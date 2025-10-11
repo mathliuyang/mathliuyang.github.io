@@ -1188,21 +1188,21 @@
             深度学习求解偏微分方程 (PDE) 与科学计算领域顶级期刊精选数据库<br>
             专为AI4Science研究者打造的专业投稿指南
         </p>
-        <div class="stats">
+        <div class="stats" id="statsContainer">
             <div class="stat-item">
-                <div class="stat-number">17</div>
+                <div class="stat-number" id="totalJournals">0</div>
                 <div class="stat-label">精选期刊</div>
             </div>
             <div class="stat-item">
-                <div class="stat-number">5</div>
+                <div class="stat-number" id="casZone1Count">0</div>
                 <div class="stat-label">中科院一区</div>
             </div>
             <div class="stat-item">
-                <div class="stat-number">12</div>
+                <div class="stat-number" id="casZone2Count">0</div>
                 <div class="stat-label">中科院二区</div>
             </div>
             <div class="stat-item">
-                <div class="stat-number">100%</div>
+                <div class="stat-number" id="ai4SciencePercentage">0%</div>
                 <div class="stat-label">AI4Science相关</div>
             </div>
         </div>
@@ -1901,6 +1901,27 @@
             }, 150);
         }
 
+        // 自动计算统计数据
+        function calculateStats() {
+            const totalJournals = journals.length;
+            const casZone1Count = journals.filter(journal => journal.casZone === '1区').length;
+            const casZone2Count = journals.filter(journal => journal.casZone === '2区').length;
+            
+            // 计算AI4Science相关期刊占比
+            const ai4ScienceKeywords = ['AI', 'AI4Science', '深度学习', 'PINN', '物理信息', '神经网络', '机器学习'];
+            const ai4ScienceJournals = journals.filter(journal => {
+                const searchText = `${journal.name} ${journal.chineseName} ${journal.tags.join(' ')} ${journal.scope} ${journal.scopeCN}`.toLowerCase();
+                return ai4ScienceKeywords.some(keyword => searchText.includes(keyword.toLowerCase()));
+            });
+            const ai4SciencePercentage = Math.round((ai4ScienceJournals.length / totalJournals) * 100);
+
+            // 更新DOM
+            document.getElementById('totalJournals').textContent = totalJournals;
+            document.getElementById('casZone1Count').textContent = casZone1Count;
+            document.getElementById('casZone2Count').textContent = casZone2Count;
+            document.getElementById('ai4SciencePercentage').textContent = ai4SciencePercentage + '%';
+        }
+
         // Event listeners
         document.getElementById('searchInput').addEventListener('input', filterAndSort);
         document.getElementById('filterZone').addEventListener('change', filterAndSort);
@@ -1910,6 +1931,7 @@
         document.getElementById('sortBy').addEventListener('change', filterAndSort);
 
         // 初始渲染
+        calculateStats(); // 计算并显示统计数据
         renderJournals(journals);
     </script>
 </body>
