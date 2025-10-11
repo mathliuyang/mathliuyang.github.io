@@ -1201,10 +1201,6 @@
                 <div class="stat-number" id="casZone2Count">0</div>
                 <div class="stat-label">中科院二区</div>
             </div>
-            <div class="stat-item">
-                <div class="stat-number">2025年10月</div>
-                <div class="stat-label">统计日期</div>
-            </div>
         </div>
     </section>
 
@@ -1906,7 +1902,7 @@
             const totalJournals = journals.length;
             const casZone1Count = journals.filter(journal => journal.casZone === '1区').length;
             const casZone2Count = journals.filter(journal => journal.casZone === '2区').length;
-
+            
             // 更新DOM
             document.getElementById('totalJournals').textContent = totalJournals;
             document.getElementById('casZone1Count').textContent = casZone1Count;
