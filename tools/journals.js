@@ -415,7 +415,7 @@ let journals = [
         "language": "English",
         "coverImage": "https://www.global-sci.org/public/journals/15/journalThumbnail_en.png",
         "website": "https://computmath.cjoe.ac.cn/jcm/EN/0254-9409/home.shtml",
-        "authorGuide": "hhttps://computmath.cjoe.ac.cn/jcm/EN/column/column106.shtml",
+        "authorGuide": "https://computmath.cjoe.ac.cn/jcm/EN/column/column106.shtml",
         "submissionUrl": "https://mc03.manuscriptcentral.com/jcmath",
         "tags": [
             "Inst. of Computational Mathematics and Sc./Eng. Computing",
