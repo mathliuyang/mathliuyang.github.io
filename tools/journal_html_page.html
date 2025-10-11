@@ -1,0 +1,2601 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI for Science 期刊导航 | 深度学习求解PDE期刊推荐</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #000000;
+            --text: #ffffff;
+            --text-dim: #666666;
+            --accent: #ffffff;
+            --border: rgba(255, 255, 255, 0.08);
+            --card-bg: rgba(255, 255, 255, 0.02);
+        }
+
+        [data-theme="light"] {
+            --bg: #ffffff;
+            --text: #000000;
+            --text-dim: #999999;
+            --accent: #000000;
+            --border: rgba(0, 0, 0, 0.08);
+            --card-bg: rgba(0, 0, 0, 0.02);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.8;
+            overflow-x: hidden;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            letter-spacing: -0.02em;
+        }
+
+        #canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1.5rem 4rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        [data-theme="light"] nav {
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        .logo {
+            font-size: 1rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            cursor: pointer;
+        }
+
+        .nav-right {
+            display: flex;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-dim);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            letter-spacing: 0.02em;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--text);
+        }
+
+        .theme-btn {
+            width: 36px;
+            height: 36px;
+            border: 1px solid var(--border);
+            background: transparent;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .theme-btn:hover {
+            border-color: var(--text);
+            transform: scale(1.1);
+        }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
+            min-height: 60vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 8rem 4rem 4rem;
+            z-index: 1;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 6vw, 5rem);
+            font-weight: 300;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        .hero h1 strong {
+            font-weight: 600;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1rem, 2vw, 1.3rem);
+            color: var(--text-dim);
+            margin-bottom: 3rem;
+            max-width: 800px;
+        }
+
+        /* Stats */
+        .stats {
+            display: flex;
+            gap: 4rem;
+            margin-top: 2rem;
+        }
+
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 300;
+            letter-spacing: -0.03em;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        /* Controls */
+        .controls {
+            position: relative;
+            padding: 2rem 4rem;
+            z-index: 1;
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .control-group {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .control-group input,
+        .control-group select {
+            width: 100%;
+            padding: 1rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            color: var(--text);
+            font-size: 0.9rem;
+            font-family: inherit;
+            transition: all 0.3s ease;
+        }
+
+        .control-group input:focus,
+        .control-group select:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        .control-group input::placeholder {
+            color: var(--text-dim);
+        }
+
+        /* Journal Grid */
+        .journals-section {
+            position: relative;
+            padding: 2rem 4rem 4rem;
+            z-index: 1;
+        }
+
+        .journals-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .journal-card {
+            border: 1px solid var(--border);
+            background: var(--card-bg);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            min-height: 200px;
+        }
+
+        .journal-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: var(--accent);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+
+
+        .journal-upper {
+            padding: 2rem 2.5rem 1rem;
+            display: flex;
+            gap: 1.5rem;
+            align-items: flex-start;
+            position: relative;
+            z-index: 2;
+        }
+
+        .journal-lower {
+            padding: 1rem 2.5rem 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .journal-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .journal-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent);
+        }
+
+        .journal-card:hover .journal-link {
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        [data-theme="light"] .journal-card:hover .journal-link {
+            border-color: rgba(0, 0, 0, 0.2);
+        }
+
+        /* 期刊封面 - 书籍样式 */
+        .journal-cover {
+            flex-shrink: 0;
+            width: 100px;
+            height: 140px;
+            overflow: hidden;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+            position: relative;
+            transition: all 0.4s ease;
+            border-radius: 3px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* 封面和链接容器 */
+        .journal-cover-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            flex-shrink: 0;
+        }
+
+        /* 期刊链接区域 */
+        .journal-links {
+            display: flex;
+            flex-direction: row;
+            gap: 1rem;
+            align-items: center;
+            margin-top: 1rem;
+            min-height: 2.5rem;
+            align-items: flex-end;
+        }
+
+        [data-theme="light"] .journal-cover {
+            box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .journal-card:hover .journal-cover {
+            transform: translateY(-3px);
+            box-shadow: 3px 4px 12px rgba(0, 0, 0, 0.4);
+        }
+
+        [data-theme="light"] .journal-card:hover .journal-cover {
+            box-shadow: 3px 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .journal-cover img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 2px;
+        }
+
+        .journal-cover-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            color: var(--text-dim);
+            text-align: center;
+            padding: 0.5rem;
+            line-height: 1.4;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 2px;
+        }
+
+        .journal-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+            justify-content: flex-start;
+            min-height: 130px;
+            gap: 0.5rem;
+        }
+
+        .journal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 0.5rem;
+        }
+
+        .journal-zone {
+            padding: 0.4rem 1rem;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            border: 2px solid;
+            white-space: nowrap;
+            border-radius: 20px;
+            text-transform: uppercase;
+        }
+
+        .journal-zone.zone-1 {
+            border-color: var(--border);
+            color: var(--text-secondary);
+            background: var(--surface-hover);
+        }
+
+        .journal-zone.zone-2 {
+            border-color: var(--border);
+            color: var(--text-secondary);
+            background: var(--surface-hover);
+        }
+
+        .journal-title {
+            font-size: 1.4rem;
+            font-weight: 500;
+            margin-bottom: 0.3rem;
+            letter-spacing: -0.01em;
+            line-height: 1.2;
+            color: var(--text);
+            min-height: 2.8rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .journal-abbr {
+            font-size: 0.9rem;
+            color: var(--text-dim);
+            margin-bottom: 0.5rem;
+            font-weight: 300;
+            min-height: 2.4rem;
+            line-height: 1.2;
+        }
+
+        .journal-chinese-name {
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            margin: 0.25rem 0 0 0;
+            font-weight: 400;
+            opacity: 0.8;
+            min-height: 1rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .journal-metrics {
+            display: flex;
+            gap: 1.2rem;
+            margin-bottom: 0.8rem;
+            padding: 0.6rem 0;
+            border-top: none;
+            border-bottom: none;
+            align-items: center;
+            min-height: 3.2rem;
+        }
+
+        .journal-zones-inline {
+            display: flex;
+            gap: 1.2rem;
+            margin-left: auto;
+            align-items: center;
+        }
+
+        .zone-metric {
+            display: flex;
+            flex-direction: column;
+            gap: 0.2rem;
+            text-align: center;
+        }
+
+        .zone-metric-value {
+            font-size: 1.2rem;
+            font-weight: 400;
+        }
+
+        .zone-metric-label {
+            font-size: 0.7rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .metric {
+            display: flex;
+            flex-direction: column;
+            gap: 0.2rem;
+            text-align: center;
+            align-items: center;
+        }
+
+        .metric-value {
+            font-size: 1.2rem;
+            font-weight: 400;
+        }
+
+        .metric-label {
+            font-size: 0.7rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .journal-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+            min-height: 2rem;
+            align-items: flex-start;
+        }
+
+        .tag {
+            padding: 0.2rem 0.6rem;
+            font-size: 0.65rem;
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-dim);
+            transition: all 0.3s ease;
+            border-radius: 12px;
+        }
+
+        .tag-highlight {
+            border-color: var(--border);
+            color: var(--text-secondary);
+            background: var(--surface-hover);
+            font-weight: 600;
+        }
+
+        .journal-info {
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            line-height: 1.5;
+            margin-bottom: 0.5rem;
+            min-height: 1.2rem;
+        }
+
+        .journal-arrow {
+            display: none;
+        }
+
+        .journal-link {
+            font-size: 0.8rem;
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--border);
+            text-decoration: none;
+            color: var(--text-dim);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.4rem;
+            background: rgba(255, 255, 255, 0.02);
+            position: relative;
+            overflow: hidden;
+            border-radius: 6px;
+            font-weight: 500;
+            letter-spacing: 0.01em;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            flex: 1;
+        }
+
+        .journal-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--accent);
+            transform: translateX(-100%);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: -1;
+        }
+
+        .journal-link:hover {
+            color: var(--bg);
+            border-color: var(--accent);
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        [data-theme="light"] .journal-link:hover {
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .journal-link:hover::before {
+            transform: translateX(0);
+        }
+
+        .journal-link:focus::before {
+            transform: translateX(0);
+        }
+
+        .journal-link span {
+            font-size: 0.8rem;
+            transition: transform 0.3s ease;
+            display: inline-block;
+        }
+
+        .journal-link:hover span {
+            transform: scale(1.1);
+        }
+
+        .journal-link:focus span {
+            transform: scale(1.1);
+        }
+
+        .journal-link:active {
+            transform: translateY(0);
+        }
+
+        .journal-link:focus {
+            outline: 1px solid var(--accent);
+            outline-offset: 2px;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            overflow-y: auto;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .modal-content {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            max-width: 900px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .modal-header {
+            padding: 3rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            gap: 2rem;
+            align-items: start;
+            position: relative;
+            /* 为绝对定位的关闭按钮提供参照 */
+        }
+
+        /* 模态窗口中的封面 - 稍大的书籍样式 */
+        .modal-cover {
+            flex-shrink: 0;
+            width: 150px;
+            height: 210px;
+            overflow: hidden;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            box-shadow: 4px 4px 16px rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        [data-theme="light"] .modal-cover {
+            box-shadow: 4px 4px 16px rgba(0, 0, 0, 0.15);
+        }
+
+        .modal-cover img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .modal-header-text {
+            flex: 1;
+            min-width: 0;
+            padding-right: 3rem;
+            /* 为关闭按钮预留空间 */
+            position: relative;
+        }
+
+        /* 模态框头部中的研究方向样式 */
+        .modal-header-text .journal-research-areas {
+            margin-top: 0.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .modal-header-text .journal-research-areas span {
+            color: var(--text-dim);
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .modal-header-text .journal-research-areas strong {
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        /* 模态框头部中的关键词标签样式 */
+        .modal-header-text .journal-tags {
+            margin-top: 1rem;
+            margin-bottom: 0;
+        }
+
+        .modal-header-text .tag {
+            font-size: 0.7rem;
+            padding: 0.25rem 0.7rem;
+            background: var(--surface-hover);
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            width: 36px;
+            height: 36px;
+            border: 1px solid var(--border);
+            background: var(--bg);
+            color: var(--text);
+            font-size: 1.25rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 10;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1;
+        }
+
+        .modal-close:hover {
+            border-color: var(--accent);
+            transform: rotate(90deg) scale(1.05);
+            background: var(--surface-hover);
+        }
+
+        .modal-close:active {
+            transform: rotate(90deg) scale(0.95);
+        }
+
+        .modal-body {
+            padding: 3rem;
+        }
+
+        .info-section {
+            margin-bottom: 2.5rem;
+        }
+
+        .info-section h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .info-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+        }
+
+        .info-label {
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .info-value {
+            font-size: 0.95rem;
+        }
+
+        .info-text {
+            font-size: 0.9rem;
+            color: var(--text-dim);
+            line-height: 1.8;
+        }
+
+        /* 语言切换按钮样式 */
+        .language-switcher {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .lang-btn {
+            padding: 0.3rem 0.8rem;
+            font-size: 0.85rem;
+            border: 1px solid var(--border);
+            background: transparent;
+            color: var(--text-dim);
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: inherit;
+            text-transform: none;
+            letter-spacing: normal;
+        }
+
+        .lang-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            transform: translateY(-1px);
+        }
+
+        .lang-btn.active {
+            background: var(--accent);
+            color: var(--bg);
+            border-color: var(--accent);
+        }
+
+        .lang-btn.active:hover {
+            background: var(--accent);
+            color: var(--bg);
+            transform: none;
+        }
+
+        /* 图标式语言切换器 */
+        .language-switcher.icon-style {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.2rem;
+            gap: 0.25rem;
+        }
+
+        .language-switcher.icon-style .lang-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.4rem 0.8rem;
+            font-size: 0.8rem;
+            border: none;
+            border-radius: 4px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .language-switcher.icon-style .lang-btn:not(.active) {
+            background: transparent;
+            color: var(--text);
+        }
+
+        .language-switcher.icon-style .lang-btn:not(.active):hover {
+            background: var(--bg);
+            color: var(--accent);
+            transform: none;
+        }
+
+        .language-switcher.icon-style .lang-btn.active {
+            background: var(--accent);
+            color: var(--bg);
+        }
+
+        /* 单个图标语言切换器 */
+        .language-switcher.single-icon {
+            display: flex;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .lang-toggle-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            border: 1px solid var(--border);
+            background: var(--card-bg);
+            color: var(--text);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .lang-toggle-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            background: var(--card-bg);
+        }
+
+        .lang-toggle-btn:active {
+            transform: translateY(0);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .lang-toggle-btn .translate-icon {
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .lang-toggle-btn:hover .translate-icon {
+            transform: rotate(20deg) scale(1.15);
+        }
+
+        /* 切换动画 */
+        .scope-content.switching {
+            opacity: 0.7;
+            transform: translateY(2px);
+        }
+
+        /* 语言状态指示器 */
+        .lang-toggle-btn::after {
+            content: '';
+            position: absolute;
+            bottom: 3px;
+            right: 3px;
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: var(--accent);
+            opacity: 0;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            transform: scale(0.8);
+        }
+
+        .lang-toggle-btn.active-lang::after {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .scope-content {
+            transition: opacity 0.3s ease;
+        }
+
+        .scope-content.switching {
+            opacity: 0.7;
+        }
+
+        .recommendation-box {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            padding: 2rem;
+            margin-top: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .recommendation-box h4 {
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            letter-spacing: 0.05em;
+        }
+
+        .recommendation-list {
+            list-style: none;
+            font-size: 0.85rem;
+            line-height: 1.8;
+        }
+
+        .recommendation-list li {
+            margin-bottom: 0.5rem;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .recommendation-list li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+        }
+
+        .link-btn {
+            display: inline-block;
+            padding: 1rem 2rem;
+            border: 1px solid var(--border);
+            background: transparent;
+            color: var(--text);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+            margin-right: 1rem;
+        }
+
+        .link-btn:hover {
+            border-color: var(--accent);
+            background: var(--card-bg);
+        }
+
+        /* Footer */
+        footer {
+            position: relative;
+            padding: 3rem 4rem;
+            border-top: 1px solid var(--border);
+            text-align: center;
+            z-index: 1;
+        }
+
+        .footer-text {
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            letter-spacing: 0.05em;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            nav {
+                padding: 1.5rem 2rem;
+            }
+
+            nav.scrolled {
+                padding: 1rem 2rem;
+            }
+
+            .hero {
+                padding: 6rem 2rem 2rem;
+            }
+
+            .stats {
+                flex-direction: column;
+                gap: 2rem;
+            }
+
+            .controls {
+                padding: 2rem 2rem;
+            }
+
+            .journals-section {
+                padding: 2rem 2rem;
+            }
+
+            .journals-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .journal-card {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .journal-cover-container {
+                align-items: center;
+            }
+
+            .journal-cover {
+                width: 120px;
+                height: 170px;
+            }
+
+            .journal-links {
+                flex-direction: column;
+                align-items: center;
+                width: 100%;
+                margin-top: 0.5rem;
+                margin-bottom: 1rem;
+            }
+
+            .journal-link {
+                width: 80px;
+                justify-content: center;
+                margin: 0.2rem 0;
+            }
+
+            .modal.active {
+                padding: 1rem;
+            }
+
+            .modal-header {
+                flex-direction: column;
+                padding: 2rem;
+                align-items: center;
+                text-align: center;
+            }
+
+            .modal-header-text {
+                padding-right: 0;
+                /* 移动端移除右侧内边距 */
+                margin-top: 1rem;
+            }
+
+            .modal-cover {
+                width: 140px;
+                height: 200px;
+            }
+
+            .modal-body {
+                padding: 2rem;
+            }
+
+            footer {
+                padding: 2rem;
+            }
+
+            /* 移动端关闭按钮优化 */
+            .modal-close {
+                top: 1rem;
+                right: 1rem;
+                width: 32px;
+                height: 32px;
+                font-size: 1.1rem;
+            }
+
+            /* 移动端标题优化 */
+            #modalTitle {
+                font-size: 1.5rem !important;
+                word-break: break-word;
+                margin-right: 2rem;
+                /* 为关闭按钮预留额外空间 */
+            }
+        }
+
+        /* Loading State */
+        .no-results {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--text-dim);
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="canvas"></canvas>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="logo" onclick="location.href='../index.html'">图灵的猫</div>
+        <div class="nav-right">
+            <ul class="nav-links">
+                <li><a href="../index.html">首页</a></li>
+                <li><a href="../pages/about.html">关于我</a></li>
+                <li><a href="../pages/blog.html">博客</a></li>
+                <li><a href="../pages/projects.html">项目</a></li>
+                <li><a href="../pages/publications.html">学术成果</a></li>
+                <li><a href="../pages/tools.html" class="active">工具箱</a></li>
+                <li><a href="../pages/contact.html">联系我</a></li>
+            </ul>
+            <button class="theme-btn" id="themeBtn">
+                <span id="themeIcon">◐</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>AI for Science 期刊导航</h1>
+        <p class="hero-subtitle">
+            深度学习求解偏微分方程 (PDE) 与科学计算领域顶级期刊精选数据库<br>
+            专为AI4Science研究者打造的专业投稿指南
+        </p>
+        <div class="stats">
+            <div class="stat-item">
+                <div class="stat-number">17</div>
+                <div class="stat-label">精选期刊</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">5</div>
+                <div class="stat-label">中科院一区</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">12</div>
+                <div class="stat-label">中科院二区</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">100%</div>
+                <div class="stat-label">AI4Science相关</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Controls -->
+    <section class="controls">
+        <div class="control-group">
+            <input type="text" id="searchInput" placeholder="搜索期刊名称、缩写或AI4Science关键词（如PINN、深度学习、物理信息神经网络）...">
+        </div>
+        <div class="control-group">
+            <select id="filterZone">
+                <option value="all">所有分区</option>
+                <option value="一区">中科院一区</option>
+                <option value="二区">中科院二区</option>
+            </select>
+        </div>
+        <div class="control-group">
+            <select id="sortBy">
+                <option value="impact">按影响因子排序</option>
+                <option value="zone">按分区排序</option>
+                <option value="name">按名称排序</option>
+            </select>
+        </div>
+    </section>
+
+    <!-- Journals Section -->
+    <section class="journals-section">
+        <div class="journals-grid" id="journalsGrid"></div>
+        <div class="no-results" id="noResults" style="display: none;">
+            <p>未找到匹配的期刊</p>
+        </div>
+    </section>
+
+    <!-- Modal -->
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">×</button>
+            <div class="modal-header">
+                <div class="modal-cover" id="modalCover"></div>
+                <div class="modal-header-text">
+                    <h2 id="modalTitle"
+                        style="font-size: 1.8rem; font-weight: 500; margin-bottom: 0.5rem; line-height: 1.3; word-wrap: break-word;">
+                    </h2>
+                    <p id="modalAbbr" style="color: var(--text-dim); font-size: 0.95rem;"></p>
+                </div>
+            </div>
+            <div class="modal-body" id="modalBody"></div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-text">© 2025 学术期刊数据库 | 数据更新时间: 2024-2025 | 投稿前请核实最新信息</div>
+    </footer>
+
+    <script>
+        // Canvas Setup (same as original)
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        let mouse = { x: null, y: null, radius: 150 };
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        window.addEventListener('mousemove', (e) => {
+            mouse.x = e.x;
+            mouse.y = e.y;
+        });
+
+        window.addEventListener('mouseout', () => {
+            mouse.x = null;
+            mouse.y = null;
+        });
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 0.5;
+                this.baseX = this.x;
+                this.baseY = this.y;
+                this.density = Math.random() * 30 + 1;
+                this.vx = (Math.random() - 0.5) * 0.3;
+                this.vy = (Math.random() - 0.5) * 0.3;
+            }
+
+            draw() {
+                const theme = document.documentElement.getAttribute('data-theme');
+                ctx.fillStyle = theme === 'light' ? 'rgba(0, 0, 0, 0.3)' : 'rgba(255, 255, 255, 0.3)';
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+
+            update() {
+                if (mouse.x != null && mouse.y != null) {
+                    let dx = mouse.x - this.x;
+                    let dy = mouse.y - this.y;
+                    let distance = Math.sqrt(dx * dx + dy * dy);
+                    let forceDirectionX = dx / distance;
+                    let forceDirectionY = dy / distance;
+                    let maxDistance = mouse.radius;
+                    let force = (maxDistance - distance) / maxDistance;
+                    let directionX = forceDirectionX * force * this.density * 0.6;
+                    let directionY = forceDirectionY * force * this.density * 0.6;
+
+                    if (distance < mouse.radius) {
+                        this.x -= directionX;
+                        this.y -= directionY;
+                    } else {
+                        if (this.x !== this.baseX) {
+                            let dx = this.x - this.baseX;
+                            this.x -= dx / 10;
+                        }
+                        if (this.y !== this.baseY) {
+                            let dy = this.y - this.baseY;
+                            this.y -= dy / 10;
+                        }
+                    }
+                } else {
+                    this.x += this.vx;
+                    this.y += this.vy;
+
+                    if (Math.abs(this.x - this.baseX) > 50) {
+                        this.vx *= -1;
+                    }
+                    if (Math.abs(this.y - this.baseY) > 50) {
+                        this.vy *= -1;
+                    }
+                }
+
+                this.draw();
+            }
+        }
+
+        function init() {
+            particles = [];
+            const numberOfParticles = Math.floor((canvas.width * canvas.height) / 9000);
+            for (let i = 0; i < numberOfParticles; i++) {
+                particles.push(new Particle());
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(particle => particle.update());
+            connectParticles();
+            requestAnimationFrame(animate);
+        }
+
+        function connectParticles() {
+            const theme = document.documentElement.getAttribute('data-theme');
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    let dx = particles[i].x - particles[j].x;
+                    let dy = particles[i].y - particles[j].y;
+                    let distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance < 100) {
+                        ctx.strokeStyle = theme === 'light'
+                            ? `rgba(0, 0, 0, ${0.2 - distance / 500})`
+                            : `rgba(255, 255, 255, ${0.2 - distance / 500})`;
+                        ctx.lineWidth = 0.5;
+                        ctx.beginPath();
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+        }
+
+        init();
+        animate();
+
+        window.addEventListener('resize', () => {
+            init();
+        });
+
+        // Nav scroll effect
+        const nav = document.getElementById('nav');
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 100) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+        });
+
+        // Theme toggle
+        const themeBtn = document.getElementById('themeBtn');
+        const themeIcon = document.getElementById('themeIcon');
+        const currentTheme = localStorage.getItem('theme') || 'dark';
+
+        document.documentElement.setAttribute('data-theme', currentTheme);
+        themeIcon.textContent = currentTheme === 'dark' ? '◐' : '◑';
+        themeIcon.style.color = currentTheme === 'dark' ? '#ffffff' : '#000000';
+
+        themeBtn.addEventListener('click', () => {
+            const theme = document.documentElement.getAttribute('data-theme');
+            const newTheme = theme === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            themeIcon.textContent = newTheme === 'dark' ? '◐' : '◑';
+            themeIcon.style.color = newTheme === 'dark' ? '#ffffff' : '#000000';
+        });
+
+        // Journal Data
+        let journals = [
+            {
+                "name": "Advances in Computational Mathematics",
+                "chineseName": "计算数学进展",
+                "abbr": "ADV COMPUT MATH",
+                "impactFactor": 1.7,
+                "articles_per_year": 92,
+                "region": "荷兰",
+                "jcrZone": "Q2",
+                "casZone": "数学 4区",
+                "scuZone": "数学E",
+                "reviewTime": "12周,或约稿",
+                "acceptanceRate": "待补充",
+                "publisher": "Springer US",
+                "issn": "1019-7168",
+                "eissn": "1572-9044",
+                "frequency": "双月刊",
+                "founded": "1993年",
+                "language": "English",
+                "coverImage": "https://media.springernature.com/w316/springer-static/cover-hires/journal/10444?as=webp",
+                "website": "https://www.springer.com/journal/10444",
+                "authorGuide": "https://www.springer.com/journal/10444/submission-guidelines",
+                "submissionUrl": "https://www.editorialmanager.com/acom/default.aspx",
+                "tags": [
+                    "Springer US",
+                    "荷兰",
+                    "数学 - 应用数学",
+                    "SCIE"
+                ],
+                "scope": "Advances in Computational Mathematics publishes high quality, accessible and original articles at the forefront of computational and applied mathematics, with a clear potential for impact across the sciences. The journal emphasizes three core areas: approximation theory and computational geometry; numerical analysis, modelling and simulation; imaging, signal processing and data analysis. This journal welcomes papers that are accessible to a broad audience in the mathematical sciences and that show either an advance in computational methodology or a novel scientific application area, or both. Methods papers should rely on rigorous analysis and/or convincing numerical studies.",
+                "scopeCN": "《计算数学进展》发表计算与应用数学前沿的高质量、易读且原创的文章,具有明确的跨科学影响潜力。期刊强调三个核心领域:逼近理论与计算几何;数值分析、建模与仿真;成像、信号处理与数据分析。本刊欢迎数学科学广大受众可读的论文,这些论文应展示计算方法的进步或新颖的科学应用领域,或两者兼有。方法类论文应依赖严格的分析和/或有说服力的数值研究。",
+                "researchAreas": "数学 - 应用数学",
+                "tips": "适合有扎实数学理论基础的研究者投稿"
+            },
+            {
+                "name": "Applied Mathematics and Computation",
+                "chineseName": "应用数学与计算",
+                "abbr": "APPL MATH COMPUT",
+                "impactFactor": 3.5,
+                "articles_per_year": 511,
+                "region": "美国",
+                "jcrZone": "Q1",
+                "casZone": "数学 2区",
+                "scuZone": "数学C",
+                "reviewTime": "约9.8个月 / 约11.9周",
+                "acceptanceRate": "待补充",
+                "publisher": "Elsevier Inc.",
+                "issn": "0096-3003",
+                "eissn": "1873-5649",
+                "frequency": "半月刊",
+                "founded": "1975年",
+                "language": "Multi-Language",
+                "coverImage": "https://ars.els-cdn.com/content/image/X00963003.jpg",
+                "website": "https://www.journals.elsevier.com/applied-mathematics-and-computation",
+                "authorGuide": "https://www.elsevier.com/journals/applied-mathematics-and-computation/0096-3003/guide-for-authors",
+                "submissionUrl": "https://www.editorialmanager.com/amc/default.aspx",
+                "tags": [
+                    "美国",
+                    "数学 - 应用数学",
+                    "SCIE",
+                    "Elsevier Inc."
+                ],
+                "scope": "Applied Mathematics and Computation addresses work at the interface between applied mathematics, numerical computation, and applications of systems – oriented ideas to the physical, biological, social, and behavioral sciences, and emphasizes papers of a computational nature focusing on new algorithms, their analysis and numerical results. In addition to presenting research papers, Applied Mathematics and Computation publishes review articles and single–topics issues.",
+                "scopeCN": "《应用数学与计算》关注应用数学、数值计算以及面向系统思想在物理、生物、社会和行为科学中应用的交叉领域,强调关注新算法、算法分析和数值结果的计算性质论文。除了研究论文,本刊还发表综述文章和单一主题特刊。",
+                "researchAreas": "数学 - 应用数学",
+                "tips": "非常适合PINN应用类论文,尤其是解决实际工程问题的工作"
+            },
+            {
+                "name": "Communications in Nonlinear Science and Numerical Simulation",
+                "chineseName": "非线性科学与数值模拟通讯",
+                "abbr": "COMMUN NONLINEAR SCI",
+                "impactFactor": 3.4,
+                "articles_per_year": 597,
+                "region": "荷兰",
+                "jcrZone": "Q1",
+                "casZone": "数学 2区",
+                "scuZone": "数学B",
+                "reviewTime": "约3.0个月",
+                "acceptanceRate": "待补充",
+                "publisher": "Elsevier",
+                "issn": "1007-5704",
+                "eissn": "1878-7274",
+                "frequency": "月刊",
+                "founded": "1996年",
+                "language": "English",
+                "coverImage": "https://ars.els-cdn.com/content/image/X10075704.jpg",
+                "website": "https://www.journals.elsevier.com/communications-in-nonlinear-science-and-numerical-simulation",
+                "authorGuide": "https://www.elsevier.com/journals/communications-in-nonlinear-science-and-numerical-simulation/1007-5704/guide-for-authors",
+                "submissionUrl": "https://www.editorialmanager.com/CNSNS",
+                "tags": [
+                    "数学 - 跨学科应用",
+                    "数学 - 应用数学",
+                    "Elsevier",
+                    "荷兰",
+                    "SCIE"
+                ],
+                "scope": "The journal publishes original research findings on experimental observation, mathematical modeling, theoretical analysis and numerical simulation, for more accurate description, better prediction or novel application, of nonlinear phenomena in science and engineering. It offers a venue for researchers to make rapid exchange of ideas and techniques in nonlinear science and complexity. The submission of manuscripts with cross-disciplinary approaches in nonlinear science and complexity is particularly encouraged.",
+                "scopeCN": "本刊发表关于实验观察、数学建模、理论分析和数值模拟的原创研究成果,以更准确地描述、更好地预测或新颖地应用科学和工程中的非线性现象。为研究者提供非线性科学和复杂性领域快速交流思想和技术的平台。特别鼓励提交具有跨学科方法的稿件。",
+                "researchAreas": "数学 - 应用数学, 数学 - 跨学科应用",
+                "tips": "强烈推荐用于深度学习求解非线性PDE的研究"
+            },
+            {
+                "name": "Computer Methods in Applied Mechanics and Engineering",
+                "chineseName": "应用力学与工程中的计算机方法",
+                "abbr": "COMPUT METHOD APPL M",
+                "impactFactor": 6.9,
+                "articles_per_year": 665,
+                "region": "荷兰",
+                "jcrZone": "Q1",
+                "casZone": "工程技术 1区",
+                "scuZone": "工程技术B",
+                "reviewTime": "约3.0个月 / 约8.6周",
+                "acceptanceRate": "待补充",
+                "publisher": "Elsevier",
+                "issn": "0045-7825",
+                "eissn": "1879-2138",
+                "frequency": "半月刊",
+                "founded": "1972年",
+                "language": "Multi-Language",
+                "coverImage": "https://ars.els-cdn.com/content/image/X00457825.jpg",
+                "website": "https://www.sciencedirect.com/journal/computer-methods-in-applied-mechanics-and-engineering",
+                "authorGuide": "https://www.elsevier.com/journals/computer-methods-in-applied-mechanics-and-engineering/0045-7825/guide-for-authors",
+                "submissionUrl": "https://www.editorialmanager.com/CMAME",
+                "tags": [
+                    "工程技术 - 工程:综合",
+                    "Elsevier",
+                    "荷兰",
+                    "SCIE"
+                ],
+                "scope": "Computer Methods in Applied Mechanics and Engineering was founded over three decades ago, providing a platform for the publication of papers in this important field of science and engineering. The range of appropriate contributions is very wide. It covers any type of computational method for the simulation of complex physical problems leading to the analysis and design of engineering products and systems.",
+                "scopeCN": "《应用力学与工程中的计算机方法》成立三十多年来,为这一重要科学和工程领域的论文发表提供平台。适合投稿的范围非常广泛。涵盖用于模拟复杂物理问题的任何类型计算方法,以进行工程产品和系统的分析与设计。",
+                "researchAreas": "工程技术 - 工程:综合",
+                "tips": "强烈推荐用于工程导向的PINN/深度学习求解PDE研究"
+            },
+            {
+                "name": "Computer Physics Communications",
+                "chineseName": "计算机物理通讯",
+                "abbr": "COMPUT PHYS COMMUN",
+                "impactFactor": 7.2,
+                "articles_per_year": 311,
+                "region": "荷兰",
+                "jcrZone": "Q1",
+                "casZone": "物理与天体物理 2区",
+                "scuZone": "物理与天体物理C",
+                "reviewTime": "约12.0个月 / 约13.5周",
+                "acceptanceRate": "待补充",
+                "publisher": "Elsevier",
+                "issn": "0010-4655",
+                "eissn": "1879-2944",
+                "frequency": "半月刊",
+                "founded": "1969年",
+                "language": "English",
+                "coverImage": "https://ars.els-cdn.com/content/image/X00104655.jpg",
+                "website": "https://www.journals.elsevier.com/computer-physics-communications",
+                "authorGuide": "https://www.elsevier.com/journals/computer-physics-communications/0010-4655/guide-for-authors",
+                "submissionUrl": "https://www.editorialmanager.com/cpc",
+                "tags": [
+                    "Elsevier",
+                    "荷兰",
+                    "SCIE",
+                    "物理 - 计算机:跨学科应用"
+                ],
+                "scope": "The focus of CPC is on contemporary computational methods and techniques and their implementation, the effectiveness of which will normally be evidenced by the author(s) within the context of a substantive problem in physics. Within this setting CPC publishes two types of paper: (1) Computer Programs in Physics (CPiP): These papers describe significant computer programs to be archived in the CPC Program Library which is held in the Mendeley Data repository. The submitted software must be covered by an approved open source licence. (2) Computational Physics Papers (CP): These are research papers in, but are not limited to, the following themes across computational physics and related disciplines: mathematical and numerical methods and algorithms; computational models including those associated with the design, control and analysis of experiments; and algebraic computation.",
+                "scopeCN": "CPC的重点是当代计算方法和技术及其实现,其有效性通常由作者在物理学的实质性问题背景下证明。在此背景下,CPC发表两类论文:(1)物理计算机程序(CPiP):这些论文描述存档在Mendeley数据仓库的CPC程序库中的重要计算机程序。提交的软件必须遵循经批准的开源许可。(2)计算物理论文(CP):这些研究论文涉及但不限于计算物理及相关学科的以下主题:数学和数值方法及算法;计算模型(包括与实验设计、控制和分析相关的模型);代数计算。",
+                "researchAreas": "物理 - 计算机:跨学科应用",
+                "tips": "最适合有完整软件实现的深度学习求解PDE研究"
+            },
+            {
+                "name": "Computers & Mathematics with Applications",
+                "chineseName": "计算机与数学应用",
+                "abbr": "COMPUT MATH APPL",
+                "impactFactor": 2.9,
+                "articles_per_year": 578,
+                "region": "英国",
+                "jcrZone": "Q1",
+                "casZone": "数学 2区",
+                "scuZone": "数学C",
+                "reviewTime": "约6.0个月",
+                "acceptanceRate": "待补充",
+                "publisher": "Elsevier Ltd",
+                "issn": "0898-1221",
+                "eissn": "1873-7668",
+                "frequency": "半月刊",
+                "founded": "1975年",
+                "language": "English",
+                "coverImage": "https://ars.els-cdn.com/content/image/X08981221.jpg",
+                "website": "https://www.journals.elsevier.com/computers-and-mathematics-with-applications",
+                "authorGuide": "https://www.elsevier.com/journals/computers-and-mathematics-with-applications/0898-1221/guide-for-authors",
+                "submissionUrl": "https://www.editorialmanager.com/camwa/default.aspx",
+                "tags": [
+                    "英国",
+                    "数学 - 应用数学",
+                    "SCIE",
+                    "Elsevier Ltd"
+                ],
+                "scope": "Computers & Mathematics with Applications provides a medium of exchange for those engaged in fields where there exists a non-trivial interplay between mathematics and computers. Thus, the three present principal categories of interest of the journal are: 1. Computers in mathematics research: This includes, but is not limited to, applications in numerical analysis, number theory, algebra, statistics, probability, geometry, topology, combinatorics, logic, mathematical programming, fuzzy theory, and classical analysis. 2. Mathematics in computer science: This includes, but is not limited to, applications in algorithms, data structures, computational complexity, parallel computing, distributed computing, artificial intelligence, machine learning, databases, computer graphics, image processing, computer vision, computational geometry, computational topology, cryptography, information theory, coding theory, automata theory, formal languages, symbolic computation, programming languages, compilers, computer algebra, software engineering, operating systems, networks, numerical computing, neural networks, fuzzy systems, genetic algorithms, expert systems, simulation, mathematical software, and computational mathematics. 3. Applications in science and engineering: This includes, but is not limited to, applications in biology, chemistry, physics, geology, psychology, sociology, anthropology, economics, operations research, medicine, health sciences, environmental science, transportation, urban planning, management, business, finance, image processing, pattern recognition, robotics, computer graphics, signal processing, telecommunications, control systems, aerospace, mechanical, civil, electrical, electronic, computer, chemical, industrial, manufacturing, mining, agricultural, and biomedical engineering.",
+                "scopeCN": "《计算机与数学应用》为那些从事存在数学与计算机之间非平凡相互作用的领域的人们提供交流媒介。因此,该期刊目前感兴趣的三个主要类别是:1.计算机在数学研究中的应用:包括但不限于数值分析、数论、代数、统计学、概率论、几何、拓扑学、组合数学、逻辑、数学规划、模糊理论和经典分析中的应用。2.数学在计算机科学中的应用:包括但不限于算法、数据结构、计算复杂性、并行计算、分布式计算、人工智能、机器学习、数据库、计算机图形学、图像处理、计算机视觉、计算几何、计算拓扑学、密码学、信息论、编码理论、自动机理论、形式语言、符号计算、编程语言、编译器、计算机代数、软件工程、操作系统、网络、数值计算、神经网络、模糊系统、遗传算法、专家系统、仿真、数学软件和计算数学中的应用。3.科学和工程中的应用:包括但不限于生物学、化学、物理学、地质学、心理学、社会学、人类学、经济学、运筹学、医学、健康科学、环境科学、交通运输、城市规划、管理、商业、金融、图像处理、模式识别、机器人技术、计算机图形学、信号处理、电信、控制系统、航空航天、机械、土木、电气、电子、计算机、化学、工业、制造、采矿、农业和生物医学工程中的应用。",
+                "researchAreas": "数学 - 应用数学",
+                "tips": "特别适合PINN类论文,尤其是有工程应用背景的研究"
+            },
+            {
+                "name": "Computational and Applied Mathematics",
+                "chineseName": "计算与应用数学",
+                "abbr": "COMPUT APPL MATH",
+                "impactFactor": 2.5,
+                "articles_per_year": 365,
+                "region": "巴西",
+                "jcrZone": "Q1",
+                "casZone": "数学 4区(3区)",
+                "scuZone": "数学E",
+                "reviewTime": "",
+                "acceptanceRate": "待补充",
+                "publisher": "Springer International Publishing",
+                "issn": "2238-3603",
+                "eissn": "1807-0302",
+                "frequency": "连续出版",
+                "founded": "2013年",
+                "language": "English",
+                "coverImage": "https://media.springernature.com/w316/springer-static/cover-hires/journal/40314?as=webp",
+                "website": "https://www.springer.com/journal/40314",
+                "authorGuide": "https://www.springer.com/journal/40314/submission-guidelines",
+                "submissionUrl": "https://www.editorialmanager.com/cam/default.aspx",
+                "tags": ["巴西", "Springer International Publishing", "数学 - 计算数学", "SCIE"],
+                "scope": "Computational & Applied Mathematics began to be published in 1981. This journal was conceived as the main scientific publication of SBMAC (Brazilian Society of Computational and Applied Mathematics). The objective of the journal is the publication of original research in Applied and Computational Mathematics, with interfaces in Physics, Engineering, Chemistry, Biology, Operations Research, Statistics, Social Sciences and Economy.",
+                "scopeCN": "《计算与应用数学》始创于1981年,是巴西计算与应用数学学会(SBMAC)的主要科学出版物。本刊的目标是发表应用与计算数学的原创研究,涉及物理、工程、化学、生物、运筹学、统计学、社会科学和经济学等交叉领域。",
+                "researchAreas": "数学 - 计算数学",
+                "tips": "适合有明确跨学科应用背景的AI for Science研究"
+            },
+            {
+                "name": "Engineering with Computers",
+                "chineseName": "计算机工程",
+                "abbr": "ENG COMPUT-GERMANY",
+                "impactFactor": 5.7,
+                "articles_per_year": 172,
+                "region": "德国",
+                "jcrZone": "Q1",
+                "casZone": "工程技术 2区",
+                "scuZone": "工程技术C",
+                "reviewTime": "约12.0个月",
+                "acceptanceRate": "待补充",
+                "publisher": "Springer London",
+                "issn": "0177-0667",
+                "eissn": "1435-5663",
+                "frequency": "季刊",
+                "founded": "1985年",
+                "language": "English",
+                "coverImage": "https://media.springernature.com/w316/springer-static/cover-hires/journal/366?as=webp",
+                "website": "https://www.springer.com/journal/366",
+                "authorGuide": "https://www.springer.com/journal/366/submission-guidelines",
+                "submissionUrl": "https://www.editorialmanager.com/engc",
+                "tags": ["工程技术 - 工程:机械", "Springer London", "德国", "SCIE"],
+                "scope": "Engineering with Computers is an international journal for simulation-based engineering. It publishes original papers and authoritative state-of-the-art reviews on the technologies supporting simulation-based engineering, and examples of operational simulation-based engineering systems.",
+                "scopeCN": "《计算机工程》是一本专注于基于仿真工程的国际期刊。发表关于支持基于仿真工程技术的原创论文和权威性最新综述,以及可操作的基于仿真工程系统的实例。",
+                "researchAreas": "工程技术 - 工程:机械",
+                "tips": "暂不推荐作为主要投稿目标"
+            },
+            {
+                "name": "IMA Journal of Numerical Analysis",
+                "chineseName": "IMA数值分析期刊",
+                "abbr": "IMA J NUMER ANAL",
+                "impactFactor": 2.3,
+                "articles_per_year": 110,
+                "region": "英国",
+                "jcrZone": "Q1",
+                "casZone": "数学 2区",
+                "scuZone": "数学C",
+                "reviewTime": "较慢,6-12周",
+                "acceptanceRate": "待补充",
+                "publisher": "Oxford University Press",
+                "issn": "0272-4979",
+                "eissn": "1464-3642",
+                "frequency": "季刊",
+                "founded": "1981年",
+                "language": "English",
+                "coverImage": "https://oup.silverchair-cdn.com/oup/backfile/Content_public/Journal/imajna/Issue/45/5/1/m_cover.jpeg?Expires=1763193012&Signature=sKkE1NNxomrwyfR9E3OmrPb8DOA9vOvmMrhPB~oqfh5VOd2Apumsw9kAtjTR4b6qprzn3sPaXLXFO0x6ItRodyB4hoJ-Drh~grhiDqg2ECs4FR3GYhgwRX2ZRLJRmVuYO68fznSaqL-sbg42Wqq9Gqa6RKYcdWUH9yKOFOZHXUopDa6X8HmxE9y8lZ4LXld-SIWtMOArnA1yj7Nvt2~enVz7IZ1ai0XE91G4wLUfGoXSZzcHb5aiqD8NpqRIejUX~n~TpZYhBS9xEz5hGwVkwYiDRB4DOjVyVpNYEMPtxj2ZSiYEeSyI-inZbbzK0PWhxcHB9TA1~a9nAz80Vs~RXw__&Key-Pair-Id=APKAIE5G5CRDK6RD3PGA",
+                "website": "https://academic.oup.com/imajna",
+                "authorGuide": "https://academic.oup.com/imajna/pages/General_Instructions",
+                "submissionUrl": "https://mc.manuscriptcentral.com/imajna",
+                "tags": ["英国", "Oxford University Press", "数学 - 应用数学", "SCIE"],
+                "scope": "The IMA Journal of Numerical Analysis (IMAJNA) publishes original contributions to all fields of numerical analysis; articles will be accepted which treat the theory, development or use of practical algorithms and interactions between these aspects. Occasional survey articles are also published.",
+                "scopeCN": "《IMA数值分析期刊》发表数值分析所有领域的原创贡献;接受涉及实用算法的理论、开发或使用及其相互作用的文章。偶尔也发表综述文章。",
+                "researchAreas": "数学 - 应用数学",
+                "tips": "仅推荐给有深厚数学理论功底的研究者"
+            },
+            {
+                "name": "International Journal for Numerical Methods in Engineering",
+                "chineseName": "国际工程数值方法杂志",
+                "abbr": "INT J NUMER METH ENG",
+                "impactFactor": 2.7,
+                "articles_per_year": 190,
+                "region": "英国",
+                "jcrZone": "Q1",
+                "casZone": "工程技术 3区",
+                "scuZone": "工程技术C",
+                "reviewTime": "约6.0个月",
+                "acceptanceRate": "待补充",
+                "publisher": "John Wiley and Sons Ltd",
+                "issn": "0029-5981",
+                "eissn": "1097-0207",
+                "frequency": "周刊",
+                "founded": "1969年",
+                "language": "English",
+                "coverImage": "https://onlinelibrary.wiley.com/cms/asset/ba83db84-a66d-4380-bc74-1f5a050be9e6/nme.v126.19.cover.gif",
+                "website": "https://onlinelibrary.wiley.com/journal/10970207",
+                "authorGuide": "https://onlinelibrary.wiley.com/page/journal/10970207/homepage/forauthors.html",
+                "submissionUrl": "https://mc.manuscriptcentral.com/nme",
+                "tags": ["工程技术 - 工程:综合", "英国", "John Wiley and Sons Ltd", "SCIE"],
+                "scope": "The International Journal for Numerical Methods in Engineering publishes original papers describing significant, novel developments in numerical methods that are applicable to engineering problems. The Journal is known for welcoming contributions in a wide range of areas in computational engineering, including computational issues in model reduction, uncertainty quantification, verification and validation, inverse analysis and stochastic methods, optimisation, element technology, solution techniques and parallel computing, damage and fracture, mechanics at micro and nano-scales, low-speed fluid dynamics, fluid-structure interaction, electromagnetics, coupled diffusion phenomena, and error estimation and mesh generation.",
+                "scopeCN": "《国际工程数值方法杂志》发表描述适用于工程问题的重要、新颖数值方法发展的原创论文。本刊以欢迎计算工程广泛领域的贡献而闻名,包括模型简化、不确定性量化、验证与确认、反问题和随机方法、优化、单元技术、求解技术和并行计算、损伤和断裂、微观和纳米尺度力学、低速流体动力学、流固耦合、电磁学、耦合扩散现象以及误差估计和网格生成等计算问题。",
+                "researchAreas": "工程技术 - 工程:综合",
+                "tips": "推荐用于工程导向的深度学习求解PDE研究"
+            },
+            {
+                "name": "International Journal of Computer Mathematics",
+                "chineseName": "国际计算数学杂志",
+                "abbr": "INT J COMPUT MATH",
+                "impactFactor": 1.7,
+                "articles_per_year": 90,
+                "region": "英国",
+                "jcrZone": "Q2",
+                "casZone": "数学 4区",
+                "scuZone": "数学E",
+                "reviewTime": "约6.0个月",
+                "acceptanceRate": "待补充",
+                "publisher": "Taylor and Francis Ltd.",
+                "issn": "0020-7160",
+                "eissn": "1029-0265",
+                "frequency": "双月刊",
+                "founded": "1964年",
+                "language": "Multi-Language",
+                "coverImage": "https://www.tandfonline.com/cms/asset/33eb8ee9-00c0-49cb-987a-c94c152449e9/gcom20.v102.i10.largecover.jpg",
+                "website": "https://www.tandfonline.com/toc/gcom20/current",
+                "authorGuide": "https://www.tandfonline.com/action/authorSubmission?journalCode=gcom20",
+                "submissionUrl": "https://www.editorialmanager.com/ijcm/default.aspx",
+                "tags": ["英国", "数学 - 应用数学", "SCIE", "Taylor and Francis Ltd."],
+                "scope": "International Journal of Computer Mathematics (IJCM) is a world-leading journal serving the community of researchers in numerical analysis and scientific computing from academia to industry. IJCM publishes original research papers of high scientific value in fields of computational mathematics with profound applications to science and engineering.",
+                "scopeCN": "《国际计算数学杂志》是服务于学术界到工业界数值分析和科学计算研究者社区的世界领先期刊。IJCM发表在计算数学领域具有高科学价值、对科学和工程有深远应用的原创研究论文。",
+                "researchAreas": "数学 - 应用数学",
+                "tips": "适合有一定理论基础的PINN类研究"
+            },
+            {
+                "name": "Journal of Computational and Applied Mathematics",
+                "chineseName": "计算与应用数学杂志",
+                "abbr": "J COMPUT APPL MATH",
+                "impactFactor": 2.1,
+                "articles_per_year": 533,
+                "region": "荷兰",
+                "jcrZone": "Q1",
+                "casZone": "数学 2区",
+                "scuZone": "数学C",
+                "reviewTime": "约3.0个月",
+                "acceptanceRate": "待补充",
+                "publisher": "Elsevier",
+                "issn": "0377-0427",
+                "eissn": "1879-1778",
+                "frequency": "半月刊",
+                "founded": "1975年",
+                "language": "English",
+                "coverImage": "https://ars.els-cdn.com/content/image/X03770427.jpg",
+                "website": "https://www.journals.elsevier.com/journal-of-computational-and-applied-mathematics",
+                "authorGuide": "https://www.elsevier.com/journals/journal-of-computational-and-applied-mathematics/0377-0427/guide-for-authors",
+                "submissionUrl": "https://www.editorialmanager.com/JCAM",
+                "tags": ["Elsevier", "荷兰", "数学 - 应用数学", "SCIE"],
+                "scope": "The Journal of Computational and Applied Mathematics publishes original papers of high scientific value in all areas of computational and applied mathematics. The main interest of the Journal is in papers that describe and analyze new computational techniques for solving scientific or engineering problems. Also the improved analysis, including the effectiveness and applicability, of existing methods and algorithms is of importance. The computational efficiency (e.g. the convergence, stability, accuracy, ...) should be proved and illustrated by nontrivial numerical examples.",
+                "scopeCN": "《计算与应用数学杂志》发表计算与应用数学所有领域的高科学价值原创论文。本刊的主要兴趣在于描述和分析解决科学或工程问题的新计算技术的论文。对现有方法和算法的改进分析(包括有效性和适用性)也很重要。计算效率(如收敛性、稳定性、精度等)应通过非平凡的数值例子得到证明和说明。",
+                "researchAreas": "数学 - 应用数学",
+                "tips": "强烈推荐用于PINN方法论创新的研究"
+            },
+            {
+                "name": "Journal of Computational Mathematics",
+                "chineseName": "计算数学期刊",
+                "abbr": "J COMPUT MATH",
+                "impactFactor": 0.9,
+                "articles_per_year": 110,
+                "region": "中国",
+                "jcrZone": "Q2",
+                "casZone": "数学 4区",
+                "scuZone": "数学C",
+                "reviewTime": "约2月",
+                "acceptanceRate": "待补充",
+                "publisher": "Inst. of Computational Mathematics and Sc./Eng. Computing",
+                "issn": "0254-9409",
+                "eissn": "1991-7139",
+                "frequency": "双月刊",
+                "founded": "1983年",
+                "language": "English",
+                "coverImage": "https://www.global-sci.org/public/journals/15/journalThumbnail_en.png",
+                "website": "https://www.global-sci.org/jcm/",
+                "authorGuide": "https://www.global-sci.org/jcm/authors",
+                "submissionUrl": "https://www.global-sci.org/jcm/submission",
+                "tags": ["Inst. of Computational Mathematics and Sc./Eng. Computing", "数学 - 数学", "中国", "SCIE"],
+                "scope": "Journal of Computational Mathematics (JCM) is an international scientific computing journal founded by Professor Feng Kang in 1983, which is the first Chinese computational mathematics journal published in English. JCM covers all branches of modern computational mathematics such as numerical linear algebra, numerical optimization, computational geometry, numerical PDEs, and inverse problems.",
+                "scopeCN": "《计算数学期刊》是由冯康教授于1983年创办的国际科学计算期刊,是中国第一本用英文出版的计算数学期刊。JCM涵盖现代计算数学的所有分支,如数值线性代数、数值优化、计算几何、数值偏微分方程和反问题。",
+                "researchAreas": "数学 - 数学",
+                "tips": "对ML方法接受度有限,谨慎投稿"
+            },
+            {
+                "name": "Journal of Computational Physics",
+                "chineseName": "计算物理杂志",
+                "abbr": "J COMPUT PHYS",
+                "impactFactor": 3.8,
+                "articles_per_year": 667,
+                "region": "美国",
+                "jcrZone": "Q1",
+                "casZone": "物理与天体物理 2区",
+                "scuZone": "物理与天体物理C",
+                "reviewTime": "约6.5个月 / 约17.2周",
+                "acceptanceRate": "待补充",
+                "publisher": "Academic Press Inc.",
+                "issn": "0021-9991",
+                "eissn": "1090-2716",
+                "frequency": "月刊",
+                "founded": "1966年",
+                "language": "English",
+                "coverImage": "https://ars.els-cdn.com/content/image/X00219991.jpg",
+                "website": "https://www.sciencedirect.com/journal/journal-of-computational-physics",
+                "authorGuide": "https://www.elsevier.com/journals/journal-of-computational-physics/0021-9991/guide-for-authors",
+                "submissionUrl": "https://www.editorialmanager.com/JCOMP",
+                "tags": ["美国", "物理 - 计算机:跨学科应用", "SCIE", "Academic Press Inc."],
+                "scope": "Journal of Computational Physics thoroughly treats the computational aspects of physical problems, presenting techniques for the numerical solution of mathematical equations arising in all areas of physics. The journal seeks to emphasize methods that cross disciplinary boundaries.",
+                "scopeCN": "《计算物理杂志》全面处理物理问题的计算方面,展示物理学所有领域中数学方程数值解的技术。本刊致力于强调跨学科边界的方法。",
+                "researchAreas": "物理 - 计算机:跨学科应用",
+                "tips": "最强烈推荐用于深度学习求解物理PDE的研究"
+            },
+            {
+                "name": "Journal of Scientific Computing",
+                "chineseName": "科学计算杂志",
+                "abbr": "J SCI COMPUT",
+                "impactFactor": 2.8,
+                "articles_per_year": 325,
+                "region": "美国",
+                "jcrZone": "Q1",
+                "casZone": "数学 2区",
+                "scuZone": "数学C",
+                "reviewTime": "偏慢,4-8周",
+                "acceptanceRate": "待补充",
+                "publisher": "Springer US",
+                "issn": "0885-7474",
+                "eissn": "1573-7691",
+                "frequency": "月刊",
+                "founded": "1986年",
+                "language": "English",
+                "coverImage": "https://media.springernature.com/w316/springer-static/cover-hires/journal/10915?as=webp",
+                "website": "https://www.springer.com/journal/10915",
+                "authorGuide": "https://www.springer.com/journal/10915/submission-guidelines",
+                "submissionUrl": "https://www.editorialmanager.com/jomp/default.aspx",
+                "tags": ["美国", "Springer US", "数学 - 应用数学", "SCIE"],
+                "scope": "Journal of Scientific Computing is an international interdisciplinary forum for the publication of papers on state-of-the-art developments in scientific computing and its applications in science and engineering. The journal publishes high-quality, peer-reviewed original papers, review papers and short communications on scientific computing.",
+                "scopeCN": "《科学计算杂志》是一个国际跨学科论坛,发表关于科学计算及其在科学与工程中应用的最新发展论文。本刊发表高质量、同行评审的原创论文、综述论文和科学计算简短通讯。",
+                "researchAreas": "数学 - 应用数学",
+                "tips": "推荐用于方法创新+科学应用的研究"
+            },
+            {
+                "name": "Mathematical Methods in the Applied Sciences",
+                "chineseName": "应用科学中的数学方法",
+                "abbr": "MATH METHOD APPL SCI",
+                "impactFactor": 2.1,
+                "articles_per_year": 838,
+                "region": "英国",
+                "jcrZone": "Q1",
+                "casZone": "数学 4区(3区)",
+                "scuZone": "数学E",
+                "reviewTime": "约6.0个月",
+                "acceptanceRate": "待补充",
+                "publisher": "John Wiley and Sons Ltd",
+                "issn": "0170-4214",
+                "eissn": "1099-1476",
+                "frequency": "半月刊",
+                "founded": "1979年",
+                "language": "English",
+                "coverImage": "https://onlinelibrary.wiley.com/cms/asset/4fbe5733-593d-43d7-bbe8-cd9ea8bf2ca1/mma.v48.16.cover.gif",
+                "website": "https://onlinelibrary.wiley.com/journal/10991476",
+                "authorGuide": "https://onlinelibrary.wiley.com/page/journal/10991476/homepage/forauthors.html",
+                "submissionUrl": "https://mc.manuscriptcentral.com/mma",
+                "tags": ["英国", "John Wiley and Sons Ltd", "数学 - 应用数学", "SCIE"],
+                "scope": "Mathematical Methods in the Applied Sciences publishes papers dealing with new mathematical methods for the consideration of linear and non-linear, direct and inverse problems for physical relevant processes over time- and space- varying media under certain initial, boundary, transition conditions etc. Papers dealing with biomathematical content, population dynamics and network problems are most welcome.",
+                "scopeCN": "《应用科学中的数学方法》发表处理在特定初始、边界、转换条件等下,时间和空间变化介质中物理相关过程的线性和非线性、正向和反向问题的新数学方法的论文。特别欢迎涉及生物数学内容、种群动力学和网络问题的论文。",
+                "researchAreas": "数学 - 应用数学",
+                "tips": "适合有明确生物、社会科学应用的研究"
+            },
+            {
+                "name": "Mathematics and Computers in Simulation",
+                "chineseName": "仿真中的数学与计算机",
+                "abbr": "MATH COMPUT SIMULAT",
+                "impactFactor": 4.4,
+                "articles_per_year": 322,
+                "region": "荷兰",
+                "jcrZone": "Q1",
+                "casZone": "数学 3区(2区)",
+                "scuZone": "数学E",
+                "reviewTime": "约18.0个月",
+                "acceptanceRate": "待补充",
+                "publisher": "Elsevier",
+                "issn": "0378-4754",
+                "eissn": "1872-7166",
+                "frequency": "月刊",
+                "founded": "1977年",
+                "language": "English",
+                "coverImage": "https://ars.els-cdn.com/content/image/X03784754.jpg",
+                "website": "https://www.journals.elsevier.com/mathematics-and-computers-in-simulation",
+                "authorGuide": "https://www.elsevier.com/journals/mathematics-and-computers-in-simulation/0378-4754/guide-for-authors",
+                "submissionUrl": "https://www.editorialmanager.com/matcom/default.aspx",
+                "tags": ["Elsevier", "荷兰", "数学 - 计算机:跨学科应用", "SCIE"],
+                "scope": "The aim of the journal is to provide an international forum for the dissemination of up-to-date information in the fields of the mathematics and computers, in particular (but not exclusively) as they apply to the dynamics of systems, their simulation and scientific computation in general. Mathematics and Computers in Simulation, published monthly, is the official organ of IMACS, the International Association for Mathematics and Computers in Simulation.",
+                "scopeCN": "本刊的目标是为数学和计算机领域(特别是但不限于它们在系统动力学、仿真和一般科学计算中的应用)的最新信息传播提供国际论坛。本刊是IMACS(国际数学与计算机仿真协会,前身为AICA)的官方刊物,月刊发行。",
+                "researchAreas": "数学 - 计算机:跨学科应用",
+                "tips": "适合深度学习加速仿真、替代仿真的研究"
+            },
+            {
+                "name": "Nature Computational Science",
+                "chineseName": "自然计算科学",
+                "abbr": "NAT COMPUT SCI",
+                "impactFactor": 12.0,
+                "articles_per_year": 74,
+                "region": "美国",
+                "jcrZone": "Q1",
+                "casZone": "1区",
+                "scuZone": "CNS",
+                "reviewTime": "",
+                "acceptanceRate": "待补充",
+                "publisher": "Springer Nature",
+                "issn": "2662-8457",
+                "eissn": "",
+                "frequency": "",
+                "founded": "",
+                "language": "English",
+                "coverImage": "https://media.springernature.com/w440/springer-static/cover-hires/journal/43588/5/10?as=webp&q=95",
+                "website": "https://www.nature.com/natcomputsci/",
+                "authorGuide": "https://www.nature.com/natcomputsci/submission-guidelines",
+                "submissionUrl": "https://mts-natcomputsci.nature.com/",
+                "tags": ["Multiple(多学科)", "SCIE / ESCI", "Springer Nature"],
+                "scope": "The main goal of Nature Computational Science is to promote innovative applications of computing technology in various scientific fields, including but not limited to bioinformatics, chemical informatics, geographic informatics, computational physics, cosmology, materials science, and urban science. The content published in the journal covers both fundamental and applied research, including breakthrough algorithms, tools, and frameworks, as well as new insights and solutions to challenging real-world problems discovered through innovative ways of utilizing computing power.",
+                "scopeCN": "《自然计算科学》的主要目标是推广计算技术在各个科学领域的创新应用,包括但不限于生物信息学、化学信息学、地理信息学、计算物理、宇宙学、材料科学和城市科学。本刊发表的内容涵盖基础和应用研究,包括突破性算法、工具和框架,以及通过创新方式利用计算能力发现的具有挑战性的现实问题的新见解和解决方案。",
+                "researchAreas": "Multiple(多学科)",
+                "tips": "仅推荐给有重大突破性成果的工作"
+            },
+            {
+                "name": "Nature Machine Intelligence",
+                "chineseName": "自然机器智能",
+                "abbr": "NAT MACH INTELL",
+                "impactFactor": 18.8,
+                "articles_per_year": 129,
+                "region": "英国",
+                "jcrZone": "Q1",
+                "casZone": "计算机科学 1区",
+                "scuZone": "CNS",
+                "reviewTime": "",
+                "acceptanceRate": "待补充",
+                "publisher": "SPRINGERNATURE",
+                "issn": "2522-5839",
+                "eissn": "2522-5839",
+                "frequency": "12期/年",
+                "founded": "",
+                "language": "English",
+                "coverImage": "https://media.springernature.com/w440/springer-static/cover-hires/journal/42256/7/9?as=webp&q=95",
+                "website": "https://www.nature.com/natmachintell/",
+                "authorGuide": "https://www.nature.com/natmachintell/submission-guidelines",
+                "submissionUrl": "https://mts-natmachintell.nature.com/",
+                "tags": ["英国", "Multiple(多学科)", "SCIE", "SPRINGERNATURE"],
+                "scope": "Nature Machine Intelligence will publish high-quality original research and reviews in a wide range of topics in machine learning, robotics and AI. The journal will also explore and discuss the significant impact that these fields are beginning to have on other scientific disciplines as well as many aspects of society and industry.",
+                "scopeCN": "《自然机器智能》将发表机器学习、机器人和人工智能广泛主题的高质量原创研究和综述。本刊还将探讨和讨论这些领域对其他科学学科以及社会和工业许多方面开始产生的重大影响。",
+                "researchAreas": "Multiple(多学科)",
+                "tips": "仅推荐给AI理论有重大创新的工作"
+            },
+            {
+                "name": "Neural Networks",
+                "chineseName": "神经网络",
+                "abbr": "NEURAL NETWORKS",
+                "impactFactor": 6.0,
+                "articles_per_year": 595,
+                "region": "英国",
+                "jcrZone": "Q1",
+                "casZone": "计算机科学 1区",
+                "scuZone": "计算机科学C",
+                "reviewTime": "约12.0个月 / 约10.5周",
+                "acceptanceRate": "待补充",
+                "publisher": "Elsevier Ltd",
+                "issn": "0893-6080",
+                "eissn": "1879-2782",
+                "frequency": "月刊",
+                "founded": "1988年",
+                "language": "English",
+                "coverImage": "https://ars.els-cdn.com/content/image/X08936080.jpg",
+                "website": "https://www.journals.elsevier.com/neural-networks",
+                "authorGuide": "https://www.elsevier.com/journals/neural-networks/0893-6080/guide-for-authors",
+                "submissionUrl": "https://www.editorialmanager.com/neunet/default.aspx",
+                "tags": ["工程技术 - 计算机:人工智能", "英国", "Elsevier Ltd", "SCIE"],
+                "scope": "Neural Networks is the archival journal of the world's three oldest neural modeling societies: the International Neural Network Society (INNS), the European Neural Network Society (ENNS), and the Japfanese Neural Network Society (JNNS). Neural Networks provides a forum for developing and nurturing an international community of scholars and practitioners who are interested in all aspects of neural networks and related approaches to computational intelligence.",
+                "scopeCN": "《神经网络》是世界三大最古老神经建模学会的档案期刊:国际神经网络学会(INNS)、欧洲神经网络学会(ENNS)和日本神经网络学会(JNNS)。本刊为发展和培育对神经网络及相关计算智能方法各个方面感兴趣的国际学者和实践者社区提供论坛。",
+                "researchAreas": "工程技术 - 计算机:人工智能",
+                "tips": "适合从神经网络理论角度研究PINN的工作"
+            },
+            {
+                "name": "Neurocomputing",
+                "chineseName": "神经计算",
+                "abbr": "NEUROCOMPUTING",
+                "impactFactor": 5.5,
+                "articles_per_year": 903,
+                "region": "荷兰",
+                "jcrZone": "Q1",
+                "casZone": "计算机科学 2区",
+                "scuZone": "计算机科学B",
+                "reviewTime": "约5.7个月 / 约15.5周",
+                "acceptanceRate": "待补充",
+                "publisher": "Elsevier",
+                "issn": "0925-2312",
+                "eissn": "1872-8286",
+                "frequency": "双月刊",
+                "founded": "1989年",
+                "language": "English",
+                "coverImage": "https://ars.els-cdn.com/content/image/X09252312.jpg",
+                "website": "https://www.journals.elsevier.com/neurocomputing",
+                "authorGuide": "https://www.elsevier.com/journals/neurocomputing/0925-2312/guide-for-authors",
+                "submissionUrl": "https://www.editorialmanager.com/NEUCOM",
+                "tags": ["工程技术 - 计算机:人工智能", "Elsevier", "荷兰", "SCIE"],
+                "scope": "Neurocomputing publishes articles describing recent fundamental contributions in the field of neurocomputing. Neurocomputing theory, practice and applications are the essential topics being covered.",
+                "scopeCN": "《神经计算》发表描述神经计算领域近期基本贡献的文章。神经计算理论、实践和应用是涵盖的核心主题。",
+                "researchAreas": "工程技术 - 计算机:人工智能",
+                "tips": "适合应用导向的深度学习求解PDE研究"
+            },
+            {
+                "name": "Nonlinear Dynamics",
+                "chineseName": "非线性动力学",
+                "abbr": "NONLINEAR DYNAM",
+                "impactFactor": 5.2,
+                "articles_per_year": 986,
+                "region": "美国",
+                "jcrZone": "Q1",
+                "casZone": "工程技术 2区",
+                "scuZone": "工程技术C",
+                "reviewTime": "约3.0个月",
+                "acceptanceRate": "待补充",
+                "publisher": "Springer Netherlands",
+                "issn": "0924-090X",
+                "eissn": "1573-269X",
+                "frequency": "月刊",
+                "founded": "1990年",
+                "language": "English",
+                "coverImage": "https://media.springernature.com/w316/springer-static/cover-hires/journal/11071?as=webp",
+                "website": "https://www.springer.com/journal/11071",
+                "authorGuide": "https://www.springer.com/journal/11071/submission-guidelines",
+                "submissionUrl": "https://www.editorialmanager.com/nody",
+                "tags": ["美国", "Springer Netherlands", "工程技术 - 工程:机械", "SCIE"],
+                "scope": "Nonlinear Dynamics provides a forum for the rapid publication of original research in the field. The journal's scope encompasses all nonlinear dynamic phenomena associated with mechanical, structural, civil, aeronautical, ocean, electrical, and control systems.",
+                "scopeCN": "《非线性动力学》为该领域原创研究的快速发表提供论坛。本刊范围涵盖与机械、结构、土木、航空、海洋、电气和控制系统相关的所有非线性动力学现象。",
+                "researchAreas": "工程技术 - 工程:机械",
+                "tips": "强烈推荐用于非线性系统的深度学习研究"
+            },
+            {
+                "name": "Numerical Methods for Partial Differential Equations",
+                "chineseName": "偏微分方程数值方法",
+                "abbr": "NUMER METH PART D E",
+                "impactFactor": 2.1,
+                "articles_per_year": 95,
+                "region": "美国",
+                "jcrZone": "Q1",
+                "casZone": "数学 3区",
+                "scuZone": "数学D",
+                "reviewTime": "约8.0个月",
+                "acceptanceRate": "待补充",
+                "publisher": "John Wiley and Sons Inc.",
+                "issn": "0749-159X",
+                "eissn": "1098-2426",
+                "frequency": "双月刊",
+                "founded": "1985年",
+                "language": "English",
+                "coverImage": "https://onlinelibrary.wiley.com/cms/asset/9594a66b-9aff-4707-ac10-97d6298ad828/num.v41.6.cover.gif",
+                "website": "https://onlinelibrary.wiley.com/journal/10982426",
+                "authorGuide": "https://onlinelibrary.wiley.com/page/journal/10982426/homepage/forauthors.html",
+                "submissionUrl": "https://mc.manuscriptcentral.com/num",
+                "tags": ["美国", "数学 - 应用数学", "John Wiley and Sons Inc.", "SCIE"],
+                "scope": "An international journal that aims to cover research into the development and analysis of new methods for the numerical solution of partial differential equations, it is intended that it be readily readable by and directed to a broad spectrum of researchers into numerical methods for partial differential equations throughout science and engineering. The numerical methods and techniques themselves are emphasized rather than the specific applications.",
+                "scopeCN": "一本旨在涵盖偏微分方程数值解新方法开发和分析研究的国际期刊,期望对科学和工程领域研究偏微分方程数值方法的广泛研究者易读且有针对性。强调数值方法和技术本身而非具体应用。",
+                "researchAreas": "数学 - 应用数学",
+                "tips": "最对口的期刊之一,专门针对PDE数值方法"
+            },
+            {
+                "name": "SCIENCE CHINA Mathematics",
+                "chineseName": "中国科学:数学",
+                "abbr": "SCI CHINA MATH",
+                "impactFactor": 1.4,
+                "articles_per_year": 115,
+                "region": "中国",
+                "jcrZone": "Q1",
+                "casZone": "数学 1区",
+                "scuZone": "数学B",
+                "reviewTime": "一般,3-8周",
+                "acceptanceRate": "待补充",
+                "publisher": "Science China Press",
+                "issn": "1674-7283",
+                "eissn": "1869-1862",
+                "frequency": "月刊",
+                "founded": "1997年",
+                "language": "English",
+                "coverImage": "https://media.springernature.com/w316/springer-static/cover-hires/journal/11425?as=webp",
+                "website": "https://link.springer.com/journal/11425",
+                "authorGuide": "https://link.springer.com/journal/11425/submission-guidelines",
+                "submissionUrl": "https://mc03.manuscriptcentral.com/scmath",
+                "tags": ["数学 - 应用数学", "Science China Press", "数学 - 数学", "中国", "SCIE"],
+                "scope": "Science China Mathematics is committed to publishing high-quality, original results in both basic and applied research. It presents reviews that summarize representative results and achievements in a particular topic or an area, comment on the current state of research, or advise on research directions.",
+                "scopeCN": "《中国科学:数学》致力于发表基础和应用研究的高质量原创成果。发表综述,总结特定主题或领域的代表性成果和成就,评论当前研究状况,或建议研究方向。",
+                "researchAreas": "数学 - 数学, 数学 - 应用数学",
+                "tips": "对深度学习方法接受度有限"
+            },
+            {
+                "name": "SCIENCE CHINA Physics, Mechanics & Astronomy",
+                "chineseName": "中国科学:物理学、力学与天文学",
+                "abbr": "SCI CHINA PHYS MECH",
+                "impactFactor": 6.4,
+                "articles_per_year": 196,
+                "region": "中国",
+                "jcrZone": "Q1",
+                "casZone": "物理与天体物理 1区",
+                "scuZone": "物理与天体物理C",
+                "reviewTime": "约3.6个月",
+                "acceptanceRate": "待补充",
+                "publisher": "Science China Press",
+                "issn": "1674-7348",
+                "eissn": "1869-1927",
+                "frequency": "月刊",
+                "founded": "2003年",
+                "language": "English",
+                "coverImage": "https://media.springernature.com/w316/springer-static/cover-hires/journal/11433?as=webp",
+                "website": "https://link.springer.com/journal/11433",
+                "authorGuide": "https://link.springer.com/journal/11433/submission-guidelines",
+                "submissionUrl": "https://mc03.manuscriptcentral.com/scpma",
+                "tags": ["物理 - 综合", "中国", "SCIE", "Science China Press"],
+                "scope": "Science China Physics, Mechanics & Astronomy, an academic journal cosponsored by the Chinese Academy of Sciences and the National Natural Science Foundation of China, and published by Science China Press, is committed to publishing high-quality, original results in both basic and applied research.",
+                "scopeCN": "《中国科学:物理学、力学与天文学》是由中国科学院和国家自然科学基金委员会共同主办、科学出版社出版的学术期刊,致力于发表基础和应用研究的高质量原创成果。",
+                "researchAreas": "物理 - 综合",
+                "tips": "适合国内学者发表AI for Physics研究"
+            },
+            {
+                "name": "SIAM Journal on Scientific Computing",
+                "chineseName": "SIAM科学计算杂志",
+                "abbr": "SIAM J SCI COMPUT",
+                "impactFactor": 3.0,
+                "articles_per_year": 188,
+                "region": "美国",
+                "jcrZone": "Q1",
+                "casZone": "数学 2区",
+                "scuZone": "数学C",
+                "reviewTime": "约6月",
+                "acceptanceRate": "待补充",
+                "publisher": "Society for Industrial and Applied Mathematics Publications",
+                "issn": "1064-8275",
+                "eissn": "1095-7197",
+                "frequency": "双月刊",
+                "founded": "1993年",
+                "language": "English",
+                "coverImage": "https://epubs.siam.org/cms/10.1137/sjoce3.47.5/asset/17efe382-d417-fe38-2d41-efe3822d417e/cover.jpg",
+                "website": "https://epubs.siam.org/journal/sjoce3",
+                "authorGuide": "https://www.siam.org/publications/journals/siam-journal-on-scientific-computing-sisc/submission-guidelines",
+                "submissionUrl": "https://www.siam.org/publications/journals/siam-journal-scientific-computing",
+                "tags": ["美国", "应用数学 - 数学", "SCIE", "Society for Industrial and Applied Mathematics Publications"],
+                "scope": "The purpose of SIAM Journal on Scientific Computing (SISC) is to advance computational methods for solving scientific and engineering problems. SISC papers are classified into three categories: (1) Methods and Algorithms for Scientific Computing (2) Computational Methods in Science and Engineering (3) Software and High-Performance Computing",
+                "scopeCN": "《SIAM科学计算杂志》的目的是推进解决科学和工程问题的计算方法。SISC论文分为三类:(1)科学计算的方法和算法(2)科学与工程中的计算方法(3)软件与高性能计算",
+                "researchAreas": "应用数学 - 数学",
+                "tips": "强烈推荐用于有理论深度的PINN研究"
+            },
+            {
+                "name": "SIAM Review",
+                "chineseName": "SIAM评论",
+                "abbr": "SIAM REV",
+                "impactFactor": 10.8,
+                "articles_per_year": 28,
+                "region": "美国",
+                "jcrZone": "Q1",
+                "casZone": "数学 1区",
+                "scuZone": "数学B",
+                "reviewTime": "约稿 周期不定",
+                "acceptanceRate": "待补充",
+                "publisher": "Society for Industrial and Applied Mathematics Publications",
+                "issn": "0036-1445",
+                "eissn": "1095-7200",
+                "frequency": "季刊",
+                "founded": "1959年",
+                "language": "English",
+                "coverImage": "https://epubs.siam.org/cms/10.1137/siread.67.3/asset/19884202-b019-8420-9b01-8842029b0198/cover.jpg",
+                "website": "https://epubs.siam.org/journal/siread",
+                "authorGuide": "https://epubs.siam.org/journal-authors",
+                "submissionUrl": "https://sirev.siam.org/cgi-bin/main.plex",
+                "tags": ["美国", "数学 - 应用数学", "SCIE", "Society for Industrial and Applied Mathematics Publications"],
+                "scope": "SIAM Review (SIREV) consists of the following five sections: Survey and Review, Research Spotlights, SIGEST, Education, and Book Reviews. Survey and Review features papers with a deliberately integrative and up-to-date perspective on a major topic in applied or computational mathematics or scientific computing.",
+                "scopeCN": "《SIAM评论》由以下五个部分组成:调查与综述、研究亮点、SIGEST、教育和书评。调查与综述刊登对应用或计算数学或科学计算主要主题具有刻意整合性和最新视角的论文。",
+                "researchAreas": "数学 - 应用数学",
+                "tips": "仅推荐给领域内资深专家"
+            }]
+            ;
+
+        // Render journals
+        function renderJournals(journalsToRender) {
+            const grid = document.getElementById('journalsGrid');
+            const noResults = document.getElementById('noResults');
+
+            if (journalsToRender.length === 0) {
+                grid.innerHTML = '';
+                noResults.style.display = 'block';
+                return;
+            }
+
+            noResults.style.display = 'none';
+            grid.innerHTML = journalsToRender.map(journal => `
+                <div class="journal-card" onclick="openModal(${journals.indexOf(journal)})">
+                    <!-- 上半部分：封面、标题、简称、分区 -->
+                    <div class="journal-upper" style="min-height: 200px;">
+                        <!-- 封面和链接容器 -->
+                        <div class="journal-cover-container">
+                            <div class="journal-cover">
+                                ${journal.coverImage ?
+                    (() => {
+                        const img = document.createElement('img');
+                        img.src = journal.coverImage;
+                        img.alt = journal.name;
+                        img.onerror = function () {
+                            this.parentElement.innerHTML = '<div class="journal-cover-placeholder">封面<br>暂缺</div>';
+                        };
+                        return img.outerHTML;
+                    })() :
+                    '<div class="journal-cover-placeholder">封面<br>暂缺</div>'
+                }
+                            </div>
+                        </div>
+                        <div class="journal-content">
+                            <div class="journal-header">
+                                <h3 class="journal-title">${journal.name}</h3>
+                            </div>
+                            <p class="journal-abbr">
+                                ${journal.abbr}<br>
+                                <small style="color: var(--text-dim); font-size: 0.85rem; margin-top: 0.2rem; display: inline-block;">${journal.chineseName || ''}</small>
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <!-- 下半部分：其他信息 -->
+                    <div class="journal-lower" style="min-height: 280px;">
+                        <div class="journal-metrics">
+                            <div class="metric">
+                                <div class="metric-value">${journal.impactFactor}</div>
+                                <div class="metric-label">IF</div>
+                            </div>
+                            <div class="metric">
+                                <div class="metric-value">${journal.articles_per_year}</div>
+                                <div class="metric-label">年文章数</div>
+                            </div>
+                            <div class="metric">
+                                <div class="metric-value">${journal.region}</div>
+                                <div class="metric-label">地区</div>
+                            </div>
+                            <div class="journal-zones-inline">
+                                ${journal.jcrZone ? `
+                                    <div class="zone-metric">
+                                        <div class="zone-metric-value">${journal.jcrZone}</div>
+                                        <div class="zone-metric-label">JCR</div>
+                                    </div>
+                                ` : ''}
+                                ${journal.casZone ? `
+                                    <div class="zone-metric">
+                                        <div class="zone-metric-value">${journal.casZone}</div>
+                                        <div class="zone-metric-label">中科院</div>
+                                    </div>
+                                ` : ''}
+                                ${journal.scuZone ? `
+                                    <div class="zone-metric">
+                                        <div class="zone-metric-value">${journal.scuZone.replace('级', '')}</div>
+                                        <div class="zone-metric-label">川大</div>
+                                    </div>
+                                ` : ''}
+                            </div>
+                        </div>
+                        <div class="journal-tags">
+                            ${journal.tags.slice(0, 4).map(tag => `<span class="tag ${tag.includes('AI4Science') || tag.includes('PINN') || tag.includes('深度学习') ? 'tag-highlight' : ''}">${tag}</span>`).join('')}
+                        </div>
+                        <div class="journal-info">
+                            <strong>审稿:</strong> ${journal.reviewTime} | <strong>接受率:</strong> ${journal.acceptanceRate}
+                        </div>
+
+                        
+                        <!-- 期刊链接区域 - 放在下半部分 -->
+                        <div class="journal-links">
+                            <a href="${journal.website}" target="_blank" class="journal-link" title="期刊主页" rel="noopener noreferrer" aria-label="访问期刊主页" onclick="event.stopPropagation()">
+                                <span>主页</span>
+                            </a>
+                            <a href="${journal.authorGuide}" target="_blank" class="journal-link" title="作者指南" rel="noopener noreferrer" aria-label="查看作者指南" onclick="event.stopPropagation()">
+                                <span>指南</span>
+                            </a>
+                            <a href="${journal.submissionUrl}" target="_blank" class="journal-link" title="在线投稿" rel="noopener noreferrer" aria-label="在线投稿" onclick="event.stopPropagation()">
+                                <span>投稿</span>
+                            </a>
+                        </div>
+                        <div class="journal-arrow">→</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Filter and sort
+        function filterAndSort() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const filterZone = document.getElementById('filterZone').value;
+            const sortBy = document.getElementById('sortBy').value;
+
+            let filtered = journals.filter(journal => {
+                const matchesSearch = journal.name.toLowerCase().includes(searchTerm) ||
+                    journal.abbr.toLowerCase().includes(searchTerm) ||
+                    journal.tags.some(tag => tag.toLowerCase().includes(searchTerm)) ||
+                    (journal.scope && journal.scope.toLowerCase().includes(searchTerm)) ||
+                    (journal.recentArticles && journal.recentArticles.toLowerCase().includes(searchTerm));
+                const matchesZone = filterZone === 'all' || journal.zone === filterZone;
+                return matchesSearch && matchesZone;
+            });
+
+            filtered.sort((a, b) => {
+                switch (sortBy) {
+                    case 'impact':
+                        return b.impactFactor - a.impactFactor;
+                    case 'zone':
+                        return a.zone.localeCompare(b.zone);
+                    case 'name':
+                        return a.name.localeCompare(b.name);
+                    default:
+                        return 0;
+                }
+            });
+
+            renderJournals(filtered);
+        }
+
+        // Modal
+        function openModal(index) {
+            const journal = journals[index];
+            const modal = document.getElementById('modal');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalAbbr = document.getElementById('modalAbbr');
+            const modalCover = document.getElementById('modalCover');
+            const modalBody = document.getElementById('modalBody');
+
+            // 出版社国家映射
+            const publisherCountry = {
+                "Elsevier": "荷兰 🇳🇱",
+                "SIAM": "美国 🇺🇸",
+                "Springer": "德国 🇩🇪",
+                "Taylor & Francis": "英国 🇬🇧",
+                "Wiley": "美国 🇺🇸"
+            };
+
+            const country = publisherCountry[journal.publisher] || "国际 🌍";
+
+            modalTitle.textContent = journal.name;
+            modalAbbr.innerHTML = `${journal.abbr}<br><small style="color: var(--text-dim); font-size: 0.9rem;">${journal.chineseName || ''}</small> | ${country} | IF: ${journal.impactFactor}`;
+
+            // 在标题和简称下方添加研究方向，然后添加关键词标签
+            const modalHeaderText = document.querySelector('.modal-header-text');
+
+            // 移除现有的研究方向和标签
+            const existingResearchAreas = modalHeaderText.querySelector('.journal-research-areas');
+            const existingTags = modalHeaderText.querySelector('.journal-tags');
+            if (existingResearchAreas) {
+                existingResearchAreas.remove();
+            }
+            if (existingTags) {
+                existingTags.remove();
+            }
+
+            // 添加研究方向（如果有）
+            if (journal.researchAreas) {
+                const researchAreasDiv = document.createElement('div');
+                researchAreasDiv.className = 'journal-research-areas';
+                researchAreasDiv.style.marginTop = '0.8rem';
+                researchAreasDiv.style.marginBottom = '0.5rem';
+                researchAreasDiv.innerHTML = `<span style="color: var(--text-dim); font-size: 0.9rem;"><strong>涉及的研究方向：</strong>${journal.researchAreas}</span>`;
+                modalHeaderText.appendChild(researchAreasDiv);
+            }
+
+            // 添加关键词标签
+            const tagsDiv = document.createElement('div');
+            tagsDiv.className = 'journal-tags';
+            tagsDiv.style.marginTop = journal.researchAreas ? '0.5rem' : '1rem';
+            tagsDiv.style.marginBottom = '0';
+            tagsDiv.innerHTML = journal.tags.map(tag => `<span class="tag">${tag}</span>`).join('');
+            modalHeaderText.appendChild(tagsDiv);
+
+            // 显示封面
+            if (journal.coverImage) {
+                const img = document.createElement('img');
+                img.src = journal.coverImage;
+                img.alt = journal.name;
+                img.onerror = function () {
+                    this.parentElement.innerHTML = '<div class="journal-cover-placeholder" style="height:100%;">封面加载失败</div>';
+                };
+                modalCover.innerHTML = '';
+                modalCover.appendChild(img);
+            } else {
+                modalCover.innerHTML = `<div class="journal-cover-placeholder" style="height: 100%;">封面暂缺</div>`;
+            }
+
+            modalBody.innerHTML = `
+                <div class="info-section">
+                    <h3>期刊基本信息</h3>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <div class="info-label">出版社</div>
+                            <div class="info-value">${journal.publisher}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">ISSN</div>
+                            <div class="info-value">${journal.issn}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">eISSN</div>
+                            <div class="info-value">${journal.eissn}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">审稿周期</div>
+                            <div class="info-value">${journal.reviewTime}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">接受率</div>
+                            <div class="info-value">${journal.acceptanceRate}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">开放获取</div>
+                            <div class="info-value">${journal.openAccess}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">年文章数</div>
+                            <div class="info-value">${journal.articles_per_year}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">地区</div>
+                            <div class="info-value">${journal.region}</div>
+                        </div>
+
+                        ${journal.language ? `
+                        <div class="info-item">
+                            <div class="info-label">出版语言</div>
+                            <div class="info-value">${journal.language}</div>
+                        </div>
+                        ` : ''}
+                        ${journal.frequency ? `
+                        <div class="info-item">
+                            <div class="info-label">出版周期</div>
+                            <div class="info-value">${journal.frequency}</div>
+                        </div>
+                        ` : ''}
+                        ${journal.publicationYear ? `
+                        <div class="info-item">
+                            <div class="info-label">出版年份</div>
+                            <div class="info-value">${journal.publicationYear}</div>
+                        </div>
+                        ` : ''}
+                        ${journal.annualArticles ? `
+                        <div class="info-item">
+                            <div class="info-label">年文章数</div>
+                            <div class="info-value">${journal.annualArticles}</div>
+                        </div>
+                        ` : ''}
+                        ${journal.jcrZone ? `
+                        <div class="info-item">
+                            <div class="info-label">JCR分区</div>
+                            <div class="info-value">${journal.jcrZone}</div>
+                        </div>
+                        ` : ''}
+                        ${journal.casZone ? `
+                        <div class="info-item">
+                            <div class="info-label">中科院分区</div>
+                            <div class="info-value">${journal.casZone}</div>
+                        </div>
+                        ` : ''}
+                        ${journal.scuZone ? `
+                        <div class="info-item">
+                            <div class="info-label">川大期刊分级</div>
+                            <div class="info-value">${journal.scuZone}</div>
+                        </div>
+                        ` : ''}
+                    </div>
+                </div>
+
+                <div class="info-section">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem;">
+                        <h3 style="margin: 0; flex: 1;">研究范围 (Scope)</h3>
+                        <div class="language-switcher single-icon" style="margin-left: 1rem; margin-top: 0.2rem;">
+                            <button class="lang-toggle-btn" onclick="toggleScopeLanguage(this)" title="切换语言">
+                                <svg class="translate-icon" width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M12.87 15.07l-2.54-2.51.03-.03c1.74-1.94 2.98-4.17 3.71-6.53H17V4h-7V2H8v2H1v1.99h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11.76-2.04zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2l-4.5-12zm-2.62 7l1.62-4.33L19.12 17h-3.24z"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="scope-content">
+                        <p class="info-text scope-en" style="display: block;">${journal.scope}</p>
+                        ${journal.scopeCN ? `<p class="info-text scope-cn" style="display: none;">${journal.scopeCN}</p>` : `<p class="info-text scope-cn" style="display: none; color: var(--text-dim); font-style: italic;">中文版本准备中...</p>`}
+                    </div>
+                </div>
+
+
+
+                <div class="info-section">
+                    <h3>投稿建议</h3>
+                    <p class="info-text">${journal.tips}</p>
+                </div>
+
+                <div class="info-section">
+                    <h3>相关链接</h3>
+                    <a href="${journal.website}" target="_blank" class="link-btn">期刊主页</a>
+                    <a href="${journal.authorGuide}" target="_blank" class="link-btn">作者指南</a>
+                    <a href="${journal.submissionUrl}" target="_blank" class="link-btn">在线投稿系统</a>
+                </div>
+            `;
+
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('modal');
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        // Click outside to close
+        document.getElementById('modal').addEventListener('click', (e) => {
+            if (e.target.id === 'modal') {
+                closeModal();
+            }
+        });
+
+        // ESC to close
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+
+        // 定义全局函数用于语言切换
+        window.switchScopeLanguage = function (lang, btn) {
+            const container = btn.closest('.info-section');
+            const enText = container.querySelector('.scope-en');
+            const cnText = container.querySelector('.scope-cn');
+            const buttons = container.querySelectorAll('.lang-btn');
+            const scopeContent = container.querySelector('.scope-content');
+
+            // 添加切换动画效果
+            scopeContent.classList.add('switching');
+
+            // 延迟执行切换，创建平滑过渡
+            setTimeout(() => {
+                // 更新按钮状态
+                buttons.forEach(b => {
+                    b.classList.remove('active');
+                });
+                btn.classList.add('active');
+
+                // 切换文本显示
+                if (lang === 'en') {
+                    enText.style.display = 'block';
+                    cnText.style.display = 'none';
+                } else {
+                    enText.style.display = 'none';
+                    cnText.style.display = 'block';
+                }
+
+                // 移除切换动画类
+                scopeContent.classList.remove('switching');
+            }, 150);
+        }
+
+        // 单个图标自动切换语言函数
+        window.toggleScopeLanguage = function (btn) {
+            const container = btn.closest('.info-section');
+            const enText = container.querySelector('.scope-en');
+            const cnText = container.querySelector('.scope-cn');
+            const scopeContent = container.querySelector('.scope-content');
+
+            // 检查当前显示的语言
+            const isEnglish = enText.style.display !== 'none';
+
+            // 添加切换动画效果
+            scopeContent.classList.add('switching');
+
+            // 延迟执行切换，创建平滑过渡
+            setTimeout(() => {
+                if (isEnglish) {
+                    // 切换到中文
+                    enText.style.display = 'none';
+                    cnText.style.display = 'block';
+                    btn.classList.add('active-lang');
+                } else {
+                    // 切换到英文
+                    enText.style.display = 'block';
+                    cnText.style.display = 'none';
+                    btn.classList.remove('active-lang');
+                }
+
+                // 移除切换动画类
+                scopeContent.classList.remove('switching');
+
+                // 添加图标旋转效果
+                const icon = btn.querySelector('.translate-icon');
+                icon.style.transform = 'rotate(360deg)';
+                setTimeout(() => {
+                    icon.style.transform = 'rotate(0deg)';
+                }, 300);
+            }, 150);
+        }
+
+        // Event listeners
+        document.getElementById('searchInput').addEventListener('input', filterAndSort);
+        document.getElementById('filterZone').addEventListener('change', filterAndSort);
+        document.getElementById('sortBy').addEventListener('change', filterAndSort);
+
+        // 初始渲染
+        renderJournals(journals);
+    </script>
+</body>
+
+</html>

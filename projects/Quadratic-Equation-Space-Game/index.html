@@ -1,0 +1,3804 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>一元二次方程游戏之旅 - 图灵的猫</title>
+    <!-- 引入Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 引入Font Awesome -->
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <!-- 引入GSAP动画库 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollToPlugin.min.js"></script>
+
+    <!-- 配置Tailwind自定义颜色和字体 -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#0ea5e9', // 主蓝色
+                        secondary: '#7c3aed', // 紫色
+                        accent: '#ec4899', // 粉色强调色
+                        dark: '#0f172a', // 深色背景
+                        light: '#f8fafc'  // 浅色文本
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif']
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                        'glow': 'glow 2s ease-in-out infinite alternate'
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' }
+                        },
+                        glow: {
+                            '0%': { boxShadow: '0 0 5px rgba(14, 165, 233, 0.5)' },
+                            '100%': { boxShadow: '0 0 20px rgba(14, 165, 233, 0.8), 0 0 30px rgba(124, 58, 237, 0.5)' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- 自定义工具类 -->
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .text-shadow {
+                text-shadow: 0 0 10px rgba(14, 165, 233, 0.7);
+            }
+            .bg-grid {
+                background-image: linear-gradient(rgba(14, 165, 233, 0.1) 1px, transparent 1px),
+                                linear-gradient(90deg, rgba(14, 165, 233, 0.1) 1px, transparent 1px);
+                background-size: 20px 20px;
+            }
+            .perspective-1000 {
+                perspective: 1000px;
+            }
+            .preserve-3d {
+                transform-style: preserve-3d;
+            }
+            .backdrop-blur-md {
+                backdrop-filter: blur(12px);
+            }
+        }
+    </style>
+
+    <!-- 全局样式 -->
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            background-color: #0f172a;
+            color: #f8fafc;
+        }
+
+        /* 滚动条样式 */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #1e293b;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #0ea5e9;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #0284c7;
+        }
+
+        /* 动画效果 */
+        .equation {
+            font-family: 'Times New Roman', serif;
+            transition: all 0.3s ease;
+        }
+
+        .equation:hover {
+            transform: scale(1.03);
+            color: #38bdf8;
+        }
+
+        /* 3D卡片效果 */
+        .card-3d {
+            transition: transform 0.5s ease;
+        }
+
+        .card-3d:hover {
+            transform: translateY(-10px) rotateX(5deg) rotateY(5deg);
+        }
+
+        /* 星空背景 */
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        /* 粒子动画 */
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            background: white;
+            opacity: 0.8;
+        }
+    </style>
+</head>
+
+<body class="min-h-screen bg-dark text-light bg-grid">
+
+    <!-- JavaScript代码 -->
+    <script>
+        // 绘制概念图1
+        function drawConceptGraph1() {
+            const canvas = document.getElementById('conceptGraph1');
+            if (!canvas) return;
+
+            // 设置Canvas尺寸
+            canvas.width = 280;
+            canvas.height = 200;
+
+            const ctx = canvas.getContext('2d');
+            const width = canvas.width;
+            const height = canvas.height;
+
+            // 清空画布
+            ctx.fillStyle = 'rgba(15, 23, 42, 0.9)';
+            ctx.fillRect(0, 0, width, height);
+
+            // 绘制坐标轴
+            ctx.strokeStyle = '#475569';
+            ctx.lineWidth = 1;
+
+            // x轴
+            ctx.beginPath();
+            ctx.moveTo(20, height / 2);
+            ctx.lineTo(width - 20, height / 2);
+            ctx.stroke();
+
+            // y轴
+            ctx.beginPath();
+            ctx.moveTo(width / 2, 20);
+            ctx.lineTo(width / 2, height - 20);
+            ctx.stroke();
+
+            // 绘制抛物线 y = x²
+            ctx.strokeStyle = '#0ea5e9';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+
+            for (let x = -4; x <= 4; x += 0.1) {
+                const y = x * x;
+                const canvasX = width / 2 + x * 20;
+                const canvasY = height / 2 - y * 8;
+
+                if (x === -4) {
+                    ctx.moveTo(canvasX, canvasY);
+                } else {
+                    ctx.lineTo(canvasX, canvasY);
+                }
+            }
+            ctx.stroke();
+
+            // 添加发光效果
+            ctx.shadowColor = '#0ea5e9';
+            ctx.shadowBlur = 10;
+            ctx.stroke();
+            ctx.shadowBlur = 0;
+        }
+
+        // 绘制根的可视化
+        function drawRootsVisualization() {
+            const canvas = document.getElementById('rootsVisualization');
+            if (!canvas) return;
+
+            // 设置Canvas尺寸
+            canvas.width = 280;
+            canvas.height = 200;
+
+            const ctx = canvas.getContext('2d');
+            const width = canvas.width;
+            const height = canvas.height;
+
+            // 清空画布
+            ctx.fillStyle = 'rgba(15, 23, 42, 0.9)';
+            ctx.fillRect(0, 0, width, height);
+
+            // 绘制坐标轴
+            ctx.strokeStyle = '#475569';
+            ctx.lineWidth = 1;
+
+            ctx.beginPath();
+            ctx.moveTo(20, height / 2);
+            ctx.lineTo(width - 20, height / 2);
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.moveTo(width / 2, 20);
+            ctx.lineTo(width / 2, height - 20);
+            ctx.stroke();
+
+            // 绘制方程 x² - 4 = 0 的图像
+            ctx.strokeStyle = '#ec4899';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+
+            for (let x = -3; x <= 3; x += 0.1) {
+                const y = x * x - 4;
+                const canvasX = width / 2 + x * 30;
+                const canvasY = height / 2 - y * 10;
+
+                if (x === -3) {
+                    ctx.moveTo(canvasX, canvasY);
+                } else {
+                    ctx.lineTo(canvasX, canvasY);
+                }
+            }
+            ctx.stroke();
+
+            // 标记根点
+            ctx.fillStyle = '#f59e0b';
+            ctx.beginPath();
+            ctx.arc(width / 2 - 60, height / 2, 4, 0, 2 * Math.PI); // x = -2
+            ctx.fill();
+
+            ctx.beginPath();
+            ctx.arc(width / 2 + 60, height / 2, 4, 0, 2 * Math.PI); // x = 2
+            ctx.fill();
+        }
+
+        // 绘制太空舱设计（动态版本）
+        function drawSpacecraftDesignDynamic(cutSize = 5) {
+            const canvas = document.getElementById('spacecraftDesign');
+            if (!canvas) return;
+
+            // 设置Canvas尺寸
+            canvas.width = 400;
+            canvas.height = 300;
+
+            const ctx = canvas.getContext('2d');
+            const width = canvas.width;
+            const height = canvas.height;
+
+            // 清空画布
+            ctx.fillStyle = 'rgba(15, 23, 42, 0.9)';
+            ctx.fillRect(0, 0, width, height);
+
+            // 绘制星空背景
+            ctx.fillStyle = '#ffffff';
+            for (let i = 0; i < 30; i++) {
+                const x = Math.random() * width;
+                const y = Math.random() * height;
+                const size = Math.random() * 1.5;
+                ctx.beginPath();
+                ctx.arc(x, y, size, 0, 2 * Math.PI);
+                ctx.fill();
+            }
+
+            // 计算实际尺寸
+            const originalLength = 100;
+            const originalWidth = 50;
+            const actualLength = originalLength - 2 * cutSize;
+            const actualWidth = originalWidth - 2 * cutSize;
+            const actualArea = actualLength * actualWidth;
+
+            // 绘制太空舱底板
+            const centerX = width / 2;
+            const centerY = height / 2;
+            const scale = 2; // 缩放因子
+            const baseWidth = actualLength * scale;
+            const baseHeight = actualWidth * scale;
+            const cutSizeScaled = cutSize * scale;
+
+            // 主体底板
+            ctx.fillStyle = 'rgba(14, 165, 233, 0.3)';
+            ctx.strokeStyle = '#0ea5e9';
+            ctx.lineWidth = 2;
+            ctx.fillRect(centerX - baseWidth / 2, centerY - baseHeight / 2, baseWidth, baseHeight);
+            ctx.strokeRect(centerX - baseWidth / 2, centerY - baseHeight / 2, baseWidth, baseHeight);
+
+            // 切除的角（显示为虚线）
+            ctx.strokeStyle = '#ec4899';
+            ctx.setLineDash([5, 5]);
+            ctx.lineWidth = 1;
+
+            // 四个角的切除区域
+            const corners = [
+                { x: centerX - baseWidth / 2 - cutSizeScaled, y: centerY - baseHeight / 2 - cutSizeScaled },
+                { x: centerX + baseWidth / 2, y: centerY - baseHeight / 2 - cutSizeScaled },
+                { x: centerX - baseWidth / 2 - cutSizeScaled, y: centerY + baseHeight / 2 },
+                { x: centerX + baseWidth / 2, y: centerY + baseHeight / 2 }
+            ];
+
+            corners.forEach(corner => {
+                ctx.strokeRect(corner.x, corner.y, cutSizeScaled, cutSizeScaled);
+            });
+
+            ctx.setLineDash([]);
+
+            // 标注尺寸
+            ctx.fillStyle = '#f8fafc';
+            ctx.font = '12px Arial';
+            ctx.textAlign = 'center';
+
+            // 长度标注
+            ctx.fillText(`${actualLength.toFixed(1)}m`, centerX, centerY - baseHeight / 2 - 15);
+            // 宽度标注
+            ctx.save();
+            ctx.translate(centerX - baseWidth / 2 - 25, centerY);
+            ctx.rotate(-Math.PI / 2);
+            ctx.fillText(`${actualWidth.toFixed(1)}m`, 0, 0);
+            ctx.restore();
+
+            // 切除边长标注
+            ctx.fillStyle = '#ec4899';
+            ctx.font = '10px Arial';
+            ctx.fillText(`x=${cutSize}`, centerX - baseWidth / 2 - cutSizeScaled / 2, centerY - baseHeight / 2 - cutSizeScaled / 2);
+
+            // 面积显示
+            ctx.fillStyle = '#f59e0b';
+            ctx.font = '14px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText(`面积: ${actualArea.toFixed(1)} m²`, centerX, centerY + baseHeight / 2 + 30);
+
+            // 目标面积对比
+            const targetArea = 3600;
+            const diff = Math.abs(actualArea - targetArea);
+            ctx.fillStyle = diff < 10 ? '#10b981' : '#ef4444';
+            ctx.font = '12px Arial';
+            ctx.fillText(`目标: ${targetArea} m² (差值: ${diff.toFixed(1)})`, centerX, centerY + baseHeight / 2 + 50);
+        }
+
+        // 初始化太空舱设计求解器
+        function initSpacecraftSolver() {
+            const cutSizeSlider = document.getElementById('cutSize');
+            const cutValueSpan = document.getElementById('cutValue');
+            const resultLength = document.getElementById('resultLength');
+            const resultWidth = document.getElementById('resultWidth');
+            const resultArea = document.getElementById('resultArea');
+
+            if (!cutSizeSlider) return;
+
+            function updateSpacecraft() {
+                const cutSize = parseFloat(cutSizeSlider.value);
+                const length = 100 - 2 * cutSize;
+                const width = 50 - 2 * cutSize;
+                const area = length * width;
+
+                // 更新显示值
+                cutValueSpan.textContent = cutSize.toFixed(1);
+                resultLength.textContent = length.toFixed(1);
+                resultWidth.textContent = width.toFixed(1);
+                resultArea.textContent = area.toFixed(0);
+
+                // 重绘图像
+                drawSpacecraftDesignDynamic(cutSize);
+            }
+
+            // 绑定事件监听器
+            cutSizeSlider.addEventListener('input', updateSpacecraft);
+
+            // 初始化
+            updateSpacecraft();
+        }
+
+        // 绘制太空雕像（黄金比例）
+        function drawSpaceStatue() {
+            const canvas = document.getElementById('spaceStatue');
+            if (!canvas) return;
+
+            // 设置Canvas尺寸
+            canvas.width = 256;
+            canvas.height = 384;
+
+            const ctx = canvas.getContext('2d');
+            const width = canvas.width;
+            const height = canvas.height;
+
+            // 清空画布
+            ctx.fillStyle = 'rgba(15, 23, 42, 0.9)';
+            ctx.fillRect(0, 0, width, height);
+
+            // 绘制星空背景
+            ctx.fillStyle = '#ffffff';
+            for (let i = 0; i < 50; i++) {
+                const x = Math.random() * width;
+                const y = Math.random() * height;
+                const size = Math.random() * 2;
+                ctx.beginPath();
+                ctx.arc(x, y, size, 0, 2 * Math.PI);
+                ctx.fill();
+            }
+
+            // 黄金比例计算
+            const phi = (1 + Math.sqrt(5)) / 2; // 黄金比例 ≈ 1.618
+            const totalHeight = height * 0.8;
+            const baseY = height * 0.9;
+
+            // 雕像总高度为2光年，下部为x光年，上部为(2-x)光年
+            // 根据黄金比例：x² = 2(2-x) => x² + 2x - 4 = 0
+            // 解得：x = -1 + √5 ≈ 1.236
+            const x = -1 + Math.sqrt(5);
+            const lowerHeight = (x / 2) * totalHeight;
+            const upperHeight = ((2 - x) / 2) * totalHeight;
+
+            // 绘制雕像底座
+            const baseWidth = width * 0.6;
+            const baseHeight = 20;
+            ctx.fillStyle = '#475569';
+            ctx.fillRect((width - baseWidth) / 2, baseY, baseWidth, baseHeight);
+
+            // 绘制雕像下部（蓝色）
+            const lowerWidth = width * 0.4;
+            ctx.fillStyle = '#0ea5e9';
+            ctx.fillRect((width - lowerWidth) / 2, baseY - lowerHeight, lowerWidth, lowerHeight);
+
+            // 绘制雕像上部（粉色）
+            const upperWidth = width * 0.3;
+            ctx.fillStyle = '#ec4899';
+            ctx.fillRect((width - upperWidth) / 2, baseY - lowerHeight - upperHeight, upperWidth, upperHeight);
+
+            // 添加发光效果
+            ctx.shadowColor = '#0ea5e9';
+            ctx.shadowBlur = 15;
+            ctx.fillStyle = '#0ea5e9';
+            ctx.fillRect((width - lowerWidth) / 2, baseY - lowerHeight, lowerWidth, lowerHeight);
+
+            ctx.shadowColor = '#ec4899';
+            ctx.shadowBlur = 15;
+            ctx.fillStyle = '#ec4899';
+            ctx.fillRect((width - upperWidth) / 2, baseY - lowerHeight - upperHeight, upperWidth, upperHeight);
+
+            ctx.shadowBlur = 0;
+
+            // 绘制分割线
+            ctx.strokeStyle = '#f59e0b';
+            ctx.lineWidth = 2;
+            ctx.setLineDash([5, 5]);
+            ctx.beginPath();
+            ctx.moveTo((width - lowerWidth) / 2, baseY - lowerHeight);
+            ctx.lineTo((width - lowerWidth) / 2 + lowerWidth, baseY - lowerHeight);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            // 添加标注
+            ctx.fillStyle = '#f8fafc';
+            ctx.font = '14px Arial';
+            ctx.textAlign = 'center';
+
+            // 标注高度
+            ctx.fillText('2-x ≈ 0.764', width / 2, baseY - lowerHeight - upperHeight / 2);
+            ctx.fillText('x ≈ 1.236', width / 2, baseY - lowerHeight / 2);
+            ctx.fillText('黄金比例雕像', width / 2, 30);
+
+            // 绘制方程
+            ctx.font = '12px Arial';
+            ctx.fillText('x² = 2(2-x)', width / 2, height - 30);
+        }
+
+        // 绘制主函数图像
+        function drawMainFunctionGraph() {
+            const canvas = document.getElementById('mainFunctionGraph');
+            if (!canvas) return;
+            canvas.width = 600;
+            canvas.height = 400;
+
+            const ctx = canvas.getContext('2d');
+            const width = canvas.width;
+            const height = canvas.height;
+
+            // 清空画布
+            ctx.fillStyle = 'rgba(15, 23, 42, 0.9)';
+            ctx.fillRect(0, 0, width, height);
+
+            // 绘制网格
+            ctx.strokeStyle = 'rgba(71, 85, 105, 0.3)';
+            ctx.lineWidth = 0.5;
+
+            const gridSize = 20;
+            for (let x = 0; x <= width; x += gridSize) {
+                ctx.beginPath();
+                ctx.moveTo(x, 0);
+                ctx.lineTo(x, height);
+                ctx.stroke();
+            }
+
+            for (let y = 0; y <= height; y += gridSize) {
+                ctx.beginPath();
+                ctx.moveTo(0, y);
+                ctx.lineTo(width, y);
+                ctx.stroke();
+            }
+
+            // 绘制坐标轴
+            ctx.strokeStyle = '#475569';
+            ctx.lineWidth = 2;
+
+            const centerX = width / 2;
+            const centerY = height / 2;
+
+            // x轴
+            ctx.beginPath();
+            ctx.moveTo(0, centerY);
+            ctx.lineTo(width, centerY);
+            ctx.stroke();
+
+            // y轴
+            ctx.beginPath();
+            ctx.moveTo(centerX, 0);
+            ctx.lineTo(centerX, height);
+            ctx.stroke();
+
+            // 绘制抛物线 y = x²
+            ctx.strokeStyle = '#0ea5e9';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+
+            let firstPoint = true;
+            for (let x = -10; x <= 10; x += 0.1) {
+                const y = x * x;
+                const canvasX = centerX + x * 20;
+                const canvasY = centerY - y * 10;
+
+                if (canvasY >= 0 && canvasY <= height) {
+                    if (firstPoint) {
+                        ctx.moveTo(canvasX, canvasY);
+                        firstPoint = false;
+                    } else {
+                        ctx.lineTo(canvasX, canvasY);
+                    }
+                }
+            }
+            ctx.stroke();
+
+            // 添加发光效果
+            ctx.shadowColor = '#0ea5e9';
+            ctx.shadowBlur = 10;
+            ctx.stroke();
+            ctx.shadowBlur = 0;
+        }
+    </script>
+    <!-- 星空背景 -->
+    <div class="stars" id="stars"></div>
+
+    <!-- 头部导航 -->
+    <header class="fixed w-full top-0 z-50 backdrop-blur-md bg-dark/80 border-b border-primary/20">
+        <!-- 课件信息栏 -->
+        <div class="bg-gradient-to-r from-primary/10 to-secondary/10 border-b border-primary/30">
+            <div class="container mx-auto px-4 py-2">
+                <div class="flex flex-col md:flex-row justify-between items-center text-sm">
+                    <div class="flex items-center space-x-4 mb-2 md:mb-0">
+                        <span class="text-primary font-semibold">🏫 四川大学</span>
+                        <span class="text-secondary">📚 计算机学院</span>
+                        <span class="text-accent">👨‍🏫 作者：图灵的猫</span>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <span class="text-gray-300">📅 2025年10月</span>
+                        <span class="text-yellow-400">🏆 课件</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container mx-auto px-4 py-3 flex items-center justify-between">
+            <div class="flex items-center space-x-2">
+                <i class="fa fa-cubes text-primary text-2xl animate-pulse"></i>
+                <h1 class="text-xl md:text-2xl font-bold text-shadow">一元二次方程 <span class="text-accent">游戏之旅</span></h1>
+            </div>
+
+            <nav class="hidden md:flex items-center space-x-6">
+                <a href="#intro" class="hover:text-primary transition-colors">课程介绍</a>
+                <a href="#concepts" class="hover:text-primary transition-colors">核心概念</a>
+                <a href="#examples" class="hover:text-primary transition-colors">例题解析</a>
+                <a href="#practice" class="hover:text-primary transition-colors">实战练习</a>
+                <a href="#game"
+                    class="bg-gradient-to-r from-primary to-secondary px-4 py-2 rounded-full hover:opacity-90 transition-opacity">进入游戏</a>
+                <button id="fullscreenBtn"
+                    class="px-4 py-2 border border-primary/50 rounded-full hover:bg-primary/10 transition-colors">
+                    <i class="fa fa-expand"></i> 全屏模式
+                </button>
+            </nav>
+
+            <!-- 移动端菜单按钮 -->
+            <button class="md:hidden text-2xl" id="menuToggle">
+                <i class="fa fa-bars"></i>
+            </button>
+        </div>
+
+        <!-- 移动端菜单 -->
+        <div class="md:hidden hidden bg-dark/95 backdrop-blur-md" id="mobileMenu">
+            <div class="container mx-auto px-4 py-3 flex flex-col space-y-4">
+                <a href="#intro" class="hover:text-primary transition-colors py-2 border-b border-gray-700">课程介绍</a>
+                <a href="#concepts" class="hover:text-primary transition-colors py-2 border-b border-gray-700">核心概念</a>
+                <a href="#examples" class="hover:text-primary transition-colors py-2 border-b border-gray-700">例题解析</a>
+                <a href="#practice" class="hover:text-primary transition-colors py-2 border-b border-gray-700">实战练习</a>
+                <a href="#game"
+                    class="bg-gradient-to-r from-primary to-secondary px-4 py-2 rounded-full hover:opacity-90 transition-opacity text-center">进入游戏</a>
+                <button id="mobileFullscreenBtn"
+                    class="px-4 py-2 border border-primary/50 rounded-full hover:bg-primary/10 transition-colors text-center">
+                    <i class="fa fa-expand"></i> 全屏模式
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- 主内容区 -->
+    <main class="container mx-auto px-4 pt-32 pb-16">
+        <!-- 英雄区域 -->
+        <section id="intro" class="min-h-screen flex flex-col justify-center items-center text-center py-16 parallax">
+            <div class="perspective-1000 animate-fade-in-up">
+                <div class="card-3d hologram rounded-2xl p-8 md:p-12 shadow-2xl max-w-5xl">
+                    <div class="mb-8">
+                        <h2 class="text-4xl md:text-6xl font-bold mb-6 font-space text-shadow-glow animate-glow">
+                            第二十一章 一元二次方程
+                        </h2>
+                        <div class="w-24 h-1 bg-gradient-to-r from-primary to-accent mx-auto mb-8 rounded-full"></div>
+                    </div>
+
+                    <div class="mb-12">
+                        <p class="text-lg md:text-xl mb-8 leading-relaxed">
+                            在遥远的太空中，数学定律如星辰般闪耀。今天我们将探索一元二次方程的奥秘，
+                            就像探索宇宙中的黄金比例一样神奇...
+                        </p>
+
+                        <!-- 太空雕像可视化 -->
+                        <div class="flex justify-center my-12">
+                            <div class="relative">
+                                <!-- 3D太空雕像 -->
+                                <div class="relative w-64 h-96 mx-auto">
+                                    <canvas id="spaceStatue" width="256" height="384"
+                                        class="rounded-2xl shadow-2xl"></canvas>
+                                    <div
+                                        class="absolute -inset-4 bg-gradient-to-r from-primary/20 to-secondary/20 rounded-2xl blur-xl animate-pulse-slow">
+                                    </div>
+                                </div>
+
+                                <!-- 方程显示 -->
+                                <div class="mt-8 space-y-4">
+                                    <div
+                                        class="equation text-xl md:text-2xl p-4 glass-effect rounded-lg hologram-border">
+                                        AC : BC = BC : 2, 即 BC² = 2AC
+                                    </div>
+
+                                    <div class="text-lg mb-4">设雕像下部高 x 光年，可得方程:</div>
+
+                                    <div class="equation text-xl md:text-2xl p-4 glass-effect rounded-lg">
+                                        x² = 2(2 - x)
+                                    </div>
+
+                                    <div class="text-lg mb-4">整理得:</div>
+
+                                    <div
+                                        class="equation text-2xl md:text-3xl p-6 hologram rounded-lg border-l-4 border-accent animate-glow">
+                                        x² + 2x - 4 = 0
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-center">
+                        <a href="#concepts"
+                            class="interactive-btn flex items-center space-x-3 bg-gradient-to-r from-primary via-secondary to-accent px-8 py-4 rounded-full hover:opacity-90 transition-all duration-300 text-lg font-space shadow-2xl">
+                            <i class="fa fa-rocket"></i>
+                            <span>开始太空探索</span>
+                            <i class="fa fa-arrow-down animate-bounce"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 核心概念部分 -->
+        <section id="concepts" class="py-20 parallax">
+            <div class="text-center mb-16 animate-fade-in-up">
+                <h2 class="text-4xl md:text-5xl font-bold mb-6 font-space text-shadow-glow">核心理论模块</h2>
+                <div class="w-32 h-1 bg-gradient-to-r from-primary to-accent mx-auto rounded-full"></div>
+                <p class="text-xl mt-6 text-space-400">探索数学宇宙中的基本定律</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- 概念卡片1 -->
+                <div
+                    class="card-3d hologram rounded-xl p-8 hover:border-primary/60 transition-all duration-500 animate-slide-in-left">
+                    <div class="text-center mb-6">
+                        <div
+                            class="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center">
+                            <i class="fa fa-square-o text-2xl text-white"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-4 font-space">方程定义</h3>
+                    </div>
+
+                    <p class="mb-6 leading-relaxed">
+                        在数学宇宙中，一元二次方程是只含有一个未知数，且未知数最高次数为2的方程，
+                        它们遵循着宇宙的基本数学定律。
+                    </p>
+
+                    <div class="equation text-lg p-4 glass-effect rounded-lg text-center font-space">
+                        ax² + bx + c = 0 (a ≠ 0)
+                    </div>
+
+                    <!-- 实时函数图像 -->
+                    <div class="mt-6">
+                        <canvas id="conceptGraph1" width="280" height="200"
+                            class="w-full function-graph rounded-lg"></canvas>
+                    </div>
+                </div>
+
+                <!-- 概念卡片2 -->
+                <div class="card-3d hologram rounded-xl p-8 hover:border-secondary/60 transition-all duration-500 animate-fade-in-up"
+                    style="animation-delay: 0.2s;">
+                    <div class="text-center mb-6">
+                        <div
+                            class="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-secondary to-accent rounded-full flex items-center justify-center">
+                            <i class="fa fa-list-ol text-2xl text-white"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-4 font-space">标准形式</h3>
+                    </div>
+
+                    <p class="mb-4">一元二次方程的标准形式包含三个重要组成部分：</p>
+
+                    <div class="equation text-lg p-4 glass-effect rounded-lg mb-4 text-center font-space">
+                        ax² + bx + c = 0 (a ≠ 0)
+                    </div>
+
+                    <ul class="space-y-2 mb-6">
+                        <li class="flex items-center"><span class="w-2 h-2 bg-primary rounded-full mr-3"></span>ax²
+                            是二次项，a 是二次项系数</li>
+                        <li class="flex items-center"><span class="w-2 h-2 bg-secondary rounded-full mr-3"></span>bx
+                            是一次项，b 是一次项系数</li>
+                        <li class="flex items-center"><span class="w-2 h-2 bg-accent rounded-full mr-3"></span>c 是常数项
+                        </li>
+                    </ul>
+
+                    <!-- 交互式系数调节器 -->
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between">
+                            <label class="text-sm font-space">a:</label>
+                            <input type="range" min="-5" max="5" step="0.1" value="1" class="coefficient-slider"
+                                data-coeff="a">
+                            <span class="coeff-value w-12 text-center">1</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <label class="text-sm font-space">b:</label>
+                            <input type="range" min="-10" max="10" step="0.1" value="0" class="coefficient-slider"
+                                data-coeff="b">
+                            <span class="coeff-value w-12 text-center">0</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <label class="text-sm font-space">c:</label>
+                            <input type="range" min="-10" max="10" step="0.1" value="0" class="coefficient-slider"
+                                data-coeff="c">
+                            <span class="coeff-value w-12 text-center">0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 概念卡片3 -->
+                <div class="card-3d hologram rounded-xl p-8 hover:border-accent/60 transition-all duration-500 animate-slide-in-right"
+                    style="animation-delay: 0.4s;">
+                    <div class="text-center mb-6">
+                        <div
+                            class="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-accent to-primary rounded-full flex items-center justify-center">
+                            <i class="fa fa-check-circle-o text-2xl text-white"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-4 font-space">方程的根</h3>
+                    </div>
+
+                    <p class="mb-6 leading-relaxed">
+                        在数学宇宙中，方程的根就像恒星的坐标，
+                        它们是使方程左右两边相等的特殊数值。
+                    </p>
+
+                    <div class="glass-effect p-4 rounded-lg mb-6">
+                        <p class="italic text-center font-space">
+                            例如：x = 2 是方程 x² - 4 = 0 的根
+                        </p>
+                    </div>
+
+                    <!-- 根的可视化 -->
+                    <div class="mt-6">
+                        <canvas id="rootsVisualization" width="280" height="200"
+                            class="w-full function-graph rounded-lg"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 例题解析部分 -->
+        <section id="examples" class="py-20 parallax">
+            <div class="text-center mb-16 animate-fade-in-up">
+                <h2 class="text-4xl md:text-5xl font-bold mb-6 font-space text-shadow-glow">实例分析</h2>
+                <div class="w-32 h-1 bg-gradient-to-r from-secondary to-primary mx-auto rounded-full"></div>
+                <p class="text-xl mt-6 text-space-400">通过太空任务学习方程应用</p>
+            </div>
+
+            <!-- 例题1：太空舱设计 -->
+            <div class="card-3d hologram rounded-2xl p-8 md:p-12 mb-16 animate-zoom-in">
+                <h3 class="text-3xl font-bold mb-8 text-primary font-space">
+                    <i class="fa fa-rocket mr-4"></i>
+                    任务一：太空舱设计
+                </h3>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                    <div class="space-y-6">
+                        <div class="glass-effect p-6 rounded-xl">
+                            <p class="text-lg leading-relaxed mb-6">
+                                太空工程师需要设计一个矩形太空舱底板。已知底板长 100 米，宽 50 米。
+                                为了安装推进器，需要在四角各切去一个相同的正方形区域，
+                                然后将四周折起形成舱壁。如果要求底板面积为 3600 平方米，
+                                那么每个角应该切去多大的正方形？
+                            </p>
+                        </div>
+
+                        <div class="space-y-4">
+                            <p class="text-lg font-space">设切去的正方形边长为 x 米，则：</p>
+
+                            <ul class="space-y-2 ml-6">
+                                <li class="flex items-center">
+                                    <span class="w-2 h-2 bg-primary rounded-full mr-3"></span>
+                                    底板长为 (100 - 2x) 米
+                                </li>
+                                <li class="flex items-center">
+                                    <span class="w-2 h-2 bg-secondary rounded-full mr-3"></span>
+                                    底板宽为 (50 - 2x) 米
+                                </li>
+                            </ul>
+
+                            <div class="equation text-xl p-4 glass-effect rounded-lg font-space">
+                                (100 - 2x)(50 - 2x) = 3600
+                            </div>
+
+                            <div class="equation text-xl p-4 glass-effect rounded-lg font-space">
+                                展开：5000 - 300x + 4x² = 3600
+                            </div>
+
+                            <div
+                                class="equation text-2xl p-6 hologram rounded-lg border-l-4 border-accent font-space animate-glow">
+                                4x² - 300x + 1400 = 0
+                            </div>
+
+                            <div class="equation text-xl p-4 glass-effect rounded-lg font-space">
+                                化简：x² - 75x + 350 = 0
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col justify-center">
+                        <!-- 3D太空舱可视化 -->
+                        <div class="relative mb-8">
+                            <canvas id="spacecraftDesign" width="400" height="300"
+                                class="w-full function-graph rounded-xl shadow-2xl"></canvas>
+                            <div
+                                class="absolute -inset-2 bg-gradient-to-r from-primary/20 to-secondary/20 rounded-xl blur-lg animate-pulse-slow">
+                            </div>
+                        </div>
+
+                        <!-- 实时计算器 -->
+                        <div class="glass-effect p-6 rounded-xl">
+                            <h4 class="text-xl font-bold mb-4 font-space text-center">实时求解器</h4>
+                            <div class="space-y-4">
+                                <div class="flex items-center justify-between">
+                                    <label class="font-space">切除边长 x:</label>
+                                    <input type="range" min="1" max="20" step="0.1" value="5" id="cutSize"
+                                        class="flex-1 mx-4">
+                                    <span id="cutValue" class="w-16 text-center font-space">5</span>
+                                </div>
+                                <div class="text-center space-y-2">
+                                    <div>底板长度: <span id="resultLength" class="font-space text-primary">90</span> 米</div>
+                                    <div>底板宽度: <span id="resultWidth" class="font-space text-secondary">40</span> 米
+                                    </div>
+                                    <div>底板面积: <span id="resultArea" class="font-space text-accent">3600</span> 平方米
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 例题2：卫星轨道计算 -->
+            <div class="card-3d hologram rounded-2xl p-8 md:p-12 animate-zoom-in" style="animation-delay: 0.3s;">
+                <h3 class="text-3xl font-bold mb-8 text-secondary font-space flex items-center">
+                    <i class="fa fa-globe mr-4"></i>
+                    任务二：卫星轨道计算
+                </h3>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                    <div class="space-y-6">
+                        <div class="glass-effect p-6 rounded-xl">
+                            <p class="text-lg leading-relaxed mb-6">
+                                太空竞赛中，需要安排卫星之间的通信。参赛的每两颗卫星之间都要建立一条通信链路。
+                                根据能源和时间限制，计划安排 7 天完成所有链路建设，每天建设 4 条链路。
+                                请问应该部署多少颗卫星？
+                            </p>
+                        </div>
+
+                        <div class="space-y-4">
+                            <p class="text-lg font-space">分析过程：</p>
+
+                            <ul class="space-y-3 ml-6">
+                                <li class="flex items-start">
+                                    <span class="w-2 h-2 bg-primary rounded-full mr-3 mt-2"></span>
+                                    <span>总通信链路数：4 × 7 = 28 条</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="w-2 h-2 bg-secondary rounded-full mr-3 mt-2"></span>
+                                    <span>设部署 x 颗卫星</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="w-2 h-2 bg-accent rounded-full mr-3 mt-2"></span>
+                                    <span>每颗卫星与其他 (x-1) 颗卫星通信</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="w-2 h-2 bg-primary rounded-full mr-3 mt-2"></span>
+                                    <span>总链路数：½x(x-1) 条</span>
+                                </li>
+                            </ul>
+
+                            <div class="equation text-xl p-4 glass-effect rounded-lg font-space">
+                                ½x(x - 1) = 28
+                            </div>
+
+                            <div class="equation text-xl p-4 glass-effect rounded-lg font-space">
+                                x(x - 1) = 56
+                            </div>
+
+                            <div
+                                class="equation text-2xl p-6 hologram rounded-lg border-l-4 border-accent font-space animate-glow">
+                                x² - x - 56 = 0
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col justify-center">
+                        <!-- 卫星网络可视化 -->
+                        <div class="relative mb-8">
+                            <canvas id="satelliteNetwork" width="400" height="300"
+                                class="w-full function-graph rounded-xl shadow-2xl"></canvas>
+                            <div
+                                class="absolute -inset-2 bg-gradient-to-r from-secondary/20 to-accent/20 rounded-xl blur-lg animate-pulse-slow">
+                            </div>
+                        </div>
+
+                        <!-- 网络计算器 -->
+                        <div class="glass-effect p-6 rounded-xl">
+                            <h4 class="text-xl font-bold mb-4 font-space text-center">网络分析器</h4>
+                            <div class="space-y-4">
+                                <div class="flex items-center justify-between">
+                                    <label class="font-space">卫星数量:</label>
+                                    <input type="range" min="2" max="15" step="1" value="8" id="satelliteCount"
+                                        class="flex-1 mx-4">
+                                    <span id="satelliteValue" class="w-16 text-center font-space">8</span>
+                                </div>
+                                <div class="text-center space-y-2">
+                                    <div>通信链路: <span id="linkCount" class="font-space text-primary">28</span> 条</div>
+                                    <div>建设天数: <span id="buildDays" class="font-space text-secondary">7</span> 天</div>
+                                    <div>每天链路: <span id="dailyLinks" class="font-space text-accent">4</span> 条</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 实战练习部分 -->
+        <section id="practice" class="py-20 parallax">
+            <div class="text-center mb-16 animate-fade-in-up">
+                <h2 class="text-4xl md:text-5xl font-bold mb-6 font-space text-shadow-glow">实战训练</h2>
+                <div class="w-32 h-1 bg-gradient-to-r from-accent to-secondary mx-auto rounded-full"></div>
+                <p class="text-xl mt-6 text-space-400">在太空模拟器中测试你的技能</p>
+            </div>
+
+            <!-- 练习题目 -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+                <!-- 练习1 -->
+                <div class="card-3d hologram rounded-xl p-8 animate-slide-in-left">
+                    <h3 class="text-2xl font-bold mb-6 text-primary font-space">练习 1：太空站扩建</h3>
+
+                    <div class="glass-effect p-6 rounded-lg mb-6">
+                        <p class="mb-4">
+                            太空站的矩形太阳能板长为 20 米，宽为 15 米。
+                            为了增加发电量，需要在长和宽上各增加相同的长度，
+                            使面积增加到 500 平方米。求增加的长度。
+                        </p>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="equation text-lg p-3 glass-effect rounded-lg font-space">
+                            设增加长度为 x 米
+                        </div>
+                        <div class="equation text-lg p-3 glass-effect rounded-lg font-space">
+                            (20 + x)(15 + x) = 500
+                        </div>
+                    </div>
+
+                    <!-- 答案输入 -->
+                    <div class="mt-6 space-y-4">
+                        <div class="flex items-center space-x-4">
+                            <label class="font-space">你的答案:</label>
+                            <input type="number" step="0.1"
+                                class="practice-input flex-1 p-2 bg-dark/50 border border-primary/30 rounded-lg text-center font-space"
+                                placeholder="输入 x 的值">
+                            <button
+                                class="check-answer interactive-btn bg-primary px-4 py-2 rounded-lg font-space">检查</button>
+                        </div>
+                        <div class="answer-feedback hidden p-3 rounded-lg"></div>
+                    </div>
+                </div>
+
+                <!-- 练习2 -->
+                <div class="card-3d hologram rounded-xl p-8 animate-slide-in-right" style="animation-delay: 0.2s;">
+                    <h3 class="text-2xl font-bold mb-6 text-secondary font-space">练习 2：行星探测器</h3>
+
+                    <div class="glass-effect p-6 rounded-lg mb-6">
+                        <p class="mb-4">
+                            一个探测器从高度 h 米处自由下落，下落时间 t 秒满足方程：
+                            h = 5t²。如果探测器下落了 3.2 秒，求初始高度。
+                        </p>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="equation text-lg p-3 glass-effect rounded-lg font-space">
+                            h = 5t²
+                        </div>
+                        <div class="equation text-lg p-3 glass-effect rounded-lg font-space">
+                            h = 5 × (3.2)²
+                        </div>
+                    </div>
+
+                    <!-- 答案输入 -->
+                    <div class="mt-6 space-y-4">
+                        <div class="flex items-center space-x-4">
+                            <label class="font-space">初始高度:</label>
+                            <input type="number" step="0.1"
+                                class="practice-input flex-1 p-2 bg-dark/50 border border-secondary/30 rounded-lg text-center font-space"
+                                placeholder="输入高度值">
+                            <button
+                                class="check-answer interactive-btn bg-secondary px-4 py-2 rounded-lg font-space">检查</button>
+                        </div>
+                        <div class="answer-feedback hidden p-3 rounded-lg"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 综合函数图像分析器 -->
+            <div class="card-3d hologram rounded-2xl p-8 md:p-12 animate-zoom-in">
+                <h3 class="text-3xl font-bold mb-8 text-center font-space text-shadow-glow">
+                    <i class="fa fa-line-chart mr-4"></i>
+                    太空函数分析器
+                </h3>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <!-- 控制面板 -->
+                    <div class="glass-effect p-6 rounded-xl">
+                        <h4 class="text-xl font-bold mb-6 font-space text-center">控制中心</h4>
+
+                        <div class="space-y-6">
+                            <!-- 系数控制 -->
+                            <div class="space-y-4">
+                                <h5 class="font-space text-lg">方程系数</h5>
+                                <div class="space-y-3">
+                                    <div class="flex items-center justify-between">
+                                        <label class="font-space">a:</label>
+                                        <input type="range" min="-3" max="3" step="0.1" value="1" id="mainCoeffA"
+                                            class="flex-1 mx-3">
+                                        <span id="mainValueA" class="w-12 text-center font-space">1</span>
+                                    </div>
+                                    <div class="flex items-center justify-between">
+                                        <label class="font-space">b:</label>
+                                        <input type="range" min="-10" max="10" step="0.1" value="0" id="mainCoeffB"
+                                            class="flex-1 mx-3">
+                                        <span id="mainValueB" class="w-12 text-center font-space">0</span>
+                                    </div>
+                                    <div class="flex items-center justify-between">
+                                        <label class="font-space">c:</label>
+                                        <input type="range" min="-10" max="10" step="0.1" value="0" id="mainCoeffC"
+                                            class="flex-1 mx-3">
+                                        <span id="mainValueC" class="w-12 text-center font-space">0</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 当前方程显示 -->
+                            <div class="glass-effect p-4 rounded-lg">
+                                <div class="text-center">
+                                    <div class="text-sm text-space-400 mb-2">当前方程</div>
+                                    <div id="currentEquation" class="equation text-lg font-space">y = x²</div>
+                                </div>
+                            </div>
+
+                            <!-- 根的信息 -->
+                            <div class="glass-effect p-4 rounded-lg">
+                                <div class="text-center">
+                                    <div class="text-sm text-space-400 mb-2">方程的根</div>
+                                    <div id="rootsInfo" class="font-space text-sm">x₁ = 0, x₂ = 0</div>
+                                </div>
+                            </div>
+
+                            <!-- 预设方程 -->
+                            <div>
+                                <h5 class="font-space text-lg mb-3">预设方程</h5>
+                                <div class="space-y-2">
+                                    <button
+                                        class="preset-equation w-full p-2 glass-effect rounded-lg text-sm font-space hover:border-primary/50 transition-all"
+                                        data-a="1" data-b="0" data-c="-4">
+                                        x² - 4 = 0
+                                    </button>
+                                    <button
+                                        class="preset-equation w-full p-2 glass-effect rounded-lg text-sm font-space hover:border-primary/50 transition-all"
+                                        data-a="1" data-b="-5" data-c="6">
+                                        x² - 5x + 6 = 0
+                                    </button>
+                                    <button
+                                        class="preset-equation w-full p-2 glass-effect rounded-lg text-sm font-space hover:border-primary/50 transition-all"
+                                        data-a="2" data-b="4" data-c="-6">
+                                        2x² + 4x - 6 = 0
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 主图像显示 -->
+                    <div class="lg:col-span-2">
+                        <div class="relative">
+                            <canvas id="mainFunctionGraph" width="600" height="400"
+                                class="w-full function-graph rounded-xl shadow-2xl"></canvas>
+                            <div
+                                class="absolute -inset-2 bg-gradient-to-r from-primary/10 via-secondary/10 to-accent/10 rounded-xl blur-lg animate-pulse-slow">
+                            </div>
+                        </div>
+
+                        <!-- 图像信息面板 -->
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+                            <div class="glass-effect p-4 rounded-lg text-center">
+                                <div class="text-sm text-space-400">顶点坐标</div>
+                                <div id="vertexInfo" class="font-space text-primary">(-0, 0)</div>
+                            </div>
+                            <div class="glass-effect p-4 rounded-lg text-center">
+                                <div class="text-sm text-space-400">判别式 Δ</div>
+                                <div id="discriminantInfo" class="font-space text-secondary">0</div>
+                            </div>
+                            <div class="glass-effect p-4 rounded-lg text-center">
+                                <div class="text-sm text-space-400">开口方向</div>
+                                <div id="directionInfo" class="font-space text-accent">向上</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 游戏区域 -->
+        <section id="game" class="py-20 parallax">
+            <div class="text-center mb-16 animate-fade-in-up">
+                <h2 class="text-4xl md:text-5xl font-bold mb-6 font-space text-shadow-glow">太空任务中心</h2>
+                <div class="w-32 h-1 bg-gradient-to-r from-primary to-accent mx-auto rounded-full"></div>
+                <p class="text-xl mt-6 text-space-400">准备好开始你的太空数学冒险了吗？</p>
+            </div>
+
+            <div class="card-3d hologram rounded-2xl p-8 md:p-12 text-center animate-zoom-in">
+                <div class="mb-8">
+                    <div
+                        class="w-32 h-32 mx-auto mb-6 bg-gradient-to-br from-primary via-secondary to-accent rounded-full flex items-center justify-center animate-float">
+                        <i class="fa fa-rocket text-4xl text-white"></i>
+                    </div>
+                    <h3 class="text-3xl font-bold mb-4 font-space">任务即将开始</h3>
+                    <p class="text-xl text-space-400 mb-8">
+                        在浩瀚的数学宇宙中，一元二次方程就像导航星图，
+                        指引着我们探索未知的数学星系。
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+                    <div class="glass-effect p-6 rounded-xl">
+                        <i class="fa fa-trophy text-3xl text-primary mb-4"></i>
+                        <h4 class="text-xl font-bold mb-2 font-space">挑战关卡</h4>
+                        <p class="text-space-400">完成各种太空任务，掌握方程求解技巧</p>
+                    </div>
+                    <div class="glass-effect p-6 rounded-xl">
+                        <i class="fa fa-line-chart text-3xl text-secondary mb-4"></i>
+                        <h4 class="text-xl font-bold mb-2 font-space">实时可视化</h4>
+                        <p class="text-space-400">观察函数图像的实时变化和性质</p>
+                    </div>
+                    <div class="glass-effect p-6 rounded-xl">
+                        <i class="fa fa-users text-3xl text-accent mb-4"></i>
+                        <h4 class="text-xl font-bold mb-2 font-space">协作探索</h4>
+                        <p class="text-space-400">与其他太空探索者一起学习成长</p>
+                    </div>
+                </div>
+
+                <button id="startGameBtn"
+                    class="interactive-btn bg-gradient-to-r from-primary via-secondary to-accent px-12 py-4 rounded-full text-xl font-space shadow-2xl hover:scale-105 transition-all duration-300">
+                    <i class="fa fa-play mr-3"></i>
+                    启动太空任务
+                    <i class="fa fa-rocket ml-3"></i>
+                </button>
+            </div>
+        </section>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="glass-effect py-12 mt-20">
+        <div class="container mx-auto px-4 text-center">
+            <div class="mb-6">
+                <div class="flex justify-center items-center space-x-3 mb-4">
+                    <i class="fa fa-rocket text-primary text-2xl animate-float"></i>
+                    <h3 class="text-2xl font-bold font-space">太空数学探索</h3>
+                </div>
+                <p class="text-space-400">在数学的宇宙中，每一个方程都是一颗闪亮的星星</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+                <div>
+                    <h4 class="font-bold mb-3 font-space">学习资源</h4>
+                    <ul class="space-y-2 text-space-400">
+                        <li><a href="#" class="hover:text-primary transition-colors">基础理论</a></li>
+                        <li><a href="#" class="hover:text-primary transition-colors">进阶练习</a></li>
+                        <li><a href="#" class="hover:text-primary transition-colors">实战应用</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-3 font-space">工具箱</h4>
+                    <ul class="space-y-2 text-space-400">
+                        <li><a href="#" class="hover:text-secondary transition-colors">方程求解器</a></li>
+                        <li><a href="#" class="hover:text-secondary transition-colors">图像绘制器</a></li>
+                        <li><a href="#" class="hover:text-secondary transition-colors">练习生成器</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-3 font-space">社区</h4>
+                    <ul class="space-y-2 text-space-400">
+                        <li><a href="#" class="hover:text-accent transition-colors">讨论论坛</a></li>
+                        <li><a href="#" class="hover:text-accent transition-colors">学习小组</a></li>
+                        <li><a href="#" class="hover:text-accent transition-colors">成就展示</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="border-t border-space-300 pt-6">
+                <p class="text-space-400">&copy; 2046 太空数学探索. 在知识的宇宙中自由翱翔.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // 页面加载完成后初始化所有功能
+        document.addEventListener('DOMContentLoaded', function () {
+            // 初始化所有Canvas图像
+            drawConceptGraph1();
+            drawRootsVisualization();
+            initSpacecraftSolver();
+            initSatelliteAnalyzer();
+            drawSpaceStatue();
+            drawMainFunctionGraph();
+
+            // 初始化标准形式系数滑杆
+            initStandardFormSliders();
+
+            // 初始化太空函数分析器
+            initMainFunctionAnalyzer();
+
+            // 初始化练习系统
+            initPracticeSystem();
+
+            // 初始化动画效果
+            initAnimations();
+
+            // 初始化移动端菜单
+            initMobileMenu();
+        });
+
+        // 初始化标准形式系数滑杆
+        function initStandardFormSliders() {
+            const sliders = document.querySelectorAll('.coefficient-slider');
+            const values = document.querySelectorAll('.coeff-value');
+
+            sliders.forEach((slider, index) => {
+                const valueSpan = values[index];
+
+                // 初始化显示值
+                valueSpan.textContent = slider.value;
+
+                // 添加事件监听器
+                slider.addEventListener('input', function () {
+                    const value = parseFloat(this.value);
+                    valueSpan.textContent = value.toFixed(1);
+
+                    // 重绘概念图1（标准形式对应的图像）
+                    drawConceptGraph1WithCoefficients();
+                });
+            });
+        }
+
+        // 绘制带系数的概念图1
+        function drawConceptGraph1WithCoefficients() {
+            const canvas = document.getElementById('conceptGraph1');
+            if (!canvas) return;
+
+            // 获取系数值
+            const sliders = document.querySelectorAll('.coefficient-slider');
+            const a = parseFloat(sliders[0]?.value || 1);
+            const b = parseFloat(sliders[1]?.value || 0);
+            const c = parseFloat(sliders[2]?.value || 0);
+
+            // 设置Canvas尺寸
+            canvas.width = 280;
+            canvas.height = 200;
+
+            const ctx = canvas.getContext('2d');
+            const width = canvas.width;
+            const height = canvas.height;
+
+            // 清空画布
+            ctx.fillStyle = 'rgba(15, 23, 42, 0.9)';
+            ctx.fillRect(0, 0, width, height);
+
+            // 绘制网格
+            ctx.strokeStyle = 'rgba(71, 85, 105, 0.3)';
+            ctx.lineWidth = 0.5;
+
+            const gridSize = 20;
+            for (let x = 0; x <= width; x += gridSize) {
+                ctx.beginPath();
+                ctx.moveTo(x, 0);
+                ctx.lineTo(x, height);
+                ctx.stroke();
+            }
+
+            for (let y = 0; y <= height; y += gridSize) {
+                ctx.beginPath();
+                ctx.moveTo(0, y);
+                ctx.lineTo(width, y);
+                ctx.stroke();
+            }
+
+            // 绘制坐标轴
+            ctx.strokeStyle = '#475569';
+            ctx.lineWidth = 2;
+
+            const centerX = width / 2;
+            const centerY = height / 2;
+
+            // x轴
+            ctx.beginPath();
+            ctx.moveTo(0, centerY);
+            ctx.lineTo(width, centerY);
+            ctx.stroke();
+
+            // y轴
+            ctx.beginPath();
+            ctx.moveTo(centerX, 0);
+            ctx.lineTo(centerX, height);
+            ctx.stroke();
+
+            // 绘制抛物线 y = ax² + bx + c
+            ctx.strokeStyle = '#0ea5e9';
+            ctx.lineWidth = 3;
+            ctx.shadowColor = '#0ea5e9';
+            ctx.shadowBlur = 10;
+
+            ctx.beginPath();
+            let firstPoint = true;
+
+            for (let x = -width / 2; x <= width / 2; x += 2) {
+                const realX = x / 20; // 缩放因子
+                const realY = a * realX * realX + b * realX + c;
+                const canvasX = centerX + x;
+                const canvasY = centerY - realY * 20; // 缩放因子
+
+                if (canvasY >= 0 && canvasY <= height) {
+                    if (firstPoint) {
+                        ctx.moveTo(canvasX, canvasY);
+                        firstPoint = false;
+                    } else {
+                        ctx.lineTo(canvasX, canvasY);
+                    }
+                }
+            }
+
+            ctx.stroke();
+            ctx.shadowBlur = 0;
+
+            // 标记顶点
+            const vertexX = -b / (2 * a);
+            const vertexY = a * vertexX * vertexX + b * vertexX + c;
+            const vertexCanvasX = centerX + vertexX * 20;
+            const vertexCanvasY = centerY - vertexY * 20;
+
+            if (vertexCanvasX >= 0 && vertexCanvasX <= width && vertexCanvasY >= 0 && vertexCanvasY <= height) {
+                ctx.fillStyle = '#ec4899';
+                ctx.beginPath();
+                ctx.arc(vertexCanvasX, vertexCanvasY, 4, 0, 2 * Math.PI);
+                ctx.fill();
+            }
+        }
+
+        // 绘制卫星网络（动态版本）
+        function drawSatelliteNetworkDynamic(satelliteCount = 8) {
+            const canvas = document.getElementById('satelliteNetwork');
+            if (!canvas) return;
+
+            // 设置Canvas尺寸
+            canvas.width = 400;
+            canvas.height = 300;
+
+            const ctx = canvas.getContext('2d');
+            const width = canvas.width;
+            const height = canvas.height;
+
+            // 清空画布
+            ctx.fillStyle = 'rgba(15, 23, 42, 0.9)';
+            ctx.fillRect(0, 0, width, height);
+
+            // 绘制星空背景
+            ctx.fillStyle = '#ffffff';
+            for (let i = 0; i < 50; i++) {
+                const x = Math.random() * width;
+                const y = Math.random() * height;
+                const size = Math.random() * 1.5;
+                ctx.beginPath();
+                ctx.arc(x, y, size, 0, 2 * Math.PI);
+                ctx.fill();
+            }
+
+            // 计算卫星位置（圆形排列）
+            const centerX = width / 2;
+            const centerY = height / 2;
+            const radius = Math.min(width, height) * 0.35;
+            const satellites = [];
+
+            for (let i = 0; i < satelliteCount; i++) {
+                const angle = (2 * Math.PI * i) / satelliteCount;
+                const x = centerX + radius * Math.cos(angle);
+                const y = centerY + radius * Math.sin(angle);
+                satellites.push({ x, y, id: i + 1 });
+            }
+
+            // 绘制通信链路
+            ctx.strokeStyle = 'rgba(14, 165, 233, 0.4)';
+            ctx.lineWidth = 1;
+
+            for (let i = 0; i < satellites.length; i++) {
+                for (let j = i + 1; j < satellites.length; j++) {
+                    ctx.beginPath();
+                    ctx.moveTo(satellites[i].x, satellites[i].y);
+                    ctx.lineTo(satellites[j].x, satellites[j].y);
+                    ctx.stroke();
+                }
+            }
+
+            // 绘制卫星
+            satellites.forEach((satellite, index) => {
+                // 卫星主体
+                ctx.fillStyle = '#0ea5e9';
+                ctx.beginPath();
+                ctx.arc(satellite.x, satellite.y, 8, 0, 2 * Math.PI);
+                ctx.fill();
+
+                // 卫星光晕
+                const gradient = ctx.createRadialGradient(
+                    satellite.x, satellite.y, 0,
+                    satellite.x, satellite.y, 15
+                );
+                gradient.addColorStop(0, 'rgba(14, 165, 233, 0.6)');
+                gradient.addColorStop(1, 'rgba(14, 165, 233, 0)');
+
+                ctx.fillStyle = gradient;
+                ctx.beginPath();
+                ctx.arc(satellite.x, satellite.y, 15, 0, 2 * Math.PI);
+                ctx.fill();
+
+                // 卫星编号
+                ctx.fillStyle = '#ffffff';
+                ctx.font = '10px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText(satellite.id.toString(), satellite.x, satellite.y + 3);
+            });
+
+            // 绘制地球（中心）
+            ctx.fillStyle = 'rgba(34, 197, 94, 0.8)';
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, 20, 0, 2 * Math.PI);
+            ctx.fill();
+
+            ctx.strokeStyle = '#22c55e';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+
+            // 地球标签
+            ctx.fillStyle = '#ffffff';
+            ctx.font = '12px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText('地球', centerX, centerY + 4);
+
+            // 显示统计信息
+            const linkCount = (satelliteCount * (satelliteCount - 1)) / 2;
+            ctx.fillStyle = '#f59e0b';
+            ctx.font = '14px Arial';
+            ctx.textAlign = 'left';
+            ctx.fillText(`卫星数量: ${satelliteCount}`, 10, 25);
+            ctx.fillText(`通信链路: ${linkCount} 条`, 10, 45);
+
+            // 目标检查
+            if (linkCount === 28) {
+                ctx.fillStyle = '#10b981';
+                ctx.fillText('✓ 达到目标！', 10, 65);
+            } else {
+                ctx.fillStyle = '#ef4444';
+                ctx.fillText(`目标: 28 条 (差值: ${Math.abs(linkCount - 28)})`, 10, 65);
+            }
+        }
+
+        // 初始化卫星网络分析器
+        function initSatelliteAnalyzer() {
+            const satelliteSlider = document.getElementById('satelliteCount');
+            const satelliteValueSpan = document.getElementById('satelliteValue');
+            const linkCountSpan = document.getElementById('linkCount');
+
+            if (!satelliteSlider) return;
+
+            function updateSatelliteNetwork() {
+                const count = parseInt(satelliteSlider.value);
+                const linkCount = (count * (count - 1)) / 2;
+
+                // 更新显示值
+                satelliteValueSpan.textContent = count;
+                linkCountSpan.textContent = linkCount;
+
+                // 重绘网络图
+                drawSatelliteNetworkDynamic(count);
+            }
+
+            // 绑定事件监听器
+            satelliteSlider.addEventListener('input', updateSatelliteNetwork);
+
+            // 初始化
+            updateSatelliteNetwork();
+        }
+        function initMainFunctionAnalyzer() {
+            const coeffA = document.getElementById('mainCoeffA');
+            const coeffB = document.getElementById('mainCoeffB');
+            const coeffC = document.getElementById('mainCoeffC');
+            const valueA = document.getElementById('mainValueA');
+            const valueB = document.getElementById('mainValueB');
+            const valueC = document.getElementById('mainValueC');
+
+            if (!coeffA || !coeffB || !coeffC) return;
+
+            // 更新函数
+            function updateFunction() {
+                const a = parseFloat(coeffA.value);
+                const b = parseFloat(coeffB.value);
+                const c = parseFloat(coeffC.value);
+
+                // 更新显示值
+                valueA.textContent = a.toFixed(1);
+                valueB.textContent = b.toFixed(1);
+                valueC.textContent = c.toFixed(1);
+
+                // 更新方程显示
+                updateEquationDisplay(a, b, c);
+
+                // 重绘图像
+                drawDynamicFunction(a, b, c);
+
+                // 更新信息面板
+                updateInfoPanels(a, b, c);
+            }
+
+            // 绑定事件监听器
+            coeffA.addEventListener('input', updateFunction);
+            coeffB.addEventListener('input', updateFunction);
+            coeffC.addEventListener('input', updateFunction);
+
+            // 预设方程按钮
+            document.querySelectorAll('.preset-equation').forEach(btn => {
+                btn.addEventListener('click', function () {
+                    const a = parseFloat(this.dataset.a);
+                    const b = parseFloat(this.dataset.b);
+                    const c = parseFloat(this.dataset.c);
+
+                    coeffA.value = a;
+                    coeffB.value = b;
+                    coeffC.value = c;
+
+                    updateFunction();
+                });
+            });
+        }
+
+        // 更新方程显示
+        function updateEquationDisplay(a, b, c) {
+            const equation = document.getElementById('currentEquation');
+            if (!equation) return;
+
+            let equationText = 'y = ';
+
+            if (a !== 1) {
+                equationText += a === -1 ? '-' : a.toFixed(1);
+            }
+            equationText += 'x²';
+
+            if (b !== 0) {
+                equationText += b > 0 ? ' + ' : ' - ';
+                equationText += Math.abs(b) === 1 ? '' : Math.abs(b).toFixed(1);
+                equationText += 'x';
+            }
+
+            if (c !== 0) {
+                equationText += c > 0 ? ' + ' : ' - ';
+                equationText += Math.abs(c).toFixed(1);
+            }
+
+            equation.textContent = equationText;
+        }
+
+        // 绘制动态函数图像
+        function drawDynamicFunction(a, b, c) {
+            const canvas = document.getElementById('mainFunctionGraph');
+            if (!canvas) return;
+
+            const ctx = canvas.getContext('2d');
+            const width = canvas.width;
+            const height = canvas.height;
+
+            // 清空画布
+            ctx.fillStyle = 'rgba(15, 23, 42, 0.9)';
+            ctx.fillRect(0, 0, width, height);
+
+            // 绘制网格
+            ctx.strokeStyle = 'rgba(71, 85, 105, 0.3)';
+            ctx.lineWidth = 0.5;
+
+            const gridSize = 20;
+            for (let x = 0; x <= width; x += gridSize) {
+                ctx.beginPath();
+                ctx.moveTo(x, 0);
+                ctx.lineTo(x, height);
+                ctx.stroke();
+            }
+
+            for (let y = 0; y <= height; y += gridSize) {
+                ctx.beginPath();
+                ctx.moveTo(0, y);
+                ctx.lineTo(width, y);
+                ctx.stroke();
+            }
+
+            // 绘制坐标轴
+            ctx.strokeStyle = '#475569';
+            ctx.lineWidth = 2;
+
+            const centerX = width / 2;
+            const centerY = height / 2;
+
+            ctx.beginPath();
+            ctx.moveTo(0, centerY);
+            ctx.lineTo(width, centerY);
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.moveTo(centerX, 0);
+            ctx.lineTo(centerX, height);
+            ctx.stroke();
+
+            // 绘制抛物线
+            ctx.strokeStyle = '#0ea5e9';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+
+            let firstPoint = true;
+            const scale = 15;
+
+            for (let x = -15; x <= 15; x += 0.1) {
+                const y = a * x * x + b * x + c;
+                const canvasX = centerX + x * scale;
+                const canvasY = centerY - y * scale;
+
+                if (canvasY >= 0 && canvasY <= height && canvasX >= 0 && canvasX <= width) {
+                    if (firstPoint) {
+                        ctx.moveTo(canvasX, canvasY);
+                        firstPoint = false;
+                    } else {
+                        ctx.lineTo(canvasX, canvasY);
+                    }
+                }
+            }
+            ctx.stroke();
+
+            // 添加发光效果
+            ctx.shadowColor = '#0ea5e9';
+            ctx.shadowBlur = 10;
+            ctx.stroke();
+            ctx.shadowBlur = 0;
+
+            // 绘制根点（如果存在）
+            const discriminant = b * b - 4 * a * c;
+            if (discriminant >= 0) {
+                const x1 = (-b + Math.sqrt(discriminant)) / (2 * a);
+                const x2 = (-b - Math.sqrt(discriminant)) / (2 * a);
+
+                ctx.fillStyle = '#f59e0b';
+
+                if (Math.abs(x1) <= 15) {
+                    const canvasX1 = centerX + x1 * scale;
+                    ctx.beginPath();
+                    ctx.arc(canvasX1, centerY, 4, 0, 2 * Math.PI);
+                    ctx.fill();
+                }
+
+                if (Math.abs(x2) <= 15 && x1 !== x2) {
+                    const canvasX2 = centerX + x2 * scale;
+                    ctx.beginPath();
+                    ctx.arc(canvasX2, centerY, 4, 0, 2 * Math.PI);
+                    ctx.fill();
+                }
+            }
+
+            // 绘制顶点
+            const vertexX = -b / (2 * a);
+            const vertexY = a * vertexX * vertexX + b * vertexX + c;
+
+            if (Math.abs(vertexX) <= 15 && Math.abs(vertexY) <= 15) {
+                const canvasVertexX = centerX + vertexX * scale;
+                const canvasVertexY = centerY - vertexY * scale;
+
+                ctx.fillStyle = '#ec4899';
+                ctx.beginPath();
+                ctx.arc(canvasVertexX, canvasVertexY, 5, 0, 2 * Math.PI);
+                ctx.fill();
+            }
+        }
+
+        // 更新信息面板
+        function updateInfoPanels(a, b, c) {
+            const discriminant = b * b - 4 * a * c;
+            const vertexX = -b / (2 * a);
+            const vertexY = a * vertexX * vertexX + b * vertexX + c;
+
+            // 更新顶点信息
+            const vertexInfo = document.getElementById('vertexInfo');
+            if (vertexInfo) {
+                vertexInfo.textContent = `(${vertexX.toFixed(2)}, ${vertexY.toFixed(2)})`;
+            }
+
+            // 更新判别式信息
+            const discriminantInfo = document.getElementById('discriminantInfo');
+            if (discriminantInfo) {
+                discriminantInfo.textContent = discriminant.toFixed(2);
+            }
+
+            // 更新开口方向
+            const directionInfo = document.getElementById('directionInfo');
+            if (directionInfo) {
+                directionInfo.textContent = a > 0 ? '向上' : '向下';
+            }
+
+            // 更新根的信息
+            const rootsInfo = document.getElementById('rootsInfo');
+            if (rootsInfo) {
+                if (discriminant > 0) {
+                    const x1 = (-b + Math.sqrt(discriminant)) / (2 * a);
+                    const x2 = (-b - Math.sqrt(discriminant)) / (2 * a);
+                    rootsInfo.textContent = `x₁ = ${x1.toFixed(2)}, x₂ = ${x2.toFixed(2)}`;
+                } else if (discriminant === 0) {
+                    const x = -b / (2 * a);
+                    rootsInfo.textContent = `x = ${x.toFixed(2)} (重根)`;
+                } else {
+                    rootsInfo.textContent = '无实数根';
+                }
+            }
+        }
+
+        // 初始化练习系统
+        function initPracticeSystem() {
+            document.querySelectorAll('.check-answer').forEach(btn => {
+                btn.addEventListener('click', function () {
+                    const input = this.parentElement.querySelector('.practice-input');
+                    const feedback = this.parentElement.parentElement.querySelector('.answer-feedback');
+
+                    if (!input || !feedback) return;
+
+                    const userAnswer = parseFloat(input.value);
+                    let correctAnswer, isCorrect;
+
+                    // 根据练习类型判断正确答案
+                    const practiceTitle = this.closest('.card-3d').querySelector('h3').textContent;
+
+                    if (practiceTitle.includes('太空站扩建')) {
+                        correctAnswer = 5; // (20+x)(15+x) = 500 的解
+                        isCorrect = Math.abs(userAnswer - correctAnswer) < 0.1;
+                    } else if (practiceTitle.includes('行星探测器')) {
+                        correctAnswer = 51.2; // 5 × (3.2)² = 51.2
+                        isCorrect = Math.abs(userAnswer - correctAnswer) < 0.1;
+                    }
+
+                    feedback.classList.remove('hidden');
+
+                    if (isCorrect) {
+                        feedback.className = 'answer-feedback p-3 rounded-lg bg-green-500/20 border border-green-500/50 text-green-300';
+                        feedback.textContent = '🎉 正确！太棒了！';
+                    } else {
+                        feedback.className = 'answer-feedback p-3 rounded-lg bg-red-500/20 border border-red-500/50 text-red-300';
+                        feedback.textContent = `❌ 不正确，正确答案是 ${correctAnswer}`;
+                    }
+                });
+            });
+        }
+
+        // 初始化动画效果
+        function initAnimations() {
+            // 开始游戏按钮动画
+            const startBtn = document.getElementById('startGameBtn');
+            if (startBtn) {
+                startBtn.addEventListener('click', function () {
+                    this.style.transform = 'scale(0.95)';
+                    setTimeout(() => {
+                        this.style.transform = 'scale(1)';
+                        showGameLaunchModal();
+                    }, 150);
+                });
+            }
+            // 显示游戏启动模态框
+            function showGameLaunchModal() {
+                // 创建模态框背景
+                const modalOverlay = document.createElement('div');
+                modalOverlay.className = 'fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 animate-fade-in';
+                modalOverlay.style.animation = 'fadeIn 0.3s ease-out';
+
+                // 创建模态框内容
+                const modalContent = document.createElement('div');
+                modalContent.className = 'glass-effect rounded-2xl p-8 max-w-md mx-4 text-center transform animate-zoom-in';
+                modalContent.style.animation = 'zoomIn 0.4s ease-out';
+
+                modalContent.innerHTML = `
+                <div class="mb-6">
+                    <div class="text-6xl mb-4 animate-float">🚀</div>
+                    <h2 class="text-3xl font-bold mb-4 font-space text-primary">太空任务启动</h2>
+                    <p class="text-lg text-space-300 mb-6">
+                        准备好探索数学宇宙了吗？<br>
+                        在这个太空冒险中，你将：
+                    </p>
+                </div>
+                
+                <div class="space-y-3 mb-8 text-left">
+                    <div class="flex items-center">
+                        <span class="w-2 h-2 bg-primary rounded-full mr-3"></span>
+                        <span>解决一元二次方程挑战</span>
+                    </div>
+                    <div class="flex items-center">
+                        <span class="w-2 h-2 bg-secondary rounded-full mr-3"></span>
+                        <span>收集太空能量水晶</span>
+                    </div>
+                    <div class="flex items-center">
+                        <span class="w-2 h-2 bg-accent rounded-full mr-3"></span>
+                        <span>探索神秘的数学星系</span>
+                    </div>
+                </div>
+                
+                <div class="flex gap-4">
+                    <button id="startMissionBtn" class="flex-1 bg-gradient-to-r from-primary to-secondary px-6 py-3 rounded-full font-space font-bold hover:scale-105 transition-all duration-300 shadow-lg">
+                        <i class="fa fa-rocket mr-2"></i>
+                        开始任务
+                    </button>
+                    <button id="cancelMissionBtn" class="flex-1 bg-gray-600 hover:bg-gray-700 px-6 py-3 rounded-full font-space font-bold hover:scale-105 transition-all duration-300">
+                        <i class="fa fa-times mr-2"></i>
+                        取消
+                    </button>
+                </div>
+            `;
+
+                modalOverlay.appendChild(modalContent);
+                document.body.appendChild(modalOverlay);
+
+                // 添加CSS动画
+                const style = document.createElement('style');
+                style.textContent = `
+                @keyframes fadeIn {
+                    from { opacity: 0; }
+                    to { opacity: 1; }
+                }
+                @keyframes zoomIn {
+                    from { 
+                        opacity: 0; 
+                        transform: scale(0.8) translateY(20px); 
+                    }
+                    to { 
+                        opacity: 1; 
+                        transform: scale(1) translateY(0); 
+                    }
+                }
+            `;
+                document.head.appendChild(style);
+
+                // 绑定事件
+                document.getElementById('startMissionBtn').addEventListener('click', function () {
+                    // 启动游戏逻辑
+                    launchSpaceGame();
+                    closeModal();
+                });
+
+                document.getElementById('cancelMissionBtn').addEventListener('click', closeModal);
+                modalOverlay.addEventListener('click', function (e) {
+                    if (e.target === modalOverlay) closeModal();
+                });
+
+                function closeModal() {
+                    modalOverlay.style.animation = 'fadeOut 0.3s ease-out';
+                    setTimeout(() => {
+                        document.body.removeChild(modalOverlay);
+                        document.head.removeChild(style);
+                    }, 300);
+                }
+            }
+
+            // 启动太空游戏
+            function launchSpaceGame() {
+                // 创建游戏界面
+                const gameContainer = document.createElement('div');
+                gameContainer.id = 'spaceGameContainer';
+                gameContainer.className = 'fixed inset-0 bg-gradient-to-b from-indigo-900 via-purple-900 to-black z-40 overflow-hidden';
+
+                gameContainer.innerHTML = `
+                <div class="relative w-full h-full">
+                    <!-- 游戏画布 -->
+                    <canvas id="gameCanvas" class="absolute inset-0 w-full h-full"></canvas>
+                    
+                    <!-- 游戏UI覆盖层 -->
+                    <div class="absolute inset-0 pointer-events-none">
+                        <!-- 顶部状态栏 -->
+                        <div class="flex justify-between items-center p-4 glass-effect m-4 rounded-xl pointer-events-auto">
+                            <div class="flex items-center space-x-6">
+                                <div class="flex items-center">
+                                    <i class="fa fa-heart text-red-500 mr-2"></i>
+                                    <span id="gameHealth" class="font-space text-xl">100</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="fa fa-star text-yellow-500 mr-2"></i>
+                                    <span id="gameScore" class="font-space text-xl">0</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="fa fa-clock text-blue-500 mr-2"></i>
+                                    <span id="gameTime" class="font-space text-xl">05:00</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="fa fa-layer-group text-green-500 mr-2"></i>
+                                    <span id="gameLevel" class="font-space text-xl">1</span>
+                                </div>
+                            </div>
+                            <button id="exitGameBtn" class="bg-red-600 hover:bg-red-700 px-4 py-2 rounded-full font-space transition-colors pointer-events-auto">
+                                <i class="fa fa-times mr-2"></i>退出
+                            </button>
+                        </div>
+                        
+                        <!-- 题目显示区域 -->
+                        <div id="questionPanel" class="absolute bottom-4 left-4 right-4 glass-effect p-6 rounded-xl pointer-events-auto transform translate-y-full transition-transform duration-500">
+                            <h3 class="text-xl font-bold mb-4 font-space text-primary">数学挑战</h3>
+                            <div id="gameQuestion" class="text-lg mb-4 font-space text-center">
+                                准备接受挑战...
+                            </div>
+                            <div id="answerOptions" class="grid grid-cols-2 gap-3">
+                                <!-- 答案选项将动态生成 -->
+                            </div>
+                            <div id="questionTimer" class="mt-4 text-center">
+                                <div class="w-full bg-gray-700 rounded-full h-2">
+                                    <div id="timerBar" class="bg-gradient-to-r from-green-500 to-red-500 h-2 rounded-full transition-all duration-1000" style="width: 100%"></div>
+                                </div>
+                                <span class="text-sm text-gray-300 mt-1 block">剩余时间</span>
+                            </div>
+                        </div>
+                        
+                        <!-- 游戏提示 -->
+                        <div id="gameHints" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center pointer-events-none">
+                            <div class="text-2xl font-space text-white opacity-80 animate-pulse">
+                                使用鼠标控制飞船移动
+                            </div>
+                            <div class="text-lg font-space text-gray-300 mt-2">
+                                正确答题获得强力武器！
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+                document.body.appendChild(gameContainer);
+
+                // 初始化游戏
+                initThunderFighterGame();
+            }
+
+            // 初始化太空游戏
+            // 雷霆战机风格的太空游戏引擎
+            function initThunderFighterGame() {
+                const canvas = document.getElementById('gameCanvas');
+                const ctx = canvas.getContext('2d');
+
+                // 设置canvas尺寸
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+
+                // 游戏状态
+                const gameState = {
+                    player: { x: canvas.width / 2, y: canvas.height - 100, width: 60, height: 60, health: 100 },
+                    enemies: [],
+                    bullets: [],
+                    enemyBullets: [], // 敌机子弹
+                    particles: [],
+                    powerUps: [],
+                    score: 0,
+                    level: 1,
+                    gameTime: 300, // 5分钟
+                    isRunning: true,
+                    currentQuestion: null,
+                    questionActive: false,
+                    questionTimer: 15,
+                    mouseX: canvas.width / 2,
+                    mouseY: canvas.height - 100,
+                    keys: {},
+                    lastShot: 0,
+                    shootCooldown: 200,
+                    enemySpawnRate: 2000,
+                    lastEnemySpawn: 0,
+                    shieldActive: false, // 护盾状态
+                    shieldTime: 0, // 护盾剩余时间
+                    // 持续道具系统
+                    persistentItems: {
+                        weaponLevel: 1, // 武器等级 1-5
+                        shieldLevel: 0, // 护盾等级 0-3
+                        speedLevel: 0, // 速度等级 0-3
+                        healthLevel: 0, // 生命等级 0-3
+                        fireRateLevel: 0, // 射速等级 0-3
+                        multiShotLevel: 0, // 多重射击等级 0-3
+                        laserLevel: 0, // 激光等级 0-3
+                        bombLevel: 0 // 炸弹等级 0-3
+                    },
+                    // 自动驾驶状态
+                    autopilot: {
+                        active: false,
+                        targetX: canvas.width / 2,
+                        lastDirectionChange: 0,
+                        avoidanceMode: false
+                    }
+                };
+
+                // 完整的数学题目库
+                const mathQuestions = [
+                    // 一般形式转换题目 - 练习题
+                    {
+                        type: 'standard_form',
+                        question: '将方程 5x² - 1 = 4x 化为一般形式，并写出二次项系数',
+                        options: ['5x² - 4x - 1 = 0，二次项系数为5', '5x² + 4x - 1 = 0，二次项系数为5', '5x² - 4x + 1 = 0，二次项系数为5', 'x² - 4x - 1 = 0，二次项系数为1'],
+                        correct: 0,
+                        difficulty: 1,
+                        battleMode: 'rapid_fire'
+                    },
+                    {
+                        type: 'standard_form',
+                        question: '将方程 4x² = 81 化为一般形式，并写出常数项',
+                        options: ['4x² - 81 = 0，常数项为-81', '4x² + 81 = 0，常数项为81', 'x² - 81 = 0，常数项为-81', '4x² = 81，无常数项'],
+                        correct: 0,
+                        difficulty: 1,
+                        battleMode: 'rapid_fire'
+                    },
+                    {
+                        type: 'standard_form',
+                        question: '将方程 4x(x+2) = 25 化为一般形式',
+                        options: ['4x² + 8x - 25 = 0', '4x² + 8x + 25 = 0', '4x² - 8x - 25 = 0', 'x² + 2x - 25 = 0'],
+                        correct: 0,
+                        difficulty: 2,
+                        battleMode: 'rapid_fire'
+                    },
+                    {
+                        type: 'standard_form',
+                        question: '将方程 (3x-2)(x+1) = 8x-3 化为一般形式',
+                        options: ['3x² - 7x + 1 = 0', '3x² + 7x - 1 = 0', '3x² - 7x - 1 = 0', '3x² + x - 1 = 0'],
+                        correct: 0,
+                        difficulty: 3,
+                        battleMode: 'rapid_fire'
+                    },
+
+                    // 习题21.1 - 一般形式转换
+                    {
+                        type: 'standard_form',
+                        question: '将方程 3x² + 1 = 6x 化为一般形式，并写出一次项系数',
+                        options: ['3x² - 6x + 1 = 0，一次项系数为-6', '3x² + 6x + 1 = 0，一次项系数为6', '3x² - 6x - 1 = 0，一次项系数为-6', 'x² - 2x + 1 = 0，一次项系数为-2'],
+                        correct: 0,
+                        difficulty: 2,
+                        battleMode: 'rapid_fire'
+                    },
+                    {
+                        type: 'standard_form',
+                        question: '将方程 4x² + 5x = 81 化为一般形式',
+                        options: ['4x² + 5x - 81 = 0', '4x² + 5x + 81 = 0', '4x² - 5x - 81 = 0', 'x² + 5x - 81 = 0'],
+                        correct: 0,
+                        difficulty: 1,
+                        battleMode: 'rapid_fire'
+                    },
+                    {
+                        type: 'standard_form',
+                        question: '将方程 x(x+5) = 0 化为一般形式',
+                        options: ['x² + 5x = 0', 'x² - 5x = 0', 'x² + 5x + 0 = 0', 'x + 5 = 0'],
+                        correct: 0,
+                        difficulty: 1,
+                        battleMode: 'rapid_fire'
+                    },
+                    {
+                        type: 'standard_form',
+                        question: '将方程 (2x-2)(x-1) = 0 化为一般形式',
+                        options: ['2x² - 4x + 2 = 0', '2x² + 4x - 2 = 0', '2x² - 4x - 2 = 0', 'x² - 2x + 1 = 0'],
+                        correct: 0,
+                        difficulty: 2,
+                        battleMode: 'rapid_fire'
+                    },
+                    {
+                        type: 'standard_form',
+                        question: '将方程 x(x+5) = 5x-10 化为一般形式',
+                        options: ['x² - 10 = 0', 'x² + 5x - 10 = 0', 'x² - 5x + 10 = 0', 'x² + 10 = 0'],
+                        correct: 0,
+                        difficulty: 3,
+                        battleMode: 'rapid_fire'
+                    },
+                    {
+                        type: 'standard_form',
+                        question: '将方程 (3x-2)(x+1) = x(2x-1) 化为一般形式',
+                        options: ['x² - x - 2 = 0', 'x² + x + 2 = 0', 'x² - x + 2 = 0', 'x² + x - 2 = 0'],
+                        correct: 0,
+                        difficulty: 3,
+                        battleMode: 'rapid_fire'
+                    },
+
+                    // 应用题 - 练习题
+                    {
+                        type: 'application',
+                        question: '4个完全相同的正方形面积之和是25，求正方形边长x的方程',
+                        options: ['4x² = 25', 'x² = 25', '4x = 25', '2x² = 25'],
+                        correct: 0,
+                        difficulty: 2,
+                        battleMode: 'shield_mode'
+                    },
+                    {
+                        type: 'application',
+                        question: '矩形长比宽多2，面积是100，求矩形长x的方程',
+                        options: ['x(x-2) = 100', 'x(x+2) = 100', '2x² = 100', 'x² + 2x = 100'],
+                        correct: 0,
+                        difficulty: 3,
+                        battleMode: 'shield_mode'
+                    },
+                    {
+                        type: 'application',
+                        question: '把长为1的木条分成两段，使较短一段的长与全长的积等于较长一段的长的平方，求较短一段的长x',
+                        options: ['x·1 = (1-x)²', 'x² = 1-x', 'x(1-x) = x²', 'x·1 = (1-x)²'],
+                        correct: 0,
+                        difficulty: 4,
+                        battleMode: 'shield_mode'
+                    },
+
+                    // 应用题 - 习题21.1
+                    {
+                        type: 'application',
+                        question: '一个圆的面积是2π m²，求半径r的方程',
+                        options: ['πr² = 2π', '2πr = 2π', 'πr² = 2', 'r² = 2π'],
+                        correct: 0,
+                        difficulty: 2,
+                        battleMode: 'shield_mode'
+                    },
+                    {
+                        type: 'application',
+                        question: '直角三角形两条直角边相差3cm，面积是9cm²，求较长直角边x的方程',
+                        options: ['x(x-3) = 18', '½x(x-3) = 9', 'x(x+3) = 18', '½x(x+3) = 9'],
+                        correct: 1,
+                        difficulty: 3,
+                        battleMode: 'shield_mode'
+                    },
+                    {
+                        type: 'application',
+                        question: '矩形长比宽多1cm，面积是132cm²，求长x的方程',
+                        options: ['x(x-1) = 132', 'x(x+1) = 132', 'x² + x = 132', 'x² - x = 132'],
+                        correct: 0,
+                        difficulty: 3,
+                        battleMode: 'shield_mode'
+                    },
+                    {
+                        type: 'application',
+                        question: '用1m长的铁丝围成面积为0.06m²的矩形，设长为x，求方程',
+                        options: ['x(0.5-x) = 0.06', 'x(1-x) = 0.06', '2x(0.5-x) = 0.06', 'x(0.25-x) = 0.06'],
+                        correct: 0,
+                        difficulty: 4,
+                        battleMode: 'shield_mode'
+                    },
+                    {
+                        type: 'application',
+                        question: '聚会中每两人都握一次手，共握手10次，求参加人数x的方程',
+                        options: ['x(x-1)/2 = 10', 'x(x+1)/2 = 10', 'x² = 10', '2x = 10'],
+                        correct: 0,
+                        difficulty: 4,
+                        battleMode: 'shield_mode'
+                    },
+
+                    // 根的判断题
+                    {
+                        type: 'roots',
+                        question: '下列哪个数是方程 x² + x - 12 = 0 的根？',
+                        options: ['3', '4', '2', '1'],
+                        correct: 0,
+                        difficulty: 2,
+                        battleMode: 'boss_fight'
+                    },
+                    {
+                        type: 'roots',
+                        question: '在数字 -4, -3, -2, -1, 0, 1, 2, 3, 4 中，哪个是方程 x² + x - 12 = 0 的根？',
+                        options: ['-4', '-3', '0', '4'],
+                        correct: 0,
+                        difficulty: 2,
+                        battleMode: 'boss_fight'
+                    },
+                    {
+                        type: 'roots',
+                        question: '如果2是方程 x² - c = 0 的一个根，那么常数c是多少？',
+                        options: ['4', '2', '-2', '-4'],
+                        correct: 0,
+                        difficulty: 3,
+                        battleMode: 'boss_fight'
+                    },
+                    {
+                        type: 'roots',
+                        question: '方程 x² - 4 = 0 的根是什么？',
+                        options: ['x = ±2', 'x = ±4', 'x = 2', 'x = 4'],
+                        correct: 0,
+                        difficulty: 2,
+                        battleMode: 'boss_fight'
+                    }
+                ];
+
+                // 鼠标控制
+                canvas.addEventListener('mousemove', (e) => {
+                    const rect = canvas.getBoundingClientRect();
+                    gameState.mouseX = e.clientX - rect.left;
+                    gameState.mouseY = e.clientY - rect.top;
+                });
+
+                // 键盘控制
+                document.addEventListener('keydown', (e) => {
+                    gameState.keys[e.key] = true;
+                });
+
+                document.addEventListener('keyup', (e) => {
+                    gameState.keys[e.key] = false;
+                });
+
+                // 创建星空背景
+                const stars = [];
+                for (let i = 0; i < 300; i++) {
+                    stars.push({
+                        x: Math.random() * canvas.width,
+                        y: Math.random() * canvas.height,
+                        size: Math.random() * 2 + 0.5,
+                        speed: Math.random() * 2 + 0.5,
+                        opacity: Math.random() * 0.8 + 0.2
+                    });
+                }
+
+                // 绘制星空
+                function drawStars() {
+                    stars.forEach(star => {
+                        ctx.save();
+                        ctx.globalAlpha = star.opacity;
+                        ctx.fillStyle = '#ffffff';
+                        ctx.beginPath();
+                        ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+                        ctx.fill();
+                        ctx.restore();
+
+                        star.y += star.speed;
+                        if (star.y > canvas.height) {
+                            star.y = -10;
+                            star.x = Math.random() * canvas.width;
+                        }
+                    });
+                }
+
+                // 绘制玩家飞船
+                function drawPlayer() {
+                    const player = gameState.player;
+
+                    // 平滑移动到鼠标位置
+                    const dx = gameState.mouseX - player.x;
+                    const dy = gameState.mouseY - player.y;
+                    player.x += dx * 0.1;
+                    player.y += dy * 0.1;
+
+                    // 限制边界
+                    player.x = Math.max(30, Math.min(canvas.width - 30, player.x));
+                    player.y = Math.max(30, Math.min(canvas.height - 30, player.y));
+
+                    // 绘制护盾效果
+                    if (gameState.shieldActive) {
+                        ctx.save();
+                        ctx.globalAlpha = 0.3 + Math.sin(Date.now() * 0.01) * 0.2;
+                        ctx.strokeStyle = '#00ffff';
+                        ctx.lineWidth = 3;
+                        ctx.beginPath();
+                        ctx.arc(player.x, player.y, 50, 0, Math.PI * 2);
+                        ctx.stroke();
+
+                        // 护盾粒子效果
+                        ctx.globalAlpha = 0.6;
+                        for (let i = 0; i < 8; i++) {
+                            const angle = (Date.now() * 0.005 + i * Math.PI / 4) % (Math.PI * 2);
+                            const x = player.x + Math.cos(angle) * 45;
+                            const y = player.y + Math.sin(angle) * 45;
+                            ctx.fillStyle = '#00ffff';
+                            ctx.beginPath();
+                            ctx.arc(x, y, 3, 0, Math.PI * 2);
+                            ctx.fill();
+                        }
+                        ctx.restore();
+                    }
+
+                    // 绘制飞船尾焰粒子效果
+                    for (let i = 0; i < 5; i++) {
+                        const offsetX = (Math.random() - 0.5) * 20;
+                        const offsetY = 15 + Math.random() * 20;
+                        const size = Math.random() * 4 + 2;
+
+                        ctx.save();
+                        ctx.globalAlpha = 0.7 - i * 0.1;
+                        ctx.fillStyle = i % 2 === 0 ? '#ff6600' : '#ffaa00';
+                        ctx.beginPath();
+                        ctx.arc(player.x + offsetX, player.y + offsetY, size, 0, Math.PI * 2);
+                        ctx.fill();
+                        ctx.restore();
+                    }
+
+                    // 绘制飞船
+                    ctx.save();
+                    ctx.translate(player.x, player.y);
+
+                    // 添加发光效果
+                    ctx.shadowColor = '#00ffff';
+                    ctx.shadowBlur = 15;
+
+                    // 飞船主体 - 更华丽的设计
+                    const gradient = ctx.createLinearGradient(0, -25, 0, 15);
+                    gradient.addColorStop(0, '#00ffff');
+                    gradient.addColorStop(0.5, '#0088ff');
+                    gradient.addColorStop(1, '#004488');
+                    ctx.fillStyle = gradient;
+
+                    // 主体形状
+                    ctx.beginPath();
+                    ctx.moveTo(0, -25);
+                    ctx.lineTo(-15, 15);
+                    ctx.lineTo(-8, 10);
+                    ctx.lineTo(0, -5);
+                    ctx.lineTo(8, 10);
+                    ctx.lineTo(15, 15);
+                    ctx.closePath();
+                    ctx.fill();
+
+                    // 飞船装饰线条
+                    ctx.strokeStyle = '#ffffff';
+                    ctx.lineWidth = 2;
+                    ctx.beginPath();
+                    ctx.moveTo(-10, 0);
+                    ctx.lineTo(10, 0);
+                    ctx.moveTo(-8, -10);
+                    ctx.lineTo(8, -10);
+                    ctx.stroke();
+
+                    // 驾驶舱
+                    ctx.fillStyle = '#ffffff';
+                    ctx.beginPath();
+                    ctx.arc(0, -10, 6, 0, Math.PI * 2);
+                    ctx.fill();
+
+                    // 驾驶舱内部
+                    ctx.fillStyle = '#0066ff';
+                    ctx.beginPath();
+                    ctx.arc(0, -10, 4, 0, Math.PI * 2);
+                    ctx.fill();
+
+                    // 武器挂载点
+                    ctx.fillStyle = '#ff0000';
+                    ctx.fillRect(-12, 5, 4, 8);
+                    ctx.fillRect(8, 5, 4, 8);
+
+                    // 飞船引擎光效 - 更华丽
+                    const engineGradient = ctx.createLinearGradient(0, 10, 0, 25);
+                    engineGradient.addColorStop(0, '#ff6600');
+                    engineGradient.addColorStop(0.5, '#ffaa00');
+                    engineGradient.addColorStop(1, '#ffff00');
+                    ctx.fillStyle = engineGradient;
+
+                    ctx.beginPath();
+                    ctx.moveTo(-8, 10);
+                    ctx.lineTo(-4, 25 + Math.sin(Date.now() * 0.01) * 3);
+                    ctx.lineTo(0, 20 + Math.sin(Date.now() * 0.015) * 2);
+                    ctx.lineTo(4, 25 + Math.sin(Date.now() * 0.01) * 3);
+                    ctx.lineTo(8, 10);
+                    ctx.closePath();
+                    ctx.fill();
+
+                    // 侧翼引擎
+                    ctx.fillStyle = '#ff3300';
+                    ctx.fillRect(-15, 12, 3, 8 + Math.sin(Date.now() * 0.02) * 2);
+                    ctx.fillRect(12, 12, 3, 8 + Math.sin(Date.now() * 0.02) * 2);
+
+                    // 能量核心发光效果
+                    ctx.save();
+                    ctx.globalAlpha = 0.8 + Math.sin(Date.now() * 0.008) * 0.2;
+                    ctx.fillStyle = '#00ffff';
+                    ctx.beginPath();
+                    ctx.arc(0, 0, 3, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.restore();
+
+                    ctx.restore();
+                }
+
+                // 创建子弹
+                function createBullet(x, y, type = 'normal') {
+                    const items = gameState.persistentItems;
+
+                    // 基础子弹
+                    let bullet = {
+                        x: x,
+                        y: y,
+                        width: 4,
+                        height: 15,
+                        speed: 8,
+                        type: type,
+                        damage: 1 + items.weaponLevel
+                    };
+
+                    // 根据子弹类型设置不同属性
+                    switch (type) {
+                        case 'rapid':
+                            bullet.speed = 12 + items.fireRateLevel * 2;
+                            bullet.width = 3;
+                            bullet.height = 10;
+                            bullet.color = '#ffff00';
+                            break;
+                        case 'laser':
+                            bullet.speed = 15 + items.laserLevel * 3;
+                            bullet.width = 6 + items.laserLevel * 2;
+                            bullet.height = 20 + items.laserLevel * 5;
+                            bullet.damage = 3 + items.laserLevel * 2;
+                            bullet.color = '#ff0000';
+                            break;
+                        case 'super':
+                            bullet.speed = 10;
+                            bullet.width = 8 + items.weaponLevel;
+                            bullet.height = 25 + items.weaponLevel * 2;
+                            bullet.damage = 5 + items.weaponLevel * 2;
+                            bullet.color = '#ff00ff';
+                            break;
+                        default:
+                            bullet.color = '#00ff00';
+                    }
+
+                    gameState.bullets.push(bullet);
+
+                    // 多重射击
+                    if (items.multiShotLevel > 0) {
+                        for (let i = 1; i <= items.multiShotLevel; i++) {
+                            const sideBullet1 = { ...bullet };
+                            const sideBullet2 = { ...bullet };
+                            sideBullet1.x = x - i * 15;
+                            sideBullet2.x = x + i * 15;
+                            gameState.bullets.push(sideBullet1, sideBullet2);
+                        }
+                    }
+                }
+
+                // 绘制子弹
+                function drawBullets() {
+                    gameState.bullets.forEach((bullet, index) => {
+                        bullet.y -= bullet.speed;
+
+                        // 根据子弹类型设置颜色和效果
+                        ctx.save();
+
+                        if (bullet.type === 'laser') {
+                            ctx.fillStyle = bullet.color || '#ff0080';
+                            ctx.shadowColor = bullet.color || '#ff0080';
+                            ctx.shadowBlur = 15;
+                        } else if (bullet.type === 'super') {
+                            ctx.fillStyle = bullet.color || '#ff00ff';
+                            ctx.shadowColor = bullet.color || '#ff00ff';
+                            ctx.shadowBlur = 20;
+                            // 添加粒子尾迹
+                            for (let i = 0; i < 2; i++) {
+                                gameState.particles.push({
+                                    x: bullet.x + Math.random() * bullet.width,
+                                    y: bullet.y + bullet.height,
+                                    vx: (Math.random() - 0.5) * 3,
+                                    vy: Math.random() * 2 + 1,
+                                    life: 15,
+                                    maxLife: 15,
+                                    size: 2,
+                                    color: bullet.color || '#ff00ff',
+                                    type: 'trail'
+                                });
+                            }
+                        } else if (bullet.type === 'rapid') {
+                            ctx.fillStyle = bullet.color || '#ffff00';
+                            ctx.shadowColor = bullet.color || '#ffff00';
+                            ctx.shadowBlur = 8;
+                        } else {
+                            ctx.fillStyle = bullet.color || '#00ff00';
+                            ctx.shadowColor = bullet.color || '#00ff00';
+                            ctx.shadowBlur = 5;
+                        }
+
+                        ctx.fillRect(bullet.x - bullet.width / 2, bullet.y, bullet.width, bullet.height);
+                        ctx.restore();
+
+                        // 移除超出屏幕的子弹
+                        if (bullet.y < -20) {
+                            gameState.bullets.splice(index, 1);
+                        }
+                    });
+                }
+
+                // 创建敌机
+                function createEnemy(type = 'normal') {
+                    let enemy;
+
+                    switch (type) {
+                        case 'scout':
+                            enemy = {
+                                x: Math.random() * (canvas.width - 40) + 20,
+                                y: -30,
+                                width: 25,
+                                height: 25,
+                                speed: Math.random() * 3 + 3, // 快速
+                                health: 1,
+                                maxHealth: 1,
+                                type: type,
+                                lastShot: 0,
+                                shootCooldown: 2000,
+                                color: '#00ff88',
+                                pattern: 'zigzag', // 之字形移动
+                                patternTimer: 0
+                            };
+                            break;
+                        case 'heavy':
+                            enemy = {
+                                x: Math.random() * (canvas.width - 80) + 40,
+                                y: -60,
+                                width: 60,
+                                height: 60,
+                                speed: Math.random() * 1 + 0.5, // 缓慢
+                                health: 5,
+                                maxHealth: 5,
+                                type: type,
+                                lastShot: 0,
+                                shootCooldown: 800,
+                                color: '#8800ff',
+                                pattern: 'straight', // 直线移动
+                                armor: true // 有装甲
+                            };
+                            break;
+                        case 'sniper':
+                            enemy = {
+                                x: Math.random() * (canvas.width - 50) + 25,
+                                y: -40,
+                                width: 35,
+                                height: 35,
+                                speed: Math.random() * 1.5 + 1,
+                                health: 2,
+                                maxHealth: 2,
+                                type: type,
+                                lastShot: 0,
+                                shootCooldown: 1200,
+                                color: '#ff0088',
+                                pattern: 'hover', // 悬停射击
+                                targetLocked: false
+                            };
+                            break;
+                        case 'bomber':
+                            enemy = {
+                                x: Math.random() * (canvas.width - 70) + 35,
+                                y: -50,
+                                width: 50,
+                                height: 50,
+                                speed: Math.random() * 2 + 1.5,
+                                health: 3,
+                                maxHealth: 3,
+                                type: type,
+                                lastShot: 0,
+                                shootCooldown: 1000,
+                                color: '#ffaa00',
+                                pattern: 'dive', // 俯冲攻击
+                                bombLoad: 3
+                            };
+                            break;
+                        case 'boss':
+                            enemy = {
+                                x: canvas.width / 2,
+                                y: -80,
+                                width: 80,
+                                height: 80,
+                                speed: Math.random() * 1 + 0.8,
+                                health: 15,
+                                maxHealth: 15,
+                                type: type,
+                                lastShot: 0,
+                                shootCooldown: 300,
+                                color: '#ff0000',
+                                pattern: 'boss_pattern',
+                                phase: 1,
+                                specialAttackTimer: 0
+                            };
+                            break;
+                        case 'strong':
+                            enemy = {
+                                x: Math.random() * (canvas.width - 60) + 30,
+                                y: -50,
+                                width: 45,
+                                height: 45,
+                                speed: Math.random() * 2 + 1.5,
+                                health: 3,
+                                maxHealth: 3,
+                                type: type,
+                                lastShot: 0,
+                                shootCooldown: 1000,
+                                color: '#ff8800',
+                                pattern: 'aggressive'
+                            };
+                            break;
+                        default: // normal
+                            enemy = {
+                                x: Math.random() * (canvas.width - 60) + 30,
+                                y: -50,
+                                width: 40,
+                                height: 40,
+                                speed: Math.random() * 2 + 1,
+                                health: 1,
+                                maxHealth: 1,
+                                type: type,
+                                lastShot: 0,
+                                shootCooldown: 1500,
+                                color: '#ff4444',
+                                pattern: 'straight'
+                            };
+                    }
+
+                    gameState.enemies.push(enemy);
+                }
+
+                // 更新敌机移动模式
+                function updateEnemyMovement(enemy) {
+                    if (!enemy.moveTimer) enemy.moveTimer = 0;
+                    enemy.moveTimer++;
+
+                    switch (enemy.pattern) {
+                        case 'zigzag':
+                            enemy.x += Math.sin(enemy.moveTimer * 0.1) * 3;
+                            break;
+                        case 'straight':
+                            // 直线移动，无额外操作
+                            break;
+                        case 'hover':
+                            enemy.y += Math.sin(enemy.moveTimer * 0.05) * 2;
+                            enemy.x += Math.cos(enemy.moveTimer * 0.03) * 1.5;
+                            break;
+                        case 'dive':
+                            if (enemy.moveTimer % 120 === 0) {
+                                enemy.speed = enemy.speed === enemy.originalSpeed ? enemy.originalSpeed * 3 : enemy.originalSpeed;
+                            }
+                            break;
+                        case 'boss_pattern':
+                            if (enemy.moveTimer % 180 === 0) {
+                                enemy.targetX = Math.random() * (canvas.width - 60) + 30;
+                            }
+                            if (enemy.targetX) {
+                                const dx = enemy.targetX - enemy.x;
+                                enemy.x += dx * 0.02;
+                            }
+                            break;
+                        case 'aggressive':
+                            const playerDx = gameState.player.x - enemy.x;
+                            enemy.x += Math.sign(playerDx) * 1.5;
+                            break;
+                    }
+
+                    // 边界检查
+                    if (enemy.x < 0) enemy.x = 0;
+                    if (enemy.x > canvas.width) enemy.x = canvas.width;
+                }
+
+                // 绘制敌机
+                function drawEnemies() {
+                    gameState.enemies.forEach((enemy, index) => {
+                        // 更新敌机移动模式
+                        updateEnemyMovement(enemy);
+
+                        enemy.y += enemy.speed;
+
+                        // 敌机颜色根据类型
+                        ctx.fillStyle = enemy.color || '#ff4444';
+
+                        // 绘制不同形状的敌机
+                        ctx.save();
+                        ctx.translate(enemy.x, enemy.y);
+
+                        // 添加发光效果
+                        ctx.shadowColor = enemy.color || '#ff4444';
+                        ctx.shadowBlur = 10;
+
+                        switch (enemy.type) {
+                            case 'scout':
+                                // 小型三角形
+                                ctx.beginPath();
+                                ctx.moveTo(0, 10);
+                                ctx.lineTo(-8, -8);
+                                ctx.lineTo(8, -8);
+                                ctx.closePath();
+                                ctx.fill();
+                                break;
+                            case 'heavy':
+                                // 大型六边形
+                                ctx.beginPath();
+                                for (let i = 0; i < 6; i++) {
+                                    const angle = (i * Math.PI) / 3;
+                                    const x = Math.cos(angle) * 20;
+                                    const y = Math.sin(angle) * 20;
+                                    if (i === 0) ctx.moveTo(x, y);
+                                    else ctx.lineTo(x, y);
+                                }
+                                ctx.closePath();
+                                ctx.fill();
+                                // 装甲效果
+                                if (enemy.armor) {
+                                    ctx.strokeStyle = '#ffffff';
+                                    ctx.lineWidth = 2;
+                                    ctx.stroke();
+                                }
+                                break;
+                            case 'sniper':
+                                // 细长形状
+                                ctx.fillRect(-5, -15, 10, 30);
+                                ctx.fillRect(-15, -5, 30, 10);
+                                // 瞄准线
+                                if (enemy.targetLocked) {
+                                    ctx.strokeStyle = '#ff0088';
+                                    ctx.lineWidth = 2;
+                                    ctx.beginPath();
+                                    ctx.moveTo(0, 15);
+                                    ctx.lineTo(gameState.player.x - enemy.x, gameState.player.y - enemy.y);
+                                    ctx.stroke();
+                                }
+                                break;
+                            case 'bomber':
+                                // 宽大形状
+                                ctx.beginPath();
+                                ctx.ellipse(0, 0, 25, 15, 0, 0, 2 * Math.PI);
+                                ctx.fill();
+                                // 炸弹指示器
+                                for (let i = 0; i < enemy.bombLoad; i++) {
+                                    ctx.fillStyle = '#ff0000';
+                                    ctx.fillRect(-20 + i * 15, 10, 8, 8);
+                                }
+                                break;
+                            case 'boss':
+                                // 复杂Boss形状
+                                ctx.beginPath();
+                                ctx.moveTo(0, 25);
+                                ctx.lineTo(-30, -15);
+                                ctx.lineTo(-15, -25);
+                                ctx.lineTo(0, -10);
+                                ctx.lineTo(15, -25);
+                                ctx.lineTo(30, -15);
+                                ctx.closePath();
+                                ctx.fill();
+
+                                // Boss特效
+                                ctx.strokeStyle = '#ffff00';
+                                ctx.lineWidth = 3;
+                                ctx.stroke();
+
+                                // 相位指示器
+                                for (let i = 0; i < enemy.phase; i++) {
+                                    ctx.fillStyle = '#ffff00';
+                                    ctx.fillRect(-35 + i * 15, -35, 10, 5);
+                                }
+                                break;
+                            default:
+                                // 标准敌机形状
+                                ctx.beginPath();
+                                ctx.moveTo(0, 15);
+                                ctx.lineTo(-12, -10);
+                                ctx.lineTo(-6, -15);
+                                ctx.lineTo(0, -5);
+                                ctx.lineTo(6, -15);
+                                ctx.lineTo(12, -10);
+                                ctx.closePath();
+                                ctx.fill();
+                        }
+
+                        ctx.restore();
+
+                        // 血条
+                        if (enemy.health < enemy.maxHealth) {
+                            const barWidth = enemy.width;
+                            const barHeight = 4;
+                            const healthPercent = enemy.health / enemy.maxHealth;
+
+                            ctx.fillStyle = '#333';
+                            ctx.fillRect(enemy.x - barWidth / 2, enemy.y - 25, barWidth, barHeight);
+                            ctx.fillStyle = healthPercent > 0.5 ? '#00ff00' : (healthPercent > 0.2 ? '#ffff00' : '#ff0000');
+                            ctx.fillRect(enemy.x - barWidth / 2, enemy.y - 25, barWidth * healthPercent, barHeight);
+                        }
+
+                        // 敌机射击
+                        const now = Date.now();
+                        if (now - enemy.lastShot > enemy.shootCooldown) {
+                            createEnemyBullet(enemy.x, enemy.y + 20);
+                            enemy.lastShot = now;
+                        }
+
+                        // 移除超出屏幕的敌机
+                        if (enemy.y > canvas.height + 50) {
+                            gameState.enemies.splice(index, 1);
+                        }
+                    });
+                }
+
+                // 创建敌机子弹
+                function createEnemyBullet(x, y) {
+                    const bullet = {
+                        x: x,
+                        y: y,
+                        width: 3,
+                        height: 10,
+                        speed: 4,
+                        isEnemy: true
+                    };
+                    gameState.bullets.push(bullet);
+                }
+
+                // 碰撞检测
+                function checkCollisions() {
+                    // 玩家子弹与敌机碰撞
+                    gameState.bullets.forEach((bullet, bulletIndex) => {
+                        if (bullet.isEnemy) return;
+
+                        gameState.enemies.forEach((enemy, enemyIndex) => {
+                            if (bullet.x > enemy.x - enemy.width / 2 &&
+                                bullet.x < enemy.x + enemy.width / 2 &&
+                                bullet.y > enemy.y - enemy.height / 2 &&
+                                bullet.y < enemy.y + enemy.height / 2) {
+
+                                // 根据敌机类型创建不同大小的爆炸
+                                const explosionSize = enemy.type === 'boss' ? 'large' :
+                                    enemy.type === 'strong' ? 'normal' : 'small';
+                                createExplosion(enemy.x, enemy.y, explosionSize);
+
+                                // 减少敌机血量
+                                enemy.health -= bullet.damage;
+                                gameState.bullets.splice(bulletIndex, 1);
+
+                                if (enemy.health <= 0) {
+                                    gameState.score += enemy.type === 'boss' ? 50 : (enemy.type === 'strong' ? 20 : 10);
+                                    gameState.enemies.splice(enemyIndex, 1);
+                                    updateUI();
+                                }
+                            }
+                        });
+                    });
+
+                    // 敌机子弹与玩家碰撞
+                    gameState.bullets.forEach((bullet, bulletIndex) => {
+                        if (!bullet.isEnemy) return;
+
+                        const player = gameState.player;
+                        if (bullet.x > player.x - player.width / 2 &&
+                            bullet.x < player.x + player.width / 2 &&
+                            bullet.y > player.y - player.height / 2 &&
+                            bullet.y < player.y + player.height / 2) {
+
+                            // 如果有护盾，减少伤害
+                            const damage = gameState.shieldActive ? 5 : 10;
+                            player.health -= damage;
+                            gameState.bullets.splice(bulletIndex, 1);
+                            createExplosion(player.x, player.y, 'small');
+                            updateUI();
+
+                            if (player.health <= 0) {
+                                endGame();
+                            }
+                        }
+                    });
+
+                    // 敌机与玩家碰撞
+                    gameState.enemies.forEach((enemy, enemyIndex) => {
+                        const player = gameState.player;
+                        if (Math.abs(enemy.x - player.x) < 30 && Math.abs(enemy.y - player.y) < 30) {
+                            // 如果有护盾，减少伤害
+                            const damage = gameState.shieldActive ? 10 : 20;
+                            player.health -= damage;
+                            gameState.enemies.splice(enemyIndex, 1);
+                            createExplosion(enemy.x, enemy.y, 'normal');
+                            updateUI();
+
+                            if (player.health <= 0) {
+                                endGame();
+                            }
+                        }
+                    });
+                }
+
+                // 滚动背景
+                let backgroundOffset = 0;
+                function drawScrollingBackground() {
+                    // 清空画布
+                    ctx.fillStyle = 'rgba(0, 0, 20, 0.1)';
+                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                    // 绘制网格背景
+                    ctx.strokeStyle = 'rgba(14, 165, 233, 0.1)';
+                    ctx.lineWidth = 1;
+
+                    const gridSize = 40;
+                    backgroundOffset += 0.5; // 滚动速度
+                    if (backgroundOffset >= gridSize) backgroundOffset = 0;
+
+                    // 垂直线
+                    for (let x = -backgroundOffset; x < canvas.width + gridSize; x += gridSize) {
+                        ctx.beginPath();
+                        ctx.moveTo(x, 0);
+                        ctx.lineTo(x, canvas.height);
+                        ctx.stroke();
+                    }
+
+                    // 水平线
+                    for (let y = -backgroundOffset; y < canvas.height + gridSize; y += gridSize) {
+                        ctx.beginPath();
+                        ctx.moveTo(0, y);
+                        ctx.lineTo(canvas.width, y);
+                        ctx.stroke();
+                    }
+
+                    // 添加一些动态光点
+                    ctx.fillStyle = 'rgba(14, 165, 233, 0.3)';
+                    for (let i = 0; i < 5; i++) {
+                        const x = (Date.now() * 0.01 + i * 200) % (canvas.width + 100) - 50;
+                        const y = (Date.now() * 0.005 + i * 150) % (canvas.height + 100) - 50;
+                        ctx.beginPath();
+                        ctx.arc(x, y, 2, 0, Math.PI * 2);
+                        ctx.fill();
+                    }
+                }
+
+                // 更新护盾状态
+                function updateShield() {
+                    if (gameState.shieldActive) {
+                        gameState.shieldTime -= 16; // 假设60fps，每帧约16ms
+                        if (gameState.shieldTime <= 0) {
+                            gameState.shieldActive = false;
+                            gameState.shieldTime = 0;
+                        }
+                    }
+                }
+
+                // 自动驾驶系统
+                function updateAutopilot() {
+                    const now = Date.now();
+                    const player = gameState.player;
+
+                    // 智能躲避敌机和子弹
+                    let dangerX = null;
+                    let minDistance = Infinity;
+
+                    // 检测最近的威胁
+                    [...gameState.enemies, ...gameState.bullets.filter(b => b.isEnemy)].forEach(threat => {
+                        const distance = Math.sqrt(
+                            Math.pow(threat.x - player.x, 2) +
+                            Math.pow(threat.y - player.y, 2)
+                        );
+
+                        if (distance < minDistance && threat.y > player.y - 150) {
+                            minDistance = distance;
+                            dangerX = threat.x;
+                        }
+                    });
+
+                    // 智能移动逻辑
+                    if (dangerX !== null && minDistance < 100) {
+                        // 有威胁时躲避
+                        gameState.autopilot.avoidanceMode = true;
+                        if (dangerX < player.x) {
+                            gameState.autopilot.targetX = Math.min(canvas.width - 50, player.x + 80);
+                        } else {
+                            gameState.autopilot.targetX = Math.max(50, player.x - 80);
+                        }
+                    } else {
+                        // 无威胁时巡逻
+                        gameState.autopilot.avoidanceMode = false;
+                        if (now - gameState.autopilot.lastDirectionChange > 2000) {
+                            gameState.autopilot.targetX = 100 + Math.random() * (canvas.width - 200);
+                            gameState.autopilot.lastDirectionChange = now;
+                        }
+                    }
+
+                    // 平滑移动到目标位置
+                    const dx = gameState.autopilot.targetX - player.x;
+                    const moveSpeed = gameState.autopilot.avoidanceMode ? 8 : 4;
+
+                    if (Math.abs(dx) > 5) {
+                        player.x += Math.sign(dx) * moveSpeed;
+                        player.x = Math.max(30, Math.min(canvas.width - 30, player.x));
+                    }
+                }
+
+                // 创建爆炸效果
+                function createExplosion(x, y, size = 'normal') {
+                    let particleCount, particleSize, colors;
+
+                    switch (size) {
+                        case 'small':
+                            particleCount = 15;
+                            particleSize = 3;
+                            colors = ['#ff6600', '#ffaa00', '#ffdd00'];
+                            break;
+                        case 'large':
+                            particleCount = 40;
+                            particleSize = 6;
+                            colors = ['#ff0000', '#ff6600', '#ffaa00', '#ffffff'];
+                            break;
+                        default: // normal
+                            particleCount = 25;
+                            particleSize = 4;
+                            colors = ['#ff3300', '#ff6600', '#ffaa00'];
+                    }
+
+                    for (let i = 0; i < particleCount; i++) {
+                        const angle = (Math.PI * 2 * i) / particleCount + Math.random() * 0.5;
+                        const speed = Math.random() * 8 + 3;
+                        const color = colors[Math.floor(Math.random() * colors.length)];
+
+                        gameState.particles.push({
+                            x: x,
+                            y: y,
+                            vx: Math.cos(angle) * speed,
+                            vy: Math.sin(angle) * speed,
+                            life: 40 + Math.random() * 20,
+                            maxLife: 60,
+                            size: particleSize + Math.random() * 2,
+                            color: color,
+                            type: 'explosion'
+                        });
+                    }
+                }
+
+                // 绘制粒子效果
+                function drawParticles() {
+                    gameState.particles.forEach((particle, index) => {
+                        particle.life--;
+                        particle.x += particle.vx;
+                        particle.y += particle.vy;
+
+                        // 根据粒子类型应用不同效果
+                        if (particle.type === 'explosion') {
+                            particle.vx *= 0.98; // 阻力
+                            particle.vy *= 0.98;
+                            particle.size *= 0.95; // 缩小
+                        } else if (particle.type === 'shield') {
+                            // 护盾粒子围绕玩家旋转
+                            const angle = Math.atan2(particle.y - gameState.player.y, particle.x - gameState.player.x);
+                            particle.x = gameState.player.x + Math.cos(angle + 0.05) * 45;
+                            particle.y = gameState.player.y + Math.sin(angle + 0.05) * 45;
+                        } else if (particle.type === 'trail') {
+                            particle.vy += 0.2; // 重力
+                            particle.size *= 0.9;
+                        }
+
+                        // 计算透明度
+                        const alpha = particle.life / particle.maxLife;
+
+                        ctx.save();
+                        ctx.globalAlpha = alpha;
+                        ctx.fillStyle = particle.color;
+
+                        // 根据粒子类型绘制不同形状
+                        if (particle.type === 'explosion') {
+                            ctx.shadowColor = particle.color;
+                            ctx.shadowBlur = 10;
+                            ctx.beginPath();
+                            ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+                            ctx.fill();
+                        } else if (particle.type === 'shield') {
+                            ctx.shadowColor = particle.color;
+                            ctx.shadowBlur = 8;
+                            ctx.beginPath();
+                            ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+                            ctx.fill();
+                        } else if (particle.type === 'success') {
+                            // 成功粒子 - 星形
+                            ctx.shadowColor = particle.color;
+                            ctx.shadowBlur = 15;
+                            drawStar(particle.x, particle.y, particle.size);
+                        } else if (particle.type === 'error') {
+                            // 错误粒子 - 十字形
+                            ctx.lineWidth = 2;
+                            ctx.strokeStyle = particle.color;
+                            ctx.shadowColor = particle.color;
+                            ctx.shadowBlur = 8;
+                            ctx.beginPath();
+                            ctx.moveTo(particle.x - particle.size, particle.y);
+                            ctx.lineTo(particle.x + particle.size, particle.y);
+                            ctx.moveTo(particle.x, particle.y - particle.size);
+                            ctx.lineTo(particle.x, particle.y + particle.size);
+                            ctx.stroke();
+                        } else {
+                            // 默认圆形粒子
+                            ctx.beginPath();
+                            ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+                            ctx.fill();
+                        }
+
+                        ctx.restore();
+
+                        // 移除生命周期结束的粒子
+                        if (particle.life <= 0) {
+                            gameState.particles.splice(index, 1);
+                        }
+                    });
+                }
+
+                // 绘制星形
+                function drawStar(x, y, size) {
+                    ctx.beginPath();
+                    for (let i = 0; i < 5; i++) {
+                        const angle = (i * 4 * Math.PI) / 5;
+                        const x1 = x + Math.cos(angle) * size;
+                        const y1 = y + Math.sin(angle) * size;
+                        if (i === 0) ctx.moveTo(x1, y1);
+                        else ctx.lineTo(x1, y1);
+                    }
+                    ctx.closePath();
+                    ctx.fill();
+                }
+
+                // 显示题目
+                function showQuestion() {
+                    if (gameState.questionActive) return;
+
+                    const question = mathQuestions[Math.floor(Math.random() * mathQuestions.length)];
+                    gameState.currentQuestion = question;
+                    gameState.questionActive = true;
+                    gameState.questionTimer = 15;
+
+                    // 启动自动驾驶
+                    gameState.autopilot.active = true;
+                    gameState.autopilot.targetX = canvas.width / 2;
+
+                    // 显示题目面板
+                    const panel = document.getElementById('questionPanel');
+                    const questionDiv = document.getElementById('gameQuestion');
+                    const optionsDiv = document.getElementById('answerOptions');
+
+                    questionDiv.textContent = question.question;
+                    optionsDiv.innerHTML = '';
+
+                    question.options.forEach((option, index) => {
+                        const button = document.createElement('button');
+                        button.className = 'bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg font-space transition-colors text-sm';
+                        button.textContent = option;
+                        button.onclick = () => answerQuestion(index);
+                        optionsDiv.appendChild(button);
+                    });
+
+                    panel.style.transform = 'translateY(0)';
+
+                    // 开始计时
+                    const timerInterval = setInterval(() => {
+                        gameState.questionTimer--;
+                        const timerBar = document.getElementById('timerBar');
+                        timerBar.style.width = `${(gameState.questionTimer / 15) * 100}%`;
+
+                        if (gameState.questionTimer <= 0) {
+                            clearInterval(timerInterval);
+                            answerQuestion(-1); // 超时
+                        }
+                    }, 1000);
+                }
+
+                // 回答问题
+                function answerQuestion(selectedIndex) {
+                    if (!gameState.questionActive) return;
+
+                    gameState.questionActive = false;
+                    // 关闭自动驾驶
+                    gameState.autopilot.active = false;
+
+                    const panel = document.getElementById('questionPanel');
+                    panel.style.transform = 'translateY(100%)';
+
+                    if (selectedIndex === gameState.currentQuestion.correct) {
+                        // 答对了
+                        gameState.score += 100;
+                        gameState.player.health = Math.min(100, gameState.player.health + 20);
+
+                        // 随机装备升级奖励
+                        const upgradeChance = Math.random();
+                        if (upgradeChance < 0.3) { // 30%概率获得装备升级
+                            const upgradeTypes = ['weapon', 'shield', 'speed', 'health', 'fireRate', 'multiShot', 'laser', 'bomb'];
+                            const randomUpgrade = upgradeTypes[Math.floor(Math.random() * upgradeTypes.length)];
+                            upgradeSystem.upgradeEquipment(randomUpgrade);
+                        }
+
+                        // 根据题目类型和战斗模式给予不同奖励
+                        const battleMode = gameState.currentQuestion.battleMode;
+
+                        if (battleMode === 'rapid_fire') {
+                            // 标准形式题目：快速射击模式
+                            gameState.shootCooldown = Math.max(50, gameState.shootCooldown - 30);
+                            // 生成多发子弹
+                            for (let i = -1; i <= 1; i++) {
+                                createBullet(gameState.player.x + i * 20, gameState.player.y - 30, 'rapid');
+                            }
+                            // 清除部分敌机
+                            const enemiesToRemove = Math.min(3, gameState.enemies.length);
+                            for (let i = 0; i < enemiesToRemove; i++) {
+                                const enemy = gameState.enemies[i];
+                                createExplosion(enemy.x, enemy.y);
+                                gameState.score += 10;
+                            }
+                            gameState.enemies.splice(0, enemiesToRemove);
+
+                        } else if (battleMode === 'shield_mode') {
+                            // 应用题：护盾模式
+                            gameState.player.health = 100; // 完全恢复血量
+                            // 生成护盾效果
+                            createShieldEffect();
+                            // 生成激光武器
+                            for (let i = 0; i < 5; i++) {
+                                setTimeout(() => {
+                                    createBullet(gameState.player.x, gameState.player.y - 30, 'laser');
+                                }, i * 100);
+                            }
+
+                        } else if (battleMode === 'boss_fight') {
+                            // 根的判断：Boss战模式
+                            // 清除所有普通敌机
+                            gameState.enemies.forEach(enemy => {
+                                if (enemy.type !== 'boss') {
+                                    createExplosion(enemy.x, enemy.y);
+                                    gameState.score += 10;
+                                }
+                            });
+                            gameState.enemies = gameState.enemies.filter(enemy => enemy.type === 'boss');
+
+                            // 生成超级武器
+                            createSuperWeapon();
+
+                            // 如果没有Boss，生成一个
+                            if (gameState.enemies.length === 0) {
+                                createEnemy('boss');
+                            }
+                        }
+
+                        // 显示答对特效
+                        showCorrectEffect();
+
+                    } else {
+                        // 答错了
+                        gameState.player.health -= 30;
+
+                        // 根据战斗模式给予不同惩罚
+                        const battleMode = gameState.currentQuestion.battleMode;
+
+                        if (battleMode === 'rapid_fire') {
+                            // 生成更多敌机
+                            for (let i = 0; i < 3; i++) {
+                                createEnemy('normal');
+                            }
+                        } else if (battleMode === 'shield_mode') {
+                            // 生成强力敌机
+                            createEnemy('strong');
+                            createEnemy('strong');
+                        } else if (battleMode === 'boss_fight') {
+                            // 生成Boss
+                            createEnemy('boss');
+                        }
+
+                        // 显示答错特效
+                        showWrongEffect();
+
+                        if (gameState.player.health <= 0) {
+                            endGame();
+                        }
+                    }
+
+                    updateUI();
+                }
+
+                // 创建护盾效果
+                function createShieldEffect() {
+                    gameState.shieldActive = true;
+                    gameState.shieldTime = 5000; // 5秒护盾
+
+                    // 护盾粒子效果
+                    for (let i = 0; i < 20; i++) {
+                        const angle = (i / 20) * Math.PI * 2;
+                        gameState.particles.push({
+                            x: gameState.player.x + Math.cos(angle) * 40,
+                            y: gameState.player.y + Math.sin(angle) * 40,
+                            vx: Math.cos(angle) * 2,
+                            vy: Math.sin(angle) * 2,
+                            life: 100,
+                            maxLife: 100,
+                            size: 3,
+                            color: '#00ffff',
+                            type: 'shield'
+                        });
+                    }
+                }
+
+                // 创建超级武器
+                function createSuperWeapon() {
+                    // 发射多方向激光
+                    for (let angle = 0; angle < 360; angle += 30) {
+                        const rad = (angle * Math.PI) / 180;
+                        gameState.bullets.push({
+                            x: gameState.player.x,
+                            y: gameState.player.y,
+                            width: 6,
+                            height: 20,
+                            speed: 10,
+                            type: 'super',
+                            damage: 5,
+                            vx: Math.cos(rad) * 8,
+                            vy: Math.sin(rad) * 8
+                        });
+                    }
+                }
+
+                // 显示答对特效
+                function showCorrectEffect() {
+                    for (let i = 0; i < 30; i++) {
+                        gameState.particles.push({
+                            x: gameState.player.x,
+                            y: gameState.player.y,
+                            vx: (Math.random() - 0.5) * 15,
+                            vy: (Math.random() - 0.5) * 15,
+                            life: 60,
+                            maxLife: 60,
+                            size: Math.random() * 6 + 2,
+                            color: '#00ff00',
+                            type: 'success'
+                        });
+                    }
+                }
+
+                // 显示答错特效
+                function showWrongEffect() {
+                    for (let i = 0; i < 20; i++) {
+                        gameState.particles.push({
+                            x: gameState.player.x,
+                            y: gameState.player.y,
+                            vx: (Math.random() - 0.5) * 10,
+                            vy: (Math.random() - 0.5) * 10,
+                            life: 40,
+                            maxLife: 40,
+                            size: Math.random() * 4 + 2,
+                            color: '#ff0000',
+                            type: 'error'
+                        });
+                    }
+                }
+
+                // 创建华丽装备升级系统
+                function createUpgradeSystem() {
+                    // 升级装备
+                    function upgradeEquipment(type) {
+                        const items = gameState.persistentItems;
+
+                        switch (type) {
+                            case 'weapon':
+                                if (items.weaponLevel < 5) {
+                                    items.weaponLevel++;
+                                    showUpgradeEffect('武器升级！', '#ff6600');
+                                    updateWeaponStats();
+                                }
+                                break;
+                            case 'shield':
+                                if (items.shieldLevel < 3) {
+                                    items.shieldLevel++;
+                                    showUpgradeEffect('护盾升级！', '#00ffff');
+                                    updateShieldStats();
+                                }
+                                break;
+                            case 'speed':
+                                if (items.speedLevel < 3) {
+                                    items.speedLevel++;
+                                    showUpgradeEffect('速度升级！', '#00ff00');
+                                    updateSpeedStats();
+                                }
+                                break;
+                            case 'health':
+                                if (items.healthLevel < 3) {
+                                    items.healthLevel++;
+                                    showUpgradeEffect('生命升级！', '#ff0080');
+                                    updateHealthStats();
+                                }
+                                break;
+                            case 'fireRate':
+                                if (items.fireRateLevel < 3) {
+                                    items.fireRateLevel++;
+                                    showUpgradeEffect('射速升级！', '#ffff00');
+                                    updateFireRateStats();
+                                }
+                                break;
+                            case 'multiShot':
+                                if (items.multiShotLevel < 3) {
+                                    items.multiShotLevel++;
+                                    showUpgradeEffect('多重射击升级！', '#ff00ff');
+                                    updateMultiShotStats();
+                                }
+                                break;
+                            case 'laser':
+                                if (items.laserLevel < 3) {
+                                    items.laserLevel++;
+                                    showUpgradeEffect('激光升级！', '#ff0000');
+                                    updateLaserStats();
+                                }
+                                break;
+                            case 'bomb':
+                                if (items.bombLevel < 3) {
+                                    items.bombLevel++;
+                                    showUpgradeEffect('炸弹升级！', '#ff8800');
+                                    updateBombStats();
+                                }
+                                break;
+                        }
+                    }
+
+                    // 显示升级特效
+                    function showUpgradeEffect(text, color) {
+                        const effect = document.createElement('div');
+                        effect.style.position = 'fixed';
+                        effect.style.left = '50%';
+                        effect.style.top = '30%';
+                        effect.style.transform = 'translateX(-50%)';
+                        effect.style.color = color;
+                        effect.style.fontSize = '24px';
+                        effect.style.fontWeight = 'bold';
+                        effect.style.textShadow = `0 0 10px ${color}`;
+                        effect.style.zIndex = '1000';
+                        effect.style.pointerEvents = 'none';
+                        effect.textContent = text;
+
+                        document.body.appendChild(effect);
+
+                        // 动画效果
+                        let opacity = 1;
+                        let scale = 1;
+                        const animate = () => {
+                            opacity -= 0.02;
+                            scale += 0.02;
+                            effect.style.opacity = opacity;
+                            effect.style.transform = `translateX(-50%) scale(${scale})`;
+
+                            if (opacity > 0) {
+                                requestAnimationFrame(animate);
+                            } else {
+                                document.body.removeChild(effect);
+                            }
+                        };
+                        animate();
+                    }
+
+                    // 更新武器属性
+                    function updateWeaponStats() {
+                        const level = gameState.persistentItems.weaponLevel;
+                        gameState.shootCooldown = Math.max(100, 200 - level * 20);
+                    }
+
+                    // 更新护盾属性
+                    function updateShieldStats() {
+                        const level = gameState.persistentItems.shieldLevel;
+                        if (level > 0) {
+                            gameState.shieldActive = true;
+                            gameState.shieldTime = level * 5000; // 每级5秒
+                        }
+                    }
+
+                    // 更新速度属性
+                    function updateSpeedStats() {
+                        // 速度升级影响玩家移动速度
+                        // 在drawPlayer函数中会使用这个值
+                    }
+
+                    // 更新生命属性
+                    function updateHealthStats() {
+                        const level = gameState.persistentItems.healthLevel;
+                        gameState.player.health = Math.min(100 + level * 25, gameState.player.health + 25);
+                    }
+
+                    // 更新射速属性
+                    function updateFireRateStats() {
+                        const level = gameState.persistentItems.fireRateLevel;
+                        gameState.shootCooldown = Math.max(50, 200 - level * 50);
+                    }
+
+                    // 更新多重射击属性
+                    function updateMultiShotStats() {
+                        // 多重射击在createBullet函数中处理
+                    }
+
+                    // 更新激光属性
+                    function updateLaserStats() {
+                        // 激光属性在createBullet函数中处理
+                    }
+
+                    // 更新炸弹属性
+                    function updateBombStats() {
+                        // 炸弹属性在特殊攻击中处理
+                    }
+
+                    return { upgradeEquipment };
+                }
+
+                // 初始化升级系统
+                const upgradeSystem = createUpgradeSystem();
+
+                // 创建道具
+                function createPowerUp(x, y, type) {
+                    gameState.powerUps.push({
+                        x: x,
+                        y: y,
+                        type: type,
+                        life: 300
+                    });
+                }
+
+                // 更新UI
+                function updateUI() {
+                    document.getElementById('gameHealth').textContent = gameState.player.health;
+                    document.getElementById('gameScore').textContent = gameState.score;
+                    document.getElementById('gameLevel').textContent = gameState.level;
+
+                    const minutes = Math.floor(gameState.gameTime / 60);
+                    const seconds = gameState.gameTime % 60;
+                    document.getElementById('gameTime').textContent =
+                        `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                }
+
+                // 结束游戏
+                function endGame() {
+                    gameState.isRunning = false;
+
+                    const gameContainer = document.getElementById('spaceGameContainer');
+                    const endScreen = document.createElement('div');
+                    endScreen.className = 'absolute inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50';
+                    endScreen.innerHTML = `
+                        <div class="glass-effect p-8 rounded-2xl text-center max-w-md">
+                            <h2 class="text-3xl font-bold mb-4 text-primary">游戏结束</h2>
+                            <p class="text-xl mb-2">最终得分: <span class="text-yellow-500">${gameState.score}</span></p>
+                            <p class="text-lg mb-6">等级: <span class="text-green-500">${gameState.level}</span></p>
+                            <button id="restartBtn" class="bg-gradient-to-r from-primary to-secondary px-6 py-3 rounded-full hover:opacity-90 transition-opacity">
+                                重新开始
+                            </button>
+                        </div>
+                    `;
+
+                    gameContainer.appendChild(endScreen);
+
+                    document.getElementById('restartBtn').onclick = () => {
+                        document.body.removeChild(gameContainer);
+                        launchSpaceGame();
+                    };
+                }
+
+                // 游戏主循环
+                function gameLoop() {
+                    if (!gameState.isRunning) return;
+
+                    // 清空画布并绘制滚动背景
+                    drawScrollingBackground();
+
+                    // 绘制游戏元素
+                    drawStars();
+                    drawPlayer();
+                    drawBullets();
+                    drawEnemies();
+                    drawParticles();
+
+                    // 更新护盾状态
+                    updateShield();
+
+                    // 自动驾驶逻辑
+                    if (gameState.autopilot.active) {
+                        updateAutopilot();
+                    }
+
+                    // 玩家射击
+                    const now = Date.now();
+                    if (now - gameState.lastShot > gameState.shootCooldown) {
+                        createBullet(gameState.player.x, gameState.player.y - 30);
+                        gameState.lastShot = now;
+                    }
+
+                    // 生成敌机
+                    if (now - gameState.lastEnemySpawn > gameState.enemySpawnRate) {
+                        const rand = Math.random();
+                        if (rand < 0.05) {
+                            createEnemy('boss');
+                        } else if (rand < 0.15) {
+                            createEnemy('bomber');
+                        } else if (rand < 0.25) {
+                            createEnemy('sniper');
+                        } else if (rand < 0.35) {
+                            createEnemy('heavy');
+                        } else if (rand < 0.45) {
+                            createEnemy('scout');
+                        } else if (rand < 0.65) {
+                            createEnemy('strong');
+                        } else {
+                            createEnemy('normal');
+                        }
+                        gameState.lastEnemySpawn = now;
+                    }
+
+                    // 碰撞检测
+                    checkCollisions();
+
+                    // 随机显示题目
+                    if (Math.random() < 0.002 && !gameState.questionActive) {
+                        showQuestion();
+                    }
+
+                    // 游戏时间倒计时
+                    if (now % 1000 < 16) { // 大约每秒执行一次
+                        gameState.gameTime--;
+                        if (gameState.gameTime <= 0) {
+                            endGame();
+                        }
+                        updateUI();
+                    }
+
+                    requestAnimationFrame(gameLoop);
+                }
+
+                // 退出游戏
+                document.getElementById('exitGameBtn').addEventListener('click', function () {
+                    gameState.isRunning = false;
+                    const gameContainer = document.getElementById('spaceGameContainer');
+                    gameContainer.style.animation = 'fadeOut 0.5s ease-out';
+                    setTimeout(() => {
+                        document.body.removeChild(gameContainer);
+                    }, 500);
+                });
+
+                // 隐藏提示
+                setTimeout(() => {
+                    const hints = document.getElementById('gameHints');
+                    hints.style.opacity = '0';
+                    hints.style.transition = 'opacity 2s ease-out';
+                }, 3000);
+
+                // 开始游戏循环
+                updateUI();
+                gameLoop();
+            }
+            document.querySelectorAll('.interactive-btn').forEach(btn => {
+                btn.addEventListener('mouseenter', function () {
+                    this.style.transform = 'translateY(-2px)';
+                    this.style.boxShadow = '0 10px 25px rgba(0,0,0,0.3)';
+                });
+
+                btn.addEventListener('mouseleave', function () {
+                    this.style.transform = 'translateY(0)';
+                    this.style.boxShadow = '0 4px 15px rgba(0,0,0,0.2)';
+                });
+            });
+        }
+
+        // 初始化移动端菜单
+        function initMobileMenu() {
+            const mobileMenuBtn = document.getElementById('menuToggle');
+            const mobileMenu = document.getElementById('mobileMenu');
+
+            if (mobileMenuBtn && mobileMenu) {
+                mobileMenuBtn.addEventListener('click', function () {
+                    mobileMenu.classList.toggle('hidden');
+                });
+            }
+        }
+
+        // 全屏模式功能
+        function toggleFullScreen() {
+            if (!document.fullscreenElement) {
+                // 进入全屏
+                document.documentElement.requestFullscreen().catch(err => {
+                    console.log(`全屏请求错误: ${err.message}`);
+                });
+            } else {
+                // 退出全屏
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                }
+            }
+        }
+
+        // 更新全屏按钮状态
+        function updateFullScreenButton() {
+            const fullscreenBtn = document.getElementById('fullscreenBtn');
+            const mobileFullscreenBtn = document.getElementById('mobileFullscreenBtn');
+
+            const isFullscreen = document.fullscreenElement;
+
+            if (fullscreenBtn) {
+                if (isFullscreen) {
+                    fullscreenBtn.innerHTML = '<i class="fa fa-compress"></i> 退出全屏';
+                } else {
+                    fullscreenBtn.innerHTML = '<i class="fa fa-expand"></i> 全屏模式';
+                }
+            }
+
+            if (mobileFullscreenBtn) {
+                if (isFullscreen) {
+                    mobileFullscreenBtn.innerHTML = '<i class="fa fa-compress"></i> 退出全屏';
+                } else {
+                    mobileFullscreenBtn.innerHTML = '<i class="fa fa-expand"></i> 全屏模式';
+                }
+            }
+        }
+
+        // 监听全屏状态变化
+        document.addEventListener('fullscreenchange', updateFullScreenButton);
+
+        // 初始化全屏按钮事件绑定
+        document.addEventListener('DOMContentLoaded', function () {
+            const fullscreenBtn = document.getElementById('fullscreenBtn');
+            const mobileFullscreenBtn = document.getElementById('mobileFullscreenBtn');
+
+            if (fullscreenBtn) {
+                fullscreenBtn.addEventListener('click', toggleFullScreen);
+            }
+
+            if (mobileFullscreenBtn) {
+                mobileFullscreenBtn.addEventListener('click', toggleFullScreen);
+            }
+        });
+
+        // 窗口大小改变时重绘图像
+        window.addEventListener('resize', function () {
+            setTimeout(() => {
+                drawConceptGraph1();
+                drawRootsVisualization();
+                initSpacecraftSolver();
+                initSatelliteAnalyzer();
+                drawSpaceStatue();
+                drawMainFunctionGraph();
+            }, 100);
+        });
+    </script>
+</body>
+
+</html>

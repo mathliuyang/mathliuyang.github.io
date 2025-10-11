@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>学术成果 - Publications</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #000000;
+            --text: #ffffff;
+            --text-dim: #666666;
+            --accent: #ffffff;
+            --border: rgba(255, 255, 255, 0.08);
+        }
+
+        [data-theme="light"] {
+            --bg: #ffffff;
+            --text: #000000;
+            --text-dim: #999999;
+            --accent: #000000;
+            --border: rgba(0, 0, 0, 0.08);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.8;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            letter-spacing: -0.02em;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1.5rem 4rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        [data-theme="light"] nav {
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        .logo {
+            font-size: 1rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            cursor: pointer;
+        }
+
+        .nav-right {
+            display: flex;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-dim);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            letter-spacing: 0.02em;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--text);
+        }
+
+        .theme-btn {
+            width: 36px;
+            height: 36px;
+            border: 1px solid var(--border);
+            background: transparent;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .theme-btn:hover {
+            border-color: var(--text);
+            transform: scale(1.1);
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 140px 4rem 6rem;
+        }
+
+        /* Header */
+        .header {
+            margin-bottom: 4rem;
+        }
+
+        .header h1 {
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 300;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .stat-box {
+            border: 1px solid var(--border);
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 300;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        /* Search & Filter */
+        .controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 300px;
+            padding: 0.8rem 1.2rem;
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text);
+            font-size: 0.9rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: var(--text);
+        }
+
+        .filter-btn {
+            padding: 0.8rem 1.5rem;
+            border: 1px solid var(--border);
+            background: transparent;
+            color: var(--text-dim);
+            font-size: 0.85rem;
+            letter-spacing: 0.05em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            border-color: var(--text);
+            color: var(--text);
+            background: var(--text);
+            color: var(--bg);
+        }
+
+        /* Publications List */
+        .year-section {
+            margin-bottom: 4rem;
+            opacity: 0;
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        .year-section:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .year-section:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .year-section:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+
+        .year-title {
+            font-size: 1.5rem;
+            font-weight: 300;
+            margin-bottom: 2rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border);
+            letter-spacing: -0.01em;
+        }
+
+        .publication {
+            border: 1px solid var(--border);
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .publication::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: var(--accent);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .publication:hover::before {
+            transform: scaleX(1);
+        }
+
+        .publication:hover {
+            border-color: var(--text);
+        }
+
+        .publication.hidden {
+            display: none;
+        }
+
+        .pub-title {
+            font-size: 1.3rem;
+            font-weight: 500;
+            margin-bottom: 0.8rem;
+            letter-spacing: -0.01em;
+            line-height: 1.4;
+        }
+
+        .pub-authors {
+            font-size: 0.95rem;
+            color: var(--text-dim);
+            margin-bottom: 0.5rem;
+        }
+
+        .pub-authors .me {
+            color: var(--text);
+            font-weight: 500;
+        }
+
+        .pub-venue {
+            font-size: 0.9rem;
+            color: var(--text-dim);
+            font-style: italic;
+            margin-bottom: 1rem;
+        }
+
+        .pub-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+        }
+
+        .tag {
+            padding: 0.3rem 0.8rem;
+            border: 1px solid var(--border);
+            font-size: 0.75rem;
+            letter-spacing: 0.05em;
+            color: var(--text-dim);
+        }
+
+        .pub-links {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .pub-link {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--border);
+            color: var(--text);
+            text-decoration: none;
+            font-size: 0.85rem;
+            letter-spacing: 0.05em;
+            transition: all 0.3s ease;
+        }
+
+        .pub-link:hover {
+            background: var(--text);
+            color: var(--bg);
+            border-color: var(--text);
+        }
+
+        /* Research Interests */
+        .interests-section {
+            margin-top: 6rem;
+            padding-top: 4rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .interests-section h2 {
+            font-size: 2rem;
+            font-weight: 300;
+            margin-bottom: 2rem;
+            letter-spacing: -0.02em;
+        }
+
+        .interests-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .interest-card {
+            border: 1px solid var(--border);
+            padding: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .interest-card:hover {
+            border-color: var(--text);
+        }
+
+        .interest-card h3 {
+            font-size: 1.2rem;
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+
+        .interest-card p {
+            font-size: 0.95rem;
+            color: var(--text-dim);
+            line-height: 1.6;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            nav {
+                padding: 1rem 2rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .container {
+                padding: 100px 2rem 4rem;
+            }
+
+            .controls {
+                flex-direction: column;
+            }
+
+            .search-box {
+                min-width: 100%;
+            }
+
+            .pub-links {
+                flex-direction: column;
+            }
+
+            .pub-link {
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="logo" onclick="location.href='../index.html'">图灵的猫</div>
+        <div class="nav-right">
+            <ul class="nav-links">
+                <li><a href="../index.html">首页</a></li>
+                <li><a href="about.html">关于我</a></li>
+                <li><a href="blog.html">博客</a></li>
+                <li><a href="projects.html">项目</a></li>
+                <li><a href="publications.html" class="active">学术成果</a></li>
+                <li><a href="tools.html">工具箱</a></li>
+                <li><a href="contact.html">联系我</a></li>
+            </ul>
+            <button class="theme-btn" id="themeBtn">
+                <span id="themeIcon">◐</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <h1>学术成果</h1>
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <div class="stat-number">9</div>
+                    <div class="stat-label">Publications</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">9+</div>
+                    <div class="stat-label">Citations</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">3</div>
+                    <div class="stat-label">H-Index</div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Search & Filter -->
+        <div class="controls">
+            <input type="text" class="search-box" placeholder="搜索论文标题或关键词..." id="searchBox">
+            <button class="filter-btn active" data-filter="all">全部</button>
+            <button class="filter-btn" data-filter="conference">会议</button>
+            <button class="filter-btn" data-filter="journal">期刊</button>
+            <button class="filter-btn" data-filter="preprint">预印本</button>
+        </div>
+
+        <!-- Publications List -->
+        <div id="publicationsList">
+            <!-- 2025 -->
+            <div class="year-section">
+                <h2 class="year-title">2025</h2>
+
+                <article class="publication" data-type="journal"
+                    data-keywords="neutron transport differential equation">
+                    <h3 class="pub-title">The Neutron Transport Equation in Exact Differential Form</h3>
+                    <p class="pub-authors">
+                        Liu, Dong, <span class="me">Liu, Yang</span>, Dang, Haoning, Wang, Kai, Zhang, Bin, Wang, Fei,
+                        Liu, Zhouyu, Jiang, Yong
+                    </p>
+                    <p class="pub-venue">Science China Physics, Mechanics & Astronomy, Vol. 68, No. 7, 270511, 2025</p>
+                    <div class="pub-tags">
+                        <span class="tag">Neutron Transport</span>
+                        <span class="tag">Differential Equation</span>
+                        <span class="tag">TOP Journal</span>
+                    </div>
+                    <div class="pub-links">
+                        <a href="https://link.springer.com/10.1007/s11433-024-2642-3" class="pub-link"
+                            target="_blank">DOI</a>
+                        <a href="/assets/documents/publications/2025 - Liu, Liu, Dang - Sci. China Phys. Mech. Astron. - The neutron transport equation in exact differential form.pdf"
+                            class="pub-link" target="_blank">PDF</a>
+                    </div>
+                </article>
+
+                <article class="publication" data-type="journal" data-keywords="deep learning weak solution">
+                    <h3 class="pub-title">面向深度学习方法的间断系数微分方程变域积分弱解理论</h3>
+                    <p class="pub-authors">
+                        刘东, 廖真, <span class="me">刘洋</span>
+                    </p>
+                    <p class="pub-venue">计算物理, 2025</p>
+                    <div class="pub-tags">
+                        <span class="tag">Deep Learning</span>
+                        <span class="tag">Weak Solution</span>
+                        <span class="tag">Core Journal</span>
+                    </div>
+                    <div class="pub-links">
+                        <a href="https://kns.cnki.net/KCMS/detail/detail.aspx?dbcode=CAPJ&dbname=CAPJLAST&filename=JSWL20250911001"
+                            class="pub-link" target="_blank">CNKI</a>
+                        <a href="/assets/documents/publications/2025 - 刘东, 廖真, 刘洋 - 计算物理 - 面向深度学习方法的间断系数微分方程变域积分弱解理论.pdf"
+                            class="pub-link" target="_blank">PDF</a>
+                    </div>
+                </article>
+
+                <article class="publication" data-type="journal"
+                    data-keywords="coupled schrödinger structure-preserving">
+                    <h3 class="pub-title">二维分数阶强耦合薛定谔方程的保结构方法</h3>
+                    <p class="pub-authors">
+                        谭凤, 冉茂华, <span class="me">刘洋</span>
+                    </p>
+                    <p class="pub-venue">四川师范大学学报（自然科学版）, Vol. 48, No. 5, 693-703, 2025</p>
+                    <div class="pub-tags">
+                        <span class="tag">Coupled Schrödinger</span>
+                        <span class="tag">Structure-Preserving</span>
+                        <span class="tag">Core Journal</span>
+                    </div>
+                    <div class="pub-links">
+                        <a href="https://kns.cnki.net/KCMS/detail/detail.aspx?dbcode=CJFQ&dbname=CJFDLAST2025&filename=SCSD202505009"
+                            class="pub-link" target="_blank">CNKI</a>
+                        <a href="/assets/documents/publications/2025 - 谭凤, 冉茂华, 刘洋 - 四川师范大学学报（自然科学版） - 二维分数阶强耦合薛定谔方程的保结构方法.pdf"
+                            class="pub-link" target="_blank">PDF</a>
+                    </div>
+                </article>
+
+                <article class="publication" data-type="journal"
+                    data-keywords="resnet-pinn neutron equation neutron diffusion equation neutron transport equation">
+                    <h3 class="pub-title">基于ResNet-PINN求解中子方程算法研究</h3>
+                    <p class="pub-authors">
+                        牛艺晓, 李佳芳, 杨春, <span class="me">刘洋</span>, 赖秋宇, 符美蕊, 蒋毅
+                    </p>
+                    <p class="pub-venue">核动力工程, 2025, 45(1): 1-6</p>
+                    <div class="pub-tags">
+                        <span class="tag">ResNet-PINN</span>
+                        <span class="tag">Neutron Diffusion Equation</span>
+                        <span class="tag">EI Journal</span>
+                        <span class="tag">Core Journal</span>
+                    </div>
+                    <div class="pub-links">
+                        <a href="https://kns.cnki.net/KCMS/detail/detail.aspx?dbcode=CAPJ&dbname=CAPJLAST&filename=HDLG20250221001"
+                            class="pub-link" target="_blank">CNKI</a>
+                        <a href="/assets/documents/publications/2025 - 牛艺晓, 李佳芳, 杨春 - 核动力工程 - 基于ResNet-PINN求解中子方程算法研究.pdf"
+                            class="pub-link" target="_blank">PDF</a>
+                    </div>
+                </article>
+            </div>
+
+            <!-- 2024 -->
+            <div class="year-section">
+                <h2 class="year-title">2024</h2>
+
+                <article class="publication" data-type="journal"
+                    data-keywords="fractional schrödinger energy-conserving">
+                    <h3 class="pub-title">Arbitrarily High-Order Explicit Energy-Conserving Methods for the Generalized
+                        Nonlinear Fractional Schrödinger Wave Equations</h3>
+                    <p class="pub-authors">
+                        <span class="me">Liu, Yang</span>, Ran, Maohua
+                    </p>
+                    <p class="pub-venue">Mathematics and Computers in Simulation, Vol. 216, 126-144, 2024</p>
+                    <div class="pub-tags">
+                        <span class="tag">Fractional Schrödinger</span>
+                        <span class="tag">Energy-Conserving</span>
+                        <span class="tag">TOP Journal</span>
+                    </div>
+                    <div class="pub-links">
+                        <a href="https://linkinghub.elsevier.com/retrieve/pii/S037847542300383X" class="pub-link"
+                            target="_blank">DOI</a>
+                        <a href="/assets/documents/publications/2024 - Liu, Ran - Math. Comput. Simulation - Arbitrarily high-order explicit energy-conserving methods for the generalized nonlinear fractional Schrödinger wave equations.pdf"
+                            class="pub-link" target="_blank">PDF</a>
+                    </div>
+                </article>
+
+                <article class="publication" data-type="thesis"
+                    data-keywords="fractional schrödinger structure-preserving">
+                    <h3 class="pub-title">非线性分数阶薛定谔波动方程的两类保结构数值方法</h3>
+                    <p class="pub-authors">
+                        <span class="me">刘洋</span>
+                    </p>
+                    <p class="pub-venue">硕士学位论文, 四川师范大学, 2024</p>
+                    <div class="pub-tags">
+                        <span class="tag">Fractional Schrödinger</span>
+                        <span class="tag">Structure-Preserving</span>
+                        <span class="tag">Master Thesis</span>
+                    </div>
+                    <div class="pub-links">
+                        <a href="https://kns.cnki.net/KCMS/detail/detail.aspx?dbcode=CMFD&dbname=CMFDTEMP&filename=1024034339.nh"
+                            class="pub-link" target="_blank">CNKI</a>
+                        <a href="/assets/documents/publications/2024 - 刘洋 - 非线性分数阶薛定谔波动方程的两类保结构数值方法.pdf"
+                            class="pub-link" target="_blank">PDF</a>
+                    </div>
+                </article>
+            </div>
+
+            <!-- 2023 -->
+            <div class="year-section">
+                <h2 class="year-title">2023</h2>
+
+                <article class="publication" data-type="journal"
+                    data-keywords="hamiltonian-preserving fractional schrödinger">
+                    <h3 class="pub-title">Hamiltonian-Preserving Schemes for the Two-Dimensional Fractional Nonlinear
+                        Schrödinger Wave Equations</h3>
+                    <p class="pub-authors">
+                        <span class="me">Liu, Yang</span>, Ran, Maohua, Zhang, Li
+                    </p>
+                    <p class="pub-venue">Computers & Mathematics with Applications, Vol. 150, 54-69, 2023</p>
+                    <div class="pub-tags">
+                        <span class="tag">Hamiltonian-Preserving</span>
+                        <span class="tag">Fractional Schrödinger</span>
+                        <span class="tag">Q1 Journal</span>
+                    </div>
+                    <div class="pub-links">
+                        <a href="https://linkinghub.elsevier.com/retrieve/pii/S0898122123003966" class="pub-link"
+                            target="_blank">DOI</a>
+                        <a href="/assets/documents/publications/2023 - Liu, Ran, Zhang - Comput. Math. Appl. - Hamiltonian-preserving schemes for the two-dimensional fractional nonlinear Schrödinger wave equations.pdf"
+                            class="pub-link" target="_blank">PDF</a>
+                    </div>
+                </article>
+
+                <article class="publication" data-type="journal" data-keywords="energy-preserving strain wave">
+                    <h3 class="pub-title">Higher-Order Energy-Preserving Difference Scheme for the Fourth-Order
+                        Nonlinear Strain Wave Equation</h3>
+                    <p class="pub-authors">
+                        Tian, Zhihui, Ran, Maohua, <span class="me">Liu, Yang</span>
+                    </p>
+                    <p class="pub-venue">Computers & Mathematics with Applications, Vol. 135, 124-133, 2023</p>
+                    <div class="pub-tags">
+                        <span class="tag">Energy-Preserving</span>
+                        <span class="tag">Strain Wave</span>
+                        <span class="tag">Q1 Journal</span>
+                    </div>
+                    <div class="pub-links">
+                        <a href="https://linkinghub.elsevier.com/retrieve/pii/S0898122123000329" class="pub-link"
+                            target="_blank">DOI</a>
+                        <a href="/assets/documents/publications/2023 - Tian, Ran, Liu - Comput. Math. Appl. - Higher-order energy-preserving difference scheme for the fourth-order nonlinear strain wave equation.pdf"
+                            class="pub-link" target="_blank">PDF</a>
+                    </div>
+                </article>
+
+                <article class="publication" data-type="journal" data-keywords="structure-preserving schrödinger wave">
+                    <h3 class="pub-title">A High-Order Structure-Preserving Difference Scheme for Generalized Fractional
+                        Schrödinger Equation with Wave Operator</h3>
+                    <p class="pub-authors">
+                        Zhang, Xi, Ran, Maohua, <span class="me">Liu, Yang</span>, Zhang, Li
+                    </p>
+                    <p class="pub-venue">Mathematics and Computers in Simulation, Vol. 210, 532-546, 2023</p>
+                    <div class="pub-tags">
+                        <span class="tag">Structure-Preserving</span>
+                        <span class="tag">Schrödinger Wave</span>
+                        <span class="tag">TOP Journal</span>
+                    </div>
+                    <div class="pub-links">
+                        <a href="https://linkinghub.elsevier.com/retrieve/pii/S0378475423001325" class="pub-link"
+                            target="_blank">DOI</a>
+                        <a href="/assets/documents/publications/2023 - Zhang, Ran, Liu - Math. Comput. Simulation - A high-order structure-preserving difference scheme for generalized fractional Schrödinger equation with wave operator.pdf"
+                            class="pub-link" target="_blank">PDF</a>
+                    </div>
+                </article>
+            </div>
+
+            <!-- 2021 -->
+            <div class="year-section">
+                <h2 class="year-title">2021</h2>
+
+                <article class="publication" data-type="journal" data-keywords="fractional diffusion difference scheme">
+                    <h3 class="pub-title">An Efficient Difference Scheme for the Non-Fickian Time-Fractional Diffusion
+                        Equations with Variable Coefficient</h3>
+                    <p class="pub-authors">
+                        Feng, Zhouping, Ran, Maohua, <span class="me">Liu, Yang</span>
+                    </p>
+                    <p class="pub-venue">Applied Mathematics Letters, Vol. 121, 107489, 2021</p>
+                    <div class="pub-tags">
+                        <span class="tag">Fractional Diffusion</span>
+                        <span class="tag">Difference Scheme</span>
+                        <span class="tag">Q1 Journal</span>
+                    </div>
+                    <div class="pub-links">
+                        <a href="https://linkinghub.elsevier.com/retrieve/pii/S0893965921002603" class="pub-link"
+                            target="_blank">DOI</a>
+                        <a href="/assets/documents/publications/2021 - Feng, Ran, Liu - Appl. Math. Lett. - An efficient difference scheme for the non-Fickian time-fractional diffusion equations with variable coefficient.pdf"
+                            class="pub-link" target="_blank">PDF</a>
+                    </div>
+                </article>
+            </div>
+
+            <!-- Research Interests -->
+            <section class="interests-section">
+                <h2>研究方向</h2>
+                <div class="interests-grid">
+                    <div class="interest-card">
+                        <h3>传统数值计算</h3>
+                        <p>有限体积、有限差分方法的格式设计与分析，致力于发展高效精确的数值算法，特别是分数阶微分方程的保结构算法。</p>
+                    </div>
+                    <div class="interest-card">
+                        <h3>核科学智能计算</h3>
+                        <p>将深度学习与科学计算相结合，解决核工程中的中子输运、扩散等复杂问题，发展物理信息神经网络等前沿方法。</p>
+                    </div>
+                    <div class="interest-card">
+                        <h3>AI for Science</h3>
+                        <p>探索人工智能在科学计算中的应用，推动传统科学计算与现代AI技术的深度融合，为复杂物理问题提供新的求解思路。</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <script>
+            // Theme toggle
+            const themeBtn = document.getElementById('themeBtn');
+            const themeIcon = document.getElementById('themeIcon');
+
+            // Set initial theme based on local storage or prefers-color-scheme
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            document.documentElement.setAttribute('data-theme', currentTheme);
+            themeIcon.textContent = currentTheme === 'dark' ? '◐' : '◑';
+            themeIcon.style.color = currentTheme === 'dark' ? '#ffffff' : '#000000';
+
+            // Theme toggle functionality
+            themeBtn.addEventListener('click', () => {
+                const newTheme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+                document.documentElement.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+                themeIcon.textContent = newTheme === 'dark' ? '◐' : '◑';
+                themeIcon.style.color = newTheme === 'dark' ? '#ffffff' : '#000000';
+            });
+
+            // Search functionality
+            const searchBox = document.getElementById('searchBox');
+            const publications = document.querySelectorAll('.publication');
+
+            searchBox.addEventListener('input', (e) => {
+                const searchTerm = e.target.value.toLowerCase();
+
+                publications.forEach(pub => {
+                    const title = pub.querySelector('.pub-title').textContent.toLowerCase();
+                    const keywords = pub.getAttribute('data-keywords').toLowerCase();
+
+                    if (title.includes(searchTerm) || keywords.includes(searchTerm)) {
+                        pub.classList.remove('hidden');
+                    } else {
+                        pub.classList.add('hidden');
+                    }
+                });
+
+                // Hide empty year sections
+                document.querySelectorAll('.year-section').forEach(section => {
+                    const visiblePubs = section.querySelectorAll('.publication:not(.hidden)');
+                    if (visiblePubs.length === 0) {
+                        section.style.display = 'none';
+                    } else {
+                        section.style.display = 'block';
+                    }
+                });
+            });
+
+            // Filter functionality
+            const filterBtns = document.querySelectorAll('.filter-btn');
+
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    // Update active state
+                    filterBtns.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+
+                    const filter = btn.getAttribute('data-filter');
+
+                    // Clear search
+                    searchBox.value = '';
+
+                    // Filter publications
+                    publications.forEach(pub => {
+                        if (filter === 'all') {
+                            pub.classList.remove('hidden');
+                        } else {
+                            const type = pub.getAttribute('data-type');
+                            if (type === filter) {
+                                pub.classList.remove('hidden');
+                            } else {
+                                pub.classList.add('hidden');
+                            }
+                        }
+                    });
+
+                    // Hide empty year sections
+                    document.querySelectorAll('.year-section').forEach(section => {
+                        const visiblePubs = section.querySelectorAll('.publication:not(.hidden)');
+                        if (visiblePubs.length === 0) {
+                            section.style.display = 'none';
+                        } else {
+                            section.style.display = 'block';
+                        }
+                    });
+                });
+            });
+
+        // 移除超链接预览
+        document.addEventListener('DOMContentLoaded', function() {
+            const links = document.querySelectorAll('a[href]');
+            
+            links.forEach(link => {
+                let originalHref = link.href;
+                
+                link.addEventListener('mouseenter', function(e) {
+                    originalHref = this.href;
+                    this.removeAttribute('href');
+                    this.style.cursor = 'pointer';
+                });
+                
+                link.addEventListener('mouseleave', function(e) {
+                    this.setAttribute('href', originalHref);
+                });
+                
+                link.addEventListener('click', function(e) {
+                    if (!this.href) {
+                        e.preventDefault();
+                        window.location.href = originalHref;
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>

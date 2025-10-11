@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prompt Engineering实战指南 - 博客</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #000000;
+            --text: #ffffff;
+            --text-dim: #666666;
+            --accent: #ffffff;
+            --border: rgba(255, 255, 255, 0.08);
+        }
+
+        [data-theme="light"] {
+            --bg: #ffffff;
+            --text: #000000;
+            --text-dim: #999999;
+            --accent: #000000;
+            --border: rgba(0, 0, 0, 0.08);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.8;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            letter-spacing: -0.02em;
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1.5rem 4rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        [data-theme="light"] nav {
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        .logo {
+            font-size: 1rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            cursor: pointer;
+        }
+
+        .nav-right {
+            display: flex;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-dim);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            letter-spacing: 0.02em;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--text);
+        }
+
+        .theme-btn {
+            width: 36px;
+            height: 36px;
+            border: 1px solid var(--border);
+            background: transparent;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .theme-btn:hover {
+            border-color: var(--text);
+            transform: scale(1.1);
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 140px 4rem 6rem;
+        }
+
+        .article-header {
+            margin-bottom: 4rem;
+            text-align: center;
+        }
+
+        .article-title {
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 300;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+        }
+
+        .article-meta {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            font-size: 0.9rem;
+            color: var(--text-dim);
+            letter-spacing: 0.05em;
+            margin-bottom: 2rem;
+        }
+
+        .article-tags {
+            display: flex;
+            justify-content: center;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+            margin-bottom: 3rem;
+        }
+
+        .tag {
+            padding: 0.4rem 1rem;
+            border: 1px solid var(--border);
+            font-size: 0.75rem;
+            letter-spacing: 0.05em;
+            color: var(--text-dim);
+            transition: all 0.3s ease;
+        }
+
+        .article-content {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--text);
+        }
+
+        .article-content h2 {
+            font-size: 1.8rem;
+            font-weight: 500;
+            margin: 3rem 0 1.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        .article-content h3 {
+            font-size: 1.4rem;
+            font-weight: 500;
+            margin: 2rem 0 1rem;
+            letter-spacing: -0.02em;
+        }
+
+        .article-content p {
+            margin-bottom: 1.5rem;
+            color: var(--text-dim);
+        }
+
+        .article-content ul,
+        .article-content ol {
+            margin: 1.5rem 0;
+            padding-left: 2rem;
+            color: var(--text-dim);
+        }
+
+        .article-content li {
+            margin-bottom: 0.5rem;
+        }
+
+        .article-content code {
+            background: var(--border);
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+
+        .article-content pre {
+            background: var(--border);
+            padding: 1.5rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 2rem 0;
+            border: 1px solid var(--border);
+        }
+
+        .article-content pre code {
+            background: none;
+            padding: 0;
+            border-radius: 0;
+        }
+
+        .article-content blockquote {
+            border-left: 4px solid var(--accent);
+            padding-left: 2rem;
+            margin: 2rem 0;
+            font-style: italic;
+            color: var(--text-dim);
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.8rem 1.5rem;
+            border: 1px solid var(--border);
+            background: transparent;
+            color: var(--text-dim);
+            font-size: 0.9rem;
+            letter-spacing: 0.05em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            margin-bottom: 2rem;
+        }
+
+        .back-btn:hover {
+            border-color: var(--text);
+            color: var(--text);
+            background: var(--text);
+            color: var(--bg);
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                padding: 1rem 2rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .container {
+                padding: 100px 2rem 4rem;
+            }
+
+            .article-meta {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .article-title {
+                font-size: 2rem;
+            }
+
+            .article-content {
+                font-size: 1rem;
+            }
+
+            .article-content h2 {
+                font-size: 1.5rem;
+            }
+
+            .article-content h3 {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <div class="logo" onclick="location.href='../../index.html'">图灵的猫</div>
+        <div class="nav-right">
+            <ul class="nav-links">
+                <li><a href="../../index.html">首页</a></li>
+                <li><a href="../about.html">关于我</a></li>
+                <li><a href="../blog.html" class="active">博客</a></li>
+                <li><a href="../projects.html">项目</a></li>
+                <li><a href="../publications.html">学术成果</a></li>
+                <li><a href="../tools.html">工具箱</a></li>
+                <li><a href="../contact.html">联系我</a></li>
+            </ul>
+            <button class="theme-btn" id="themeBtn">
+                <span id="themeIcon">◐</span>
+            </button>
+        </div>
+    </nav>
+
+    <div class="container">
+        <a href="../blog.html" class="back-btn">← 返回博客列表</a>
+
+        <article class="article-header">
+            <h1 class="article-title">Prompt Engineering实战指南</h1>
+            <div class="article-meta">
+                <span>2024年12月28日</span>
+                <span>⏱️ 7分钟阅读</span>
+                <span>作者：图灵的猫</span>
+            </div>
+            <div class="article-tags">
+                <span class="tag">AI</span>
+                <span class="tag">ChatGPT</span>
+                <span class="tag">提示工程</span>
+            </div>
+        </article>
+
+        <div class="article-content">
+            <p>在过去的几年里，人工智能特别是大语言模型（LLM）的发展日新月异。作为一名技术从业者，我深深感受到掌握Prompt Engineering技能的重要性。今天，我想分享一些在实际项目中积累的Prompt工程经验。
+            </p>
+
+            <h2>什么是Prompt Engineering？</h2>
+            <p>Prompt Engineering，即提示工程，是指通过精心设计和优化输入给AI模型的提示词，来获得更准确、更有用的输出结果。它不仅仅是简单的提问，而是一门需要不断实践和总结的艺术。</p>
+
+            <h2>设计有效提示词的核心原则</h2>
+            <h3>1. 明确性原则</h3>
+            <p>提示词必须清晰明确，避免模糊不清的表达。例如，与其说"写一段代码"，不如说"请用Python编写一个函数，该函数接收一个字符串列表作为参数，返回其中长度最长的字符串"。</p>
+
+            <h3>2. 上下文原则</h3>
+            <p>提供足够的背景信息，让AI理解你的具体需求。包括：</p>
+            <ul>
+                <li>项目背景和目标</li>
+                <li>技术栈和约束条件</li>
+                <li>期望的输出格式</li>
+                <li>质量标准</li>
+            </ul>
+
+            <h3>3. 结构化原则</h3>
+            <p>使用结构化的方式组织提示词，可以包括：</p>
+            <pre><code>角色定义：你是一个经验丰富的Python开发者
+                    任务描述：需要优化以下代码的性能
+                    具体要求：
+                    1. 保持原有功能不变
+                    2. 提高执行效率
+                    3. 添加详细的注释
+                    4. 遵循PEP8规范
+
+                    代码如下：</code></pre>
+
+            <h2>常见陷阱与解决方案</h2>
+            <h3>陷阱一：过度复杂化</h3>
+            <p>很多初学者会试图在一个提示词中包含过多要求，导致AI无法准确理解重点。解决方案是将复杂任务拆分成多个简单步骤，逐步优化。</p>
+
+            <h3>陷阱二：缺乏迭代</h3>
+            <p>期望一次性得到完美结果往往是不现实的。Prompt Engineering需要反复试验和调整。建议：</p>
+            <ul>
+                <li>记录每次提示词的效果</li>
+                <li>分析输出结果的优缺点</li>
+                <li>基于反馈持续优化提示词</li>
+            </ul>
+
+            <h3>陷阱三：忽视模型特性</h3>
+            <p>不同的AI模型有不同的优势和局限性。了解你所使用模型的特点，针对性地设计提示词，这是提高效率的关键。</p>
+
+            <h2>进阶技巧</h2>
+            <h3>1. 少样本学习（Few-shot Learning）</h3>
+            <p>通过在提示词中提供少量示例，让AI快速理解你的期望输出格式和质量标准。例如：</p>
+            <pre><code>请将以下英文单词翻译成中文，保持简洁准确：
+
+                    示例：
+                    hello -> 你好
+                    world -> 世界
+
+                    待翻译：
+                    technology -></code></pre>
+
+            <h3>2. 思维链（Chain of Thought）</h3>
+            <p>鼓励AI展示思考过程，特别是对于复杂的问题。可以在提示词中添加"请逐步思考"或"让我们一步步来分析这个问题"等引导语。</p>
+
+            <h3>3. 自我反思（Self-reflection）</h3>
+            <p>要求AI对自己的输出进行评估和改进。例如："请检查上述代码是否存在潜在的问题，如果有，请指出并给出改进建议"。</p>
+
+            <h2>实战案例分享</h2>
+            <h3>案例一：代码审查助手</h3>
+            <p>在项目开发中，我设计了一个代码审查的提示词模板：</p>
+            <pre><code>角色：你是一名资深的软件架构师，有10年以上的代码审查经验。
+
+                    任务：请对以下Python代码进行全面的代码审查。
+
+                    审查要点：
+                    1. 代码质量和可读性
+                    2. 性能优化建议
+                    3. 安全性考虑
+                    4. 设计模式应用
+                    5. 测试覆盖率建议
+                    6. 文档完整性
+
+                    输出格式：
+                    - 问题分类（严重/中等/轻微）
+                    - 具体问题和建议
+                    - 改进后的代码示例
+
+                    代码：
+                    ```python
+                    [待审查的代码]
+                    ```</code></pre>
+
+            <h3>案例二：技术文档生成</h3>
+            <p>为API接口生成文档时，我使用的提示词：</p>
+            <pre><code>基于以下Python函数，生成一份详细的API文档。
+
+                    要求：
+                    1. 包含功能描述
+                    2. 参数说明（名称、类型、是否必需、默认值、描述）
+                    3. 返回值说明
+                    4. 异常处理
+                    5. 使用示例
+                    6. 注意事项
+
+                    输出格式采用Markdown，确保清晰易读。
+
+                    函数代码：
+                    ```python
+                    [函数代码]
+                    ```</code></pre>
+
+            <h2>持续优化的建议</h2>
+            <p>Prompt Engineering是一个需要持续学习和实践的技能。以下是一些建议：</p>
+            <ul>
+                <li><strong>建立提示词库</strong>：整理和分类你使用过的有效提示词</li>
+                <li><strong>关注社区动态</strong>：学习其他人的经验和技巧</li>
+                <li><strong>实验新思路</strong>：不断尝试新的提示词结构和技巧</li>
+                <li><strong>记录和分析</strong>：详细记录每次实验的结果，分析成功和失败的原因</li>
+            </ul>
+
+            <h2>结语</h2>
+            <p>Prompt
+                Engineering是一门实践性很强的技能，需要我们在日常工作中不断应用和总结。希望这些经验分享能够帮助大家更好地利用AI工具，提高工作效率。记住，最好的学习方式就是动手实践，从简单的提示词开始，逐步探索更复杂的应用场景。
+            </p>
+
+            <p>如果你有任何关于Prompt Engineering的问题或经验，欢迎在评论区分享交流。让我们一起在这个快速发展的AI时代中保持学习和进步！</p>
+        </div>
+    </div>
+
+    <script>
+        const themeBtn = document.getElementById('themeBtn');
+        const themeIcon = document.getElementById('themeIcon');
+
+        // Set initial theme based on local storage or prefers-color-scheme
+        const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', currentTheme);
+        themeIcon.textContent = currentTheme === 'dark' ? '◐' : '◑';
+        themeIcon.style.color = currentTheme === 'dark' ? '#ffffff' : '#000000';
+
+        // Theme toggle functionality
+        themeBtn.addEventListener('click', () => {
+            const newTheme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            themeIcon.textContent = newTheme === 'dark' ? '◐' : '◑';
+            themeIcon.style.color = newTheme === 'dark' ? '#ffffff' : '#000000';
+        });
+    </script>
+</body>
+
+</html>

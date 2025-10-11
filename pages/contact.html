@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>联系我 - Contact</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #000000;
+            --text: #ffffff;
+            --text-dim: #666666;
+            --accent: #ffffff;
+            --border: rgba(255, 255, 255, 0.08);
+        }
+
+        [data-theme="light"] {
+            --bg: #ffffff;
+            --text: #000000;
+            --text-dim: #999999;
+            --accent: #000000;
+            --border: rgba(0, 0, 0, 0.08);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.8;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            letter-spacing: -0.02em;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1.5rem 4rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        [data-theme="light"] nav {
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        .logo {
+            font-size: 1rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            cursor: pointer;
+        }
+
+        .nav-right {
+            display: flex;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-dim);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            letter-spacing: 0.02em;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--text);
+        }
+
+        .theme-btn {
+            width: 36px;
+            height: 36px;
+            border: 1px solid var(--border);
+            background: transparent;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .theme-btn:hover {
+            border-color: var(--text);
+            transform: scale(1.1);
+        }
+
+        /* Main Container */
+        .container {
+            flex: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 140px 4rem 6rem;
+        }
+
+        /* Header Section */
+        .header-section {
+            margin-bottom: 4rem;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        .header-section h1 {
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 300;
+            margin-bottom: 2rem;
+            letter-spacing: -0.02em;
+        }
+
+        .header-section p {
+            font-size: 1.1rem;
+            color: var(--text-dim);
+            max-width: 600px;
+        }
+
+        /* Content Grid */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6rem;
+            align-items: start;
+        }
+
+        /* Left Side */
+        .left-side {
+            animation: fadeInUp 0.8s ease 0.2s backwards;
+        }
+
+        /* Status Indicator */
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 1.5rem;
+            border: 1px solid var(--border);
+            margin-bottom: 3rem;
+            animation: fadeInUp 0.8s ease 0.2s backwards;
+            border-radius: 4px;
+        }
+
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #00ff00;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.5;
+            }
+        }
+
+        .status-text {
+            font-size: 0.9rem;
+            color: var(--text-dim);
+        }
+
+        /* Social Links */
+        .social-grid {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .social-item {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            padding: 1.5rem;
+            border: 1px solid var(--border);
+            text-decoration: none;
+            color: var(--text);
+            transition: all 0.3s ease;
+            animation: fadeInUp 0.8s ease backwards;
+            border-radius: 4px;
+        }
+
+        .social-item:nth-child(1) {
+            animation-delay: 0.3s;
+        }
+
+        .social-item:nth-child(2) {
+            animation-delay: 0.4s;
+        }
+
+        .social-item:nth-child(3) {
+            animation-delay: 0.5s;
+        }
+
+        .social-item:nth-child(4) {
+            animation-delay: 0.6s;
+        }
+
+        .social-item:hover {
+            border-color: var(--text);
+            transform: translateX(10px);
+        }
+
+        .social-icon {
+            font-size: 1.5rem;
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .social-icon svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        .social-info {
+            flex: 1;
+        }
+
+        .social-label {
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            margin-bottom: 0.3rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        .social-value {
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        /* Right Side - Form */
+        .right-side {
+            animation: fadeInUp 0.8s ease 0.2s backwards;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .form-title {
+            font-size: 1.5rem;
+            font-weight: 400;
+            letter-spacing: -0.01em;
+        }
+
+        .contact-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-label {
+            font-size: 0.85rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            color: var(--text-dim);
+        }
+
+        .form-input,
+        .form-textarea {
+            padding: 1rem;
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text);
+            font-size: 0.95rem;
+            font-family: inherit;
+            transition: border-color 0.3s ease;
+            border-radius: 4px;
+            width: 100%;
+        }
+
+        .form-input:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: var(--text);
+        }
+
+        .form-textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        .submit-btn {
+            padding: 1rem 2rem;
+            background: var(--text);
+            color: var(--bg);
+            border: 1px solid var(--text);
+            font-size: 0.9rem;
+            font-weight: 500;
+            letter-spacing: 0.05em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            border-radius: 4px;
+            align-self: flex-start;
+        }
+
+        .submit-btn:hover {
+            background: transparent;
+            color: var(--text);
+        }
+
+        .form-note {
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            font-style: italic;
+            margin-top: 0.5rem;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+                gap: 4rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                padding: 1rem 2rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .container {
+                padding: 100px 2rem 4rem;
+            }
+
+            .social-item {
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
+            }
+
+            .social-icon {
+                width: 40px;
+                height: 40px;
+            }
+
+            .submit-btn {
+                align-self: stretch;
+            }
+        }
+
+        /* Copy functionality styles */
+        .copy-item {
+            cursor: pointer;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .copy-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .copy-hint {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: #ffffff;
+            color: #000000;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 500;
+            opacity: 0;
+            transform: translateY(0);
+            transition: all 0.3s ease;
+            pointer-events: none;
+            white-space: nowrap;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+            z-index: 10;
+        }
+
+        .copy-item:hover .copy-hint {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .copy-feedback {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-20px);
+            background: linear-gradient(135deg, #ffffff, #cccccc);
+            color: #000000;
+            padding: 16px 28px;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 500;
+            z-index: 1000;
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            min-width: 280px;
+            text-align: center;
+            pointer-events: none;
+        }
+        
+        .copy-feedback.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* 浅色主题适配 */
+        [data-theme="light"] .copy-feedback {
+            background: linear-gradient(135deg, #000000, #333333);
+            color: #ffffff;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        /* 复制提示文字优化 */
+        [data-theme="light"] .copy-hint {
+            background: #000000;
+            color: #ffffff;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .copy-feedback.show {
+            opacity: 1;
+        }
+
+        @media (max-width: 480px) {
+            .header-section h1 {
+                font-size: clamp(2rem, 5vw, 3rem);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="logo" onclick="location.href='../index.html'">图灵的猫</div>
+        <div class="nav-right">
+            <ul class="nav-links">
+                <li><a href="../index.html">首页</a></li>
+                <li><a href="about.html">关于我</a></li>
+                <li><a href="blog.html">博客</a></li>
+                <li><a href="projects.html">项目</a></li>
+                <li><a href="publications.html">学术成果</a></li>
+                <li><a href="tools.html">工具箱</a></li>
+                <li><a href="contact.html" class="active">联系我</a></li>
+            </ul>
+            <button class="theme-btn" id="themeBtn">
+                <span id="themeIcon">◐</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Header Section -->
+        <div class="header-section">
+            <h1>让我们<br>保持联系</h1>
+            <p>无论是项目合作、学术交流，还是简单的打个招呼，我都很乐意听到你的声音。</p>
+        </div>
+
+        <!-- Content Grid -->
+        <div class="content-grid">
+            <!-- Left Side -->
+            <div class="left-side">
+
+                <div class="status-indicator">
+                    <div class="status-dot"></div>
+                    <div class="status-text">目前接受新项目和合作机会</div>
+                </div>
+
+                <div class="social-grid">
+                    <a href="mailto:mathliuyang@163.com" class="social-item">
+                        <span class="social-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z">
+                                </path>
+                                <polyline points="22,6 12,13 2,6"></polyline>
+                            </svg>
+                        </span>
+                        <div class="social-info">
+                            <div class="social-label">Email</div>
+                            <div class="social-value">mathliuyang@163.com</div>
+                        </div>
+                    </a>
+
+                    <a href="https://github.com/mathliuyang/" target="_blank" class="social-item">
+                        <span class="social-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path
+                                    d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22">
+                                </path>
+                            </svg>
+                        </span>
+                        <div class="social-info">
+                            <div class="social-label">GitHub</div>
+                            <div class="social-value">@mathliuyang</div>
+                        </div>
+                    </a>
+
+                    <div class="social-item copy-item" data-copy="TuringsCat" data-type="WeChat">
+                        <span class="social-icon">
+                            <img src="/assets/icons/微信_wechat.svg" width="24" height="24" alt="WeChat" />
+                        </span>
+                        <div class="social-info">
+                            <div class="social-label">WeChat</div>
+                            <div class="social-value">TuringsCat</div>
+                        </div>
+                        <span class="copy-hint">点击复制</span>
+                    </div>
+
+                    <div class="social-item copy-item" data-copy="TuringsCat" data-type="QQ">
+                        <span class="social-icon">
+                            <img src="/assets/icons/QQ_tencent-qq.svg" width="24" height="24" alt="QQ" />
+                        </span>
+                        <div class="social-info">
+                            <div class="social-label">QQ</div>
+                            <div class="social-value">TuringsCat</div>
+                        </div>
+                        <span class="copy-hint">点击复制</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Side - Contact Form -->
+            <div class="right-side">
+                <h2 class="form-title">发送消息</h2>
+                <form class="contact-form" id="contactForm">
+                    <div class="form-group">
+                        <label class="form-label" for="name">姓名</label>
+                        <input type="text" id="name" class="form-input" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="email">邮箱</label>
+                        <input type="email" id="email" class="form-input" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="subject">主题</label>
+                        <input type="text" id="subject" class="form-input" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="message">消息内容</label>
+                        <textarea id="message" class="form-textarea" required></textarea>
+                    </div>
+
+                    <button type="submit" class="submit-btn">发送消息</button>
+
+                    <p class="form-note">
+                        注意：此表单为演示版本。在实际部署时，你需要配置后端服务（如 Formspree、EmailJS）来处理表单提交。
+                    </p>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Set initial theme based on local storage or prefers-color-scheme
+        const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', currentTheme);
+        themeIcon.textContent = currentTheme === 'dark' ? '◐' : '◑';
+        themeIcon.style.color = currentTheme === 'dark' ? '#ffffff' : '#000000';
+
+        // Theme toggle functionality
+        themeBtn.addEventListener('click', () => {
+            const newTheme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            themeIcon.textContent = newTheme === 'dark' ? '◐' : '◑';
+            themeIcon.style.color = newTheme === 'dark' ? '#ffffff' : '#000000';
+        });
+
+        // Form submission (demo)
+        const contactForm = document.getElementById('contactForm');
+
+        contactForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const subject = document.getElementById('subject').value;
+            const message = document.getElementById('message').value;
+
+            // Demo alert - replace with actual form handling
+            alert(`感谢你的消息！\n\n姓名: ${name}\n邮箱: ${email}\n主题: ${subject}\n\n在实际部署时，这些信息会被发送到你的邮箱。`);
+
+            // Reset form
+            contactForm.reset();
+        });
+
+        // Copy functionality for WeChat and QQ
+        document.querySelectorAll('.copy-item').forEach(item => {
+            item.addEventListener('click', async function() {
+                const textToCopy = this.getAttribute('data-copy');
+                const type = this.getAttribute('data-type');
+                
+                try {
+                    // 尝试使用现代Clipboard API
+                    if (navigator.clipboard && window.isSecureContext) {
+                        await navigator.clipboard.writeText(textToCopy);
+                        showCopyFeedback(`✓ ${type} 账号复制成功`);
+                    } else {
+                        // 降级方案：使用document.execCommand
+                        const textArea = document.createElement('textarea');
+                        textArea.value = textToCopy;
+                        textArea.style.position = 'fixed';
+                        textArea.style.left = '-999999px';
+                        textArea.style.top = '-999999px';
+                        document.body.appendChild(textArea);
+                        textArea.focus();
+                        textArea.select();
+                        
+                        try {
+                            document.execCommand('copy');
+                            showCopyFeedback(`✓ ${type} 账号复制成功`);
+                        } catch (err) {
+                            console.warn('复制失败:', err);
+                            showCopyFeedback('复制失败，请手动选择复制');
+                        }
+                        
+                        document.body.removeChild(textArea);
+                    }
+                } catch (err) {
+                    console.error('复制功能出错:', err);
+                    showCopyFeedback('复制失败，请手动选择复制');
+                }
+            });
+        });
+
+        // 显示复制反馈
+        function showCopyFeedback(message) {
+            // 移除已存在的反馈
+            const existingFeedback = document.querySelector('.copy-feedback');
+            if (existingFeedback) {
+                existingFeedback.classList.remove('show');
+                setTimeout(() => {
+                    if (existingFeedback.parentNode) {
+                        existingFeedback.parentNode.removeChild(existingFeedback);
+                    }
+                }, 300);
+            }
+            
+            // 创建反馈元素
+            let feedback = document.createElement('div');
+            feedback.className = 'copy-feedback';
+            feedback.textContent = message;
+            document.body.appendChild(feedback);
+            
+            // 强制重排以确保动画生效
+            feedback.offsetHeight;
+            
+            // 显示反馈
+            requestAnimationFrame(() => {
+                feedback.classList.add('show');
+            });
+            
+            // 2.5秒后移除反馈
+            setTimeout(() => {
+                feedback.classList.remove('show');
+                setTimeout(() => {
+                    if (feedback.parentNode) {
+                        feedback.parentNode.removeChild(feedback);
+                    }
+                }, 300);
+            }, 2500);
+        }
+
+        // 移除超链接预览
+        document.addEventListener('DOMContentLoaded', function() {
+            const links = document.querySelectorAll('a[href]');
+            
+            links.forEach(link => {
+                let originalHref = link.href;
+                
+                link.addEventListener('mouseenter', function(e) {
+                    originalHref = this.href;
+                    this.removeAttribute('href');
+                    this.style.cursor = 'pointer';
+                });
+                
+                link.addEventListener('mouseleave', function(e) {
+                    this.setAttribute('href', originalHref);
+                });
+                
+                link.addEventListener('click', function(e) {
+                    if (!this.href) {
+                        e.preventDefault();
+                        window.location.href = originalHref;
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>

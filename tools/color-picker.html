@@ -1,0 +1,1083 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>配色方案生成器</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #000000;
+            --text: #ffffff;
+            --text-dim: #666666;
+            --accent: #ffffff;
+            --border: rgba(255, 255, 255, 0.08);
+        }
+
+        [data-theme="light"] {
+            --bg: #ffffff;
+            --text: #000000;
+            --text-dim: #999999;
+            --accent: #000000;
+            --border: rgba(0, 0, 0, 0.08);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            min-height: 100vh;
+            letter-spacing: -0.02em;
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1.5rem 4rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        [data-theme="light"] nav {
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        .logo {
+            font-size: 1rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            cursor: pointer;
+        }
+
+        .nav-right {
+            display: flex;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-dim);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            letter-spacing: 0.02em;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--text);
+        }
+
+        .theme-btn {
+            width: 36px;
+            height: 36px;
+            border: 1px solid var(--border);
+            background: transparent;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .theme-btn:hover {
+            border-color: var(--text);
+            transform: scale(1.1);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 120px 4rem 4rem;
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-bottom: 2rem;
+            padding: 0.6rem 1.2rem;
+            border: 1px solid var(--border);
+            background: transparent;
+            color: var(--text-dim);
+            text-decoration: none;
+            font-size: 0.85rem;
+            letter-spacing: 0.05em;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            border-color: var(--text);
+            color: var(--text);
+            background: var(--text);
+            color: var(--bg);
+        }
+
+        .header {
+            margin-bottom: 3rem;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 300;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        .header p {
+            color: var(--text-dim);
+        }
+
+        .controls {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .control-group {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .control-label {
+            font-size: 0.85rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            color: var(--text-dim);
+        }
+
+        .base-color-input {
+            width: 60px;
+            height: 40px;
+            border: 1px solid var(--border);
+            cursor: pointer;
+            background: transparent;
+            transition: all 0.3s ease;
+        }
+
+        .base-color-input:hover {
+            transform: scale(1.1);
+        }
+
+        .scheme-select {
+            padding: 0.6rem 1.5rem;
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text);
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .scheme-select:hover,
+        .scheme-select:focus {
+            outline: none;
+            border-color: var(--text);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .action-btn {
+            padding: 0.6rem 1.5rem;
+            border: 1px solid var(--border);
+            background: transparent;
+            color: var(--text);
+            font-size: 0.85rem;
+            letter-spacing: 0.05em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+        }
+
+        .action-btn:hover {
+            background: var(--text);
+            color: var(--bg);
+            border-color: var(--text);
+        }
+
+        .action-btn.primary {
+            background: var(--text);
+            color: var(--bg);
+        }
+
+        .action-btn.primary:hover {
+            background: transparent;
+            color: var(--text);
+        }
+
+        .palette-display {
+            margin-bottom: 3rem;
+        }
+
+        .palette-title {
+            font-size: 1.2rem;
+            font-weight: 500;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.01em;
+        }
+
+        .colors-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .color-card {
+            border: 1px solid var(--border);
+            overflow: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .color-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--text);
+        }
+
+        .color-swatch {
+            width: 100%;
+            height: 150px;
+            position: relative;
+        }
+
+        .lock-btn {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            width: 32px;
+            height: 32px;
+            background: rgba(0, 0, 0, 0.3);
+            border: none;
+            border-radius: 50%;
+            color: #fff;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .color-card:hover .lock-btn {
+            opacity: 1;
+        }
+
+        .lock-btn.locked {
+            opacity: 1;
+            background: rgba(255, 255, 255, 0.9);
+            color: #000;
+        }
+
+        .color-info {
+            padding: 1rem;
+        }
+
+        .color-name {
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .color-values {
+            display: grid;
+            gap: 0.3rem;
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            font-family: 'Courier New', monospace;
+        }
+
+        .color-value {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .copy-icon {
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .color-value:hover .copy-icon {
+            opacity: 1;
+        }
+
+        .export-section {
+            border-top: 1px solid var(--border);
+            padding-top: 3rem;
+        }
+
+        .export-title {
+            font-size: 1.2rem;
+            font-weight: 500;
+            margin-bottom: 1.5rem;
+        }
+
+        .export-formats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .export-panel {
+            border: 1px solid var(--border);
+            padding: 1.5rem;
+        }
+
+        .export-panel-title {
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .export-code {
+            background: var(--border);
+            padding: 1rem;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+            line-height: 1.6;
+            max-height: 200px;
+            overflow-y: auto;
+            margin-bottom: 1rem;
+            white-space: pre;
+        }
+
+        .copy-btn {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid var(--border);
+            background: transparent;
+            color: var(--text);
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .copy-btn:hover {
+            background: var(--text);
+            color: var(--bg);
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            padding: 1rem 1.5rem;
+            background: var(--text);
+            color: var(--bg);
+            border: 1px solid var(--text);
+            font-size: 0.9rem;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                padding: 1rem 2rem;
+            }
+
+            .container {
+                padding: 100px 2rem 2rem;
+            }
+
+            .controls {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .control-group {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .action-btn {
+                width: 100%;
+            }
+
+            .colors-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .export-formats {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <div class="logo" onclick="location.href='../index.html'">图灵的猫</div>
+        <div class="nav-right">
+            <ul class="nav-links">
+                <li><a href="../index.html">首页</a></li>
+                <li><a href="../pages/about.html">关于我</a></li>
+                <li><a href="../pages/blog.html">博客</a></li>
+                <li><a href="../pages/projects.html">项目</a></li>
+                <li><a href="../pages/publications.html">学术成果</a></li>
+                <li><a href="../pages/tools.html" class="active">工具箱</a></li>
+                <li><a href="../pages/contact.html">联系我</a></li>
+            </ul>
+            <button class="theme-btn" id="themeBtn">
+                <span id="themeIcon">◐</span>
+            </button>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- <a href="../pages/tools.html" class="back-btn">← 返回工具箱</a> -->
+        <div class="header">
+            <h1>配色方案生成器</h1>
+            <p>基于色彩理论生成和谐的配色方案</p>
+        </div>
+
+        <div class="controls">
+            <div class="control-group">
+                <span class="control-label">基础颜色</span>
+                <input type="color" class="base-color-input" id="baseColor" value="#3b82f6">
+            </div>
+
+            <div class="control-group">
+                <span class="control-label">从图片提取</span>
+                <input type="file" id="imageUpload" accept="image/*" style="display: none;">
+                <button class="action-btn" onclick="document.getElementById('imageUpload').click()">
+                    上传图片
+                </button>
+            </div>
+
+            <div class="control-group">
+                <span class="control-label">配色模式</span>
+                <select class="scheme-select" id="schemeType">
+                    <option value="monochromatic">单色</option>
+                    <option value="analogous">类似色</option>
+                    <option value="complementary">互补色</option>
+                    <option value="triadic">三角色</option>
+                    <option value="tetradic">四角色</option>
+                    <option value="split-complementary">分裂互补</option>
+                </select>
+            </div>
+
+            <div class="action-buttons">
+                <button class="action-btn primary" onclick="generatePalette()">生成配色</button>
+                <button class="action-btn" onclick="randomColor()">随机颜色</button>
+                <button class="action-btn" onclick="savePalette()">保存方案</button>
+            </div>
+        </div>
+
+        <div id="imagePreview" style="display: none; margin-bottom: 2rem;">
+            <div style="border: 1px solid var(--border); padding: 1rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <span style="font-size: 0.9rem; color: var(--text-dim);">提取的颜色</span>
+                    <button class="action-btn" onclick="closeImagePreview()" style="padding: 0.4rem 1rem;">关闭</button>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(80px, 1fr)); gap: 1rem;"
+                    id="extractedColors"></div>
+            </div>
+        </div>
+
+        <div class="palette-display">
+            <h2 class="palette-title">配色方案</h2>
+            <div class="colors-grid" id="colorsGrid"></div>
+        </div>
+
+        <div class="export-section">
+            <h2 class="export-title">导出代码</h2>
+            <div class="export-formats">
+                <div class="export-panel">
+                    <h3 class="export-panel-title">CSS</h3>
+                    <div class="export-code" id="cssCode"></div>
+                    <button class="copy-btn" onclick="copyCode('css')">复制CSS</button>
+                </div>
+
+                <div class="export-panel">
+                    <h3 class="export-panel-title">JavaScript</h3>
+                    <div class="export-code" id="jsCode"></div>
+                    <button class="copy-btn" onclick="copyCode('js')">复制JavaScript</button>
+                </div>
+
+                <div class="export-panel">
+                    <h3 class="export-panel-title">Tailwind</h3>
+                    <div class="export-code" id="tailwindCode"></div>
+                    <button class="copy-btn" onclick="copyCode('tailwind')">复制Tailwind</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script>
+        // Theme toggle
+        const themeBtn = document.getElementById('themeBtn');
+        const themeIcon = document.getElementById('themeIcon');
+        const currentTheme = localStorage.getItem('theme') || 'dark';
+
+        document.documentElement.setAttribute('data-theme', currentTheme);
+        themeIcon.textContent = currentTheme === 'dark' ? '◐' : '◑';
+
+        // 添加图标颜色样式，确保在不同主题下都清晰可见
+        themeIcon.style.color = currentTheme === 'dark' ? '#ffffff' : '#000000';
+
+        themeBtn.addEventListener('click', () => {
+            const theme = document.documentElement.getAttribute('data-theme');
+            const newTheme = theme === 'dark' ? 'light' : 'dark';
+
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            themeIcon.textContent = newTheme === 'dark' ? '◐' : '◑';
+            themeIcon.style.color = newTheme === 'dark' ? '#ffffff' : '#000000';
+        });
+
+        let currentPalette = [];
+        let lockedColors = new Set();
+
+        // Color conversion utilities
+        function hexToRgb(hex) {
+            const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+            return result ? {
+                r: parseInt(result[1], 16),
+                g: parseInt(result[2], 16),
+                b: parseInt(result[3], 16)
+            } : null;
+        }
+
+        function rgbToHex(r, g, b) {
+            return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+        }
+
+        function rgbToHsl(r, g, b) {
+            r /= 255;
+            g /= 255;
+            b /= 255;
+
+            const max = Math.max(r, g, b);
+            const min = Math.min(r, g, b);
+            let h, s, l = (max + min) / 2;
+
+            if (max === min) {
+                h = s = 0;
+            } else {
+                const d = max - min;
+                s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+
+                switch (max) {
+                    case r: h = ((g - b) / d + (g < b ? 6 : 0)) / 6; break;
+                    case g: h = ((b - r) / d + 2) / 6; break;
+                    case b: h = ((r - g) / d + 4) / 6; break;
+                }
+            }
+
+            return {
+                h: Math.round(h * 360),
+                s: Math.round(s * 100),
+                l: Math.round(l * 100)
+            };
+        }
+
+        function hslToRgb(h, s, l) {
+            h /= 360;
+            s /= 100;
+            l /= 100;
+
+            let r, g, b;
+
+            if (s === 0) {
+                r = g = b = l;
+            } else {
+                const hue2rgb = (p, q, t) => {
+                    if (t < 0) t += 1;
+                    if (t > 1) t -= 1;
+                    if (t < 1 / 6) return p + (q - p) * 6 * t;
+                    if (t < 1 / 2) return q;
+                    if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
+                    return p;
+                };
+
+                const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+                const p = 2 * l - q;
+                r = hue2rgb(p, q, h + 1 / 3);
+                g = hue2rgb(p, q, h);
+                b = hue2rgb(p, q, h - 1 / 3);
+            }
+
+            return {
+                r: Math.round(r * 255),
+                g: Math.round(g * 255),
+                b: Math.round(b * 255)
+            };
+        }
+
+        // Generate color schemes
+        function generatePalette() {
+            const baseColor = document.getElementById('baseColor').value;
+            const schemeType = document.getElementById('schemeType').value;
+            const rgb = hexToRgb(baseColor);
+            const hsl = rgbToHsl(rgb.r, rgb.g, rgb.b);
+
+            let colors = [];
+
+            switch (schemeType) {
+                case 'monochromatic':
+                    colors = generateMonochromatic(hsl);
+                    break;
+                case 'analogous':
+                    colors = generateAnalogous(hsl);
+                    break;
+                case 'complementary':
+                    colors = generateComplementary(hsl);
+                    break;
+                case 'triadic':
+                    colors = generateTriadic(hsl);
+                    break;
+                case 'tetradic':
+                    colors = generateTetradic(hsl);
+                    break;
+                case 'split-complementary':
+                    colors = generateSplitComplementary(hsl);
+                    break;
+            }
+
+            // Replace only unlocked colors
+            currentPalette = currentPalette.map((color, index) => {
+                return lockedColors.has(index) ? color : colors[index];
+            });
+
+            if (currentPalette.length === 0) {
+                currentPalette = colors;
+            }
+
+            displayPalette();
+            generateExportCode();
+        }
+
+        function generateMonochromatic(hsl) {
+            return [
+                hslToHex(hsl.h, hsl.s, Math.min(hsl.l + 30, 95)),
+                hslToHex(hsl.h, hsl.s, Math.min(hsl.l + 15, 90)),
+                hslToHex(hsl.h, hsl.s, hsl.l),
+                hslToHex(hsl.h, hsl.s, Math.max(hsl.l - 15, 10)),
+                hslToHex(hsl.h, hsl.s, Math.max(hsl.l - 30, 5))
+            ];
+        }
+
+        function generateAnalogous(hsl) {
+            return [
+                hslToHex((hsl.h - 60 + 360) % 360, hsl.s, hsl.l),
+                hslToHex((hsl.h - 30 + 360) % 360, hsl.s, hsl.l),
+                hslToHex(hsl.h, hsl.s, hsl.l),
+                hslToHex((hsl.h + 30) % 360, hsl.s, hsl.l),
+                hslToHex((hsl.h + 60) % 360, hsl.s, hsl.l)
+            ];
+        }
+
+        function generateComplementary(hsl) {
+            const comp = (hsl.h + 180) % 360;
+            return [
+                hslToHex(hsl.h, hsl.s, Math.min(hsl.l + 20, 90)),
+                hslToHex(hsl.h, hsl.s, hsl.l),
+                hslToHex(hsl.h, hsl.s, Math.max(hsl.l - 20, 10)),
+                hslToHex(comp, hsl.s, hsl.l),
+                hslToHex(comp, hsl.s, Math.max(hsl.l - 20, 10))
+            ];
+        }
+
+        function generateTriadic(hsl) {
+            return [
+                hslToHex(hsl.h, hsl.s, hsl.l),
+                hslToHex((hsl.h + 120) % 360, hsl.s, hsl.l),
+                hslToHex((hsl.h + 240) % 360, hsl.s, hsl.l),
+                hslToHex(hsl.h, Math.max(hsl.s - 20, 20), hsl.l),
+                hslToHex((hsl.h + 120) % 360, Math.max(hsl.s - 20, 20), hsl.l)
+            ];
+        }
+
+        function generateTetradic(hsl) {
+            return [
+                hslToHex(hsl.h, hsl.s, hsl.l),
+                hslToHex((hsl.h + 90) % 360, hsl.s, hsl.l),
+                hslToHex((hsl.h + 180) % 360, hsl.s, hsl.l),
+                hslToHex((hsl.h + 270) % 360, hsl.s, hsl.l),
+                hslToHex(hsl.h, Math.max(hsl.s - 30, 20), hsl.l)
+            ];
+        }
+
+        function generateSplitComplementary(hsl) {
+            const comp = (hsl.h + 180) % 360;
+            return [
+                hslToHex(hsl.h, hsl.s, hsl.l),
+                hslToHex((comp - 30 + 360) % 360, hsl.s, hsl.l),
+                hslToHex((comp + 30) % 360, hsl.s, hsl.l),
+                hslToHex(hsl.h, Math.max(hsl.s - 20, 20), hsl.l),
+                hslToHex(hsl.h, hsl.s, Math.max(hsl.l - 20, 10))
+            ];
+        }
+
+        function hslToHex(h, s, l) {
+            const rgb = hslToRgb(h, s, l);
+            return rgbToHex(rgb.r, rgb.g, rgb.b);
+        }
+
+        // Display palette
+        function displayPalette() {
+            const grid = document.getElementById('colorsGrid');
+            grid.innerHTML = currentPalette.map((color, index) => {
+                const rgb = hexToRgb(color);
+                const hsl = rgbToHsl(rgb.r, rgb.g, rgb.b);
+                const isLocked = lockedColors.has(index);
+
+                return `
+                    <div class="color-card" onclick="copyColor('${color}')">
+                        <div class="color-swatch" style="background-color: ${color}">
+                            <button class="lock-btn ${isLocked ? 'locked' : ''}" 
+                                    onclick="event.stopPropagation(); toggleLock(${index})">
+                                ${isLocked ? '🔒' : '🔓'}
+                            </button>
+                        </div>
+                        <div class="color-info">
+                            <div class="color-name">Color ${index + 1}</div>
+                            <div class="color-values">
+                                <div class="color-value">
+                                    <span>HEX</span>
+                                    <span>${color.toUpperCase()} <span class="copy-icon">📋</span></span>
+                                </div>
+                                <div class="color-value">
+                                    <span>RGB</span>
+                                    <span>${rgb.r}, ${rgb.g}, ${rgb.b}</span>
+                                </div>
+                                <div class="color-value">
+                                    <span>HSL</span>
+                                    <span>${hsl.h}°, ${hsl.s}%, ${hsl.l}%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function toggleLock(index) {
+            if (lockedColors.has(index)) {
+                lockedColors.delete(index);
+            } else {
+                lockedColors.add(index);
+            }
+            displayPalette();
+        }
+
+        function copyColor(color) {
+            navigator.clipboard.writeText(color);
+            showToast(`已复制: ${color}`);
+        }
+
+        // Generate export code
+        function generateExportCode() {
+            // CSS
+            const cssCode = `:root {\n${currentPalette.map((color, i) =>
+                `  --color-${i + 1}: ${color};`
+            ).join('\n')}\n}`;
+            document.getElementById('cssCode').textContent = cssCode;
+
+            // JavaScript
+            const jsCode = `const colors = {\n${currentPalette.map((color, i) =>
+                `  color${i + 1}: '${color}',`
+            ).join('\n')}\n};`;
+            document.getElementById('jsCode').textContent = jsCode;
+
+            // Tailwind
+            const tailwindCode = `module.exports = {\n  theme: {\n    extend: {\n      colors: {\n${currentPalette.map((color, i) =>
+                `        'primary-${i + 1}': '${color}',`
+            ).join('\n')}\n      }\n    }\n  }\n}`;
+            document.getElementById('tailwindCode').textContent = tailwindCode;
+        }
+
+        function copyCode(type) {
+            let text = '';
+            if (type === 'css') text = document.getElementById('cssCode').textContent;
+            if (type === 'js') text = document.getElementById('jsCode').textContent;
+            if (type === 'tailwind') text = document.getElementById('tailwindCode').textContent;
+
+            navigator.clipboard.writeText(text);
+            showToast('代码已复制到剪贴板');
+        }
+
+        function randomColor() {
+            const randomHex = '#' + Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0');
+            document.getElementById('baseColor').value = randomHex;
+            generatePalette();
+        }
+
+        function savePalette() {
+            const palettes = JSON.parse(localStorage.getItem('colorPalettes') || '[]');
+            palettes.unshift({
+                colors: currentPalette,
+                date: new Date().toLocaleString('zh-CN')
+            });
+            if (palettes.length > 10) palettes.pop();
+            localStorage.setItem('colorPalettes', JSON.stringify(palettes));
+            showToast('配色方案已保存');
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2000);
+        }
+
+        // Make functions global
+        window.generatePalette = generatePalette;
+        window.randomColor = randomColor;
+        window.savePalette = savePalette;
+        window.copyCode = copyCode;
+        window.copyColor = copyColor;
+        window.toggleLock = toggleLock;
+
+        // Image color extraction
+        const imageUpload = document.getElementById('imageUpload');
+        imageUpload.addEventListener('change', handleImageUpload);
+
+        function handleImageUpload(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function (event) {
+                const img = new Image();
+                img.onload = function () {
+                    extractColorsFromImage(img);
+                };
+                img.src = event.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function extractColorsFromImage(img) {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+
+            // Resize image for faster processing
+            const maxSize = 150;
+            const scale = Math.min(maxSize / img.width, maxSize / img.height);
+            canvas.width = img.width * scale;
+            canvas.height = img.height * scale;
+
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+            try {
+                const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                const pixels = imageData.data;
+
+                // Collect color samples
+                const colorMap = {};
+                for (let i = 0; i < pixels.length; i += 16) { // Sample every 4 pixels
+                    const r = pixels[i];
+                    const g = pixels[i + 1];
+                    const b = pixels[i + 2];
+                    const a = pixels[i + 3];
+
+                    if (a > 200) { // Only non-transparent pixels
+                        // Quantize colors to reduce variations
+                        const qr = Math.round(r / 10) * 10;
+                        const qg = Math.round(g / 10) * 10;
+                        const qb = Math.round(b / 10) * 10;
+                        const key = `${qr},${qg},${qb}`;
+
+                        colorMap[key] = (colorMap[key] || 0) + 1;
+                    }
+                }
+
+                // Get most frequent colors
+                const sortedColors = Object.entries(colorMap)
+                    .sort((a, b) => b[1] - a[1])
+                    .slice(0, 30) // Take top 30
+                    .map(([key]) => {
+                        const [r, g, b] = key.split(',').map(Number);
+                        return { r, g, b };
+                    });
+
+                // Simple clustering by color similarity
+                const clusters = [];
+                const used = new Set();
+
+                for (let color of sortedColors) {
+                    if (used.has(`${color.r},${color.g},${color.b}`)) continue;
+
+                    let similar = [color];
+                    used.add(`${color.r},${color.g},${color.b}`);
+
+                    for (let other of sortedColors) {
+                        const key = `${other.r},${other.g},${other.b}`;
+                        if (used.has(key)) continue;
+
+                        const dist = Math.sqrt(
+                            Math.pow(color.r - other.r, 2) +
+                            Math.pow(color.g - other.g, 2) +
+                            Math.pow(color.b - other.b, 2)
+                        );
+
+                        if (dist < 60) {
+                            similar.push(other);
+                            used.add(key);
+                        }
+                    }
+
+                    // Average the similar colors
+                    const avg = {
+                        r: Math.round(similar.reduce((s, c) => s + c.r, 0) / similar.length),
+                        g: Math.round(similar.reduce((s, c) => s + c.g, 0) / similar.length),
+                        b: Math.round(similar.reduce((s, c) => s + c.b, 0) / similar.length)
+                    };
+
+                    clusters.push(rgbToHex(avg.r, avg.g, avg.b));
+
+                    if (clusters.length >= 8) break;
+                }
+
+                // Sort by brightness
+                clusters.sort((a, b) => {
+                    const rgbA = hexToRgb(a);
+                    const rgbB = hexToRgb(b);
+                    const brightA = rgbA.r + rgbA.g + rgbA.b;
+                    const brightB = rgbB.r + rgbB.g + rgbB.b;
+                    return brightB - brightA;
+                });
+
+                displayExtractedColors(clusters);
+                showToast('成功提取 ' + clusters.length + ' 种颜色');
+            } catch (error) {
+                console.error('提取颜色失败:', error);
+                showToast('提取失败，请重试');
+            }
+        }
+
+        function kMeansClustering(colors, k) {
+            if (colors.length === 0) return [];
+
+            // Initialize centroids randomly
+            let centroids = [];
+            for (let i = 0; i < k; i++) {
+                const randomIndex = Math.floor(Math.random() * colors.length);
+                centroids.push({ ...colors[randomIndex] });
+            }
+
+            // Run k-means for a few iterations
+            for (let iter = 0; iter < 5; iter++) {
+                const clusters = Array(k).fill().map(() => []);
+
+                // Assign colors to nearest centroid
+                colors.forEach(color => {
+                    let minDist = Infinity;
+                    let clusterIndex = 0;
+
+                    centroids.forEach((centroid, i) => {
+                        const dist = Math.sqrt(
+                            Math.pow(color.r - centroid.r, 2) +
+                            Math.pow(color.g - centroid.g, 2) +
+                            Math.pow(color.b - centroid.b, 2)
+                        );
+                        if (dist < minDist) {
+                            minDist = dist;
+                            clusterIndex = i;
+                        }
+                    });
+
+                    clusters[clusterIndex].push(color);
+                });
+
+                // Update centroids
+                centroids = clusters.map(cluster => {
+                    if (cluster.length === 0) return centroids[0];
+                    const sum = cluster.reduce((acc, c) => ({
+                        r: acc.r + c.r,
+                        g: acc.g + c.g,
+                        b: acc.b + c.b
+                    }), { r: 0, g: 0, b: 0 });
+
+                    return {
+                        r: Math.round(sum.r / cluster.length),
+                        g: Math.round(sum.g / cluster.length),
+                        b: Math.round(sum.b / cluster.length)
+                    };
+                });
+            }
+
+            // Sort by brightness and return as hex
+            return centroids
+                .sort((a, b) => (b.r + b.g + b.b) - (a.r + a.g + a.b))
+                .map(c => rgbToHex(c.r, c.g, c.b));
+        }
+
+        function displayExtractedColors(colors) {
+            const container = document.getElementById('extractedColors');
+            const preview = document.getElementById('imagePreview');
+
+            container.innerHTML = colors.map(color => `
+                <div style="cursor: pointer;" onclick="useExtractedColor('${color}')">
+                    <div style="width: 100%; height: 60px; background: ${color}; border: 1px solid var(--border); margin-bottom: 0.5rem;"></div>
+                    <div style="text-align: center; font-size: 0.75rem; font-family: 'Courier New', monospace;">${color}</div>
+                </div>
+            `).join('');
+
+            preview.style.display = 'block';
+        }
+
+        function useExtractedColor(color) {
+            document.getElementById('baseColor').value = color;
+            generatePalette();
+            showToast(`已应用颜色：${color}`);
+        }
+
+        function closeImagePreview() {
+            document.getElementById('imagePreview').style.display = 'none';
+        }
+
+        window.closeImagePreview = closeImagePreview;
+        window.useExtractedColor = useExtractedColor;
+
+        // Initial generation
+        generatePalette();
+    </script>
+</body>
+
+</html>

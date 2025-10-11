@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>文本分析工具</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #000000;
+            --text: #ffffff;
+            --text-dim: #666666;
+            --accent: #ffffff;
+            --border: rgba(255, 255, 255, 0.08);
+        }
+
+        [data-theme="light"] {
+            --bg: #ffffff;
+            --text: #000000;
+            --text-dim: #999999;
+            --accent: #000000;
+            --border: rgba(0, 0, 0, 0.08);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            min-height: 100vh;
+            letter-spacing: -0.02em;
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1.5rem 4rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        [data-theme="light"] nav {
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        .logo {
+            font-size: 1rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            cursor: pointer;
+        }
+
+        .nav-right {
+            display: flex;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            letter-spacing: 0.02em;
+            transition: color 0.3s ease;
+            opacity: 0.6;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            opacity: 1;
+        }
+
+        .theme-btn {
+            width: 36px;
+            height: 36px;
+            border: 1px solid var(--border);
+            background: transparent;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .theme-btn:hover {
+            border-color: var(--text);
+            transform: scale(1.1);
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin: 120px 4rem 2rem;
+            padding: 0.75rem 1.5rem;
+            border: 1px solid var(--border);
+            background: transparent;
+            color: var(--text);
+            text-decoration: none;
+            font-size: 0.9rem;
+            letter-spacing: 0.02em;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            border-color: var(--text);
+            color: var(--bg);
+            background: var(--text);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 120px 4rem 4rem;
+        }
+
+        .header {
+            margin-bottom: 3rem;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 300;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        .header p {
+            color: var(--text-dim);
+        }
+
+        .stopword-info {
+            margin-top: 1rem;
+            padding: 1rem;
+            border: 1px solid var(--border);
+            background: rgba(255, 255, 255, 0.02);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .stopword-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--text-dim);
+        }
+
+        .stopword-toggle {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 44px;
+            height: 24px;
+            background: var(--border);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .toggle-switch.active {
+            background: var(--accent);
+        }
+
+        .toggle-slider {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 20px;
+            height: 20px;
+            background: var(--bg);
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+        }
+
+        .toggle-switch.active .toggle-slider {
+            transform: translateX(20px);
+        }
+
+        .input-section {
+            margin-bottom: 3rem;
+        }
+
+        .text-input {
+            width: 100%;
+            min-height: 200px;
+            padding: 1.5rem;
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text);
+            font-size: 1rem;
+            font-family: inherit;
+            line-height: 1.8;
+            resize: vertical;
+            transition: border-color 0.3s ease;
+        }
+
+        .text-input:focus {
+            outline: none;
+            border-color: var(--text);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat-box {
+            border: 1px solid var(--border);
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .stat-box:hover {
+            border-color: var(--text);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 300;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .analysis-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .analysis-panel {
+            border: 1px solid var(--border);
+            padding: 2rem;
+        }
+
+        .panel-title {
+            font-size: 1.2rem;
+            font-weight: 500;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.01em;
+        }
+
+        .word-list {
+            display: grid;
+            gap: 0.8rem;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .word-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.8rem;
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
+        }
+
+        .word-item:hover {
+            border-color: var(--text);
+        }
+
+        .word-name {
+            font-size: 0.95rem;
+        }
+
+        .word-count {
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            padding: 0.3rem 0.8rem;
+            border: 1px solid var(--border);
+        }
+
+        .reading-stats {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .reading-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            border: 1px solid var(--border);
+        }
+
+        .reading-label {
+            font-size: 0.9rem;
+            color: var(--text-dim);
+        }
+
+        .reading-value {
+            font-size: 1rem;
+            font-weight: 500;
+            text-align: right;
+        }
+
+        .reading-speed {
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            margin-top: 0.2rem;
+        }
+
+        /* Word Cloud */
+        .word-cloud {
+            min-height: 300px;
+            padding: 2rem;
+            border: 1px solid var(--border);
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            line-height: 1.2;
+        }
+
+        .cloud-word {
+            cursor: pointer;
+            transition: all 0.3s ease;
+            padding: 0.2rem 0.5rem;
+            white-space: nowrap;
+        }
+
+        .cloud-word:hover {
+            color: var(--text);
+            transform: scale(1.1);
+        }
+
+        .char-dist {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 1rem;
+        }
+
+        .char-item {
+            padding: 1rem;
+            border: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .char-type {
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+
+        .char-count {
+            font-size: 1.5rem;
+            font-weight: 500;
+        }
+
+        .char-percent {
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            margin-top: 0.3rem;
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                padding: 1rem 2rem;
+            }
+
+            .container {
+                padding: 100px 2rem 2rem;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .analysis-section {
+                grid-template-columns: 1fr;
+            }
+
+            .char-dist {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <div class="logo" onclick="location.href='../index.html'">图灵的猫</div>
+        <div class="nav-right">
+            <ul class="nav-links">
+                <li><a href="../index.html">首页</a></li>
+                <li><a href="../pages/about.html">关于我</a></li>
+                <li><a href="../pages/blog.html">博客</a></li>
+                <li><a href="../pages/projects.html">项目</a></li>
+                <li><a href="../pages/publications.html">学术成果</a></li>
+                <li><a href="../pages/tools.html" class="active">工具箱</a></li>
+                <li><a href="../pages/contact.html">联系我</a></li>
+            </ul>
+            <button class="theme-btn" id="themeBtn">
+                <span id="themeIcon">◐</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- <a href="../pages/tools.html" class="back-btn">← 返回工具箱</a> -->
+
+    <div class="container">
+        <div class="header">
+            <h1>文本分析工具</h1>
+            <p>实时分析文本的字数、词频、可读性等指标</p>
+            <div class="stopword-info">
+                <div class="stopword-status">
+                    <span>停用词状态:</span>
+                    <span id="stopwordCount">加载中...</span>
+                </div>
+                <div class="stopword-toggle">
+                    <span>启用停用词过滤</span>
+                    <div class="toggle-switch active" id="stopwordToggle">
+                        <div class="toggle-slider"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="input-section">
+            <textarea class="text-input" id="textInput" placeholder="在这里输入或粘贴文本..."></textarea>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-box">
+                <div class="stat-number" id="totalCharsWithSpace">0</div>
+                <div class="stat-label">字符数(包含空格)</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number" id="totalCharsNoSpace">0</div>
+                <div class="stat-label">字符数(不包含空格)</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number" id="chineseWords">0</div>
+                <div class="stat-label">汉字数</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number" id="englishWords">0</div>
+                <div class="stat-label">单词数</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number" id="totalLines">0</div>
+                <div class="stat-label">行数</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number" id="totalParagraphs">0</div>
+                <div class="stat-label">段落数</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number" id="uniqueWords">0</div>
+                <div class="stat-label">不重复词数</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number" id="avgWordLength">0</div>
+                <div class="stat-label">平均词长</div>
+            </div>
+
+        </div>
+
+        <div class="analysis-section">
+            <div class="analysis-panel">
+                <h2 class="panel-title">字符分布</h2>
+                <div class="char-dist">
+                    <div class="char-item">
+                        <div class="char-type">中文</div>
+                        <div class="char-count" id="chineseCount">0</div>
+                        <div class="char-percent" id="chinesePercent">0%</div>
+                    </div>
+                    <div class="char-item">
+                        <div class="char-type">英文</div>
+                        <div class="char-count" id="englishCount">0</div>
+                        <div class="char-percent" id="englishPercent">0%</div>
+                    </div>
+                    <div class="char-item">
+                        <div class="char-type">数字</div>
+                        <div class="char-count" id="digitCount">0</div>
+                        <div class="char-percent" id="digitPercent">0%</div>
+                    </div>
+                    <div class="char-item">
+                        <div class="char-type">标点</div>
+                        <div class="char-count" id="punctCount">0</div>
+                        <div class="char-percent" id="punctPercent">0%</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="analysis-panel">
+                <h2 class="panel-title">阅读时间估算</h2>
+                <div class="reading-stats">
+                    <div class="reading-item">
+                        <div>
+                            <div class="reading-label">慢速阅读</div>
+                            <div class="reading-speed">约150词/分钟</div>
+                        </div>
+                        <div class="reading-value" id="readSlow">0分0秒</div>
+                    </div>
+                    <div class="reading-item">
+                        <div>
+                            <div class="reading-label">正常阅读</div>
+                            <div class="reading-speed">约200词/分钟</div>
+                        </div>
+                        <div class="reading-value" id="readMedium">0分0秒</div>
+                    </div>
+                    <div class="reading-item">
+                        <div>
+                            <div class="reading-label">快速阅读</div>
+                            <div class="reading-speed">约300词/分钟</div>
+                        </div>
+                        <div class="reading-value" id="readFast">0分0秒</div>
+                    </div>
+                    <div class="reading-item">
+                        <div>
+                            <div class="reading-label">朗读时间</div>
+                            <div class="reading-speed">约120词/分钟</div>
+                        </div>
+                        <div class="reading-value" id="speakTime">0分0秒</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="analysis-panel">
+                <h2 class="panel-title">词频统计 Top 10</h2>
+                <div class="word-list" id="wordFreq"></div>
+            </div>
+
+
+
+            <div class="analysis-panel">
+                <h2 class="panel-title">词云可视化</h2>
+                <div class="word-cloud" id="wordCloud">
+                    <div style="text-align:center;color:var(--text-dim);">输入文本后自动生成词云</div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+    <script>
+        // Theme toggle
+        const themeBtn = document.getElementById('themeBtn');
+        const themeIcon = document.getElementById('themeIcon');
+        const currentTheme = localStorage.getItem('theme') || 'dark';
+
+        document.documentElement.setAttribute('data-theme', currentTheme);
+        themeIcon.textContent = currentTheme === 'dark' ? '◐' : '◑';
+
+        // 添加图标颜色样式，确保在不同主题下都清晰可见
+        themeIcon.style.color = currentTheme === 'dark' ? '#ffffff' : '#000000';
+
+        themeBtn.addEventListener('click', () => {
+            const theme = document.documentElement.getAttribute('data-theme');
+            const newTheme = theme === 'dark' ? 'light' : 'dark';
+
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            themeIcon.textContent = newTheme === 'dark' ? '◐' : '◑';
+            themeIcon.style.color = newTheme === 'dark' ? '#ffffff' : '#000000';
+        });
+
+        const textInput = document.getElementById('textInput');
+
+        // 停用词集合
+        let stopWords = new Set();
+
+        // 加载停用词文件
+        async function loadStopWords() {
+            const stopwordFiles = [
+                '/stopwords-master/baidu_stopwords.txt',
+                '/stopwords-master/cn_stopwords.txt',
+                '/stopwords-master/hit_stopwords.txt',
+                '/stopwords-master/scu_stopwords.txt'
+            ];
+
+            for (const file of stopwordFiles) {
+                try {
+                    const response = await fetch(file);
+                    const text = await response.text();
+                    const words = text.split('\n')
+                        .map(word => word.trim())
+                        .filter(word => word.length > 0);
+
+                    words.forEach(word => stopWords.add(word.toLowerCase()));
+                } catch (error) {
+                    console.warn(`无法加载停用词文件: ${file}`, error);
+                }
+            }
+
+            console.log(`已加载 ${stopWords.size} 个停用词`);
+        }
+
+        // 页面加载完成后初始化停用词
+        let enableStopwordFilter = true; // 默认启用停用词过滤
+
+        loadStopWords().then(() => {
+            updateStopwordStatus();
+        });
+
+        // 停用词开关控制
+        const stopwordToggle = document.getElementById('stopwordToggle');
+        stopwordToggle.addEventListener('click', () => {
+            enableStopwordFilter = !enableStopwordFilter;
+            stopwordToggle.classList.toggle('active', enableStopwordFilter);
+            analyzeText(); // 重新分析文本
+        });
+
+        // 更新停用词状态显示
+        function updateStopwordStatus() {
+            const statusElement = document.getElementById('stopwordCount');
+            if (stopWords.size > 0) {
+                statusElement.textContent = `已加载 ${stopWords.size} 个停用词`;
+            } else {
+                statusElement.textContent = '停用词加载失败';
+            }
+        }
+
+        textInput.addEventListener('input', analyzeText);
+
+        function analyzeText() {
+            const text = textInput.value;
+
+            if (!text.trim()) {
+                // Reset all values if text is empty
+                document.getElementById('totalCharsWithSpace').textContent = '0';
+                document.getElementById('totalCharsNoSpace').textContent = '0';
+                document.getElementById('chineseWords').textContent = '0';
+                document.getElementById('englishWords').textContent = '0';
+                document.getElementById('totalChars').textContent = '0';
+                document.getElementById('totalWords').textContent = '0';
+                document.getElementById('totalLines').textContent = '0';
+                document.getElementById('totalParagraphs').textContent = '0';
+                document.getElementById('uniqueWords').textContent = '0';
+                document.getElementById('avgWordLength').textContent = '0';
+                document.getElementById('wordFreq').innerHTML = '<div style="text-align:center;color:var(--text-dim);padding:2rem;">暂无数据</div>';
+                document.getElementById('readSlow').textContent = '0分钟';
+                document.getElementById('readMedium').textContent = '0分钟';
+                document.getElementById('readFast').textContent = '0分钟';
+                document.getElementById('speakTime').textContent = '0分钟';
+                document.getElementById('chineseCount').textContent = '0';
+                document.getElementById('chinesePercent').textContent = '0%';
+                document.getElementById('englishCount').textContent = '0';
+                document.getElementById('englishPercent').textContent = '0%';
+                document.getElementById('digitCount').textContent = '0';
+                document.getElementById('digitPercent').textContent = '0%';
+                document.getElementById('punctCount').textContent = '0';
+                document.getElementById('punctPercent').textContent = '0%';
+                return;
+            }
+
+            // Basic stats
+            const totalCharsWithSpace = text.length;
+            const totalCharsNoSpace = text.replace(/\s/g, '').length; // 移除所有空白字符（空格、制表符、换行等）
+
+            // Word count - count both Chinese characters and English words
+            // Chinese: each character counts as one word
+            // English: split by spaces
+            const chineseChars = (text.match(/[\u4e00-\u9fa5]/g) || []).length;
+            const englishWords = (text.match(/[a-zA-Z]+/g) || []).length;
+            const totalWords = chineseChars + englishWords;
+
+            const totalLines = text.split('\n').length;
+            const paragraphs = text.trim().split(/\n\n+/).filter(p => p.trim().length > 0);
+            const totalParagraphs = paragraphs.length;
+
+            document.getElementById('totalCharsWithSpace').textContent = totalCharsWithSpace;
+            document.getElementById('totalCharsNoSpace').textContent = totalCharsNoSpace;
+            document.getElementById('chineseWords').textContent = chineseChars;
+            document.getElementById('englishWords').textContent = englishWords;
+            document.getElementById('totalLines').textContent = totalLines;
+            document.getElementById('totalParagraphs').textContent = totalParagraphs;
+
+            // Word frequency - extract Chinese and English words
+            const wordMatches = text.toLowerCase().match(/[\u4e00-\u9fa5]+|[a-z]+/gi) || [];
+            const wordFreq = {};
+
+            wordMatches.forEach(word => {
+                // 根据停用词开关状态过滤停用词和单字符词
+                if (word.length > 1) {
+                    if (enableStopwordFilter) {
+                        // 启用停用词过滤
+                        if (!stopWords.has(word.toLowerCase())) {
+                            wordFreq[word] = (wordFreq[word] || 0) + 1;
+                        }
+                    } else {
+                        // 停用词过滤关闭，只过滤单字符
+                        wordFreq[word] = (wordFreq[word] || 0) + 1;
+                    }
+                }
+            });
+
+            const uniqueWords = Object.keys(wordFreq).length;
+            document.getElementById('uniqueWords').textContent = uniqueWords;
+
+            // Average word length
+            const allWords = wordMatches.filter(w => w.length > 0);
+            const avgWordLength = allWords.length > 0
+                ? (allWords.reduce((sum, word) => sum + word.length, 0) / allWords.length).toFixed(1)
+                : 0;
+            document.getElementById('avgWordLength').textContent = avgWordLength;
+
+            // Top 10 words
+            const sortedWords = Object.entries(wordFreq)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 10);
+
+            const wordFreqHtml = sortedWords.length > 0
+                ? sortedWords.map(([word, count]) => `
+                    <div class="word-item">
+                        <span class="word-name">${word}</span>
+                        <span class="word-count">${count}次</span>
+                    </div>
+                `).join('')
+                : '<div style="text-align:center;color:var(--text-dim);padding:2rem;">暂无数据</div>';
+
+            document.getElementById('wordFreq').innerHTML = wordFreqHtml;
+
+            // Reading time with precise seconds
+            // Slow: 150 words/min, Normal: 200 words/min, Fast: 300 words/min, Speak: 120 words/min
+            const speeds = {
+                slow: 150,
+                medium: 200,
+                fast: 300,
+                speak: 120
+            };
+
+            function formatTime(words, wordsPerMin) {
+                if (words === 0) return '0分0秒';
+                const totalSeconds = Math.ceil((words / wordsPerMin) * 60);
+                const minutes = Math.floor(totalSeconds / 60);
+                const seconds = totalSeconds % 60;
+                return `${minutes}分${seconds}秒`;
+            }
+
+            document.getElementById('readSlow').textContent = formatTime(totalWords, speeds.slow);
+            document.getElementById('readMedium').textContent = formatTime(totalWords, speeds.medium);
+            document.getElementById('readFast').textContent = formatTime(totalWords, speeds.fast);
+            document.getElementById('speakTime').textContent = formatTime(totalWords, speeds.speak);
+
+            // Character distribution
+            let chineseCount = 0;
+            let englishCount = 0;
+            let digitCount = 0;
+            let punctCount = 0;
+
+            for (let char of text) {
+                if (/[\u4e00-\u9fa5]/.test(char)) {
+                    chineseCount++;
+                } else if (/[a-zA-Z]/.test(char)) {
+                    englishCount++;
+                } else if (/[0-9]/.test(char)) {
+                    digitCount++;
+                } else if (/[^\s]/.test(char)) {
+                    punctCount++;
+                }
+            }
+
+            const total = chineseCount + englishCount + digitCount + punctCount || 1;
+
+            document.getElementById('chineseCount').textContent = chineseCount;
+            document.getElementById('chinesePercent').textContent =
+                `${((chineseCount / total) * 100).toFixed(1)}%`;
+
+            document.getElementById('englishCount').textContent = englishCount;
+            document.getElementById('englishPercent').textContent =
+                `${((englishCount / total) * 100).toFixed(1)}%`;
+
+            document.getElementById('digitCount').textContent = digitCount;
+            document.getElementById('digitPercent').textContent =
+                `${((digitCount / total) * 100).toFixed(1)}%`;
+
+            document.getElementById('punctCount').textContent = punctCount;
+            document.getElementById('punctPercent').textContent =
+                `${((punctCount / total) * 100).toFixed(1)}%`;
+
+            // Generate word cloud
+            generateWordCloud(wordFreq);
+        }
+
+        function generateWordCloud(wordFreq) {
+            const wordCloud = document.getElementById('wordCloud');
+
+            if (Object.keys(wordFreq).length === 0) {
+                wordCloud.innerHTML = '<div style="text-align:center;color:var(--text-dim);">暂无数据</div>';
+                return;
+            }
+
+            // Get top 15 words (already filtered from stop words) - 只显示前15个高频词
+            const topWords = Object.entries(wordFreq)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 15);
+
+            // Find max frequency for scaling
+            const maxFreq = topWords[0][1];
+            const minFreq = topWords[topWords.length - 1][1];
+
+            // Generate word cloud HTML
+            const colors = [
+                '#3b82f6', '#8b5cf6', '#ec4899', '#10b981',
+                '#f59e0b', '#ef4444', '#06b6d4', '#84cc16'
+            ];
+
+            wordCloud.innerHTML = topWords.map(([word, freq], index) => {
+                // Scale font size based on frequency (0.8rem to 3rem)
+                const scale = (freq - minFreq) / (maxFreq - minFreq);
+                const fontSize = 0.8 + scale * 2.2;
+                const color = colors[index % colors.length];
+
+                return `<span class="cloud-word" 
+                    style="font-size: ${fontSize}rem; color: ${color}; opacity: ${0.6 + scale * 0.4};"
+                    title="${word}: ${freq}次">
+                    ${word}
+                </span>`;
+            }).join('');
+        }
+
+        // Load sample text
+        textInput.value = `人工智能（Artificial Intelligence，简称AI）是计算机科学的一个分支，致力于创造能够模拟、延伸和扩展人类智能的系统。
+
+在过去的几十年里，人工智能技术取得了巨大的进展。从早期的规则基础系统到现代的深度学习模型，AI已经在图像识别、自然语言处理、语音识别等多个领域展现出惊人的能力。
+
+深度学习是当前AI研究的热点，它通过构建多层神经网络来学习数据的表示。2012年，AlexNet在ImageNet竞赛中的突破性表现标志着深度学习时代的到来。
+
+随着计算能力的提升和数据量的增长，AI正在改变我们的生活方式。从智能助手到自动驾驶，从医疗诊断到金融分析，人工智能的应用越来越广泛。
+
+然而，AI的发展也带来了一些挑战，包括伦理问题、隐私保护、算法偏见等。如何在推动技术进步的同时确保AI的安全和可控，是我们需要认真思考的问题。`;
+
+        analyzeText();
+    </script>
+</body>
+
+</html>

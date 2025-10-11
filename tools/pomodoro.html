@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>番茄时钟</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #000000;
+            --text: #ffffff;
+            --text-dim: #666666;
+            --accent: #ffffff;
+            --border: rgba(255, 255, 255, 0.08);
+            --work: #ff6b6b;
+            --break: #4ecdc4;
+        }
+
+        [data-theme="light"] {
+            --bg: #ffffff;
+            --text: #000000;
+            --text-dim: #999999;
+            --accent: #000000;
+            --border: rgba(0, 0, 0, 0.08);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            min-height: 100vh;
+            letter-spacing: -0.02em;
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1.5rem 4rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        [data-theme="light"] nav {
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        .logo {
+            font-size: 1rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            cursor: pointer;
+        }
+
+        .nav-right {
+            display: flex;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            letter-spacing: 0.02em;
+            transition: color 0.3s ease;
+            opacity: 0.6;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            opacity: 1;
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin: 2rem 0;
+            padding: 0.8rem 1.5rem;
+            border: 1px solid var(--border);
+            background: transparent;
+            color: var(--text);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            letter-spacing: 0.02em;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            border-color: var(--text);
+            color: var(--bg);
+            background: var(--text);
+        }
+
+        .theme-btn {
+            width: 36px;
+            height: 36px;
+            border: 1px solid var(--border);
+            background: transparent;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .theme-btn:hover {
+            border-color: var(--text);
+            transform: scale(1.1);
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 120px 4rem 4rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .mode-selector {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 3rem;
+        }
+
+        .mode-btn {
+            padding: 0.8rem 2rem;
+            border: 1px solid var(--border);
+            background: transparent;
+            color: var(--text-dim);
+            font-size: 0.9rem;
+            letter-spacing: 0.05em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+        }
+
+        .mode-btn:hover {
+            border-color: var(--text);
+            color: var(--text);
+        }
+
+        .mode-btn.active {
+            background: var(--text);
+            color: var(--bg);
+            border-color: var(--text);
+        }
+
+        .timer-display {
+            position: relative;
+            width: 400px;
+            height: 400px;
+            margin-bottom: 3rem;
+        }
+
+        .timer-circle {
+            width: 100%;
+            height: 100%;
+            transform: rotate(-90deg);
+        }
+
+        .timer-bg {
+            fill: none;
+            stroke: var(--border);
+            stroke-width: 8;
+        }
+
+        .timer-progress {
+            fill: none;
+            stroke: var(--text);
+            stroke-width: 8;
+            stroke-linecap: round;
+            transition: stroke-dashoffset 1s linear;
+        }
+
+        .timer-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+
+        .timer-time {
+            font-size: 5rem;
+            font-weight: 300;
+            letter-spacing: -0.02em;
+            margin-bottom: 0.5rem;
+        }
+
+        .timer-label {
+            font-size: 1.2rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .timer-controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 3rem;
+        }
+
+        .control-btn {
+            padding: 1.2rem 3rem;
+            background: var(--text);
+            color: var(--bg);
+            border: 1px solid var(--text);
+            font-size: 1rem;
+            font-weight: 500;
+            letter-spacing: 0.05em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+        }
+
+        .control-btn:hover {
+            background: transparent;
+            color: var(--text);
+        }
+
+        .control-btn.secondary {
+            background: transparent;
+            color: var(--text);
+        }
+
+        .control-btn.secondary:hover {
+            background: var(--text);
+            color: var(--bg);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            width: 100%;
+            margin-bottom: 3rem;
+        }
+
+        .stat-box {
+            border: 1px solid var(--border);
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .stat-box:hover {
+            border-color: var(--text);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 300;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .settings-panel {
+            width: 100%;
+            border: 1px solid var(--border);
+            padding: 2rem;
+        }
+
+        .settings-title {
+            font-size: 1.2rem;
+            font-weight: 500;
+            margin-bottom: 1.5rem;
+        }
+
+        .setting-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .setting-item:last-child {
+            border-bottom: none;
+        }
+
+        .setting-label {
+            font-size: 0.95rem;
+        }
+
+        .setting-control {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .setting-input {
+            width: 80px;
+            padding: 0.5rem;
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text);
+            text-align: center;
+        }
+
+        .setting-input:focus {
+            outline: none;
+            border-color: var(--text);
+        }
+
+        .setting-unit {
+            color: var(--text-dim);
+            font-size: 0.85rem;
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                padding: 1rem 2rem;
+            }
+
+            .container {
+                padding: 100px 2rem 2rem;
+            }
+
+            .timer-display {
+                width: 300px;
+                height: 300px;
+            }
+
+            .timer-time {
+                font-size: 3.5rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .mode-selector {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .mode-btn {
+                width: 100%;
+            }
+
+            .timer-controls {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .control-btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <div class="logo" onclick="location.href='../index.html'">图灵的猫</div>
+        <div class="nav-right">
+            <ul class="nav-links">
+                <li><a href="../index.html">首页</a></li>
+                <li><a href="../pages/about.html">关于我</a></li>
+                <li><a href="../pages/blog.html">博客</a></li>
+                <li><a href="../pages/projects.html">项目</a></li>
+                <li><a href="../pages/publications.html">学术成果</a></li>
+                <li><a href="../pages/tools.html" class="active">工具箱</a></li>
+                <li><a href="../pages/contact.html">联系我</a></li>
+            </ul>
+            <button class="theme-btn" id="themeBtn">
+                <span id="themeIcon">◐</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- <a href="../pages/tools.html" class="back-btn">← 返回工具箱</a> -->
+
+    <div class="container">
+        <div class="mode-selector">
+            <button class="mode-btn active" data-mode="work">工作</button>
+            <button class="mode-btn" data-mode="shortBreak">短休息</button>
+            <button class="mode-btn" data-mode="longBreak">长休息</button>
+        </div>
+
+        <div class="timer-display">
+            <svg class="timer-circle" viewBox="0 0 400 400">
+                <circle class="timer-bg" cx="200" cy="200" r="190"></circle>
+                <circle class="timer-progress" cx="200" cy="200" r="190" id="progressCircle" stroke-dasharray="1194"
+                    stroke-dashoffset="0"></circle>
+            </svg>
+            <div class="timer-content">
+                <div class="timer-time" id="timerDisplay">25:00</div>
+                <div class="timer-label" id="timerLabel">准备开始</div>
+            </div>
+        </div>
+
+        <div class="timer-controls">
+            <button class="control-btn" id="startBtn">开始</button>
+            <button class="control-btn secondary" id="resetBtn">重置</button>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-box">
+                <div class="stat-number" id="completedToday">0</div>
+                <div class="stat-label">今日完成</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number" id="totalCompleted">0</div>
+                <div class="stat-label">总完成数</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number" id="totalTime">0</div>
+                <div class="stat-label">总时长(分钟)</div>
+            </div>
+        </div>
+
+        <div class="settings-panel">
+            <h3 class="settings-title">设置</h3>
+            <div class="setting-item">
+                <div class="setting-label">工作时长</div>
+                <div class="setting-control">
+                    <input type="number" class="setting-input" id="workDuration" value="25" min="1" max="60">
+                    <span class="setting-unit">分钟</span>
+                </div>
+            </div>
+            <div class="setting-item">
+                <div class="setting-label">短休息时长</div>
+                <div class="setting-control">
+                    <input type="number" class="setting-input" id="shortBreakDuration" value="5" min="1" max="30">
+                    <span class="setting-unit">分钟</span>
+                </div>
+            </div>
+            <div class="setting-item">
+                <div class="setting-label">长休息时长</div>
+                <div class="setting-control">
+                    <input type="number" class="setting-input" id="longBreakDuration" value="15" min="1" max="60">
+                    <span class="setting-unit">分钟</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Theme toggle
+        const themeBtn = document.getElementById('themeBtn');
+        const themeIcon = document.getElementById('themeIcon');
+        const currentTheme = localStorage.getItem('theme') || 'dark';
+
+        document.documentElement.setAttribute('data-theme', currentTheme);
+        themeIcon.textContent = currentTheme === 'dark' ? '◐' : '◑';
+
+        // 添加图标颜色样式，确保在不同主题下都清晰可见
+        themeIcon.style.color = currentTheme === 'dark' ? '#ffffff' : '#000000';
+
+        themeBtn.addEventListener('click', () => {
+            const theme = document.documentElement.getAttribute('data-theme');
+            const newTheme = theme === 'dark' ? 'light' : 'dark';
+
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            themeIcon.textContent = newTheme === 'dark' ? '◐' : '◑';
+            themeIcon.style.color = newTheme === 'dark' ? '#ffffff' : '#000000';
+        });
+
+        // Pomodoro Timer
+        let currentMode = 'work';
+        let timeLeft = 25 * 60; // seconds
+        let totalTime = 25 * 60;
+        let isRunning = false;
+        let intervalId = null;
+
+        const durations = {
+            work: 25 * 60,
+            shortBreak: 5 * 60,
+            longBreak: 15 * 60
+        };
+
+        // Load stats
+        let stats = JSON.parse(localStorage.getItem('pomodoroStats') || '{"completedToday": 0, "totalCompleted": 0, "totalTime": 0, "lastDate": ""}');
+
+        // Reset daily stats if new day
+        const today = new Date().toDateString();
+        if (stats.lastDate !== today) {
+            stats.completedToday = 0;
+            stats.lastDate = today;
+        }
+
+        updateStatsDisplay();
+
+        // Mode selection
+        document.querySelectorAll('.mode-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                if (isRunning) return;
+
+                document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentMode = btn.dataset.mode;
+                resetTimer();
+            });
+        });
+
+        // Timer controls
+        document.getElementById('startBtn').addEventListener('click', toggleTimer);
+        document.getElementById('resetBtn').addEventListener('click', resetTimer);
+
+        function toggleTimer() {
+            isRunning = !isRunning;
+            const startBtn = document.getElementById('startBtn');
+
+            if (isRunning) {
+                startBtn.textContent = '暂停';
+                document.getElementById('timerLabel').textContent = getModeLabel(currentMode);
+                startInterval();
+            } else {
+                startBtn.textContent = '继续';
+                document.getElementById('timerLabel').textContent = '已暂停';
+                clearInterval(intervalId);
+            }
+        }
+
+        function startInterval() {
+            intervalId = setInterval(() => {
+                timeLeft--;
+                updateDisplay();
+
+                if (timeLeft <= 0) {
+                    clearInterval(intervalId);
+                    isRunning = false;
+                    completeSession();
+                }
+            }, 1000);
+        }
+
+        function resetTimer() {
+            clearInterval(intervalId);
+            isRunning = false;
+
+            const workInput = parseInt(document.getElementById('workDuration').value);
+            const shortInput = parseInt(document.getElementById('shortBreakDuration').value);
+            const longInput = parseInt(document.getElementById('longBreakDuration').value);
+
+            durations.work = workInput * 60;
+            durations.shortBreak = shortInput * 60;
+            durations.longBreak = longInput * 60;
+
+            timeLeft = durations[currentMode];
+            totalTime = durations[currentMode];
+
+            document.getElementById('startBtn').textContent = '开始';
+            document.getElementById('timerLabel').textContent = '准备开始';
+            updateDisplay();
+        }
+
+        function completeSession() {
+            if (currentMode === 'work') {
+                stats.completedToday++;
+                stats.totalCompleted++;
+                stats.totalTime += Math.floor(durations.work / 60);
+                stats.lastDate = today;
+                localStorage.setItem('pomodoroStats', JSON.stringify(stats));
+                updateStatsDisplay();
+            }
+
+            document.getElementById('startBtn').textContent = '开始';
+            document.getElementById('timerLabel').textContent = '完成！';
+
+            // Play notification sound (browser notification)
+            if ('Notification' in window && Notification.permission === 'granted') {
+                new Notification('番茄钟', {
+                    body: `${getModeLabel(currentMode)}完成！`,
+                    icon: '🍅'
+                });
+            }
+        }
+
+        function updateDisplay() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            document.getElementById('timerDisplay').textContent =
+                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
+            // Update progress circle
+            const progress = (totalTime - timeLeft) / totalTime;
+            const circumference = 2 * Math.PI * 190;
+            const offset = circumference * (1 - progress);
+            document.getElementById('progressCircle').style.strokeDashoffset = offset;
+        }
+
+        function getModeLabel(mode) {
+            const labels = {
+                work: '专注工作中',
+                shortBreak: '短暂休息中',
+                longBreak: '长时间休息中'
+            };
+            return labels[mode];
+        }
+
+        function updateStatsDisplay() {
+            document.getElementById('completedToday').textContent = stats.completedToday;
+            document.getElementById('totalCompleted').textContent = stats.totalCompleted;
+            document.getElementById('totalTime').textContent = stats.totalTime;
+        }
+
+        // Request notification permission
+        if ('Notification' in window && Notification.permission === 'default') {
+            Notification.requestPermission();
+        }
+
+        // Settings change
+        ['workDuration', 'shortBreakDuration', 'longBreakDuration'].forEach(id => {
+            document.getElementById(id).addEventListener('change', () => {
+                if (!isRunning) {
+                    resetTimer();
+                }
+            });
+        });
+
+        // Initial display
+        updateDisplay();
+    </script>
+</body>
+
+</html>

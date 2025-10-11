@@ -1,0 +1,1459 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>关于我 - About</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #000000;
+            --text: #ffffff;
+            --text-dim: #666666;
+            --accent: #ffffff;
+            --border: rgba(255, 255, 255, 0.08);
+        }
+
+        [data-theme="light"] {
+            --bg: #ffffff;
+            --text: #000000;
+            --text-dim: #999999;
+            --accent: #000000;
+            --border: rgba(0, 0, 0, 0.08);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.8;
+            overflow-x: hidden;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            letter-spacing: -0.02em;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1.5rem 4rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        [data-theme="light"] nav {
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        .logo {
+            font-size: 1rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            cursor: pointer;
+        }
+
+        .nav-right {
+            display: flex;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-dim);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            letter-spacing: 0.02em;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--text);
+        }
+
+        .theme-btn {
+            width: 36px;
+            height: 36px;
+            border: 1px solid var(--border);
+            background: transparent;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .theme-btn:hover {
+            border-color: var(--text);
+            transform: scale(1.1);
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 120px 4rem 4rem;
+            display: grid;
+            grid-template-columns: 320px 1fr;
+            gap: 6rem;
+            align-items: start;
+            /* 确保网格项顶部对齐 */
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: sticky;
+            top: 120px;
+            height: fit-content;
+            max-height: calc(100vh - 140px);
+            display: flex;
+            flex-direction: column;
+            align-self: flex-start;
+            /* 确保侧边栏不会拉伸 */
+            flex-shrink: 0;
+            /* 防止侧边栏被压缩 */
+        }
+
+        .profile {
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--text), var(--text-dim));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .profile h1 {
+            font-size: 1.8rem;
+            font-weight: 400;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        .profile .title {
+            font-size: 0.9rem;
+            color: var(--text-dim);
+            margin-bottom: 0.8rem;
+            line-height: 1.6;
+        }
+
+        .profile .info {
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            margin: 0.5rem 0 0 0;
+        }
+
+        .profile-footer {
+            margin-top: 1.2rem;
+            padding-top: 1.2rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .download-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0;
+            border: none;
+            color: var(--text-dim);
+            text-decoration: none;
+            font-size: 0.8rem;
+            letter-spacing: 0.02em;
+            transition: all 0.3s ease;
+            margin-top: 0.8rem;
+            opacity: 0.7;
+        }
+
+        .download-btn:hover {
+            color: var(--text);
+            opacity: 1;
+            transform: translateX(2px);
+        }
+
+        .download-btn::before {
+            content: '↓';
+            font-size: 0.75rem;
+        }
+
+        .sidebar-nav-container {
+            margin-top: 2rem;
+            width: 100%;
+        }
+
+        .sidebar-nav {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar-nav li {
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .sidebar-nav a {
+            color: var(--text-dim);
+            text-decoration: none;
+            font-size: 0.9rem;
+            letter-spacing: 0.02em;
+            transition: color 0.3s ease;
+            display: block;
+            padding: 0.5rem 0;
+        }
+
+        .sidebar-nav a:hover,
+        .sidebar-nav a.active {
+            color: var(--text);
+        }
+
+        /* Main Content */
+        .content {
+            padding-bottom: 1rem;
+        }
+
+        section {
+            margin-bottom: 6rem;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease forwards;
+        }
+
+        section:last-child {
+            margin-bottom: 1rem;
+        }
+
+        section:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        section:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        section:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+
+        section:nth-child(4) {
+            animation-delay: 0.4s;
+        }
+
+        section:nth-child(5) {
+            animation-delay: 0.5s;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: 300;
+            margin-bottom: 3rem;
+            letter-spacing: -0.02em;
+        }
+
+        .section-number {
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            letter-spacing: 0.1em;
+            margin-bottom: 0.5rem;
+        }
+
+        /* About */
+        .about-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--text-dim);
+            max-width: 700px;
+        }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            padding-left: 3rem;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 1px;
+            background: var(--border);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 3rem;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -3rem;
+            top: 0.5rem;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--text);
+            border: 2px solid var(--bg);
+            box-shadow: 0 0 0 1px var(--border);
+        }
+
+        .timeline-date {
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-title {
+            font-size: 1.2rem;
+            font-weight: 500;
+            margin-bottom: 0.3rem;
+        }
+
+        .timeline-subtitle {
+            font-size: 0.95rem;
+            color: var(--text-dim);
+            margin-bottom: 0.8rem;
+        }
+
+        .timeline-desc {
+            font-size: 0.95rem;
+            color: var(--text-dim);
+            line-height: 1.6;
+        }
+
+        /* Skills */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .skill-category {
+            border: 1px solid var(--border);
+            padding: 2rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .skill-category:hover {
+            border-color: var(--text);
+        }
+
+        .skill-category h3 {
+            font-size: 1.1rem;
+            font-weight: 500;
+            margin-bottom: 1.5rem;
+        }
+
+        .skill-item {
+            margin-bottom: 1.5rem;
+        }
+
+        .skill-name {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .skill-level {
+            color: var(--text-dim);
+            font-size: 0.85rem;
+        }
+
+        .skill-bar {
+            height: 2px;
+            background: var(--border);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .skill-progress {
+            height: 100%;
+            background: var(--text);
+            position: absolute;
+            left: 0;
+            top: 0;
+            transition: width 1s ease;
+        }
+
+        /* Interests */
+        .interests-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .interest-item {
+            border: 1px solid var(--border);
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .interest-item:hover {
+            border-color: var(--text);
+            transform: translateY(-5px);
+        }
+
+        .interest-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .interest-name {
+            font-size: 0.9rem;
+            letter-spacing: 0.02em;
+        }
+
+        /* Media Coverage Section - 优化版 */
+        .media-coverage {
+            margin-top: 2rem;
+        }
+
+        .media-coverage h3 {
+            font-size: 1.1rem;
+            font-weight: 500;
+            margin-bottom: 1.5rem;
+            letter-spacing: 0.02em;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .media-coverage h3::after {
+            content: '↓';
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            opacity: 0.5;
+        }
+
+        .media-list {
+            max-height: calc(100vh - 680px);
+            min-height: 240px;
+            overflow-y: auto;
+            padding-right: 0.5rem;
+            position: relative;
+        }
+
+        .media-list::after {
+            content: '';
+            position: sticky;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 40px;
+            background: linear-gradient(to top, var(--bg), transparent);
+            pointer-events: none;
+            display: block;
+        }
+
+        /* 媒体列表滚动条样式 */
+        .media-list::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .media-list::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 3px;
+        }
+
+        [data-theme="light"] .media-list::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.03);
+        }
+
+        .media-list::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 3px;
+            transition: background 0.3s ease;
+        }
+
+        .media-list::-webkit-scrollbar-thumb:hover {
+            background: var(--text-dim);
+        }
+
+        .media-item {
+            border: 1px solid var(--border);
+            margin-bottom: 0.8rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            display: block;
+            background: transparent;
+            overflow: hidden;
+        }
+
+        .media-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .media-item:hover {
+            border-color: var(--text);
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        [data-theme="light"] .media-item:hover {
+            background: rgba(0, 0, 0, 0.02);
+        }
+
+        .media-image {
+            width: 100%;
+            height: 120px;
+            background: linear-gradient(135deg, var(--border), rgba(255, 255, 255, 0.03));
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        [data-theme="light"] .media-image {
+            background: linear-gradient(135deg, var(--border), rgba(0, 0, 0, 0.03));
+        }
+
+        /* 默认显示装饰性圆圈 */
+        .media-image::before {
+            content: '';
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            border: 2px solid var(--border);
+            border-radius: 50%;
+        }
+
+        .media-image::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: var(--border);
+            border-radius: 50%;
+        }
+
+        /* 有图片时隐藏装饰性圆圈 */
+        .media-image.has-image::before,
+        .media-image.has-image::after {
+            display: none;
+        }
+
+        .media-item:hover .media-image {
+            transform: scale(1.02);
+        }
+
+        .media-content {
+            padding: 1rem;
+        }
+
+        .media-title {
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-bottom: 0.6rem;
+            color: var(--text);
+            line-height: 1.5;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .media-item:hover .media-title {
+            color: var(--accent);
+        }
+
+        .media-meta {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            margin-bottom: 0.6rem;
+            flex-wrap: wrap;
+        }
+
+        .media-source {
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            letter-spacing: 0.02em;
+        }
+
+        .media-date {
+            font-size: 0.7rem;
+            color: var(--text-dim);
+            opacity: 0.8;
+        }
+
+        .meta-separator {
+            font-size: 0.6rem;
+            color: var(--text-dim);
+            opacity: 0.6;
+            line-height: 1;
+        }
+
+
+
+        /* Social Links */
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin: 0;
+        }
+
+        .social-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
+            color: var(--text);
+            text-decoration: none;
+        }
+
+        .social-link:hover {
+            border-color: var(--text);
+            transform: translateY(-3px);
+        }
+
+        .social-link svg {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+        }
+
+        .social-tooltip {
+            position: relative;
+        }
+
+        .social-tooltip::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 0.3rem 0.6rem;
+            background: var(--text);
+            color: var(--bg);
+            font-size: 0.7rem;
+            border-radius: 4px;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        .social-tooltip:hover::after {
+            opacity: 1;
+            visibility: visible;
+            bottom: calc(100% + 8px);
+        }
+
+        .social-tooltip::before {
+            content: '';
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 4px;
+            border-style: solid;
+            border-color: var(--text) transparent transparent transparent;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .social-tooltip:hover::before {
+            opacity: 1;
+            visibility: visible;
+            bottom: calc(100% + 0px);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .container {
+                grid-template-columns: 1fr;
+                gap: 4rem;
+                padding: 100px 2rem 2rem;
+            }
+
+            .sidebar {
+                position: relative;
+                top: 0;
+                max-height: none;
+                display: grid;
+                grid-template-columns: 380px 1fr;
+                gap: 3rem;
+                align-items: start;
+            }
+
+            .profile {
+                border-bottom: none;
+                border-right: 1px solid var(--border);
+                padding-right: 3rem;
+                margin-bottom: 0;
+                padding-bottom: 0;
+            }
+
+            .media-coverage {
+                margin-top: 0;
+            }
+
+            .media-list {
+                max-height: 400px;
+                min-height: 220px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                padding: 1rem 2rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .container {
+                padding: 100px 2rem 1rem;
+            }
+
+            .sidebar {
+                grid-template-columns: 1fr;
+                gap: 2.5rem;
+            }
+
+            .profile {
+                border-right: none;
+                border-bottom: 1px solid var(--border);
+                padding-right: 0;
+                padding-bottom: 2rem;
+                margin-bottom: 0;
+            }
+
+            .media-coverage {
+                margin-top: 2rem;
+            }
+
+            .media-list {
+                max-height: 350px;
+                min-height: 180px;
+            }
+
+            .skills-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .interests-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="logo" onclick="location.href='../index.html'">图灵的猫</div>
+        <div class="nav-right">
+            <ul class="nav-links">
+                <li><a href="../index.html">首页</a></li>
+                <li><a href="about.html" class="active">关于我</a></li>
+                <li><a href="blog.html">博客</a></li>
+                <li><a href="projects.html">项目</a></li>
+                <li><a href="publications.html">学术成果</a></li>
+                <li><a href="tools.html">工具箱</a></li>
+                <li><a href="contact.html">联系我</a></li>
+            </ul>
+            <button class="theme-btn" id="themeBtn">
+                <span id="themeIcon">◐</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="profile">
+                <div class="avatar"><img src="../assets/images/avatar.jpg" alt="头像"
+                        style="width: 120px; height: 120px; border-radius: 50%; object-fit: cover;"></div>
+                <h1>刘洋<a href="https://orcid.org/0000-0001-7668-3467" target="_blank" data-tooltip="ORCID"
+                        style="margin-left: 6px; display: inline-block; text-decoration: none;"><img
+                            src="../assets/icons/ORCID-iD_icon_vector.svg" alt="ORCID"
+                            style="width: 20px; height: 20px; vertical-align: middle;"></a></h1>
+                <p class="title">核领域的智能科学计算 / 博士在读</p>
+                <p class="info">中共党员 | 1997.12.18 | <a href="../assets/documents/resume.pdf" class="download-btn">
+                        简历PDF</a></p>
+
+                <div class="profile-footer">
+                    <!-- 个人账号链接 -->
+                    <div class="social-links">
+                        <!-- CSDN -->
+                        <a href="https://turingscat.blog.csdn.net/" class="social-link social-tooltip" target="_blank"
+                            data-tooltip="CSDN博客">
+                            <img src="../assets/icons/csdn.svg" alt="CSDN" style="width: 20px; height: 20px;">
+                        </a>
+                        <!-- GitHub -->
+                        <a href="https://github.com/mathliuyang/" class="social-link social-tooltip" target="_blank"
+                            data-tooltip="GitHub">
+                            <img src="../assets/icons/github _github.svg" alt="GitHub"
+                                style="width: 20px; height: 20px;">
+                        </a>
+                        <!-- 微博 -->
+                        <a href="https://weibo.com/u/5994679637" class="social-link social-tooltip" target="_blank"
+                            data-tooltip="微博">
+                            <img src="../assets/icons/微博_weibo.svg" alt="微博" style="width: 20px; height: 20px;">
+                        </a>
+                        <!-- 抖音 -->
+                        <a href="https://v.douyin.com/kwMjD04bxWs/ 8@5.com :7pm" class="social-link social-tooltip"
+                            target="_blank" data-tooltip="抖音">
+                            <img src="../assets/icons/抖音_tiktok.svg" alt="抖音" style="width: 20px; height: 20px;">
+                        </a>
+                        <!-- 哔哩哔哩 -->
+                        <a href=" https://b23.tv/Eg8KhtV" class="social-link social-tooltip" target="_blank"
+                            data-tooltip="哔哩哔哩">
+                            <img src="../assets/icons/哔哩哔哩2.png" alt="哔哩哔哩" style="width: 20px; height: 20px;">
+                        </a>
+                        <!-- 小红书 -->
+                        <a href="https://www.xiaohongshu.com/user/profile/6118bf8b00000000010074b6"
+                            class="social-link social-tooltip" target="_blank" data-tooltip="小红书">
+                            <img src="../assets/icons/小红书1.png" alt="小红书" style="width: 20px; height: 20px;">
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="media-coverage">
+                <h3>官媒报道</h3>
+                <div class="media-list">
+                    <a href="https://mp.weixin.qq.com/s/c7ySxLEgMUh6L6eJNh35Gg" class="media-item" target="_blank">
+                        <div class="media-image">
+                            <img src="/assets/images/SCPMA.png" alt="SCPMA"
+                                style="width: 100%; height: 100%; object-fit: cover;">
+                        </div>
+                        <div class="media-content">
+                            <div class="media-title">顶刊发表 | 中科院一区 Top</div>
+                            <div class="media-meta">
+                                <div class="media-source">SCPMA</div>
+                                <span class="meta-separator">•</span>
+                                <div class="media-date">2025年第8期</div>
+                            </div>
+
+                        </div>
+                    </a>
+
+                    <a href="https://mp.weixin.qq.com/s/CuctD_jg5x-k6HFz3gMyrQ" class="media-item" target="_blank">
+                        <div class="media-image">
+                            <img src="/assets/images/EDNT.png" alt="AI4S创新"
+                                style="width: 100%; height: 100%; object-fit: cover;">
+                        </div>
+                        <div class="media-content">
+                            <div class="media-title">AI4S创新 | 中子输运新突破</div>
+                            <div class="media-meta">
+                                <div class="media-source">中国核动力研究设计院</div>
+                                <span class="meta-separator">•</span>
+                                <div class="media-date">2024年</div>
+                            </div>
+
+                        </div>
+                    </a>
+
+                    <a href="https://mp.weixin.qq.com/s/6mkQMdNkbGVtpNHMkCnOGQ" class="media-item" target="_blank">
+                        <div class="media-image">
+                            <img src="/assets/images/sicnu.gif" alt="国奖荣耀"
+                                style="width: 100%; height: 100%; object-fit: cover;">
+                        </div>
+                        <div class="media-content">
+                            <div class="media-title">国奖获得者 | 榜样风采</div>
+                            <div class="media-meta">
+                                <div class="media-source">四川师范大学</div>
+                                <span class="meta-separator">•</span>
+                                <div class="media-date">2024年</div>
+                            </div>
+
+                        </div>
+                    </a>
+
+                    <a href="https://mp.weixin.qq.com/s/4cEY8CO_koHunNh_OUlU5g" class="media-item" target="_blank">
+                        <div class="media-image">
+                            <img src="/assets/images/sicnu.gif" alt="十佳之星"
+                                style="width: 100%; height: 100%; object-fit: cover;">
+                        </div>
+                        <div class="media-content">
+                            <div class="media-title">十佳之星 | 榜样风采展现</div>
+                            <div class="media-meta">
+                                <div class="media-source">四川师范大学</div>
+                                <span class="meta-separator">•</span>
+                                <div class="media-date">2024年</div>
+                            </div>
+
+                        </div>
+                    </a>
+
+                    <a href="https://yjsc.sicnu.edu.cn/_wx/_wx_home_news_i.aspx?iid=638374504626656118&ret=news&said=yjs"
+                        class="media-item" target="_blank">
+                        <div class="media-image">
+                            <img src="/assets/images/sicnu.gif" alt="学术年会"
+                                style="width: 100%; height: 100%; object-fit: cover;">
+                        </div>
+                        <div class="media-content">
+                            <div class="media-title">学术年会 | 研究成果获奖</div>
+                            <div class="media-meta">
+                                <div class="media-source">四川师范大学研究生院</div>
+                                <span class="meta-separator">•</span>
+                                <div class="media-date">2023年12月</div>
+                            </div>
+
+                        </div>
+                    </a>
+
+                    <a href="https://yjsc.sicnu.edu.cn/_wx/_wx_home_news_i.aspx?iid=638351401577655201&ret=news&said=yjs"
+                        class="media-item" target="_blank">
+                        <div class="media-image">
+                            <img src="/assets/images/sicnu.gif" alt="三好学生"
+                                style="width: 100%; height: 100%; object-fit: cover;">
+                        </div>
+                        <div class="media-content">
+                            <div class="media-title">三好学生 | 优秀干部表彰</div>
+                            <div class="media-meta">
+                                <div class="media-source">四川师范大学研究生院</div>
+                                <span class="meta-separator">•</span>
+                                <div class="media-date">2023年11月</div>
+                            </div>
+
+                        </div>
+                    </a>
+
+                    <a href="https://mp.weixin.qq.com/s/uIwylbdpMkn5VnaRWNInng" class="media-item" target="_blank">
+                        <div class="media-image">
+                            <img src="/assets/images/CPIPC.png" alt="CPIPC"
+                                style="width: 100%; height: 100%; object-fit: cover;">
+                        </div>
+                        <div class="media-content">
+                            <div class="media-title">CPIPC获奖 | 国家级荣誉</div>
+                            <div class="media-meta">
+                                <div class="media-source">四川师范大学</div>
+                                <span class="meta-separator">•</span>
+                                <div class="media-date">2023年</div>
+                            </div>
+
+                        </div>
+                    </a>
+
+                    <a href="https://www.cdqsng.com/detail.html?cId=2212051743e63d1327b535&id=230924bed46cfbdb11c206&sessionid="
+                        class="media-item" target="_blank">
+                        <div class="media-image">
+                            <img src="/assets/images/cdqsng.png" alt="指导教师"
+                                style="width: 100%; height: 100%; object-fit: cover;">
+                        </div>
+                        <div class="media-content">
+                            <div class="media-title">指导教师 | 第一名佳绩</div>
+                            <div class="media-meta">
+                                <div class="media-source">成都市青少年宫</div>
+                                <span class="meta-separator">•</span>
+                                <div class="media-date">2023年</div>
+                            </div>
+
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="content">
+            <!-- About -->
+            <section id="about">
+                <div class="section-number">01 / ABOUT</div>
+                <h2 class="section-title">关于我</h2>
+                <div class="about-text">
+                    <p style="margin-bottom: 1.5rem;">
+                        我是图灵的猫,专注于核领域的智能科学计算研究。目前就读于四川大学计算机学院人工智能专业博士项目，致力于将深度学习与科学计算相结合，解决核工程中的复杂问题。
+                    </p>
+                    <p style="margin-bottom: 1.5rem;">
+                        我的研究兴趣包括：非线性分数阶薛定谔波动方程的数值方法、保结构算法、深度学习在核科学中的应用等。已在多个国际知名期刊发表学术论文9篇，其中中科院一区1篇、二区4篇。
+                    </p>
+                    <p>
+                        除了学术研究，我还积极参与数学建模竞赛，多次获得国家级奖项。我相信跨学科合作的力量，致力于将数学理论与工程实践相结合，为核科学技术的发展贡献自己的力量。
+                    </p>
+                </div>
+            </section>
+
+            <!-- Education -->
+            <section id="education">
+                <div class="section-number">02 / EDUCATION</div>
+                <h2 class="section-title">教育背景</h2>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-date">至今</div>
+                        <div class="timeline-title">四川大学 | 计算机学院</div>
+                        <div class="timeline-subtitle">人工智能 · 博士在读</div>
+                        <div class="timeline-desc">
+                            研究方向：核领域的智能科学计算<br>
+                            导师：刘东<br>
+                            在读博士
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-date">2021.09 - 2024.06</div>
+                        <div class="timeline-title">四川师范大学 | 数学科学学院</div>
+                        <div class="timeline-subtitle">计算数学 · 硕士<br>导师:冉茂华<br></div>
+                        <div class="timeline-desc">
+                            平均成绩：89.8，GPA：3.8/4.0，综合排名：1/153（年级第一）<br>
+                            国家奖学金、研究生学业一等奖学金、校长奖学金<br>
+                            四川省优秀大学毕业生、四川师范大学优秀毕业研究生、十佳毕业生、十佳学术之星、三好学生
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-date">2017.09 - 2021.06</div>
+                        <div class="timeline-title">四川师范大学 | 数学科学学院</div>
+                        <div class="timeline-subtitle">数学与应用数学 · 学士</div>
+                        <div class="timeline-desc">
+                            平均成绩：85.1，GPA：3.5/4.0，综合排名前10%<br>
+                            社会工作奖学金、学业三等奖学金<br>
+                            优秀学生干部、三好学生
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Publications -->
+            <section id="publications">
+                <div class="section-number">03 / PUBLICATIONS</div>
+                <h2 class="section-title">科研成果</h2>
+                <div class="timeline">
+                    <!-- 2025年科研成果 -->
+                    <div class="timeline-item">
+                        <div class="timeline-date">2025</div>
+                        <div class="timeline-title">The neutron transport equation in exact differential form</div>
+                        <div class="timeline-subtitle">Sci. China Phys., Mech. Astron. 135: 124–133 | 中科院1区</div>
+                        <div class="timeline-desc">
+                            D. Liu, <strong>Y. Liu</strong>, H. Dang, et al. 共同作者
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-date">2025</div>
+                        <div class="timeline-title">基于ResNet-PINN求解中子方程算法研究</div>
+                        <div class="timeline-subtitle">核动力工程, 2025: 1-6 | T1期刊</div>
+                        <div class="timeline-desc">
+                            牛艺晓, 李佳芳, 杨春, <strong>刘洋</strong>, 等. 共同作者
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-date">2025</div>
+                        <div class="timeline-title">面向深度学习方法的间断系数微分方程变域积分弱解理论</div>
+                        <div class="timeline-subtitle">计算物理, 2025 | CSCD</div>
+                        <div class="timeline-desc">
+                            刘东, 廖真, <strong>刘洋</strong>. 共同作者
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-date">2025</div>
+                        <div class="timeline-title">二维分数阶强耦合薛定谔方程的保结构方法</div>
+                        <div class="timeline-subtitle">四川师范大学学报（自然科学版）, 2025, 48(5): 693-703 | 北核</div>
+                        <div class="timeline-desc">
+                            谭凤, 冉茂华, <strong>刘洋</strong>. 共同作者
+                        </div>
+                    </div>
+                    <!-- 2023年科研成果 -->
+                    <div class="timeline-item">
+                        <div class="timeline-date">2023</div>
+                        <div class="timeline-title">Hamiltonian-preserving schemes for the two-dimensional fractional
+                            nonlinear Schrödinger wave equations</div>
+                        <div class="timeline-subtitle">Comput. Math. Appl. 150: 54–69 | 中科院2区</div>
+                        <div class="timeline-desc">
+                            <strong>Y. Liu</strong>, M. Ran, L. Zhang. 第一作者
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-date">2023</div>
+                        <div class="timeline-title">Arbitrarily high-order explicit energy-conserving methods for the
+                            generalized nonlinear fractional Schrödinger wave equations</div>
+                        <div class="timeline-subtitle">Math. Comput. Simulation. 216: 126-144 | T1期刊</div>
+                        <div class="timeline-desc">
+                            <strong>Y. Liu</strong>, M. Ran. 第一作者
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-date">2023</div>
+                        <div class="timeline-title">Higher-order energy-preserving difference scheme for the
+                            fourth-order nonlinear strain wave equation</div>
+                        <div class="timeline-subtitle">Comput. Math. Appl. 135: 124–133 | 中科院2区</div>
+                        <div class="timeline-desc">
+                            Z. Tian, M. Ran, <strong>Y. Liu</strong>. 共同作者
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-date">2023</div>
+                        <div class="timeline-title">A high-order structure-preserving difference scheme for generalized
+                            fractional Schrödinger equation with wave operator</div>
+                        <div class="timeline-subtitle">Math. Comput. Simulation. 210: 532–546 | T1期刊</div>
+                        <div class="timeline-desc">
+                            X. Zhang, M. Ran, <strong>Y. Liu</strong>, L. Zhang. 共同作者
+                        </div>
+                    </div>
+                    <!-- 2021年科研成果 -->
+                    <div class="timeline-item">
+                        <div class="timeline-date">2021</div>
+                        <div class="timeline-title">An efficient difference scheme for the non-Fickian time-fractional
+                            diffusion equations with variable coefficient</div>
+                        <div class="timeline-subtitle">Appl. Math. Lett. 121: 107489 | 中科院2区</div>
+                        <div class="timeline-desc">
+                            Z. Feng, M. Ran, <strong>Y. Liu</strong>. 共同作者
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 学位论文 -->
+                <div class="timeline" style="margin-top: 3rem;">
+                    <div class="section-number" style="font-size: 1rem; margin-bottom: 1rem;">学位论文</div>
+                    <div class="timeline-item">
+                        <div class="timeline-date">2024</div>
+                        <div class="timeline-title">非线性分数阶薛定谔波动方程的两类保结构数值方法</div>
+                        <div class="timeline-subtitle">硕士学位论文, 四川师范大学, 成都 | 优秀毕业论文</div>
+                        <div class="timeline-desc">
+                            <strong>刘洋</strong>. 独立完成
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Awards -->
+            <section id="awards">
+                <div class="section-number">04 / AWARDS</div>
+                <h2 class="section-title">竞赛获奖</h2>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-date">2023.12</div>
+                        <div class="timeline-title">"华为杯"第二十届中国研究生数学建模竞赛</div>
+                        <div class="timeline-subtitle">国家二等奖 | 队长</div>
+                        <div class="timeline-desc">
+                            全国研究生数学建模竞赛最高奖项之一
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-date">2023.01</div>
+                        <div class="timeline-title">中国光谷·"华为杯"第十九届中国研究生数学建模竞赛</div>
+                        <div class="timeline-subtitle">国家二等奖 | 队长</div>
+                        <div class="timeline-desc">
+                            连续获得研究生数学建模竞赛国家级奖项
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-date">2021.12</div>
+                        <div class="timeline-title">"华为杯"第十八届中国研究生数学建模竞赛</div>
+                        <div class="timeline-subtitle">国家二等奖</div>
+                        <div class="timeline-desc">
+                            研究生阶段首次获得国家级奖项
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-date">2020.12</div>
+                        <div class="timeline-title">第十二届全国大学生数学竞赛</div>
+                        <div class="timeline-subtitle">二等奖</div>
+                        <div class="timeline-desc">
+                            本科阶段数学竞赛重要奖项
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Other Experience -->
+            <section id="other-experience">
+                <div class="section-number">05 / OTHER EXPERIENCE</div>
+                <h2 class="section-title">其他经历</h2>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-date">2023.11</div>
+                        <div class="timeline-title">四川师范大学第十六届研究生学术年会</div>
+                        <div class="timeline-subtitle">优秀论文</div>
+                        <div class="timeline-desc">
+                            研究生学术年会优秀论文评选
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-date">2023.09</div>
+                        <div class="timeline-title">成渝青少年数学建模活动</div>
+                        <div class="timeline-subtitle">优秀指导老师（排名第一）</div>
+                        <div class="timeline-desc">
+                            成渝地区青少年数学建模竞赛指导教师
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-date">2021.12</div>
+                        <div class="timeline-title">深度学习与科学计算的结合：基础与提高</div>
+                        <div class="timeline-subtitle">学员</div>
+                        <div class="timeline-desc">
+                            深度学习与科学计算专题培训
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-date">2021.07</div>
+                        <div class="timeline-title">"有限元方法"湖南省研究生暑期学校</div>
+                        <div class="timeline-subtitle">学员</div>
+                        <div class="timeline-desc">
+                            有限元方法理论与应用暑期培训
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-date">2018.04</div>
+                        <div class="timeline-title">四川师范大学第61期党校入党积极分子培训班</div>
+                        <div class="timeline-subtitle">班长</div>
+                        <div class="timeline-desc">
+                            入党积极分子培训班班长职务
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-date">2017.09</div>
+                        <div class="timeline-title">数学科学学院陶行知实验班</div>
+                        <div class="timeline-subtitle">班长</div>
+                        <div class="timeline-desc">
+                            陶行知实验班班长职务
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Skills -->
+            <section id="skills">
+                <div class="section-number">06 / SKILLS</div>
+                <h2 class="section-title">技能与证书</h2>
+                <div class="skills-grid">
+                    <div class="skill-category">
+                        <h3>专业认证</h3>
+                        <div class="skill-item">
+                            <div class="skill-name">
+                                <span>腾讯云人工智能从业者认证证书</span>
+                                <span class="skill-level">Expert</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: 100%"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-name">
+                                <span>CSDN博客专家</span>
+                                <span class="skill-level">Expert</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: 100%"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-name">
+                                <span>高级中学数学教师资格证</span>
+                                <span class="skill-level">Expert</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: 100%"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="skill-category">
+                        <h3>计算机技能</h3>
+                        <div class="skill-item">
+                            <div class="skill-name">
+                                <span>全国计算机等级考试二级合格证书</span>
+                                <span class="skill-level">Expert</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: 100%"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-name">
+                                <span>Python科学计算</span>
+                                <span class="skill-level">Expert</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: 95%"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-name">
+                                <span>MATLAB数值计算</span>
+                                <span class="skill-level">Advanced</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: 90%"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="skill-category">
+                        <h3>语言能力</h3>
+                        <div class="skill-item">
+                            <div class="skill-name">
+                                <span>CET-4 合格证书</span>
+                                <span class="skill-level">Expert</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: 100%"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-name">
+                                <span>普通话二级乙等证书</span>
+                                <span class="skill-level">Expert</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: 100%"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-name">
+                                <span>科技英语阅读</span>
+                                <span class="skill-level">Advanced</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: 85%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Interests -->
+            <section id="interests">
+                <div class="section-number">07 / INTERESTS</div>
+                <h2 class="section-title">兴趣爱好</h2>
+                <div class="interests-grid">
+                    <div class="interest-item">
+                        <div class="interest-icon">📷</div>
+                        <div class="interest-name">摄影</div>
+                    </div>
+                    <div class="interest-item">
+                        <div class="interest-icon">🚴</div>
+                        <div class="interest-name">骑行</div>
+                    </div>
+                    <div class="interest-item">
+                        <div class="interest-icon">🎮</div>
+                        <div class="interest-name">游戏</div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        // Theme toggle
+        const themeBtn = document.getElementById('themeBtn');
+        const themeIcon = document.getElementById('themeIcon');
+        const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', currentTheme);
+        themeIcon.textContent = currentTheme === 'dark' ? '◐' : '◑';
+        themeIcon.style.color = currentTheme === 'dark' ? '#ffffff' : '#000000';
+
+        // Theme toggle functionality
+        themeBtn.addEventListener('click', () => {
+            const newTheme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            themeIcon.textContent = newTheme === 'dark' ? '◐' : '◑';
+            themeIcon.style.color = newTheme === 'dark' ? '#ffffff' : '#000000';
+        });
+
+        // Smooth scroll for navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // 媒体项图片处理：有图片时隐藏装饰性圆圈
+        function updateMediaImages() {
+            document.querySelectorAll('.media-image').forEach(mediaImage => {
+                if (mediaImage.querySelector('img')) {
+                    mediaImage.classList.add('has-image');
+                } else {
+                    mediaImage.classList.remove('has-image');
+                }
+            });
+        }
+
+        // 页面加载时执行
+        document.addEventListener('DOMContentLoaded', updateMediaImages);
+
+        // 如果有动态内容，可以定期执行（可选）
+        // setInterval(updateMediaImages, 1000);
+
+        // 移除超链接预览 - 阻止浏览器显示链接地址
+        document.addEventListener('DOMContentLoaded', function () {
+            // 为所有超链接添加事件监听
+            document.querySelectorAll('a[href]').forEach(link => {
+                link.addEventListener('mouseenter', function (e) {
+                    // 临时移除href属性
+                    this.dataset.originalHref = this.href;
+                    this.removeAttribute('href');
+                });
+
+                link.addEventListener('mouseleave', function (e) {
+                    // 恢复href属性
+                    if (this.dataset.originalHref) {
+                        this.href = this.dataset.originalHref;
+                        delete this.dataset.originalHref;
+                    }
+                });
+
+                // 确保点击功能正常
+                link.addEventListener('click', function (e) {
+                    if (this.dataset.originalHref) {
+                        e.preventDefault();
+                        window.location.href = this.dataset.originalHref;
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>

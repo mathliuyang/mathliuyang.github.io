@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Research Prompt Pro - 科研提示词助手</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+
+<body>
+    <!-- 动态背景 -->
+    <div class="background-animation">
+        <div class="floating-shapes">
+            <div class="shape"></div>
+            <div class="shape"></div>
+            <div class="shape"></div>
+            <div class="shape"></div>
+            <div class="shape"></div>
+        </div>
+        <div class="particles" id="particles"></div>
+        <div class="grid-overlay"></div>
+    </div>
+
+    <!-- 顶部导航栏 -->
+    <nav class="top-nav">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <i class="fas fa-rocket brand-icon"></i>
+                <span class="brand-text">Research Prompt Pro</span>
+                <span class="version-badge">v2.0</span>
+            </div>
+            <div class="nav-actions">
+                <button class="nav-btn" id="theme-toggle" title="切换主题">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <button class="nav-btn" id="fullscreen-toggle" title="全屏模式">
+                    <i class="fas fa-expand"></i>
+                </button>
+                <button class="nav-btn" id="help-toggle" title="帮助">
+                    <i class="fas fa-question-circle"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- 头部区域 -->
+        <header class="header">
+            <div class="header-content">
+                <h1 class="main-title">
+                    <i class="fas fa-rocket title-icon"
+                        style="color: inherit !important; opacity: 1 !important; display: inline-block !important;"></i>
+                    Research Prompt Pro
+                </h1>
+                <p class="subtitle">专业的学术写作AI提示词工具</p>
+                <p class="description">助力科研工作者提升写作效率，让学术创作更加智能化</p>
+
+                <!-- 统计信息 -->
+                <div class="stats-bar">
+                    <div class="stat-item">
+                        <div class="stat-number" data-count="23">23</div>
+                        <div class="stat-label">提示词模板</div>
+                    </div>
+                    <div class="stat-divider"></div>
+                    <div class="stat-item">
+                        <div class="stat-number" data-count="6">6</div>
+                        <div class="stat-label">功能分类</div>
+                    </div>
+                    <div class="stat-divider"></div>
+                    <div class="stat-item">
+                        <div class="stat-number" data-count="1000">1829</div>
+                        <div class="stat-label">用户使用</div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- 主要内容区域 -->
+        <main class="main-content">
+            <div class="content-wrapper">
+                <!-- 侧边栏 -->
+                <aside class="sidebar">
+                    <div class="sidebar-header">
+                        <h2>
+                            <i class="fas fa-list-ul"></i>
+                            提示词分类
+                        </h2>
+                        <div class="search-box">
+                            <i class="fas fa-search search-icon"></i>
+                            <input type="text" placeholder="搜索提示词..." id="search-input">
+                        </div>
+                        <div class="sidebar-actions">
+                            <button class="sidebar-btn" id="favorites-btn" title="查看收藏夹">
+                                <i class="fas fa-heart"></i>
+                                <span>我的收藏</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="sidebar-content">
+                        <div class="category" data-category="writing">
+                            <div class="category-header">
+                                <div class="category-title">
+                                    <i class="fas fa-pen-fancy"></i>
+                                    写作辅助
+                                </div>
+                                <div class="category-count">4</div>
+                            </div>
+                            <div class="prompt-list">
+                                <div class="prompt-item" data-prompt="translation">
+                                    <i class="fas fa-language"></i>
+                                    <span>学术翻译</span>
+                                    <div class="prompt-badge">热门</div>
+                                </div>
+                                <div class="prompt-item" data-prompt="polish">
+                                    <i class="fas fa-magic"></i>
+                                    <span>论文润色</span>
+                                </div>
+                                <div class="prompt-item" data-prompt="style-imitation">
+                                    <i class="fas fa-palette"></i>
+                                    <span>风格仿写</span>
+                                </div>
+                                <div class="prompt-item" data-prompt="latex-translation">
+                                    <i class="fab fa-latex"></i>
+                                    <span>LaTeX全文翻译</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="category" data-category="paper">
+                            <div class="category-header">
+                                <div class="category-title">
+                                    <i class="fas fa-file-alt"></i>
+                                    论文撰写
+                                </div>
+                                <div class="category-count">4</div>
+                            </div>
+                            <div class="prompt-list">
+                                <div class="prompt-item" data-prompt="title">
+                                    <i class="fas fa-heading"></i>
+                                    <span>拟定标题</span>
+                                </div>
+                                <div class="prompt-item" data-prompt="abstract">
+                                    <i class="fas fa-clipboard-list"></i>
+                                    <span>撰写摘要</span>
+                                </div>
+                                <div class="prompt-item" data-prompt="keywords">
+                                    <i class="fas fa-tags"></i>
+                                    <span>生成关键词</span>
+                                </div>
+                                <div class="prompt-item" data-prompt="methodology">
+                                    <i class="fas fa-cogs"></i>
+                                    <span>方法简称生成</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="category" data-category="communication">
+                            <div class="category-header">
+                                <div class="category-title">
+                                    <i class="fas fa-envelope"></i>
+                                    学术交流
+                                </div>
+                                <div class="category-count">4</div>
+                            </div>
+                            <div class="prompt-list">
+                                <div class="prompt-item" data-prompt="cover-letter">
+                                    <i class="fas fa-paper-plane"></i>
+                                    <span>Cover Letter</span>
+                                </div>
+                                <div class="prompt-item" data-prompt="review-response">
+                                    <i class="fas fa-reply"></i>
+                                    <span>审稿回复信</span>
+                                </div>
+                                <div class="prompt-item" data-prompt="email-reply">
+                                    <i class="fas fa-at"></i>
+                                    <span>邮件回复</span>
+                                </div>
+                                <div class="prompt-item" data-prompt="reviewer">
+                                    <i class="fas fa-user-graduate"></i>
+                                    <span>审稿人角色</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="category" data-category="tools">
+                            <div class="category-header">
+                                <div class="category-title">
+                                    <i class="fas fa-tools"></i>
+                                    格式工具
+                                </div>
+                                <div class="category-count">4</div>
+                            </div>
+                            <div class="prompt-list">
+                                <div class="prompt-item" data-prompt="reference-format">
+                                    <i class="fas fa-quote-right"></i>
+                                    <span>参考文献格式化</span>
+                                </div>
+                                <div class="prompt-item" data-prompt="grammar-check">
+                                    <i class="fas fa-spell-check"></i>
+                                    <span>语法检查纠正</span>
+                                </div>
+                                <div class="prompt-item" data-prompt="latex-format">
+                                    <i class="fas fa-code"></i>
+                                    <span>LaTeX格式化</span>
+                                </div>
+                                <div class="prompt-item" data-prompt="webpage-generator">
+                                    <i class="fas fa-globe"></i>
+                                    <span>功能网页生成</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="category" data-category="research">
+                            <div class="category-header">
+                                <div class="category-title">
+                                    <i class="fas fa-microscope"></i>
+                                    研究方法
+                                </div>
+                                <div class="category-count">4</div>
+                            </div>
+                            <div class="prompt-list">
+                                <div class="prompt-item" data-prompt="research-proposal">
+                                    <i class="fas fa-lightbulb"></i>
+                                    <span>研究计划</span>
+                                </div>
+                                <div class="prompt-item" data-prompt="literature-review">
+                                    <i class="fas fa-book-open"></i>
+                                    <span>文献综述</span>
+                                </div>
+                                <div class="prompt-item" data-prompt="data-analysis">
+                                    <i class="fas fa-chart-bar"></i>
+                                    <span>数据分析</span>
+                                </div>
+                                <div class="prompt-item" data-prompt="experiment-design">
+                                    <i class="fas fa-flask"></i>
+                                    <span>实验设计</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="category" data-category="application">
+                            <div class="category-header">
+                                <div class="category-title">
+                                    <i class="fas fa-trophy"></i>
+                                    项目申请
+                                </div>
+                                <div class="category-count">3</div>
+                            </div>
+                            <div class="prompt-list">
+                                <div class="prompt-item" data-prompt="conference-abstract">
+                                    <i class="fas fa-microphone"></i>
+                                    <span>会议摘要</span>
+                                </div>
+                                <div class="prompt-item" data-prompt="grant-application">
+                                    <i class="fas fa-dollar-sign"></i>
+                                    <span>基金申请</span>
+                                </div>
+                                <div class="prompt-item" data-prompt="peer-review">
+                                    <i class="fas fa-search"></i>
+                                    <span>同行评议</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </aside>
+
+                <!-- 主内容区域 -->
+                <section class="content-area">
+                    <!-- 欢迎页面 -->
+                    <div id="welcome" class="welcome-section">
+                        <div class="welcome-content">
+                            <div class="welcome-icon">
+                                <i class="fas fa-rocket"></i>
+                            </div>
+                            <h2>欢迎使用 Research Prompt Pro</h2>
+                            <p class="welcome-description">
+                                选择左侧的提示词类型，系统将自动生成相应的输入表单。
+                                填写表单后即可生成专业的AI提示词，助力您的科研写作。
+                            </p>
+
+                            <div class="feature-grid">
+                                <div class="feature-card">
+                                    <i class="fas fa-magic"></i>
+                                    <h3>智能生成</h3>
+                                    <p>基于学术规范的智能提示词生成</p>
+                                </div>
+                                <div class="feature-card">
+                                    <i class="fas fa-palette"></i>
+                                    <h3>多样模板</h3>
+                                    <p>涵盖科研写作的各个环节</p>
+                                </div>
+                                <div class="feature-card">
+                                    <i class="fas fa-bolt"></i>
+                                    <h3>高效便捷</h3>
+                                    <p>一键生成，即时复制使用</p>
+                                </div>
+                            </div>
+
+                            <div class="quick-start">
+                                <h3>快速开始</h3>
+                                <div class="quick-actions">
+                                    <button class="quick-btn" data-prompt="translation">
+                                        <i class="fas fa-language"></i>
+                                        学术翻译
+                                    </button>
+                                    <button class="quick-btn" data-prompt="polish">
+                                        <i class="fas fa-magic"></i>
+                                        论文润色
+                                    </button>
+                                    <button class="quick-btn" data-prompt="abstract">
+                                        <i class="fas fa-clipboard-list"></i>
+                                        撰写摘要
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 提示词内容区域 -->
+                    <div id="prompt-content" class="prompt-section" style="display: none;">
+                        <div class="content-header">
+                            <div class="header-left">
+                                <h2>
+                                    <span class="prompt-icon" id="prompt-icon">📝</span>
+                                    <span id="prompt-title">选择提示词</span>
+                                </h2>
+                                <p id="prompt-description">请填写以下信息来生成提示词</p>
+                            </div>
+                            <div class="header-actions">
+                                <button class="action-btn" id="save-template" title="保存为模板">
+                                    <i class="fas fa-bookmark"></i>
+                                </button>
+                                <button class="action-btn" id="share-prompt" title="分享">
+                                    <i class="fas fa-share-alt"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="form-container" id="dynamic-form">
+                            <!-- 动态表单将在这里生成 -->
+                        </div>
+
+                        <div class="action-bar">
+                            <div class="action-left">
+                                <button class="btn btn-secondary" id="reset-form-btn">
+                                    <i class="fas fa-undo"></i>
+                                    重置表单
+                                </button>
+                            </div>
+                            <div class="action-right">
+                                <button class="btn btn-primary" id="generate-prompt-btn">
+                                    <i class="fas fa-magic"></i>
+                                    生成提示词
+                                    <div class="btn-loading">
+                                        <i class="fas fa-spinner fa-spin"></i>
+                                    </div>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="result-container" id="result">
+                            <div class="result-header">
+                                <h3>
+                                    <i class="fas fa-clipboard-check"></i>
+                                    生成的提示词
+                                </h3>
+                                <div class="result-actions">
+                                    <button class="result-btn" onclick="copyPrompt()" id="copy-btn">
+                                        <i class="fas fa-copy"></i>
+                                        复制
+                                    </button>
+                                    <button class="result-btn" onclick="downloadPrompt()">
+                                        <i class="fas fa-download"></i>
+                                        下载
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="result-content" id="result-text"></div>
+                            <div class="result-footer">
+                                <div class="result-stats">
+                                    <span class="stat">字符数: <span id="char-count">0</span></span>
+                                    <span class="stat">词数: <span id="word-count">0</span></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- 通知系统 -->
+    <div id="notification-container"></div>
+
+    <!-- 帮助模态框 -->
+    <div id="help-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>使用帮助</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="help-section">
+                    <h4>如何使用</h4>
+                    <ol>
+                        <li>从左侧选择需要的提示词类型</li>
+                        <li>填写相应的表单信息</li>
+                        <li>点击"生成提示词"按钮</li>
+                        <li>复制生成的提示词到AI工具中使用</li>
+                    </ol>
+                </div>
+                <div class="help-section">
+                    <h4>快捷键</h4>
+                    <ul>
+                        <li><kbd>Ctrl</kbd> + <kbd>Enter</kbd> - 生成提示词</li>
+                        <li><kbd>Ctrl</kbd> + <kbd>D</kbd> - 切换主题</li>
+                        <li><kbd>Ctrl</kbd> + <kbd>C</kbd> - 复制结果</li>
+                        <li><kbd>Esc</kbd> - 关闭模态框</li>
+                        <li><kbd>F11</kbd> - 全屏切换</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 加载提示词模板数据 -->
+    <script src="assets/data/prompt-templates.js"></script>
+    <!-- 粒子特效系统 -->
+    <script src="assets/js/particles.js"></script>
+    <!-- 主要JavaScript功能 -->
+    <script src="assets/js/main.js"></script>
+</body>
+
+</html>
