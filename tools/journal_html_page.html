@@ -1201,6 +1201,10 @@
                 <div class="stat-number" id="casZone2Count">0</div>
                 <div class="stat-label">中科院二区</div>
             </div>
+            <div class="stat-item">
+                <div class="stat-number" id="ai4SciencePercentage">0%</div>
+                <div class="stat-label">统计截止日期2025年10月</div>
+            </div>
         </div>
     </section>
 
@@ -1902,11 +1906,20 @@
             const totalJournals = journals.length;
             const casZone1Count = journals.filter(journal => journal.casZone === '1区').length;
             const casZone2Count = journals.filter(journal => journal.casZone === '2区').length;
+            
+            // 计算AI4Science相关期刊占比
+            const ai4ScienceKeywords = ['AI', 'AI4Science', '深度学习', 'PINN', '物理信息', '神经网络', '机器学习'];
+            const ai4ScienceJournals = journals.filter(journal => {
+                const searchText = `${journal.name} ${journal.chineseName} ${journal.tags.join(' ')} ${journal.scope} ${journal.scopeCN}`.toLowerCase();
+                return ai4ScienceKeywords.some(keyword => searchText.includes(keyword.toLowerCase()));
+            });
+            const ai4SciencePercentage = Math.round((ai4ScienceJournals.length / totalJournals) * 100);
 
             // 更新DOM
             document.getElementById('totalJournals').textContent = totalJournals;
             document.getElementById('casZone1Count').textContent = casZone1Count;
             document.getElementById('casZone2Count').textContent = casZone2Count;
+            document.getElementById('ai4SciencePercentage').textContent = ai4SciencePercentage + '%';
         }
 
         // Event listeners
