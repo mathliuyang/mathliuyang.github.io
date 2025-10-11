@@ -619,7 +619,7 @@ let journals = [
         "articles_per_year": 129,
         "region": "英国",
         "jcrZone": "Q1",
-        "casZone": "计算机科学 1区",
+        "casZone": "1区",
         "scuZone": "CNS",
         "reviewTime": "",
         "publisher": "SPRINGERNATURE",
@@ -861,7 +861,7 @@ let journals = [
         "casZone": "2区",
         "scuZone": "数学 C",
         "reviewTime": "约6月",
-        "publisher": "Society for Industrial and Applied Mathematics Publications",
+        "publisher": "SIAM",
         "issn": "1064-8275",
         "eissn": "1095-7197",
         "frequency": "双月刊",
@@ -875,7 +875,7 @@ let journals = [
             "美国",
             "应用数学 - 数学",
             "SCIE",
-            "Society for Industrial and Applied Mathematics Publications"
+            "SIAM"
         ],
         "scope": "The purpose of SIAM Journal on Scientific Computing (SISC) is to advance computational methods for solving scientific and engineering problems. SISC papers are classified into three categories: (1) Methods and Algorithms for Scientific Computing (2) Computational Methods in Science and Engineering (3) Software and High-Performance Computing",
         "scopeCN": "《SIAM科学计算杂志》的目的是推进解决科学和工程问题的计算方法。SISC论文分为三类:(1)科学计算的方法和算法(2)科学与工程中的计算方法(3)软件与高性能计算",
@@ -895,7 +895,7 @@ let journals = [
         "casZone": "1区",
         "scuZone": "数学 B",
         "reviewTime": "约稿 周期不定",
-        "publisher": "Society for Industrial and Applied Mathematics Publications",
+        "publisher": "SIAM",
         "issn": "0036-1445",
         "eissn": "1095-7200",
         "frequency": "季刊",
@@ -909,7 +909,7 @@ let journals = [
             "美国",
             "数学 - 应用数学",
             "SCIE",
-            "Society for Industrial and Applied Mathematics Publications"
+            "SIAM"
         ],
         "scope": "SIAM Review (SIREV) consists of the following five sections: Survey and Review, Research Spotlights, SIGEST, Education, and Book Reviews. Survey and Review features papers with a deliberately integrative and up-to-date perspective on a major topic in applied or computational mathematics or scientific computing.",
         "scopeCN": "《SIAM评论》由以下五个部分组成:调查与综述、研究亮点、SIGEST、教育和书评。调查与综述刊登对应用或计算数学或科学计算主要主题具有刻意整合性和最新视角的论文。",

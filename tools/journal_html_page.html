@@ -1212,10 +1212,10 @@
         <div class="control-group">
             <select id="filterZone">
                 <option value="all">所有分区</option>
-                <option value="一区">中科院一区</option>
-                <option value="二区">中科院二区</option>
-                <option value="三区">中科院三区</option>
-                <option value="四区">中科院四区</option>
+                <option value="1区">中科院一区</option>
+                <option value="2区">中科院二区</option>
+                <option value="3区">中科院三区</option>
+                <option value="4区">中科院四区</option>
             </select>
         </div>
         <div class="control-group">
@@ -1242,7 +1242,7 @@
 
         <div class="control-group">
             <select id="sortBy">
-                <option value="impact">按影响因子排序</option>
+                <option value="impact" selected>按影响因子排序</option>
                 <option value="zone">按分区排序</option>
                 <option value="name">按名称排序</option>
             </select>
@@ -1562,12 +1562,12 @@
 
                 // 分区筛选 - 支持模糊匹配（如"4区(3区)"也能匹配"4区"）
                 const matchesZone = filterZone === 'all' || (journal.casZone && journal.casZone.includes(filterZone));
-                
+
                 // 地区筛选
                 const matchesRegion = filterRegion === 'all' || journal.region === filterRegion;
-                
+
                 // 出版社筛选 - 支持模糊匹配
-                const matchesPublisher = filterPublisher === 'all' || 
+                const matchesPublisher = filterPublisher === 'all' ||
                     (journal.publisher && (
                         journal.publisher.includes(filterPublisher) ||
                         (filterPublisher === 'Taylor & Francis' && journal.publisher.includes('Taylor and Francis')) ||
@@ -1884,7 +1884,7 @@
 
         // 初始渲染
         calculateStats(); // 计算并显示统计数据
-        renderJournals(journals);
+        filterAndSort(); // 确保按影响因子排序后渲染
     </script>
 </body>
 
