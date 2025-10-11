@@ -1469,7 +1469,7 @@
                             ${journal.tags.slice(0, 4).map(tag => `<span class="tag ${tag.includes('AI4Science') || tag.includes('PINN') || tag.includes('深度学习') ? 'tag-highlight' : ''}">${tag}</span>`).join('')}
                         </div>
                         <div class="journal-info">
-                            <strong>审稿:</strong> ${journal.reviewTime} | <strong>是否预警:</strong> ${journal.warning ? '是' : '否'}
+                            <strong>审稿:</strong> ${journal.reviewTime} <span style="margin: 0 12px;">|</span> <strong>是否预警:</strong> ${journal.warning ? '是' : '否'}
                         </div>
 
                         
