@@ -152,7 +152,7 @@ let journals = [
         "coverImage": "https://ars.els-cdn.com/content/image/X00104655.jpg",
         "website": "https://www.journals.elsevier.com/computer-physics-communications",
         "authorGuide": "https://www.elsevier.com/journals/computer-physics-communications/0010-4655/guide-for-authors",
-        "submissionUrl": "https://www.editorialmanager.com/cpc",
+        "submissionUrl": "https://www.editorialmanager.com/comphy/default.aspx?adobe_mc=MCMID%3D23718793984289872703310327623159018768%7CMCORGID%3D4D6368F454EC41940A4C98A6%2540AdobeOrg%7CTS%3D1760211429",
         "tags": [
             "Elsevier",
             "SCIE",
@@ -218,7 +218,7 @@ let journals = [
         "coverImage": "https://media.springernature.com/w316/springer-static/cover-hires/journal/40314?as=webp",
         "website": "https://www.springer.com/journal/40314",
         "authorGuide": "https://www.springer.com/journal/40314/submission-guidelines",
-        "submissionUrl": "https://www.editorialmanager.com/cam/default.aspx",
+        "submissionUrl": "https://www.editorialmanager.com/coam/default.aspx",
         "tags": [
             "Springer International Publishing",
             "数学 - 计算数学",
@@ -251,7 +251,7 @@ let journals = [
         "coverImage": "https://media.springernature.com/w316/springer-static/cover-hires/journal/366?as=webp",
         "website": "https://www.springer.com/journal/366",
         "authorGuide": "https://www.springer.com/journal/366/submission-guidelines",
-        "submissionUrl": "https://www.editorialmanager.com/engc",
+        "submissionUrl": "https://idp-personal-authenticator.springernature.com/gateway?response_type=code&redirect_uri=https%3A%2F%2Fidp.springernature.com%2Fauthed%2Fpersonal&state=89c3e9bb-b1ed-401c-b4ed-d26554b62f3b&context_code=366&target_redirect_uri=https%3A%2F%2Fsubmission.springernature.com%2Fnew-submission%2F366%2F3%3F_gl%3D1*1uhmnxe*_gcl_au*MTYwNjAxODQ3LjE3NTgwMjIyMjA.*_ga*NzE5OTkzNjgyLjE3NDIwMzI3MjY.*_ga_B3E4QL2TPR*czE3NjAyMTE0NzQkbzMyJGcxJHQxNzYwMjExNTExJGoyMyRsMCRoMTkwODUyMjAxNQ..&context_type=submission&_gl=1*1uhmnxe*_gcl_au*MTYwNjAxODQ3LjE3NTgwMjIyMjA.*_ga*NzE5OTkzNjgyLjE3NDIwMzI3MjY.*_ga_B3E4QL2TPR*czE3NjAyMTE0NzQkbzMyJGcxJHQxNzYwMjExNTExJGoyMyRsMCRoMTkwODUyMjAxNQ..",
         "tags": [
             "工程技术 - 工程:机械",
             "Springer London",
@@ -383,7 +383,7 @@ let journals = [
         "coverImage": "https://ars.els-cdn.com/content/image/X03770427.jpg",
         "website": "https://www.journals.elsevier.com/journal-of-computational-and-applied-mathematics",
         "authorGuide": "https://www.elsevier.com/journals/journal-of-computational-and-applied-mathematics/0377-0427/guide-for-authors",
-        "submissionUrl": "https://www.editorialmanager.com/JCAM",
+        "submissionUrl": "https://www.editorialmanager.com/elscam/default.aspx?adobe_mc=MCMID%3D23718793984289872703310327623159018768%7CMCORGID%3D4D6368F454EC41940A4C98A6%2540AdobeOrg%7CTS%3D1760212109",
         "tags": [
             "Elsevier",
             "数学 - 应用数学",
@@ -414,9 +414,9 @@ let journals = [
         "founded": "1983年",
         "language": "English",
         "coverImage": "https://www.global-sci.org/public/journals/15/journalThumbnail_en.png",
-        "website": "https://www.global-sci.org/jcm/",
-        "authorGuide": "https://www.global-sci.org/jcm/authors",
-        "submissionUrl": "https://www.global-sci.org/jcm/submission",
+        "website": "https://computmath.cjoe.ac.cn/jcm/EN/0254-9409/home.shtml",
+        "authorGuide": "hhttps://computmath.cjoe.ac.cn/jcm/EN/column/column106.shtml",
+        "submissionUrl": "https://mc03.manuscriptcentral.com/jcmath",
         "tags": [
             "Inst. of Computational Mathematics and Sc./Eng. Computing",
             "数学 - 数学",
@@ -746,7 +746,7 @@ let journals = [
         "coverImage": "https://onlinelibrary.wiley.com/cms/asset/9594a66b-9aff-4707-ac10-97d6298ad828/num.v41.6.cover.gif",
         "website": "https://onlinelibrary.wiley.com/journal/10982426",
         "authorGuide": "https://onlinelibrary.wiley.com/page/journal/10982426/homepage/forauthors.html",
-        "submissionUrl": "https://mc.manuscriptcentral.com/num",
+        "submissionUrl": "https://submission.wiley.com/submission/dashboard?siteName=NUM",
         "tags": [
             "数学 - 应用数学",
             "John Wiley and Sons Inc.",
@@ -845,8 +845,8 @@ let journals = [
         "language": "English",
         "coverImage": "https://epubs.siam.org/cms/10.1137/sjoce3.47.5/asset/17efe382-d417-fe38-2d41-efe3822d417e/cover.jpg",
         "website": "https://epubs.siam.org/journal/sjoce3",
-        "authorGuide": "https://www.siam.org/publications/journals/siam-journal-on-scientific-computing-sisc/submission-guidelines",
-        "submissionUrl": "https://www.siam.org/publications/journals/siam-journal-scientific-computing",
+        "authorGuide": "https://epubs.siam.org/journal-authors",
+        "submissionUrl": "https://sisc.siam.org/cgi-bin/main.plex",
         "tags": [
             "应用数学 - 数学",
             "SCIE",
