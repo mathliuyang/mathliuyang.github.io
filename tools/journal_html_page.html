@@ -1563,48 +1563,43 @@
             const sortBy = document.getElementById('sortBy').value;
 
             let filtered = journals.filter(journal => {
-                const matchesSearch = journal.name.toLowerCase().includes(searchTerm) ||
+                // 搜索功能：包含期刊名称、缩写、中文名、标签、范围等
+                const matchesSearch = !searchTerm || 
+                    journal.name.toLowerCase().includes(searchTerm) ||
+                    journal.chineseName.toLowerCase().includes(searchTerm) ||
                     journal.abbr.toLowerCase().includes(searchTerm) ||
                     journal.tags.some(tag => tag.toLowerCase().includes(searchTerm)) ||
                     (journal.scope && journal.scope.toLowerCase().includes(searchTerm)) ||
-                    (journal.recentArticles && journal.recentArticles.toLowerCase().includes(searchTerm));
+                    (journal.scopeCN && journal.scopeCN.toLowerCase().includes(searchTerm)) ||
+                    (journal.researchAreas && journal.researchAreas.toLowerCase().includes(searchTerm));
                 
                 const matchesZone = filterZone === 'all' || journal.casZone === filterZone;
                 const matchesRegion = filterRegion === 'all' || journal.region === filterRegion;
-                const matchesPublisher = filterPublisher === 'all' || journal.publisher.includes(filterPublisher);
+                const matchesPublisher = filterPublisher === 'all' || journal.publisher.toLowerCase().includes(filterPublisher.toLowerCase());
                 
-                // 审稿周期筛选逻辑
+                // 审稿周期筛选逻辑 - 基于月份数字提取
                 let matchesReviewTime = true;
                 if (filterReviewTime !== 'all') {
                     const reviewTimeText = journal.reviewTime.toLowerCase();
+                    // 提取审稿时间中的数字（月份）
+                    const monthMatches = reviewTimeText.match(/(\d+(?:\.\d+)?)\s*个月/);
+                    const weekMatches = reviewTimeText.match(/(\d+(?:\.\d+)?)\s*周/);
+                    
+                    let months = 0;
+                    if (monthMatches) {
+                        months = parseFloat(monthMatches[1]);
+                    } else if (weekMatches) {
+                        months = parseFloat(weekMatches[1]) / 4.3; // 转换为月份
+                    }
+                    
                     if (filterReviewTime === '快速') {
-                        matchesReviewTime = reviewTimeText.includes('周') || 
-                                          reviewTimeText.includes('月') && (
-                                          reviewTimeText.includes('1') || 
-                                          reviewTimeText.includes('2') || 
-                                          reviewTimeText.includes('3'));
+                        matchesReviewTime = months > 0 && months <= 3;
                     } else if (filterReviewTime === '标准') {
-                        matchesReviewTime = reviewTimeText.includes('月') && (
-                                          reviewTimeText.includes('3') || 
-                                          reviewTimeText.includes('4') || 
-                                          reviewTimeText.includes('5') || 
-                                          reviewTimeText.includes('6'));
+                        matchesReviewTime = months > 3 && months <= 6;
                     } else if (filterReviewTime === '较慢') {
-                        matchesReviewTime = reviewTimeText.includes('月') && (
-                                          reviewTimeText.includes('6') || 
-                                          reviewTimeText.includes('7') || 
-                                          reviewTimeText.includes('8') || 
-                                          reviewTimeText.includes('9') || 
-                                          reviewTimeText.includes('10') || 
-                                          reviewTimeText.includes('11') || 
-                                          reviewTimeText.includes('12'));
+                        matchesReviewTime = months > 6 && months <= 12;
                     } else if (filterReviewTime === '很慢') {
-                        matchesReviewTime = reviewTimeText.includes('年') || 
-                                          (reviewTimeText.includes('月') && (
-                                          reviewTimeText.includes('12') || 
-                                          reviewTimeText.includes('13') || 
-                                          reviewTimeText.includes('14') || 
-                                          reviewTimeText.includes('15')));
+                        matchesReviewTime = months > 12 || reviewTimeText.includes('年');
                     }
                 }
                 
@@ -1616,7 +1611,10 @@
                     case 'impact':
                         return b.impactFactor - a.impactFactor;
                     case 'zone':
-                        return a.casZone.localeCompare(b.casZone);
+                        // 按中科院分区数字排序，1区在前，4区在后
+                        const zoneA = parseInt(a.casZone.replace('区', '')) || 999;
+                        const zoneB = parseInt(b.casZone.replace('区', '')) || 999;
+                        return zoneA - zoneB;
                     case 'name':
                         return a.name.localeCompare(b.name);
                     default:
@@ -1624,6 +1622,24 @@
                 }
             });
 
+            // 显示筛选结果统计
+            const noResults = document.getElementById('noResults');
+            const journalsGrid = document.getElementById('journalsGrid');
+            
+            if (filtered.length === 0) {
+                noResults.style.display = 'block';
+                journalsGrid.style.display = 'none';
+                noResults.innerHTML = `
+                    <p>未找到匹配的期刊</p>
+                    <p style="font-size: 0.9rem; color: var(--text-dim); margin-top: 0.5rem;">
+                        当前筛选条件：搜索"${searchTerm}"，分区"${filterZone}"，地区"${filterRegion}"，出版社"${filterPublisher}"，审稿周期"${filterReviewTime}"
+                    </p>
+                `;
+            } else {
+                noResults.style.display = 'none';
+                journalsGrid.style.display = 'grid';
+            }
+            
             renderJournals(filtered);
         }
 
