@@ -1,4 +1,4 @@
-[
+let journals = [
     {
         "name": "Advances in Computational Mathematics",
         "chineseName": "计算数学进展",
@@ -10,7 +10,6 @@
         "casZone": "数学 4区",
         "scuZone": "数学E",
         "reviewTime": "12周,或约稿",
-        "acceptanceRate": "待补充",
         "publisher": "Springer US",
         "issn": "1019-7168",
         "eissn": "1572-9044",
@@ -30,7 +29,9 @@
         "scope": "Advances in Computational Mathematics publishes high quality, accessible and original articles at the forefront of computational and applied mathematics, with a clear potential for impact across the sciences. The journal emphasizes three core areas: approximation theory and computational geometry; numerical analysis, modelling and simulation; imaging, signal processing and data analysis. This journal welcomes papers that are accessible to a broad audience in the mathematical sciences and that show either an advance in computational methodology or a novel scientific application area, or both. Methods papers should rely on rigorous analysis and/or convincing numerical studies.",
         "scopeCN": "《计算数学进展》发表计算与应用数学前沿的高质量、易读且原创的文章,具有明确的跨科学影响潜力。期刊强调三个核心领域:逼近理论与计算几何;数值分析、建模与仿真;成像、信号处理与数据分析。本刊欢迎数学科学广大受众可读的论文,这些论文应展示计算方法的进步或新颖的科学应用领域,或两者兼有。方法类论文应依赖严格的分析和/或有说服力的数值研究。",
         "researchAreas": "数学 - 应用数学",
-        "tips": "适合有扎实数学理论基础的研究者投稿"
+        "tips": "适合有扎实数学理论基础的研究者投稿",
+        "indexed": "SCIE",
+        "warning": false
     },
     {
         "name": "Applied Mathematics and Computation",
@@ -43,7 +44,6 @@
         "casZone": "数学 2区",
         "scuZone": "数学C",
         "reviewTime": "约9.8个月 / 约11.9周",
-        "acceptanceRate": "待补充",
         "publisher": "Elsevier Inc.",
         "issn": "0096-3003",
         "eissn": "1873-5649",
@@ -63,7 +63,9 @@
         "scope": "Applied Mathematics and Computation addresses work at the interface between applied mathematics, numerical computation, and applications of systems – oriented ideas to the physical, biological, social, and behavioral sciences, and emphasizes papers of a computational nature focusing on new algorithms, their analysis and numerical results. In addition to presenting research papers, Applied Mathematics and Computation publishes review articles and single–topics issues.",
         "scopeCN": "《应用数学与计算》关注应用数学、数值计算以及面向系统思想在物理、生物、社会和行为科学中应用的交叉领域,强调关注新算法、算法分析和数值结果的计算性质论文。除了研究论文,本刊还发表综述文章和单一主题特刊。",
         "researchAreas": "数学 - 应用数学",
-        "tips": "非常适合PINN应用类论文,尤其是解决实际工程问题的工作"
+        "tips": "非常适合PINN应用类论文,尤其是解决实际工程问题的工作",
+        "indexed": "SCIE",
+        "warning": false
     },
     {
         "name": "Communications in Nonlinear Science and Numerical Simulation",
@@ -76,7 +78,6 @@
         "casZone": "数学 2区",
         "scuZone": "数学B",
         "reviewTime": "约3.0个月",
-        "acceptanceRate": "待补充",
         "publisher": "Elsevier",
         "issn": "1007-5704",
         "eissn": "1878-7274",
@@ -97,7 +98,9 @@
         "scope": "The journal publishes original research findings on experimental observation, mathematical modeling, theoretical analysis and numerical simulation, for more accurate description, better prediction or novel application, of nonlinear phenomena in science and engineering. It offers a venue for researchers to make rapid exchange of ideas and techniques in nonlinear science and complexity. The submission of manuscripts with cross-disciplinary approaches in nonlinear science and complexity is particularly encouraged.",
         "scopeCN": "本刊发表关于实验观察、数学建模、理论分析和数值模拟的原创研究成果,以更准确地描述、更好地预测或新颖地应用科学和工程中的非线性现象。为研究者提供非线性科学和复杂性领域快速交流思想和技术的平台。特别鼓励提交具有跨学科方法的稿件。",
         "researchAreas": "数学 - 应用数学, 数学 - 跨学科应用",
-        "tips": "强烈推荐用于深度学习求解非线性PDE的研究"
+        "tips": "强烈推荐用于深度学习求解非线性PDE的研究",
+        "indexed": "SCIE",
+        "warning": false
     },
     {
         "name": "Computer Methods in Applied Mechanics and Engineering",
@@ -110,7 +113,6 @@
         "casZone": "工程技术 1区",
         "scuZone": "工程技术B",
         "reviewTime": "约3.0个月 / 约8.6周",
-        "acceptanceRate": "待补充",
         "publisher": "Elsevier",
         "issn": "0045-7825",
         "eissn": "1879-2138",
@@ -130,7 +132,9 @@
         "scope": "Computer Methods in Applied Mechanics and Engineering was founded over three decades ago, providing a platform for the publication of papers in this important field of science and engineering. The range of appropriate contributions is very wide. It covers any type of computational method for the simulation of complex physical problems leading to the analysis and design of engineering products and systems.",
         "scopeCN": "《应用力学与工程中的计算机方法》成立三十多年来,为这一重要科学和工程领域的论文发表提供平台。适合投稿的范围非常广泛。涵盖用于模拟复杂物理问题的任何类型计算方法,以进行工程产品和系统的分析与设计。",
         "researchAreas": "工程技术 - 工程:综合",
-        "tips": "强烈推荐用于工程导向的PINN/深度学习求解PDE研究"
+        "tips": "强烈推荐用于工程导向的PINN/深度学习求解PDE研究",
+        "indexed": "SCIE",
+        "warning": false
     },
     {
         "name": "Computer Physics Communications",
@@ -143,7 +147,6 @@
         "casZone": "物理与天体物理 2区",
         "scuZone": "物理与天体物理C",
         "reviewTime": "约12.0个月 / 约13.5周",
-        "acceptanceRate": "待补充",
         "publisher": "Elsevier",
         "issn": "0010-4655",
         "eissn": "1879-2944",
@@ -163,7 +166,9 @@
         "scope": "The focus of CPC is on contemporary computational methods and techniques and their implementation, the effectiveness of which will normally be evidenced by the author(s) within the context of a substantive problem in physics. Within this setting CPC publishes two types of paper: (1) Computer Programs in Physics (CPiP): These papers describe significant computer programs to be archived in the CPC Program Library which is held in the Mendeley Data repository. The submitted software must be covered by an approved open source licence. (2) Computational Physics Papers (CP): These are research papers in, but are not limited to, the following themes across computational physics and related disciplines: mathematical and numerical methods and algorithms; computational models including those associated with the design, control and analysis of experiments; and algebraic computation.",
         "scopeCN": "CPC的重点是当代计算方法和技术及其实现,其有效性通常由作者在物理学的实质性问题背景下证明。在此背景下,CPC发表两类论文:(1)物理计算机程序(CPiP):这些论文描述存档在Mendeley数据仓库的CPC程序库中的重要计算机程序。提交的软件必须遵循经批准的开源许可。(2)计算物理论文(CP):这些研究论文涉及但不限于计算物理及相关学科的以下主题:数学和数值方法及算法;计算模型(包括与实验设计、控制和分析相关的模型);代数计算。",
         "researchAreas": "物理 - 计算机:跨学科应用",
-        "tips": "最适合有完整软件实现的深度学习求解PDE研究"
+        "tips": "最适合有完整软件实现的深度学习求解PDE研究",
+        "indexed": "SCIE",
+        "warning": false
     },
     {
         "name": "Computers & Mathematics with Applications",
@@ -176,7 +181,6 @@
         "casZone": "数学 2区",
         "scuZone": "数学C",
         "reviewTime": "约6.0个月",
-        "acceptanceRate": "待补充",
         "publisher": "Elsevier Ltd",
         "issn": "0898-1221",
         "eissn": "1873-7668",
@@ -196,7 +200,9 @@
         "scope": "Computers & Mathematics with Applications provides a medium of exchange for those engaged in fields where there exists a non-trivial interplay between mathematics and computers. Thus, the three present principal categories of interest of the journal are: 1. Computers in mathematics research: This includes, but is not limited to, applications in numerical analysis, number theory, algebra, statistics, probability, geometry, topology, combinatorics, logic, mathematical programming, fuzzy theory, and classical analysis. 2. Mathematics in computer science: This includes, but is not limited to, applications in algorithms, data structures, computational complexity, parallel computing, distributed computing, artificial intelligence, machine learning, databases, computer graphics, image processing, computer vision, computational geometry, computational topology, cryptography, information theory, coding theory, automata theory, formal languages, symbolic computation, programming languages, compilers, computer algebra, software engineering, operating systems, networks, numerical computing, neural networks, fuzzy systems, genetic algorithms, expert systems, simulation, mathematical software, and computational mathematics. 3. Applications in science and engineering: This includes, but is not limited to, applications in biology, chemistry, physics, geology, psychology, sociology, anthropology, economics, operations research, medicine, health sciences, environmental science, transportation, urban planning, management, business, finance, image processing, pattern recognition, robotics, computer graphics, signal processing, telecommunications, control systems, aerospace, mechanical, civil, electrical, electronic, computer, chemical, industrial, manufacturing, mining, agricultural, and biomedical engineering.",
         "scopeCN": "《计算机与数学应用》为那些从事存在数学与计算机之间非平凡相互作用的领域的人们提供交流媒介。因此,该期刊目前感兴趣的三个主要类别是:1.计算机在数学研究中的应用:包括但不限于数值分析、数论、代数、统计学、概率论、几何、拓扑学、组合数学、逻辑、数学规划、模糊理论和经典分析中的应用。2.数学在计算机科学中的应用:包括但不限于算法、数据结构、计算复杂性、并行计算、分布式计算、人工智能、机器学习、数据库、计算机图形学、图像处理、计算机视觉、计算几何、计算拓扑学、密码学、信息论、编码理论、自动机理论、形式语言、符号计算、编程语言、编译器、计算机代数、软件工程、操作系统、网络、数值计算、神经网络、模糊系统、遗传算法、专家系统、仿真、数学软件和计算数学中的应用。3.科学和工程中的应用:包括但不限于生物学、化学、物理学、地质学、心理学、社会学、人类学、经济学、运筹学、医学、健康科学、环境科学、交通运输、城市规划、管理、商业、金融、图像处理、模式识别、机器人技术、计算机图形学、信号处理、电信、控制系统、航空航天、机械、土木、电气、电子、计算机、化学、工业、制造、采矿、农业和生物医学工程中的应用。",
         "researchAreas": "数学 - 应用数学",
-        "tips": "特别适合PINN类论文,尤其是有工程应用背景的研究"
+        "tips": "特别适合PINN类论文,尤其是有工程应用背景的研究",
+        "indexed": "SCIE",
+        "warning": false
     },
     {
         "name": "Computational and Applied Mathematics",
@@ -209,7 +215,6 @@
         "casZone": "数学 4区(3区)",
         "scuZone": "数学E",
         "reviewTime": "",
-        "acceptanceRate": "待补充",
         "publisher": "Springer International Publishing",
         "issn": "2238-3603",
         "eissn": "1807-0302",
@@ -220,11 +225,18 @@
         "website": "https://www.springer.com/journal/40314",
         "authorGuide": "https://www.springer.com/journal/40314/submission-guidelines",
         "submissionUrl": "https://www.editorialmanager.com/cam/default.aspx",
-        "tags": ["巴西", "Springer International Publishing", "数学 - 计算数学", "SCIE"],
+        "tags": [
+            "巴西",
+            "Springer International Publishing",
+            "数学 - 计算数学",
+            "SCIE"
+        ],
         "scope": "Computational & Applied Mathematics began to be published in 1981. This journal was conceived as the main scientific publication of SBMAC (Brazilian Society of Computational and Applied Mathematics). The objective of the journal is the publication of original research in Applied and Computational Mathematics, with interfaces in Physics, Engineering, Chemistry, Biology, Operations Research, Statistics, Social Sciences and Economy.",
         "scopeCN": "《计算与应用数学》始创于1981年,是巴西计算与应用数学学会(SBMAC)的主要科学出版物。本刊的目标是发表应用与计算数学的原创研究,涉及物理、工程、化学、生物、运筹学、统计学、社会科学和经济学等交叉领域。",
         "researchAreas": "数学 - 计算数学",
-        "tips": "适合有明确跨学科应用背景的AI for Science研究"
+        "tips": "适合有明确跨学科应用背景的AI for Science研究",
+        "indexed": "SCIE",
+        "warning": false
     },
     {
         "name": "Engineering with Computers",
@@ -237,7 +249,6 @@
         "casZone": "工程技术 2区",
         "scuZone": "工程技术C",
         "reviewTime": "约12.0个月",
-        "acceptanceRate": "待补充",
         "publisher": "Springer London",
         "issn": "0177-0667",
         "eissn": "1435-5663",
@@ -248,11 +259,18 @@
         "website": "https://www.springer.com/journal/366",
         "authorGuide": "https://www.springer.com/journal/366/submission-guidelines",
         "submissionUrl": "https://www.editorialmanager.com/engc",
-        "tags": ["工程技术 - 工程:机械", "Springer London", "德国", "SCIE"],
+        "tags": [
+            "工程技术 - 工程:机械",
+            "Springer London",
+            "德国",
+            "SCIE"
+        ],
         "scope": "Engineering with Computers is an international journal for simulation-based engineering. It publishes original papers and authoritative state-of-the-art reviews on the technologies supporting simulation-based engineering, and examples of operational simulation-based engineering systems.",
         "scopeCN": "《计算机工程》是一本专注于基于仿真工程的国际期刊。发表关于支持基于仿真工程技术的原创论文和权威性最新综述,以及可操作的基于仿真工程系统的实例。",
         "researchAreas": "工程技术 - 工程:机械",
-        "tips": "暂不推荐作为主要投稿目标"
+        "tips": "暂不推荐作为主要投稿目标",
+        "indexed": "SCIE",
+        "warning": false
     },
     {
         "name": "IMA Journal of Numerical Analysis",
@@ -265,7 +283,6 @@
         "casZone": "数学 2区",
         "scuZone": "数学C",
         "reviewTime": "较慢,6-12周",
-        "acceptanceRate": "待补充",
         "publisher": "Oxford University Press",
         "issn": "0272-4979",
         "eissn": "1464-3642",
@@ -276,11 +293,18 @@
         "website": "https://academic.oup.com/imajna",
         "authorGuide": "https://academic.oup.com/imajna/pages/General_Instructions",
         "submissionUrl": "https://mc.manuscriptcentral.com/imajna",
-        "tags": ["英国", "Oxford University Press", "数学 - 应用数学", "SCIE"],
+        "tags": [
+            "英国",
+            "Oxford University Press",
+            "数学 - 应用数学",
+            "SCIE"
+        ],
         "scope": "The IMA Journal of Numerical Analysis (IMAJNA) publishes original contributions to all fields of numerical analysis; articles will be accepted which treat the theory, development or use of practical algorithms and interactions between these aspects. Occasional survey articles are also published.",
         "scopeCN": "《IMA数值分析期刊》发表数值分析所有领域的原创贡献;接受涉及实用算法的理论、开发或使用及其相互作用的文章。偶尔也发表综述文章。",
         "researchAreas": "数学 - 应用数学",
-        "tips": "仅推荐给有深厚数学理论功底的研究者"
+        "tips": "仅推荐给有深厚数学理论功底的研究者",
+        "indexed": "SCIE",
+        "warning": false
     },
     {
         "name": "International Journal for Numerical Methods in Engineering",
@@ -293,7 +317,6 @@
         "casZone": "工程技术 3区",
         "scuZone": "工程技术C",
         "reviewTime": "约6.0个月",
-        "acceptanceRate": "待补充",
         "publisher": "John Wiley and Sons Ltd",
         "issn": "0029-5981",
         "eissn": "1097-0207",
@@ -304,11 +327,18 @@
         "website": "https://onlinelibrary.wiley.com/journal/10970207",
         "authorGuide": "https://onlinelibrary.wiley.com/page/journal/10970207/homepage/forauthors.html",
         "submissionUrl": "https://mc.manuscriptcentral.com/nme",
-        "tags": ["工程技术 - 工程:综合", "英国", "John Wiley and Sons Ltd", "SCIE"],
+        "tags": [
+            "工程技术 - 工程:综合",
+            "英国",
+            "John Wiley and Sons Ltd",
+            "SCIE"
+        ],
         "scope": "The International Journal for Numerical Methods in Engineering publishes original papers describing significant, novel developments in numerical methods that are applicable to engineering problems. The Journal is known for welcoming contributions in a wide range of areas in computational engineering, including computational issues in model reduction, uncertainty quantification, verification and validation, inverse analysis and stochastic methods, optimisation, element technology, solution techniques and parallel computing, damage and fracture, mechanics at micro and nano-scales, low-speed fluid dynamics, fluid-structure interaction, electromagnetics, coupled diffusion phenomena, and error estimation and mesh generation.",
         "scopeCN": "《国际工程数值方法杂志》发表描述适用于工程问题的重要、新颖数值方法发展的原创论文。本刊以欢迎计算工程广泛领域的贡献而闻名,包括模型简化、不确定性量化、验证与确认、反问题和随机方法、优化、单元技术、求解技术和并行计算、损伤和断裂、微观和纳米尺度力学、低速流体动力学、流固耦合、电磁学、耦合扩散现象以及误差估计和网格生成等计算问题。",
         "researchAreas": "工程技术 - 工程:综合",
-        "tips": "推荐用于工程导向的深度学习求解PDE研究"
+        "tips": "推荐用于工程导向的深度学习求解PDE研究",
+        "indexed": "SCIE",
+        "warning": false
     },
     {
         "name": "International Journal of Computer Mathematics",
@@ -321,7 +351,6 @@
         "casZone": "数学 4区",
         "scuZone": "数学E",
         "reviewTime": "约6.0个月",
-        "acceptanceRate": "待补充",
         "publisher": "Taylor and Francis Ltd.",
         "issn": "0020-7160",
         "eissn": "1029-0265",
@@ -332,11 +361,18 @@
         "website": "https://www.tandfonline.com/toc/gcom20/current",
         "authorGuide": "https://www.tandfonline.com/action/authorSubmission?journalCode=gcom20",
         "submissionUrl": "https://www.editorialmanager.com/ijcm/default.aspx",
-        "tags": ["英国", "数学 - 应用数学", "SCIE", "Taylor and Francis Ltd."],
+        "tags": [
+            "英国",
+            "数学 - 应用数学",
+            "SCIE",
+            "Taylor and Francis Ltd."
+        ],
         "scope": "International Journal of Computer Mathematics (IJCM) is a world-leading journal serving the community of researchers in numerical analysis and scientific computing from academia to industry. IJCM publishes original research papers of high scientific value in fields of computational mathematics with profound applications to science and engineering.",
         "scopeCN": "《国际计算数学杂志》是服务于学术界到工业界数值分析和科学计算研究者社区的世界领先期刊。IJCM发表在计算数学领域具有高科学价值、对科学和工程有深远应用的原创研究论文。",
         "researchAreas": "数学 - 应用数学",
-        "tips": "适合有一定理论基础的PINN类研究"
+        "tips": "适合有一定理论基础的PINN类研究",
+        "indexed": "SCIE",
+        "warning": false
     },
     {
         "name": "Journal of Computational and Applied Mathematics",
@@ -349,7 +385,6 @@
         "casZone": "数学 2区",
         "scuZone": "数学C",
         "reviewTime": "约3.0个月",
-        "acceptanceRate": "待补充",
         "publisher": "Elsevier",
         "issn": "0377-0427",
         "eissn": "1879-1778",
@@ -360,11 +395,18 @@
         "website": "https://www.journals.elsevier.com/journal-of-computational-and-applied-mathematics",
         "authorGuide": "https://www.elsevier.com/journals/journal-of-computational-and-applied-mathematics/0377-0427/guide-for-authors",
         "submissionUrl": "https://www.editorialmanager.com/JCAM",
-        "tags": ["Elsevier", "荷兰", "数学 - 应用数学", "SCIE"],
+        "tags": [
+            "Elsevier",
+            "荷兰",
+            "数学 - 应用数学",
+            "SCIE"
+        ],
         "scope": "The Journal of Computational and Applied Mathematics publishes original papers of high scientific value in all areas of computational and applied mathematics. The main interest of the Journal is in papers that describe and analyze new computational techniques for solving scientific or engineering problems. Also the improved analysis, including the effectiveness and applicability, of existing methods and algorithms is of importance. The computational efficiency (e.g. the convergence, stability, accuracy, ...) should be proved and illustrated by nontrivial numerical examples.",
         "scopeCN": "《计算与应用数学杂志》发表计算与应用数学所有领域的高科学价值原创论文。本刊的主要兴趣在于描述和分析解决科学或工程问题的新计算技术的论文。对现有方法和算法的改进分析(包括有效性和适用性)也很重要。计算效率(如收敛性、稳定性、精度等)应通过非平凡的数值例子得到证明和说明。",
         "researchAreas": "数学 - 应用数学",
-        "tips": "强烈推荐用于PINN方法论创新的研究"
+        "tips": "强烈推荐用于PINN方法论创新的研究",
+        "indexed": "SCIE",
+        "warning": false
     },
     {
         "name": "Journal of Computational Mathematics",
@@ -377,7 +419,6 @@
         "casZone": "数学 4区",
         "scuZone": "数学C",
         "reviewTime": "约2月",
-        "acceptanceRate": "待补充",
         "publisher": "Inst. of Computational Mathematics and Sc./Eng. Computing",
         "issn": "0254-9409",
         "eissn": "1991-7139",
@@ -388,11 +429,18 @@
         "website": "https://www.global-sci.org/jcm/",
         "authorGuide": "https://www.global-sci.org/jcm/authors",
         "submissionUrl": "https://www.global-sci.org/jcm/submission",
-        "tags": ["Inst. of Computational Mathematics and Sc./Eng. Computing", "数学 - 数学", "中国", "SCIE"],
+        "tags": [
+            "Inst. of Computational Mathematics and Sc./Eng. Computing",
+            "数学 - 数学",
+            "中国",
+            "SCIE"
+        ],
         "scope": "Journal of Computational Mathematics (JCM) is an international scientific computing journal founded by Professor Feng Kang in 1983, which is the first Chinese computational mathematics journal published in English. JCM covers all branches of modern computational mathematics such as numerical linear algebra, numerical optimization, computational geometry, numerical PDEs, and inverse problems.",
         "scopeCN": "《计算数学期刊》是由冯康教授于1983年创办的国际科学计算期刊,是中国第一本用英文出版的计算数学期刊。JCM涵盖现代计算数学的所有分支,如数值线性代数、数值优化、计算几何、数值偏微分方程和反问题。",
         "researchAreas": "数学 - 数学",
-        "tips": "对ML方法接受度有限,谨慎投稿"
+        "tips": "对ML方法接受度有限,谨慎投稿",
+        "indexed": "SCIE",
+        "warning": false
     },
     {
         "name": "Journal of Computational Physics",
@@ -405,7 +453,6 @@
         "casZone": "物理与天体物理 2区",
         "scuZone": "物理与天体物理C",
         "reviewTime": "约6.5个月 / 约17.2周",
-        "acceptanceRate": "待补充",
         "publisher": "Academic Press Inc.",
         "issn": "0021-9991",
         "eissn": "1090-2716",
@@ -416,11 +463,18 @@
         "website": "https://www.sciencedirect.com/journal/journal-of-computational-physics",
         "authorGuide": "https://www.elsevier.com/journals/journal-of-computational-physics/0021-9991/guide-for-authors",
         "submissionUrl": "https://www.editorialmanager.com/JCOMP",
-        "tags": ["美国", "物理 - 计算机:跨学科应用", "SCIE", "Academic Press Inc."],
+        "tags": [
+            "美国",
+            "物理 - 计算机:跨学科应用",
+            "SCIE",
+            "Academic Press Inc."
+        ],
         "scope": "Journal of Computational Physics thoroughly treats the computational aspects of physical problems, presenting techniques for the numerical solution of mathematical equations arising in all areas of physics. The journal seeks to emphasize methods that cross disciplinary boundaries.",
         "scopeCN": "《计算物理杂志》全面处理物理问题的计算方面,展示物理学所有领域中数学方程数值解的技术。本刊致力于强调跨学科边界的方法。",
         "researchAreas": "物理 - 计算机:跨学科应用",
-        "tips": "最强烈推荐用于深度学习求解物理PDE的研究"
+        "tips": "最强烈推荐用于深度学习求解物理PDE的研究",
+        "indexed": "SCIE",
+        "warning": false
     },
     {
         "name": "Journal of Scientific Computing",
@@ -433,7 +487,6 @@
         "casZone": "数学 2区",
         "scuZone": "数学C",
         "reviewTime": "偏慢,4-8周",
-        "acceptanceRate": "待补充",
         "publisher": "Springer US",
         "issn": "0885-7474",
         "eissn": "1573-7691",
@@ -444,11 +497,18 @@
         "website": "https://www.springer.com/journal/10915",
         "authorGuide": "https://www.springer.com/journal/10915/submission-guidelines",
         "submissionUrl": "https://www.editorialmanager.com/jomp/default.aspx",
-        "tags": ["美国", "Springer US", "数学 - 应用数学", "SCIE"],
+        "tags": [
+            "美国",
+            "Springer US",
+            "数学 - 应用数学",
+            "SCIE"
+        ],
         "scope": "Journal of Scientific Computing is an international interdisciplinary forum for the publication of papers on state-of-the-art developments in scientific computing and its applications in science and engineering. The journal publishes high-quality, peer-reviewed original papers, review papers and short communications on scientific computing.",
         "scopeCN": "《科学计算杂志》是一个国际跨学科论坛,发表关于科学计算及其在科学与工程中应用的最新发展论文。本刊发表高质量、同行评审的原创论文、综述论文和科学计算简短通讯。",
         "researchAreas": "数学 - 应用数学",
-        "tips": "推荐用于方法创新+科学应用的研究"
+        "tips": "推荐用于方法创新+科学应用的研究",
+        "indexed": "SCIE",
+        "warning": false
     },
     {
         "name": "Mathematical Methods in the Applied Sciences",
@@ -461,7 +521,6 @@
         "casZone": "数学 4区(3区)",
         "scuZone": "数学E",
         "reviewTime": "约6.0个月",
-        "acceptanceRate": "待补充",
         "publisher": "John Wiley and Sons Ltd",
         "issn": "0170-4214",
         "eissn": "1099-1476",
@@ -472,11 +531,18 @@
         "website": "https://onlinelibrary.wiley.com/journal/10991476",
         "authorGuide": "https://onlinelibrary.wiley.com/page/journal/10991476/homepage/forauthors.html",
         "submissionUrl": "https://mc.manuscriptcentral.com/mma",
-        "tags": ["英国", "John Wiley and Sons Ltd", "数学 - 应用数学", "SCIE"],
+        "tags": [
+            "英国",
+            "John Wiley and Sons Ltd",
+            "数学 - 应用数学",
+            "SCIE"
+        ],
         "scope": "Mathematical Methods in the Applied Sciences publishes papers dealing with new mathematical methods for the consideration of linear and non-linear, direct and inverse problems for physical relevant processes over time- and space- varying media under certain initial, boundary, transition conditions etc. Papers dealing with biomathematical content, population dynamics and network problems are most welcome.",
         "scopeCN": "《应用科学中的数学方法》发表处理在特定初始、边界、转换条件等下,时间和空间变化介质中物理相关过程的线性和非线性、正向和反向问题的新数学方法的论文。特别欢迎涉及生物数学内容、种群动力学和网络问题的论文。",
         "researchAreas": "数学 - 应用数学",
-        "tips": "适合有明确生物、社会科学应用的研究"
+        "tips": "适合有明确生物、社会科学应用的研究",
+        "indexed": "SCIE",
+        "warning": false
     },
     {
         "name": "Mathematics and Computers in Simulation",
@@ -489,7 +555,6 @@
         "casZone": "数学 3区(2区)",
         "scuZone": "数学E",
         "reviewTime": "约18.0个月",
-        "acceptanceRate": "待补充",
         "publisher": "Elsevier",
         "issn": "0378-4754",
         "eissn": "1872-7166",
@@ -500,11 +565,18 @@
         "website": "https://www.journals.elsevier.com/mathematics-and-computers-in-simulation",
         "authorGuide": "https://www.elsevier.com/journals/mathematics-and-computers-in-simulation/0378-4754/guide-for-authors",
         "submissionUrl": "https://www.editorialmanager.com/matcom/default.aspx",
-        "tags": ["Elsevier", "荷兰", "数学 - 计算机:跨学科应用", "SCIE"],
+        "tags": [
+            "Elsevier",
+            "荷兰",
+            "数学 - 计算机:跨学科应用",
+            "SCIE"
+        ],
         "scope": "The aim of the journal is to provide an international forum for the dissemination of up-to-date information in the fields of the mathematics and computers, in particular (but not exclusively) as they apply to the dynamics of systems, their simulation and scientific computation in general. Mathematics and Computers in Simulation, published monthly, is the official organ of IMACS, the International Association for Mathematics and Computers in Simulation.",
         "scopeCN": "本刊的目标是为数学和计算机领域(特别是但不限于它们在系统动力学、仿真和一般科学计算中的应用)的最新信息传播提供国际论坛。本刊是IMACS(国际数学与计算机仿真协会,前身为AICA)的官方刊物,月刊发行。",
         "researchAreas": "数学 - 计算机:跨学科应用",
-        "tips": "适合深度学习加速仿真、替代仿真的研究"
+        "tips": "适合深度学习加速仿真、替代仿真的研究",
+        "indexed": "SCIE",
+        "warning": false
     },
     {
         "name": "Nature Computational Science",
@@ -517,7 +589,6 @@
         "casZone": "1区",
         "scuZone": "CNS",
         "reviewTime": "",
-        "acceptanceRate": "待补充",
         "publisher": "Springer Nature",
         "issn": "2662-8457",
         "eissn": "",
@@ -528,11 +599,17 @@
         "website": "https://www.nature.com/natcomputsci/",
         "authorGuide": "https://www.nature.com/natcomputsci/submission-guidelines",
         "submissionUrl": "https://mts-natcomputsci.nature.com/",
-        "tags": ["Multiple(多学科)", "SCIE / ESCI", "Springer Nature"],
+        "tags": [
+            "Multiple(多学科)",
+            "SCIE / ESCI",
+            "Springer Nature"
+        ],
         "scope": "The main goal of Nature Computational Science is to promote innovative applications of computing technology in various scientific fields, including but not limited to bioinformatics, chemical informatics, geographic informatics, computational physics, cosmology, materials science, and urban science. The content published in the journal covers both fundamental and applied research, including breakthrough algorithms, tools, and frameworks, as well as new insights and solutions to challenging real-world problems discovered through innovative ways of utilizing computing power.",
         "scopeCN": "《自然计算科学》的主要目标是推广计算技术在各个科学领域的创新应用,包括但不限于生物信息学、化学信息学、地理信息学、计算物理、宇宙学、材料科学和城市科学。本刊发表的内容涵盖基础和应用研究,包括突破性算法、工具和框架,以及通过创新方式利用计算能力发现的具有挑战性的现实问题的新见解和解决方案。",
         "researchAreas": "Multiple(多学科)",
-        "tips": "仅推荐给有重大突破性成果的工作"
+        "tips": "仅推荐给有重大突破性成果的工作",
+        "indexed": "SCIE / ESCI",
+        "warning": false
     },
     {
         "name": "Nature Machine Intelligence",
@@ -545,7 +622,6 @@
         "casZone": "计算机科学 1区",
         "scuZone": "CNS",
         "reviewTime": "",
-        "acceptanceRate": "待补充",
         "publisher": "SPRINGERNATURE",
         "issn": "2522-5839",
         "eissn": "2522-5839",
@@ -556,11 +632,18 @@
         "website": "https://www.nature.com/natmachintell/",
         "authorGuide": "https://www.nature.com/natmachintell/submission-guidelines",
         "submissionUrl": "https://mts-natmachintell.nature.com/",
-        "tags": ["英国", "Multiple(多学科)", "SCIE", "SPRINGERNATURE"],
+        "tags": [
+            "英国",
+            "Multiple(多学科)",
+            "SCIE",
+            "SPRINGERNATURE"
+        ],
         "scope": "Nature Machine Intelligence will publish high-quality original research and reviews in a wide range of topics in machine learning, robotics and AI. The journal will also explore and discuss the significant impact that these fields are beginning to have on other scientific disciplines as well as many aspects of society and industry.",
         "scopeCN": "《自然机器智能》将发表机器学习、机器人和人工智能广泛主题的高质量原创研究和综述。本刊还将探讨和讨论这些领域对其他科学学科以及社会和工业许多方面开始产生的重大影响。",
         "researchAreas": "Multiple(多学科)",
-        "tips": "仅推荐给AI理论有重大创新的工作"
+        "tips": "仅推荐给AI理论有重大创新的工作",
+        "indexed": "SCIE",
+        "warning": false
     },
     {
         "name": "Neural Networks",
@@ -573,7 +656,6 @@
         "casZone": "计算机科学 1区",
         "scuZone": "计算机科学C",
         "reviewTime": "约12.0个月 / 约10.5周",
-        "acceptanceRate": "待补充",
         "publisher": "Elsevier Ltd",
         "issn": "0893-6080",
         "eissn": "1879-2782",
@@ -584,11 +666,18 @@
         "website": "https://www.journals.elsevier.com/neural-networks",
         "authorGuide": "https://www.elsevier.com/journals/neural-networks/0893-6080/guide-for-authors",
         "submissionUrl": "https://www.editorialmanager.com/neunet/default.aspx",
-        "tags": ["工程技术 - 计算机:人工智能", "英国", "Elsevier Ltd", "SCIE"],
+        "tags": [
+            "工程技术 - 计算机:人工智能",
+            "英国",
+            "Elsevier Ltd",
+            "SCIE"
+        ],
         "scope": "Neural Networks is the archival journal of the world's three oldest neural modeling societies: the International Neural Network Society (INNS), the European Neural Network Society (ENNS), and the Japanese Neural Network Society (JNNS). Neural Networks provides a forum for developing and nurturing an international community of scholars and practitioners who are interested in all aspects of neural networks and related approaches to computational intelligence.",
         "scopeCN": "《神经网络》是世界三大最古老神经建模学会的档案期刊:国际神经网络学会(INNS)、欧洲神经网络学会(ENNS)和日本神经网络学会(JNNS)。本刊为发展和培育对神经网络及相关计算智能方法各个方面感兴趣的国际学者和实践者社区提供论坛。",
         "researchAreas": "工程技术 - 计算机:人工智能",
-        "tips": "适合从神经网络理论角度研究PINN的工作"
+        "tips": "适合从神经网络理论角度研究PINN的工作",
+        "indexed": "SCIE",
+        "warning": false
     },
     {
         "name": "Neurocomputing",
@@ -601,7 +690,6 @@
         "casZone": "计算机科学 2区",
         "scuZone": "计算机科学B",
         "reviewTime": "约5.7个月 / 约15.5周",
-        "acceptanceRate": "待补充",
         "publisher": "Elsevier",
         "issn": "0925-2312",
         "eissn": "1872-8286",
@@ -612,11 +700,18 @@
         "website": "https://www.journals.elsevier.com/neurocomputing",
         "authorGuide": "https://www.elsevier.com/journals/neurocomputing/0925-2312/guide-for-authors",
         "submissionUrl": "https://www.editorialmanager.com/NEUCOM",
-        "tags": ["工程技术 - 计算机:人工智能", "Elsevier", "荷兰", "SCIE"],
+        "tags": [
+            "工程技术 - 计算机:人工智能",
+            "Elsevier",
+            "荷兰",
+            "SCIE"
+        ],
         "scope": "Neurocomputing publishes articles describing recent fundamental contributions in the field of neurocomputing. Neurocomputing theory, practice and applications are the essential topics being covered.",
         "scopeCN": "《神经计算》发表描述神经计算领域近期基本贡献的文章。神经计算理论、实践和应用是涵盖的核心主题。",
         "researchAreas": "工程技术 - 计算机:人工智能",
-        "tips": "适合应用导向的深度学习求解PDE研究"
+        "tips": "适合应用导向的深度学习求解PDE研究",
+        "indexed": "SCIE",
+        "warning": false
     },
     {
         "name": "Nonlinear Dynamics",
@@ -629,7 +724,6 @@
         "casZone": "工程技术 2区",
         "scuZone": "工程技术C",
         "reviewTime": "约3.0个月",
-        "acceptanceRate": "待补充",
         "publisher": "Springer Netherlands",
         "issn": "0924-090X",
         "eissn": "1573-269X",
@@ -640,11 +734,18 @@
         "website": "https://www.springer.com/journal/11071",
         "authorGuide": "https://www.springer.com/journal/11071/submission-guidelines",
         "submissionUrl": "https://www.editorialmanager.com/nody",
-        "tags": ["美国", "Springer Netherlands", "工程技术 - 工程:机械", "SCIE"],
+        "tags": [
+            "美国",
+            "Springer Netherlands",
+            "工程技术 - 工程:机械",
+            "SCIE"
+        ],
         "scope": "Nonlinear Dynamics provides a forum for the rapid publication of original research in the field. The journal's scope encompasses all nonlinear dynamic phenomena associated with mechanical, structural, civil, aeronautical, ocean, electrical, and control systems.",
         "scopeCN": "《非线性动力学》为该领域原创研究的快速发表提供论坛。本刊范围涵盖与机械、结构、土木、航空、海洋、电气和控制系统相关的所有非线性动力学现象。",
         "researchAreas": "工程技术 - 工程:机械",
-        "tips": "强烈推荐用于非线性系统的深度学习研究"
+        "tips": "强烈推荐用于非线性系统的深度学习研究",
+        "indexed": "SCIE",
+        "warning": false
     },
     {
         "name": "Numerical Methods for Partial Differential Equations",
@@ -657,7 +758,6 @@
         "casZone": "数学 3区",
         "scuZone": "数学D",
         "reviewTime": "约8.0个月",
-        "acceptanceRate": "待补充",
         "publisher": "John Wiley and Sons Inc.",
         "issn": "0749-159X",
         "eissn": "1098-2426",
@@ -668,11 +768,18 @@
         "website": "https://onlinelibrary.wiley.com/journal/10982426",
         "authorGuide": "https://onlinelibrary.wiley.com/page/journal/10982426/homepage/forauthors.html",
         "submissionUrl": "https://mc.manuscriptcentral.com/num",
-        "tags": ["美国", "数学 - 应用数学", "John Wiley and Sons Inc.", "SCIE"],
+        "tags": [
+            "美国",
+            "数学 - 应用数学",
+            "John Wiley and Sons Inc.",
+            "SCIE"
+        ],
         "scope": "An international journal that aims to cover research into the development and analysis of new methods for the numerical solution of partial differential equations, it is intended that it be readily readable by and directed to a broad spectrum of researchers into numerical methods for partial differential equations throughout science and engineering. The numerical methods and techniques themselves are emphasized rather than the specific applications.",
         "scopeCN": "一本旨在涵盖偏微分方程数值解新方法开发和分析研究的国际期刊,期望对科学和工程领域研究偏微分方程数值方法的广泛研究者易读且有针对性。强调数值方法和技术本身而非具体应用。",
         "researchAreas": "数学 - 应用数学",
-        "tips": "最对口的期刊之一,专门针对PDE数值方法"
+        "tips": "最对口的期刊之一,专门针对PDE数值方法",
+        "indexed": "SCIE",
+        "warning": false
     },
     {
         "name": "SCIENCE CHINA Mathematics",
@@ -685,7 +792,6 @@
         "casZone": "数学 1区",
         "scuZone": "数学B",
         "reviewTime": "一般,3-8周",
-        "acceptanceRate": "待补充",
         "publisher": "Science China Press",
         "issn": "1674-7283",
         "eissn": "1869-1862",
@@ -696,11 +802,19 @@
         "website": "https://link.springer.com/journal/11425",
         "authorGuide": "https://link.springer.com/journal/11425/submission-guidelines",
         "submissionUrl": "https://mc03.manuscriptcentral.com/scmath",
-        "tags": ["数学 - 应用数学", "Science China Press", "数学 - 数学", "中国", "SCIE"],
+        "tags": [
+            "数学 - 应用数学",
+            "Science China Press",
+            "数学 - 数学",
+            "中国",
+            "SCIE"
+        ],
         "scope": "Science China Mathematics is committed to publishing high-quality, original results in both basic and applied research. It presents reviews that summarize representative results and achievements in a particular topic or an area, comment on the current state of research, or advise on research directions.",
         "scopeCN": "《中国科学:数学》致力于发表基础和应用研究的高质量原创成果。发表综述,总结特定主题或领域的代表性成果和成就,评论当前研究状况,或建议研究方向。",
         "researchAreas": "数学 - 数学, 数学 - 应用数学",
-        "tips": "对深度学习方法接受度有限"
+        "tips": "对深度学习方法接受度有限",
+        "indexed": "SCIE",
+        "warning": false
     },
     {
         "name": "SCIENCE CHINA Physics, Mechanics & Astronomy",
@@ -713,7 +827,6 @@
         "casZone": "物理与天体物理 1区",
         "scuZone": "物理与天体物理C",
         "reviewTime": "约3.6个月",
-        "acceptanceRate": "待补充",
         "publisher": "Science China Press",
         "issn": "1674-7348",
         "eissn": "1869-1927",
@@ -724,11 +837,18 @@
         "website": "https://link.springer.com/journal/11433",
         "authorGuide": "https://link.springer.com/journal/11433/submission-guidelines",
         "submissionUrl": "https://mc03.manuscriptcentral.com/scpma",
-        "tags": ["物理 - 综合", "中国", "SCIE", "Science China Press"],
+        "tags": [
+            "物理 - 综合",
+            "中国",
+            "SCIE",
+            "Science China Press"
+        ],
         "scope": "Science China Physics, Mechanics & Astronomy, an academic journal cosponsored by the Chinese Academy of Sciences and the National Natural Science Foundation of China, and published by Science China Press, is committed to publishing high-quality, original results in both basic and applied research.",
         "scopeCN": "《中国科学:物理学、力学与天文学》是由中国科学院和国家自然科学基金委员会共同主办、科学出版社出版的学术期刊,致力于发表基础和应用研究的高质量原创成果。",
         "researchAreas": "物理 - 综合",
-        "tips": "适合国内学者发表AI for Physics研究"
+        "tips": "适合国内学者发表AI for Physics研究",
+        "indexed": "SCIE",
+        "warning": false
     },
     {
         "name": "SIAM Journal on Scientific Computing",
@@ -741,7 +861,6 @@
         "casZone": "数学 2区",
         "scuZone": "数学C",
         "reviewTime": "约6月",
-        "acceptanceRate": "待补充",
         "publisher": "Society for Industrial and Applied Mathematics Publications",
         "issn": "1064-8275",
         "eissn": "1095-7197",
@@ -752,11 +871,18 @@
         "website": "https://epubs.siam.org/journal/sjoce3",
         "authorGuide": "https://www.siam.org/publications/journals/siam-journal-on-scientific-computing-sisc/submission-guidelines",
         "submissionUrl": "https://www.siam.org/publications/journals/siam-journal-scientific-computing",
-        "tags": ["美国", "应用数学 - 数学", "SCIE", "Society for Industrial and Applied Mathematics Publications"],
+        "tags": [
+            "美国",
+            "应用数学 - 数学",
+            "SCIE",
+            "Society for Industrial and Applied Mathematics Publications"
+        ],
         "scope": "The purpose of SIAM Journal on Scientific Computing (SISC) is to advance computational methods for solving scientific and engineering problems. SISC papers are classified into three categories: (1) Methods and Algorithms for Scientific Computing (2) Computational Methods in Science and Engineering (3) Software and High-Performance Computing",
         "scopeCN": "《SIAM科学计算杂志》的目的是推进解决科学和工程问题的计算方法。SISC论文分为三类:(1)科学计算的方法和算法(2)科学与工程中的计算方法(3)软件与高性能计算",
         "researchAreas": "应用数学 - 数学",
-        "tips": "强烈推荐用于有理论深度的PINN研究"
+        "tips": "强烈推荐用于有理论深度的PINN研究",
+        "indexed": "SCIE",
+        "warning": false
     },
     {
         "name": "SIAM Review",
@@ -769,7 +895,6 @@
         "casZone": "数学 1区",
         "scuZone": "数学B",
         "reviewTime": "约稿 周期不定",
-        "acceptanceRate": "待补充",
         "publisher": "Society for Industrial and Applied Mathematics Publications",
         "issn": "0036-1445",
         "eissn": "1095-7200",
@@ -780,9 +905,17 @@
         "website": "https://epubs.siam.org/journal/siread",
         "authorGuide": "https://epubs.siam.org/journal-authors",
         "submissionUrl": "https://sirev.siam.org/cgi-bin/main.plex",
-        "tags": ["美国", "数学 - 应用数学", "SCIE", "Society for Industrial and Applied Mathematics Publications"],
+        "tags": [
+            "美国",
+            "数学 - 应用数学",
+            "SCIE",
+            "Society for Industrial and Applied Mathematics Publications"
+        ],
         "scope": "SIAM Review (SIREV) consists of the following five sections: Survey and Review, Research Spotlights, SIGEST, Education, and Book Reviews. Survey and Review features papers with a deliberately integrative and up-to-date perspective on a major topic in applied or computational mathematics or scientific computing.",
         "scopeCN": "《SIAM评论》由以下五个部分组成:调查与综述、研究亮点、SIGEST、教育和书评。调查与综述刊登对应用或计算数学或科学计算主要主题具有刻意整合性和最新视角的论文。",
         "researchAreas": "数学 - 应用数学",
-        "tips": "仅推荐给领域内资深专家"
-    }]
+        "tips": "仅推荐给领域内资深专家",
+        "indexed": "SCIE",
+        "warning": false
+    }
+];
