@@ -217,7 +217,7 @@
                 padding: 1.5rem 2rem;
                 gap: 0.8rem;
             }
-            
+
             .control-group {
                 min-width: 180px;
             }
@@ -230,7 +230,7 @@
                 align-items: stretch;
                 gap: 1rem;
             }
-            
+
             .control-group {
                 min-width: auto;
                 width: 100%;
@@ -1226,7 +1226,7 @@
                 <option value="荷兰">荷兰</option>
                 <option value="德国">德国</option>
                 <option value="中国">中国</option>
-                <option value="国际">国际</option>
+                <option value="巴西">巴西</option>
             </select>
         </div>
         <div class="control-group">
@@ -1239,15 +1239,7 @@
                 <option value="SIAM">SIAM</option>
             </select>
         </div>
-        <div class="control-group">
-            <select id="filterReviewTime">
-                <option value="all">所有审稿周期</option>
-                <option value="快速">快速审稿（≤3个月）</option>
-                <option value="标准">标准审稿（3-6个月）</option>
-                <option value="较慢">较慢审稿（6-12个月）</option>
-                <option value="很慢">很慢审稿（≥12个月）</option>
-            </select>
-        </div>
+
         <div class="control-group">
             <select id="sortBy">
                 <option value="impact">按影响因子排序</option>
@@ -1559,51 +1551,30 @@
             const filterZone = document.getElementById('filterZone').value;
             const filterRegion = document.getElementById('filterRegion').value;
             const filterPublisher = document.getElementById('filterPublisher').value;
-            const filterReviewTime = document.getElementById('filterReviewTime').value;
             const sortBy = document.getElementById('sortBy').value;
 
             let filtered = journals.filter(journal => {
-                // 搜索功能：包含期刊名称、缩写、中文名、标签、范围等
-                const matchesSearch = !searchTerm || 
-                    journal.name.toLowerCase().includes(searchTerm) ||
-                    journal.chineseName.toLowerCase().includes(searchTerm) ||
+                const matchesSearch = journal.name.toLowerCase().includes(searchTerm) ||
                     journal.abbr.toLowerCase().includes(searchTerm) ||
                     journal.tags.some(tag => tag.toLowerCase().includes(searchTerm)) ||
                     (journal.scope && journal.scope.toLowerCase().includes(searchTerm)) ||
-                    (journal.scopeCN && journal.scopeCN.toLowerCase().includes(searchTerm)) ||
-                    (journal.researchAreas && journal.researchAreas.toLowerCase().includes(searchTerm));
+                    (journal.recentArticles && journal.recentArticles.toLowerCase().includes(searchTerm));
+
+                // 分区筛选 - 支持模糊匹配（如"4区(3区)"也能匹配"4区"）
+                const matchesZone = filterZone === 'all' || (journal.casZone && journal.casZone.includes(filterZone));
                 
-                const matchesZone = filterZone === 'all' || journal.casZone === filterZone;
+                // 地区筛选
                 const matchesRegion = filterRegion === 'all' || journal.region === filterRegion;
-                const matchesPublisher = filterPublisher === 'all' || journal.publisher.toLowerCase().includes(filterPublisher.toLowerCase());
                 
-                // 审稿周期筛选逻辑 - 基于月份数字提取
-                let matchesReviewTime = true;
-                if (filterReviewTime !== 'all') {
-                    const reviewTimeText = journal.reviewTime.toLowerCase();
-                    // 提取审稿时间中的数字（月份）
-                    const monthMatches = reviewTimeText.match(/(\d+(?:\.\d+)?)\s*个月/);
-                    const weekMatches = reviewTimeText.match(/(\d+(?:\.\d+)?)\s*周/);
-                    
-                    let months = 0;
-                    if (monthMatches) {
-                        months = parseFloat(monthMatches[1]);
-                    } else if (weekMatches) {
-                        months = parseFloat(weekMatches[1]) / 4.3; // 转换为月份
-                    }
-                    
-                    if (filterReviewTime === '快速') {
-                        matchesReviewTime = months > 0 && months <= 3;
-                    } else if (filterReviewTime === '标准') {
-                        matchesReviewTime = months > 3 && months <= 6;
-                    } else if (filterReviewTime === '较慢') {
-                        matchesReviewTime = months > 6 && months <= 12;
-                    } else if (filterReviewTime === '很慢') {
-                        matchesReviewTime = months > 12 || reviewTimeText.includes('年');
-                    }
-                }
-                
-                return matchesSearch && matchesZone && matchesRegion && matchesPublisher && matchesReviewTime;
+                // 出版社筛选 - 支持模糊匹配
+                const matchesPublisher = filterPublisher === 'all' || 
+                    (journal.publisher && (
+                        journal.publisher.includes(filterPublisher) ||
+                        (filterPublisher === 'Taylor & Francis' && journal.publisher.includes('Taylor and Francis')) ||
+                        (filterPublisher === 'SIAM' && journal.publisher.includes('SIAM'))
+                    ));
+
+                return matchesSearch && matchesZone && matchesRegion && matchesPublisher;
             });
 
             filtered.sort((a, b) => {
@@ -1611,10 +1582,7 @@
                     case 'impact':
                         return b.impactFactor - a.impactFactor;
                     case 'zone':
-                        // 按中科院分区数字排序，1区在前，4区在后
-                        const zoneA = parseInt(a.casZone.replace('区', '')) || 999;
-                        const zoneB = parseInt(b.casZone.replace('区', '')) || 999;
-                        return zoneA - zoneB;
+                        return a.casZone.localeCompare(b.casZone);
                     case 'name':
                         return a.name.localeCompare(b.name);
                     default:
@@ -1622,24 +1590,6 @@
                 }
             });
 
-            // 显示筛选结果统计
-            const noResults = document.getElementById('noResults');
-            const journalsGrid = document.getElementById('journalsGrid');
-            
-            if (filtered.length === 0) {
-                noResults.style.display = 'block';
-                journalsGrid.style.display = 'none';
-                noResults.innerHTML = `
-                    <p>未找到匹配的期刊</p>
-                    <p style="font-size: 0.9rem; color: var(--text-dim); margin-top: 0.5rem;">
-                        当前筛选条件：搜索"${searchTerm}"，分区"${filterZone}"，地区"${filterRegion}"，出版社"${filterPublisher}"，审稿周期"${filterReviewTime}"
-                    </p>
-                `;
-            } else {
-                noResults.style.display = 'none';
-                journalsGrid.style.display = 'grid';
-            }
-            
             renderJournals(filtered);
         }
 
@@ -1918,7 +1868,7 @@
             const totalJournals = journals.length;
             const casZone1Count = journals.filter(journal => journal.casZone === '1区').length;
             const casZone2Count = journals.filter(journal => journal.casZone === '2区').length;
-            
+
             // 更新DOM
             document.getElementById('totalJournals').textContent = totalJournals;
             document.getElementById('casZone1Count').textContent = casZone1Count;
@@ -1930,7 +1880,6 @@
         document.getElementById('filterZone').addEventListener('change', filterAndSort);
         document.getElementById('filterRegion').addEventListener('change', filterAndSort);
         document.getElementById('filterPublisher').addEventListener('change', filterAndSort);
-        document.getElementById('filterReviewTime').addEventListener('change', filterAndSort);
         document.getElementById('sortBy').addEventListener('change', filterAndSort);
 
         // 初始渲染
