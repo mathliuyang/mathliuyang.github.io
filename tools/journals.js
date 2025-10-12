@@ -440,7 +440,7 @@ let journals = [
         "casZone": "2区",
         "scuZone": "物理与天体物理 C",
         "reviewTime": "约6.5个月",
-        "publisher": "Academic Press Inc.",
+        "publisher": "Elsevier",
         "issn": "0021-9991",
         "eissn": "1090-2716",
         "frequency": "月刊",
@@ -453,10 +453,10 @@ let journals = [
         "tags": [
             "物理 - 计算机:跨学科应用",
             "SCIE",
-            "Academic Press Inc."
+            "Elsevier"
         ],
-        "scope": "Journal of Computational Physics thoroughly treats the computational aspects of physical problems, presenting techniques for the numerical solution of mathematical equations arising in all areas of physics. The journal seeks to emphasize methods that cross disciplinary boundaries.",
-        "scopeCN": "《计算物理杂志》全面处理物理问题的计算方面,展示物理学所有领域中数学方程数值解的技术。本刊致力于强调跨学科边界的方法。",
+        "scope": "The Journal of Computational Physics (JCP) focuses on the computational aspects of physical problems. JCP encourages original scientific contributions in advanced mathematical and numerical modeling reflecting a combination of concepts, methods and principles which are often interdisciplinary in nature and span several areas of physics, mechanics, applied mathematics, statistics, applied geometry, computer science, chemistry and other scientific disciplines as well: the Journal's editors seek to emphasize methods that cross disciplinary boundaries. JCP also encourages the submission of papers that develop innovative methods bridging mathematical, physical modeling and algorithmization, e.g. at the frontier between predictive simulation and machine learning. When addressing problems previously covered by other approaches, a comparison should be provided. As for any paper in JCP, the efficacy, robustness, computational complexity, as well as reproducibility should be addressed. JCP also publishes short notes of 4 pages or less (including figures, tables, and references but excluding title pages). Letters to the Editor commenting on articles already published in this Journal will also be considered. Neither notes nor letters should have an abstract. Review articles providing a survey of particular fields are particularly encouraged. JCP does not impose a formal page limit. Authors are expected to present their work clearly and concisely. The handling Editor will assess whether the length of the manuscript is appropriate for the content and may request a shorter version of the submission if necessary. Published conference papers are welcome provided the submitted manuscript is a significant enhancement of the conference paper with substantial additions. Reproducibility, that is the ability to reproduce results obtained by others, is a core principle of the scientific method. As the impact of and knowledge discovery enabled by computational science and engineering continues to increase, it is imperative that reproducibility becomes a natural part of these activities. The journal strongly encourages authors to make available all software or data that would allow published results to be reproduced and that every effort is made to include sufficient information in manuscripts to enable this. This should not only include information used for setup but also details on post-processing to recover published results.",
+        "scopeCN": "《计算物理学杂志》（JCP）关注物理问题的计算方面。JCP 鼓励在高级数学和数值建模方面的原创性科学论文，这些论文反映了概念、方法和原理的结合，通常具有跨学科性质，跨越物理学、力学、应用数学、统计学、应用几何学、计算机科学、化学和其他科学学科的多个领域：期刊编辑力求强调跨越学科界限的方法。JCP 还鼓励提交那些在数学、物理建模和算法之间架起桥梁的创新方法的论文，例如在预测模拟和机器学习之间的前沿领域。当论文涉及到其他方法尚未解决的问题时，应提供相关比较。对于 JCP 上的任何论文，都应说明其有效性、稳健性、计算复杂性以及可重复性。JCP 还发表 4 页或 4 页以下的短文（包括图、表和参考文献，但不包括标题页）。对本刊已发表文章进行评论的致编辑信也会被考虑。注释和信件均不得有摘要。特别鼓励对特定领域进行综述的评论文章。JCP 没有正式的页数限制。作者应简明扼要地介绍自己的工作。处理编辑将评估稿件长度是否与内容相符，必要时可要求缩短稿件。欢迎已发表的会议论文，只要所提交的稿件是对会议论文的重大改进和实质性补充。可重复性是科学方法的核心原则，即能够复制他人的成果。随着计算科学与工程的影响和知识发现的不断增加，可重复性必须成为这些活动的自然组成部分。本刊强烈鼓励作者提供所有可以复制已发表结果的软件或数据，并尽一切努力在稿件中提供足够的信息以实现这一目标。这不仅应包括用于设置的信息，还应包括恢复已发表结果的后处理细节。",
         "researchAreas": "物理 - 计算机:跨学科应用",
         "tips": "最强烈推荐用于深度学习求解物理PDE的研究！这是该领域认可度最高、影响力最大的期刊之一。特别适合PINN求解各类物理PDE(流体、传热、波动等)、Neural Operator(FNO、DeepONet等)用于物理问题、深度学习在高维量子力学和统计物理中的应用、物理约束机器学习方法等研究。审稿周期较长(6.5个月)，必须强调物理意义和物理约束的重要性，建议准备有物理意义的复杂测试案例。作为2区高水平期刊(IF=3.8)，如果只能投一个期刊，对于AI+物理方向这是首选。可考虑先投短笔记快速发表核心结果。",
         "indexed": "SCIE",

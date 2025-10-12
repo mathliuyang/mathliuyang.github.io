@@ -1,0 +1,1201 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>期刊封面图片生成器 - AI for Science</title>
+    <style>
+        :root {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-card: rgba(30, 41, 59, 0.8);
+            --text-primary: #f8fafc;
+            --text-secondary: #cbd5e1;
+            --accent: #3b82f6;
+            --accent-hover: #2563eb;
+            --border: #334155;
+            --shadow: rgba(0, 0, 0, 0.3);
+            --success: #10b981;
+            --warning: #f59e0b;
+            --error: #ef4444;
+        }
+
+        [data-theme="light"] {
+            --bg-primary: #f8fafc;
+            --bg-secondary: #e2e8f0;
+            --bg-card: rgba(255, 255, 255, 0.9);
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --accent: #3b82f6;
+            --accent-hover: #2563eb;
+            --border: #d1d5db;
+            --shadow: rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, var(--accent) 0%, transparent 70%);
+            opacity: 0.1;
+            border-radius: 50%;
+            z-index: -1;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--accent) 0%, #8b5cf6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border);
+            box-shadow: 0 8px 32px var(--shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 40px var(--shadow);
+        }
+
+        .card h2 {
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .file-upload {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .file-upload input[type="file"] {
+            position: absolute;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+
+        .file-upload-label {
+            display: block;
+            padding: 1rem;
+            border: 2px dashed var(--border);
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: var(--bg-secondary);
+        }
+
+        .file-upload-label:hover {
+            border-color: var(--accent);
+            background: rgba(59, 130, 246, 0.05);
+        }
+
+        .file-upload-label.has-file {
+            border-color: var(--success);
+            background: rgba(16, 185, 129, 0.05);
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-hover);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        .btn-secondary {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background: var(--border);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .preview-area {
+            position: relative;
+            width: 100%;
+            height: 400px;
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--border);
+        }
+
+        .preview-content {
+            text-align: center;
+            padding: 2rem;
+            max-width: 100%;
+        }
+
+        .preview-series {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .preview-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .preview-subtitle {
+            font-size: 1.5rem;
+            color: var(--accent);
+            margin-bottom: 1rem;
+        }
+
+        .preview-image {
+            max-width: 200px;
+            max-height: 150px;
+            border-radius: 8px;
+            margin: 1rem 0;
+            box-shadow: 0 4px 12px var(--shadow);
+        }
+
+        .preview-info {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.4;
+        }
+
+        .status {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            color: white;
+            font-weight: 500;
+            z-index: 1000;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .status.show {
+            transform: translateX(0);
+        }
+
+        .status.success {
+            background: rgba(16, 185, 129, 0.9);
+        }
+
+        .status.error {
+            background: rgba(239, 68, 68, 0.9);
+        }
+
+        .status.warning {
+            background: rgba(245, 158, 11, 0.9);
+        }
+
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            z-index: 100;
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1);
+        }
+
+        .instructions {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-top: 2rem;
+            border: 1px solid var(--border);
+        }
+
+        .instructions h3 {
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .instructions ul {
+            margin-left: 1.5rem;
+            color: var(--text-secondary);
+        }
+
+        .instructions li {
+            margin-bottom: 0.5rem;
+        }
+
+        .shortcuts {
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .container {
+                padding: 1rem;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .btn-group {
+                flex-direction: column;
+            }
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .image-colors {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .color-swatch {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: 2px solid white;
+            box-shadow: 0 2px 4px var(--shadow);
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .color-swatch:hover {
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="theme-toggle" onclick="toggleTheme()" title="切换主题">
+        <span id="themeIcon">🌙</span>
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <h1>期刊封面图片生成器</h1>
+            <p>为 AI for Science 期刊推荐系列创建精美的公众号封面图片</p>
+        </div>
+
+        <div class="main-content">
+            <div class="card">
+                <h2>🎨 配置参数</h2>
+                
+                <div class="form-group">
+                    <label for="quickTemplate">快速模板选择</label>
+                    <select id="quickTemplate" onchange="applyTemplate()">
+                        <option value="">选择模板...</option>
+                        <option value="computational-physics">计算物理类</option>
+                        <option value="applied-mathematics">应用数学类</option>
+                        <option value="machine-learning">机器学习类</option>
+                        <option value="interdisciplinary">交叉学科类</option>
+                        <option value="classical">经典物理类</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="journalName">期刊名称</label>
+                    <input type="text" id="journalName" placeholder="例如：Journal of Computational Physics" oninput="updatePreview()">
+                </div>
+
+                <div class="form-group">
+                    <label for="seriesNumber">系列编号</label>
+                    <input type="number" id="seriesNumber" value="01" min="1" max="999" oninput="updatePreview()">
+                </div>
+
+                <div class="form-group">
+                    <label for="journalDescription">期刊描述</label>
+                    <textarea id="journalDescription" placeholder="简要描述期刊特色..." rows="3" oninput="updatePreview()">计算物理领域顶级期刊，专注于科学计算和数值方法</textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>期刊封面图片</label>
+                    <div class="file-upload">
+                        <input type="file" id="coverImage" accept="image/*" onchange="handleImageUpload(event)">
+                        <label for="coverImage" class="file-upload-label" id="fileUploadLabel">
+                            📷 点击上传封面图片或拖拽到此处
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="coverUrl">或输入图片链接</label>
+                    <input type="url" id="coverUrl" placeholder="https://..." oninput="loadImageFromUrl()">
+                </div>
+
+                <div id="imageColors" class="image-colors" style="display: none;">
+                    <label>识别到的主色调：</label>
+                    <div id="colorSwatches"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="bgColor">背景风格</label>
+                    <select id="bgColor" onchange="updatePreview()">
+                        <option value="dark">深色主题</option>
+                        <option value="light">浅色主题</option>
+                        <option value="blue">蓝色主题</option>
+                        <option value="gradient">渐变主题</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="fontSize">字体大小</label>
+                    <select id="fontSize" onchange="updatePreview()">
+                        <option value="small">小字体</option>
+                        <option value="medium" selected>中等字体</option>
+                        <option value="large">大字体</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="layoutStyle">布局风格</label>
+                    <select id="layoutStyle" onchange="updatePreview()">
+                        <option value="centered">居中布局</option>
+                        <option value="left">左对齐</option>
+                        <option value="modern">现代风格</option>
+                    </select>
+                </div>
+
+                <div class="btn-group">
+                    <button class="btn btn-primary" onclick="downloadCover()">
+                        <span>📥</span> 生成并下载
+                    </button>
+                    <button class="btn btn-secondary" onclick="resetForm()">
+                        <span>🔄</span> 重置
+                    </button>
+                    <button class="btn btn-secondary" onclick="generateBatch()">
+                        <span>⚡</span> 批量生成
+                    </button>
+                </div>
+
+                <div class="shortcuts">
+                    <strong>快捷键：</strong><br>
+                    ⌘/Ctrl + Enter: 生成封面 | ⌘/Ctrl + R: 重置设置 | ⌘/Ctrl + S: 下载图片
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>👁️ 实时预览</h2>
+                <div class="preview-area" id="previewArea">
+                    <div class="preview-content">
+                        <div class="preview-series" id="previewSeries">AI for Science · 期刊推荐系列</div>
+                        <div class="preview-title" id="previewTitle">Journal of Computational Physics</div>
+                        <div class="preview-subtitle" id="previewSubtitle">No. 01</div>
+                        <img id="previewImage" class="preview-image" style="display: none;">
+                        <div class="preview-info" id="previewInfo">计算物理领域顶级期刊，专注于科学计算和数值方法</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="instructions">
+            <h3>📋 使用说明</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+                <div>
+                    <h4>基本步骤</h4>
+                    <ul>
+                        <li>输入期刊名称和系列编号</li>
+                        <li>上传期刊封面图片或输入图片链接</li>
+                        <li>选择合适的背景风格和字体大小</li>
+                        <li>实时预览效果，调整参数</li>
+                        <li>点击生成并下载封面图片</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>设计建议</h4>
+                    <ul>
+                        <li>选择高质量的期刊封面图片</li>
+                        <li>保持文字简洁明了，避免过多信息</li>
+                        <li>根据期刊特色选择合适的配色方案</li>
+                        <li>确保文字与背景有足够的对比度</li>
+                        <li>预览不同尺寸下的显示效果</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>模板说明</h4>
+                    <ul>
+                        <li><strong>计算物理类：</strong>蓝色调，突出科技感</li>
+                        <li><strong>应用数学类：</strong>绿色调，体现严谨性</li>
+                        <li><strong>机器学习类：</strong>紫色调，展现创新性</li>
+                        <li><strong>交叉学科类：</strong>多彩调，强调融合性</li>
+                        <li><strong>经典物理类：</strong>金色调，彰显权威性</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="status" class="status"></div>
+
+    <script>
+        let uploadedImage = null;
+        let imageColors = null;
+
+        // 主题切换
+        function toggleTheme() {
+            const html = document.documentElement;
+            const themeIcon = document.getElementById('themeIcon');
+            
+            if (html.getAttribute('data-theme') === 'light') {
+                html.removeAttribute('data-theme');
+                themeIcon.textContent = '🌙';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                html.setAttribute('data-theme', 'light');
+                themeIcon.textContent = '☀️';
+                localStorage.setItem('theme', 'light');
+            }
+        }
+
+        // 初始化主题
+        function initTheme() {
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            const themeIcon = document.getElementById('themeIcon');
+            
+            if (savedTheme === 'light') {
+                document.documentElement.setAttribute('data-theme', 'light');
+                themeIcon.textContent = '☀️';
+            }
+        }
+
+        // 显示状态信息
+        function showStatus(message, type = 'success') {
+            const status = document.getElementById('status');
+            status.textContent = message;
+            status.className = `status ${type}`;
+            status.classList.add('show');
+            
+            setTimeout(() => {
+                status.classList.remove('show');
+            }, 3000);
+        }
+
+        // 更新预览
+        function updatePreview() {
+            const journalName = document.getElementById('journalName').value || 'Journal of Computational Physics';
+            const seriesNumber = document.getElementById('seriesNumber').value || '01';
+            const journalDescription = document.getElementById('journalDescription').value || '计算物理领域顶级期刊，专注于科学计算和数值方法';
+            const bgColor = document.getElementById('bgColor').value;
+            const fontSize = document.getElementById('fontSize').value;
+            const layoutStyle = document.getElementById('layoutStyle').value;
+
+            document.getElementById('previewSeries').textContent = 'AI for Science · 期刊推荐系列';
+            document.getElementById('previewTitle').textContent = journalName;
+            document.getElementById('previewSubtitle').textContent = `No. ${seriesNumber}`;
+            document.getElementById('previewInfo').textContent = journalDescription;
+
+            const previewArea = document.getElementById('previewArea');
+            const previewContent = document.querySelector('.preview-content');
+
+            // 应用背景风格
+            const bgColors = {
+                dark: 'linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%)',
+                light: 'linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%)',
+                blue: 'linear-gradient(135deg, #1e40af 0%, #3b82f6 100%)',
+                gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
+            };
+
+            previewArea.style.background = bgColors[bgColor] || bgColors.dark;
+
+            // 应用布局风格
+            if (layoutStyle === 'left') {
+                previewContent.style.textAlign = 'left';
+            } else if (layoutStyle === 'modern') {
+                previewContent.style.textAlign = 'center';
+                previewContent.style.padding = '3rem 2rem';
+            } else {
+                previewContent.style.textAlign = 'center';
+                previewContent.style.padding = '2rem';
+            }
+
+            // 应用字体大小
+            const fontSizes = {
+                small: { series: '1rem', title: '1.5rem', subtitle: '1.2rem', info: '0.8rem' },
+                medium: { series: '1.2rem', title: '2rem', subtitle: '1.5rem', info: '0.9rem' },
+                large: { series: '1.4rem', title: '2.5rem', subtitle: '1.8rem', info: '1rem' }
+            };
+
+            const sizes = fontSizes[fontSize] || fontSizes.medium;
+            document.getElementById('previewSeries').style.fontSize = sizes.series;
+            document.getElementById('previewTitle').style.fontSize = sizes.title;
+            document.getElementById('previewSubtitle').style.fontSize = sizes.subtitle;
+            document.getElementById('previewInfo').style.fontSize = sizes.info;
+
+            // 调整文字颜色
+            const textColors = {
+                dark: '#ffffff',
+                light: '#000000',
+                blue: '#ffffff',
+                gradient: '#ffffff'
+            };
+
+            const textColor = textColors[bgColor] || textColors.dark;
+            document.getElementById('previewSeries').style.color = textColor;
+            document.getElementById('previewTitle').style.color = textColor;
+            document.getElementById('previewInfo').style.color = textColor;
+        }
+
+        // 处理图片上传
+        function handleImageUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    uploadedImage = e.target.result;
+                    const previewImage = document.getElementById('previewImage');
+                    previewImage.src = uploadedImage;
+                    previewImage.style.display = 'block';
+                    
+                    // 更新文件上传标签
+                    const label = document.getElementById('fileUploadLabel');
+                    label.textContent = `📷 已选择: ${file.name}`;
+                    label.classList.add('has-file');
+                    
+                    // 分析图片颜色
+                    analyzeImageColors(uploadedImage);
+                    showStatus('图片上传成功！', 'success');
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // 从URL加载图片
+        function loadImageFromUrl() {
+            const url = document.getElementById('coverUrl').value;
+            if (url) {
+                uploadedImage = url;
+                const previewImage = document.getElementById('previewImage');
+                previewImage.src = uploadedImage;
+                previewImage.style.display = 'block';
+                
+                // 分析图片颜色
+                analyzeImageColors(url);
+                showStatus('图片加载成功！', 'success');
+            }
+        }
+
+        // 分析图片颜色
+        function analyzeImageColors(imageSrc) {
+            const img = new Image();
+            img.crossOrigin = 'anonymous';
+            img.onload = function() {
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                
+                canvas.width = img.width;
+                canvas.height = img.height;
+                ctx.drawImage(img, 0, 0);
+                
+                const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                const colors = extractMainColors(imageData);
+                
+                displayColorSwatches(colors);
+                imageColors = colors;
+                applySmartColorScheme();
+            };
+            img.src = imageSrc;
+        }
+
+        // 提取主要颜色
+        function extractMainColors(imageData) {
+            const data = imageData.data;
+            const colorMap = {};
+            
+            // 采样像素（每10个像素采样一次）
+            for (let i = 0; i < data.length; i += 40) {
+                const r = data[i];
+                const g = data[i + 1];
+                const b = data[i + 2];
+                const a = data[i + 3];
+                
+                if (a > 128) { // 忽略透明像素
+                    const colorKey = `${Math.round(r/10)*10},${Math.round(g/10)*10},${Math.round(b/10)*10}`;
+                    colorMap[colorKey] = (colorMap[colorKey] || 0) + 1;
+                }
+            }
+            
+            // 排序并获取前5个主要颜色
+            const sortedColors = Object.entries(colorMap)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 5)
+                .map(([color]) => {
+                    const [r, g, b] = color.split(',').map(Number);
+                    return { r, g, b, hsl: rgbToHsl(r, g, b) };
+                });
+            
+            return sortedColors;
+        }
+
+        // RGB转HSL
+        function rgbToHsl(r, g, b) {
+            r /= 255;
+            g /= 255;
+            b /= 255;
+            
+            const max = Math.max(r, g, b);
+            const min = Math.min(r, g, b);
+            let h, s, l = (max + min) / 2;
+            
+            if (max === min) {
+                h = s = 0;
+            } else {
+                const d = max - min;
+                s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+                
+                switch (max) {
+                    case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+                    case g: h = (b - r) / d + 2; break;
+                    case b: h = (r - g) / d + 4; break;
+                }
+                h /= 6;
+            }
+            
+            return { h: h * 360, s: s * 100, l: l * 100 };
+        }
+
+        // 显示颜色样本
+        function displayColorSwatches(colors) {
+            const container = document.getElementById('colorSwatches');
+            const colorsDiv = document.getElementById('imageColors');
+            
+            container.innerHTML = '';
+            colors.forEach(color => {
+                const swatch = document.createElement('div');
+                swatch.className = 'color-swatch';
+                swatch.style.backgroundColor = `rgb(${color.r}, ${color.g}, ${color.b})`;
+                swatch.title = `RGB(${color.r}, ${color.g}, ${color.b})`;
+                container.appendChild(swatch);
+            });
+            
+            colorsDiv.style.display = 'flex';
+        }
+
+        // 应用智能配色方案
+        function applySmartColorScheme() {
+            if (!imageColors || imageColors.length === 0) return;
+            
+            const primaryColor = imageColors[0];
+            const bgColorSelect = document.getElementById('bgColor');
+            
+            // 根据主色调自动选择背景风格
+            const hsl = primaryColor.hsl;
+            if (hsl.l > 70) {
+                bgColorSelect.value = 'light';
+            } else if (hsl.h > 200 && hsl.h < 280) {
+                bgColorSelect.value = 'blue';
+            } else if (hsl.s > 60) {
+                bgColorSelect.value = 'gradient';
+            } else {
+                bgColorSelect.value = 'dark';
+            }
+            
+            updatePreview();
+            showStatus('已应用智能配色方案', 'success');
+        }
+
+        // 下载封面
+        function downloadCover() {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            
+            canvas.width = 900;
+            canvas.height = 500;
+            
+            // 获取当前样式设置
+            const bgColor = document.getElementById('bgColor').value;
+            const fontSize = document.getElementById('fontSize').value;
+            const journalName = document.getElementById('journalName').value || 'Journal of Computational Physics';
+            const seriesNumber = document.getElementById('seriesNumber').value || '01';
+            const journalDescription = document.getElementById('journalDescription').value || '计算物理领域顶级期刊，专注于科学计算和数值方法';
+            
+            // 智能配色方案
+            let colorScheme = getSmartColorScheme();
+            
+            // 背景渐变
+            const bgGradients = {
+                dark: ctx.createLinearGradient(0, 0, canvas.width, canvas.height),
+                light: ctx.createLinearGradient(0, 0, canvas.width, canvas.height),
+                blue: ctx.createLinearGradient(0, 0, canvas.width, canvas.height),
+                gradient: ctx.createLinearGradient(0, 0, canvas.width, canvas.height)
+            };
+            
+            // 根据图片颜色智能调整背景色
+            if (imageColors && imageColors.length > 0) {
+                const primaryColor = imageColors[0];
+                bgGradients.dark.addColorStop(0, `rgb(${primaryColor.r * 0.3}, ${primaryColor.g * 0.3}, ${primaryColor.b * 0.3})`);
+                bgGradients.dark.addColorStop(1, `rgb(${primaryColor.r * 0.1}, ${primaryColor.g * 0.1}, ${primaryColor.b * 0.1})`);
+                
+                bgGradients.light.addColorStop(0, `rgb(${Math.min(255, primaryColor.r + 100)}, ${Math.min(255, primaryColor.g + 100)}, ${Math.min(255, primaryColor.b + 100)})`);
+                bgGradients.light.addColorStop(1, `rgb(${Math.min(255, primaryColor.r + 50)}, ${Math.min(255, primaryColor.g + 50)}, ${Math.min(255, primaryColor.b + 50)})`);
+                
+                bgGradients.blue.addColorStop(0, `rgb(${primaryColor.r * 0.5}, ${primaryColor.g * 0.7}, ${Math.min(255, primaryColor.b + 50)})`);
+                bgGradients.blue.addColorStop(1, `rgb(${primaryColor.r * 0.3}, ${primaryColor.g * 0.5}, ${Math.min(255, primaryColor.b + 30)})`);
+                
+                bgGradients.gradient.addColorStop(0, `rgb(${primaryColor.r}, ${primaryColor.g}, ${primaryColor.b})`);
+                bgGradients.gradient.addColorStop(1, `rgb(${primaryColor.r * 0.6}, ${primaryColor.g * 0.6}, ${primaryColor.b * 0.6})`);
+            } else {
+                // 默认渐变
+                bgGradients.dark.addColorStop(0, '#1a1a1a');
+                bgGradients.dark.addColorStop(1, '#2d2d2d');
+                
+                bgGradients.light.addColorStop(0, '#f8f9fa');
+                bgGradients.light.addColorStop(1, '#e9ecef');
+                
+                bgGradients.blue.addColorStop(0, '#1e40af');
+                bgGradients.blue.addColorStop(1, '#3b82f6');
+                
+                bgGradients.gradient.addColorStop(0, '#667eea');
+                bgGradients.gradient.addColorStop(1, '#764ba2');
+            }
+            
+            ctx.fillStyle = bgGradients[bgColor] || bgGradients.dark;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // 添加装饰性元素，使用协调的颜色
+            const decorColor = colorScheme.secondary || 'rgba(255, 255, 255, 0.1)';
+            ctx.fillStyle = decorColor;
+            ctx.beginPath();
+            ctx.arc(canvas.width - 100, 100, 150, 0, Math.PI * 2);
+            ctx.fill();
+            
+            ctx.beginPath();
+            ctx.arc(100, canvas.height - 100, 100, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // 智能文字颜色，确保对比度
+            const textColor = getContrastColor(colorScheme.primary || bgGradients[bgColor]);
+            ctx.fillStyle = textColor;
+            
+            // 字体大小配置
+            const fontSizes = {
+                small: { series: '18px', title: '36px', subtitle: '24px', info: '14px' },
+                medium: { series: '24px', title: '48px', subtitle: '32px', info: '18px' },
+                large: { series: '28px', title: '56px', subtitle: '40px', info: '20px' }
+            };
+            
+            const sizes = fontSizes[fontSize] || fontSizes.medium;
+            
+            // 系列标题
+            ctx.font = `500 ${sizes.series} -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif`;
+            ctx.textAlign = 'center';
+            ctx.fillText('AI for Science · 期刊推荐系列', canvas.width/2, 80);
+            
+            // 主标题
+            ctx.font = `600 ${sizes.title} -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif`;
+            ctx.fillText(journalName, canvas.width/2, 140);
+            
+            // 编号
+            ctx.font = `500 ${sizes.subtitle} -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif`;
+            ctx.fillText(`No. ${seriesNumber}`, canvas.width/2, 190);
+            
+            // 期刊描述，使用辅助色确保层次
+            const descColor = colorScheme.tertiary || (bgColor === 'light' ? '#666666' : '#cccccc');
+            ctx.fillStyle = descColor;
+            ctx.font = `400 ${sizes.info} -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif`;
+            ctx.fillText(journalDescription, canvas.width/2, 420);
+            
+            // 底部装饰线，使用主色调
+            ctx.strokeStyle = colorScheme.primary || textColor;
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(50, canvas.height - 60);
+            ctx.lineTo(canvas.width - 50, canvas.height - 60);
+            ctx.stroke();
+            
+            // 品牌标识
+            ctx.font = `500 16px -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif`;
+            ctx.fillStyle = colorScheme.accent || textColor;
+            ctx.textAlign = 'right';
+            ctx.fillText('图灵的猫', canvas.width - 50, canvas.height - 30);
+            
+            // 添加期刊封面图片（如果有）
+            if (uploadedImage) {
+                const img = new Image();
+                img.onload = function() {
+                    // 计算图片位置和大小
+                    const imgWidth = 200;
+                    const imgHeight = (img.height / img.width) * imgWidth;
+                    const x = (canvas.width - imgWidth) / 2;
+                    const y = 220;
+                    
+                    // 添加图片阴影，使用协调的颜色
+                    const shadowColor = colorScheme.shadow || 'rgba(0, 0, 0, 0.3)';
+                    ctx.shadowColor = shadowColor;
+                    ctx.shadowBlur = 20;
+                    ctx.shadowOffsetX = 0;
+                    ctx.shadowOffsetY = 10;
+                    
+                    // 绘制图片
+                    ctx.drawImage(img, x, y, imgWidth, imgHeight);
+                    
+                    // 重置阴影
+                    ctx.shadowColor = 'transparent';
+                    ctx.shadowBlur = 0;
+                    ctx.shadowOffsetX = 0;
+                    ctx.shadowOffsetY = 0;
+                    
+                    // 下载图片
+                    downloadCanvas();
+                };
+                img.onerror = function() {
+                    showStatus('封面图片加载失败，将生成无图片版本', 'warning');
+                    downloadCanvas();
+                };
+                img.src = uploadedImage;
+            } else {
+                downloadCanvas();
+            }
+            
+            function downloadCanvas() {
+                // 下载图片
+                const link = document.createElement('a');
+                link.download = `AI_for_Science_期刊推荐_${journalName.replace(/[^\u4e00-\u9fa5a-zA-Z0-9]/g, '_')}.png`;
+                link.href = canvas.toDataURL('image/png', 1.0);
+                link.click();
+                
+                showStatus('封面图片下载成功！', 'success');
+            }
+        }
+
+        // 获取智能配色方案
+        function getSmartColorScheme() {
+            if (!imageColors || imageColors.length === 0) {
+                return {
+                    primary: '#ffffff',
+                    secondary: 'rgba(255, 255, 255, 0.1)',
+                    tertiary: '#cccccc',
+                    accent: '#ffffff',
+                    shadow: 'rgba(0, 0, 0, 0.3)'
+                };
+            }
+            
+            const primary = imageColors[0];
+            const primaryHsl = primary.hsl;
+            
+            return {
+                primary: `rgb(${primary.r}, ${primary.g}, ${primary.b})`,
+                secondary: `rgba(${primary.r}, ${primary.g}, ${primary.b}, 0.3)`,
+                tertiary: `rgb(${Math.min(255, primary.r + 60)}, ${Math.min(255, primary.g + 60)}, ${Math.min(255, primary.b + 60)})`,
+                accent: `rgb(${Math.min(255, primary.r + 30)}, ${Math.min(255, primary.g + 30)}, ${Math.min(255, primary.b + 30)})`,
+                shadow: `rgba(${Math.floor(primary.r * 0.2)}, ${Math.floor(primary.g * 0.2)}, ${Math.floor(primary.b * 0.2)}, 0.3)`
+            };
+        }
+
+        // 获取对比色，确保文字清晰
+        function getContrastColor(backgroundColor) {
+            if (!imageColors || imageColors.length === 0) {
+                return (document.getElementById('bgColor').value === 'light') ? '#000000' : '#ffffff';
+            }
+            
+            // 计算背景亮度
+            const bgColor = imageColors[0];
+            const luminance = (0.299 * bgColor.r + 0.587 * bgColor.g + 0.114 * bgColor.b) / 255;
+            
+            return luminance > 0.5 ? '#000000' : '#ffffff';
+        }
+
+        // 模板数据
+        const templates = {
+            'computational-physics': {
+                bgColor: 'blue',
+                fontSize: 'medium',
+                layoutStyle: 'centered',
+                description: '计算物理领域顶级期刊，专注于科学计算和数值方法'
+            },
+            'applied-mathematics': {
+                bgColor: 'gradient',
+                fontSize: 'medium',
+                layoutStyle: 'left',
+                description: '应用数学权威期刊，涵盖数学建模和理论分析'
+            },
+            'machine-learning': {
+                bgColor: 'gradient',
+                fontSize: 'large',
+                layoutStyle: 'modern',
+                description: '机器学习前沿期刊，探索AI技术的最新进展'
+            },
+            'interdisciplinary': {
+                bgColor: 'gradient',
+                fontSize: 'medium',
+                layoutStyle: 'centered',
+                description: '交叉学科研究期刊，促进多学科融合发展'
+            },
+            'classical': {
+                bgColor: 'dark',
+                fontSize: 'medium',
+                layoutStyle: 'centered',
+                description: '经典物理学期刊，传承物理学的基础理论'
+            }
+        };
+
+        // 应用模板
+        function applyTemplate() {
+            const template = document.getElementById('quickTemplate').value;
+            if (template && templates[template]) {
+                const config = templates[template];
+                document.getElementById('bgColor').value = config.bgColor;
+                document.getElementById('fontSize').value = config.fontSize;
+                document.getElementById('layoutStyle').value = config.layoutStyle;
+                document.getElementById('journalDescription').value = config.description;
+                
+                updatePreview();
+                showStatus(`已应用${template}模板`, 'success');
+            }
+        }
+
+        // 重置表单
+        function resetForm() {
+            document.getElementById('journalName').value = '';
+            document.getElementById('seriesNumber').value = '01';
+            document.getElementById('journalDescription').value = '计算物理领域顶级期刊，专注于科学计算和数值方法';
+            document.getElementById('coverImage').value = '';
+            document.getElementById('coverUrl').value = '';
+            document.getElementById('bgColor').value = 'dark';
+            document.getElementById('fontSize').value = 'medium';
+            document.getElementById('layoutStyle').value = 'centered';
+            document.getElementById('quickTemplate').value = '';
+            
+            uploadedImage = null;
+            imageColors = null;
+            
+            document.getElementById('previewImage').style.display = 'none';
+            document.getElementById('fileUploadLabel').textContent = '📷 点击上传封面图片或拖拽到此处';
+            document.getElementById('fileUploadLabel').classList.remove('has-file');
+            document.getElementById('imageColors').style.display = 'none';
+            
+            updatePreview();
+            showStatus('已重置所有设置', 'success');
+        }
+
+        // 批量生成
+        function generateBatch() {
+            const journals = [
+                { name: 'Journal of Computational Physics', number: '01' },
+                { name: 'Computer Methods in Applied Mechanics', number: '02' },
+                { name: 'SIAM Journal on Scientific Computing', number: '03' }
+            ];
+            
+            journals.forEach((journal, index) => {
+                setTimeout(() => {
+                    document.getElementById('journalName').value = journal.name;
+                    document.getElementById('seriesNumber').value = journal.number;
+                    updatePreview();
+                    
+                    setTimeout(() => {
+                        downloadCover();
+                    }, 500);
+                }, index * 2000);
+            });
+            
+            showStatus('开始批量生成，请稍候...', 'success');
+        }
+
+        // 键盘快捷键
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey || e.metaKey) {
+                switch(e.key) {
+                    case 'Enter':
+                        e.preventDefault();
+                        downloadCover();
+                        break;
+                    case 'r':
+                        e.preventDefault();
+                        resetForm();
+                        break;
+                    case 's':
+                        e.preventDefault();
+                        downloadCover();
+                        break;
+                }
+            }
+        });
+
+        // 初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            initTheme();
+            updatePreview();
+            
+            // 拖拽上传
+            const fileUpload = document.querySelector('.file-upload-label');
+            
+            fileUpload.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                this.style.borderColor = 'var(--accent)';
+                this.style.background = 'rgba(59, 130, 246, 0.1)';
+            });
+            
+            fileUpload.addEventListener('dragleave', function(e) {
+                e.preventDefault();
+                this.style.borderColor = 'var(--border)';
+                this.style.background = 'var(--bg-secondary)';
+            });
+            
+            fileUpload.addEventListener('drop', function(e) {
+                e.preventDefault();
+                this.style.borderColor = 'var(--border)';
+                this.style.background = 'var(--bg-secondary)';
+                
+                const files = e.dataTransfer.files;
+                if (files.length > 0) {
+                    document.getElementById('coverImage').files = files;
+                    handleImageUpload({ target: { files: files } });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
