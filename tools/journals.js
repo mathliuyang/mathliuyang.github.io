@@ -834,7 +834,7 @@ let journals = [
         "articles_per_year": 188,
         "region": "美国",
         "jcrZone": "Q1",
-        "casZone": "2区",
+        "casZone": "1区",
         "scuZone": "数学 C",
         "reviewTime": "约6.0个月",
         "publisher": "SIAM",
@@ -852,10 +852,10 @@ let journals = [
             "SCIE",
             "SIAM"
         ],
-        "scope": "The purpose of SIAM Journal on Scientific Computing (SISC) is to advance computational methods for solving scientific and engineering problems. SISC papers are classified into three categories: (1) Methods and Algorithms for Scientific Computing (2) Computational Methods in Science and Engineering (3) Software and High-Performance Computing",
-        "scopeCN": "《SIAM科学计算杂志》的目的是推进解决科学和工程问题的计算方法。SISC论文分为三类:(1)科学计算的方法和算法(2)科学与工程中的计算方法(3)软件与高性能计算",
+        "scope": "SIAM Journal on Scientific Computing (SISC) contains research articles on numerical methods and techniques for scientific computation. Papers in this journal address computational issues relevant to the solution of scientific or engineering problems and include computational results demonstrating the effectiveness of the proposed techniques.",
+        "scopeCN": "SIAM Journal on Scientific Computing （SISC） 包含有关科学计算的数值方法和技术的研究文章。该期刊上的论文涉及与解决科学或工程问题相关的计算问题，并包括证明所提出技术有效性的计算结果。",
         "researchAreas": "应用数学 - 数学",
-        "tips": "强烈推荐用于有理论深度的PINN研究！论文分为三类：(1)科学计算方法与算法-适合PINN收敛性分析、误差估计、理论保证；(2)科学与工程计算方法-适合PINN求解特定科学/工程问题的新方法；(3)软件与高性能计算-适合PINN框架、并行实现、GPU加速。审稿周期约6个月，理论分析要求高纯经验性工作难接受，必须展示方法对科学/工程问题的相关性。作为SIAM旗下权威2区Q1期刊(IF=3.0)，特别适合理论+应用结合好的工作和软件类投稿，SIAM会员对该领域认可度极高。",
+        "tips": "强烈推荐用于有理论深度的PINN研究！论文分为三类：(1)科学计算方法与算法- 适合PINN收敛性分析、误差估计、理论保证； (2)科学与工程计算方法 - 适合PINN求解特定科学 / 工程问题的新方法； (3)软件与高性能计算 - 适合PINN框架、并行实现、GPU加速。 审稿周期约6个月，理论分析要求高纯经验性工作难接受，必须展示方法对科学 / 工程问题的相关性。作为SIAM旗下权威2区Q1期刊(IF = 3.0)，特别适合理论 + 应用结合好的工作和软件类投稿，SIAM会员对该领域认可度极高。需要注意的是，本刊的页数限制为每篇论文 20 页。",
         "indexed": "SCIE",
         "warning": false
     },
