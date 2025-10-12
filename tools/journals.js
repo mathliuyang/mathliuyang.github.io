@@ -109,7 +109,7 @@ let journals = [
         "jcrZone": "Q1",
         "casZone": "1区",
         "scuZone": "工程技术 B",
-        "reviewTime": "约3.0个月 / 约8.6周",
+        "reviewTime": "约3.0个月",
         "publisher": "Elsevier",
         "issn": "0045-7825",
         "eissn": "1879-2138",
