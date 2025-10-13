@@ -715,8 +715,11 @@
             busuanziContainer.innerHTML = '<span id="busuanzi_value_site_pv"></span>';
             document.body.appendChild(busuanziContainer);
             
-            // 增强的Busuanzi统计
-            enhanceBusuanziStats(visitorElement);
+            // 等待Busuanzi脚本加载完成后再监控
+            setTimeout(() => {
+                console.log('开始监控Busuanzi数据...');
+                monitorBusuanziLoad(visitorElement);
+            }, 2000);
         }
         
         // 增强Busuanzi统计功能
@@ -745,27 +748,34 @@
         
         // 监听Busuanzi加载完成
         function monitorBusuanziLoad(visitorElement) {
+            console.log('开始监控Busuanzi加载状态...');
             const targetElement = document.getElementById('busuanzi_value_site_pv');
             if (!targetElement) {
+                console.error('未找到busuanzi_value_site_pv元素');
                 visitorElement.textContent = '···';
                 visitorElement.title = '统计元素未找到';
                 return;
             }
+            
+            console.log('找到Busuanzi元素:', targetElement);
             
             // 显示加载状态
             visitorElement.textContent = '···';
             visitorElement.classList.add('loading');
             
             let checkAttempts = 0;
-            const maxAttempts = 50; // 最多检查5秒
-            const checkInterval = 100;
+            const maxAttempts = 100; // 最多检查10秒
+            const checkInterval = 200; // 每200ms检查一次
             
             const checkContent = setInterval(() => {
                 checkAttempts++;
+                console.log(`第${checkAttempts}次检查Busuanzi数据...`);
                 
                 try {
                     const content = targetElement.textContent.trim();
                     const numValue = parseInt(content, 10);
+                    
+                    console.log(`Busuanzi元素内容: "${content}", 解析结果: ${numValue}`);
                     
                     // 检查是否有有效数字
                     if (content && !isNaN(numValue) && numValue > 0) {
@@ -785,6 +795,17 @@
                         visitorElement.title = '统计加载中...';
                         
                         console.log('Busuanzi统计加载超时，等待真实数据');
+                        console.log('建议: 1.检查网络连接 2.确认Busuanzi服务正常 3.尝试刷新页面');
+                        
+                        // 尝试强制重新加载Busuanzi
+                        console.log('尝试重新加载Busuanzi脚本...');
+                        if (window.bszs) {
+                            console.log('发现bszs对象，尝试重新初始化...');
+                            window.bszs.init();
+                        } else {
+                            console.log('未找到bszs对象，重新加载脚本...');
+                            loadBusuanziScript();
+                        }
                     }
                 } catch (error) {
                     clearInterval(checkContent);
@@ -858,17 +879,45 @@
         
         // 动态加载Busuanzi脚本（带重试机制）
         function loadBusuanziScript() {
+            console.log('开始加载Busuanzi脚本...');
             const script = document.createElement('script');
             script.async = true;
             script.src = 'https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js';
             
+            // 备用CDN
+            const fallbackSrc = 'https://cdn.jsdelivr.net/npm/busuanzi@2.3.0/bs.pure.mini.js';
+            
             script.onload = () => {
                 console.log('Busuanzi脚本加载成功');
+                // 脚本加载成功后，给一点时间来初始化
+                setTimeout(() => {
+                    console.log('检查Busuanzi是否已初始化...');
+                    if (window.bszs) {
+                        console.log('Busuanzi已初始化:', window.bszs);
+                    }
+                }, 1000);
             };
             
-            script.onerror = () => {
-                console.warn('Busuanzi脚本加载失败，5秒后重试');
-                setTimeout(loadBusuanziScript, 5000);
+            script.onerror = (error) => {
+                console.error('Busuanzi脚本加载失败:', error);
+                console.warn('尝试使用备用CDN加载Busuanzi脚本');
+                
+                // 尝试备用CDN
+                const fallbackScript = document.createElement('script');
+                fallbackScript.async = true;
+                fallbackScript.src = fallbackSrc;
+                
+                fallbackScript.onload = () => {
+                    console.log('备用CDN Busuanzi脚本加载成功');
+                };
+                
+                fallbackScript.onerror = (err) => {
+                    console.error('备用CDN也加载失败:', err);
+                    console.warn('5秒后重试主CDN');
+                    setTimeout(loadBusuanziScript, 5000);
+                };
+                
+                document.head.appendChild(fallbackScript);
             };
             
             document.head.appendChild(script);
@@ -880,6 +929,27 @@
         } else {
             loadBusuanziScript();
         }
+
+        // 添加调试用手动刷新功能
+        function debugBusuanzi() {
+            console.log('=== Busuanzi调试信息 ===');
+            const element = document.getElementById('busuanzi_value_site_pv');
+            console.log('Busuanzi元素:', element);
+            if (element) {
+                console.log('元素内容:', element.textContent);
+                console.log('元素样式:', window.getComputedStyle(element));
+            }
+            console.log('window.bszs:', window.bszs);
+            console.log('所有Busuanzi元素:', document.querySelectorAll('[id*="busuanzi"]'));
+        }
+        
+        // 添加键盘快捷键调试 (按 Ctrl+Shift+B)
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.shiftKey && e.key === 'B') {
+                debugBusuanzi();
+                alert('调试信息已输出到控制台，请查看');
+            }
+        });
 
         // Nav scroll effect
         const nav = document.getElementById('nav');
