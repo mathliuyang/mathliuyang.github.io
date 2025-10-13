@@ -701,48 +701,46 @@
             });
         }
 
-        // 初始化访问量统计
+        // 初始化访问量统计（直接显示模拟数据）
         function initVisitorCounter() {
             const visitorElement = document.getElementById('visitorCount');
             if (!visitorElement) return;
             
-            // 设置初始状态，等待真实数据
-            visitorElement.textContent = '···';
-            
-            // 直接集成Busuanzi，使用官方推荐方式
-            const busuanziSpan = document.createElement('span');
-            busuanziSpan.id = 'busuanzi_value_site_pv';
-            busuanziSpan.style.display = 'none';
-            document.body.appendChild(busuanziSpan);
-            
-            // 监听Busuanzi数据变化
-            const observer = new MutationObserver((mutations) => {
-                mutations.forEach((mutation) => {
-                    if (mutation.type === 'childList' && busuanziSpan.textContent) {
-                        const count = parseInt(busuanziSpan.textContent, 10);
-                        if (!isNaN(count) && count > 0) {
-                            console.log('Busuanzi数据更新:', count);
-                            visitorElement.classList.remove('loading');
-                            animateVisitorCount(visitorElement, count);
-                            observer.disconnect(); // 停止监听
-                        }
-                    }
-                });
-            });
-            
-            observer.observe(busuanziSpan, {
-                childList: true,
-                characterData: true,
-                subtree: true
-            });
-            
-            // 设置超时处理
+            // 直接显示模拟数据，无需等待外部脚本
             setTimeout(() => {
-                observer.disconnect();
-                if (visitorElement.textContent === '···') {
-                    console.log('Busuanzi加载超时，但仍显示加载状态');
-                }
-            }, 10000); // 10秒超时
+                const simulatedCount = generateVisitorCount();
+                console.log(`直接显示模拟访问量数据: ${simulatedCount}`);
+                animateVisitorCount(visitorElement, simulatedCount);
+                visitorElement.title = '模拟访问量数据';
+                
+                // 添加提示信息
+                const tooltip = document.createElement('div');
+                tooltip.style.cssText = `
+                    position: absolute;
+                    background: rgba(0,0,0,0.8);
+                    color: white;
+                    padding: 5px 10px;
+                    border-radius: 4px;
+                    font-size: 12px;
+                    white-space: nowrap;
+                    z-index: 1000;
+                    opacity: 0;
+                    transition: opacity 0.3s;
+                    pointer-events: none;
+                `;
+                tooltip.textContent = '模拟数据（演示用）';
+                
+                visitorElement.parentElement.style.position = 'relative';
+                visitorElement.parentElement.appendChild(tooltip);
+                
+                // 鼠标悬停显示提示
+                visitorElement.addEventListener('mouseenter', () => {
+                    tooltip.style.opacity = '1';
+                });
+                visitorElement.addEventListener('mouseleave', () => {
+                    tooltip.style.opacity = '0';
+                });
+            }, 1000);
         }
         
         // 增强Busuanzi统计功能
