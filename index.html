@@ -900,6 +900,21 @@
             initVisitorCounter();
         }, 1500);
         
+        // 生成模拟访问量数据
+        function generateVisitorCount() {
+            // 基于当前日期的简单哈希生成伪随机数，确保同一天访问相同
+            const today = new Date().toDateString();
+            let hash = 0;
+            for (let i = 0; i < today.length; i++) {
+                hash = ((hash << 5) - hash) + today.charCodeAt(i);
+                hash = hash & hash; // 转换为32位整数
+            }
+            
+            // 生成1000-9999之间的访问量（基于日期变化）
+            const baseCount = Math.abs(hash % 9000) + 1000;
+            return baseCount;
+        }
+        
         // 动态加载Busuanzi脚本（带重试机制）
         function loadBusuanziScript() {
             console.log('开始加载Busuanzi脚本...');
@@ -924,29 +939,59 @@
                     if (window.bszs) {
                         console.log('Busuanzi已初始化，对象:', window.bszs);
                     } else {
-                        console.log('Busuanzi未初始化，尝试手动触发...');
+                        console.log('Busuanzi未初始化，使用模拟数据...');
+                        // 如果Busuanzi未初始化，使用模拟数据
+                        useSimulatedData();
                     }
                 }, 3000);
             };
             
             script.onerror = (error) => {
                 console.error('Busuanzi脚本加载失败:', error);
-                console.warn('使用备用方案：显示本地测试数据');
-                
-                // 备用方案：显示本地测试数据用于演示
-                const testData = [1234, 2345, 3456, 4567, 5678];
-                const randomData = testData[Math.floor(Math.random() * testData.length)];
-                
-                // 检查是否有访问量元素需要更新
-                const visitorElement = document.getElementById('visitorCount');
-                if (visitorElement && visitorElement.textContent === '···') {
-                    console.log(`使用备用测试数据: ${randomData}`);
-                    animateVisitorCount(visitorElement, randomData);
-                    visitorElement.title = '本地测试数据（Busuanzi加载失败）';
-                }
+                console.warn('使用模拟数据作为替代方案');
+                useSimulatedData();
             };
             
             document.head.appendChild(script);
+        }
+        
+        // 使用模拟数据
+        function useSimulatedData() {
+            const visitorElement = document.getElementById('visitorCount');
+            if (visitorElement && visitorElement.textContent === '···') {
+                const simulatedCount = generateVisitorCount();
+                console.log(`使用模拟访问量数据: ${simulatedCount}`);
+                animateVisitorCount(visitorElement, simulatedCount);
+                visitorElement.title = '模拟访问量数据';
+                
+                // 添加提示信息
+                const tooltip = document.createElement('div');
+                tooltip.style.cssText = `
+                    position: absolute;
+                    background: rgba(0,0,0,0.8);
+                    color: white;
+                    padding: 5px 10px;
+                    border-radius: 4px;
+                    font-size: 12px;
+                    white-space: nowrap;
+                    z-index: 1000;
+                    opacity: 0;
+                    transition: opacity 0.3s;
+                    pointer-events: none;
+                `;
+                tooltip.textContent = '模拟数据（Busuanzi服务不可用）';
+                
+                visitorElement.parentElement.style.position = 'relative';
+                visitorElement.parentElement.appendChild(tooltip);
+                
+                // 鼠标悬停显示提示
+                visitorElement.addEventListener('mouseenter', () => {
+                    tooltip.style.opacity = '1';
+                });
+                visitorElement.addEventListener('mouseleave', () => {
+                    tooltip.style.opacity = '0';
+                });
+            }
         }
         
         // 页面加载完成后立即加载Busuanzi
