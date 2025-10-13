@@ -709,17 +709,40 @@
             // 设置初始状态，等待真实数据
             visitorElement.textContent = '···';
             
-            // 创建Busuanzi容器
-            const busuanziContainer = document.createElement('div');
-            busuanziContainer.style.display = 'none';
-            busuanziContainer.innerHTML = '<span id="busuanzi_value_site_pv"></span>';
-            document.body.appendChild(busuanziContainer);
+            // 直接集成Busuanzi，使用官方推荐方式
+            const busuanziSpan = document.createElement('span');
+            busuanziSpan.id = 'busuanzi_value_site_pv';
+            busuanziSpan.style.display = 'none';
+            document.body.appendChild(busuanziSpan);
             
-            // 等待Busuanzi脚本加载完成后再监控
+            // 监听Busuanzi数据变化
+            const observer = new MutationObserver((mutations) => {
+                mutations.forEach((mutation) => {
+                    if (mutation.type === 'childList' && busuanziSpan.textContent) {
+                        const count = parseInt(busuanziSpan.textContent, 10);
+                        if (!isNaN(count) && count > 0) {
+                            console.log('Busuanzi数据更新:', count);
+                            visitorElement.classList.remove('loading');
+                            animateVisitorCount(visitorElement, count);
+                            observer.disconnect(); // 停止监听
+                        }
+                    }
+                });
+            });
+            
+            observer.observe(busuanziSpan, {
+                childList: true,
+                characterData: true,
+                subtree: true
+            });
+            
+            // 设置超时处理
             setTimeout(() => {
-                console.log('开始监控Busuanzi数据...');
-                monitorBusuanziLoad(visitorElement);
-            }, 2000);
+                observer.disconnect();
+                if (visitorElement.textContent === '···') {
+                    console.log('Busuanzi加载超时，但仍显示加载状态');
+                }
+            }, 10000); // 10秒超时
         }
         
         // 增强Busuanzi统计功能
