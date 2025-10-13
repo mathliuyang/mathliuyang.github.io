@@ -169,6 +169,45 @@
             animation: slideUp 1s ease 0.7s forwards;
         }
 
+        .meta-row {
+            display: flex;
+            gap: 4rem;
+            margin-bottom: 2rem;
+            justify-content: flex-start;
+        }
+
+        .meta-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .meta-row .meta-item {
+            flex: 0 0 auto;
+            min-width: 120px;
+        }
+
+        .meta-row {
+            display: flex;
+            gap: 4rem;
+            margin-bottom: 2rem;
+            justify-content: flex-start;
+        }
+
+        .meta-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .meta-row .meta-item {
+            flex: 0 0 auto;
+            min-width: 120px;
+        }
+
+        .visitor-row {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            margin-top: 0.5rem;
+        }
+
         .meta-item {
             display: flex;
             flex-direction: column;
@@ -206,8 +245,15 @@
         }
 
         @keyframes pulse {
-            0%, 100% { opacity: 0.7; }
-            50% { opacity: 1; }
+
+            0%,
+            100% {
+                opacity: 0.7;
+            }
+
+            50% {
+                opacity: 1;
+            }
         }
 
         .meta-label {
@@ -215,6 +261,63 @@
             color: var(--text-dim);
             letter-spacing: 0.05em;
             text-transform: uppercase;
+        }
+
+        /* 访问统计计数器样式 */
+        .visitor-counter-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.4rem 0.8rem;
+            background: linear-gradient(135deg, rgba(46, 158, 247, 0.1) 0%, rgba(46, 158, 247, 0.05) 100%);
+            border-radius: 12px;
+            border: 1px solid rgba(46, 158, 247, 0.15);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            min-height: 48px;
+            margin-top: 1rem;
+        }
+
+        .visitor-counter-wrapper::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.8s ease;
+        }
+
+        .visitor-counter-wrapper:hover::before {
+            left: 100%;
+        }
+
+        .visitor-counter-wrapper:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 8px 30px rgba(46, 158, 247, 0.25);
+            border-color: rgba(46, 158, 247, 0.3);
+        }
+
+        [data-theme="light"] .visitor-counter-wrapper {
+            background: linear-gradient(135deg, rgba(46, 158, 247, 0.08) 0%, rgba(46, 158, 247, 0.03) 100%);
+            border-color: rgba(46, 158, 247, 0.1);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .visitor-counter-wrapper img {
+            height: 32px;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+            transition: all 0.3s ease;
+            border-radius: 4px;
+        }
+
+        .visitor-counter-wrapper:hover img {
+            filter: drop-shadow(0 4px 8px rgba(46, 158, 247, 0.3));
+            transform: scale(1.08);
         }
 
         .scroll-hint {
@@ -326,10 +429,44 @@
             z-index: 1;
         }
 
+        .footer-content {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
         .footer-text {
             font-size: 0.85rem;
             color: var(--text-dim);
             letter-spacing: 0.05em;
+        }
+
+        footer .visitor-counter-wrapper {
+            margin: 0;
+            padding: 0;
+            min-height: auto;
+            background: transparent;
+            border: none;
+            backdrop-filter: none;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+
+        footer .visitor-counter-wrapper:hover {
+            background: transparent;
+            transform: none;
+            box-shadow: none;
+        }
+
+        footer .visitor-counter-wrapper img {
+            height: 20px;
+            filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
+            transition: filter 0.3s ease;
+        }
+
+        footer .visitor-counter-wrapper:hover img {
+            filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.2));
         }
 
         .social-links {
@@ -406,6 +543,20 @@
                 margin: 0 auto;
             }
 
+            .meta-row {
+                flex-direction: column;
+                gap: 2rem;
+                margin-bottom: 1.5rem;
+            }
+
+            .meta-row:last-child {
+                margin-bottom: 0;
+            }
+
+            .visitor-row {
+                margin-top: 0.5rem;
+            }
+
             .scroll-hint {
                 left: 2rem;
             }
@@ -423,6 +574,12 @@
                 flex-direction: column;
                 gap: 2rem;
                 text-align: center;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: center;
             }
         }
     </style>
@@ -457,21 +614,19 @@
                 一位被偏微分方程带偏了的人工智能算法开发者
             </p>
             <div class="hero-meta">
-                <div class="meta-item">
-                    <div class="meta-number" data-target="9">00</div>
-                    <div class="meta-label">学术论文</div>
-                </div>
-                <div class="meta-item">
-                    <div class="meta-number" data-target="15">00</div>
-                    <div class="meta-label">科研项目</div>
-                </div>
-                <div class="meta-item">
-                    <div class="meta-number" data-target="8">00</div>
-                    <div class="meta-label">实用工具</div>
-                </div>
-                <div class="meta-item">
-                    <img src="https://komarev.com/ghpvc/?username=mathliuyang&color=2E9EF7&style=flat-square&label=Profile+Views" alt="访问量统计" style="height: 32px; vertical-align: middle; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));" />
-                    <div class="meta-label">访问量</div>
+                <div class="meta-row">
+                    <div class="meta-item">
+                        <div class="meta-number" data-target="9">00</div>
+                        <div class="meta-label">学术论文</div>
+                    </div>
+                    <div class="meta-item">
+                        <div class="meta-number" data-target="15">00</div>
+                        <div class="meta-label">科研项目</div>
+                    </div>
+                    <div class="meta-item">
+                        <div class="meta-number" data-target="8">00</div>
+                        <div class="meta-label">实用工具</div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -523,7 +678,13 @@
 
     <!-- Footer -->
     <footer>
-        <div class="footer-text">© 2025 刘洋 | AIDING 团队</div>
+        <div class="footer-content">
+                <div class="footer-text">© 2025 刘洋 | AIDING 团队</div>
+                <a href="https://github.com/mathliuyang/" target="_blank" class="visitor-counter-wrapper">
+                    <img src="https://komarev.com/ghpvc/?username=mathliuyang&color=2E9EF7&style=flat-square&label=Profile+Views"
+                        alt="访问量统计" />
+                </a>
+            </div>
         <div class="social-links">
             <a href="mailto:mathliuyang@163.com">学术邮箱</a>
             <a href="https://github.com/mathliuyang/" target="_blank">GitHub</a>
@@ -731,25 +892,25 @@
         themeIcon.textContent = currentTheme === 'dark' ? '◐' : '◑';
 
         // 移除超链接预览 - 阻止浏览器显示链接地址
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             // 为所有超链接添加事件监听
             document.querySelectorAll('a[href]').forEach(link => {
-                link.addEventListener('mouseenter', function(e) {
+                link.addEventListener('mouseenter', function (e) {
                     // 临时移除href属性
                     this.dataset.originalHref = this.href;
                     this.removeAttribute('href');
                 });
-                
-                link.addEventListener('mouseleave', function(e) {
+
+                link.addEventListener('mouseleave', function (e) {
                     // 恢复href属性
                     if (this.dataset.originalHref) {
                         this.href = this.dataset.originalHref;
                         delete this.dataset.originalHref;
                     }
                 });
-                
+
                 // 确保点击功能正常
-                link.addEventListener('click', function(e) {
+                link.addEventListener('click', function (e) {
                     if (this.dataset.originalHref) {
                         e.preventDefault();
                         window.location.href = this.dataset.originalHref;
