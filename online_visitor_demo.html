@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>在线访问量统计演示</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+            max-width: 1000px;
+            margin: 50px auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin: 30px 0;
+        }
+        .stat-card {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 10px;
+            text-align: center;
+            border: 2px solid #e9ecef;
+            transition: all 0.3s ease;
+        }
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            border-color: #007bff;
+        }
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #007bff;
+            margin: 15px 0;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .stat-label {
+            font-size: 1.1em;
+            color: #6c757d;
+            margin-bottom: 10px;
+        }
+        .status {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: bold;
+            display: inline-block;
+        }
+        .status.loading {
+            background: #fff3cd;
+            color: #856404;
+        }
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+        }
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        .log {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 30px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .log-entry {
+            margin: 5px 0;
+            padding: 5px 0;
+            border-bottom: 1px solid #eee;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        .log-entry:last-child {
+            border-bottom: none;
+        }
+        .timestamp {
+            color: #6c757d;
+            margin-right: 10px;
+        }
+        .refresh-btn {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            margin: 20px auto;
+            display: block;
+            transition: all 0.3s ease;
+        }
+        .refresh-btn:hover {
+            background: #0056b3;
+            transform: scale(1.05);
+        }
+        .feature-list {
+            list-style: none;
+            padding: 0;
+            margin: 20px 0;
+        }
+        .feature-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .feature-list li:before {
+            content: "✅ ";
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🌐 在线访问量统计系统演示</h1>
+        
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-label">网站总访问量</div>
+                <div class="stat-number" id="site-pv">
+                    <span class="status loading">加载中...</span>
+                </div>
+                <div class="status loading" id="site-pv-status">正在连接统计服务...</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-label">独立访客数</div>
+                <div class="stat-number" id="site-uv">
+                    <span class="status loading">加载中...</span>
+                </div>
+                <div class="status loading" id="site-uv-status">正在获取数据...</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-label">页面访问量</div>
+                <div class="stat-number" id="page-pv">
+                    <span class="status loading">加载中...</span>
+                </div>
+                <div class="status loading" id="page-pv-status">等待统计结果...</div>
+            </div>
+        </div>
+        
+        <button class="refresh-btn" onclick="refreshStats()">🔄 刷新统计数据</button>
+        
+        <div class="log" id="log-container">
+            <div class="log-entry">
+                <span class="timestamp">[系统]</span>
+                在线访问量统计系统已启动...
+            </div>
+        </div>
+        
+        <h3>✨ 系统特性</h3>
+        <ul class="feature-list">
+            <li>实时在线统计，无需本地存储</li>
+            <li>自动重试机制，确保数据可靠性</li>
+            <li>智能超时处理，防止无限等待</li>
+            <li>数字动画效果，提升用户体验</li>
+            <li>跨页面数据同步，统计更准确</li>
+            <li>零配置部署，即插即用</li>
+        </ul>
+    </div>
+
+    <script>
+        // 日志系统
+        function addLog(message, type = 'info') {
+            const logContainer = document.getElementById('log-container');
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = document.createElement('div');
+            logEntry.className = 'log-entry';
+            logEntry.innerHTML = `<span class="timestamp">[${timestamp}]</span> ${message}`;
+            logContainer.appendChild(logEntry);
+            logContainer.scrollTop = logContainer.scrollHeight;
+        }
+        
+        // 数字动画函数
+        function animateNumber(element, target, duration = 1500) {
+            const start = 0;
+            const startTime = Date.now();
+            
+            function update() {
+                const elapsed = Date.now() - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                const easeOutQuart = t => 1 - Math.pow(1 - t, 4);
+                const current = Math.floor(start + (target - start) * easeOutQuart(progress));
+                
+                element.textContent = current.toLocaleString();
+                
+                if (progress < 1) {
+                    requestAnimationFrame(update);
+                } else {
+                    element.textContent = target.toLocaleString();
+                }
+            }
+            
+            update();
+        }
+        
+        // 格式化数字
+        function formatNumber(num) {
+            if (num >= 1000000) {
+                return (num / 1000000).toFixed(1) + 'M';
+            } else if (num >= 1000) {
+                return (num / 1000).toFixed(1) + 'K';
+            }
+            return num.toString();
+        }
+        
+        // 更新状态显示
+        function updateStatus(elementId, status, message) {
+            const element = document.getElementById(elementId);
+            if (element) {
+                element.className = `status ${status}`;
+                element.textContent = message;
+            }
+        }
+        
+        // 初始化Busuanzi统计
+        function initBusuanziStats() {
+            addLog('正在初始化Busuanzi统计...', 'info');
+            
+            // 创建隐藏的统计元素
+            const container = document.createElement('div');
+            container.style.display = 'none';
+            container.innerHTML = `
+                <span id="busuanzi_value_site_pv"></span>
+                <span id="busuanzi_value_site_uv"></span>
+                <span id="busuanzi_value_page_pv"></span>
+            `;
+            document.body.appendChild(container);
+            
+            // 加载Busuanzi脚本
+            const script = document.createElement('script');
+            script.async = true;
+            script.src = 'https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js';
+            
+            script.onload = () => {
+                addLog('Busuanzi脚本加载成功！', 'success');
+                monitorStats();
+            };
+            
+            script.onerror = () => {
+                addLog('Busuanzi脚本加载失败，使用模拟数据', 'error');
+                useSimulatedData();
+            };
+            
+            document.head.appendChild(script);
+        }
+        
+        // 监控统计数据
+        function monitorStats() {
+            let attempts = 0;
+            const maxAttempts = 30;
+            
+            const checkInterval = setInterval(() => {
+                attempts++;
+                
+                try {
+                    const sitePV = document.getElementById('busuanzi_value_site_pv');
+                    const siteUV = document.getElementById('busuanzi_value_site_uv');
+                    const pagePV = document.getElementById('busuanzi_value_page_pv');
+                    
+                    if (sitePV && siteUV && pagePV) {
+                        const pvValue = parseInt(sitePV.textContent) || 0;
+                        const uvValue = parseInt(siteUV.textContent) || 0;
+                        const pageValue = parseInt(pagePV.textContent) || 0;
+                        
+                        if (pvValue > 0 && uvValue > 0) {
+                            clearInterval(checkInterval);
+                            updateStatsDisplay(pvValue, uvValue, pageValue);
+                            addLog(`统计成功！PV: ${pvValue}, UV: ${uvValue}, 页面PV: ${pageValue}`, 'success');
+                        }
+                    }
+                    
+                    if (attempts >= maxAttempts) {
+                        clearInterval(checkInterval);
+                        addLog('统计超时，使用模拟数据', 'warning');
+                        useSimulatedData();
+                    }
+                } catch (error) {
+                    clearInterval(checkInterval);
+                    addLog(`统计错误: ${error.message}`, 'error');
+                    useSimulatedData();
+                }
+            }, 200);
+        }
+        
+        // 更新统计显示
+        function updateStatsDisplay(pv, uv, pagePv) {
+            // 网站总访问量
+            const sitePvElement = document.getElementById('site-pv');
+            animateNumber(sitePvElement, pv);
+            updateStatus('site-pv-status', 'success', `实时统计: ${formatNumber(pv)}`);
+            
+            // 独立访客数
+            const siteUvElement = document.getElementById('site-uv');
+            animateNumber(siteUvElement, uv);
+            updateStatus('site-uv-status', 'success', `实时统计: ${formatNumber(uv)}`);
+            
+            // 页面访问量
+            const pagePvElement = document.getElementById('page-pv');
+            animateNumber(pagePvElement, pagePv);
+            updateStatus('page-pv-status', 'success', `实时统计: ${formatNumber(pagePv)}`);
+        }
+        
+        // 使用模拟数据
+        function useSimulatedData() {
+            const simulatedPv = 15000 + Math.floor(Math.random() * 5000);
+            const simulatedUv = 8000 + Math.floor(Math.random() * 2000);
+            const simulatedPagePv = 500 + Math.floor(Math.random() * 200);
+            
+            updateStatsDisplay(simulatedPv, simulatedUv, simulatedPagePv);
+            updateStatus('site-pv-status', 'success', `模拟数据: ${formatNumber(simulatedPv)}`);
+            updateStatus('site-uv-status', 'success', `模拟数据: ${formatNumber(simulatedUv)}`);
+            updateStatus('page-pv-status', 'success', `模拟数据: ${formatNumber(simulatedPagePv)}`);
+            
+            addLog(`使用模拟数据: PV=${simulatedPv}, UV=${simulatedUv}, 页面=${simulatedPagePv}`, 'info');
+        }
+        
+        // 刷新统计
+        function refreshStats() {
+            addLog('用户手动刷新统计数据...', 'info');
+            
+            // 重置显示
+            document.getElementById('site-pv').innerHTML = '<span class="status loading">加载中...</span>';
+            document.getElementById('site-uv').innerHTML = '<span class="status loading">加载中...</span>';
+            document.getElementById('page-pv').innerHTML = '<span class="status loading">加载中...</span>';
+            
+            updateStatus('site-pv-status', 'loading', '重新获取数据中...');
+            updateStatus('site-uv-status', 'loading', '重新获取数据中...');
+            updateStatus('page-pv-status', 'loading', '重新获取数据中...');
+            
+            // 重新初始化
+            setTimeout(() => {
+                initBusuanziStats();
+            }, 500);
+        }
+        
+        // 页面加载完成后初始化
+        window.addEventListener('load', () => {
+            addLog('页面加载完成，开始初始化统计系统...', 'info');
+            setTimeout(() => {
+                initBusuanziStats();
+            }, 1000);
+        });
+        
+        // 定期刷新（每30秒）
+        setInterval(() => {
+            if (Math.random() > 0.7) { // 30%概率自动刷新
+                addLog('自动刷新统计数据...', 'info');
+                refreshStats();
+            }
+        }, 30000);
+    </script>
+</body>
+</html>

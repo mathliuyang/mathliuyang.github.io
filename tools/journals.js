@@ -234,7 +234,7 @@ let journals = [
     {
         "name": "Engineering with Computers",
         "chineseName": "计算机工程",
-        "abbr": "ENG COMPUT-GERMANY",
+        "abbr": "ENG COMPUT",
         "impactFactor": 5.7,
         "articles_per_year": 172,
         "region": "德国",
@@ -242,7 +242,7 @@ let journals = [
         "casZone": "2区",
         "scuZone": "工程技术 C",
         "reviewTime": "约12.0个月",
-        "publisher": "Springer London",
+        "publisher": "Springer",
         "issn": "0177-0667",
         "eissn": "1435-5663",
         "frequency": "季刊",
@@ -254,13 +254,13 @@ let journals = [
         "submissionUrl": "https://idp-personal-authenticator.springernature.com/gateway?response_type=code&redirect_uri=https%3A%2F%2Fidp.springernature.com%2Fauthed%2Fpersonal&state=89c3e9bb-b1ed-401c-b4ed-d26554b62f3b&context_code=366&target_redirect_uri=https%3A%2F%2Fsubmission.springernature.com%2Fnew-submission%2F366%2F3%3F_gl%3D1*1uhmnxe*_gcl_au*MTYwNjAxODQ3LjE3NTgwMjIyMjA.*_ga*NzE5OTkzNjgyLjE3NDIwMzI3MjY.*_ga_B3E4QL2TPR*czE3NjAyMTE0NzQkbzMyJGcxJHQxNzYwMjExNTExJGoyMyRsMCRoMTkwODUyMjAxNQ..&context_type=submission&_gl=1*1uhmnxe*_gcl_au*MTYwNjAxODQ3LjE3NTgwMjIyMjA.*_ga*NzE5OTkzNjgyLjE3NDIwMzI3MjY.*_ga_B3E4QL2TPR*czE3NjAyMTE0NzQkbzMyJGcxJHQxNzYwMjExNTExJGoyMyRsMCRoMTkwODUyMjAxNQ..",
         "tags": [
             "工程技术 - 工程:机械",
-            "Springer London",
+            "Springer",
             "SCIE"
         ],
-        "scope": "Engineering with Computers is an international journal for simulation-based engineering. It publishes original papers and authoritative state-of-the-art reviews on the technologies supporting simulation-based engineering, and examples of operational simulation-based engineering systems.",
-        "scopeCN": "《计算机工程》是一本专注于基于仿真工程的国际期刊。发表关于支持基于仿真工程技术的原创论文和权威性最新综述,以及可操作的基于仿真工程系统的实例。",
+        "scope": "Engineering with Computers is a journal that publishes research and authoritative state-of-the-art reviews on technologies supporting simulation-based engineering.Focuses on the development of new computing methods, algorithms, and workflows.Addresses significant computational challenges in engineering.Emphasizes technologies that support a wide range of engineering applications.Invites submissions of novel, cutting-edge research and algorithm-based software development.",
+        "scopeCN": "《工程与计算机》是一本发布支持基于仿真的工程技术研究和权威前沿综述的期刊。关注新计算方法、算法和工作流程的开发。解决工程中的重大计算挑战。强调支持广泛工程应用的技术。邀请提交新颖、前沿的研究以及基于算法的软件开发论文。",
         "researchAreas": "工程技术 - 工程:机械",
-        "tips": "专注于基于仿真的工程计算，对AI for Science研究接受度高！特别适合PINN在工程仿真中的应用、物理约束神经网络用于结构力学和流体力学仿真、深度学习加速工程计算、神经网络替代传统有限元方法、多物理场耦合的深度学习建模等研究。<mcreference link=\"https://www.iisb.fraunhofer.de/en/research_areas/simulation/ai-augmented-simulation/physics-informed-neural-networks-for-engineering-applications.html\" index=\"2\">2</mcreference> <mcreference link=\"https://asmedigitalcollection.asme.org/computingengineering/article/24/4/040802/1193884/Physics-Guided-Physics-Informed-and-Physics\" index=\"4\">4</mcreference> 作为Q1期刊(IF=5.7)发文量适中(172篇/年)，审稿周期约12个月，强调工程应用价值和仿真效率提升。建议突出PINN相比传统仿真方法的计算效率优势，以及在复杂工程问题中的实用性。",
+        "tips": "专注于基于仿真的工程计算，对AI for Science研究接受度高！适合PINN在工程仿真中的应用、物理约束神经网络用于结构力学和流体力学仿真、深度学习加速工程计算、神经网络替代传统有限元方法、多物理场耦合的深度学习建模等研究。作为Q1期刊(IF=5.7)发文量适中(172篇/年)，审稿周期约12个月，强调工程应用价值和仿真效率提升。建议突出PINN相比传统仿真方法的计算效率优势，以及在复杂工程问题中的实用性。论文应集中于工程计算中的创新性解决方案，特别是在新算法和软件开发方面的突破，并展示这些技术如何帮助解决实际的工程问题。",
         "indexed": "SCIE",
         "warning": false
     },
@@ -389,10 +389,10 @@ let journals = [
             "数学 - 应用数学",
             "SCIE"
         ],
-        "scope": "The Journal of Computational and Applied Mathematics publishes original papers of high scientific value in all areas of computational and applied mathematics. The main interest of the Journal is in papers that describe and analyze new computational techniques for solving scientific or engineering problems. Also the improved analysis, including the effectiveness and applicability, of existing methods and algorithms is of importance. The computational efficiency (e.g. the convergence, stability, accuracy, ...) should be proved and illustrated by nontrivial numerical examples.",
-        "scopeCN": "《计算与应用数学杂志》发表计算与应用数学所有领域的高科学价值原创论文。本刊的主要兴趣在于描述和分析解决科学或工程问题的新计算技术的论文。对现有方法和算法的改进分析(包括有效性和适用性)也很重要。计算效率(如收敛性、稳定性、精度等)应通过非平凡的数值例子得到证明和说明。",
+        "scope": "The Journal of Computational and Applied Mathematics publishes original papers of high scientific value in all areas of computational and applied mathematics. The main interest of the Journal is in papers that describe and analyze new computational techniques for solving scientific or engineering problems. Also the improved analysis, including the effectiveness and applicability, of existing methods and algorithms is of importance. The computational efficiency (e.g. the convergence, stability, accuracy, ...) should be proved and illustrated by nontrivial numerical examples. Papers describing only variants of existing methods, without adding significant new computational properties are not of interest. The audience consists of: applied mathematicians, numerical analysts, computational scientists and engineers.",
+        "scopeCN": "《Journal of Computational and Applied Mathematics》发表所有计算与应用数学领域的高科学价值的原创论文。该期刊的主要兴趣在于描述和分析用于解决科学或工程问题的新计算技术的论文。同时，现有方法和算法的改进分析，包括其有效性和适用性也非常重要。计算效率（例如收敛性、稳定性、准确性等）应该通过非平凡的数值示例进行证明和展示。仅描述现有方法的变体，且未增加显著的新计算特性的论文不在考虑范围内。该期刊的读者群体包括：应用数学家、数值分析师、计算科学家和工程师。",
         "researchAreas": "数学 - 应用数学",
-        "tips": "本期刊强烈推荐用于PINN方法论创新的研究，特别适合新的物理约束方式、训练技术、网络结构等方面的创新。必须提供充分的数值实验(非平凡案例)，需要证明计算效率(收敛性、稳定性、精度)。不接受无重大新计算性质的方法变体。审稿速度快(约3个月)，建议准备3-5个不同难度的数值案例。作为2区Q1期刊(IF=2.1)，发文量大(533篇/年)，接收率相对较高，性价比高，适合作为方法论创新类论文的主要目标之一。",
+        "tips": "本期刊欢迎提交描述新计算方法或技术的论文，尤其是解决科学和工程问题的创新方法，强调计算技术的独特性和贡献。如果论文改进现有方法，需证明其在有效性、适用性或效率方面的显著优势，且不能仅为方法变体，必须有实际改进。论文应清晰描述所解决问题的背景，并阐明方法的应用意义，确保不仅仅是数学抽象，而是具有实际应用价值。避免仅描述小变动或无重大改进的论文。提交的论文应专注于实际问题的高效、创新解决方案，并提供充分的数值实验（包括非平凡案例）以证明计算效率（如收敛性、稳定性、精度）。审稿速度约为3个月，建议准备3-5个难度不同的数值案例。作为2区Q1期刊（IF=2.1），年发文量大（533篇/年），接收率较高，性价比高，适合作为方法论创新类论文的主要目标之一。",
         "indexed": "SCIE",
         "warning": false
     },
@@ -407,7 +407,7 @@ let journals = [
         "casZone": "4区",
         "scuZone": "数学 C",
         "reviewTime": "约2.0个月",
-        "publisher": "Inst. of Computational Mathematics and Sc./Eng. Computing",
+        "publisher": "Global Science Press  ",
         "issn": "0254-9409",
         "eissn": "1991-7139",
         "frequency": "双月刊",
@@ -418,14 +418,14 @@ let journals = [
         "authorGuide": "https://computmath.cjoe.ac.cn/jcm/EN/column/column106.shtml",
         "submissionUrl": "https://mc03.manuscriptcentral.com/jcmath",
         "tags": [
-            "Inst. of Computational Mathematics and Sc./Eng. Computing",
+            "Global Science Press  ",
             "数学 - 数学",
             "SCIE"
         ],
-        "scope": "Journal of Computational Mathematics (JCM) is an international scientific computing journal founded by Professor Feng Kang in 1983, which is the first Chinese computational mathematics journal published in English. JCM covers all branches of modern computational mathematics such as numerical linear algebra, numerical optimization, computational geometry, numerical PDEs, and inverse problems.",
-        "scopeCN": "《计算数学期刊》是由冯康教授于1983年创办的国际科学计算期刊,是中国第一本用英文出版的计算数学期刊。JCM涵盖现代计算数学的所有分支,如数值线性代数、数值优化、计算几何、数值偏微分方程和反问题。",
+        "scope": "The Journal of Computational Mathematics is an international journal covering numerical methods, analysis and applications. The journal publishes original research papers in all branches of modern computational mathematics such as linear and nonlinear algebra, numerical optimization, numerical approximations, computational geometry, computational statistics and probability, Monte Carlo methods, numerical methods for ordinary differential equations, integral equations and partial differential equations including both direct and inverse problems, and computational-mathematical problems in diverse fields of science and engineering. Papers containing new ideas, creative approaches and/or innovative applications as well as invited reviews are expected to appear regularly in the journal.",
+        "scopeCN": "《Journal of Computational Mathematics》是一本国际性期刊，涵盖数值方法、分析与应用。该期刊发表现代计算数学各个分支的原创研究论文，包括线性与非线性代数、数值优化、数值逼近、计算几何、计算统计与概率、蒙特卡罗方法、常微分方程的数值方法、积分方程与偏微分方程（包括正问题与逆问题）以及在科学与工程各个领域中的计算数学问题。期刊将定期刊登包含新思想、创新方法和/或创新应用的论文，以及邀请的综述文章。",
         "researchAreas": "数学 - 数学",
-        "tips": "本期刊对ML方法接受度有限，需要数学理论基础，理论优先。特别适合有理论保证的PINN方法、深度学习与传统数值方法的理论比较、神经网络逼近理论在PDE中的应用等研究。作为4区期刊(IF=0.9)，影响力有限，如有更好选择不推荐作为首选，但对国内评审可能有一定认可度。建议谨慎投稿，适合国内学者发表理论性较强的工作。",
+        "tips": "本期刊对ML方法接受度有限，需要数学理论基础，理论优先。特别适合有理论保证的PINN方法、深度学习与传统数值方法的理论比较、神经网络逼近理论在PDE中的应用等研究。作为4区期刊(IF=0.9)，影响力有限，如有更好选择不推荐作为首选，但对国内评审可能有一定认可度（T1）。建议谨慎投稿，适合国内学者发表理论性较强的工作。",
         "indexed": "SCIE",
         "warning": false
     },
