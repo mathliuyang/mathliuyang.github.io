@@ -893,10 +893,8 @@
         // Trigger number animation
         setTimeout(animateNumbers, 1000);
         
-        // 初始化访问量统计（在线实时统计）
-        setTimeout(() => {
-            initVisitorCounter();
-        }, 1500);
+        // 立即初始化访客计数器（确保页面加载时立即显示）
+        initVisitorCounter();
         
         // 生成模拟访问量数据
         function generateVisitorCount() {
