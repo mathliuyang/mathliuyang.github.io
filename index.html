@@ -470,7 +470,7 @@
                     <div class="meta-label">实用工具</div>
                 </div>
                 <div class="meta-item">
-                    <div class="meta-number" id="visitorCount">1</div>
+                    <div class="meta-number" id="visitorCount">···</div>
                     <div class="meta-label">访问量</div>
                 </div>
             </div>
@@ -701,13 +701,13 @@
             });
         }
 
-        // Busuanzi在线访问量统计（增强版）
+        // 初始化访问量统计
         function initVisitorCounter() {
             const visitorElement = document.getElementById('visitorCount');
             if (!visitorElement) return;
             
-            // 初始化显示为1，避免显示00
-            visitorElement.textContent = '1';
+            // 设置初始状态，等待真实数据
+            visitorElement.textContent = '···';
             
             // 创建Busuanzi容器
             const busuanziContainer = document.createElement('div');
@@ -733,9 +733,10 @@
                     retryCount++;
                     setTimeout(checkBusuanziLoaded, retryDelay);
                 } else {
-                    // 超时处理，显示默认值
-                    console.warn('Busuanzi加载超时，使用默认值');
-                    animateVisitorCount(visitorElement, 1);
+                    // 超时处理，显示加载中状态
+                    console.warn('Busuanzi加载超时，等待真实数据');
+                    visitorElement.textContent = '···';
+                    visitorElement.title = '统计加载中...';
                 }
             }
             
@@ -746,7 +747,8 @@
         function monitorBusuanziLoad(visitorElement) {
             const targetElement = document.getElementById('busuanzi_value_site_pv');
             if (!targetElement) {
-                animateVisitorCount(visitorElement, 1);
+                visitorElement.textContent = '···';
+                visitorElement.title = '统计元素未找到';
                 return;
             }
             
@@ -770,25 +772,25 @@
                         clearInterval(checkContent);
                         visitorElement.classList.remove('loading');
                         
-                        // 添加随机增量使数据更真实
-                        const enhancedValue = numValue + Math.floor(Math.random() * 10);
-                        animateVisitorCount(visitorElement, enhancedValue);
+                        // 使用真实的Busuanzi数据，不做任何修改
+                        animateVisitorCount(visitorElement, numValue);
                         
-                        console.log(`Busuanzi统计加载成功: ${numValue} → ${enhancedValue}`);
+                        console.log(`Busuanzi统计加载成功: ${numValue}`);
                     } else if (checkAttempts >= maxAttempts) {
                         clearInterval(checkContent);
                         visitorElement.classList.remove('loading');
                         
-                        // 超时后显示估算值
-                        const estimatedValue = 1000 + Math.floor(Math.random() * 500);
-                        animateVisitorCount(visitorElement, estimatedValue);
+                        // 超时后显示加载失败提示
+                        visitorElement.textContent = '···';
+                        visitorElement.title = '统计加载中...';
                         
-                        console.log('Busuanzi统计超时，使用估算值:', estimatedValue);
+                        console.log('Busuanzi统计加载超时，等待真实数据');
                     }
                 } catch (error) {
                     clearInterval(checkContent);
                     visitorElement.classList.remove('loading');
-                    animateVisitorCount(visitorElement, 1);
+                    visitorElement.textContent = '···';
+                    visitorElement.title = '统计加载失败';
                     console.error('Busuanzi数据处理错误:', error);
                 }
             }, checkInterval);
