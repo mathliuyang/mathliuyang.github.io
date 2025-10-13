@@ -701,16 +701,25 @@
             });
         }
 
-        // 初始化访问量统计（直接显示模拟数据）
+        // 确保DOM加载完成后初始化访客计数器
         function initVisitorCounter() {
-            const visitorElement = document.getElementById('visitorCount');
-            if (!visitorElement) return;
-            
-            // 直接显示模拟数据，无需等待外部脚本
-            setTimeout(() => {
+            // 等待DOM完全加载
+            function checkAndUpdate() {
+                const visitorElement = document.getElementById('visitorCount');
+                if (!visitorElement) {
+                    console.log('等待visitorCount元素加载...');
+                    setTimeout(checkAndUpdate, 100);
+                    return;
+                }
+                
+                console.log('找到visitorCount元素，开始更新数据...');
+                
+                // 立即显示模拟数据
                 const simulatedCount = generateVisitorCount();
-                console.log(`直接显示模拟访问量数据: ${simulatedCount}`);
-                animateVisitorCount(visitorElement, simulatedCount);
+                console.log(`显示模拟访问量数据: ${simulatedCount}`);
+                
+                // 直接设置内容
+                visitorElement.textContent = simulatedCount.toLocaleString();
                 visitorElement.title = '模拟访问量数据';
                 
                 // 添加提示信息
@@ -727,6 +736,9 @@
                     opacity: 0;
                     transition: opacity 0.3s;
                     pointer-events: none;
+                    top: -35px;
+                    left: 50%;
+                    transform: translateX(-50%);
                 `;
                 tooltip.textContent = '模拟数据（演示用）';
                 
@@ -740,7 +752,10 @@
                 visitorElement.addEventListener('mouseleave', () => {
                     tooltip.style.opacity = '0';
                 });
-            }, 1000);
+            }
+            
+            // 立即开始检查
+            checkAndUpdate();
         }
         
         // 增强Busuanzi统计功能
