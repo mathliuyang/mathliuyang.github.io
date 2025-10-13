@@ -203,6 +203,100 @@
             font-size: 0.75rem;
         }
 
+        /* Password Modal */
+        .password-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+        }
+
+        .password-modal.active {
+            display: flex;
+        }
+
+        .password-container {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            padding: 2.5rem;
+            border-radius: 8px;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+        }
+
+        .password-title {
+            font-size: 1.2rem;
+            font-weight: 500;
+            margin-bottom: 1.5rem;
+            color: var(--text);
+        }
+
+        .password-input {
+            width: 100%;
+            padding: 1rem;
+            border: 1px solid var(--border);
+            background: transparent;
+            color: var(--text);
+            font-size: 1rem;
+            border-radius: 4px;
+            margin-bottom: 1.5rem;
+            letter-spacing: 0.1em;
+            transition: border-color 0.3s ease;
+        }
+
+        .password-input:focus {
+            outline: none;
+            border-color: var(--text);
+        }
+
+        .password-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .password-btn {
+            padding: 0.8rem 1.5rem;
+            border: 1px solid var(--border);
+            background: transparent;
+            color: var(--text);
+            font-size: 0.9rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .password-btn:hover {
+            border-color: var(--text);
+            transform: translateY(-2px);
+        }
+
+        .password-btn.confirm {
+            background: var(--text);
+            color: var(--bg);
+            border-color: var(--text);
+        }
+
+        .password-error {
+            color: #ff4444;
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .password-error.show {
+            opacity: 1;
+        }
+
         .sidebar-nav-container {
             margin-top: 2rem;
             width: 100%;
@@ -714,6 +808,35 @@
 
         /* Responsive */
         @media (max-width: 1024px) {
+            .password-container {
+                margin: 2rem;
+                max-width: 350px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .password-container {
+                margin: 1rem;
+                padding: 2rem;
+                max-width: 300px;
+            }
+            
+            .password-title {
+                font-size: 1.1rem;
+            }
+            
+            .password-input {
+                font-size: 0.9rem;
+                padding: 0.8rem;
+            }
+            
+            .password-btn {
+                padding: 0.6rem 1.2rem;
+                font-size: 0.85rem;
+            }
+        }
+
+        @media (max-width: 1024px) {
             .container {
                 grid-template-columns: 1fr;
                 gap: 4rem;
@@ -826,8 +949,8 @@
                             src="../assets/icons/ORCID-iD_icon_vector.svg" alt="ORCID"
                             style="width: 20px; height: 20px; vertical-align: middle;"></a></h1>
                 <p class="title">核领域的智能科学计算 / 博士在读</p>
-                <p class="info">中共党员 | 1997.12.18 | <a href="../assets/documents/resume.pdf" class="download-btn">
-                        简历PDF</a></p>
+                <p class="info">中共党员 | 1997.12.18 | <a href="#" class="download-btn" id="resumeDownloadBtn">
+                        简历PDF <span style="font-size: 0.7rem; opacity: 0.6; margin-left: 0.3rem;">🔒</span></a></p>
 
                 <div class="profile-footer">
                     <!-- 个人账号链接 -->
@@ -1380,6 +1503,20 @@
         </main>
     </div>
 
+    <!-- Password Modal -->
+    <div class="password-modal" id="passwordModal">
+        <div class="password-container">
+            <h3 class="password-title">简历下载</h3>
+            <p style="color: var(--text-dim); font-size: 0.9rem; margin-bottom: 1.5rem;">请输入下载密码</p>
+            <input type="password" class="password-input" id="passwordInput" placeholder="请输入6位密码" maxlength="6">
+            <div class="password-buttons">
+                <button class="password-btn" id="cancelBtn">取消</button>
+                <button class="password-btn confirm" id="confirmBtn">确认</button>
+            </div>
+            <div class="password-error" id="passwordError">密码错误，请重试</div>
+        </div>
+    </div>
+
     <script>
         // Theme toggle
         const themeBtn = document.getElementById('themeBtn');
@@ -1425,6 +1562,79 @@
 
         // 如果有动态内容，可以定期执行（可选）
         // setInterval(updateMediaImages, 1000);
+
+        // Resume download with password protection
+        const resumeDownloadBtn = document.getElementById('resumeDownloadBtn');
+        const passwordModal = document.getElementById('passwordModal');
+        const passwordInput = document.getElementById('passwordInput');
+        const confirmBtn = document.getElementById('confirmBtn');
+        const cancelBtn = document.getElementById('cancelBtn');
+        const passwordError = document.getElementById('passwordError');
+
+        const CORRECT_PASSWORD = '962464';
+        const RESUME_URL = '../assets/documents/resume.pdf';
+
+        // 显示密码模态框
+        resumeDownloadBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            passwordModal.classList.add('active');
+            passwordInput.focus();
+            passwordError.classList.remove('show');
+            passwordInput.value = '';
+        });
+
+        // 确认密码
+        confirmBtn.addEventListener('click', () => {
+            const inputPassword = passwordInput.value;
+            if (inputPassword === CORRECT_PASSWORD) {
+                // 密码正确，开始下载
+                const link = document.createElement('a');
+                link.href = RESUME_URL;
+                link.download = '刘洋_简历.pdf';
+                link.click();
+                
+                // 关闭模态框
+                passwordModal.classList.remove('active');
+                passwordError.classList.remove('show');
+            } else {
+                // 密码错误，显示错误信息
+                passwordError.classList.add('show');
+                passwordInput.focus();
+                passwordInput.select();
+            }
+        });
+
+        // 取消下载
+        cancelBtn.addEventListener('click', () => {
+            passwordModal.classList.remove('active');
+            passwordError.classList.remove('show');
+            passwordInput.value = '';
+        });
+
+        // 点击模态框外部关闭
+        passwordModal.addEventListener('click', (e) => {
+            if (e.target === passwordModal) {
+                passwordModal.classList.remove('active');
+                passwordError.classList.remove('show');
+                passwordInput.value = '';
+            }
+        });
+
+        // 回车键确认
+        passwordInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                confirmBtn.click();
+            }
+        });
+
+        // ESC键关闭
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && passwordModal.classList.contains('active')) {
+                passwordModal.classList.remove('active');
+                passwordError.classList.remove('show');
+                passwordInput.value = '';
+            }
+        });
 
         // 移除超链接预览 - 阻止浏览器显示链接地址
         document.addEventListener('DOMContentLoaded', function () {
