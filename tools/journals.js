@@ -530,7 +530,7 @@ let journals = [
     },
     {
         "name": "Mathematics and Computers in Simulation",
-        "chineseName": "仿真中的数学与计算机",
+        "chineseName": "数学与计算机仿真",
         "abbr": "MATH COMPUT SIMULAT",
         "impactFactor": 4.4,
         "articles_per_year": 120,

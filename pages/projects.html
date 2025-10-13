@@ -324,7 +324,7 @@
 
 <body>
     <nav>
-        <div class="logo" onclick="location.href='../index.html'">图灵的猫</div>
+        <div class="logo" onclick="location.href='../index.html'">图灵的猫 X 智核学术</div>
         <div class="nav-right">
             <ul class="nav-links">
                 <li><a href="../index.html">首页</a></li>
@@ -372,7 +372,8 @@
                         <a href="../projects/ResearchPrompt Pro/index.html" class="project-link" target="_blank">
                             <span>🔗</span> Demo
                         </a>
-                        <a href="docs-viewer.html?doc=../projects/ResearchPrompt Pro/README.md&title=Research Prompt Pro" class="project-link" target="_blank">
+                        <a href="docs-viewer.html?doc=../projects/ResearchPrompt Pro/README.md&title=Research Prompt Pro"
+                            class="project-link" target="_blank">
                             <span>📖</span> Docs
                         </a>
                     </div>
@@ -381,7 +382,8 @@
 
             <div class="project-card" data-category="web">
                 <div class="project-image">
-                    <img src="../assets/images/Quadratic Equation Space Game.png" alt="Quadratic Equation Space Game" loading="lazy">
+                    <img src="../assets/images/Quadratic Equation Space Game.png" alt="Quadratic Equation Space Game"
+                        loading="lazy">
                 </div>
                 <div class="project-content">
                     <h3 class="project-title">Quadratic Equation Space Game</h3>
@@ -393,10 +395,12 @@
                         <span class="tech-tag">Tailwind CSS</span>
                     </div>
                     <div class="project-links">
-                        <a href="../projects/Quadratic-Equation-Space-Game/index.html" class="project-link" target="_blank">
+                        <a href="../projects/Quadratic-Equation-Space-Game/index.html" class="project-link"
+                            target="_blank">
                             <span>🔗</span> Demo
                         </a>
-                        <a href="docs-viewer.html?doc=../projects/Quadratic-Equation-Space-Game/README.md&title=Quadratic Equation Space Game" class="project-link" target="_blank">
+                        <a href="docs-viewer.html?doc=../projects/Quadratic-Equation-Space-Game/README.md&title=Quadratic Equation Space Game"
+                            class="project-link" target="_blank">
                             <span>📖</span> Docs
                         </a>
                     </div>
@@ -405,7 +409,8 @@
 
             <div class="project-card" data-category="opensource">
                 <div class="project-image">
-                    <img src="../assets/images/Simple Navigation Panel.png" alt="Simple Navigation Panel" loading="lazy">
+                    <img src="../assets/images/Simple Navigation Panel.png" alt="Simple Navigation Panel"
+                        loading="lazy">
                 </div>
                 <div class="project-content">
                     <h3 class="project-title">Simple Navigation Panel</h3>
@@ -420,7 +425,8 @@
                         <a href="../projects/Simple-Navigation-Panel/index.html" class="project-link" target="_blank">
                             <span>🔗</span> Demo
                         </a>
-                        <a href="docs-viewer.html?doc=../projects/Simple-Navigation-Panel/README.md&title=Simple Navigation Panel" class="project-link" target="_blank">
+                        <a href="docs-viewer.html?doc=../projects/Simple-Navigation-Panel/README.md&title=Simple Navigation Panel"
+                            class="project-link" target="_blank">
                             <span>📖</span> Docs
                         </a>
                     </div>
@@ -472,23 +478,23 @@
         });
 
         // 移除超链接预览
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const links = document.querySelectorAll('a[href]');
-            
+
             links.forEach(link => {
                 let originalHref = link.href;
-                
-                link.addEventListener('mouseenter', function(e) {
+
+                link.addEventListener('mouseenter', function (e) {
                     originalHref = this.href;
                     this.removeAttribute('href');
                     this.style.cursor = 'pointer';
                 });
-                
-                link.addEventListener('mouseleave', function(e) {
+
+                link.addEventListener('mouseleave', function (e) {
                     this.setAttribute('href', originalHref);
                 });
-                
-                link.addEventListener('click', function(e) {
+
+                link.addEventListener('click', function (e) {
                     if (!this.href) {
                         e.preventDefault();
                         window.location.href = originalHref;

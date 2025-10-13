@@ -359,7 +359,7 @@
 
 <body>
     <nav>
-        <div class="logo" onclick="location.href='../index.html'">图灵的猫</div>
+        <div class="logo" onclick="location.href='../index.html'">图灵的猫 X 智核学术</div>
         <div class="nav-right">
             <ul class="nav-links">
                 <li><a href="../index.html">首页</a></li>
@@ -547,23 +547,23 @@
         });
 
         // 移除超链接预览
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const links = document.querySelectorAll('a[href]');
-            
+
             links.forEach(link => {
                 let originalHref = link.href;
-                
-                link.addEventListener('mouseenter', function(e) {
+
+                link.addEventListener('mouseenter', function (e) {
                     originalHref = this.href;
                     this.removeAttribute('href');
                     this.style.cursor = 'pointer';
                 });
-                
-                link.addEventListener('mouseleave', function(e) {
+
+                link.addEventListener('mouseleave', function (e) {
                     this.setAttribute('href', originalHref);
                 });
-                
-                link.addEventListener('click', function(e) {
+
+                link.addEventListener('click', function (e) {
                     if (!this.href) {
                         e.preventDefault();
                         window.location.href = originalHref;

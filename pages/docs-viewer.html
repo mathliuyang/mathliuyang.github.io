@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>文档预览 - 图灵的猫</title>
+    <title>文档预览 - 图灵的猫 X 智核学术</title>
     <style>
         * {
             margin: 0;
@@ -280,6 +281,7 @@
         }
     </style>
 </head>
+
 <body>
     <nav>
         <div class="nav-content">
@@ -296,7 +298,7 @@
         <div class="breadcrumb">
             <a href="/index.html">首页</a> / <a href="/pages/projects.html">项目</a> / <span id="docTitle">文档预览</span>
         </div>
-        
+
         <div id="loading" class="loading">正在加载文档...</div>
         <div id="error" class="error" style="display: none;"></div>
         <div id="content" class="markdown-content" style="display: none;"></div>
@@ -304,7 +306,7 @@
 
     <!-- 引入 marked.js 用于 Markdown 解析 -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    
+
     <script>
         // 主题切换功能
         const themeBtn = document.getElementById('themeBtn');
@@ -330,14 +332,14 @@
         async function loadMarkdown() {
             const docUrl = getUrlParameter('doc');
             const docTitle = getUrlParameter('title') || '项目文档';
-            
+
             if (!docUrl) {
                 showError('未指定文档路径');
                 return;
             }
 
             // 更新页面标题和面包屑
-            document.title = `${docTitle} - 图灵的猫`;
+            document.title = `${docTitle} - 图灵的猫 X 智核学术`;
             document.getElementById('docTitle').textContent = docTitle;
 
             try {
@@ -346,12 +348,12 @@
                 if (!response.ok) {
                     throw new Error(`无法加载文档: ${response.statusText}`);
                 }
-                
+
                 const markdownText = await response.text();
-                
+
                 // 配置marked选项
                 marked.setOptions({
-                    highlight: function(code, lang) {
+                    highlight: function (code, lang) {
                         // 简单的代码高亮处理
                         return code;
                     },
@@ -361,7 +363,7 @@
 
                 // 渲染Markdown为HTML
                 const htmlContent = marked.parse(markdownText);
-                
+
                 // 显示渲染后的内容
                 document.getElementById('content').innerHTML = htmlContent;
                 document.getElementById('loading').style.display = 'none';
@@ -392,7 +394,7 @@
         document.addEventListener('DOMContentLoaded', loadMarkdown);
 
         // 处理浏览器返回按钮
-        window.addEventListener('popstate', function(event) {
+        window.addEventListener('popstate', function (event) {
             if (event.state && event.state.fromViewer) {
                 // 从文档查看器返回时，确保主题一致
                 const savedTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
@@ -402,4 +404,5 @@
         });
     </script>
 </body>
+
 </html>

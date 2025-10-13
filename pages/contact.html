@@ -450,7 +450,7 @@
             text-align: center;
             pointer-events: none;
         }
-        
+
         .copy-feedback.show {
             opacity: 1;
             transform: translateX(-50%) translateY(0);
@@ -486,7 +486,7 @@
 <body>
     <!-- Navigation -->
     <nav>
-        <div class="logo" onclick="location.href='../index.html'">图灵的猫</div>
+        <div class="logo" onclick="location.href='../index.html'">图灵的猫 X 智核学术</div>
         <div class="nav-right">
             <ul class="nav-links">
                 <li><a href="../index.html">首页</a></li>
@@ -648,10 +648,10 @@
 
         // Copy functionality for WeChat and QQ
         document.querySelectorAll('.copy-item').forEach(item => {
-            item.addEventListener('click', async function() {
+            item.addEventListener('click', async function () {
                 const textToCopy = this.getAttribute('data-copy');
                 const type = this.getAttribute('data-type');
-                
+
                 try {
                     // 尝试使用现代Clipboard API
                     if (navigator.clipboard && window.isSecureContext) {
@@ -667,7 +667,7 @@
                         document.body.appendChild(textArea);
                         textArea.focus();
                         textArea.select();
-                        
+
                         try {
                             document.execCommand('copy');
                             showCopyFeedback(`✓ ${type} 账号复制成功`);
@@ -675,7 +675,7 @@
                             console.warn('复制失败:', err);
                             showCopyFeedback('复制失败，请手动选择复制');
                         }
-                        
+
                         document.body.removeChild(textArea);
                     }
                 } catch (err) {
@@ -697,21 +697,21 @@
                     }
                 }, 300);
             }
-            
+
             // 创建反馈元素
             let feedback = document.createElement('div');
             feedback.className = 'copy-feedback';
             feedback.textContent = message;
             document.body.appendChild(feedback);
-            
+
             // 强制重排以确保动画生效
             feedback.offsetHeight;
-            
+
             // 显示反馈
             requestAnimationFrame(() => {
                 feedback.classList.add('show');
             });
-            
+
             // 2.5秒后移除反馈
             setTimeout(() => {
                 feedback.classList.remove('show');
@@ -724,23 +724,23 @@
         }
 
         // 移除超链接预览
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const links = document.querySelectorAll('a[href]');
-            
+
             links.forEach(link => {
                 let originalHref = link.href;
-                
-                link.addEventListener('mouseenter', function(e) {
+
+                link.addEventListener('mouseenter', function (e) {
                     originalHref = this.href;
                     this.removeAttribute('href');
                     this.style.cursor = 'pointer';
                 });
-                
-                link.addEventListener('mouseleave', function(e) {
+
+                link.addEventListener('mouseleave', function (e) {
                     this.setAttribute('href', originalHref);
                 });
-                
-                link.addEventListener('click', function(e) {
+
+                link.addEventListener('click', function (e) {
                     if (!this.href) {
                         e.preventDefault();
                         window.location.href = originalHref;
