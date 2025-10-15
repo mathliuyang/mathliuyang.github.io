@@ -985,7 +985,7 @@ let journals = [
         "frequency": "连续出版",
         "founded": "2011年",
         "language": "English",
-        "coverImage": "https://media.springernature.com/w316/springer-static/cover-hires/journal/s41598?as=webp",
+        "coverImage": "https://m.booksci.cn/Content/Literature/img/1023b746-b85b-4382-9988-34d5755c952f.jpg",
         "website": "https://www.nature.com/srep/",
         "authorGuide": "https://www.nature.com/srep/author-instructions",
         "submissionUrl": "https://author-welcome.nature.com/41598",
