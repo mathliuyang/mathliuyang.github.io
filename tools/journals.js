@@ -786,10 +786,10 @@ let journals = [
             "数学 - 数学",
             "SCIE"
         ],
-        "scope": "Science China Mathematics is committed to publishing high-quality, original results in both basic and applied research. It presents reviews that summarize representative results and achievements in a particular topic or an area, comment on the current state of research, or advise on research directions.",
-        "scopeCN": "《中国科学:数学》致力于发表基础和应用研究的高质量原创成果。发表综述,总结特定主题或领域的代表性成果和成就,评论当前研究状况,或建议研究方向。",
+        "scope": "Science China Mathematics is dedicated to publishing high-quality and original findings in all areas of basic and applied mathematical research.A highly respected mathematical journal in China.Cosponsored by the Chinese Academy of Sciences and the National Natural Science Foundation of China.Features research papers reporting on significant original results across all fields of mathematics.Specializes in reviews that summarize notable results and achievements in specific topics or areas.",
+        "scopeCN": "《Science China Mathematics》是一本致力于发表基础和应用数学领域高质量、原创性研究成果的期刊。它在中国数学界具有很高的声誉，并由中国科学院和国家自然科学基金委员会联合主办。期刊的内容包括报告重要原创性成果的研究论文，涵盖数学各个领域，特别是对特定主题或领域的显著成果和成就进行总结的综述文章。",
         "researchAreas": "数学 - 数学, 数学 - 应用数学",
-        "tips": "对深度学习方法接受度有限，仅推荐给能提供严格数学证明的工作。特别适合有完整理论证明的PINN方法、深度学习的数学理论基础等研究。要求严格数学证明，理论优先，对国内评审有一定认可度。作为1-2区期刊(IF=1.4)但影响因子较低，如有更好选择不推荐作为首选。",
+        "tips": "对深度学习方法接受度有限，仅推荐给能提供严格数学证明的工作。若是具有完整理论证明的新的PINN方法、深度学习的数学理论基础等研究，可以考虑投稿。要求严格数学证明，理论优先，作为川大评级为 B 的1区期刊(IF=1.4) 对国内评审有较高认可度。",
         "indexed": "SCIE",
         "warning": false
     },
