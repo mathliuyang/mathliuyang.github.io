@@ -792,11 +792,10 @@ let journals = [
         "scope": "Open-access journal publishing high quality, editorially selected and peer reviewed advances in physics. Communications Physics is an open access journal from Nature Portfolio publishing high-quality research, reviews and commentary in all areas of the physical sciences. Research papers published by the journal represent significant advances bringing new insight to a specialized area of research in physics. We also aim to provide a community forum for issues of importance to all physicists, regardless of sub-discipline. The scope of the journal covers all areas of experimental, applied, fundamental, and interdisciplinary physical sciences and includes (but is not limited to): Astrophysics and cosmology, Atomic and molecular physics, Biophysics and biological physics, Chemical physics, Complex systems and network science, Condensed-matter physics, Electronics and device physics, Energy materials, Fluid dynamics, High-energy particle physics, Information theory and computation, Materials sciences, Nanotechnology, Nuclear physics, Optical physics and photonics, Plasma physics, Polymers and thin films, Quantum physics and quantum technologies, Soft condensed-matter physics, Statistical physics, thermodynamics and nonlinear dynamics. Primary research published in Communications Physics includes novel experimental results, new techniques or computational methods that may influence the work of others in the sub-discipline. We also consider submissions from adjacent research fields where the central advance of the study is of interest to physicists, for example material sciences, physical chemistry and technologies. The submission and review processes are managed by our in-house professional editors supported by our Editorial Board Members, who provide technical expertise across the breadth of the physical sciences. We are committed to rapid dissemination of significant research results. Articles are published on a continuous basis with minimal time from acceptance to publication.",
         "scopeCN": "本刊为开放获取期刊,发表经编辑精选和同行评审的高质量物理学进展。《通讯物理》是Nature旗下开放获取期刊,发表物理科学各领域的高质量研究、综述和评论。期刊发表的研究论文代表了重要进展,为物理学专门研究领域带来新见解。我们还致力于为所有物理学家提供讨论重要问题的社区论坛,不限子学科。期刊涵盖实验、应用、基础和跨学科物理科学的所有领域,包括(但不限于):天体物理学与宇宙学、原子与分子物理学、生物物理学、化学物理、复杂系统与网络科学、凝聚态物理、电子学与器件物理、能源材料、流体动力学、高能粒子物理、信息论与计算、材料科学、纳米技术、核物理、光学物理与光子学、等离子体物理、聚合物与薄膜、量子物理与量子技术、软凝聚态物理、统计物理、热力学与非线性动力学。本刊发表的原创研究包括新颖的实验结果、可能影响该子学科其他工作者的新技术或计算方法。我们也考虑来自相邻研究领域的投稿,前提是研究的核心进展对物理学家具有重要意义,例如材料科学、物理化学和技术领域。投稿和评审流程由内部专业编辑管理,并得到编委会成员的支持,编委会提供物理科学各领域的技术专长。我们致力于快速传播重要研究成果,文章在连续出版基础上发表,从接收到发表的时间极短。",
         "researchAreas": "物理 - 多学科物理, 物理 - 计算物理, 物理 - 凝聚态物理, 跨学科 - 复杂系统",
-        "tips": "本刊为Nature旗下中科院1区、JCR Q1期刊,影响因子5.4,学术水平较高,在国内物理学界认可度高,适合作为博士毕业或青年教师晋升的重要成果。川大评级NCS可能未纳入分类体系,但实际水平显著。期刊强调创新性与跨学科特性,特别欢迎能对物理子领域产生影响的新技术和计算方法,但要求研究必须具有显著进展和新见解。对于PINN、Neural Operators、DeepONet等深度学习求解微分方程的方法,本刊持有限接受态度,适合发表此类工作,但需满足严格标准:必须提供充分的数值验证与误差分析,详细对比传统方法的优劣势,展示计算效率与可扩展性优势,并阐明物理意义与可解释性。单纯的方法介绍难以录用,需结合具体物理问题展示方法的实际价值。审稿周期约13周,属于中等速度,但作为Nature系列竞争激烈,拒稿率较高。建议在研究具有明确物理创新、数值结果充分且方法论证严谨时投稿,确保代码和数据的可重复性。全开放获取模式需支付APC费用,投稿前需确认经费支持。适合作为深度学习物理建模研究的中高端投稿目标,优先级建议为第二至第三选择。",
+        "tips": "本刊为Nature旗下中科院1区、JCR Q1期刊,影响因子5.4,学术水平较高,在国内物理学界认可度高,适合作为博士毕业或青年教师晋升的重要成果。川大评级CNS,独一档,实际水平显著。期刊强调创新性与跨学科特性,特别欢迎能对物理子领域产生影响的新技术和计算方法,但要求研究必须具有显著进展和新见解。对于PINN、Neural Operators、DeepONet等深度学习求解微分方程的方法,本刊持有限接受态度,适合发表此类工作,但需满足严格标准:必须提供充分的数值验证与误差分析,详细对比传统方法的优劣势,展示计算效率与可扩展性优势,并阐明物理意义与可解释性。单纯的方法介绍难以录用,需结合具体物理问题展示方法的实际价值。审稿周期约13周,属于中等速度,但作为Nature系列竞争激烈,拒稿率较高。建议在研究具有明确物理创新、数值结果充分且方法论证严谨时投稿,确保代码和数据的可重复性。全开放获取模式需支付APC费用,投稿前需确认经费支持。适合作为深度学习物理建模研究的中高端投稿目标,优先级建议为第二至第三选择。",
         "indexed": "SCIE",
         "warning": false
     },
-
     {
         "name": "SCIENCE CHINA Mathematics",
         "chineseName": "中国科学:数学",
@@ -929,6 +928,43 @@ let journals = [
         "scopeCN": "《SIAM Review》(SIREV) 包含以下五个部分，所有部分都包含广泛兴趣的文章：Survey and Review：发表关于应用数学、计算数学或科学计算领域的重要话题的综述性文章，具有综合性和最新视角。Research Spotlights：发表简洁的应用数学和计算数学研究论文，旨在吸引SIAM Review的多样化读者群体。该部分的文章包含新颖的思想，表达清晰且动机充分。与SIAM领域特定期刊中的典型出版物不同，这些文章更具广泛的可接触性，并且可能会产生异常广泛和持久的影响。SIGEST：重点介绍SIAM的一个专业研究期刊中的近期论文，这些论文因其对整个SIAM社区具有特别的兴趣而被选出，并根据需要进行修订和精简，以提高可访问性。Education：主要由独立的模块组成，这些模块是关于应用数学、科学计算或其应用的特定主题的自包含展示；每个模块提供教学某一主题所需的主要材料以及补充材料。The Book Reviews：该部分包含一篇特色书评，概述了某一学科领域的几本书。还包括对单本书籍的简短评论。成为SIAM会员后，可免费订阅《SIAM Review》。",
         "researchAreas": "数学 - 应用数学",
         "tips": "仅推荐给领域内资深专家！分为五个部分：Survey and Review(深度学习求解PDE的全面综述)、Research Spotlights(PINN等方法的突破性工作)、SIGEST(从SIAM专业期刊精选的重要PINN论文)、Education(PINN教学模块)、Book Reviews。年发文量极少(28篇)竞争极其激烈，多为约稿形式，需要对整个领域有深刻全面的理解。作为1区顶级期刊(IF=10.8)具有最高认可度，适合全面系统的PINN/AI for Science综述，可考虑先联系编辑探讨综述topic，如被接收将成为该领域权威参考文献。",
+        "indexed": "SCIE",
+        "warning": false
+    },
+
+    {
+        "name": "Nature Communications",
+        "chineseName": "自然通讯",
+        "abbr": "NAT COMMUN",
+        "impactFactor": 14.7,
+        "articles_per_year": 7910,
+        "region": "英国",
+        "jcrZone": "Q1",
+        "casZone": "1区",
+        "scuZone": "CNS",
+        "reviewTime": "约1.0个月",
+        "publisher": "Springer Nature",
+        "issn": "2041-1723",
+        "eissn": "2041-1723",
+        "frequency": "双月刊",
+        "founded": "2010年",
+        "language": "English",
+        "coverImage": "http://www.naturechina.com/public/upload/image/2020/12/21/5fe0530b1f09f.jpg",
+        "website": "https://www.nature.com/ncomms/",
+        "authorGuide": "https://www.nature.com/ncomms/submit",
+        "submissionUrl": "https://mts-ncomms.nature.com/cgi-bin/main.plex",
+        "tags": [
+            "综合性期刊",
+            "Springer Nature",
+            "多学科交叉",
+            "SCIE",
+            "开放获取",
+            "高影响力"
+        ],
+        "scope": "Nature Communications is an open access, multidisciplinary journal dedicated to publishing high-quality research in all areas of the biological, health, physical, chemical, Earth, social, mathematical, applied, and engineering sciences. Papers published by the journal aim to represent important advances of significance to specialists within each field. We are committed to providing an efficient service for both authors and readers. Our team of independent editors make rapid and fair publication decisions. Prompt dissemination of accepted papers to a wide readership and beyond is achieved through a programme of continuous online publication.",
+        "scopeCN": "《自然通讯》是一本开放获取的多学科期刊,致力于发表生物、健康、物理、化学、地球科学、社会科学、数学、应用科学和工程科学等各领域的高质量研究。期刊发表的论文旨在代表对各领域专家具有重要意义的重大进展。我们致力于为作者和读者提供高效服务,由独立编辑团队做出快速公正的发表决策。通过持续在线出版计划,确保已接受论文及时传播到广大读者群体及更广范围。",
+        "researchAreas": "综合 - 多学科科学, 生物 - 生物科学, 物理 - 物理科学, 化学 - 化学科学, 数学 - 应用数学, 工程 - 工程科学",
+        "tips": "本刊是Nature旗下顶级综合性期刊,中科院1区、JCR Q1,影响因子高达14.7,在国内学术评审中认可度极高,是博士毕业、职称晋升和人才项目申报的重量级成果。川大评级独一档,实际水平属于综合类顶刊。期刊采用多学科交叉视角,强调对各领域专家具有重要意义的突破性进展,注重研究的显著性和创新性,标准极为严苛。对于PINN、Neural Operators、DeepONet等深度学习求解微分方程的方法,本刊持高度友好态度,是发表此类工作的理想平台,但要求必须展现出对相关领域的重大推进:需要提供严格的理论分析(收敛性、误差界)、在真实复杂问题上的充分验证、与传统方法的系统性对比优势、突出的计算效率或可扩展性创新,以及清晰的物理或实际意义解释。单纯的方法改进很难录用,必须解决重要科学问题。审稿周期约1个月,效率较高,但年发文量近8000篇导致竞争极其激烈,拒稿率很高。建议在取得突破性成果、具备充分实验验证和理论支撑时投稿,特别注意凸显研究对多学科领域的广泛影响。作为开放获取期刊需支付较高APC费用,需提前规划经费。适合作为重大创新性研究的首选投稿目标。",
         "indexed": "SCIE",
         "warning": false
     }
