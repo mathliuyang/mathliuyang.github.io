@@ -43,7 +43,7 @@ let journals = [
         "casZone": "2区",
         "scuZone": "数学 C",
         "reviewTime": "约9.8个月 / 约11.9周",
-        "publisher": "Elsevier Inc.",
+        "publisher": "Elsevier",
         "issn": "0096-3003",
         "eissn": "1873-5649",
         "frequency": "半月刊",
@@ -56,7 +56,7 @@ let journals = [
         "tags": [
             "数学 - 应用数学",
             "SCIE",
-            "Elsevier Inc."
+            "Elsevier"
         ],
         "scope": "Applied Mathematics and Computation addresses work at the interface between applied mathematics, numerical computation, and applications of systems – oriented ideas to the physical, biological, social, and behavioral sciences, and emphasizes papers of a computational nature focusing on new algorithms, their analysis and numerical results. In addition to presenting research papers, Applied Mathematics and Computation publishes review articles and single–topics issues.",
         "scopeCN": "《应用数学与计算》关注应用数学、数值计算以及面向系统思想在物理、生物、社会和行为科学中应用的交叉领域,强调关注新算法、算法分析和数值结果的计算性质论文。除了研究论文,本刊还发表综述文章和单一主题特刊。",
@@ -176,7 +176,7 @@ let journals = [
         "casZone": "2区",
         "scuZone": "数学 C",
         "reviewTime": "约6.0个月",
-        "publisher": "Elsevier Ltd",
+        "publisher": "Elsevier",
         "issn": "0898-1221",
         "eissn": "1873-7668",
         "frequency": "半月刊",
@@ -189,7 +189,7 @@ let journals = [
         "tags": [
             "数学 - 应用数学",
             "SCIE",
-            "Elsevier Ltd"
+            "Elsevier"
         ],
         "scope": "Computers & Mathematics with Applications provides a medium of exchange for those engaged in fields where there exists a non-trivial interplay between mathematics and computers. Thus, the three present principal categories of interest of the journal are: 1. Computers in mathematics research: This includes, but is not limited to, applications in numerical analysis, number theory, algebra, statistics, probability, geometry, topology, combinatorics, logic, mathematical programming, fuzzy theory, and classical analysis. 2. Mathematics in computer science: This includes, but is not limited to, applications in algorithms, data structures, computational complexity, parallel computing, distributed computing, artificial intelligence, machine learning, databases, computer graphics, image processing, computer vision, computational geometry, computational topology, cryptography, information theory, coding theory, automata theory, formal languages, symbolic computation, programming languages, compilers, computer algebra, software engineering, operating systems, networks, numerical computing, neural networks, fuzzy systems, genetic algorithms, expert systems, simulation, mathematical software, and computational mathematics. 3. Applications in science and engineering: This includes, but is not limited to, applications in biology, chemistry, physics, geology, psychology, sociology, anthropology, economics, operations research, medicine, health sciences, environmental science, transportation, urban planning, management, business, finance, image processing, pattern recognition, robotics, computer graphics, signal processing, telecommunications, control systems, aerospace, mechanical, civil, electrical, electronic, computer, chemical, industrial, manufacturing, mining, agricultural, and biomedical engineering.",
         "scopeCN": "《计算机与数学应用》为那些从事存在数学与计算机之间非平凡相互作用的领域的人们提供交流媒介。因此,该期刊目前感兴趣的三个主要类别是:1.计算机在数学研究中的应用:包括但不限于数值分析、数论、代数、统计学、概率论、几何、拓扑学、组合数学、逻辑、数学规划、模糊理论和经典分析中的应用。2.数学在计算机科学中的应用:包括但不限于算法、数据结构、计算复杂性、并行计算、分布式计算、人工智能、机器学习、数据库、计算机图形学、图像处理、计算机视觉、计算几何、计算拓扑学、密码学、信息论、编码理论、自动机理论、形式语言、符号计算、编程语言、编译器、计算机代数、软件工程、操作系统、网络、数值计算、神经网络、模糊系统、遗传算法、专家系统、仿真、数学软件和计算数学中的应用。3.科学和工程中的应用:包括但不限于生物学、化学、物理学、地质学、心理学、社会学、人类学、经济学、运筹学、医学、健康科学、环境科学、交通运输、城市规划、管理、商业、金融、图像处理、模式识别、机器人技术、计算机图形学、信号处理、电信、控制系统、航空航天、机械、土木、电气、电子、计算机、化学、工业、制造、采矿、农业和生物医学工程中的应用。",
@@ -209,7 +209,7 @@ let journals = [
         "casZone": "3区",
         "scuZone": "数学 E",
         "reviewTime": "约3.0个月",
-        "publisher": "Springer International Publishing",
+        "publisher": "Springer",
         "issn": "2238-3603",
         "eissn": "1807-0302",
         "frequency": "连续出版",
@@ -220,7 +220,7 @@ let journals = [
         "authorGuide": "https://www.springer.com/journal/40314/submission-guidelines",
         "submissionUrl": "https://www.editorialmanager.com/coam/default.aspx",
         "tags": [
-            "Springer International Publishing",
+            "Springer",
             "数学 - 计算数学",
             "SCIE"
         ],
@@ -275,7 +275,7 @@ let journals = [
         "casZone": "2区",
         "scuZone": "数学 C",
         "reviewTime": "6-12周,",
-        "publisher": "Oxford University Press",
+        "publisher": "Oxford",
         "issn": "0272-4979",
         "eissn": "1464-3642",
         "frequency": "季刊",
@@ -286,7 +286,7 @@ let journals = [
         "authorGuide": "https://academic.oup.com/imajna/pages/General_Instructions",
         "submissionUrl": "https://mc.manuscriptcentral.com/imajna",
         "tags": [
-            "Oxford University Press",
+            "Oxford",
             "数学 - 应用数学",
             "SCIE"
         ],
@@ -308,7 +308,7 @@ let journals = [
         "casZone": "3区",
         "scuZone": "工程技术 C",
         "reviewTime": "约6.0个月",
-        "publisher": "John Wiley and Sons Ltd",
+        "publisher": " Wiley",
         "issn": "0029-5981",
         "eissn": "1097-0207",
         "frequency": "周刊",
@@ -320,7 +320,7 @@ let journals = [
         "submissionUrl": "https://mc.manuscriptcentral.com/nme",
         "tags": [
             "工程技术 - 工程:综合",
-            "John Wiley and Sons Ltd",
+            " Wiley",
             "SCIE"
         ],
         "scope": "The International Journal for Numerical Methods in Engineering publishes original papers describing significant, novel developments in numerical methods that are applicable to engineering problems. The Journal is known for welcoming contributions in a wide range of areas in computational engineering, including computational issues in model reduction, uncertainty quantification, verification and validation, inverse analysis and stochastic methods, optimisation, element technology, solution techniques and parallel computing, damage and fracture, mechanics at micro and nano-scales, low-speed fluid dynamics, fluid-structure interaction, electromagnetics, coupled diffusion phenomena, and error estimation and mesh generation.",
@@ -341,7 +341,7 @@ let journals = [
         "casZone": "2区",
         "scuZone": "数学 C",
         "reviewTime": "约6.0个月",
-        "publisher": "Taylor and Francis Ltd.",
+        "publisher": "Taylor and Francis",
         "issn": "0020-7160",
         "eissn": "1029-0265",
         "frequency": "双月刊",
@@ -354,7 +354,7 @@ let journals = [
         "tags": [
             "数学 - 应用数学",
             "SCIE",
-            "Taylor and Francis Ltd."
+            "Taylor and Francis"
         ],
         "scope": "International Journal of Computer Mathematics (IJCM) is a world-leading journal serving the community of researchers in numerical analysis and scientific computing from academia to industry. IJCM publishes original research papers of high scientific value in fields of computational mathematics with profound applications to science and engineering.",
         "scopeCN": "《国际计算数学杂志》是服务于学术界到工业界数值分析和科学计算研究者社区的世界领先期刊。IJCM发表在计算数学领域具有高科学价值、对科学和工程有深远应用的原创研究论文。",
@@ -506,7 +506,7 @@ let journals = [
         "casZone": "3区",
         "scuZone": "数学 E",
         "reviewTime": "约6.0个月",
-        "publisher": "John Wiley and Sons Ltd",
+        "publisher": " Wiley",
         "issn": "0170-4214",
         "eissn": "1099-1476",
         "frequency": "半月刊",
@@ -517,7 +517,7 @@ let journals = [
         "authorGuide": "https://onlinelibrary.wiley.com/page/journal/10991476/homepage/forauthors.html",
         "submissionUrl": "https://mc.manuscriptcentral.com/mma",
         "tags": [
-            "John Wiley and Sons Ltd",
+            " Wiley",
             "数学 - 应用数学",
             "SCIE"
         ],
@@ -605,7 +605,7 @@ let journals = [
         "casZone": "1区",
         "scuZone": "CNS",
         "reviewTime": "约稿 周期不定",
-        "publisher": "SPRINGERNATURE",
+        "publisher": "Springer Nature",
         "issn": "2522-5839",
         "eissn": "2522-5839",
         "frequency": "12期/年",
@@ -618,7 +618,7 @@ let journals = [
         "tags": [
             "Multiple(多学科)",
             "SCIE",
-            "SPRINGERNATURE"
+            "Springer Nature"
         ],
         "scope": "Nature Machine Intelligence will publish high-quality original research and reviews in a wide range of topics in machine learning, robotics and AI. The journal will also explore and discuss the significant impact that these fields are beginning to have on other scientific disciplines as well as many aspects of society and industry.",
         "scopeCN": "《自然机器智能》将发表机器学习、机器人和人工智能广泛主题的高质量原创研究和综述。本刊还将探讨和讨论这些领域对其他科学学科以及社会和工业许多方面开始产生的重大影响。",
@@ -638,7 +638,7 @@ let journals = [
         "casZone": "1区",
         "scuZone": "计算机科学 C",
         "reviewTime": "约12.0个月",
-        "publisher": "Elsevier Ltd",
+        "publisher": "Elsevier",
         "issn": "0893-6080",
         "eissn": "1879-2782",
         "frequency": "月刊",
@@ -650,7 +650,7 @@ let journals = [
         "submissionUrl": "https://www.editorialmanager.com/neunet/default.aspx",
         "tags": [
             "工程技术 - 计算机:人工智能",
-            "Elsevier Ltd",
+            "Elsevier",
             "SCIE"
         ],
         "scope": "Neural Networks is the archival journal of the world's three oldest neural modeling societies: the International Neural Network Society (INNS), the European Neural Network Society (ENNS), and the Japanese Neural Network Society (JNNS). Neural Networks provides a forum for developing and nurturing an international community of scholars and practitioners who are interested in all aspects of neural networks and related approaches to computational intelligence.",
@@ -704,7 +704,7 @@ let journals = [
         "casZone": "2区",
         "scuZone": "工程技术 C",
         "reviewTime": "约3.0个月",
-        "publisher": "Springer Netherlands",
+        "publisher": "Springer",
         "issn": "0924-090X",
         "eissn": "1573-269X",
         "frequency": "月刊",
@@ -715,7 +715,7 @@ let journals = [
         "authorGuide": "https://www.springer.com/journal/11071/submission-guidelines",
         "submissionUrl": "https://www.editorialmanager.com/nody",
         "tags": [
-            "Springer Netherlands",
+            "Springer",
             "工程技术 - 工程:机械",
             "SCIE"
         ],
@@ -737,7 +737,7 @@ let journals = [
         "casZone": "3区",
         "scuZone": "数学 D",
         "reviewTime": "约8.0个月",
-        "publisher": "John Wiley and Sons Inc.",
+        "publisher": " Wiley",
         "issn": "0749-159X",
         "eissn": "1098-2426",
         "frequency": "双月刊",
@@ -749,7 +749,7 @@ let journals = [
         "submissionUrl": "https://submission.wiley.com/submission/dashboard?siteName=NUM",
         "tags": [
             "数学 - 应用数学",
-            "John Wiley and Sons Inc.",
+            " Wiley",
             "SCIE"
         ],
         "scope": "An international journal that aims to cover research into the development and analysis of new methods for the numerical solution of partial differential equations, it is intended that it be readily readable by and directed to a broad spectrum of researchers into numerical methods for partial differential equations throughout science and engineering. The numerical methods and techniques themselves are emphasized rather than the specific applications.",
@@ -759,6 +759,44 @@ let journals = [
         "indexed": "SCIE",
         "warning": false
     },
+
+    {
+        "name": "Communications Physics",
+        "chineseName": "通讯物理",
+        "abbr": "COMMUN PHYS-UK",
+        "impactFactor": 5.4,
+        "articles_per_year": 351,
+        "region": "英国",
+        "jcrZone": "Q1",
+        "casZone": "1区",
+        "scuZone": "CNS",
+        "reviewTime": "约13周",
+        "publisher": "Springer Nature",
+        "issn": "2399-3650",
+        "eissn": "2399-3650",
+        "frequency": "连续出版",
+        "founded": "2018年",
+        "language": "English",
+        "coverImage": "https://media.springernature.com/w316/springer-static/cover-hires/journal/42005?as=webp",
+        "website": "https://www.nature.com/commsphys/",
+        "authorGuide": "https://www.nature.com/commsphys/submit",
+        "submissionUrl": "https://mts-commsphys.nature.com/cgi-bin/main.plex?_gl=1*ma6dt3*_gcl_au*ODA3NjgyNTQ3LjE3NTQ3MjAyMjE.*_ga*MjA5ODM1MzA4NS4xNzQzMzQ4OTg5*_ga_B3E4QL2TPR*czE3NjA1Mjg3MTYkbzEwJGcxJHQxNzYwNTI4ODY4JGoxMiRsMCRoMTA4MTI5NTcyMw..",
+        "tags": [
+            "多学科物理",
+            "Springer Nature",
+            "开放获取",
+            "SCIE",
+            "计算方法",
+            "跨学科研究"
+        ],
+        "scope": "Open-access journal publishing high quality, editorially selected and peer reviewed advances in physics. Communications Physics is an open access journal from Nature Portfolio publishing high-quality research, reviews and commentary in all areas of the physical sciences. Research papers published by the journal represent significant advances bringing new insight to a specialized area of research in physics. We also aim to provide a community forum for issues of importance to all physicists, regardless of sub-discipline. The scope of the journal covers all areas of experimental, applied, fundamental, and interdisciplinary physical sciences and includes (but is not limited to): Astrophysics and cosmology, Atomic and molecular physics, Biophysics and biological physics, Chemical physics, Complex systems and network science, Condensed-matter physics, Electronics and device physics, Energy materials, Fluid dynamics, High-energy particle physics, Information theory and computation, Materials sciences, Nanotechnology, Nuclear physics, Optical physics and photonics, Plasma physics, Polymers and thin films, Quantum physics and quantum technologies, Soft condensed-matter physics, Statistical physics, thermodynamics and nonlinear dynamics. Primary research published in Communications Physics includes novel experimental results, new techniques or computational methods that may influence the work of others in the sub-discipline. We also consider submissions from adjacent research fields where the central advance of the study is of interest to physicists, for example material sciences, physical chemistry and technologies. The submission and review processes are managed by our in-house professional editors supported by our Editorial Board Members, who provide technical expertise across the breadth of the physical sciences. We are committed to rapid dissemination of significant research results. Articles are published on a continuous basis with minimal time from acceptance to publication.",
+        "scopeCN": "本刊为开放获取期刊,发表经编辑精选和同行评审的高质量物理学进展。《通讯物理》是Nature旗下开放获取期刊,发表物理科学各领域的高质量研究、综述和评论。期刊发表的研究论文代表了重要进展,为物理学专门研究领域带来新见解。我们还致力于为所有物理学家提供讨论重要问题的社区论坛,不限子学科。期刊涵盖实验、应用、基础和跨学科物理科学的所有领域,包括(但不限于):天体物理学与宇宙学、原子与分子物理学、生物物理学、化学物理、复杂系统与网络科学、凝聚态物理、电子学与器件物理、能源材料、流体动力学、高能粒子物理、信息论与计算、材料科学、纳米技术、核物理、光学物理与光子学、等离子体物理、聚合物与薄膜、量子物理与量子技术、软凝聚态物理、统计物理、热力学与非线性动力学。本刊发表的原创研究包括新颖的实验结果、可能影响该子学科其他工作者的新技术或计算方法。我们也考虑来自相邻研究领域的投稿,前提是研究的核心进展对物理学家具有重要意义,例如材料科学、物理化学和技术领域。投稿和评审流程由内部专业编辑管理,并得到编委会成员的支持,编委会提供物理科学各领域的技术专长。我们致力于快速传播重要研究成果,文章在连续出版基础上发表,从接收到发表的时间极短。",
+        "researchAreas": "物理 - 多学科物理, 物理 - 计算物理, 物理 - 凝聚态物理, 跨学科 - 复杂系统",
+        "tips": "本刊为Nature旗下中科院1区、JCR Q1期刊,影响因子5.4,学术水平较高,在国内物理学界认可度高,适合作为博士毕业或青年教师晋升的重要成果。川大评级NCS可能未纳入分类体系,但实际水平显著。期刊强调创新性与跨学科特性,特别欢迎能对物理子领域产生影响的新技术和计算方法,但要求研究必须具有显著进展和新见解。对于PINN、Neural Operators、DeepONet等深度学习求解微分方程的方法,本刊持有限接受态度,适合发表此类工作,但需满足严格标准:必须提供充分的数值验证与误差分析,详细对比传统方法的优劣势,展示计算效率与可扩展性优势,并阐明物理意义与可解释性。单纯的方法介绍难以录用,需结合具体物理问题展示方法的实际价值。审稿周期约13周,属于中等速度,但作为Nature系列竞争激烈,拒稿率较高。建议在研究具有明确物理创新、数值结果充分且方法论证严谨时投稿,确保代码和数据的可重复性。全开放获取模式需支付APC费用,投稿前需确认经费支持。适合作为深度学习物理建模研究的中高端投稿目标,优先级建议为第二至第三选择。",
+        "indexed": "SCIE",
+        "warning": false
+    },
+
     {
         "name": "SCIENCE CHINA Mathematics",
         "chineseName": "中国科学:数学",
@@ -793,6 +831,7 @@ let journals = [
         "indexed": "SCIE",
         "warning": false
     },
+
     {
         "name": "SCIENCE CHINA Physics, Mechanics & Astronomy",
         "chineseName": "中国科学:物理学、力学与天文学",
@@ -826,6 +865,7 @@ let journals = [
         "indexed": "SCIE",
         "warning": false
     },
+
     {
         "name": "SIAM Journal on Scientific Computing",
         "chineseName": "SIAM科学计算杂志",

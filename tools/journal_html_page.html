@@ -1212,31 +1212,16 @@
         <div class="control-group">
             <select id="filterZone">
                 <option value="all">所有分区</option>
-                <option value="1区">中科院一区</option>
-                <option value="2区">中科院二区</option>
-                <option value="3区">中科院三区</option>
-                <option value="4区">中科院四区</option>
             </select>
         </div>
         <div class="control-group">
             <select id="filterRegion">
                 <option value="all">所有地区</option>
-                <option value="美国">美国</option>
-                <option value="英国">英国</option>
-                <option value="荷兰">荷兰</option>
-                <option value="德国">德国</option>
-                <option value="中国">中国</option>
-                <option value="巴西">巴西</option>
             </select>
         </div>
         <div class="control-group">
             <select id="filterPublisher">
                 <option value="all">所有出版社</option>
-                <option value="Elsevier">Elsevier</option>
-                <option value="Springer">Springer</option>
-                <option value="Wiley">Wiley</option>
-                <option value="Taylor & Francis">Taylor & Francis</option>
-                <option value="SIAM">SIAM</option>
             </select>
         </div>
 
@@ -1566,13 +1551,8 @@
                 // 地区筛选
                 const matchesRegion = filterRegion === 'all' || journal.region === filterRegion;
 
-                // 出版社筛选 - 支持模糊匹配
-                const matchesPublisher = filterPublisher === 'all' ||
-                    (journal.publisher && (
-                        journal.publisher.includes(filterPublisher) ||
-                        (filterPublisher === 'Taylor & Francis' && journal.publisher.includes('Taylor and Francis')) ||
-                        (filterPublisher === 'SIAM' && journal.publisher.includes('SIAM'))
-                    ));
+                // 出版社筛选 - 精确匹配
+                const matchesPublisher = filterPublisher === 'all' || journal.publisher === filterPublisher;
 
                 return matchesSearch && matchesZone && matchesRegion && matchesPublisher;
             });
@@ -1882,7 +1862,46 @@
         document.getElementById('filterPublisher').addEventListener('change', filterAndSort);
         document.getElementById('sortBy').addEventListener('change', filterAndSort);
 
+        // 动态生成筛选选项
+        function populateFilterOptions() {
+            // 获取所有存在的字段值
+            const casZones = [...new Set(journals.map(j => j.casZone).filter(Boolean))].sort();
+            const regions = [...new Set(journals.map(j => j.region).filter(Boolean))].sort();
+            const publishers = [...new Set(journals.map(j => j.publisher).filter(Boolean))].sort();
+
+            // 生成分区筛选选项
+            const filterZone = document.getElementById('filterZone');
+            filterZone.innerHTML = '<option value="all">所有分区</option>';
+            casZones.forEach(zone => {
+                const option = document.createElement('option');
+                option.value = zone;
+                option.textContent = `中科院${zone}`;
+                filterZone.appendChild(option);
+            });
+
+            // 生成地区筛选选项
+            const filterRegion = document.getElementById('filterRegion');
+            filterRegion.innerHTML = '<option value="all">所有地区</option>';
+            regions.forEach(region => {
+                const option = document.createElement('option');
+                option.value = region;
+                option.textContent = region;
+                filterRegion.appendChild(option);
+            });
+
+            // 生成出版社筛选选项
+            const filterPublisher = document.getElementById('filterPublisher');
+            filterPublisher.innerHTML = '<option value="all">所有出版社</option>';
+            publishers.forEach(publisher => {
+                const option = document.createElement('option');
+                option.value = publisher;
+                option.textContent = publisher;
+                filterPublisher.appendChild(option);
+            });
+        }
+
         // 初始渲染
+        populateFilterOptions(); // 动态生成筛选选项
         calculateStats(); // 计算并显示统计数据
         filterAndSort(); // 确保按影响因子排序后渲染
     </script>
