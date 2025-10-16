@@ -978,7 +978,7 @@ let journals = [
         "region": "英国",
         "jcrZone": "Q1",
         "casZone": "3区",
-        "scuZone": "CNS",
+        "scuZone": "综合性期刊 D",
         "reviewTime": "约56天初审，约133天接收 / 约2-3个月",
         "publisher": "Springer Nature",
         "issn": "2045-2322",
@@ -1001,7 +1001,7 @@ let journals = [
         "scope": "We publish original research from all areas of the natural sciences, psychology, medicine and engineering. You can learn more about what we publish by browsing our specific scientific subject areas below or explore Scientific Reports by browsing all articles and collections.",
         "scopeCN": "我们发表来自自然科学、心理学、医学和工程学各领域的原创研究。您可以通过浏览下方的具体科学学科领域了解我们发表的内容，或通过浏览所有文章和合集来探索《科学报告》。",
         "researchAreas": "综合 - 多学科科学, 自然科学 - 各领域, 医学 - 医学研究, 工程 - 工程技术, 心理学 - 心理学研究",
-        "tips": "本刊是Nature旗下大型综合性开放获取期刊，中科院3区、JCR Q1，影响因子3.8，在国内学术评审中具有一定认可度，适合作为博士生阶段性成果或青年学者的常规产出。川大评级CNS表明属于Nature系列，但需注意Scientific Reports并非Nature主刊，学术水平属于中等偏上。期刊采用宽口径选稿策略，强调技术可靠性而非突破性创新，要求研究在技术上可靠、方法学上严谨，对各专业领域内的学者有价值即可。对于PINN、Neural Operators、DeepONet等深度学习求解微分方程的方法，本刊持有限接受态度，适合发表方法学研究和应用案例，但要求必须提供充分的数值验证、与传统方法的对比分析、清晰的误差评估，以及在具体问题上的有效性证明。理论严谨性要求相对宽松，但技术实现和实验验证必须完整可靠。审稿周期约2-3个月，效率较高，年发文量超过2万篇，录用率相对较高但质量把控严格。建议在方法初步验证完成、有充分实验数据支撑时投稿，注意避免过度强调创新性而忽视可靠性验证。作为开放获取期刊需支付APC费用，但费用相对Nature主刊较低。适合作为深度学习方法学研究的备选投稿目标，优先级建议为第三至第四选择。",
+        "tips": "本刊是Nature旗下大型综合性开放获取期刊，中科院3区、JCR Q1，影响因子3.8，在国内学术评审中具有一定认可度，适合作为博士生阶段性成果或青年学者的常规产出。川大评级综合性期刊 D，需注意Scientific Reports并非Nature主刊，学术水平属于中等偏上。期刊采用宽口径选稿策略，强调技术可靠性而非突破性创新，要求研究在技术上可靠、方法学上严谨，对各专业领域内的学者有价值即可。对于PINN、Neural Operators、DeepONet等深度学习求解微分方程的方法，本刊持有限接受态度，适合发表方法学研究和应用案例，但要求必须提供充分的数值验证、与传统方法的对比分析、清晰的误差评估，以及在具体问题上的有效性证明。理论严谨性要求相对宽松，但技术实现和实验验证必须完整可靠。审稿周期约2-3个月，效率较高，年发文量超过2万篇，录用率相对较高但质量把控严格。建议在方法初步验证完成、有充分实验数据支撑时投稿，注意避免过度强调创新性而忽视可靠性验证。作为开放获取期刊需支付APC费用，但费用相对Nature主刊较低。适合作为深度学习方法学研究的备选投稿目标，优先级建议为第三至第四选择。",
         "indexed": "SCIE",
         "warning": false
     },
