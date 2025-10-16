@@ -195,15 +195,15 @@ function renderPapers(papers = filteredPapers) {
     container.innerHTML = `<div class="papers-grid">${papersHTML}</div>`;
 
     // 添加点击事件监听
-            document.querySelectorAll('.paper-card').forEach(card => {
-                card.addEventListener('click', function () {
-                    const paperId = this.dataset.paperId;
-                    const paper = pinnsPapers.find(p => p.meta.titleCN === paperId);
-                    if (paper) {
-                        openModal(paper);
-                    }
-                });
-            });
+    document.querySelectorAll('.paper-card').forEach(card => {
+        card.addEventListener('click', function () {
+            const paperId = this.dataset.paperId;
+            const paper = pinnsPapers.find(p => p.meta.titleCN === paperId);
+            if (paper) {
+                openModal(paper);
+            }
+        });
+    });
 
     // 添加标题选项点击事件
     setupTitleOptionListeners();
@@ -248,9 +248,6 @@ function createPaperCard(paper, index) {
 
     return `
         <div class="paper-card" data-paper-id="${paper.meta.titleCN}" style="animation-delay: ${index * 0.05}s">
-            <!-- 论文类型标签 -->
-            <div class="paper-type ${typeClass}">${typeText}</div>
-            
             <!-- 卡片主体内容 -->
             <div class="paper-upper">
                 <!-- 左侧封面区域 - 书籍样式 -->
