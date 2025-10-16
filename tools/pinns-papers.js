@@ -248,7 +248,7 @@ function createPaperCard(paper, index) {
 
     return `
         <div class="paper-card" data-paper-id="${paper.meta.titleCN}" style="animation-delay: ${index * 0.05}s">
-            <!-- 卡片主体内容 -->
+            <!-- 上栏：封面和标题信息 -->
             <div class="paper-upper">
                 <!-- 左侧封面区域 - 书籍样式 -->
                 <div class="paper-cover-container">
@@ -267,8 +267,8 @@ function createPaperCard(paper, index) {
                     </div>
                 </div>
                 
-                <!-- 右侧内容区域 - 优化布局，确保核心信息优先展示 -->
-                <div class="paper-content">
+                <!-- 右侧标题区域 - 优化布局 -->
+                <div class="paper-header-content">
                     <!-- 标题区域 - 优先显示 -->
                     <div class="title-section">
                         <h3 class="paper-title">${paper.meta.titleCN}</h3>
@@ -286,15 +286,18 @@ function createPaperCard(paper, index) {
                             <div class="meta-value">${paper.meta.unit}</div>
                         </div>
                     </div>
-                    
-                    <!-- 标签区域 - 移至标题和元信息下方，提高信息获取效率 -->
-                    <div class="paper-tags">
-                        ${tagsHTML}
-                    </div>
-                    
-                    <!-- 摘要信息 - 使用summary字段保持简洁 -->
-                    ${summary}
                 </div>
+            </div>
+            
+            <!-- 下栏：标签和摘要信息 -->
+            <div class="paper-middle">
+                <!-- 标签区域 -->
+                <div class="paper-tags">
+                    ${tagsHTML}
+                </div>
+                
+                <!-- 摘要信息 -->
+                ${summary}
             </div>
             
             <!-- 底部链接区域 -->
