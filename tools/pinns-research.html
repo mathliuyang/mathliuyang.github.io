@@ -21,10 +21,6 @@
             --accent: #ffffff;
             --border: rgba(255, 255, 255, 0.08);
             --card-bg: rgba(255, 255, 255, 0.02);
-            --primary: #00d4ff;
-            --secondary: #ff6b6b;
-            --success: #51cf66;
-            --warning: #ffd43b;
         }
 
         [data-theme="light"] {
@@ -34,10 +30,6 @@
             --accent: #000000;
             --border: rgba(0, 0, 0, 0.08);
             --card-bg: rgba(0, 0, 0, 0.02);
-            --primary: #0066cc;
-            --secondary: #e03131;
-            --success: #37b24d;
-            --warning: #f59f00;
         }
 
         body {
@@ -72,6 +64,16 @@
             background: rgba(0, 0, 0, 0.5);
             backdrop-filter: blur(10px);
             border-bottom: 1px solid var(--border);
+            transition: all 0.3s ease;
+        }
+
+        nav.scrolled {
+            padding: 1rem 4rem;
+            background: rgba(0, 0, 0, 0.8);
+        }
+
+        [data-theme="light"] nav.scrolled {
+            background: rgba(255, 255, 255, 0.95);
         }
 
         [data-theme="light"] nav {
@@ -83,7 +85,6 @@
             font-weight: 600;
             letter-spacing: 0.05em;
             cursor: pointer;
-            color: var(--primary);
         }
 
         .nav-right {
@@ -109,7 +110,7 @@
 
         .nav-links a:hover,
         .nav-links a.active {
-            color: var(--primary);
+            color: var(--text);
         }
 
         .theme-btn {
@@ -126,7 +127,7 @@
         }
 
         .theme-btn:hover {
-            border-color: var(--primary);
+            border-color: var(--text);
             transform: scale(1.1);
         }
 
@@ -147,10 +148,6 @@
             line-height: 1.2;
             margin-bottom: 1.5rem;
             letter-spacing: -0.02em;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
         }
 
         .hero h1 strong {
@@ -181,7 +178,6 @@
             font-size: 2.5rem;
             font-weight: 300;
             letter-spacing: -0.03em;
-            color: var(--primary);
         }
 
         .stat-label {
@@ -222,15 +218,15 @@
         }
 
         .control-group select:hover {
-            border-color: var(--primary);
+            border-color: var(--accent);
             background: var(--card-bg);
         }
 
         .control-group input:focus,
         .control-group select:focus {
             outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 2px rgba(0, 212, 255, 0.1);
+            border-color: var(--accent);
+            box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1);
         }
 
         .control-group input::placeholder {
@@ -249,7 +245,7 @@
             font-weight: 300;
             margin-bottom: 3rem;
             text-align: center;
-            color: var(--primary);
+            color: var(--accent);
         }
 
         .papers-grid {
@@ -278,7 +274,7 @@
             left: 0;
             width: 100%;
             height: 1px;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            background: var(--accent);
             transform: scaleX(0);
             transform-origin: left;
             transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
@@ -290,8 +286,8 @@
 
         .paper-card:hover {
             transform: translateY(-5px);
-            border-color: var(--primary);
-            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.1);
+            border-color: var(--accent);
+            box-shadow: 0 10px 30px rgba(255, 255, 255, 0.1);
         }
 
         .paper-upper {
@@ -327,21 +323,21 @@
         }
 
         .paper-type.theory {
-            background: rgba(0, 212, 255, 0.1);
-            color: var(--primary);
-            border: 1px solid var(--primary);
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--accent);
+            border: 1px solid var(--accent);
         }
 
         .paper-type.application {
-            background: rgba(255, 107, 107, 0.1);
-            color: var(--secondary);
-            border: 1px solid var(--secondary);
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--accent);
+            border: 1px solid var(--accent);
         }
 
         .paper-type.review {
-            background: rgba(81, 207, 102, 0.1);
-            color: var(--success);
-            border: 1px solid var(--success);
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--accent);
+            border: 1px solid var(--accent);
         }
 
         /* 论文封面区域 */
@@ -397,7 +393,7 @@
             text-align: center;
             padding: 0.5rem;
             line-height: 1.4;
-            background: linear-gradient(135deg, rgba(0, 212, 255, 0.05), rgba(255, 107, 107, 0.05));
+            background: rgba(255, 255, 255, 0.05);
             border-radius: 2px;
         }
 
@@ -490,16 +486,16 @@
         }
 
         .tag.highlight {
-            border-color: var(--primary);
-            color: var(--primary);
-            background: rgba(0, 212, 255, 0.1);
+            border-color: var(--accent);
+            color: var(--accent);
+            background: rgba(255, 255, 255, 0.1);
             font-weight: 600;
         }
 
         .tag.pinn {
-            border-color: var(--secondary);
-            color: var(--secondary);
-            background: rgba(255, 107, 107, 0.1);
+            border-color: var(--accent);
+            color: var(--accent);
+            background: rgba(255, 255, 255, 0.1);
         }
 
         .paper-links {
@@ -538,7 +534,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            background: var(--accent);
             transform: translateX(-100%);
             transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             z-index: -1;
@@ -546,9 +542,9 @@
 
         .paper-link:hover {
             color: var(--bg);
-            border-color: var(--primary);
+            border-color: var(--accent);
             transform: translateY(-1px);
-            box-shadow: 0 2px 8px rgba(0, 212, 255, 0.2);
+            box-shadow: 0 2px 8px rgba(255, 255, 255, 0.2);
         }
 
         .paper-link:hover::before {
@@ -651,7 +647,7 @@
         }
 
         .modal-close:hover {
-            border-color: var(--primary);
+            border-color: var(--accent);
             transform: rotate(90deg) scale(1.05);
             background: var(--card-bg);
         }
@@ -670,7 +666,7 @@
             margin-bottom: 1rem;
             letter-spacing: 0.05em;
             text-transform: uppercase;
-            color: var(--primary);
+            color: var(--accent);
         }
 
         .info-grid {
@@ -703,7 +699,7 @@
             font-size: 1.1rem;
             font-weight: 500;
             margin-bottom: 1rem;
-            color: var(--primary);
+            color: var(--accent);
         }
 
         .content-section p {
@@ -713,15 +709,15 @@
         }
 
         .highlight-box {
-            background: rgba(0, 212, 255, 0.05);
-            border: 1px solid var(--primary);
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--accent);
             border-radius: 8px;
             padding: 1.5rem;
             margin: 1.5rem 0;
         }
 
         .highlight-box h4 {
-            color: var(--primary);
+            color: var(--accent);
             margin-bottom: 0.8rem;
         }
 
@@ -743,6 +739,10 @@
 
         @media (max-width: 768px) {
             nav {
+                padding: 1.5rem 2rem;
+            }
+
+            nav.scrolled {
                 padding: 1rem 2rem;
             }
 
@@ -817,15 +817,20 @@
             width: 40px;
             height: 40px;
             border: 3px solid var(--border);
-            border-top: 3px solid var(--primary);
+            border-top: 3px solid var(--accent);
             border-radius: 50%;
             animation: spin 1s linear infinite;
             margin: 0 auto 1rem;
         }
 
         @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
         }
 
         /* 无结果提示 */
@@ -847,17 +852,21 @@
     <canvas id="canvas"></canvas>
 
     <!-- Navigation -->
-    <nav>
-        <div class="logo">PINNs Research</div>
+    <nav id="nav">
+        <div class="logo" onclick="location.href='../index.html'">图灵的猫 X 智核学术</div>
         <div class="nav-right">
             <ul class="nav-links">
-                <li><a href="/index.html">首页</a></li>
-                <li><a href="/pages/tools.html">工具</a></li>
-                <li><a href="/pages/projects.html">项目</a></li>
-                <li><a href="/pages/blog.html">博客</a></li>
-                <li><a href="/pages/about.html">关于</a></li>
+                <li><a href="../index.html">首页</a></li>
+                <li><a href="../pages/about.html">关于我</a></li>
+                <li><a href="../pages/blog.html">博客</a></li>
+                <li><a href="../pages/projects.html">项目</a></li>
+                <li><a href="../pages/publications.html">学术成果</a></li>
+                <li><a href="../pages/tools.html" class="active">工具箱</a></li>
+                <li><a href="../pages/contact.html">联系我</a></li>
             </ul>
-            <button class="theme-btn" id="themeToggle">🌙</button>
+            <button class="theme-btn" id="themeBtn">
+                <span id="themeIcon">◐</span>
+            </button>
         </div>
     </nav>
 
@@ -951,27 +960,25 @@
     </div>
 
     <script>
-        // 主题切换功能
-        const themeToggle = document.getElementById('themeToggle');
-        const body = document.body;
-
-        // 检查本地存储的主题偏好
+        // Theme toggle
+        const themeBtn = document.getElementById('themeBtn');
+        const themeIcon = document.getElementById('themeIcon');
         const currentTheme = localStorage.getItem('theme') || 'dark';
-        if (currentTheme === 'light') {
-            body.setAttribute('data-theme', 'light');
-            themeToggle.textContent = '☀️';
-        }
 
-        themeToggle.addEventListener('click', () => {
-            if (body.getAttribute('data-theme') === 'light') {
-                body.removeAttribute('data-theme');
-                themeToggle.textContent = '🌙';
-                localStorage.setItem('theme', 'dark');
-            } else {
-                body.setAttribute('data-theme', 'light');
-                themeToggle.textContent = '☀️';
-                localStorage.setItem('theme', 'light');
-            }
+        document.documentElement.setAttribute('data-theme', currentTheme);
+        themeIcon.textContent = currentTheme === 'dark' ? '◐' : '◑';
+
+        // 添加图标颜色样式，确保在不同主题下都清晰可见
+        themeIcon.style.color = currentTheme === 'dark' ? '#ffffff' : '#000000';
+
+        themeBtn.addEventListener('click', () => {
+            const theme = document.documentElement.getAttribute('data-theme');
+            const newTheme = theme === 'dark' ? 'light' : 'dark';
+
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            themeIcon.textContent = newTheme === 'dark' ? '◐' : '◑';
+            themeIcon.style.color = newTheme === 'dark' ? '#ffffff' : '#000000';
         });
 
         // 简化的粒子动画背景
@@ -1023,7 +1030,7 @@
 
         function animate() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
+
             particles.forEach(particle => {
                 particle.update();
                 particle.draw();
@@ -1035,7 +1042,7 @@
                     const dx = particle.x - otherParticle.x;
                     const dy = particle.y - otherParticle.y;
                     const distance = Math.sqrt(dx * dx + dy * dy);
-                    
+
                     if (distance < 100) {
                         ctx.beginPath();
                         ctx.moveTo(particle.x, particle.y);
@@ -1054,6 +1061,16 @@
 
         // 论文数据加载和渲染功能将在pinns-papers.js中实现
         console.log('PINNs Research Page Loaded');
+
+        // 导航滚动效果
+        const nav = document.getElementById('nav');
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 100) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+        });
     </script>
 </body>
 

@@ -18,8 +18,7 @@
             --text-dim: #666666;
             --accent: #ffffff;
             --border: rgba(255, 255, 255, 0.08);
-            --success: #00ff00;
-            --danger: #ff0000;
+            --card-bg: rgba(255, 255, 255, 0.03);
         }
 
         [data-theme="light"] {
@@ -28,8 +27,7 @@
             --text-dim: #999999;
             --accent: #000000;
             --border: rgba(0, 0, 0, 0.08);
-            --success: #00aa00;
-            --danger: #cc0000;
+            --card-bg: rgba(0, 0, 0, 0.03);
         }
 
         body {
@@ -313,8 +311,8 @@
         }
 
         .todo-item.completed .todo-checkbox {
-            background: var(--text);
-            border-color: var(--text);
+            background: var(--accent);
+            border-color: var(--accent);
             position: relative;
         }
 
@@ -354,8 +352,8 @@
         }
 
         .priority-high {
-            border-color: var(--danger);
-            color: var(--danger);
+            border-color: var(--accent);
+            color: var(--accent);
         }
 
         .priority-medium {
@@ -364,8 +362,8 @@
         }
 
         .priority-low {
-            border-color: var(--success);
-            color: var(--success);
+            border-color: var(--accent);
+            color: var(--accent);
         }
 
         .todo-actions {
@@ -391,8 +389,8 @@
         }
 
         .delete-btn:hover {
-            border-color: var(--danger);
-            color: var(--danger);
+            border-color: var(--accent);
+            color: var(--accent);
         }
 
         .empty-state {
