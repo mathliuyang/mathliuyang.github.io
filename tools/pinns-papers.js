@@ -451,7 +451,7 @@ function createModalContent(paper) {
 
         <div class="info-section">
             <h3>主要贡献</h3>
-            <div class="highlight-box">
+            <div class="content-section">
                 <h4>研究意义</h4>
                 <p>${content.contribution.significance}</p>
             </div>
@@ -498,7 +498,7 @@ function createModalContent(paper) {
 
         <div class="info-section">
             <h3>总结讨论</h3>
-            <div class="highlight-box">
+            <div class="content-section">
                 <h4>核心总结</h4>
                 <p>${closing.summary}</p>
             </div>
