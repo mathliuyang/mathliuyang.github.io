@@ -218,9 +218,9 @@ window.templates = {
 
 ### 📐 格式要求
 - 段落: 每段≤100字,善用空行
-- 突出: **粗体**标记关键信息
 - 结构: 使用小标题和序号
 - 引用: 重要观点用引用格式
+- 编号：若需要用到编号，请使用①、②、③等
 - 如非必要，尽量不要出现公式或复杂的数学符号
 
 ## 【质量检查清单】✓
@@ -283,8 +283,7 @@ window.templates = {
     'project-timeline-planning': {
         name: '项目时间轴规划与里程碑设计',
         icon: '📅',
-        cover: 'https://images.unsplash.com/photo-1506784983877-45594efa4c85?w=400&h=300&fit=crop&crop=center',
-        cover: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=300&fit=crop&crop=center',
+        cover: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=300&fit=crop&crop=center',
         desc: '制定科学合理的项目执行计划和关键节点',
         tags: ['基金申请', '项目管理', '时间规划'],
         category: '国自科基金申请指令',
@@ -397,7 +396,7 @@ window.templates = {
     'feasibility-analysis': {
         name: '项目可行性分析与实施保障措施',
         icon: '✅',
-        cover: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=400&h=300&fit=crop&crop=center',
+        cover: 'https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?w=400&h=300&fit=crop&crop=center',
         desc: '全面论证项目的技术可行性和实施条件',
         tags: ['基金申请', '可行性分析', '实施保障'],
         category: '国自科基金申请指令',
@@ -557,7 +556,7 @@ window.templates = {
     'budget-justification': {
         name: '经费预算的精细化论证与合理性分析',
         icon: '💰',
-        cover: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=400&h=300&fit=crop&crop=center',
+        cover: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=300&fit=crop&crop=center',
         desc: '制定科学合理的经费预算，提供详细的使用论证',
         tags: ['基金申请', '经费预算', '合理性论证'],
         category: '国自科基金申请指令',
@@ -630,7 +629,7 @@ window.templates = {
     'budget-roi-analysis': {
         name: '项目经费预算的"投资回报率"视角下的合理性阐述',
         icon: '💰',
-        cover: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=400&h=300&fit=crop&crop=center',
+        cover: 'https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=400&h=300&fit=crop&crop=center',
         desc: '从投资回报角度论证预算的合理性和必要性',
         tags: ['基金申请', '预算分析', '投资回报'],
         category: '国自科基金申请指令',
@@ -647,7 +646,7 @@ window.templates = {
     'data-management-plan': {
         name: '数据管理计划的科学性与可操作性论证',
         icon: '📊',
-        cover: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=300&fit=crop&crop=center',
+        cover: 'https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?w=400&h=300&fit=crop&crop=center',
         desc: '制定符合基金委要求的数据管理和共享计划',
         tags: ['基金申请', '数据管理', '开放科学'],
         category: '国自科基金申请指令',
@@ -733,7 +732,7 @@ window.templates = {
     'youth-fund-application': {
         name: '青年科学基金项目的创新性与成长性论证',
         icon: '🌱',
-        cover: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=400&h=300&fit=crop&crop=center',
+        cover: 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=400&h=300&fit=crop&crop=center',
         desc: '针对青年学者特点，突出项目创新性和申请人成长潜力',
         tags: ['基金申请', '青年基金', '创新论证'],
         category: '国自科基金申请指令',
@@ -937,7 +936,7 @@ window.templates = {
     'risk-assessment-mitigation': {
         name: '项目风险评估与应对策略的系统性论证',
         icon: '⚠️',
-        cover: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=400&h=300&fit=crop&crop=center',
+        cover: 'https://images.unsplash.com/photo-1581092795360-fd1ca04f0952?w=400&h=300&fit=crop&crop=center',
         desc: '全面识别项目风险并制定科学的应对策略',
         tags: ['基金申请', '风险管理', '应对策略'],
         category: '国自科基金申请指令',
@@ -1027,7 +1026,7 @@ window.templates = {
     'methodology-innovation': {
         name: '研究方法创新性论证与技术路线优化',
         icon: '🔬',
-        cover: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=400&h=300&fit=crop&crop=center',
+        cover: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=400&h=300&fit=crop&crop=center',
         desc: '论证研究方法的创新性，优化技术路线设计',
         tags: ['基金申请', '方法创新', '技术路线'],
         category: '国自科基金申请指令',
@@ -1075,7 +1074,7 @@ window.templates = {
     'impact-significance': {
         name: '项目影响力与学术意义的多维度阐述',
         icon: '🌟',
-        cover: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=400&h=300&fit=crop&crop=center',
+        cover: 'https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?w=400&h=300&fit=crop&rop=center',
         desc: '从多个维度论证项目的学术价值和社会影响',
         tags: ['基金申请', '影响力评估', '学术价值'],
         category: '国自科基金申请指令',
@@ -1128,7 +1127,7 @@ window.templates = {
     'preliminary-results': {
         name: '前期研究成果的战略性呈现与延续性论证',
         icon: '📈',
-        cover: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=400&h=300&fit=crop&crop=center',
+        cover: 'https://images.unsplash.com/photo-1581092795360-fd1ca04f0952?w=400&h=300&fit=crop&crop=center',
         desc: '有效展示前期成果，论证与申请项目的内在联系',
         tags: ['基金申请', '前期成果', '延续性论证'],
         category: '国自科基金申请指令',
@@ -1200,7 +1199,7 @@ window.templates = {
     'competitive-niche-analysis': {
         name: '竞争性生态位分析',
         icon: '🎯',
-        cover: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=400&h=300&fit=crop&crop=center',
+        cover: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=300&fit=crop&crop=center',
         desc: '面向基金申请的领域内竞争性生态位分析',
         tags: ['基金申请', '竞争分析', '学术战略'],
         category: '国自科基金申请指令',
@@ -1246,7 +1245,7 @@ window.templates = {
     'budget-roi-analysis': {
         name: '经费投资回报率分析',
         icon: '💰',
-        cover: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=400&h=300&fit=crop&crop=center',
+        cover: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=300&fit=crop&crop=center',
         desc: '项目经费预算的"投资回报率"视角下的合理性阐述',
         tags: ['基金申请', '预算分析', '投资回报'],
         category: '国自科基金申请指令',
@@ -1263,7 +1262,7 @@ window.templates = {
     'data-management-plan': {
         name: '数据管理计划',
         icon: '📊',
-        cover: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=300&fit=crop&crop=center',
+        cover: 'https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?w=400&h=300&fit=crop&crop=center',
         desc: '符合国际标准的数据管理计划（DMP）制定',
         tags: ['基金申请', '数据管理', '国际标准'],
         category: '国自科基金申请指令',
@@ -1320,7 +1319,7 @@ window.templates = {
     'rejection-review-interpretation': {
         name: '被拒项目评审意见解读',
         icon: '🔍',
-        cover: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=400&h=300&fit=crop&crop=center',
+        cover: 'https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?w=400&h=300&fit=crop&crop=center',
         desc: '深度解读被拒项目的评审意见，找出问题根源',
         tags: ['基金申请', '评审意见', '问题分析'],
         category: '国自科基金申请指令',
@@ -1341,7 +1340,7 @@ window.templates = {
     'resubmission-strategy': {
         name: '重新申请战略声明',
         icon: '🎯',
-        cover: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=400&h=300&fit=crop&crop=center',
+        cover: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=300&fit=crop&crop=center',
         desc: '被拒项目重新申请的战略性修改声明',
         tags: ['基金申请', '重新申请', '战略修改'],
         category: '国自科基金申请指令',
@@ -1363,7 +1362,7 @@ window.templates = {
     'research-outcome-dissemination': {
         name: '研究成果传播策略',
         icon: '📢',
-        cover: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=400&h=300&fit=crop&crop=center',
+        cover: 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=400&h=300&fit=crop&crop=center',
         desc: '研究成果的多元化传播与影响力最大化策略',
         tags: ['基金申请', '成果传播', '影响力'],
         category: '国自科基金申请指令',
@@ -1382,7 +1381,7 @@ window.templates = {
     'key-scientific-question': {
         name: '关键科学问题凝练',
         icon: '❓',
-        cover: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=400&h=300&fit=crop&crop=center',
+        cover: 'https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=400&h=300&fit=crop&crop=center',
         desc: '将研究想法凝练为清晰、前沿的关键科学问题',
         tags: ['基金申请', '科学问题', '问题凝练'],
         category: '国自科基金申请指令',
@@ -1401,7 +1400,7 @@ window.templates = {
     'review-application-misjudgment': {
         name: '重大误判复议申请',
         icon: '⚖️',
-        cover: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=400&h=300&fit=crop&crop=center',
+        cover: 'https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?w=400&h=300&fit=crop&crop=center',
         desc: '针对评审结果重大误判的复议申请书撰写',
         tags: ['基金申请', '复议申请', '误判申诉'],
         category: '国自科基金申请指令',
@@ -1423,7 +1422,7 @@ window.templates = {
     'interdisciplinary-dejargonizing': {
         name: '跨学科去术语化',
         icon: '🌐',
-        cover: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=400&h=300&fit=crop&crop=center',
+        cover: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=300&fit=crop&crop=center',
         desc: '为跨学科评审专家进行术语解释和背景介绍',
         tags: ['基金申请', '跨学科', '术语解释'],
         category: '国自科基金申请指令',
@@ -1483,7 +1482,7 @@ window.templates = {
     'sci-idea-generation': {
         name: 'SCI论文创意生成',
         icon: '💡',
-        cover: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=400&h=300&fit=crop&crop=center',
+        cover: 'https://images.unsplash.com/photo-1503551723145-6c040742065b?w=400&h=300&fit=crop&crop=center',
         desc: 'SCI论文的创新想法生成和研究方向确定',
         tags: ['SCI论文', '创意生成', '研究方向'],
         category: 'SCI论文写作全指南',
@@ -1550,7 +1549,7 @@ window.templates = {
     'sci-results-visualization': {
         name: 'SCI论文结果可视化',
         icon: '📊',
-        cover: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=300&fit=crop&crop=center',
+        cover: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=400&h=300&fit=crop&crop=center',
         desc: 'SCI论文的数据分析结果展示和可视化设计',
         tags: ['SCI论文', '数据可视化', '结果展示'],
         category: 'SCI论文写作全指南',
@@ -1641,7 +1640,7 @@ window.templates = {
     'sci-rebuttal-response': {
         name: 'SCI论文同行评议回复',
         icon: '💬',
-        cover: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=400&h=300&fit=crop&crop=center',
+        cover: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=300&fit=crop&crop=center',
         desc: 'SCI论文同行评议意见的专业回复策略',
         tags: ['SCI论文', '同行评议', '回复策略'],
         category: 'SCI论文写作全指南',
@@ -1682,7 +1681,7 @@ window.templates = {
     'risk-matrix-analysis': {
         name: '研究方案风险矩阵分析',
         icon: '⚠️',
-        cover: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=400&h=300&fit=crop&crop=center',
+        cover: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=300&fit=crop&crop=center',
         desc: '研究方案的风险识别与前瞻性应对预案设计',
         tags: ['基金申请', '风险分析', '可行性'],
         content: `请以一名专业的风险管理顾问的身份，为我的研究方案撰写"可行性分析"中关于"潜在风险与对策"的部分。
@@ -1696,7 +1695,7 @@ window.templates = {
     'innovation-positioning': {
         name: '项目创新性定位与修辞策略',
         icon: '🎯',
-        cover: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=400&h=300&fit=crop&crop=center',
+        cover: 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=400&h=300&fit=crop&crop=center',
         desc: '项目创新性的"突破式"与"渐进式"定位与修辞策略',
         tags: ['基金申请', '创新性', '修辞策略'],
         content: `作为一名科学传播与修辞学专家，请指导我如何精准地定位和包装我项目的"创新之处"。
@@ -1712,7 +1711,7 @@ window.templates = {
     'screening-friendly-abstract': {
         name: '筛选友好型项目摘要',
         icon: '📋',
-        cover: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=400&h=300&fit=crop&crop=center',
+        cover: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=400&h=300&fit=crop&crop=center',
         desc: '面向函评专家的"筛选友好型"项目摘要撰写',
         tags: ['基金申请', '摘要写作', '评审友好'],
         content: `请扮演一位每年审阅上百份基金申请书、时间极其宝贵的函评专家，为我重写一份400字的项目摘要。
@@ -1732,7 +1731,7 @@ window.templates = {
     'pressure-test-strategy': {
         name: '潜在评审质疑预判与回应',
         icon: '🔍',
-        cover: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=400&h=300&fit=crop&crop=center',
+        cover: 'https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?w=400&h=300&fit=crop&crop=center',
         desc: '潜在评审质疑的预判与"先发制人式"回应策略',
         tags: ['基金申请', '评审应对', '质疑预判'],
         content: `请以一名经验丰富的答辩教练的身份，对我提供的申请书草稿[请粘贴申请书的核心章节]，进行一次"压力测试"，以预判并提前回应潜在的评审质疑。
@@ -1794,7 +1793,7 @@ window.templates = {
     'interdisciplinary-readability': {
         name: '跨学科评委可读性审查',
         icon: '🌐',
-        cover: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=400&h=300&fit=crop&crop=center',
+        cover: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=300&fit=crop&crop=center',
         desc: '模拟"跨学科"评委对引言章节进行"可读性"审查',
         tags: ['Nature论文', '跨学科', '可读性'],
         content: `我的答辩委员会中有一位来自相关但不同学科的评委，我需要确保我的引言对他/她是清晰和友好的。我将提供[我的引言章节初稿]和[这位跨学科学者的专业领域]。
@@ -1842,7 +1841,7 @@ window.templates = {
     'narrative-rhythm-optimization': {
         name: '摘要叙事节奏优化',
         icon: '🎵',
-        cover: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=400&h=300&fit=crop&crop=center',
+        cover: 'https://images.unsplash.com/photo-1501504905252-473c47e087f8?w=400&h=300&fit=crop&crop=center',
         desc: '审查并优化论文摘要的"叙事节奏"',
         tags: ['Nature论文', '摘要写作', '叙事节奏'],
         content: `我需要确保我的论文摘要能在短时间内有效吸引并说服读者，其叙事节奏至关重要。我将提供[我的博士论文摘要初稿]。
@@ -1858,7 +1857,7 @@ window.templates = {
     'figure-information-design': {
         name: '图表信息设计优化',
         icon: '📈',
-        cover: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=300&fit=crop&crop=center',
+        cover: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=400&h=300&fit=crop&crop=center',
         desc: '对论文中的图表呈现进行"信息设计"优化',
         tags: ['Nature论文', '图表设计', '信息可视化'],
         content: `我需要确保我的论文图表不仅信息准确，而且在"信息设计"上是清晰、美观、有说服力的。我将提供[我的论文中的一个核心图表及其标题和注释]。
@@ -1905,7 +1904,7 @@ window.templates = {
     'expectation-management-intro': {
         name: '预期管理引言撰写',
         icon: '🎯',
-        cover: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=400&h=300&fit=crop&crop=center',
+        cover: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=400&h=300&fit=crop&crop=center',
         desc: '撰写一份旨在"管理预期"的引言',
         tags: ['Nature论文', '引言写作', '预期管理'],
         content: `在引言中，除了说明我要做什么，我还需要巧妙地管理读者的预期，明确指出本研究"不做什么"。我将提供[我的引言初稿]。
@@ -1921,7 +1920,7 @@ window.templates = {
     'research-gap-identification': {
         name: 'SCI研究空白识别',
         icon: '🔍',
-        cover: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=400&h=300&fit=crop&crop=center',
+        cover: 'https://images.unsplash.com/photo-1503551723145-6c040742065b?w=400&h=300&fit=crop&crop=center',
         desc: 'SCI论文的研究空白识别和创新点挖掘',
         tags: ['SCI论文', '研究空白', '创新点'],
         category: 'SCI论文写作全指南',
@@ -1933,7 +1932,7 @@ window.templates = {
     'literature-review-analysis': {
         name: 'SCI文献综述分析',
         icon: '📚',
-        cover: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=400&h=300&fit=crop&crop=center',
+        cover: 'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=400&h=300&fit=crop&crop=center',
         desc: 'SCI论文的文献综述分析和核心观点提取',
         tags: ['SCI论文', '文献综述', '观点提取'],
         category: 'SCI论文写作全指南',
@@ -1947,7 +1946,7 @@ window.templates = {
     'experimental-design-optimization': {
         name: 'SCI实验设计优化',
         icon: '⚗️',
-        cover: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=400&h=300&fit=crop&crop=center',
+        cover: 'https://images.unsplash.com/photo-1582719508461-905c673771fd?w=400&h=300&fit=crop&crop=center',
         desc: 'SCI论文的实验设计优化和统计方法建议',
         tags: ['SCI论文', '实验设计', '统计方法'],
         category: 'SCI论文写作全指南',
@@ -1959,7 +1958,7 @@ window.templates = {
     'method-description-optimization': {
         name: 'SCI方法描述优化',
         icon: '📝',
-        cover: 'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=400&h=300&fit=crop&crop=center',
+        cover: 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=400&h=300&fit=crop&crop=center',
         desc: 'SCI论文方法部分的英文表达优化',
         tags: ['SCI论文', '方法描述', '英文写作'],
         category: 'SCI论文写作全指南',
@@ -1983,7 +1982,7 @@ window.templates = {
     'figure-legend-generation': {
         name: 'SCI图表结论生成',
         icon: '📈',
-        cover: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=300&fit=crop&crop=center',
+        cover: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400&h=300&fit=crop&crop=center',
         desc: 'SCI论文图表的图注和结果段落生成',
         tags: ['SCI论文', '图表', '图注写作'],
         category: 'SCI论文写作全指南',
@@ -1995,7 +1994,7 @@ window.templates = {
     'discussion-elevation': {
         name: 'SCI讨论部分升华',
         icon: '💭',
-        cover: 'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=400&h=300&fit=crop&crop=center',
+        cover: 'https://images.unsplash.com/photo-1501504905252-473c47e087f8?w=400&h=300&fit=crop&crop=center',
         desc: 'SCI论文讨论部分的深度升华和理论联系',
         tags: ['SCI论文', '讨论写作', '理论升华'],
         category: 'SCI论文写作全指南',
@@ -2010,7 +2009,7 @@ window.templates = {
     'structured-abstract-writing': {
         name: 'SCI结构化摘要撰写',
         icon: '📄',
-        cover: 'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=400&h=300&fit=crop&crop=center',
+        cover: 'https://images.unsplash.com/photo-1455849318743-b2233052fcff?w=400&h=300&fit=crop&crop=center',
         desc: 'SCI论文结构化摘要的专业撰写',
         tags: ['SCI论文', '摘要写作', '结构化'],
         category: 'SCI论文写作全指南',
@@ -2025,7 +2024,7 @@ window.templates = {
     'rebuttal-letter-drafting': {
         name: 'SCI回复信起草',
         icon: '✉️',
-        cover: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=400&h=300&fit=crop&crop=center',
+        cover: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=400&h=300&fit=crop&crop=center',
         desc: 'SCI论文审稿意见的专业回复信起草',
         tags: ['SCI论文', '回复信', '审稿回复'],
         category: 'SCI论文写作全指南',
@@ -2082,7 +2081,7 @@ window.templates = {
     'introduction-readability-review': {
         name: '"可读性"审查引言章节',
         icon: '📖',
-        cover: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=400&h=300&fit=crop&crop=center',
+        cover: 'https://images.unsplash.com/photo-1446776877081-d282a0f896e2?w=400&h=300&fit=crop&crop=center',
         desc: 'Nature级别论文引言章节的可读性审查',
         tags: ['Nature论文', '引言', '可读性'],
         content: `【角色】你是一位专业的科学写作编辑，专门负责提升学术论文的可读性。
@@ -2142,7 +2141,7 @@ window.templates = {
     'limitation-honest-discussion': {
         name: '局限性"诚实"讨论',
         icon: '⚠️',
-        cover: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=400&h=300&fit=crop&crop=center',
+        cover: 'https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?w=400&h=300&fit=crop&crop=center',
         desc: 'Nature级别论文局限性的诚实讨论',
         tags: ['Nature论文', '局限性', '诚实讨论'],
         content: `【角色】你是一位诚实、客观的科学家，深知诚实讨论研究局限性的重要性。
@@ -2183,7 +2182,7 @@ window.templates = {
     'future-research-agenda': {
         name: '未来研究议程设计',
         icon: '🔮',
-        cover: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=400&h=300&fit=crop&crop=center',
+        cover: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=400&h=300&fit=crop&crop=center',
         desc: 'Nature级别论文未来研究方向的议程设计',
         tags: ['Nature论文', '未来研究', '议程设计'],
         content: `【角色】你是一位具有前瞻性的科学研究战略家，擅长规划未来研究方向。
