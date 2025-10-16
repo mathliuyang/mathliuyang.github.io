@@ -430,10 +430,6 @@ function createModalContent(paper) {
             'review': '综述论文'
         }[paper.meta.type] || '研究论文'}</span>
                 </div>
-                <div class="info-item">
-                    <strong>研究领域</strong>
-                    <span>${paper.meta.researchArea}</span>
-                </div>
             </div>
         </div>
 
