@@ -250,8 +250,10 @@
 
         .papers-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
             gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
         }
 
         .paper-card {
@@ -264,7 +266,21 @@
             display: flex;
             flex-direction: column;
             gap: 0;
-            min-height: 280px;
+            min-height: 380px;
+            animation: fadeInUp 0.6s ease forwards;
+            opacity: 0;
+            transform: translateY(20px);
+            height: auto;
+            max-width: 400px;
+            justify-self: center;
+            backdrop-filter: blur(10px);
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .paper-card::before {
@@ -284,28 +300,50 @@
             transform: scaleX(1);
         }
 
+        /* 卡片悬停效果 - 增强交互体验 */
         .paper-card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-6px);
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.2);
             border-color: var(--accent);
-            box-shadow: 0 10px 30px rgba(255, 255, 255, 0.1);
+            background: linear-gradient(135deg, var(--card-bg) 0%, rgba(0, 212, 255, 0.03) 100%);
+        }
+
+        .paper-card:hover .paper-cover {
+            transform: scale(1.08) rotate(1deg);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+        }
+
+        .paper-card:hover .paper-title {
+            color: var(--accent);
+            transform: translateX(2px);
+        }
+
+        .paper-card:hover .paper-type {
+            transform: scale(1.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
         }
 
         .paper-upper {
-            padding: 2rem 2.5rem 1rem;
+            padding: 1.5rem;
             display: flex;
-            gap: 1.5rem;
+            gap: 1.2rem;
             align-items: flex-start;
             position: relative;
             z-index: 2;
+            flex: 1;
+            min-height: 160px;
         }
 
         .paper-lower {
-            padding: 1rem 2.5rem 2rem;
+            border-top: 1px solid var(--border);
+            padding: 1rem 1.5rem;
+            background: rgba(255, 255, 255, 0.01);
             display: flex;
             flex-direction: column;
             gap: 1rem;
             position: relative;
             z-index: 2;
+            flex-shrink: 0;
         }
 
         /* 论文类型标识 */
@@ -340,18 +378,19 @@
             border: 1px solid var(--accent);
         }
 
-        /* 论文封面区域 */
+        /* 论文封面区域 - 书籍样式设计 */
+        /* 封面和链接容器 - 采用书籍样式设计 */
         .paper-cover-container {
-            flex-shrink: 0;
-            width: 120px;
-            height: 160px;
             display: flex;
             flex-direction: column;
             align-items: center;
             gap: 0.5rem;
+            flex-shrink: 0;
         }
 
+        /* 论文封面 - 书籍样式 */
         .paper-cover {
+            flex-shrink: 0;
             width: 100px;
             height: 140px;
             overflow: hidden;
@@ -364,6 +403,26 @@
             display: flex;
             align-items: center;
             justify-content: center;
+        }
+
+        .paper-cover-placeholder {
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .cover-venue {
+            font-size: 0.85rem;
+            line-height: 1.2;
+            font-weight: 600;
+        }
+
+        .cover-date {
+            font-size: 0.75rem;
+            opacity: 0.8;
         }
 
         [data-theme="light"] .paper-cover {
@@ -380,12 +439,15 @@
             height: 100%;
             object-fit: cover;
             border-radius: 2px;
+            display: block;
+            background: #f0f0f0;
         }
 
         .paper-cover-placeholder {
             width: 100%;
             height: 100%;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
             font-size: 0.7rem;
@@ -393,64 +455,218 @@
             text-align: center;
             padding: 0.5rem;
             line-height: 1.4;
-            background: rgba(255, 255, 255, 0.05);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-weight: 500;
             border-radius: 2px;
         }
 
-        /* 论文内容区域 */
+        /* 论文内容区域 - 优化信息层次 */
         .paper-content {
             flex: 1;
             display: flex;
             flex-direction: column;
             min-width: 0;
             justify-content: flex-start;
-            min-height: 150px;
-            gap: 0.5rem;
+            gap: 0.8rem;
+            overflow: hidden;
+        }
+
+        .title-section {
+            margin-bottom: 0.5rem;
         }
 
         .paper-title {
             font-size: 1.2rem;
-            font-weight: 500;
-            margin-bottom: 0.5rem;
+            font-weight: 600;
+            margin-bottom: 0.3rem;
             letter-spacing: -0.01em;
-            line-height: 1.3;
+            line-height: 1.4;
             color: var(--text);
-            min-height: 3.6rem;
-            display: -webkit-box;
-            -webkit-line-clamp: 3;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .paper-title-en {
-            font-size: 1rem;
-            color: var(--text-dim);
-            margin-bottom: 0.5rem;
-            font-weight: 300;
-            min-height: 2.4rem;
-            line-height: 1.2;
+            min-height: 2.8rem;
             display: -webkit-box;
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
             overflow: hidden;
             text-overflow: ellipsis;
+            word-break: break-word;
         }
 
+        .paper-title-en {
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            margin-bottom: 0.5rem;
+            font-weight: 300;
+            min-height: 2.4rem;
+            line-height: 1.4;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            word-break: break-word;
+        }
+
+        /* 标题选项样式 - 优化视觉层次和响应式显示 */
+        .title-options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            flex-shrink: 0;
+            background: var(--card-bg);
+            border-radius: 10px;
+            padding: 0.8rem;
+            border: 1px solid var(--border);
+            overflow: hidden;
+        }
+
+        .title-option {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+            padding: 0.6rem;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            margin-bottom: 0;
+            cursor: pointer;
+            flex-shrink: 0;
+            min-height: 36px;
+        }
+
+        .title-option:last-child {
+            margin-bottom: 0;
+        }
+
+        .title-option:hover {
+            background: var(--card-bg);
+            transform: translateX(4px);
+        }
+
+        .title-option.suspense {
+            border-left: 3px solid #ff6b6b;
+        }
+
+        .title-option.value {
+            border-left: 3px solid #4ecdc4;
+        }
+
+        .title-option.conflict {
+            border-left: 3px solid #45b7d1;
+        }
+
+        .title-icon {
+            font-size: 1.1rem;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .title-text {
+            font-size: 0.8rem;
+            line-height: 1.5;
+            color: var(--text);
+            font-weight: 500;
+            flex: 1;
+            min-width: 0;
+            word-break: break-word;
+        }
+
+        /* 导语样式 - 优化视觉层次和响应式显示 */
+        .paper-intro {
+            margin: 0;
+            padding: 0.8rem;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.02) 0%, rgba(255, 255, 255, 0.01) 100%);
+            border-radius: 6px;
+            border-left: 3px solid var(--accent);
+            border: 1px solid var(--border);
+            position: relative;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+            overflow: hidden;
+        }
+
+        .paper-intro:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .paper-intro::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(135deg, var(--accent), var(--accent));
+            border-radius: 4px 0 0 4px;
+        }
+
+        .intro-title {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.8rem;
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .intro-text {
+            font-size: 0.85rem;
+            line-height: 1.5;
+            color: var(--text);
+            text-align: justify;
+            margin: 0;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            word-break: break-word;
+        }
+
+        /* 摘要信息样式 */
+        .paper-summary {
+            margin: 0.5rem 0;
+            padding: 0.8rem;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.02) 0%, rgba(255, 255, 255, 0.01) 100%);
+            border-radius: 6px;
+            border-left: 3px solid var(--accent);
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
+        }
+
+        .summary-text {
+            font-size: 0.85rem;
+            line-height: 1.5;
+            color: var(--accent);
+            font-weight: 500;
+            text-align: justify;
+            margin: 0;
+            word-break: break-word;
+        }
+
+        /* 论文元信息 - 采用期刊风格的指标布局 */
         .paper-meta {
             display: flex;
+            gap: 0.8rem;
             flex-wrap: wrap;
-            gap: 1rem;
-            margin-bottom: 0.8rem;
-            padding: 0.6rem 0;
+            margin-top: 0;
+            margin-bottom: 0.6rem;
+            padding: 0.5rem 0;
+            border-top: none;
+            border-bottom: none;
             align-items: center;
-            min-height: 2.5rem;
+            min-height: 2.8rem;
+            flex-shrink: 0;
         }
 
         .meta-item {
+            flex: 1;
+            min-width: 65px;
             display: flex;
             flex-direction: column;
-            gap: 0.2rem;
+            gap: 0.15rem;
+            text-align: center;
         }
 
         .meta-label {
@@ -469,10 +685,12 @@
         .paper-tags {
             display: flex;
             flex-wrap: wrap;
-            gap: 0.5rem;
+            gap: 0.6rem;
+            margin-top: 0;
             margin-bottom: 0.5rem;
             min-height: 2rem;
             align-items: flex-start;
+            flex-shrink: 0;
         }
 
         .tag {
@@ -498,17 +716,19 @@
             background: rgba(255, 255, 255, 0.1);
         }
 
+        /* 论文链接 - 采用期刊风格的按钮设计 */
         .paper-links {
             display: flex;
-            gap: 1rem;
-            margin-top: 1rem;
-            min-height: 2.5rem;
-            align-items: flex-end;
+            gap: 0.8rem;
+            margin-top: 0.8rem;
+            min-height: 2.2rem;
+            align-items: center;
+            justify-content: center;
         }
 
         .paper-link {
             font-size: 0.8rem;
-            padding: 0.5rem 1rem;
+            padding: 0.45rem 0.9rem;
             border: 1px solid var(--border);
             text-decoration: none;
             color: var(--text-dim);
@@ -516,15 +736,16 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 0.4rem;
+            gap: 0.3rem;
             background: rgba(255, 255, 255, 0.02);
             position: relative;
             overflow: hidden;
-            border-radius: 6px;
+            border-radius: 5px;
             font-weight: 500;
             letter-spacing: 0.01em;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             flex: 1;
+            min-width: 120px;
         }
 
         .paper-link::before {
@@ -544,11 +765,21 @@
             color: var(--bg);
             border-color: var(--accent);
             transform: translateY(-1px);
-            box-shadow: 0 2px 8px rgba(255, 255, 255, 0.2);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
         }
 
         .paper-link:hover::before {
             transform: translateX(0);
+        }
+
+        .paper-link span {
+            font-size: 0.8rem;
+            transition: transform 0.3s ease;
+            display: inline-block;
+        }
+
+        .paper-link:hover span {
+            transform: scale(1.1);
         }
 
         /* Modal */
@@ -586,8 +817,8 @@
             padding: 3rem;
             border-bottom: 1px solid var(--border);
             display: flex;
+            align-items: flex-start;
             gap: 2rem;
-            align-items: start;
             position: relative;
         }
 
@@ -602,6 +833,29 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            position: relative;
+        }
+
+        .modal-cover img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .modal-cover .paper-cover-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-weight: 500;
+            font-size: 0.9rem;
+            text-align: center;
+            padding: 1rem;
         }
 
         .modal-header-text {
@@ -654,19 +908,30 @@
 
         .modal-body {
             padding: 3rem;
+            line-height: 1.6;
+            color: var(--text);
         }
 
         .info-section {
-            margin-bottom: 2.5rem;
+            margin-bottom: 2rem;
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid var(--border);
+            transition: transform 0.3s ease;
+        }
+
+        .info-section:hover {
+            transform: translateY(-2px);
         }
 
         .info-section h3 {
-            font-size: 1rem;
+            font-size: 1.2rem;
             font-weight: 600;
-            margin-bottom: 1rem;
-            letter-spacing: 0.05em;
-            text-transform: uppercase;
+            margin-bottom: 0.8rem;
             color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 1rem;
         }
 
         .info-grid {
@@ -721,7 +986,113 @@
             margin-bottom: 0.8rem;
         }
 
-        /* 响应式布局 */
+        /* 模态框标题选项样式 */
+        .title-options-modal {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .title-option-modal {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 1.2rem;
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
+        }
+
+        .title-option-modal:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .title-option-modal.suspense {
+            border-left: 4px solid #ff6b6b;
+        }
+
+        .title-option-modal.value {
+            border-left: 4px solid #4ecdc4;
+        }
+
+        .title-option-modal.conflict {
+            border-left: 4px solid #45b7d1;
+        }
+
+        .title-option-header {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .title-option-icon {
+            font-size: 1.3rem;
+        }
+
+        .title-option-type {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .title-option-text {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: var(--text-dim);
+            margin: 0;
+            padding-left: 2.1rem;
+        }
+
+        .title-option.active {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            background: linear-gradient(135deg, var(--card-bg) 0%, rgba(0, 212, 255, 0.1) 100%);
+        }
+
+        .title-option.active.suspense {
+            border-color: #ff6b6b;
+            box-shadow: 0 8px 25px rgba(255, 107, 107, 0.2);
+        }
+
+        .title-option.active.value {
+            border-color: #4ecdc4;
+            box-shadow: 0 8px 25px rgba(78, 205, 196, 0.2);
+        }
+
+        .title-option.active.conflict {
+            border-color: #45b7d1;
+            box-shadow: 0 8px 25px rgba(69, 183, 209, 0.2);
+        }
+
+        /* 模态框导语样式 */
+        .intro-modal {
+            background: linear-gradient(135deg, var(--card-bg) 0%, rgba(0, 212, 255, 0.05) 100%);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid var(--border);
+            position: relative;
+        }
+
+        .intro-modal::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(135deg, var(--accent), var(--accent));
+            border-radius: 4px 0 0 4px;
+        }
+
+        .intro-text-modal {
+            font-size: 1rem;
+            line-height: 1.8;
+            color: var(--text);
+            text-align: justify;
+            margin: 0;
+        }
+
+        /* 响应式设计 - 增强多设备适配 */
         @media (max-width: 1200px) {
             .controls {
                 padding: 1.5rem 2rem;
@@ -733,7 +1104,95 @@
             }
 
             .papers-grid {
-                grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+                gap: 1.8rem;
+            }
+        }
+
+        @media (max-width: 900px) {
+            nav {
+                padding: 1.5rem 2rem;
+            }
+
+            nav.scrolled {
+                padding: 1rem 2rem;
+            }
+
+            .hero {
+                padding: 6rem 2rem 3rem;
+            }
+
+            .controls {
+                padding: 1rem;
+                flex-direction: column;
+                align-items: stretch;
+                gap: 1rem;
+            }
+
+            .control-group {
+                min-width: auto;
+                width: 100%;
+            }
+
+            .papers-section {
+                padding: 1.5rem 2rem 3rem;
+            }
+
+            .papers-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .paper-card {
+                min-height: 360px;
+            }
+
+            .paper-upper {
+                padding: 1.2rem;
+                gap: 1rem;
+            }
+
+            .paper-cover-container {
+                width: 85px;
+                height: 120px;
+            }
+
+            .paper-cover {
+                width: 85px;
+                height: 120px;
+            }
+
+            .modal-header {
+                flex-direction: column;
+                text-align: center;
+                padding: 2rem;
+                gap: 1.5rem;
+            }
+
+            .modal-cover {
+                width: 120px;
+                height: 160px;
+            }
+
+            .modal-header-text {
+                padding-right: 0;
+            }
+
+            .modal-title {
+                font-size: 1.4rem;
+            }
+
+            .modal-body {
+                padding: 2rem;
+            }
+
+            .info-section {
+                padding: 1rem;
+                margin-bottom: 1.5rem;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
             }
         }
 
@@ -763,15 +1222,20 @@
             }
 
             .papers-section {
-                padding: 1.5rem 1rem 3rem;
+                padding: 1.2rem 1.5rem 2.5rem;
             }
 
             .papers-grid {
                 grid-template-columns: 1fr;
-                gap: 1.5rem;
+                gap: 1.2rem;
+            }
+
+            .paper-card {
+                min-height: auto;
             }
 
             .paper-upper {
+                padding: 1rem;
                 flex-direction: column;
                 align-items: center;
                 text-align: center;
@@ -783,26 +1247,108 @@
             }
 
             .paper-cover {
-                width: 80px;
-                height: 110px;
+                width: 100px;
+                height: 140px;
+            }
+
+            .paper-title {
+                font-size: 1.1rem;
+                min-height: auto;
+            }
+
+            .paper-title-en {
+                font-size: 0.8rem;
+                min-height: auto;
+            }
+
+            .paper-meta {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .meta-item {
+                min-width: 60px;
+            }
+
+            .paper-content {
+                min-height: auto;
+                gap: 0.8rem;
+            }
+
+            .paper-links {
+                gap: 0.8rem;
+                margin-top: 0.8rem;
+                min-height: 2rem;
+            }
+
+            .paper-link {
+                font-size: 0.8rem;
+                padding: 0.4rem 0.8rem;
             }
 
             .modal-header {
                 flex-direction: column;
                 text-align: center;
                 padding: 2rem;
+                gap: 1.5rem;
+            }
+
+            .modal-cover {
+                width: 120px;
+                height: 160px;
             }
 
             .modal-header-text {
                 padding-right: 0;
             }
 
+            .modal-title {
+                font-size: 1.4rem;
+            }
+
+            .modal-subtitle {
+                font-size: 1rem;
+            }
+
             .modal-body {
                 padding: 2rem;
             }
 
+            .info-section {
+                padding: 1rem;
+                margin-bottom: 1.5rem;
+            }
+
             .info-grid {
                 grid-template-columns: 1fr;
+            }
+        }
+
+        /* 针对小屏幕设备的特殊优化 */
+        @media (max-width: 360px) {
+            .papers-section {
+                padding: 1rem;
+            }
+
+            .paper-upper {
+                padding: 0.8rem;
+                gap: 0.8rem;
+            }
+
+            .paper-title {
+                font-size: 1rem;
+            }
+
+            .title-options {
+                padding: 0.8rem;
+            }
+
+            .paper-intro {
+                padding: 0.8rem;
+            }
+
+            .intro-text {
+                font-size: 0.8rem;
             }
         }
 

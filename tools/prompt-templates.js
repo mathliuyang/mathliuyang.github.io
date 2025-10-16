@@ -268,16 +268,17 @@ window.templates = {
 {
   // ===== 元信息 =====
   "meta": {
-    "titleCN": "物理信息神经网络：让AI在解方程时"不忘初心"",
+    "titleCN": "物理信息神经网络：解决涉及非线性偏微分方程的正向和逆向问题的深度学习框架",
     "titleEN": "Physics-informed neural networks: A deep learning framework for solving forward and inverse problems involving nonlinear partial differential equations",
     "author": "M. Raissi",
-    "unit": "Brown University应用数学系",
+    "unit": "美国布朗大学应用数学系",
     "venue": "Journal of Computational Physics",
     "date": "2019年2月",
     "tags": "科学机器学习, 非线性PDE, 数据驱动建模, 物理约束, 自动微分",
     "links": {
       "paper": "https://www.sciencedirect.com/science/article/pii/S0021999118307125?via%3Dihub",
-      "download": "https://www.jianguoyun.com/p/DYjCwXIQ7P3jDRiTrpUGIAA"
+      "download": "https://www.jianguoyun.com/p/DYjCwXIQ7P3jDRiTrpUGIAA",
+      "cover": "https://ars.els-cdn.com/content/image/X00219991.jpg" 
     }
   },
 
