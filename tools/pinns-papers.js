@@ -433,13 +433,13 @@ function createPaperCard(paper, index) {
                         <h4 class="paper-title-en">${paper.meta.titleEN}</h4>
                     </div>
                     
-                    <!-- 元信息区域 - 紧凑布局 -->
+                    <!-- 元信息区域 - 上下两行布局 -->
                     <div class="paper-meta">
-                        <div class="meta-item">
+                        <div class="meta-row">
                             <div class="meta-label">作者</div>
                             <div class="meta-value">${paper.meta.author}</div>
                         </div>
-                        <div class="meta-item">
+                        <div class="meta-row">
                             <div class="meta-label">单位</div>
                             <div class="meta-value">${paper.meta.unit}</div>
                         </div>
