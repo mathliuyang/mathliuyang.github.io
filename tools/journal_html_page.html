@@ -50,6 +50,107 @@
             z-index: 0;
         }
 
+        /* 密码验证模态框样式 */
+        .password-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            z-index: 9999;
+            backdrop-filter: blur(10px);
+        }
+
+        .password-container {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            padding: 3rem;
+            border-radius: 8px;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .password-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--text);
+        }
+
+        .password-subtitle {
+            color: var(--text-dim);
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+        }
+
+        .password-input {
+            width: 100%;
+            padding: 1rem;
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text);
+            font-size: 1rem;
+            margin-bottom: 1.5rem;
+            border-radius: 4px;
+            text-align: center;
+            letter-spacing: 0.1em;
+        }
+
+        .password-input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1);
+        }
+
+        .password-btn {
+            width: 100%;
+            padding: 1rem;
+            background: var(--text);
+            color: var(--bg);
+            border: 1px solid var(--text);
+            font-size: 0.9rem;
+            font-weight: 500;
+            letter-spacing: 0.05em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+        }
+
+        .password-btn:hover {
+            background: transparent;
+            color: var(--text);
+        }
+
+        .password-error {
+            color: #ff4757;
+            font-size: 0.8rem;
+            margin-top: 0.5rem;
+            display: none;
+        }
+
+        .password-hint {
+            color: var(--text-dim);
+            font-size: 0.75rem;
+            margin-top: 1rem;
+            font-style: italic;
+        }
+
+        /* 主要内容初始隐藏 */
+        .main-content {
+            display: none;
+        }
+
+        .main-content.authenticated {
+            display: block;
+        }
+
         /* Navigation */
         nav {
             position: fixed;
@@ -1160,7 +1261,21 @@
 </head>
 
 <body>
-    <canvas id="canvas"></canvas>
+    <!-- 密码验证模态框 -->
+    <div id="passwordModal" class="password-modal">
+        <div class="password-container">
+            <h2 class="password-title">访问验证</h2>
+            <p class="password-subtitle">请输入访问密码以使用AI期刊导航工具</p>
+            <input type="password" id="passwordInput" class="password-input" placeholder="请输入密码" maxlength="6">
+            <button onclick="checkPassword()" class="password-btn">验证</button>
+            <div id="passwordError" class="password-error">密码错误，请重试</div>
+            <p class="password-hint">关注【智核学术】公众号，回复【访问密码】即可获取</p>
+        </div>
+    </div>
+
+    <!-- 主要内容容器 -->
+    <div id="mainContent" class="main-content">
+        <canvas id="canvas"></canvas>
 
     <!-- Navigation -->
     <nav>
@@ -1904,6 +2019,126 @@
         populateFilterOptions(); // 动态生成筛选选项
         calculateStats(); // 计算并显示统计数据
         filterAndSort(); // 确保按影响因子排序后渲染
+
+        // 密码验证功能
+        const CORRECT_PASSWORD = '962464';
+        const PASSWORD_KEY = 'academicToolsAuthenticated'; // 统一存储键名
+        const PASSWORD_EXPIRY = 24 * 60 * 60 * 1000; // 24小时有效期
+
+        // 检查是否已经验证过
+        function checkAuthentication() {
+            const authData = localStorage.getItem(PASSWORD_KEY);
+            if (!authData) return false;
+
+            try {
+                const { timestamp } = JSON.parse(authData);
+                const now = new Date().getTime();
+
+                // 检查是否过期
+                if (now - timestamp > PASSWORD_EXPIRY) {
+                    localStorage.removeItem(PASSWORD_KEY);
+                    return false;
+                }
+
+                return true;
+            } catch (e) {
+                localStorage.removeItem(PASSWORD_KEY);
+                return false;
+            }
+        }
+
+        // 验证密码
+        function checkPassword() {
+            const input = document.getElementById('passwordInput');
+            const error = document.getElementById('passwordError');
+            const password = input.value.trim();
+
+            if (password === CORRECT_PASSWORD) {
+                // 保存验证状态
+                const authData = {
+                    timestamp: new Date().getTime(),
+                    authenticated: true
+                };
+                localStorage.setItem(PASSWORD_KEY, JSON.stringify(authData));
+
+                // 隐藏密码模态框，显示主要内容
+                document.getElementById('passwordModal').style.display = 'none';
+                document.getElementById('mainContent').classList.add('authenticated');
+
+                showToast('验证成功！欢迎使用AI期刊导航工具');
+            } else {
+                error.style.display = 'block';
+                input.style.borderColor = '#ff4757';
+                input.value = '';
+                input.focus();
+
+                setTimeout(() => {
+                    error.style.display = 'none';
+                    input.style.borderColor = '';
+                }, 3000);
+            }
+        }
+
+        // 显示提示消息
+        function showToast(message) {
+            // 创建toast元素
+            const toast = document.createElement('div');
+            toast.textContent = message;
+            toast.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: var(--text);
+                color: var(--bg);
+                padding: 12px 24px;
+                border-radius: 4px;
+                font-size: 14px;
+                z-index: 10000;
+                opacity: 0;
+                transform: translateY(-20px);
+                transition: all 0.3s ease;
+            `;
+            
+            document.body.appendChild(toast);
+            
+            // 显示动画
+            setTimeout(() => {
+                toast.style.opacity = '1';
+                toast.style.transform = 'translateY(0)';
+            }, 100);
+            
+            // 自动隐藏
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateY(-20px)';
+                setTimeout(() => {
+                    document.body.removeChild(toast);
+                }, 300);
+            }, 2000);
+        }
+
+        // 回车键验证
+        document.getElementById('passwordInput').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                checkPassword();
+            }
+        });
+
+        // 页面加载时检查验证状态
+        window.addEventListener('DOMContentLoaded', function () {
+            if (checkAuthentication()) {
+                // 已经验证过，直接显示内容
+                document.getElementById('passwordModal').style.display = 'none';
+                document.getElementById('mainContent').classList.add('authenticated');
+            } else {
+                // 需要验证，显示密码模态框
+                document.getElementById('passwordModal').style.display = 'flex';
+                document.getElementById('passwordInput').focus();
+            }
+        });
+
+        // 使密码验证函数全局可用
+        window.checkPassword = checkPassword;
     </script>
 </body>
 
