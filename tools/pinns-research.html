@@ -282,7 +282,8 @@
             display: flex;
             flex-direction: column;
             gap: 0;
-            min-height: 480px; /* 固定最小高度，确保卡片大小统一 */
+            min-height: 480px;
+            /* 固定最小高度，确保卡片大小统一 */
             animation: fadeInUp 0.6s ease forwards;
             opacity: 0;
             transform: translateY(20px);
@@ -300,7 +301,8 @@
             align-items: flex-start;
             position: relative;
             z-index: 2;
-            min-height: 180px; /* 固定上栏高度 */
+            min-height: 180px;
+            /* 固定上栏高度 */
         }
 
         /* 论文卡片中栏 - 弹性内容区域 */
@@ -312,7 +314,8 @@
             gap: 1rem;
             position: relative;
             z-index: 2;
-            min-height: 200px; /* 确保中栏有最小高度 */
+            min-height: 200px;
+            /* 确保中栏有最小高度 */
         }
 
         /* 论文卡片下栏 - 固定底部区域 */
@@ -444,7 +447,8 @@
             align-items: center;
             gap: 0.5rem;
             flex-shrink: 0;
-            width: 90px; /* 固定宽度防止扩展 */
+            width: 90px;
+            /* 固定宽度防止扩展 */
         }
 
         /* 论文封面 - 书籍样式 - 优化尺寸适应新布局 */
@@ -494,7 +498,8 @@
             text-align: center;
             width: 100%;
             box-sizing: border-box;
-            min-height: 3.9rem; /* 3行文字高度：0.8rem * 1.3 * 3 = 3.12rem + padding */
+            min-height: 3.9rem;
+            /* 3行文字高度：0.8rem * 1.3 * 3 = 3.12rem + padding */
         }
 
         .journal-name {
@@ -517,25 +522,35 @@
                 margin-top: 0.4rem;
                 padding: 0.3rem 0.5rem;
             }
-            
+
             .journal-name {
                 font-size: 0.75rem;
                 -webkit-line-clamp: 3;
             }
-            
+
             /* 调整封面容器宽度 */
             .paper-cover-container {
                 width: 80px;
             }
-            
+
             .paper-cover {
                 width: 80px;
                 height: 112px;
             }
-            
+
             /* 调整期刊信息容器高度 */
             .cover-journal-info {
-                min-height: 3.0rem; /* 平板端3行高度 */
+                min-height: 3.0rem;
+                /* 平板端3行高度 */
+            }
+
+            /* 平板端标题固定高度 */
+            .paper-title {
+                font-size: 1.05rem;
+                line-height: 1.3;
+                height: 3.9rem;
+                /* 1.3 * 3 = 3.9rem */
+                min-height: 3.9rem;
             }
         }
 
@@ -544,30 +559,40 @@
                 margin-top: 0.3rem;
                 padding: 0.25rem 0.4rem;
             }
-            
+
             .journal-name {
                 font-size: 0.7rem;
             }
-            
+
             /* 小屏幕下进一步调整 */
             .paper-cover-container {
                 width: 70px;
             }
-            
+
             .paper-cover {
                 width: 70px;
                 height: 98px;
             }
-            
+
             /* 小屏幕下调整期刊信息 */
             .cover-journal-info {
-                min-height: 2.7rem; /* 移动端3行高度 */
+                min-height: 2.7rem;
+                /* 移动端3行高度 */
                 padding: 0.25rem 0.3rem;
             }
-            
+
             .journal-name {
                 font-size: 0.6rem;
                 line-height: 1.15;
+            }
+
+            /* 移动端标题固定高度 */
+            .paper-title {
+                font-size: 1rem;
+                line-height: 1.25;
+                height: 3.75rem;
+                /* 1.25 * 3 = 3.75rem */
+                min-height: 3.75rem;
             }
         }
 
@@ -616,7 +641,8 @@
             justify-content: flex-start;
             gap: 0.6rem;
             overflow: hidden;
-            min-height: 150px; /* 确保头部内容区域高度一致 */
+            min-height: 150px;
+            /* 确保头部内容区域高度一致 */
         }
 
         .title-section {
@@ -630,7 +656,10 @@
             letter-spacing: -0.01em;
             line-height: 1.35;
             color: var(--text);
-            min-height: 4.05rem; /* 3行高度：1.35 * 3 = 4.05rem */
+            min-height: 4.05rem;
+            /* 3行高度：1.35 * 3 = 4.05rem */
+            height: 4.05rem;
+            /* 固定高度确保所有卡片标题区域一致 */
             display: -webkit-box;
             -webkit-line-clamp: 3;
             -webkit-box-orient: vertical;
@@ -809,7 +838,7 @@
             gap: 0.5rem;
             margin-bottom: 0.3rem;
         }
-        
+
         .meta-row:last-child {
             margin-bottom: 0;
         }
@@ -819,17 +848,22 @@
             color: var(--text-dim);
             text-transform: uppercase;
             letter-spacing: 0.05em;
-            min-width: 2rem; /* 确保标签宽度一致 */
-            text-align: right; /* 右对齐 */
+            min-width: 2rem;
+            /* 确保标签宽度一致 */
+            text-align: right;
+            /* 右对齐 */
         }
 
         .meta-value {
             font-size: 0.8rem;
             font-weight: 400;
             color: var(--text);
-            line-height: 1.3; /* 优化行高 */
-            flex: 1; /* 占据剩余空间 */
-            text-align: left; /* 左对齐 */
+            line-height: 1.3;
+            /* 优化行高 */
+            flex: 1;
+            /* 占据剩余空间 */
+            text-align: left;
+            /* 左对齐 */
         }
 
         .paper-tags {
@@ -841,7 +875,8 @@
             min-height: 2rem;
             align-items: flex-start;
             flex-shrink: 0;
-            max-height: 2.5rem; /* 限制标签区域最大高度，约3行 */
+            max-height: 2.5rem;
+            /* 限制标签区域最大高度，约3行 */
             overflow: hidden;
         }
 
