@@ -200,7 +200,7 @@ let pinnsPapers = [
         "meta": {
             "titleCN": "fPINNs：分数物理信息神经网络",
             "titleEN": "fPINNs: FRACTIONAL PHYSICS-INFORMED NEURAL NETWORKS",
-            "author": "Guofei Pang & Lu Lu（共同一作）",
+            "author": "Guofei Pang",
             "unit": "美国布朗大学应用数学系",
             "venue": "SIAM Journal on Scientific Computing",
             "date": "2019年8月",
