@@ -561,7 +561,7 @@
         // Theme toggle
         const themeBtn = document.getElementById('themeBtn');
         const themeIcon = document.getElementById('themeIcon');
-        const currentTheme = localStorage.getItem('theme') || 'dark';
+        const currentTheme = localStorage.getItem('theme') || 'light';
 
         document.documentElement.setAttribute('data-theme', currentTheme);
         themeIcon.textContent = currentTheme === 'dark' ? '◐' : '◑';
