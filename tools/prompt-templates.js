@@ -116,7 +116,8 @@ window.templates = {
     "links": {
       "paper": "",              // 论文链接
       "download": "",           // 下载链接
-      "cover": ""               // 封面图片URL
+      "cover": "",              // 封面图片URL
+      "code": ""               // 代码仓库链接（若有就提供，没有就填入“未开源”）
     },
 
   // ===== 3个爆款标题(各20-30字) =====
@@ -278,7 +279,8 @@ window.templates = {
     "links": {
       "paper": "https://www.sciencedirect.com/science/article/pii/S0021999118307125?via%3Dihub",
       "download": "https://www.jianguoyun.com/p/DYjCwXIQ7P3jDRiTrpUGIAA",
-      "cover": "https://ars.els-cdn.com/content/image/X00219991.jpg" 
+      "cover": "https://ars.els-cdn.com/content/image/X00219991.jpg",
+      "code": "https://github.com/maziarraissi/PINNs" // 若未开源，填写“未开源”
     }
   },
 

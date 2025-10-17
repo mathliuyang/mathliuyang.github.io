@@ -93,6 +93,22 @@
             align-items: center;
         }
 
+        .test-btn {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            color: var(--text);
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .test-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: var(--text);
+        }
+
         .nav-links {
             display: flex;
             gap: 2.5rem;
@@ -1449,6 +1465,7 @@
     <nav id="nav">
         <div class="logo" onclick="location.href='../index.html'">图灵的猫 X 智核学术</div>
         <div class="nav-right">
+            <button class="test-btn" onclick="testProcessMarkdown()">测试Markdown</button>
             <ul class="nav-links">
                 <li><a href="../index.html">首页</a></li>
                 <li><a href="../pages/about.html">关于我</a></li>
