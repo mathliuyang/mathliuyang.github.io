@@ -154,45 +154,6 @@
             font-weight: 600;
         }
 
-        /* 文字压力效果样式 */
-        .text-pressure {
-            position: relative;
-            display: inline-block;
-            cursor: pointer;
-            user-select: none;
-        }
-
-        .text-pressure .char {
-            display: inline-block;
-            position: relative;
-            transition: all 0.1s ease-out;
-            transform-origin: center center;
-        }
-
-        .text-pressure .char:hover {
-            transform: scale(1.1) translateY(-2px);
-            filter: brightness(1.2);
-        }
-
-        /* 文字压力动画效果 */
-        @keyframes textPressure {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-
-        .text-pressure.animated .char {
-            animation: textPressure 2s ease-in-out infinite;
-        }
-
-        .text-pressure.animated .char:nth-child(2n) {
-            animation-delay: 0.1s;
-        }
-
-        .text-pressure.animated .char:nth-child(3n) {
-            animation-delay: 0.2s;
-        }
-
         .hero-subtitle {
             font-size: clamp(1rem, 2vw, 1.5rem);
             color: var(--text-dim);
@@ -648,14 +609,7 @@
     <!-- Hero Section -->
     <section class="hero">
         <div class="hero-content">
-            <h1 class="text-pressure" data-text="探索计算数学的无限可能">
-                <span class="char">探</span>
-                <span class="char">索</span>
-                <strong><span class="char">计</span><span class="char">算</span><span class="char">数</span><span class="char">学</span></strong>
-                <br>
-                <span class="char">的</span>
-                <strong><span class="char">无</span><span class="char">限</span><span class="char">可</span><span class="char">能</span></strong>
-            </h1>
+            <h1>探索<strong>计算数学</strong><br>的<strong>无限可能</strong></h1>
             <p class="hero-subtitle">
                 一位被偏微分方程带偏了的人工智能算法开发者
             </p>
@@ -1034,76 +988,6 @@
                 this.title = '点击复制';
             });
         });
-
-        // 文字压力效果
-        function initTextPressure() {
-            const textPressure = document.querySelector('.text-pressure');
-            if (!textPressure) return;
-
-            const chars = textPressure.querySelectorAll('.char');
-            
-            // 鼠标移动效果
-            document.addEventListener('mousemove', (e) => {
-                const rect = textPressure.getBoundingClientRect();
-                const centerX = rect.left + rect.width / 2;
-                const centerY = rect.top + rect.height / 2;
-                
-                chars.forEach((char, index) => {
-                    const charRect = char.getBoundingClientRect();
-                    const charCenterX = charRect.left + charRect.width / 2;
-                    const charCenterY = charRect.top + charRect.height / 2;
-                    
-                    const distance = Math.sqrt(
-                        Math.pow(e.clientX - charCenterX, 2) + 
-                        Math.pow(e.clientY - charCenterY, 2)
-                    );
-                    
-                    const maxDistance = 200;
-                    const influence = Math.max(0, 1 - distance / maxDistance);
-                    
-                    // 计算偏移
-                    const offsetX = (e.clientX - charCenterX) * influence * 0.1;
-                    const offsetY = (e.clientY - charCenterY) * influence * 0.1;
-                    
-                    // 应用变换
-                    char.style.transform = `
-                        translate(${offsetX}px, ${offsetY}px) 
-                        scale(${1 + influence * 0.1})
-                    `;
-                    char.style.filter = `brightness(${1 + influence * 0.3})`;
-                });
-            });
-
-            // 鼠标离开时重置
-            document.addEventListener('mouseleave', () => {
-                chars.forEach(char => {
-                    char.style.transform = '';
-                    char.style.filter = '';
-                });
-            });
-
-            // 点击动画效果
-            textPressure.addEventListener('click', () => {
-                textPressure.classList.add('animated');
-                setTimeout(() => {
-                    textPressure.classList.remove('animated');
-                }, 3000);
-            });
-
-            // 滚动视差效果
-            window.addEventListener('scroll', () => {
-                const scrollY = window.pageYOffset;
-                const intensity = 0.5;
-                
-                chars.forEach((char, index) => {
-                    const offset = (index - chars.length / 2) * intensity;
-                    char.style.transform = `translateY(${scrollY * offset * 0.01}px)`;
-                });
-            });
-        }
-
-        // 初始化文字压力效果
-        initTextPressure();
     </script>
 </body>
 
