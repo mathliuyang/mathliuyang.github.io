@@ -1269,7 +1269,10 @@
             <p class="password-subtitle">请输入访问密码以使用AI期刊导航工具</p>
             <input type="text" id="passwordInput" class="password-input" placeholder="请输入密码" autocomplete="off"
                 autocapitalize="off" autocorrect="off">
-            <button onclick="checkPassword()" class="password-btn">验证</button>
+            <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+                <a href="../pages/tools.html" class="password-btn" style="flex: 1; background: transparent; color: var(--text); text-decoration: none; text-align: center;">返回工具集</a>
+                <button onclick="checkPassword()" class="password-btn" style="flex: 1;">验证</button>
+            </div>
             <div id="passwordError" class="password-error">密码错误，请重试</div>
             <p class="password-hint">关注【智核学术】公众号，回复【访问密码】即可获取</p>
         </div>
