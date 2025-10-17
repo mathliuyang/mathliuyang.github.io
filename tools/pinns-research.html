@@ -724,6 +724,8 @@
             flex-direction: column;
             gap: 0.1rem;
             text-align: center;
+            justify-content: flex-start; /* 确保内容从顶部对齐 */
+            min-height: 2.4rem; /* 设置最小高度确保对齐 */
         }
 
         .meta-label {
@@ -737,6 +739,11 @@
             font-size: 0.8rem;
             font-weight: 400;
             color: var(--text);
+            line-height: 1.2; /* 设置固定行高确保多行文本对齐 */
+            min-height: 0.96rem; /* 单行文本高度 (0.8rem * 1.2) */
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .paper-tags {
