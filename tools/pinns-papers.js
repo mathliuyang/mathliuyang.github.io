@@ -27,18 +27,7 @@ function processMarkdown(text) {
     return text;
 }
 
-// 测试函数
-function testProcessMarkdown() {
-    const testText = "这是一个**加粗**文本\n\n这是新段落\n这是单换行";
-    const result = processMarkdown(testText);
-    console.log('测试结果:', result);
-}
 
-// 页面加载完成后自动运行测试
-window.addEventListener('DOMContentLoaded', function () {
-    console.log('页面加载完成，开始测试processMarkdown函数');
-    testProcessMarkdown();
-});
 
 // PINNs系列论文研究进展数据
 let pinnsPapers = [
