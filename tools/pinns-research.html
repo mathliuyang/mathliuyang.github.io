@@ -1741,293 +1741,293 @@
     <div id="mainContent" class="main-content">
         <canvas id="canvas"></canvas>
 
-    <!-- Navigation -->
-    <nav id="nav">
-        <div class="logo" onclick="location.href='../index.html'">图灵的猫 X 智核学术</div>
-        <div class="nav-right">
-            <button class="test-btn" onclick="testProcessMarkdown()">测试Markdown</button>
-            <ul class="nav-links">
-                <li><a href="../index.html">首页</a></li>
-                <li><a href="../pages/about.html">关于我</a></li>
-                <li><a href="../pages/blog.html">博客</a></li>
-                <li><a href="../pages/projects.html">项目</a></li>
-                <li><a href="../pages/publications.html">学术成果</a></li>
-                <li><a href="../pages/tools.html" class="active">工具箱</a></li>
-                <li><a href="../pages/contact.html">联系我</a></li>
-            </ul>
-            <button class="theme-btn" id="themeBtn">
-                <span id="themeIcon">◐</span>
-            </button>
-        </div>
-    </nav>
-
-    <!-- Hero Section -->
-    <section class="hero">
-        <h1>智能科学计算·<strong>PINNs</strong></h1>
-        <p class="hero-subtitle">物理信息神经网络最新研究进展 - 探索AI与科学计算的完美融合</p>
-        <div class="stats">
-            <div class="stat-item">
-                <div class="stat-number" id="paperCount">0</div>
-                <div class="stat-label">研究论文</div>
+        <!-- Navigation -->
+        <nav id="nav">
+            <div class="logo" onclick="location.href='../index.html'">图灵的猫 X 智核学术</div>
+            <div class="nav-right">
+                <button class="test-btn" onclick="testProcessMarkdown()">测试Markdown</button>
+                <ul class="nav-links">
+                    <li><a href="../index.html">首页</a></li>
+                    <li><a href="../pages/about.html">关于我</a></li>
+                    <li><a href="../pages/blog.html">博客</a></li>
+                    <li><a href="../pages/projects.html">项目</a></li>
+                    <li><a href="../pages/publications.html">学术成果</a></li>
+                    <li><a href="../pages/tools.html" class="active">工具箱</a></li>
+                    <li><a href="../pages/contact.html">联系我</a></li>
+                </ul>
+                <button class="theme-btn" id="themeBtn">
+                    <span id="themeIcon">◐</span>
+                </button>
             </div>
-            <div class="stat-item">
-                <div class="stat-number" id="researchAreas">8</div>
-                <div class="stat-label">研究领域</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-number" id="updateTime">2025</div>
-                <div class="stat-label">最新更新</div>
-            </div>
-        </div>
-    </section>
+        </nav>
 
-    <!-- Controls -->
-    <section class="controls">
-        <div class="control-group">
-            <select id="researchAreaFilter">
-                <option value="">所有研究领域</option>
-                <option value="拓扑优化">拓扑优化</option>
-                <option value="流体力学">流体力学</option>
-                <option value="结构力学">结构力学</option>
-                <option value="热传导">热传导</option>
-                <option value="材料科学">材料科学</option>
-                <option value="生物力学">生物力学</option>
-                <option value="量子力学">量子力学</option>
-                <option value="多物理场">多物理场</option>
-            </select>
-        </div>
-        <div class="control-group">
-            <select id="paperTypeFilter">
-                <option value="">所有论文类型</option>
-                <option value="theory">理论研究</option>
-                <option value="application">应用研究</option>
-                <option value="review">综述论文</option>
-            </select>
-        </div>
-        <div class="control-group">
-            <select id="yearFilter">
-                <option value="">所有年份</option>
-                <option value="2025">2025</option>
-                <option value="2024">2024</option>
-                <option value="2023">2023</option>
-                <option value="2022">2022</option>
-                <option value="2021">2021</option>
-            </select>
-        </div>
-        <div class="control-group">
-            <input type="text" id="searchInput" placeholder="搜索论文标题、作者或关键词...">
-        </div>
-    </section>
-
-    <!-- Papers Section -->
-    <section class="papers-section">
-        <h2 class="section-title">最新研究进展</h2>
-        <div id="papersContainer">
-            <div class="loading">
-                <div class="spinner"></div>
-                <p>正在加载论文数据...</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Modal -->
-    <div class="modal" id="paperModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <div class="modal-cover" id="modalCover">
-                    <div class="paper-cover-placeholder">论文封面</div>
+        <!-- Hero Section -->
+        <section class="hero">
+            <h1>智能科学计算·<strong>PINNs</strong></h1>
+            <p class="hero-subtitle">物理信息神经网络最新研究进展 - 探索AI与科学计算的完美融合</p>
+            <div class="stats">
+                <div class="stat-item">
+                    <div class="stat-number" id="paperCount">0</div>
+                    <div class="stat-label">研究论文</div>
                 </div>
-                <div class="modal-header-text">
-                    <h2 class="modal-title" id="modalTitle"></h2>
-                    <h3 class="modal-title-en" id="modalTitleEn"></h3>
-                    <div class="paper-tags" id="modalTags"></div>
+                <div class="stat-item">
+                    <div class="stat-number" id="researchAreas">8</div>
+                    <div class="stat-label">研究领域</div>
                 </div>
-                <button class="modal-close" id="modalClose">×</button>
+                <div class="stat-item">
+                    <div class="stat-number" id="updateTime">2025</div>
+                    <div class="stat-label">最新更新</div>
+                </div>
             </div>
-            <div class="modal-body" id="modalBody">
-                <!-- 模态框内容将通过JavaScript动态生成 -->
+        </section>
+
+        <!-- Controls -->
+        <section class="controls">
+            <div class="control-group">
+                <select id="researchAreaFilter">
+                    <option value="">所有研究领域</option>
+                    <option value="拓扑优化">拓扑优化</option>
+                    <option value="流体力学">流体力学</option>
+                    <option value="结构力学">结构力学</option>
+                    <option value="热传导">热传导</option>
+                    <option value="材料科学">材料科学</option>
+                    <option value="生物力学">生物力学</option>
+                    <option value="量子力学">量子力学</option>
+                    <option value="多物理场">多物理场</option>
+                </select>
+            </div>
+            <div class="control-group">
+                <select id="paperTypeFilter">
+                    <option value="">所有论文类型</option>
+                    <option value="theory">理论研究</option>
+                    <option value="application">应用研究</option>
+                    <option value="review">综述论文</option>
+                </select>
+            </div>
+            <div class="control-group">
+                <select id="yearFilter">
+                    <option value="">所有年份</option>
+                    <option value="2025">2025</option>
+                    <option value="2024">2024</option>
+                    <option value="2023">2023</option>
+                    <option value="2022">2022</option>
+                    <option value="2021">2021</option>
+                </select>
+            </div>
+            <div class="control-group">
+                <input type="text" id="searchInput" placeholder="搜索论文标题、作者或关键词...">
+            </div>
+        </section>
+
+        <!-- Papers Section -->
+        <section class="papers-section">
+            <h2 class="section-title">最新研究进展</h2>
+            <div id="papersContainer">
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <p>正在加载论文数据...</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Modal -->
+        <div class="modal" id="paperModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-cover" id="modalCover">
+                        <div class="paper-cover-placeholder">论文封面</div>
+                    </div>
+                    <div class="modal-header-text">
+                        <h2 class="modal-title" id="modalTitle"></h2>
+                        <h3 class="modal-title-en" id="modalTitleEn"></h3>
+                        <div class="paper-tags" id="modalTags"></div>
+                    </div>
+                    <button class="modal-close" id="modalClose">×</button>
+                </div>
+                <div class="modal-body" id="modalBody">
+                    <!-- 模态框内容将通过JavaScript动态生成 -->
+                </div>
             </div>
         </div>
-    </div>
 
-    <script>
-        // Theme toggle
-        const themeBtn = document.getElementById('themeBtn');
-        const themeIcon = document.getElementById('themeIcon');
-        const currentTheme = localStorage.getItem('theme') || 'dark';
+        <script>
+            // Theme toggle
+            const themeBtn = document.getElementById('themeBtn');
+            const themeIcon = document.getElementById('themeIcon');
+            const currentTheme = localStorage.getItem('theme') || 'dark';
 
-        document.documentElement.setAttribute('data-theme', currentTheme);
-        themeIcon.textContent = currentTheme === 'dark' ? '◐' : '◑';
+            document.documentElement.setAttribute('data-theme', currentTheme);
+            themeIcon.textContent = currentTheme === 'dark' ? '◐' : '◑';
 
-        // 添加图标颜色样式，确保在不同主题下都清晰可见
-        themeIcon.style.color = currentTheme === 'dark' ? '#ffffff' : '#000000';
+            // 添加图标颜色样式，确保在不同主题下都清晰可见
+            themeIcon.style.color = currentTheme === 'dark' ? '#ffffff' : '#000000';
 
-        themeBtn.addEventListener('click', () => {
-            const theme = document.documentElement.getAttribute('data-theme');
-            const newTheme = theme === 'dark' ? 'light' : 'dark';
+            themeBtn.addEventListener('click', () => {
+                const theme = document.documentElement.getAttribute('data-theme');
+                const newTheme = theme === 'dark' ? 'light' : 'dark';
 
-            document.documentElement.setAttribute('data-theme', newTheme);
-            localStorage.setItem('theme', newTheme);
-            themeIcon.textContent = newTheme === 'dark' ? '◐' : '◑';
-            themeIcon.style.color = newTheme === 'dark' ? '#ffffff' : '#000000';
-        });
-
-        // 简化的粒子动画背景
-        const canvas = document.getElementById('canvas');
-        const ctx = canvas.getContext('2d');
-
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
-
-        resizeCanvas();
-        window.addEventListener('resize', resizeCanvas);
-
-        // 粒子系统
-        const particles = [];
-        const particleCount = 50;
-
-        class Particle {
-            constructor() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.vx = (Math.random() - 0.5) * 0.5;
-                this.vy = (Math.random() - 0.5) * 0.5;
-                this.radius = Math.random() * 2 + 1;
-                this.opacity = Math.random() * 0.5 + 0.1;
-            }
-
-            update() {
-                this.x += this.vx;
-                this.y += this.vy;
-
-                if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
-                if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
-            }
-
-            draw() {
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-                ctx.fillStyle = `rgba(0, 212, 255, ${this.opacity})`;
-                ctx.fill();
-            }
-        }
-
-        // 初始化粒子
-        for (let i = 0; i < particleCount; i++) {
-            particles.push(new Particle());
-        }
-
-        function animate() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-            particles.forEach(particle => {
-                particle.update();
-                particle.draw();
+                document.documentElement.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+                themeIcon.textContent = newTheme === 'dark' ? '◐' : '◑';
+                themeIcon.style.color = newTheme === 'dark' ? '#ffffff' : '#000000';
             });
 
-            // 绘制连线
-            particles.forEach((particle, i) => {
-                particles.slice(i + 1).forEach(otherParticle => {
-                    const dx = particle.x - otherParticle.x;
-                    const dy = particle.y - otherParticle.y;
-                    const distance = Math.sqrt(dx * dx + dy * dy);
+            // 简化的粒子动画背景
+            const canvas = document.getElementById('canvas');
+            const ctx = canvas.getContext('2d');
 
-                    if (distance < 100) {
-                        ctx.beginPath();
-                        ctx.moveTo(particle.x, particle.y);
-                        ctx.lineTo(otherParticle.x, otherParticle.y);
-                        ctx.strokeStyle = `rgba(0, 212, 255, ${0.1 * (1 - distance / 100)})`;
-                        ctx.lineWidth = 1;
-                        ctx.stroke();
-                    }
+            function resizeCanvas() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+
+            // 粒子系统
+            const particles = [];
+            const particleCount = 50;
+
+            class Particle {
+                constructor() {
+                    this.x = Math.random() * canvas.width;
+                    this.y = Math.random() * canvas.height;
+                    this.vx = (Math.random() - 0.5) * 0.5;
+                    this.vy = (Math.random() - 0.5) * 0.5;
+                    this.radius = Math.random() * 2 + 1;
+                    this.opacity = Math.random() * 0.5 + 0.1;
+                }
+
+                update() {
+                    this.x += this.vx;
+                    this.y += this.vy;
+
+                    if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+                    if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+                }
+
+                draw() {
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(0, 212, 255, ${this.opacity})`;
+                    ctx.fill();
+                }
+            }
+
+            // 初始化粒子
+            for (let i = 0; i < particleCount; i++) {
+                particles.push(new Particle());
+            }
+
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                particles.forEach(particle => {
+                    particle.update();
+                    particle.draw();
                 });
+
+                // 绘制连线
+                particles.forEach((particle, i) => {
+                    particles.slice(i + 1).forEach(otherParticle => {
+                        const dx = particle.x - otherParticle.x;
+                        const dy = particle.y - otherParticle.y;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+
+                        if (distance < 100) {
+                            ctx.beginPath();
+                            ctx.moveTo(particle.x, particle.y);
+                            ctx.lineTo(otherParticle.x, otherParticle.y);
+                            ctx.strokeStyle = `rgba(0, 212, 255, ${0.1 * (1 - distance / 100)})`;
+                            ctx.lineWidth = 1;
+                            ctx.stroke();
+                        }
+                    });
+                });
+
+                requestAnimationFrame(animate);
+            }
+
+            animate();
+
+            // 论文数据加载和渲染功能将在pinns-papers.js中实现
+            console.log('PINNs Research Page Loaded');
+
+            // 导航滚动效果
+            const nav = document.getElementById('nav');
+            window.addEventListener('scroll', () => {
+                if (window.pageYOffset > 100) {
+                    nav.classList.add('scrolled');
+                } else {
+                    nav.classList.remove('scrolled');
+                }
             });
 
-            requestAnimationFrame(animate);
-        }
+            // 密码验证功能
+            const CORRECT_PASSWORD = '962464';
+            const PASSWORD_KEY = 'academicToolsAuthenticated'; // 统一存储键名
+            const PASSWORD_EXPIRY = 24 * 60 * 60 * 1000; // 24小时有效期
 
-        animate();
+            // 检查是否已经验证过
+            function checkAuthentication() {
+                const authData = localStorage.getItem(PASSWORD_KEY);
+                if (!authData) return false;
 
-        // 论文数据加载和渲染功能将在pinns-papers.js中实现
-        console.log('PINNs Research Page Loaded');
+                try {
+                    const { timestamp } = JSON.parse(authData);
+                    const now = new Date().getTime();
 
-        // 导航滚动效果
-        const nav = document.getElementById('nav');
-        window.addEventListener('scroll', () => {
-            if (window.pageYOffset > 100) {
-                nav.classList.add('scrolled');
-            } else {
-                nav.classList.remove('scrolled');
-            }
-        });
+                    // 检查是否过期
+                    if (now - timestamp > PASSWORD_EXPIRY) {
+                        localStorage.removeItem(PASSWORD_KEY);
+                        return false;
+                    }
 
-        // 密码验证功能
-        const CORRECT_PASSWORD = '962464';
-        const PASSWORD_KEY = 'academicToolsAuthenticated'; // 统一存储键名
-        const PASSWORD_EXPIRY = 24 * 60 * 60 * 1000; // 24小时有效期
-
-        // 检查是否已经验证过
-        function checkAuthentication() {
-            const authData = localStorage.getItem(PASSWORD_KEY);
-            if (!authData) return false;
-
-            try {
-                const { timestamp } = JSON.parse(authData);
-                const now = new Date().getTime();
-
-                // 检查是否过期
-                if (now - timestamp > PASSWORD_EXPIRY) {
+                    return true;
+                } catch (e) {
                     localStorage.removeItem(PASSWORD_KEY);
                     return false;
                 }
-
-                return true;
-            } catch (e) {
-                localStorage.removeItem(PASSWORD_KEY);
-                return false;
             }
-        }
 
-        // 验证密码
-        function checkPassword() {
-            const input = document.getElementById('passwordInput');
-            const error = document.getElementById('passwordError');
-            const password = input.value.trim();
+            // 验证密码
+            function checkPassword() {
+                const input = document.getElementById('passwordInput');
+                const error = document.getElementById('passwordError');
+                const password = input.value.trim();
 
-            if (password === CORRECT_PASSWORD) {
-                // 保存验证状态
-                const authData = {
-                    timestamp: new Date().getTime(),
-                    authenticated: true
-                };
-                localStorage.setItem(PASSWORD_KEY, JSON.stringify(authData));
+                if (password === CORRECT_PASSWORD) {
+                    // 保存验证状态
+                    const authData = {
+                        timestamp: new Date().getTime(),
+                        authenticated: true
+                    };
+                    localStorage.setItem(PASSWORD_KEY, JSON.stringify(authData));
 
-                // 隐藏密码模态框，显示主要内容
-                document.getElementById('passwordModal').style.display = 'none';
-                document.getElementById('mainContent').classList.add('authenticated');
+                    // 隐藏密码模态框，显示主要内容
+                    document.getElementById('passwordModal').style.display = 'none';
+                    document.getElementById('mainContent').classList.add('authenticated');
 
-                showToast('验证成功！欢迎使用PINNs研究进展工具');
-            } else {
-                error.style.display = 'block';
-                input.style.borderColor = '#ff4757';
-                input.value = '';
-                input.focus();
+                    showToast('验证成功！欢迎使用PINNs研究进展工具');
+                } else {
+                    error.style.display = 'block';
+                    input.style.borderColor = '#ff4757';
+                    input.value = '';
+                    input.focus();
 
-                setTimeout(() => {
-                    error.style.display = 'none';
-                    input.style.borderColor = '';
-                }, 3000);
+                    setTimeout(() => {
+                        error.style.display = 'none';
+                        input.style.borderColor = '';
+                    }, 3000);
+                }
             }
-        }
 
-        // 显示提示消息
-        function showToast(message) {
-            // 创建toast元素
-            const toast = document.createElement('div');
-            toast.textContent = message;
-            toast.style.cssText = `
+            // 显示提示消息
+            function showToast(message) {
+                // 创建toast元素
+                const toast = document.createElement('div');
+                toast.textContent = message;
+                toast.style.cssText = `
                 position: fixed;
                 top: 20px;
                 right: 20px;
@@ -2041,49 +2041,49 @@
                 transform: translateY(-20px);
                 transition: all 0.3s ease;
             `;
-            
-            document.body.appendChild(toast);
-            
-            // 显示动画
-            setTimeout(() => {
-                toast.style.opacity = '1';
-                toast.style.transform = 'translateY(0)';
-            }, 100);
-            
-            // 自动隐藏
-            setTimeout(() => {
-                toast.style.opacity = '0';
-                toast.style.transform = 'translateY(-20px)';
+
+                document.body.appendChild(toast);
+
+                // 显示动画
                 setTimeout(() => {
-                    document.body.removeChild(toast);
-                }, 300);
-            }, 2000);
-        }
+                    toast.style.opacity = '1';
+                    toast.style.transform = 'translateY(0)';
+                }, 100);
 
-        // 回车键验证
-        document.getElementById('passwordInput').addEventListener('keypress', function (e) {
-            if (e.key === 'Enter') {
-                checkPassword();
+                // 自动隐藏
+                setTimeout(() => {
+                    toast.style.opacity = '0';
+                    toast.style.transform = 'translateY(-20px)';
+                    setTimeout(() => {
+                        document.body.removeChild(toast);
+                    }, 300);
+                }, 2000);
             }
-        });
 
-        // 页面加载时检查验证状态
-        window.addEventListener('DOMContentLoaded', function () {
-            if (checkAuthentication()) {
-                // 已经验证过，直接显示内容
-                document.getElementById('passwordModal').style.display = 'none';
-                document.getElementById('mainContent').classList.add('authenticated');
-            } else {
-                // 需要验证，显示密码模态框
-                document.getElementById('passwordModal').style.display = 'flex';
-                document.getElementById('passwordInput').focus();
-            }
-        });
+            // 回车键验证
+            document.getElementById('passwordInput').addEventListener('keypress', function (e) {
+                if (e.key === 'Enter') {
+                    checkPassword();
+                }
+            });
 
-        // 使密码验证函数全局可用
-        window.checkPassword = checkPassword;
-    </script>
-</div> <!-- 关闭main-content -->
+            // 页面加载时检查验证状态
+            window.addEventListener('DOMContentLoaded', function () {
+                if (checkAuthentication()) {
+                    // 已经验证过，直接显示内容
+                    document.getElementById('passwordModal').style.display = 'none';
+                    document.getElementById('mainContent').classList.add('authenticated');
+                } else {
+                    // 需要验证，显示密码模态框
+                    document.getElementById('passwordModal').style.display = 'flex';
+                    document.getElementById('passwordInput').focus();
+                }
+            });
+
+            // 使密码验证函数全局可用
+            window.checkPassword = checkPassword;
+        </script>
+    </div> <!-- 关闭main-content -->
 </body>
 
 </html>

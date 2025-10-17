@@ -1277,281 +1277,281 @@
     <div id="mainContent" class="main-content">
         <canvas id="canvas"></canvas>
 
-    <!-- Navigation -->
-    <nav>
-        <div class="logo" onclick="location.href='../index.html'">图灵的猫 X 智核学术</div>
-        <div class="nav-right">
-            <ul class="nav-links">
-                <li><a href="../index.html">首页</a></li>
-                <li><a href="../pages/about.html">关于我</a></li>
-                <li><a href="../pages/blog.html">博客</a></li>
-                <li><a href="../pages/projects.html">项目</a></li>
-                <li><a href="../pages/publications.html">学术成果</a></li>
-                <li><a href="../pages/tools.html" class="active">工具箱</a></li>
-                <li><a href="../pages/contact.html">联系我</a></li>
-            </ul>
-            <button class="theme-btn" id="themeBtn">
-                <span id="themeIcon">◐</span>
-            </button>
-        </div>
-    </nav>
-
-    <!-- Hero Section -->
-    <section class="hero">
-        <h1>AI for Science 期刊导航</h1>
-        <p class="hero-subtitle">
-            深度学习求解偏微分方程 (PDE) 与科学计算领域顶级期刊精选数据库<br>
-            专为AI4Science研究者打造的专业投稿指南
-        </p>
-        <div class="stats" id="statsContainer">
-            <div class="stat-item">
-                <div class="stat-number" id="totalJournals">0</div>
-                <div class="stat-label">精选期刊</div>
+        <!-- Navigation -->
+        <nav>
+            <div class="logo" onclick="location.href='../index.html'">图灵的猫 X 智核学术</div>
+            <div class="nav-right">
+                <ul class="nav-links">
+                    <li><a href="../index.html">首页</a></li>
+                    <li><a href="../pages/about.html">关于我</a></li>
+                    <li><a href="../pages/blog.html">博客</a></li>
+                    <li><a href="../pages/projects.html">项目</a></li>
+                    <li><a href="../pages/publications.html">学术成果</a></li>
+                    <li><a href="../pages/tools.html" class="active">工具箱</a></li>
+                    <li><a href="../pages/contact.html">联系我</a></li>
+                </ul>
+                <button class="theme-btn" id="themeBtn">
+                    <span id="themeIcon">◐</span>
+                </button>
             </div>
-            <div class="stat-item">
-                <div class="stat-number" id="casZone1Count">0</div>
-                <div class="stat-label">中科院一区</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-number" id="casZone2Count">0</div>
-                <div class="stat-label">中科院二区</div>
-            </div>
-        </div>
-    </section>
+        </nav>
 
-    <!-- Controls -->
-    <section class="controls">
-        <div class="control-group">
-            <input type="text" id="searchInput" placeholder="搜索期刊名称、缩写或AI4Science关键词（如PINN、深度学习、物理信息神经网络）...">
-        </div>
-        <div class="control-group">
-            <select id="filterZone">
-                <option value="all">所有分区</option>
-            </select>
-        </div>
-        <div class="control-group">
-            <select id="filterRegion">
-                <option value="all">所有地区</option>
-            </select>
-        </div>
-        <div class="control-group">
-            <select id="filterPublisher">
-                <option value="all">所有出版社</option>
-            </select>
-        </div>
-
-        <div class="control-group">
-            <select id="sortBy">
-                <option value="impact" selected>按影响因子排序</option>
-                <option value="zone">按分区排序</option>
-                <option value="name">按名称排序</option>
-            </select>
-        </div>
-    </section>
-
-    <!-- Journals Section -->
-    <section class="journals-section">
-        <div class="journals-grid" id="journalsGrid"></div>
-        <div class="no-results" id="noResults" style="display: none;">
-            <p>未找到匹配的期刊</p>
-        </div>
-    </section>
-
-    <!-- Modal -->
-    <div class="modal" id="modal">
-        <div class="modal-content">
-            <button class="modal-close" onclick="closeModal()">×</button>
-            <div class="modal-header">
-                <div class="modal-cover" id="modalCover"></div>
-                <div class="modal-header-text">
-                    <h2 id="modalTitle"
-                        style="font-size: 1.8rem; font-weight: 500; margin-bottom: 0.5rem; line-height: 1.3; word-wrap: break-word;">
-                    </h2>
-                    <p id="modalAbbr" style="color: var(--text-dim); font-size: 0.95rem;"></p>
+        <!-- Hero Section -->
+        <section class="hero">
+            <h1>AI for Science 期刊导航</h1>
+            <p class="hero-subtitle">
+                深度学习求解偏微分方程 (PDE) 与科学计算领域顶级期刊精选数据库<br>
+                专为AI4Science研究者打造的专业投稿指南
+            </p>
+            <div class="stats" id="statsContainer">
+                <div class="stat-item">
+                    <div class="stat-number" id="totalJournals">0</div>
+                    <div class="stat-label">精选期刊</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="casZone1Count">0</div>
+                    <div class="stat-label">中科院一区</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="casZone2Count">0</div>
+                    <div class="stat-label">中科院二区</div>
                 </div>
             </div>
-            <div class="modal-body" id="modalBody"></div>
+        </section>
+
+        <!-- Controls -->
+        <section class="controls">
+            <div class="control-group">
+                <input type="text" id="searchInput" placeholder="搜索期刊名称、缩写或AI4Science关键词（如PINN、深度学习、物理信息神经网络）...">
+            </div>
+            <div class="control-group">
+                <select id="filterZone">
+                    <option value="all">所有分区</option>
+                </select>
+            </div>
+            <div class="control-group">
+                <select id="filterRegion">
+                    <option value="all">所有地区</option>
+                </select>
+            </div>
+            <div class="control-group">
+                <select id="filterPublisher">
+                    <option value="all">所有出版社</option>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <select id="sortBy">
+                    <option value="impact" selected>按影响因子排序</option>
+                    <option value="zone">按分区排序</option>
+                    <option value="name">按名称排序</option>
+                </select>
+            </div>
+        </section>
+
+        <!-- Journals Section -->
+        <section class="journals-section">
+            <div class="journals-grid" id="journalsGrid"></div>
+            <div class="no-results" id="noResults" style="display: none;">
+                <p>未找到匹配的期刊</p>
+            </div>
+        </section>
+
+        <!-- Modal -->
+        <div class="modal" id="modal">
+            <div class="modal-content">
+                <button class="modal-close" onclick="closeModal()">×</button>
+                <div class="modal-header">
+                    <div class="modal-cover" id="modalCover"></div>
+                    <div class="modal-header-text">
+                        <h2 id="modalTitle"
+                            style="font-size: 1.8rem; font-weight: 500; margin-bottom: 0.5rem; line-height: 1.3; word-wrap: break-word;">
+                        </h2>
+                        <p id="modalAbbr" style="color: var(--text-dim); font-size: 0.95rem;"></p>
+                    </div>
+                </div>
+                <div class="modal-body" id="modalBody"></div>
+            </div>
         </div>
-    </div>
 
-    <!-- Footer -->
-    <footer>
-        <div class="footer-text">© 2025 学术期刊数据库 | 数据更新时间: 2025 年 10 月 | 投稿前请核实最新信息</div>
-    </footer>
+        <!-- Footer -->
+        <footer>
+            <div class="footer-text">© 2025 学术期刊数据库 | 数据更新时间: 2025 年 10 月 | 投稿前请核实最新信息</div>
+        </footer>
 
-    <script>
-        // Canvas Setup (same as original)
-        const canvas = document.getElementById('canvas');
-        const ctx = canvas.getContext('2d');
-        let particles = [];
-        let mouse = { x: null, y: null, radius: 150 };
+        <script>
+            // Canvas Setup (same as original)
+            const canvas = document.getElementById('canvas');
+            const ctx = canvas.getContext('2d');
+            let particles = [];
+            let mouse = { x: null, y: null, radius: 150 };
 
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
-        resizeCanvas();
-        window.addEventListener('resize', resizeCanvas);
-
-        window.addEventListener('mousemove', (e) => {
-            mouse.x = e.x;
-            mouse.y = e.y;
-        });
-
-        window.addEventListener('mouseout', () => {
-            mouse.x = null;
-            mouse.y = null;
-        });
-
-        class Particle {
-            constructor() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.size = Math.random() * 2 + 0.5;
-                this.baseX = this.x;
-                this.baseY = this.y;
-                this.density = Math.random() * 30 + 1;
-                this.vx = (Math.random() - 0.5) * 0.3;
-                this.vy = (Math.random() - 0.5) * 0.3;
+            function resizeCanvas() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
             }
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
 
-            draw() {
-                const theme = document.documentElement.getAttribute('data-theme');
-                ctx.fillStyle = theme === 'light' ? 'rgba(0, 0, 0, 0.3)' : 'rgba(255, 255, 255, 0.3)';
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fill();
-            }
+            window.addEventListener('mousemove', (e) => {
+                mouse.x = e.x;
+                mouse.y = e.y;
+            });
 
-            update() {
-                if (mouse.x != null && mouse.y != null) {
-                    let dx = mouse.x - this.x;
-                    let dy = mouse.y - this.y;
-                    let distance = Math.sqrt(dx * dx + dy * dy);
-                    let forceDirectionX = dx / distance;
-                    let forceDirectionY = dy / distance;
-                    let maxDistance = mouse.radius;
-                    let force = (maxDistance - distance) / maxDistance;
-                    let directionX = forceDirectionX * force * this.density * 0.6;
-                    let directionY = forceDirectionY * force * this.density * 0.6;
+            window.addEventListener('mouseout', () => {
+                mouse.x = null;
+                mouse.y = null;
+            });
 
-                    if (distance < mouse.radius) {
-                        this.x -= directionX;
-                        this.y -= directionY;
+            class Particle {
+                constructor() {
+                    this.x = Math.random() * canvas.width;
+                    this.y = Math.random() * canvas.height;
+                    this.size = Math.random() * 2 + 0.5;
+                    this.baseX = this.x;
+                    this.baseY = this.y;
+                    this.density = Math.random() * 30 + 1;
+                    this.vx = (Math.random() - 0.5) * 0.3;
+                    this.vy = (Math.random() - 0.5) * 0.3;
+                }
+
+                draw() {
+                    const theme = document.documentElement.getAttribute('data-theme');
+                    ctx.fillStyle = theme === 'light' ? 'rgba(0, 0, 0, 0.3)' : 'rgba(255, 255, 255, 0.3)';
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+
+                update() {
+                    if (mouse.x != null && mouse.y != null) {
+                        let dx = mouse.x - this.x;
+                        let dy = mouse.y - this.y;
+                        let distance = Math.sqrt(dx * dx + dy * dy);
+                        let forceDirectionX = dx / distance;
+                        let forceDirectionY = dy / distance;
+                        let maxDistance = mouse.radius;
+                        let force = (maxDistance - distance) / maxDistance;
+                        let directionX = forceDirectionX * force * this.density * 0.6;
+                        let directionY = forceDirectionY * force * this.density * 0.6;
+
+                        if (distance < mouse.radius) {
+                            this.x -= directionX;
+                            this.y -= directionY;
+                        } else {
+                            if (this.x !== this.baseX) {
+                                let dx = this.x - this.baseX;
+                                this.x -= dx / 10;
+                            }
+                            if (this.y !== this.baseY) {
+                                let dy = this.y - this.baseY;
+                                this.y -= dy / 10;
+                            }
+                        }
                     } else {
-                        if (this.x !== this.baseX) {
-                            let dx = this.x - this.baseX;
-                            this.x -= dx / 10;
-                        }
-                        if (this.y !== this.baseY) {
-                            let dy = this.y - this.baseY;
-                            this.y -= dy / 10;
-                        }
-                    }
-                } else {
-                    this.x += this.vx;
-                    this.y += this.vy;
+                        this.x += this.vx;
+                        this.y += this.vy;
 
-                    if (Math.abs(this.x - this.baseX) > 50) {
-                        this.vx *= -1;
+                        if (Math.abs(this.x - this.baseX) > 50) {
+                            this.vx *= -1;
+                        }
+                        if (Math.abs(this.y - this.baseY) > 50) {
+                            this.vy *= -1;
+                        }
                     }
-                    if (Math.abs(this.y - this.baseY) > 50) {
-                        this.vy *= -1;
-                    }
+
+                    this.draw();
                 }
-
-                this.draw();
             }
-        }
 
-        function init() {
-            particles = [];
-            const numberOfParticles = Math.floor((canvas.width * canvas.height) / 9000);
-            for (let i = 0; i < numberOfParticles; i++) {
-                particles.push(new Particle());
+            function init() {
+                particles = [];
+                const numberOfParticles = Math.floor((canvas.width * canvas.height) / 9000);
+                for (let i = 0; i < numberOfParticles; i++) {
+                    particles.push(new Particle());
+                }
             }
-        }
 
-        function animate() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            particles.forEach(particle => particle.update());
-            connectParticles();
-            requestAnimationFrame(animate);
-        }
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                particles.forEach(particle => particle.update());
+                connectParticles();
+                requestAnimationFrame(animate);
+            }
 
-        function connectParticles() {
-            const theme = document.documentElement.getAttribute('data-theme');
-            for (let i = 0; i < particles.length; i++) {
-                for (let j = i + 1; j < particles.length; j++) {
-                    let dx = particles[i].x - particles[j].x;
-                    let dy = particles[i].y - particles[j].y;
-                    let distance = Math.sqrt(dx * dx + dy * dy);
+            function connectParticles() {
+                const theme = document.documentElement.getAttribute('data-theme');
+                for (let i = 0; i < particles.length; i++) {
+                    for (let j = i + 1; j < particles.length; j++) {
+                        let dx = particles[i].x - particles[j].x;
+                        let dy = particles[i].y - particles[j].y;
+                        let distance = Math.sqrt(dx * dx + dy * dy);
 
-                    if (distance < 100) {
-                        ctx.strokeStyle = theme === 'light'
-                            ? `rgba(0, 0, 0, ${0.2 - distance / 500})`
-                            : `rgba(255, 255, 255, ${0.2 - distance / 500})`;
-                        ctx.lineWidth = 0.5;
-                        ctx.beginPath();
-                        ctx.moveTo(particles[i].x, particles[i].y);
-                        ctx.lineTo(particles[j].x, particles[j].y);
-                        ctx.stroke();
+                        if (distance < 100) {
+                            ctx.strokeStyle = theme === 'light'
+                                ? `rgba(0, 0, 0, ${0.2 - distance / 500})`
+                                : `rgba(255, 255, 255, ${0.2 - distance / 500})`;
+                            ctx.lineWidth = 0.5;
+                            ctx.beginPath();
+                            ctx.moveTo(particles[i].x, particles[i].y);
+                            ctx.lineTo(particles[j].x, particles[j].y);
+                            ctx.stroke();
+                        }
                     }
                 }
             }
-        }
 
-        init();
-        animate();
-
-        window.addEventListener('resize', () => {
             init();
-        });
+            animate();
 
-        // Nav scroll effect
-        const nav = document.getElementById('nav');
-        window.addEventListener('scroll', () => {
-            if (window.pageYOffset > 100) {
-                nav.classList.add('scrolled');
-            } else {
-                nav.classList.remove('scrolled');
-            }
-        });
+            window.addEventListener('resize', () => {
+                init();
+            });
 
-        // Theme toggle
-        const themeBtn = document.getElementById('themeBtn');
-        const themeIcon = document.getElementById('themeIcon');
-        const currentTheme = localStorage.getItem('theme') || 'dark';
+            // Nav scroll effect
+            const nav = document.getElementById('nav');
+            window.addEventListener('scroll', () => {
+                if (window.pageYOffset > 100) {
+                    nav.classList.add('scrolled');
+                } else {
+                    nav.classList.remove('scrolled');
+                }
+            });
 
-        document.documentElement.setAttribute('data-theme', currentTheme);
-        themeIcon.textContent = currentTheme === 'dark' ? '◐' : '◑';
-        themeIcon.style.color = currentTheme === 'dark' ? '#ffffff' : '#000000';
+            // Theme toggle
+            const themeBtn = document.getElementById('themeBtn');
+            const themeIcon = document.getElementById('themeIcon');
+            const currentTheme = localStorage.getItem('theme') || 'dark';
 
-        themeBtn.addEventListener('click', () => {
-            const theme = document.documentElement.getAttribute('data-theme');
-            const newTheme = theme === 'dark' ? 'light' : 'dark';
-            document.documentElement.setAttribute('data-theme', newTheme);
-            localStorage.setItem('theme', newTheme);
-            themeIcon.textContent = newTheme === 'dark' ? '◐' : '◑';
-            themeIcon.style.color = newTheme === 'dark' ? '#ffffff' : '#000000';
-        });
+            document.documentElement.setAttribute('data-theme', currentTheme);
+            themeIcon.textContent = currentTheme === 'dark' ? '◐' : '◑';
+            themeIcon.style.color = currentTheme === 'dark' ? '#ffffff' : '#000000';
 
-        // Journal Data - 引用外部JavaScript文件
+            themeBtn.addEventListener('click', () => {
+                const theme = document.documentElement.getAttribute('data-theme');
+                const newTheme = theme === 'dark' ? 'light' : 'dark';
+                document.documentElement.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+                themeIcon.textContent = newTheme === 'dark' ? '◐' : '◑';
+                themeIcon.style.color = newTheme === 'dark' ? '#ffffff' : '#000000';
+            });
+
+            // Journal Data - 引用外部JavaScript文件
 
 
-        // Render journals
-        function renderJournals(journalsToRender) {
-            const grid = document.getElementById('journalsGrid');
-            const noResults = document.getElementById('noResults');
+            // Render journals
+            function renderJournals(journalsToRender) {
+                const grid = document.getElementById('journalsGrid');
+                const noResults = document.getElementById('noResults');
 
-            if (journalsToRender.length === 0) {
-                grid.innerHTML = '';
-                noResults.style.display = 'block';
-                return;
-            }
+                if (journalsToRender.length === 0) {
+                    grid.innerHTML = '';
+                    noResults.style.display = 'block';
+                    return;
+                }
 
-            noResults.style.display = 'none';
-            grid.innerHTML = journalsToRender.map(journal => `
+                noResults.style.display = 'none';
+                grid.innerHTML = journalsToRender.map(journal => `
                 <div class="journal-card" onclick="openModal(${journals.indexOf(journal)})">
                     <!-- 上半部分：封面、标题、简称、分区 -->
                     <div class="journal-upper" style="min-height: 200px;">
@@ -1559,17 +1559,17 @@
                         <div class="journal-cover-container">
                             <div class="journal-cover">
                                 ${journal.coverImage ?
-                    (() => {
-                        const img = document.createElement('img');
-                        img.src = journal.coverImage;
-                        img.alt = journal.name;
-                        img.onerror = function () {
-                            this.parentElement.innerHTML = '<div class="journal-cover-placeholder">封面<br>暂缺</div>';
-                        };
-                        return img.outerHTML;
-                    })() :
-                    '<div class="journal-cover-placeholder">封面<br>暂缺</div>'
-                }
+                        (() => {
+                            const img = document.createElement('img');
+                            img.src = journal.coverImage;
+                            img.alt = journal.name;
+                            img.onerror = function () {
+                                this.parentElement.innerHTML = '<div class="journal-cover-placeholder">封面<br>暂缺</div>';
+                            };
+                            return img.outerHTML;
+                        })() :
+                        '<div class="journal-cover-placeholder">封面<br>暂缺</div>'
+                    }
                             </div>
                         </div>
                         <div class="journal-content">
@@ -1643,120 +1643,120 @@
                     </div>
                 </div>
             `).join('');
-        }
-
-        // Filter and sort
-        function filterAndSort() {
-            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-            const filterZone = document.getElementById('filterZone').value;
-            const filterRegion = document.getElementById('filterRegion').value;
-            const filterPublisher = document.getElementById('filterPublisher').value;
-            const sortBy = document.getElementById('sortBy').value;
-
-            let filtered = journals.filter(journal => {
-                const matchesSearch = journal.name.toLowerCase().includes(searchTerm) ||
-                    journal.abbr.toLowerCase().includes(searchTerm) ||
-                    journal.tags.some(tag => tag.toLowerCase().includes(searchTerm)) ||
-                    (journal.scope && journal.scope.toLowerCase().includes(searchTerm)) ||
-                    (journal.recentArticles && journal.recentArticles.toLowerCase().includes(searchTerm));
-
-                // 分区筛选 - 支持模糊匹配（如"4区(3区)"也能匹配"4区"）
-                const matchesZone = filterZone === 'all' || (journal.casZone && journal.casZone.includes(filterZone));
-
-                // 地区筛选
-                const matchesRegion = filterRegion === 'all' || journal.region === filterRegion;
-
-                // 出版社筛选 - 精确匹配
-                const matchesPublisher = filterPublisher === 'all' || journal.publisher === filterPublisher;
-
-                return matchesSearch && matchesZone && matchesRegion && matchesPublisher;
-            });
-
-            filtered.sort((a, b) => {
-                switch (sortBy) {
-                    case 'impact':
-                        return b.impactFactor - a.impactFactor;
-                    case 'zone':
-                        return a.casZone.localeCompare(b.casZone);
-                    case 'name':
-                        return a.name.localeCompare(b.name);
-                    default:
-                        return 0;
-                }
-            });
-
-            renderJournals(filtered);
-        }
-
-        // Modal
-        function openModal(index) {
-            const journal = journals[index];
-            const modal = document.getElementById('modal');
-            const modalTitle = document.getElementById('modalTitle');
-            const modalAbbr = document.getElementById('modalAbbr');
-            const modalCover = document.getElementById('modalCover');
-            const modalBody = document.getElementById('modalBody');
-
-            // 出版社国家映射
-            const publisherCountry = {
-                "Elsevier": "荷兰 🇳🇱",
-                "SIAM": "美国 🇺🇸",
-                "Springer": "德国 🇩🇪",
-                "Taylor & Francis": "英国 🇬🇧",
-                "Wiley": "美国 🇺🇸"
-            };
-
-            const country = publisherCountry[journal.publisher] || "国际 🌍";
-
-            modalTitle.textContent = journal.name;
-            modalAbbr.innerHTML = `${journal.abbr}<br><small style="color: var(--text-dim); font-size: 0.9rem;">${journal.chineseName || ''}</small> | 始于${journal.founded} | IF: ${journal.impactFactor}`;
-
-            // 在标题和简称下方添加研究方向，然后添加关键词标签
-            const modalHeaderText = document.querySelector('.modal-header-text');
-
-            // 移除现有的研究方向和标签
-            const existingResearchAreas = modalHeaderText.querySelector('.journal-research-areas');
-            const existingTags = modalHeaderText.querySelector('.journal-tags');
-            if (existingResearchAreas) {
-                existingResearchAreas.remove();
-            }
-            if (existingTags) {
-                existingTags.remove();
             }
 
-            // 添加研究方向（如果有）
-            if (journal.researchAreas) {
-                const researchAreasDiv = document.createElement('div');
-                researchAreasDiv.className = 'journal-research-areas';
-                researchAreasDiv.style.marginTop = '0.8rem';
-                researchAreasDiv.style.marginBottom = '0.5rem';
-                researchAreasDiv.innerHTML = `<span style="color: var(--text-dim); font-size: 0.9rem;"><strong>涉及的研究方向：</strong>${journal.researchAreas}</span>`;
-                modalHeaderText.appendChild(researchAreasDiv);
+            // Filter and sort
+            function filterAndSort() {
+                const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+                const filterZone = document.getElementById('filterZone').value;
+                const filterRegion = document.getElementById('filterRegion').value;
+                const filterPublisher = document.getElementById('filterPublisher').value;
+                const sortBy = document.getElementById('sortBy').value;
+
+                let filtered = journals.filter(journal => {
+                    const matchesSearch = journal.name.toLowerCase().includes(searchTerm) ||
+                        journal.abbr.toLowerCase().includes(searchTerm) ||
+                        journal.tags.some(tag => tag.toLowerCase().includes(searchTerm)) ||
+                        (journal.scope && journal.scope.toLowerCase().includes(searchTerm)) ||
+                        (journal.recentArticles && journal.recentArticles.toLowerCase().includes(searchTerm));
+
+                    // 分区筛选 - 支持模糊匹配（如"4区(3区)"也能匹配"4区"）
+                    const matchesZone = filterZone === 'all' || (journal.casZone && journal.casZone.includes(filterZone));
+
+                    // 地区筛选
+                    const matchesRegion = filterRegion === 'all' || journal.region === filterRegion;
+
+                    // 出版社筛选 - 精确匹配
+                    const matchesPublisher = filterPublisher === 'all' || journal.publisher === filterPublisher;
+
+                    return matchesSearch && matchesZone && matchesRegion && matchesPublisher;
+                });
+
+                filtered.sort((a, b) => {
+                    switch (sortBy) {
+                        case 'impact':
+                            return b.impactFactor - a.impactFactor;
+                        case 'zone':
+                            return a.casZone.localeCompare(b.casZone);
+                        case 'name':
+                            return a.name.localeCompare(b.name);
+                        default:
+                            return 0;
+                    }
+                });
+
+                renderJournals(filtered);
             }
 
-            // 添加关键词标签
-            const tagsDiv = document.createElement('div');
-            tagsDiv.className = 'journal-tags';
-            tagsDiv.style.marginTop = journal.researchAreas ? '0.5rem' : '1rem';
-            tagsDiv.style.marginBottom = '0';
-            tagsDiv.innerHTML = journal.tags.map(tag => `<span class="tag">${tag}</span>`).join('');
-            modalHeaderText.appendChild(tagsDiv);
+            // Modal
+            function openModal(index) {
+                const journal = journals[index];
+                const modal = document.getElementById('modal');
+                const modalTitle = document.getElementById('modalTitle');
+                const modalAbbr = document.getElementById('modalAbbr');
+                const modalCover = document.getElementById('modalCover');
+                const modalBody = document.getElementById('modalBody');
 
-            // 显示封面
-            if (journal.coverImage) {
-                const img = document.createElement('img');
-                img.src = journal.coverImage;
-                img.alt = journal.name;
-                img.onerror = function () {
-                    this.parentElement.innerHTML = '<div class="journal-cover-placeholder" style="height:100%;">封面加载失败</div>';
+                // 出版社国家映射
+                const publisherCountry = {
+                    "Elsevier": "荷兰 🇳🇱",
+                    "SIAM": "美国 🇺🇸",
+                    "Springer": "德国 🇩🇪",
+                    "Taylor & Francis": "英国 🇬🇧",
+                    "Wiley": "美国 🇺🇸"
                 };
-                modalCover.innerHTML = '';
-                modalCover.appendChild(img);
-            } else {
-                modalCover.innerHTML = `<div class="journal-cover-placeholder" style="height: 100%;">封面暂缺</div>`;
-            }
 
-            modalBody.innerHTML = `
+                const country = publisherCountry[journal.publisher] || "国际 🌍";
+
+                modalTitle.textContent = journal.name;
+                modalAbbr.innerHTML = `${journal.abbr}<br><small style="color: var(--text-dim); font-size: 0.9rem;">${journal.chineseName || ''}</small> | 始于${journal.founded} | IF: ${journal.impactFactor}`;
+
+                // 在标题和简称下方添加研究方向，然后添加关键词标签
+                const modalHeaderText = document.querySelector('.modal-header-text');
+
+                // 移除现有的研究方向和标签
+                const existingResearchAreas = modalHeaderText.querySelector('.journal-research-areas');
+                const existingTags = modalHeaderText.querySelector('.journal-tags');
+                if (existingResearchAreas) {
+                    existingResearchAreas.remove();
+                }
+                if (existingTags) {
+                    existingTags.remove();
+                }
+
+                // 添加研究方向（如果有）
+                if (journal.researchAreas) {
+                    const researchAreasDiv = document.createElement('div');
+                    researchAreasDiv.className = 'journal-research-areas';
+                    researchAreasDiv.style.marginTop = '0.8rem';
+                    researchAreasDiv.style.marginBottom = '0.5rem';
+                    researchAreasDiv.innerHTML = `<span style="color: var(--text-dim); font-size: 0.9rem;"><strong>涉及的研究方向：</strong>${journal.researchAreas}</span>`;
+                    modalHeaderText.appendChild(researchAreasDiv);
+                }
+
+                // 添加关键词标签
+                const tagsDiv = document.createElement('div');
+                tagsDiv.className = 'journal-tags';
+                tagsDiv.style.marginTop = journal.researchAreas ? '0.5rem' : '1rem';
+                tagsDiv.style.marginBottom = '0';
+                tagsDiv.innerHTML = journal.tags.map(tag => `<span class="tag">${tag}</span>`).join('');
+                modalHeaderText.appendChild(tagsDiv);
+
+                // 显示封面
+                if (journal.coverImage) {
+                    const img = document.createElement('img');
+                    img.src = journal.coverImage;
+                    img.alt = journal.name;
+                    img.onerror = function () {
+                        this.parentElement.innerHTML = '<div class="journal-cover-placeholder" style="height:100%;">封面加载失败</div>';
+                    };
+                    modalCover.innerHTML = '';
+                    modalCover.appendChild(img);
+                } else {
+                    modalCover.innerHTML = `<div class="journal-cover-placeholder" style="height: 100%;">封面暂缺</div>`;
+                }
+
+                modalBody.innerHTML = `
                 <div class="info-section">
                     <h3>期刊基本信息</h3>
                     <div class="info-grid">
@@ -1862,229 +1862,229 @@
                 </div>
             `;
 
-            modal.classList.add('active');
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeModal() {
-            const modal = document.getElementById('modal');
-            modal.classList.remove('active');
-            document.body.style.overflow = '';
-        }
-
-        // Click outside to close
-        document.getElementById('modal').addEventListener('click', (e) => {
-            if (e.target.id === 'modal') {
-                closeModal();
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
             }
-        });
 
-        // ESC to close
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                closeModal();
+            function closeModal() {
+                const modal = document.getElementById('modal');
+                modal.classList.remove('active');
+                document.body.style.overflow = '';
             }
-        });
 
-        // 定义全局函数用于语言切换
-        window.switchScopeLanguage = function (lang, btn) {
-            const container = btn.closest('.info-section');
-            const enText = container.querySelector('.scope-en');
-            const cnText = container.querySelector('.scope-cn');
-            const buttons = container.querySelectorAll('.lang-btn');
-            const scopeContent = container.querySelector('.scope-content');
-
-            // 添加切换动画效果
-            scopeContent.classList.add('switching');
-
-            // 延迟执行切换，创建平滑过渡
-            setTimeout(() => {
-                // 更新按钮状态
-                buttons.forEach(b => {
-                    b.classList.remove('active');
-                });
-                btn.classList.add('active');
-
-                // 切换文本显示
-                if (lang === 'en') {
-                    enText.style.display = 'block';
-                    cnText.style.display = 'none';
-                } else {
-                    enText.style.display = 'none';
-                    cnText.style.display = 'block';
+            // Click outside to close
+            document.getElementById('modal').addEventListener('click', (e) => {
+                if (e.target.id === 'modal') {
+                    closeModal();
                 }
+            });
 
-                // 移除切换动画类
-                scopeContent.classList.remove('switching');
-            }, 150);
-        }
-
-        // 单个图标自动切换语言函数
-        window.toggleScopeLanguage = function (btn) {
-            const container = btn.closest('.info-section');
-            const enText = container.querySelector('.scope-en');
-            const cnText = container.querySelector('.scope-cn');
-            const scopeContent = container.querySelector('.scope-content');
-
-            // 检查当前显示的语言
-            const isEnglish = enText.style.display !== 'none';
-
-            // 添加切换动画效果
-            scopeContent.classList.add('switching');
-
-            // 延迟执行切换，创建平滑过渡
-            setTimeout(() => {
-                if (isEnglish) {
-                    // 切换到中文
-                    enText.style.display = 'none';
-                    cnText.style.display = 'block';
-                    btn.classList.add('active-lang');
-                } else {
-                    // 切换到英文
-                    enText.style.display = 'block';
-                    cnText.style.display = 'none';
-                    btn.classList.remove('active-lang');
+            // ESC to close
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    closeModal();
                 }
+            });
 
-                // 移除切换动画类
-                scopeContent.classList.remove('switching');
+            // 定义全局函数用于语言切换
+            window.switchScopeLanguage = function (lang, btn) {
+                const container = btn.closest('.info-section');
+                const enText = container.querySelector('.scope-en');
+                const cnText = container.querySelector('.scope-cn');
+                const buttons = container.querySelectorAll('.lang-btn');
+                const scopeContent = container.querySelector('.scope-content');
 
-                // 添加图标旋转效果
-                const icon = btn.querySelector('.translate-icon');
-                icon.style.transform = 'rotate(360deg)';
+                // 添加切换动画效果
+                scopeContent.classList.add('switching');
+
+                // 延迟执行切换，创建平滑过渡
                 setTimeout(() => {
-                    icon.style.transform = 'rotate(0deg)';
-                }, 300);
-            }, 150);
-        }
+                    // 更新按钮状态
+                    buttons.forEach(b => {
+                        b.classList.remove('active');
+                    });
+                    btn.classList.add('active');
 
-        // 自动计算统计数据
-        function calculateStats() {
-            const totalJournals = journals.length;
-            const casZone1Count = journals.filter(journal => journal.casZone === '1区').length;
-            const casZone2Count = journals.filter(journal => journal.casZone === '2区').length;
+                    // 切换文本显示
+                    if (lang === 'en') {
+                        enText.style.display = 'block';
+                        cnText.style.display = 'none';
+                    } else {
+                        enText.style.display = 'none';
+                        cnText.style.display = 'block';
+                    }
 
-            // 更新DOM
-            document.getElementById('totalJournals').textContent = totalJournals;
-            document.getElementById('casZone1Count').textContent = casZone1Count;
-            document.getElementById('casZone2Count').textContent = casZone2Count;
-        }
+                    // 移除切换动画类
+                    scopeContent.classList.remove('switching');
+                }, 150);
+            }
 
-        // Event listeners
-        document.getElementById('searchInput').addEventListener('input', filterAndSort);
-        document.getElementById('filterZone').addEventListener('change', filterAndSort);
-        document.getElementById('filterRegion').addEventListener('change', filterAndSort);
-        document.getElementById('filterPublisher').addEventListener('change', filterAndSort);
-        document.getElementById('sortBy').addEventListener('change', filterAndSort);
+            // 单个图标自动切换语言函数
+            window.toggleScopeLanguage = function (btn) {
+                const container = btn.closest('.info-section');
+                const enText = container.querySelector('.scope-en');
+                const cnText = container.querySelector('.scope-cn');
+                const scopeContent = container.querySelector('.scope-content');
 
-        // 动态生成筛选选项
-        function populateFilterOptions() {
-            // 获取所有存在的字段值
-            const casZones = [...new Set(journals.map(j => j.casZone).filter(Boolean))].sort();
-            const regions = [...new Set(journals.map(j => j.region).filter(Boolean))].sort();
-            const publishers = [...new Set(journals.map(j => j.publisher).filter(Boolean))].sort();
+                // 检查当前显示的语言
+                const isEnglish = enText.style.display !== 'none';
 
-            // 生成分区筛选选项
-            const filterZone = document.getElementById('filterZone');
-            filterZone.innerHTML = '<option value="all">所有分区</option>';
-            casZones.forEach(zone => {
-                const option = document.createElement('option');
-                option.value = zone;
-                option.textContent = `中科院${zone}`;
-                filterZone.appendChild(option);
-            });
+                // 添加切换动画效果
+                scopeContent.classList.add('switching');
 
-            // 生成地区筛选选项
-            const filterRegion = document.getElementById('filterRegion');
-            filterRegion.innerHTML = '<option value="all">所有地区</option>';
-            regions.forEach(region => {
-                const option = document.createElement('option');
-                option.value = region;
-                option.textContent = region;
-                filterRegion.appendChild(option);
-            });
+                // 延迟执行切换，创建平滑过渡
+                setTimeout(() => {
+                    if (isEnglish) {
+                        // 切换到中文
+                        enText.style.display = 'none';
+                        cnText.style.display = 'block';
+                        btn.classList.add('active-lang');
+                    } else {
+                        // 切换到英文
+                        enText.style.display = 'block';
+                        cnText.style.display = 'none';
+                        btn.classList.remove('active-lang');
+                    }
 
-            // 生成出版社筛选选项
-            const filterPublisher = document.getElementById('filterPublisher');
-            filterPublisher.innerHTML = '<option value="all">所有出版社</option>';
-            publishers.forEach(publisher => {
-                const option = document.createElement('option');
-                option.value = publisher;
-                option.textContent = publisher;
-                filterPublisher.appendChild(option);
-            });
-        }
+                    // 移除切换动画类
+                    scopeContent.classList.remove('switching');
 
-        // 初始渲染
-        populateFilterOptions(); // 动态生成筛选选项
-        calculateStats(); // 计算并显示统计数据
-        filterAndSort(); // 确保按影响因子排序后渲染
+                    // 添加图标旋转效果
+                    const icon = btn.querySelector('.translate-icon');
+                    icon.style.transform = 'rotate(360deg)';
+                    setTimeout(() => {
+                        icon.style.transform = 'rotate(0deg)';
+                    }, 300);
+                }, 150);
+            }
 
-        // 密码验证功能
-        const CORRECT_PASSWORD = '962464';
-        const PASSWORD_KEY = 'academicToolsAuthenticated'; // 统一存储键名
-        const PASSWORD_EXPIRY = 24 * 60 * 60 * 1000; // 24小时有效期
+            // 自动计算统计数据
+            function calculateStats() {
+                const totalJournals = journals.length;
+                const casZone1Count = journals.filter(journal => journal.casZone === '1区').length;
+                const casZone2Count = journals.filter(journal => journal.casZone === '2区').length;
 
-        // 检查是否已经验证过
-        function checkAuthentication() {
-            const authData = localStorage.getItem(PASSWORD_KEY);
-            if (!authData) return false;
+                // 更新DOM
+                document.getElementById('totalJournals').textContent = totalJournals;
+                document.getElementById('casZone1Count').textContent = casZone1Count;
+                document.getElementById('casZone2Count').textContent = casZone2Count;
+            }
 
-            try {
-                const { timestamp } = JSON.parse(authData);
-                const now = new Date().getTime();
+            // Event listeners
+            document.getElementById('searchInput').addEventListener('input', filterAndSort);
+            document.getElementById('filterZone').addEventListener('change', filterAndSort);
+            document.getElementById('filterRegion').addEventListener('change', filterAndSort);
+            document.getElementById('filterPublisher').addEventListener('change', filterAndSort);
+            document.getElementById('sortBy').addEventListener('change', filterAndSort);
 
-                // 检查是否过期
-                if (now - timestamp > PASSWORD_EXPIRY) {
+            // 动态生成筛选选项
+            function populateFilterOptions() {
+                // 获取所有存在的字段值
+                const casZones = [...new Set(journals.map(j => j.casZone).filter(Boolean))].sort();
+                const regions = [...new Set(journals.map(j => j.region).filter(Boolean))].sort();
+                const publishers = [...new Set(journals.map(j => j.publisher).filter(Boolean))].sort();
+
+                // 生成分区筛选选项
+                const filterZone = document.getElementById('filterZone');
+                filterZone.innerHTML = '<option value="all">所有分区</option>';
+                casZones.forEach(zone => {
+                    const option = document.createElement('option');
+                    option.value = zone;
+                    option.textContent = `中科院${zone}`;
+                    filterZone.appendChild(option);
+                });
+
+                // 生成地区筛选选项
+                const filterRegion = document.getElementById('filterRegion');
+                filterRegion.innerHTML = '<option value="all">所有地区</option>';
+                regions.forEach(region => {
+                    const option = document.createElement('option');
+                    option.value = region;
+                    option.textContent = region;
+                    filterRegion.appendChild(option);
+                });
+
+                // 生成出版社筛选选项
+                const filterPublisher = document.getElementById('filterPublisher');
+                filterPublisher.innerHTML = '<option value="all">所有出版社</option>';
+                publishers.forEach(publisher => {
+                    const option = document.createElement('option');
+                    option.value = publisher;
+                    option.textContent = publisher;
+                    filterPublisher.appendChild(option);
+                });
+            }
+
+            // 初始渲染
+            populateFilterOptions(); // 动态生成筛选选项
+            calculateStats(); // 计算并显示统计数据
+            filterAndSort(); // 确保按影响因子排序后渲染
+
+            // 密码验证功能
+            const CORRECT_PASSWORD = '962464';
+            const PASSWORD_KEY = 'academicToolsAuthenticated'; // 统一存储键名
+            const PASSWORD_EXPIRY = 24 * 60 * 60 * 1000; // 24小时有效期
+
+            // 检查是否已经验证过
+            function checkAuthentication() {
+                const authData = localStorage.getItem(PASSWORD_KEY);
+                if (!authData) return false;
+
+                try {
+                    const { timestamp } = JSON.parse(authData);
+                    const now = new Date().getTime();
+
+                    // 检查是否过期
+                    if (now - timestamp > PASSWORD_EXPIRY) {
+                        localStorage.removeItem(PASSWORD_KEY);
+                        return false;
+                    }
+
+                    return true;
+                } catch (e) {
                     localStorage.removeItem(PASSWORD_KEY);
                     return false;
                 }
-
-                return true;
-            } catch (e) {
-                localStorage.removeItem(PASSWORD_KEY);
-                return false;
             }
-        }
 
-        // 验证密码
-        function checkPassword() {
-            const input = document.getElementById('passwordInput');
-            const error = document.getElementById('passwordError');
-            const password = input.value.trim();
+            // 验证密码
+            function checkPassword() {
+                const input = document.getElementById('passwordInput');
+                const error = document.getElementById('passwordError');
+                const password = input.value.trim();
 
-            if (password === CORRECT_PASSWORD) {
-                // 保存验证状态
-                const authData = {
-                    timestamp: new Date().getTime(),
-                    authenticated: true
-                };
-                localStorage.setItem(PASSWORD_KEY, JSON.stringify(authData));
+                if (password === CORRECT_PASSWORD) {
+                    // 保存验证状态
+                    const authData = {
+                        timestamp: new Date().getTime(),
+                        authenticated: true
+                    };
+                    localStorage.setItem(PASSWORD_KEY, JSON.stringify(authData));
 
-                // 隐藏密码模态框，显示主要内容
-                document.getElementById('passwordModal').style.display = 'none';
-                document.getElementById('mainContent').classList.add('authenticated');
+                    // 隐藏密码模态框，显示主要内容
+                    document.getElementById('passwordModal').style.display = 'none';
+                    document.getElementById('mainContent').classList.add('authenticated');
 
-                showToast('验证成功！欢迎使用AI期刊导航工具');
-            } else {
-                error.style.display = 'block';
-                input.style.borderColor = '#ff4757';
-                input.value = '';
-                input.focus();
+                    showToast('验证成功！欢迎使用AI期刊导航工具');
+                } else {
+                    error.style.display = 'block';
+                    input.style.borderColor = '#ff4757';
+                    input.value = '';
+                    input.focus();
 
-                setTimeout(() => {
-                    error.style.display = 'none';
-                    input.style.borderColor = '';
-                }, 3000);
+                    setTimeout(() => {
+                        error.style.display = 'none';
+                        input.style.borderColor = '';
+                    }, 3000);
+                }
             }
-        }
 
-        // 显示提示消息
-        function showToast(message) {
-            // 创建toast元素
-            const toast = document.createElement('div');
-            toast.textContent = message;
-            toast.style.cssText = `
+            // 显示提示消息
+            function showToast(message) {
+                // 创建toast元素
+                const toast = document.createElement('div');
+                toast.textContent = message;
+                toast.style.cssText = `
                 position: fixed;
                 top: 20px;
                 right: 20px;
@@ -2098,48 +2098,48 @@
                 transform: translateY(-20px);
                 transition: all 0.3s ease;
             `;
-            
-            document.body.appendChild(toast);
-            
-            // 显示动画
-            setTimeout(() => {
-                toast.style.opacity = '1';
-                toast.style.transform = 'translateY(0)';
-            }, 100);
-            
-            // 自动隐藏
-            setTimeout(() => {
-                toast.style.opacity = '0';
-                toast.style.transform = 'translateY(-20px)';
+
+                document.body.appendChild(toast);
+
+                // 显示动画
                 setTimeout(() => {
-                    document.body.removeChild(toast);
-                }, 300);
-            }, 2000);
-        }
+                    toast.style.opacity = '1';
+                    toast.style.transform = 'translateY(0)';
+                }, 100);
 
-        // 回车键验证
-        document.getElementById('passwordInput').addEventListener('keypress', function (e) {
-            if (e.key === 'Enter') {
-                checkPassword();
+                // 自动隐藏
+                setTimeout(() => {
+                    toast.style.opacity = '0';
+                    toast.style.transform = 'translateY(-20px)';
+                    setTimeout(() => {
+                        document.body.removeChild(toast);
+                    }, 300);
+                }, 2000);
             }
-        });
 
-        // 页面加载时检查验证状态
-        window.addEventListener('DOMContentLoaded', function () {
-            if (checkAuthentication()) {
-                // 已经验证过，直接显示内容
-                document.getElementById('passwordModal').style.display = 'none';
-                document.getElementById('mainContent').classList.add('authenticated');
-            } else {
-                // 需要验证，显示密码模态框
-                document.getElementById('passwordModal').style.display = 'flex';
-                document.getElementById('passwordInput').focus();
-            }
-        });
+            // 回车键验证
+            document.getElementById('passwordInput').addEventListener('keypress', function (e) {
+                if (e.key === 'Enter') {
+                    checkPassword();
+                }
+            });
 
-        // 使密码验证函数全局可用
-        window.checkPassword = checkPassword;
-    </script>
+            // 页面加载时检查验证状态
+            window.addEventListener('DOMContentLoaded', function () {
+                if (checkAuthentication()) {
+                    // 已经验证过，直接显示内容
+                    document.getElementById('passwordModal').style.display = 'none';
+                    document.getElementById('mainContent').classList.add('authenticated');
+                } else {
+                    // 需要验证，显示密码模态框
+                    document.getElementById('passwordModal').style.display = 'flex';
+                    document.getElementById('passwordInput').focus();
+                }
+            });
+
+            // 使密码验证函数全局可用
+            window.checkPassword = checkPassword;
+        </script>
 </body>
 
 </html>
