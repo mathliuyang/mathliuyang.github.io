@@ -494,6 +494,7 @@
             text-align: center;
             width: 100%;
             box-sizing: border-box;
+            min-height: 3.9rem; /* 3行文字高度：0.8rem * 1.3 * 3 = 3.12rem + padding */
         }
 
         .journal-name {
@@ -504,7 +505,7 @@
             word-break: break-word;
             overflow-wrap: break-word;
             display: -webkit-box;
-            -webkit-line-clamp: 2;
+            -webkit-line-clamp: 3;
             -webkit-box-orient: vertical;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -531,6 +532,11 @@
                 width: 80px;
                 height: 112px;
             }
+            
+            /* 调整期刊信息容器高度 */
+            .cover-journal-info {
+                min-height: 3.5rem; /* 平板端3行高度 */
+            }
         }
 
         @media (max-width: 480px) {
@@ -551,6 +557,17 @@
             .paper-cover {
                 width: 70px;
                 height: 98px;
+            }
+            
+            /* 小屏幕下调整期刊信息 */
+            .cover-journal-info {
+                min-height: 3.2rem; /* 移动端3行高度 */
+                padding: 0.3rem 0.4rem;
+            }
+            
+            .journal-name {
+                font-size: 0.7rem;
+                line-height: 1.25;
             }
         }
 
