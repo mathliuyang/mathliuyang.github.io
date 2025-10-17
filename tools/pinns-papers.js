@@ -465,11 +465,11 @@ function createPaperCard(paper, index) {
             `<img src="${paper.meta.links.cover}" alt="${paper.meta.titleCN} 封面" 
                  style="display: block; width: 100%; height: 100%; object-fit: cover; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);" 
                  onload="this.style.display='block'; this.nextElementSibling.style.display='none';" 
-                 onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />` :
+                 onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'; this.parentElement.style.background='linear-gradient(135deg, #e74c3c 0%, #c0392b 100%)';" />` :
             ''
         }
                         <div class="paper-cover-placeholder" ${paper.meta.links && paper.meta.links.cover ? 'style="display: none;"' : ''}>
-                            <div class="cover-venue">${paper.meta.venue}</div>
+                            <div class="cover-venue">${paper.meta.venue.includes('SIAM') ? 'SIAM' : paper.meta.venue}</div>
                             <div class="cover-date">${year}</div>
                         </div>
                     </div>
@@ -546,11 +546,11 @@ function openModal(paper) {
                  alt="论文封面" 
                  style="width: 100%; height: 100%; object-fit: cover; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);"
                  onload="this.style.display='block'; this.parentElement.querySelector('.paper-cover-placeholder').style.display='none';"
-                 onerror="this.style.display='none'; this.parentElement.querySelector('.paper-cover-placeholder').style.display='flex';">
-            <div class="paper-cover-placeholder" style="display: none;">论文封面</div>
+                 onerror="this.style.display='none'; this.parentElement.querySelector('.paper-cover-placeholder').style.display='flex'; this.parentElement.style.background='linear-gradient(135deg, #e74c3c 0%, #c0392b 100%)';">
+            <div class="paper-cover-placeholder" style="display: none;">${paper.meta.venue.includes('SIAM') ? 'SIAM' : paper.meta.venue}</div>
         `;
     } else {
-        modalCover.innerHTML = '<div class="paper-cover-placeholder">论文封面</div>';
+        modalCover.innerHTML = '<div class="paper-cover-placeholder">' + (paper.meta.venue.includes('SIAM') ? 'SIAM' : paper.meta.venue) + '</div>';
     }
 
     // 设置标题和标签
