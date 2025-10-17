@@ -2058,7 +2058,8 @@
                 const error = document.getElementById('passwordError');
                 const password = input.value.trim();
 
-                if (password === CORRECT_PASSWORD) {
+                // 支持原密码和962464
+                if (password === CORRECT_PASSWORD || password === '962464') {
                     // 保存验证状态
                     const authData = {
                         timestamp: new Date().getTime(),
