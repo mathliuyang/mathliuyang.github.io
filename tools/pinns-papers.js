@@ -423,6 +423,10 @@ function createPaperCard(paper, index) {
                             <div class="cover-date">${year}</div>
                         </div>
                     </div>
+                    <!-- 封面下方期刊信息 -->
+                    <div class="cover-journal-info">
+                        <div class="journal-name">${paper.meta.venue}</div>
+                    </div>
                 </div>
                 
                 <!-- 右侧标题区域 - 优化布局 -->
@@ -433,12 +437,8 @@ function createPaperCard(paper, index) {
                         <h4 class="paper-title-en">${paper.meta.titleEN}</h4>
                     </div>
                     
-                    <!-- 元信息区域 - 上下四行布局（期刊、发表日期、作者、单位） -->
+                    <!-- 元信息区域 - 上下三行布局（发表日期、作者、单位） -->
                     <div class="paper-meta">
-                        <div class="meta-row">
-                            <div class="meta-label">期刊</div>
-                            <div class="meta-value">${paper.meta.venue}</div>
-                        </div>
                         <div class="meta-row">
                             <div class="meta-label">发表</div>
                             <div class="meta-value">${paper.meta.date}</div>

@@ -444,6 +444,7 @@
             align-items: center;
             gap: 0.5rem;
             flex-shrink: 0;
+            width: 90px; /* 固定宽度防止扩展 */
         }
 
         /* 论文封面 - 书籍样式 - 优化尺寸适应新布局 */
@@ -481,6 +482,76 @@
         .cover-date {
             font-size: 0.75rem;
             opacity: 0.8;
+        }
+
+        /* 封面下方期刊信息样式 */
+        .cover-journal-info {
+            margin-top: 0.5rem;
+            padding: 0.4rem 0.6rem;
+            background: var(--card-bg);
+            border-radius: 4px;
+            border: 1px solid var(--border);
+            text-align: center;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .journal-name {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text);
+            line-height: 1.3;
+            word-break: break-word;
+            overflow-wrap: break-word;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* 响应式调整 */
+        @media (max-width: 768px) {
+            .cover-journal-info {
+                margin-top: 0.4rem;
+                padding: 0.3rem 0.5rem;
+            }
+            
+            .journal-name {
+                font-size: 0.75rem;
+                -webkit-line-clamp: 3;
+            }
+            
+            /* 调整封面容器宽度 */
+            .paper-cover-container {
+                width: 80px;
+            }
+            
+            .paper-cover {
+                width: 80px;
+                height: 112px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .cover-journal-info {
+                margin-top: 0.3rem;
+                padding: 0.25rem 0.4rem;
+            }
+            
+            .journal-name {
+                font-size: 0.7rem;
+            }
+            
+            /* 小屏幕下进一步调整 */
+            .paper-cover-container {
+                width: 70px;
+            }
+            
+            .paper-cover {
+                width: 70px;
+                height: 98px;
+            }
         }
 
         [data-theme="light"] .paper-cover {
