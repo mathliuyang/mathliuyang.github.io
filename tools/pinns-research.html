@@ -282,7 +282,7 @@
             display: flex;
             flex-direction: column;
             gap: 0;
-            min-height: 380px;
+            min-height: 480px; /* 固定最小高度，确保卡片大小统一 */
             animation: fadeInUp 0.6s ease forwards;
             opacity: 0;
             transform: translateY(20px);
@@ -290,6 +290,40 @@
             max-width: 400px;
             justify-self: center;
             backdrop-filter: blur(10px);
+        }
+
+        /* 论文卡片上栏 - 固定高度区域 */
+        .paper-upper {
+            padding: 1.5rem 1.5rem 1rem;
+            display: flex;
+            gap: 1.2rem;
+            align-items: flex-start;
+            position: relative;
+            z-index: 2;
+            min-height: 180px; /* 固定上栏高度 */
+        }
+
+        /* 论文卡片中栏 - 弹性内容区域 */
+        .paper-middle {
+            padding: 0 1.5rem 1rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            position: relative;
+            z-index: 2;
+            min-height: 200px; /* 确保中栏有最小高度 */
+        }
+
+        /* 论文卡片下栏 - 固定底部区域 */
+        .paper-lower {
+            padding: 1rem 1.5rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            position: relative;
+            z-index: 2;
+            border-top: 1px solid var(--border);
         }
 
         @keyframes fadeInUp {
@@ -494,6 +528,7 @@
             justify-content: flex-start;
             gap: 0.6rem;
             overflow: hidden;
+            min-height: 150px; /* 确保头部内容区域高度一致 */
         }
 
         .title-section {
@@ -713,6 +748,8 @@
             min-height: 2rem;
             align-items: flex-start;
             flex-shrink: 0;
+            max-height: 2.5rem; /* 限制标签区域最大高度，约3行 */
+            overflow: hidden;
         }
 
         .tag {
