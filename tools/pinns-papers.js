@@ -204,7 +204,7 @@ let pinnsPapers = [
             "unit": "美国布朗大学应用数学系",
             "venue": "SIAM Journal on Scientific Computing",
             "date": "2019年8月",
-            "tags": ["科学机器学习", "分数阶微积分", "物理信息神经网络", "反常扩散", "参数识别"],
+            "tags": "科学机器学习, 分数阶微积分, 物理信息神经网络, 反常扩散, 参数识别",
             "links": {
                 "paper": "https://epubs.siam.org/doi/10.1137/18M1229845",
                 "download": "https://www.jianguoyun.com/p/DYFM-hwQ7P3jDRjqzpUGIAA",
