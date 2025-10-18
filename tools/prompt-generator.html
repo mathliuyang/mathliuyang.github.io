@@ -897,7 +897,7 @@
                                 <div style="text-align: center; padding: 3rem 0; color: var(--text-dim);">
                                     <div style="font-size: 3rem; margin-bottom: 1rem;">📝</div>
                                     <h3 style="margin-bottom: 1rem; color: var(--text);">选择模板开始使用</h3>
-                                    <p>请从上方选择模板，或选择"通用模板"进行自定义生成</p>
+                                    <p>请从上方选择模板</p>
                                 </div>
                             </div>
                         </div>
@@ -1123,12 +1123,15 @@
                         return;
                     }
 
+                    // 立即显示完整的模板提示词，让用户了解模板内容
+                    document.getElementById('output').value = template.content;
+
                     // Extract dynamic fields from template content
                     const dynamicFields = extractDynamicFields(template.content);
 
                     if (dynamicFields.length === 0) {
                         console.warn(`No dynamic fields found in template "${templateId}"`);
-                        dynamicForm.innerHTML = '<div class="info-message">此模板无需额外输入</div>';
+                        dynamicForm.innerHTML = '<div class="info-message">此模板无需额外输入，可直接使用</div>';
                         return;
                     }
 
