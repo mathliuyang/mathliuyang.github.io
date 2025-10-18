@@ -308,7 +308,38 @@
 
         .form-group {
             margin-bottom: 1.5rem;
-            position: relative;
+        }
+
+        .dynamic-form-indicator {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .empty-state {
+            background: var(--bg-secondary);
+            border: 2px dashed var(--border);
+            border-radius: 1rem;
+            margin: 2rem 0;
+            transition: all 0.3s ease;
+        }
+
+        .empty-state:hover {
+            border-color: var(--primary);
+            background: var(--bg-primary);
+        }
+
+        .form-label.required::after {
+            content: ' *';
+            color: #ff4757;
+            font-weight: bold;
+        }    position: relative;
         }
 
         .form-label {
@@ -862,71 +893,13 @@
 
                         <!-- 动态表单容器 -->
                         <div id="dynamicForm">
-                            <!-- 默认显示原有表单 -->
-                            <div class="form-group">
-                                <label class="form-label">研究主题</label>
-                                <input type="text" class="form-input" id="topic" placeholder="例如：深度学习在医学影像中的应用">
-                            </div>
-
-                            <div class="form-group">
-                                <label class="form-label">任务类型</label>
-                                <select class="form-select" id="taskType">
-                                    <option value="literature-review">文献综述</option>
-                                    <option value="hypothesis">研究假设生成</option>
-                                    <option value="methodology">方法论设计</option>
-                                    <option value="abstract">摘要撰写</option>
-                                    <option value="introduction">引言写作</option>
-                                    <option value="discussion">讨论部分</option>
-                                    <option value="analysis">数据分析</option>
-                                    <option value="tool-recommendation">科研工具推荐</option>
-                                </select>
-                            </div>
-
-                            <div class="form-group">
-                                <label class="form-label">学科领域</label>
-                                <select class="form-select" id="field">
-                                    <option value="computer-science">计算机科学</option>
-                                    <option value="biology">生物学</option>
-                                    <option value="medicine">医学</option>
-                                    <option value="physics">物理学</option>
-                                    <option value="chemistry">化学</option>
-                                    <option value="economics">经济学</option>
-                                    <option value="psychology">心理学</option>
-                                    <option value="other">其他</option>
-                                </select>
-                            </div>
-
-                            <div class="form-group">
-                                <label class="form-label">写作风格</label>
-                                <div class="radio-group">
-                                    <label class="radio-item">
-                                        <input type="radio" name="style" value="formal" checked>
-                                        <span>正式</span>
-                                    </label>
-                                    <label class="radio-item">
-                                        <input type="radio" name="style" value="casual">
-                                        <span>通俗</span>
-                                    </label>
-                                    <label class="radio-item">
-                                        <input type="radio" name="style" value="technical">
-                                        <span>技术性</span>
-                                    </label>
+                            <!-- 未选择模板时的空状态 -->
+                            <div class="empty-state">
+                                <div style="text-align: center; padding: 3rem 0; color: var(--text-dim);">
+                                    <div style="font-size: 3rem; margin-bottom: 1rem;">📝</div>
+                                    <h3 style="margin-bottom: 1rem; color: var(--text);">选择模板开始使用</h3>
+                                    <p>请从上方选择模板，或选择"通用模板"进行自定义生成</p>
                                 </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label class="form-label">字数要求</label>
-                                <select class="form-select" id="length">
-                                    <option value="short">简短 (200-300字)</option>
-                                    <option value="medium" selected>中等 (500-800字)</option>
-                                    <option value="long">详细 (1000-1500字)</option>
-                                </select>
-                            </div>
-
-                            <div class="form-group">
-                                <label class="form-label">额外要求（可选）</label>
-                                <textarea class="form-textarea" id="requirements"
-                                    placeholder="例如：需要包含最新的研究进展，引用权威文献..."></textarea>
                             </div>
                         </div>
 
@@ -1091,6 +1064,12 @@
             function initializeTemplateSelector() {
                 const templateSelect = document.getElementById('templateSelect');
                 templateSelect.innerHTML = '<option value="">请选择模板...</option>';
+                
+                // 添加通用模板选项
+                const generalOption = document.createElement('option');
+                generalOption.value = 'general';
+                generalOption.textContent = '通用模板';
+                templateSelect.appendChild(generalOption);
 
                 Object.entries(window.templates).forEach(([id, template]) => {
                     const option = document.createElement('option');
@@ -1131,16 +1110,31 @@
                     }
 
                     if (!templateId) {
-                        // Reset to default form
+                        // Reset to empty state
                         dynamicForm.innerHTML = `
-                        <!-- 默认显示原有表单 -->
+                            <div class="empty-state">
+                                <div style="text-align: center; padding: 3rem 0; color: var(--text-dim);">
+                                    <div style="font-size: 3rem; margin-bottom: 1rem;">📝</div>
+                                    <h3 style="margin-bottom: 1rem; color: var(--text);">选择模板开始使用</h3>
+                                    <p>请从上方选择模板，或选择"通用模板"进行自定义生成</p>
+                                </div>
+                            </div>
+                        `;
+                        return;
+                    }
+
+                    if (templateId === 'general') {
+                        // Show general template form
+                        dynamicForm.innerHTML = `
+                        <!-- 通用模板表单 -->
+                        <div class="dynamic-form-indicator">通用模板</div>
                         <div class="form-group">
-                            <label class="form-label">研究主题</label>
+                            <label class="form-label required">研究主题</label>
                             <input type="text" class="form-input" id="topic" placeholder="例如：深度学习在医学影像中的应用">
                         </div>
 
                         <div class="form-group">
-                            <label class="form-label">任务类型</label>
+                            <label class="form-label required">任务类型</label>
                             <select class="form-select" id="taskType">
                                 <option value="literature-review">文献综述</option>
                                 <option value="hypothesis">研究假设生成</option>
@@ -1154,7 +1148,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label class="form-label">学科领域</label>
+                            <label class="form-label required">学科领域</label>
                             <select class="form-select" id="field">
                                 <option value="computer-science">计算机科学</option>
                                 <option value="biology">生物学</option>
@@ -1168,7 +1162,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label class="form-label">写作风格</label>
+                            <label class="form-label required">写作风格</label>
                             <div class="radio-group">
                                 <label class="radio-item">
                                     <input type="radio" name="style" value="formal" checked>
@@ -1186,7 +1180,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label class="form-label">字数要求</label>
+                            <label class="form-label required">字数要求</label>
                             <select class="form-select" id="length">
                                 <option value="short">简短 (200-300字)</option>
                                 <option value="medium" selected>中等 (500-800字)</option>
@@ -1439,11 +1433,14 @@
             function generatePrompt() {
                 const templateId = document.getElementById('templateSelect').value;
 
-                if (templateId) {
-                    // 使用模板生成
-                    generateFromTemplate(templateId);
-                } else {
-                    // 使用原有逻辑生成
+                // Check if template is selected
+                if (!templateId) {
+                    showToast('请先选择一个模板', 'error');
+                    return;
+                }
+
+                if (templateId === 'general') {
+                    // 使用通用模板生成
                     const topic = document.getElementById('topic').value;
                     const taskType = document.getElementById('taskType').value;
                     const field = document.getElementById('field').value;
@@ -1459,6 +1456,9 @@
                     const prompt = generatePromptContent(topic, taskType, field, style, length, requirements);
                     document.getElementById('output').value = prompt;
                     showToast('提示词生成成功！');
+                } else {
+                    // 使用特定模板生成
+                    generateFromTemplate(templateId);
                 }
             }
 
