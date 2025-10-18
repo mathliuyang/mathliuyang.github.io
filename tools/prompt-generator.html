@@ -1243,9 +1243,9 @@
                                     inputHTML = `<input type="number" class="form-input" id="${fieldId}" placeholder="${field.placeholder}" ${requiredAttr}>`;
                                     break;
                                 case 'date':
-                                    // 自定义日期输入，支持直接输入数字格式如20251208自动识别为2025年12月
-                                    inputHTML = `<input type="text" class="form-input" id="${fieldId}" placeholder="请输入日期，支持格式：2025年12月 或 20251208" ${requiredAttr} 
-                                                 oninput="formatDateInput(this)" maxlength="8">`;
+                                    // 自定义日期输入，支持直接输入数字格式如20251208，按回车键后自动识别为2025年12月
+                                    inputHTML = `<input type="text" class="form-input" id="${fieldId}" placeholder="请输入日期，按回车键转换：2025年12月 或 20251208" ${requiredAttr} 
+                                                 onkeypress="handleDateInputKeyPress(event, this)" maxlength="8">`;
                                     break;
                                 default:
                                     inputHTML = `<input type="text" class="form-input" id="${fieldId}" placeholder="${field.placeholder}" ${requiredAttr}>`;
@@ -1376,7 +1376,7 @@
                         keywords: ['日期', '时间', 'date', 'Date', '发表时间', '发布时间'],
                         config: {
                             type: 'date',
-                            placeholder: '请输入日期，支持格式：2025年12月 或 20251208',
+                            placeholder: '请输入日期，按回车键转换：2025年12月 或 20251208',
                             required: true
                         }
                     }
@@ -1564,6 +1564,20 @@
             function isValidEmail(email) {
                 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
                 return emailRegex.test(email);
+            }
+
+            // 处理日期输入按键事件 - 按回车键后触发格式转换
+            function handleDateInputKeyPress(event, input) {
+                // 只处理回车键（Enter）
+                if (event.key !== 'Enter') {
+                    return;
+                }
+                
+                // 阻止默认行为
+                event.preventDefault();
+                
+                // 调用格式转换函数
+                formatDateInput(input);
             }
 
             // 日期输入格式化函数 - 支持直接输入数字格式自动识别
