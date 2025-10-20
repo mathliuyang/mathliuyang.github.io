@@ -450,7 +450,7 @@ let pinnsPapers = [
             "unit": "St. Mark's School of Texas (美国德克萨斯州高中), 宾夕法尼亚大学, 布朗大学", 
             "venue": "Computer Methods in Applied Mechanics and Engineering", 
             "date": "2022年04月", 
-            "tags": ["物理信息神经网络", "梯度增强", "偏微分方程", "深度学习", "科学计算"],
+            "tags": "物理信息神经网络, 梯度增强, 偏微分方程, 深度学习, 科学计算",
             "links": { 
                 "paper": "https://www.sciencedirect.com/science/article/pii/S0045782522001438?via%3Dihub", 
                 "download": "https://www.jianguoyun.com/p/DeddzSsQ7P3jDRif7pUGIAA", 
