@@ -1200,7 +1200,7 @@
             }
 
             .hero {
-                padding: 6rem 2rem 2rem;
+                padding: 8rem 2rem 2rem;
             }
 
             .stats {
@@ -1315,7 +1315,7 @@
             }
 
             .hero {
-                padding: 5rem 1rem 2rem;
+                padding: 8rem 1rem 2rem;
             }
 
             .hero h1 {
@@ -1353,12 +1353,35 @@
                 nav {
                     padding-top: calc(1rem + env(safe-area-inset-top));
                 }
+                
+                .hero {
+                    padding-top: calc(8rem + env(safe-area-inset-top));
+                }
             }
             
             @media (max-width: 480px) {
                 nav {
                     padding-top: calc(0.8rem + env(safe-area-inset-top));
                 }
+                
+                .hero {
+                    padding-top: calc(8rem + env(safe-area-inset-top));
+                }
+            }
+        }
+
+        /* 移动端导航栏高度自适应 */
+        @media (max-width: 768px) {
+            .hero {
+                min-height: calc(60vh + 4rem);
+                padding-top: clamp(8rem, 15vh, 12rem);
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .hero {
+                min-height: calc(60vh + 6rem);
+                padding-top: clamp(8rem, 18vh, 14rem);
             }
         }
 
