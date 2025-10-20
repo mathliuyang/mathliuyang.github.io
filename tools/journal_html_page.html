@@ -1209,7 +1209,7 @@
             }
 
             .controls {
-                padding: 2rem 2rem;
+                padding: 4rem 2rem 2rem;
             }
 
             .journals-section {
@@ -1374,14 +1374,14 @@
         @media (max-width: 768px) {
             .hero {
                 min-height: calc(60vh + 4rem);
-                padding-top: clamp(8rem, 15vh, 12rem);
+                padding-top: clamp(10rem, 20vh, 16rem);
             }
         }
         
         @media (max-width: 480px) {
             .hero {
                 min-height: calc(60vh + 6rem);
-                padding-top: clamp(8rem, 18vh, 14rem);
+                padding-top: clamp(12rem, 25vh, 18rem);
             }
         }
 
@@ -1701,6 +1701,36 @@
                     location.reload(); // 简单的重新加载来应用新样式
                 }
             });
+
+            // 动态调整内容位置以避免导航栏遮挡
+            function adjustContentForNav() {
+                const nav = document.querySelector('nav');
+                const hero = document.querySelector('.hero');
+                const controls = document.querySelector('.controls');
+                
+                if (window.innerWidth <= 768 && nav && hero) {
+                    const navHeight = nav.offsetHeight;
+                    const safeAreaTop = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--safe-area-inset-top') || '0');
+                    
+                    // 为hero区域设置足够的顶部内边距
+                    hero.style.paddingTop = `${Math.max(navHeight + 40, 120)}px`;
+                    
+                    // 如果controls区域存在，也调整其位置
+                    if (controls) {
+                        controls.style.paddingTop = `${Math.max(navHeight + 20, 100)}px`;
+                    }
+                }
+            }
+            
+            // 页面加载完成后调整内容位置
+            window.addEventListener('load', adjustContentForNav);
+            
+            // 导航栏高度变化时重新调整（如展开/收起）
+            const resizeObserver = new ResizeObserver(adjustContentForNav);
+            resizeObserver.observe(document.querySelector('nav'));
+            
+            // 初始调用一次
+            setTimeout(adjustContentForNav, 100);
 
             // 防止iOS双击缩放
             let lastTouchEnd = 0;
