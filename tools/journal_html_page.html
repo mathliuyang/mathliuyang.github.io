@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>AI for Science 期刊导航 | 深度学习求解PDE期刊推荐</title>
     <script src="journals.js"></script>
     <style>
@@ -165,6 +165,7 @@
             background: rgba(0, 0, 0, 0.5);
             backdrop-filter: blur(10px);
             border-bottom: 1px solid var(--border);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         [data-theme="light"] nav {
@@ -218,9 +219,21 @@
         }
 
         .theme-btn:hover {
-            border-color: var(--text);
-            transform: scale(1.1);
-        }
+                border-color: var(--text);
+                transform: scale(1.1);
+            }
+
+            /* 移动端触摸优化 */
+            @media (hover: none) and (pointer: coarse) {
+                .theme-btn:active {
+                    border-color: var(--text);
+                    transform: scale(1.05);
+                }
+                
+                .nav-links a:active {
+                    color: var(--text);
+                }
+            }
 
         /* Hero Section */
         .hero {
@@ -1148,11 +1161,42 @@
         /* Responsive */
         @media (max-width: 768px) {
             nav {
-                padding: 1.5rem 2rem;
+                padding: 1rem 1.5rem;
+                flex-direction: column;
+                gap: 1rem;
+                align-items: stretch;
             }
 
             nav.scrolled {
-                padding: 1rem 2rem;
+                padding: 0.8rem 1.5rem;
+            }
+
+            .logo {
+                font-size: 0.9rem;
+                text-align: center;
+                margin-bottom: 0.5rem;
+            }
+
+            .nav-right {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: center;
+            }
+
+            .nav-links {
+                gap: 1.5rem;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .nav-links a {
+                font-size: 0.8rem;
+            }
+
+            .theme-btn {
+                width: 32px;
+                height: 32px;
+                font-size: 0.9rem;
             }
 
             .hero {
@@ -1249,6 +1293,72 @@
                 word-break: break-word;
                 margin-right: 2rem;
                 /* 为关闭按钮预留额外空间 */
+            }
+        }
+
+        /* 超小屏幕优化（iPhone SE等） */
+        @media (max-width: 480px) {
+            nav {
+                padding: 0.8rem 1rem;
+            }
+
+            .logo {
+                font-size: 0.8rem;
+            }
+
+            .nav-links {
+                gap: 1rem;
+            }
+
+            .nav-links a {
+                font-size: 0.75rem;
+            }
+
+            .hero {
+                padding: 5rem 1rem 2rem;
+            }
+
+            .hero h1 {
+                font-size: clamp(1.8rem, 5vw, 2.2rem);
+            }
+
+            .hero-subtitle {
+                font-size: 0.9rem;
+            }
+
+            .stats {
+                gap: 2rem;
+            }
+
+            .stat-number {
+                font-size: 2rem;
+            }
+
+            .controls {
+                padding: 1.5rem 1rem;
+            }
+
+            .journals-section {
+                padding: 1.5rem 1rem;
+            }
+        }
+
+        /* iOS Safari 优化 */
+        @supports (-webkit-touch-callout: none) {
+            nav {
+                padding-top: calc(1.5rem + env(safe-area-inset-top));
+            }
+            
+            @media (max-width: 768px) {
+                nav {
+                    padding-top: calc(1rem + env(safe-area-inset-top));
+                }
+            }
+            
+            @media (max-width: 480px) {
+                nav {
+                    padding-top: calc(0.8rem + env(safe-area-inset-top));
+                }
             }
         }
 
@@ -1514,7 +1624,7 @@
             });
 
             // Nav scroll effect
-            const nav = document.getElementById('nav');
+            const nav = document.querySelector('nav'); // 修正选择器
             window.addEventListener('scroll', () => {
                 if (window.pageYOffset > 100) {
                     nav.classList.add('scrolled');
@@ -1522,6 +1632,69 @@
                     nav.classList.remove('scrolled');
                 }
             });
+
+            // 移动端导航栏交互优化
+            let lastScrollTop = 0;
+            const isMobile = window.innerWidth <= 768;
+            
+            if (isMobile) {
+                window.addEventListener('scroll', () => {
+                    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                    
+                    // 向下滚动时隐藏导航栏，向上滚动时显示
+                    if (scrollTop > lastScrollTop && scrollTop > 200) {
+                        nav.style.transform = 'translateY(-100%)';
+                        nav.style.opacity = '0';
+                    } else {
+                        nav.style.transform = 'translateY(0)';
+                        nav.style.opacity = '1';
+                    }
+                    
+                    lastScrollTop = scrollTop;
+                });
+                
+                // 触摸事件优化
+                let touchStartY = 0;
+                document.addEventListener('touchstart', (e) => {
+                    touchStartY = e.touches[0].clientY;
+                });
+                
+                document.addEventListener('touchmove', (e) => {
+                    const touchEndY = e.touches[0].clientY;
+                    const deltaY = touchStartY - touchEndY;
+                    
+                    // 向上滑动超过50px时显示导航栏
+                    if (deltaY < -50) {
+                        nav.style.transform = 'translateY(0)';
+                        nav.style.opacity = '1';
+                    }
+                });
+            }
+
+            // 窗口大小改变时重新检测移动端
+            window.addEventListener('resize', () => {
+                const newIsMobile = window.innerWidth <= 768;
+                if (newIsMobile !== isMobile) {
+                    location.reload(); // 简单的重新加载来应用新样式
+                }
+            });
+
+            // 防止iOS双击缩放
+            let lastTouchEnd = 0;
+            document.addEventListener('touchend', function (event) {
+                const now = (new Date()).getTime();
+                if (now - lastTouchEnd <= 300) {
+                    event.preventDefault();
+                }
+                lastTouchEnd = now;
+            }, false);
+
+            // 防止iOS橡皮筋效果
+            document.addEventListener('touchmove', function(e) {
+                if (e.target.closest('.modal-content') === null) {
+                    e.preventDefault();
+                }
+            }, { passive: false });
 
             // Theme toggle
             const themeBtn = document.getElementById('themeBtn');
@@ -1564,15 +1737,7 @@
                         <div class="journal-cover-container">
                             <div class="journal-cover">
                                 ${journal.coverImage ?
-                        (() => {
-                            const img = document.createElement('img');
-                            img.src = journal.coverImage;
-                            img.alt = journal.name;
-                            img.onerror = function () {
-                                this.parentElement.innerHTML = '<div class="journal-cover-placeholder">封面<br>暂缺</div>';
-                            };
-                            return img.outerHTML;
-                        })() :
+                        `<img src="${journal.coverImage}" alt="${journal.name}" onerror="this.parentElement.innerHTML='<div class=\'journal-cover-placeholder\'>封面<br>暂缺</div>'">` :
                         '<div class="journal-cover-placeholder">封面<br>暂缺</div>'
                     }
                             </div>
