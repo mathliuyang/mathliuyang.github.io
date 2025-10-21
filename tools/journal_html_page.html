@@ -219,21 +219,33 @@
         }
 
         .theme-btn:hover {
+            border-color: var(--text);
+            transform: scale(1.1);
+        }
+
+        /* 移动端触摸优化 */
+        @media (hover: none) and (pointer: coarse) {
+            .theme-btn:active {
                 border-color: var(--text);
-                transform: scale(1.1);
+                transform: scale(1.05);
             }
 
-            /* 移动端触摸优化 */
-            @media (hover: none) and (pointer: coarse) {
-                .theme-btn:active {
-                    border-color: var(--text);
-                    transform: scale(1.05);
-                }
-                
-                .nav-links a:active {
-                    color: var(--text);
-                }
+            .nav-links a:active {
+                color: var(--text);
             }
+
+            /* 移动端滑动优化 */
+            body {
+                -webkit-overflow-scrolling: touch;
+                overflow-y: auto;
+            }
+
+            .main-content {
+                -webkit-overflow-scrolling: touch;
+            }
+        }
+            }
+        }
 
         /* Hero Section */
         .hero {
@@ -1348,22 +1360,22 @@
             nav {
                 padding-top: calc(1.5rem + env(safe-area-inset-top));
             }
-            
+
             @media (max-width: 768px) {
                 nav {
                     padding-top: calc(1rem + env(safe-area-inset-top));
                 }
-                
+
                 .hero {
                     padding-top: calc(8rem + env(safe-area-inset-top));
                 }
             }
-            
+
             @media (max-width: 480px) {
                 nav {
                     padding-top: calc(0.8rem + env(safe-area-inset-top));
                 }
-                
+
                 .hero {
                     padding-top: calc(8rem + env(safe-area-inset-top));
                 }
@@ -1377,7 +1389,7 @@
                 padding-top: clamp(10rem, 20vh, 16rem);
             }
         }
-        
+
         @media (max-width: 480px) {
             .hero {
                 min-height: calc(60vh + 6rem);
@@ -1403,7 +1415,8 @@
             <input type="text" id="passwordInput" class="password-input" placeholder="请输入密码" autocomplete="off"
                 autocapitalize="off" autocorrect="off">
             <div style="display: flex; gap: 1rem; margin-top: 1rem;">
-                <a href="../pages/tools.html" class="password-btn" style="flex: 1; background: transparent; color: var(--text); text-decoration: none; text-align: center;">返回工具集</a>
+                <a href="../pages/tools.html" class="password-btn"
+                    style="flex: 1; background: transparent; color: var(--text); text-decoration: none; text-align: center;">返回工具集</a>
                 <button onclick="checkPassword()" class="password-btn" style="flex: 1;">验证</button>
             </div>
             <div id="passwordError" class="password-error">密码错误，请重试</div>
@@ -1659,11 +1672,11 @@
             // 移动端导航栏交互优化
             let lastScrollTop = 0;
             const isMobile = window.innerWidth <= 768;
-            
+
             if (isMobile) {
                 window.addEventListener('scroll', () => {
                     const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-                    
+
                     // 向下滚动时隐藏导航栏，向上滚动时显示
                     if (scrollTop > lastScrollTop && scrollTop > 200) {
                         nav.style.transform = 'translateY(-100%)';
@@ -1672,20 +1685,20 @@
                         nav.style.transform = 'translateY(0)';
                         nav.style.opacity = '1';
                     }
-                    
+
                     lastScrollTop = scrollTop;
                 });
-                
+
                 // 触摸事件优化
                 let touchStartY = 0;
                 document.addEventListener('touchstart', (e) => {
                     touchStartY = e.touches[0].clientY;
                 });
-                
+
                 document.addEventListener('touchmove', (e) => {
                     const touchEndY = e.touches[0].clientY;
                     const deltaY = touchStartY - touchEndY;
-                    
+
                     // 向上滑动超过50px时显示导航栏
                     if (deltaY < -50) {
                         nav.style.transform = 'translateY(0)';
@@ -1707,28 +1720,28 @@
                 const nav = document.querySelector('nav');
                 const hero = document.querySelector('.hero');
                 const controls = document.querySelector('.controls');
-                
+
                 if (window.innerWidth <= 768 && nav && hero) {
                     const navHeight = nav.offsetHeight;
                     const safeAreaTop = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--safe-area-inset-top') || '0');
-                    
+
                     // 为hero区域设置足够的顶部内边距
                     hero.style.paddingTop = `${Math.max(navHeight + 40, 120)}px`;
-                    
+
                     // 如果controls区域存在，也调整其位置
                     if (controls) {
                         controls.style.paddingTop = `${Math.max(navHeight + 20, 100)}px`;
                     }
                 }
             }
-            
+
             // 页面加载完成后调整内容位置
             window.addEventListener('load', adjustContentForNav);
-            
+
             // 导航栏高度变化时重新调整（如展开/收起）
             const resizeObserver = new ResizeObserver(adjustContentForNav);
             resizeObserver.observe(document.querySelector('nav'));
-            
+
             // 初始调用一次
             setTimeout(adjustContentForNav, 100);
 
@@ -1742,9 +1755,11 @@
                 lastTouchEnd = now;
             }, false);
 
-            // 防止iOS橡皮筋效果
-            document.addEventListener('touchmove', function(e) {
-                if (e.target.closest('.modal-content') === null) {
+            // 防止iOS橡皮筋效果 - 仅针对特定情况，不影响正常滑动
+            document.addEventListener('touchmove', function (e) {
+                // 只在模态框打开时阻止背景滚动，其他情况允许正常滑动
+                const modal = document.querySelector('.modal.active');
+                if (modal && e.target.closest('.modal-content') === null) {
                     e.preventDefault();
                 }
             }, { passive: false });
