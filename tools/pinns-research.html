@@ -252,7 +252,8 @@
         /* 移动端菜单按钮 */
         .mobile-menu-btn {
             display: none;
-            width: 44px;  /* 增加点击区域 */
+            width: 44px;
+            /* 增加点击区域 */
             height: 44px;
             border: 1px solid var(--border);
             background: transparent;
@@ -261,14 +262,18 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 4px;  /* 增加间距 */
+            gap: 4px;
+            /* 增加间距 */
             transition: all 0.3s ease;
-            touch-action: manipulation;  /* 禁用双击缩放 */
-            -webkit-tap-highlight-color: transparent;  /* 移除点击高亮 */
+            touch-action: manipulation;
+            /* 禁用双击缩放 */
+            -webkit-tap-highlight-color: transparent;
+            /* 移除点击高亮 */
         }
 
         .mobile-menu-btn span {
-            width: 24px;  /* 增加线条宽度 */
+            width: 24px;
+            /* 增加线条宽度 */
             height: 2px;
             background: var(--text);
             transition: all 0.3s ease;
@@ -303,7 +308,8 @@
         }
 
         .mobile-menu-btn.active span:nth-child(1) {
-            transform: rotate(45deg) translate(4px, 4px);  /* 调整动画参数 */
+            transform: rotate(45deg) translate(4px, 4px);
+            /* 调整动画参数 */
         }
 
         .mobile-menu-btn.active span:nth-child(2) {
@@ -311,7 +317,8 @@
         }
 
         .mobile-menu-btn.active span:nth-child(3) {
-            transform: rotate(-45deg) translate(4px, -4px);  /* 调整动画参数 */
+            transform: rotate(-45deg) translate(4px, -4px);
+            /* 调整动画参数 */
         }
 
         /* Hero Section */
@@ -757,8 +764,10 @@
             .paper-title {
                 font-size: 0.9rem;
                 line-height: 1.25;
-                height: auto; /* 移除固定高度防止遮挡 */
-                max-height: 3.75rem; /* 设置最大高度而不是固定高度 */
+                height: auto;
+                /* 移除固定高度防止遮挡 */
+                max-height: 3.75rem;
+                /* 设置最大高度而不是固定高度 */
                 min-height: auto;
             }
         }
@@ -1667,25 +1676,31 @@
                 flex-direction: column;
                 align-items: center;
                 text-align: center;
-                gap: 1.5rem; /* 增加间距防止元素重叠 */
+                gap: 1.5rem;
+                /* 增加间距防止元素重叠 */
             }
 
             .paper-cover-container {
                 width: 100px;
-                height: auto; /* 移除固定高度 */
-                min-height: 140px; /* 设置最小高度 */
+                height: auto;
+                /* 移除固定高度 */
+                min-height: 140px;
+                /* 设置最小高度 */
             }
 
             .paper-cover {
                 width: 100px;
-                height: 125px; /* 适当减小高度 */
+                height: 125px;
+                /* 适当减小高度 */
             }
 
             .paper-title {
                 font-size: 1.1rem;
                 min-height: auto;
-                height: auto; /* 移除固定高度防止遮挡 */
-                max-height: 4.5rem; /* 设置最大高度而不是固定高度 */
+                height: auto;
+                /* 移除固定高度防止遮挡 */
+                max-height: 4.5rem;
+                /* 设置最大高度而不是固定高度 */
             }
 
             .paper-title-en {
@@ -1799,20 +1814,24 @@
 
             /* 480px断点下论文卡片优化 */
             .paper-upper {
-                gap: 1.5rem; /* 增加间距防止重叠 */
+                gap: 1.5rem;
+                /* 增加间距防止重叠 */
             }
 
             .cover-journal-info {
-                margin-top: 0.8rem; /* 增加期刊信息与封面的间距 */
+                margin-top: 0.8rem;
+                /* 增加期刊信息与封面的间距 */
             }
 
             /* 标题区域额外间距 */
             .title-section {
-                margin-bottom: 0.8rem; /* 增加标题区域底部间距 */
+                margin-bottom: 0.8rem;
+                /* 增加标题区域底部间距 */
             }
 
             .paper-header-content {
-                gap: 1rem; /* 增加头部内容区域内部间距 */
+                gap: 1rem;
+                /* 增加头部内容区域内部间距 */
             }
         }
 
@@ -1853,13 +1872,16 @@
 
             .paper-upper {
                 padding: 0.8rem;
-                gap: 1.3rem; /* 进一步增加间距防止重叠 */
+                gap: 1.3rem;
+                /* 进一步增加间距防止重叠 */
             }
 
             .paper-title {
                 font-size: 1rem;
-                height: auto; /* 移除固定高度防止遮挡 */
-                max-height: 3.5rem; /* 设置最大高度 */
+                height: auto;
+                /* 移除固定高度防止遮挡 */
+                max-height: 3.5rem;
+                /* 设置最大高度 */
                 min-height: auto;
             }
 
@@ -1927,7 +1949,8 @@
             <input type="text" id="passwordInput" class="password-input" placeholder="请输入密码" autocomplete="off"
                 autocapitalize="off" autocorrect="off">
             <div style="display: flex; gap: 1rem; margin-bottom: 1rem;">
-                <button onclick="location.href='../pages/tools.html'" class="password-btn" style="flex: 1; background: transparent; color: var(--text);">返回工具集</button>
+                <button onclick="location.href='../pages/tools.html'" class="password-btn"
+                    style="flex: 1; background: transparent; color: var(--text);">返回工具集</button>
                 <button onclick="checkPassword()" class="password-btn" style="flex: 1;">验证</button>
             </div>
             <div id="passwordError" class="password-error">密码错误，请重试</div>
@@ -2288,13 +2311,13 @@
             // 移动端菜单功能
             const mobileMenuBtn = document.getElementById('mobileMenuBtn');
             const navLinks = document.getElementById('navLinks');
-            
+
             if (mobileMenuBtn && navLinks) {
                 mobileMenuBtn.addEventListener('click', () => {
                     mobileMenuBtn.classList.toggle('active');
                     navLinks.classList.toggle('active');
                 });
-                
+
                 // 点击导航链接后关闭菜单
                 navLinks.querySelectorAll('a').forEach(link => {
                     link.addEventListener('click', () => {
@@ -2309,16 +2332,16 @@
                 const nav = document.getElementById('nav');
                 const hero = document.querySelector('.hero');
                 const controls = document.querySelector('.controls');
-                
+
                 if (window.innerWidth <= 768 && nav && hero) {
                     // 计算导航栏实际高度
                     const navHeight = nav.offsetHeight;
                     const safeAreaTop = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--safe-area-inset-top') || '0');
-                    
+
                     // 设置动态内边距
                     const dynamicPadding = Math.max(navHeight + 20, 120) + safeAreaTop;
                     hero.style.paddingTop = `${dynamicPadding}px`;
-                    
+
                     // 同时调整controls区域
                     if (controls) {
                         controls.style.paddingTop = `${Math.max(navHeight + 40, 140)}px`;
@@ -2334,10 +2357,10 @@
 
             // 页面加载完成后调整
             window.addEventListener('load', adjustContentForNav);
-            
+
             // 窗口大小改变时重新调整
             window.addEventListener('resize', adjustContentForNav);
-            
+
             // 使用ResizeObserver监听导航栏高度变化
             if (window.ResizeObserver) {
                 const nav = document.getElementById('nav');
@@ -2348,7 +2371,7 @@
                     resizeObserver.observe(nav);
                 }
             }
-            
+
             // 初始延迟调用，确保DOM完全渲染
             setTimeout(adjustContentForNav, 100);
         </script>
