@@ -341,6 +341,10 @@
             font-weight: bold;
         }
 
+        .form-label.required.filled::after {
+            color: #2ed573;
+        }
+
         .form-label {
             display: block;
             font-size: 0.85rem;
@@ -1579,24 +1583,24 @@
 
                             switch (field.type) {
                                 case 'textarea':
-                                    inputHTML = `<textarea class="form-textarea" id="${fieldId}" ${requiredAttr}></textarea>`;
+                                    inputHTML = `<textarea class="form-textarea" id="${fieldId}" ${requiredAttr} oninput="handleFieldInput(this)"></textarea>`;
                                     break;
                                 case 'url':
-                                    inputHTML = `<input type="url" class="form-input" id="${fieldId}" ${requiredAttr}>`;
+                                    inputHTML = `<input type="url" class="form-input" id="${fieldId}" ${requiredAttr} oninput="handleFieldInput(this)">`;
                                     break;
                                 case 'email':
-                                    inputHTML = `<input type="email" class="form-input" id="${fieldId}" ${requiredAttr}>`;
+                                    inputHTML = `<input type="email" class="form-input" id="${fieldId}" ${requiredAttr} oninput="handleFieldInput(this)">`;
                                     break;
                                 case 'number':
-                                    inputHTML = `<input type="number" class="form-input" id="${fieldId}" ${requiredAttr}>`;
+                                    inputHTML = `<input type="number" class="form-input" id="${fieldId}" ${requiredAttr} oninput="handleFieldInput(this)">`;
                                     break;
                                 case 'date':
                                     // 自定义日期输入，支持直接输入数字格式如20251208，按回车键后自动识别为2025年12月
                                     inputHTML = `<input type="text" class="form-input" id="${fieldId}" ${requiredAttr} 
-                                                 onkeypress="handleDateInputKeyPress(event, this)" maxlength="8">`;
+                                                 onkeypress="handleDateInputKeyPress(event, this)" oninput="handleFieldInput(this)" maxlength="8">`;
                                     break;
                                 default:
-                                    inputHTML = `<input type="text" class="form-input" id="${fieldId}" ${requiredAttr}>`;
+                                    inputHTML = `<input type="text" class="form-input" id="${fieldId}" ${requiredAttr} oninput="handleFieldInput(this)">`;
                             }
 
                             formHTML += `
@@ -1838,15 +1842,7 @@
                         // 重置错误样式
                         element.style.borderColor = '';
 
-                        // 检查必填字段
-                        if (field.required && !value) {
-                            missingFields.push(field.label);
-                            element.style.borderColor = '#ff4757';
-                            hasValidationError = true;
-                            return;
-                        }
-
-                        // 验证URL格式
+                        // 验证URL格式（仅当字段有值时）
                         if (field.type === 'url' && value && !isValidUrl(value)) {
                             showToast(`${field.label} 格式不正确，请输入有效的网址`);
                             element.style.borderColor = '#ff4757';
@@ -1854,7 +1850,7 @@
                             return;
                         }
 
-                        // 验证邮箱格式
+                        // 验证邮箱格式（仅当字段有值时）
                         if (field.type === 'email' && value && !isValidEmail(value)) {
                             showToast(`${field.label} 格式不正确，请输入有效的邮箱地址`);
                             element.style.borderColor = '#ff4757';
@@ -1862,17 +1858,12 @@
                             return;
                         }
 
-                        fieldValues[field.name] = value || field.placeholder;
+                        // 如果字段有值则使用实际值，否则使用占位符或空字符串
+                        fieldValues[field.name] = value || field.placeholder || '';
                     });
 
                     // 如果有验证错误，停止处理
                     if (hasValidationError) {
-                        return;
-                    }
-
-                    // 如果有必填字段未填写，显示错误信息
-                    if (missingFields.length > 0) {
-                        showToast(`请填写必填字段：${missingFields.join('、')}`);
                         return;
                     }
 
@@ -1971,6 +1962,21 @@
                         input.value = `${year}年${month}月`;
                         showToast(`已识别：${year}年${month}月`);
                     }
+                }
+            }
+
+            function handleFieldInput(input) {
+                const formGroup = input.closest('.form-group');
+                if (!formGroup) return;
+                
+                const label = formGroup.querySelector('.form-label.required');
+                if (!label) return;
+                
+                // 如果有输入值，添加filled类，*号变绿
+                if (input.value.trim()) {
+                    label.classList.add('filled');
+                } else {
+                    label.classList.remove('filled');
                 }
             }
 
