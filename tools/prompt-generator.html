@@ -607,6 +607,58 @@
             border-color: var(--text);
         }
 
+        /* 分类统计数字样式 - 优化版 */
+        .category-count {
+            background: linear-gradient(135deg, rgba(128, 128, 128, 0.15), rgba(128, 128, 128, 0.25));
+            padding: 0.15rem 0.4rem;
+            border-radius: 8px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            margin-left: 0.4rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            min-width: 1.2rem;
+            text-align: center;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(128, 128, 128, 0.1);
+            color: var(--text-dim);
+            letter-spacing: 0.02em;
+        }
+
+        .filter-btn:hover .category-count {
+            background: linear-gradient(135deg, rgba(128, 128, 128, 0.25), rgba(128, 128, 128, 0.35));
+            transform: translateY(-1px);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .filter-btn.active .category-count {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.35));
+            color: var(--bg);
+            transform: translateY(-1px);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        /* 亮色主题下的统计数字样式 - 优化版 */
+        [data-theme="light"] .category-count {
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0.12));
+            border-color: rgba(0, 0, 0, 0.08);
+            color: rgba(0, 0, 0, 0.7);
+        }
+
+        [data-theme="light"] .filter-btn:hover .category-count {
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.12), rgba(0, 0, 0, 0.18));
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+        }
+
+        [data-theme="light"] .filter-btn.active .category-count {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.4));
+            border-color: rgba(255, 255, 255, 0.25);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+        }
+
         .templates-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
@@ -825,7 +877,192 @@
                 flex-direction: column;
             }
         }
-    </style>
+    /* 二级下拉菜单样式 */
+        .dropdown-container {
+            position: relative;
+            width: 100%;
+        }
+
+        .dropdown-display {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: var(--bg);
+            color: var(--text);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 1rem;
+        }
+
+        .dropdown-display:hover {
+            border-color: var(--primary);
+        }
+
+        .dropdown-display.active {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+        }
+
+        .dropdown-arrow {
+            transition: transform 0.2s ease;
+            font-size: 0.8rem;
+        }
+
+        .dropdown-display.active .dropdown-arrow {
+            transform: rotate(180deg);
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            max-height: 400px;
+            overflow-y: auto;
+            z-index: 1000;
+            display: none;
+        }
+
+        .dropdown-menu.show {
+            display: block;
+        }
+
+        .category-group {
+            border-bottom: 1px solid var(--border);
+        }
+
+        .category-group:last-child {
+            border-bottom: none;
+        }
+
+        .category-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            background: var(--bg-secondary);
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--text);
+            transition: background-color 0.2s ease;
+        }
+
+        .category-header-right {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .category-header:hover {
+            background: var(--bg-tertiary);
+        }
+
+        .category-arrow {
+            transition: transform 0.2s ease;
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            margin-left: 0.25rem;
+        }
+
+        .category-group.expanded .category-arrow {
+            transform: rotate(90deg);
+        }
+
+        .template-items {
+            display: none;
+            background: var(--bg);
+        }
+
+        .category-group.expanded .template-items {
+            display: block;
+        }
+
+        .template-item {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem 0.75rem 2rem;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            border-left: 3px solid transparent;
+        }
+
+        .template-item:hover {
+            background: var(--bg-secondary);
+            border-left-color: var(--primary);
+        }
+
+        .template-item.selected {
+            background: var(--bg-tertiary);
+            border-left-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .template-icon {
+            margin-right: 0.75rem;
+            font-size: 1.2rem;
+        }
+
+        .template-name {
+            flex: 1;
+            font-size: 0.95rem;
+        }
+
+        .template-desc {
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            margin-left: 0.5rem;
+        }
+
+        .category-count {
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            background: var(--bg-secondary);
+            padding: 0.2rem 0.6rem;
+            border-radius: 12px;
+            min-width: 1.8rem;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .dropdown-menu {
+                max-height: 300px;
+            }
+            
+            .template-item {
+                padding: 0.75rem 1rem 0.75rem 1.5rem;
+            }
+            
+            .template-desc {
+                display: none;
+            }
+        }
+
+        /* 暗色模式适配 */
+        [data-theme="dark"] .dropdown-menu {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        [data-theme="dark"] .category-header {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        [data-theme="dark"] .template-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        [data-theme="dark"] .category-count {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        </style>
 </head>
 
 <body>
@@ -885,7 +1122,16 @@
 
                         <div class="template-selector-group">
                             <label class="form-label">选择模板</label>
-                            <select class="form-select" id="templateSelect" onchange="loadTemplate()">
+                            <div class="dropdown-container" id="templateDropdown">
+                                <div class="dropdown-display" onclick="toggleDropdown()">
+                                    <span id="dropdownText">请选择模板...</span>
+                                    <span class="dropdown-arrow">▼</span>
+                                </div>
+                                <div class="dropdown-menu" id="dropdownMenu">
+                                    <!-- 动态生成的二级菜单将在这里 -->
+                                </div>
+                            </div>
+                            <select class="form-select" id="templateSelect" onchange="loadTemplate()" style="display: none;">
                                 <option value="">请选择模板...</option>
                             </select>
                         </div>
@@ -1016,6 +1262,9 @@
 
                 // Re-render templates with filtered results
                 renderTemplates(filteredTemplates);
+                
+                // Update category counts to reflect current filter state
+                updateCategoryCounts();
             }
 
             // Switch tabs
@@ -1055,6 +1304,7 @@
 
             // Initialize template selector
             function initializeTemplateSelector() {
+                // 原有的select元素逻辑保持不变，用于兼容性
                 const templateSelect = document.getElementById('templateSelect');
                 templateSelect.innerHTML = '<option value="">请选择模板...</option>';
 
@@ -1064,6 +1314,120 @@
                     option.textContent = template.name;
                     templateSelect.appendChild(option);
                 });
+
+                // 初始化新的二级下拉菜单
+                initializeDropdownMenu();
+            }
+
+            // 初始化二级下拉菜单
+            function initializeDropdownMenu() {
+                const dropdownMenu = document.getElementById('dropdownMenu');
+                
+                // 按分类分组模板
+                const templatesByCategory = {};
+                Object.entries(window.templates).forEach(([id, template]) => {
+                    const category = template.category || '未分类';
+                    if (!templatesByCategory[category]) {
+                        templatesByCategory[category] = [];
+                    }
+                    templatesByCategory[category].push({ id, ...template });
+                });
+
+                // 生成二级菜单HTML
+                dropdownMenu.innerHTML = Object.entries(templatesByCategory)
+                    .sort(([a], [b]) => a.localeCompare(b, 'zh-CN'))
+                    .map(([category, templates]) => {
+                        const categoryCount = templates.length;
+                        return `
+                            <div class="category-group" data-category="${category}">
+                                <div class="category-header" onclick="toggleCategory('${category}')">
+                                    <span>${category}</span>
+                                    <div class="category-header-right">
+                                        <span class="category-count">${categoryCount}</span>
+                                        <span class="category-arrow">▶</span>
+                                    </div>
+                                </div>
+                                <div class="template-items" id="category-${category}">
+                                    ${templates
+                                        .sort((a, b) => a.name.localeCompare(b.name, 'zh-CN'))
+                                        .map(template => `
+                                            <div class="template-item" 
+                                                 onclick="selectTemplate('${template.id}', '${template.name.replace(/'/g, "\\'")}')"
+                                                 data-template-id="${template.id}">
+                                                <span class="template-icon">${template.icon || '📝'}</span>
+                                                <div style="flex: 1;">
+                                                    <div class="template-name">${template.name}</div>
+                                                    <div class="template-desc">${template.desc || ''}</div>
+                                                </div>
+                                            </div>
+                                        `).join('')}
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+            }
+
+            // 切换下拉菜单显示/隐藏
+            function toggleDropdown() {
+                const dropdown = document.getElementById('templateDropdown');
+                const menu = document.getElementById('dropdownMenu');
+                const display = document.querySelector('.dropdown-display');
+                
+                menu.classList.toggle('show');
+                display.classList.toggle('active');
+                
+                // 点击外部关闭下拉菜单
+                if (menu.classList.contains('show')) {
+                    setTimeout(() => {
+                        document.addEventListener('click', closeDropdownOnClickOutside);
+                    }, 100);
+                } else {
+                    document.removeEventListener('click', closeDropdownOnClickOutside);
+                }
+            }
+
+            // 点击外部关闭下拉菜单
+            function closeDropdownOnClickOutside(event) {
+                const dropdown = document.getElementById('templateDropdown');
+                const menu = document.getElementById('dropdownMenu');
+                const display = document.querySelector('.dropdown-display');
+                
+                if (!dropdown.contains(event.target)) {
+                    menu.classList.remove('show');
+                    display.classList.remove('active');
+                    document.removeEventListener('click', closeDropdownOnClickOutside);
+                }
+            }
+
+            // 切换分类展开/收起
+            function toggleCategory(category) {
+                const categoryGroup = document.querySelector(`[data-category="${category}"]`);
+                categoryGroup.classList.toggle('expanded');
+            }
+
+            // 选择模板
+            function selectTemplate(templateId, templateName) {
+                // 更新显示文本
+                document.getElementById('dropdownText').textContent = templateName;
+                
+                // 更新选中状态
+                document.querySelectorAll('.template-item').forEach(item => {
+                    item.classList.remove('selected');
+                });
+                document.querySelector(`[data-template-id="${templateId}"]`).classList.add('selected');
+                
+                // 更新隐藏的select元素并触发加载
+                const templateSelect = document.getElementById('templateSelect');
+                templateSelect.value = templateId;
+                loadTemplate();
+                
+                // 关闭下拉菜单
+                setTimeout(() => {
+                    const menu = document.getElementById('dropdownMenu');
+                    const display = document.querySelector('.dropdown-display');
+                    menu.classList.remove('show');
+                    display.classList.remove('active');
+                }, 200);
             }
 
             // Generate filter buttons based on categories from templates
@@ -1071,33 +1435,69 @@
                 const filterContainer = document.getElementById('filterButtons');
                 if (!filterContainer) return;
 
-                // Extract unique categories from templates
-                const categories = new Set();
+                // Extract unique categories from templates and count templates in each category
+                const categoryCounts = {};
+                let totalCount = 0;
+                
                 Object.entries(window.templates).forEach(([id, template]) => {
                     if (template.category) {
-                        categories.add(template.category);
+                        categoryCounts[template.category] = (categoryCounts[template.category] || 0) + 1;
                     }
+                    totalCount++;
                 });
 
-                // Clear existing buttons (except the first "全部" button)
+                // Clear existing buttons
                 filterContainer.innerHTML = '';
 
-                // Add "全部" button
+                // Add "全部" button with count
                 const allButton = document.createElement('button');
                 allButton.className = 'filter-btn active';
                 allButton.setAttribute('data-category', 'all');
-                allButton.textContent = '全部';
+                allButton.innerHTML = `全部 <span class="category-count">${totalCount}</span>`;
                 allButton.onclick = () => filterTemplates('all');
                 filterContainer.appendChild(allButton);
 
-                // Add category buttons
-                Array.from(categories).sort().forEach(category => {
+                // Add category buttons with counts
+                Array.from(Object.keys(categoryCounts)).sort().forEach(category => {
                     const button = document.createElement('button');
                     button.className = 'filter-btn';
                     button.setAttribute('data-category', category);
-                    button.textContent = category;
+                    button.innerHTML = `${category} <span class="category-count">${categoryCounts[category]}</span>`;
                     button.onclick = () => filterTemplates(category);
                     filterContainer.appendChild(button);
+                });
+            }
+
+            // Update category counts when templates are filtered or changed
+            function updateCategoryCounts() {
+                const filterContainer = document.getElementById('filterButtons');
+                if (!filterContainer) return;
+
+                // Count templates in each category
+                const categoryCounts = {};
+                let totalCount = 0;
+                
+                Object.entries(window.templates).forEach(([id, template]) => {
+                    if (template.category) {
+                        categoryCounts[template.category] = (categoryCounts[template.category] || 0) + 1;
+                    }
+                    totalCount++;
+                });
+
+                // Update button counts
+                const buttons = filterContainer.querySelectorAll('.filter-btn');
+                buttons.forEach(button => {
+                    const category = button.getAttribute('data-category');
+                    const count = category === 'all' ? totalCount : (categoryCounts[category] || 0);
+                    
+                    // Update the count span if it exists, otherwise create it
+                    let countSpan = button.querySelector('.category-count');
+                    if (!countSpan) {
+                        countSpan = document.createElement('span');
+                        countSpan.className = 'category-count';
+                        button.appendChild(countSpan);
+                    }
+                    countSpan.textContent = `${count}`;
                 });
             }
 
