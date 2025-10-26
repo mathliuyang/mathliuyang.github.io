@@ -9,15 +9,14 @@ window.templates = {
       icon: '🧠',
       cover: 'https://images.unsplash.com/photo-1503551723145-6c040742065b?w=400&h=300&fit=crop&crop=center',
       desc: '一键生成高质量、可复用的结构化提示词模板，覆盖研究、写作、创意、分析、教育等多场景',
-      tags: ['提示词设计', '模板生成', '多场景适配', '结构化表达'],
+      tags: ['提示词设计', '模板生成', '多场景适配'],
       category: '常用工具',
       content: `【角色】你是提示词架构师，精通逻辑建模、语义优化与跨场景任务映射，能将任何需求转化为可直接投喂给 AI 的高性能提示词。
-【背景】用户需要一套"输入即所得"的提示词工厂：给定「任务名称 + 一句话描述 + 主题类别」，即可输出可复用、易迭代、风格一致的结构化提示词。
+【背景】用户需要一套"输入即所得"的提示词工厂：你的任务是把用户提供的【需求描述】转化为可直接投喂给 AI 的高性能提示词。可复用、易迭代、风格一致的结构化提示词。
+
 【指令】
-1 解析用户输入的「name / desc / category」三元素，自动补齐优化缺失信息：
-   - 若 desc 缺失，用一句话概括该任务的核心价值；
-   - 若 category 缺失，根据 name 与 desc 反向推断最贴合的主题类别；
-   - 若 name 过于宽泛，用"领域+任务+对象"三段法细化。
+1 解析用户输入的「需求描述」，自动补齐优化信息
+
 2 按任务类型选择提示词范式：
    - 分析型 → 步骤拆解 + 指标量化；
    - 创作型 → 角色沉浸 + 风格变量；
@@ -45,7 +44,7 @@ window.templates = {
      }
    }
 【产出】直接返回一段合法 JSON，仅包含上述结构，用 json 代码块包裹，格式规范。
-用户给定的「任务名称 + 一句话描述 + 主题类别」如下：[任务名称 + 一句话描述 + 主题类别]`
+用户给定的「需求描述」如下：[需求描述]`
    },
 
    'prompt-001': {
@@ -70,20 +69,13 @@ window.templates = {
 
 痛点关键词：耗时、低质、错位、虚假、格式乱。  
 
-【输入】  
-用户必须提供以下字段，缺一不可：  
-【A】 论文全文或分段文本（支持中英文、LaTeX、Word、Markdown）；  
-[论文全文或分段文本（支持中英文、LaTeX、Word、Markdown）]  
-【B】 目标期刊简称或 ISSN（如未确定，可填“auto”，系统按主题自动匹配 Top-10% 期刊）；  
-[目标期刊简称或 ISSN（如未确定，可填“auto”，系统按主题自动匹配 Top-10% 期刊）]  
-【C】 引用风格（Elsevier-Harvard、IEEE、APA 7、Nature、Chicago、GB/T 7714 等）；  
-[引用风格（Elsevier-Harvard、IEEE、APA 7、Nature、Chicago、GB/T 7714 等）]  
-【D】 所需文献数量 n（默认 15，上限 50）；  
-[所需文献数量 n（默认 15，上限 50）]  
-【E】 年限窗口（默认近五年，可自定义）；  
-[年限窗口（默认近五年，可自定义）]  
-【F】 最低质量阈值（默认中科院二区及以上或 JCR-Q2 及以上，可自定义）。  
-[最低质量阈值（默认中科院二区及以上或 JCR-Q2 及以上，可自定义）]  
+【输入】    
+【A】 论文全文或分段文本: [论文全文或分段文本]  
+【B】 目标期刊: [目标期刊]  
+【C】 引用风格: [引用风格]  
+【D】 所需文献数量: [所需文献数量]  
+【E】 年限窗口: [年限窗口]  
+【F】 最低质量阈值（分区）: [最低质量阈值（分区）]  
 
 【指令】（6×3=18 步闭环，确保可重复、可验证、可追溯）  
 
@@ -128,25 +120,19 @@ window.templates = {
 
 【输出模板】  
 \`\`\`markdown  
-### 高相关文献推荐表（n=15，风格=Elsevier-Harvard，年限=2019–2024）  
+### 高相关文献推荐表
 | 序号 | 文献标题 | 作者 | 期刊 | 年份 | 相关度 | 质量评分 | 推荐插入位置 | DOI 链接 |  
 |----|------------------------------|--------|--------------|------|--------|----------|---------------------------|----------------------------|  
 | 1 | Deep learning for fault diagnosis in aerospace bearings | Zhang, Y., et al. | Aerospace Science and Technology | 2023 | 0.94 | 9.3 | 第3节第2段“To enhance bearing reliability…” | \`https://doi.org/10.1016/j.ast.2023.108123\`  |  
-…（共 15 条）  
 
 ### 正文中已插入示例  
-To enhance bearing reliability, deep learning models have been increasingly adopted [1].  
+To enhance bearing reliability, deep learning models have been increasingly adopted 【1】.  
 
 ### 参考文献列表（Elsevier-Harvard）  
-[1] Zhang, Y., et al., 2023. Deep learning for fault diagnosis in aerospace bearings. Aerospace Science and Technology 136, 108123. \`https://doi.org/10.1016/j.ast.2023.108123\`  
+【1】 Zhang, Y., et al., 2023. Deep learning for fault diagnosis in aerospace bearings. Aerospace Science and Technology 136, 108123. \`https://doi.org/10.1016/j.ast.2023.108123\`  
 …（与表格序号一一对应）  
 \`\`\`  
-
-【使用示例】  
-用户粘贴论文段落、选择“IEEE”风格、n=20、年限=近五年、最低分区=JCR-Q1，系统返回：  
-① 经六重校验的 20 篇高质量文献；  
-② 每篇精准到句的插入位置；  
-③ IEEE 格式的参考文献列表，可直接用于 overleaf 编译。`
+`
    },
 
    'latex-translation': {
