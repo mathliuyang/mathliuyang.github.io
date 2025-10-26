@@ -922,14 +922,8 @@
                 <!-- 筛选功能 -->
                 <div class="filter-section">
                     <h3 class="filter-title">按来源筛选</h3>
-                    <div class="filter-buttons">
-                        <button class="filter-btn active" data-category="all"
-                            onclick="filterTemplates('all')">全部</button>
-                        <button class="filter-btn" data-category="国自科基金申请指令"
-                            onclick="filterTemplates('国自科基金申请指令')">国自科基金申请指令</button>
-                        <button class="filter-btn" data-category="SCI论文写作全指南"
-                            onclick="filterTemplates('SCI论文写作全指南')">SCI论文写作全指南</button>
-                        <button class="filter-btn" data-category="常用工具" onclick="filterTemplates('常用工具')">常用工具</button>
+                    <div class="filter-buttons" id="filterButtons">
+                        <!-- 动态生成的筛选按钮将在这里 -->
                     </div>
                 </div>
                 <div class="templates-grid" id="templatesGrid"></div>
@@ -1072,17 +1066,54 @@
                 });
             }
 
+            // Generate filter buttons based on categories from templates
+            function generateFilterButtons() {
+                const filterContainer = document.getElementById('filterButtons');
+                if (!filterContainer) return;
+
+                // Extract unique categories from templates
+                const categories = new Set();
+                Object.entries(window.templates).forEach(([id, template]) => {
+                    if (template.category) {
+                        categories.add(template.category);
+                    }
+                });
+
+                // Clear existing buttons (except the first "全部" button)
+                filterContainer.innerHTML = '';
+
+                // Add "全部" button
+                const allButton = document.createElement('button');
+                allButton.className = 'filter-btn active';
+                allButton.setAttribute('data-category', 'all');
+                allButton.textContent = '全部';
+                allButton.onclick = () => filterTemplates('all');
+                filterContainer.appendChild(allButton);
+
+                // Add category buttons
+                Array.from(categories).sort().forEach(category => {
+                    const button = document.createElement('button');
+                    button.className = 'filter-btn';
+                    button.setAttribute('data-category', category);
+                    button.textContent = category;
+                    button.onclick = () => filterTemplates(category);
+                    filterContainer.appendChild(button);
+                });
+            }
+
             // Initialize on page load
             document.addEventListener('DOMContentLoaded', function () {
                 // 等待所有脚本加载完成后再初始化
                 if (typeof window.templates !== 'undefined' && Object.keys(window.templates).length > 0) {
                     initializeTemplateSelector();
+                    generateFilterButtons(); // 动态生成筛选按钮
                 } else {
                     console.warn('Templates not loaded yet, retrying...');
                     // 如果templates未定义，等待一段时间后重试
                     setTimeout(() => {
                         if (typeof window.templates !== 'undefined' && Object.keys(window.templates).length > 0) {
                             initializeTemplateSelector();
+                            generateFilterButtons(); // 动态生成筛选按钮
                         } else {
                             console.error('Failed to load templates from prompt-templates.js');
                             showToast('模板加载失败，请刷新页面重试');

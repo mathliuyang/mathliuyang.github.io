@@ -1793,6 +1793,7 @@ To enhance bearing reliability, deep learning models have been increasingly adop
       cover: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=400&h=300&fit=crop&crop=center',
       desc: '研究团队梯队结构与成员协同优势的论证',
       tags: ['基金申请', '团队管理', '协同优势'],
+      category: '未分类',
       content: `请扮演一位经验丰富的科研团队管理者（PI），为我的项目申请书撰写"研究团队"介绍部分。
 
 团队成员背景：[请列出包括申请人、核心参与者（如博士后、研究生）的姓名、职称、以及各自最相关的学术专长和代表性成果]。
@@ -2008,6 +2009,7 @@ To enhance bearing reliability, deep learning models have been increasingly adop
       cover: 'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=400&h=300&fit=crop&crop=center',
       desc: 'Nature级别期刊论文的整体结构和逻辑优化',
       tags: ['论文润色', 'Nature期刊', '结构优化'],
+      category: '未分类',
       content: `请作为一名Nature期刊的资深编辑，对我的论文[请提供论文标题和主要内容概述]进行结构层面的深度优化。
 
 当前论文结构：[请简要描述现有的章节安排和主要内容分布]
@@ -2028,6 +2030,7 @@ To enhance bearing reliability, deep learning models have been increasingly adop
       cover: 'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=400&h=300&fit=crop&crop=center',
       desc: 'Nature级别期刊论文的语言表达和文字精炼',
       tags: ['论文润色', 'Nature期刊', '语言精炼'],
+      category: '未分类',
       content: `请作为一名Nature期刊的语言编辑，对我的论文段落[请粘贴需要润色的具体段落]进行语言层面的精细打磨。
 
 首先，请进行"简洁性优化"。Nature期刊要求语言简洁有力，请删除冗余表达，用最少的词汇传达最准确的信息。
@@ -2245,6 +2248,7 @@ To enhance bearing reliability, deep learning models have been increasingly adop
       cover: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=300&fit=crop&crop=center',
       desc: '研究方案的风险识别与前瞻性应对预案设计',
       tags: ['基金申请', '风险分析', '可行性'],
+      category: '未分类',
       content: `请以一名专业的风险管理顾问的身份，为我的研究方案撰写"可行性分析"中关于"潜在风险与对策"的部分。
 
 首先，请构建一个风险矩阵，从"技术路线风险"、"研究进度风险"和"数据/样本风险"三个维度，系统性地识别出本项目在实施过程中可能遇到的[例如：3-5个]具体挑战。
@@ -2259,6 +2263,7 @@ To enhance bearing reliability, deep learning models have been increasingly adop
       cover: 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=400&h=300&fit=crop&crop=center',
       desc: '项目创新性的"突破式"与"渐进式"定位与修辞策略',
       tags: ['基金申请', '创新性', '修辞策略'],
+      category: '未分类',
       content: `作为一名科学传播与修辞学专家，请指导我如何精准地定位和包装我项目的"创新之处"。
 
 我的项目创新点在于：[请详细描述你的创新点]。
@@ -2275,6 +2280,7 @@ To enhance bearing reliability, deep learning models have been increasingly adop
       cover: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=400&h=300&fit=crop&crop=center',
       desc: '面向函评专家的"筛选友好型"项目摘要撰写',
       tags: ['基金申请', '摘要写作', '评审友好'],
+      category: '未分类',
       content: `请扮演一位每年审阅上百份基金申请书、时间极其宝贵的函评专家，为我重写一份400字的项目摘要。
 
 核心要求是"筛选友好"（Screening-friendly），即能在60秒内，让评审人迅速抓住核心信息并产生兴趣。
@@ -2295,6 +2301,7 @@ To enhance bearing reliability, deep learning models have been increasingly adop
       cover: 'https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?w=400&h=300&fit=crop&crop=center',
       desc: '潜在评审质疑的预判与"先发制人式"回应策略',
       tags: ['基金申请', '评审应对', '质疑预判'],
+      category: '未分类',
       content: `请以一名经验丰富的答辩教练的身份，对我提供的申请书草稿[请粘贴申请书的核心章节]，进行一次"压力测试"，以预判并提前回应潜在的评审质疑。
 
 首先，请站在最挑剔的评审人立场，从"创新性"、"可行性"、"研究基础"和"科学问题价值"四个方面，对我提出[例如：5个]最尖锐、最可能被挑战的问题。
@@ -2309,6 +2316,7 @@ To enhance bearing reliability, deep learning models have been increasingly adop
       cover: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=400&h=300&fit=crop&crop=center',
       desc: '项目技术路线的"一图胜千言"式可视化设计',
       tags: ['基金申请', '技术路线', '可视化'],
+      category: '未分类',
       content: `请扮演一名专业的信息图（Infographics）设计师，为我的项目"技术路线"部分，设计一个清晰、美观、信息量丰富的流程图。
 
 我的技术路线包含以下步骤：[请在此处分步列出你的研究流程，例如：1. 理论模型构建 -> 2. 数据采集与预处理 -> 3. 模型参数估计 -> 4. 实验验证 -> 5. 结论分析]。
@@ -2325,6 +2333,7 @@ To enhance bearing reliability, deep learning models have been increasingly adop
       cover: 'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=400&h=300&fit=crop&crop=center',
       desc: '针对"答辩委员会"进行论文摘要的"口语化"转述与精炼',
       tags: ['Nature论文', '答辩准备', '口语化'],
+      category: '未分类',
       content: `我需要将我书面化的论文摘要，转化为一段适合在答辩开场时使用的、时长约3-5分钟的、高度凝练且富有吸引力的口头陈述。我将提供[我的博士论文书面摘要]。
 
 请基于此，为我完成以下任务：
@@ -2341,6 +2350,7 @@ To enhance bearing reliability, deep learning models have been increasingly adop
       cover: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=400&h=300&fit=crop&crop=center',
       desc: '模拟"小同行"审稿人对方法论章节进行"严苛"审查',
       tags: ['Nature论文', '方法论', '同行评议'],
+      category: '未分类',
       content: `我希望以我所在领域"小同行"审稿人的最挑剔眼光，来审查并润色我的方法论章节，以应对未来期刊投稿的挑战。我将提供[我的研究方法章节的完整文稿]。
 
 请基于此，为我完成以下任务：
@@ -2357,6 +2367,7 @@ To enhance bearing reliability, deep learning models have been increasingly adop
       cover: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=300&fit=crop&crop=center',
       desc: '模拟"跨学科"评委对引言章节进行"可读性"审查',
       tags: ['Nature论文', '跨学科', '可读性'],
+      category: '未分类',
       content: `我的答辩委员会中有一位来自相关但不同学科的评委，我需要确保我的引言对他/她是清晰和友好的。我将提供[我的引言章节初稿]和[这位跨学科学者的专业领域]。
 
 请基于此，为我完成以下任务：
@@ -2373,6 +2384,7 @@ To enhance bearing reliability, deep learning models have been increasingly adop
       cover: 'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=400&h=300&fit=crop&crop=center',
       desc: '对"讨论"章节的"理论贡献"声明进行"拔高"润色',
       tags: ['Nature论文', '理论贡献', '学术写作'],
+      category: '未分类',
       content: `我的"讨论"章节已经阐述了研究发现，但我需要将其对理论的贡献，以一种更凝练、更有力、更具"大师感"的方式陈述出来。我将提供[我的讨论章节中关于理论贡献的段落初稿]。
 
 请基于此，为我完成以下任务：
@@ -2389,6 +2401,7 @@ To enhance bearing reliability, deep learning models have been increasingly adop
       cover: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=300&fit=crop&crop=center',
       desc: '对全篇论文的"论证流"进行"可视化"诊断',
       tags: ['Nature论文', '论证逻辑', '结构优化'],
+      category: '未分类',
       content: `我需要以一种可视化的方式，来诊断我整篇论文从引言到结论的"论证流"是否顺畅。我将提供[我的博士论文每一章的核心论点句]。
 
 请基于此，为我完成以下任务：
@@ -2405,6 +2418,7 @@ To enhance bearing reliability, deep learning models have been increasingly adop
       cover: 'https://images.unsplash.com/photo-1501504905252-473c47e087f8?w=400&h=300&fit=crop&crop=center',
       desc: '审查并优化论文摘要的"叙事节奏"',
       tags: ['Nature论文', '摘要写作', '叙事节奏'],
+      category: '未分类',
       content: `我需要确保我的论文摘要能在短时间内有效吸引并说服读者，其叙事节奏至关重要。我将提供[我的博士论文摘要初稿]。
 
 请基于此，为我完成以下任务：
@@ -2421,6 +2435,7 @@ To enhance bearing reliability, deep learning models have been increasingly adop
       cover: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=400&h=300&fit=crop&crop=center',
       desc: '对论文中的图表呈现进行"信息设计"优化',
       tags: ['Nature论文', '图表设计', '信息可视化'],
+      category: '未分类',
       content: `我需要确保我的论文图表不仅信息准确，而且在"信息设计"上是清晰、美观、有说服力的。我将提供[我的论文中的一个核心图表及其标题和注释]。
 
 请基于此，为我完成以下任务：
@@ -2436,6 +2451,7 @@ To enhance bearing reliability, deep learning models have been increasingly adop
       icon: '🔮',
       desc: '将论文结论改写为面向未来的"研究议程"',
       tags: ['Nature论文', '研究议程', '学术视野'],
+      category: '未分类',
       content: `我希望我的论文结论不仅仅是总结，更能彰显我作为青年学者的学术视野，为本领域提出一个未来的研究议程。我将提供[我的论文结论部分的初稿]。
 
 请基于此，为我完成以下任务：
@@ -2452,6 +2468,7 @@ To enhance bearing reliability, deep learning models have been increasingly adop
       cover: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=400&h=300&fit=crop&crop=center',
       desc: '对论文进行一次彻底的"平行结构"审查',
       tags: ['Nature论文', '语法结构', '专业性'],
+      category: '未分类',
       content: `我需要确保论文中所有的列表、标题以及并列句都遵循了严格的"平行结构"原则，以体现最高的专业性。我将提供[我的博士论文的一个章节]。
 
 请基于此，为我完成以下任务：
@@ -2468,6 +2485,7 @@ To enhance bearing reliability, deep learning models have been increasingly adop
       cover: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=400&h=300&fit=crop&crop=center',
       desc: '撰写一份旨在"管理预期"的引言',
       tags: ['Nature论文', '引言写作', '预期管理'],
+      category: '未分类',
       content: `在引言中，除了说明我要做什么，我还需要巧妙地管理读者的预期，明确指出本研究"不做什么"。我将提供[我的引言初稿]。
 
 请基于此，为我完成以下任务：
@@ -2600,6 +2618,7 @@ To enhance bearing reliability, deep learning models have been increasingly adop
       cover: 'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=400&h=300&fit=crop&crop=center',
       desc: 'Nature级别论文的口语化表达转述与精炼',
       tags: ['Nature论文', '口语化', '表达精炼'],
+      category: '未分类',
       content: `【角色】你是一位顶级期刊的语言编辑，专门负责将学术论文的表述转化为更加自然、流畅的表达。
 
 【背景】我有一段学术论文的文字，但表述过于生硬或复杂，需要转化为更加"口语化"但仍保持学术严谨性的表达。
@@ -2621,6 +2640,7 @@ To enhance bearing reliability, deep learning models have been increasingly adop
       cover: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=400&h=300&fit=crop&crop=center',
       desc: 'Nature级别论文方法论章节的严苛审查',
       tags: ['Nature论文', '方法论', '严苛审查'],
+      category: '未分类',
       content: `【角色】你是Nature期刊的资深审稿人，以严苛著称，对方法论部分要求极高。
 
 【背景】我需要你以最严苛的标准审查我的论文方法论章节，找出所有可能的问题和不足。
@@ -2645,6 +2665,7 @@ To enhance bearing reliability, deep learning models have been increasingly adop
       cover: 'https://images.unsplash.com/photo-1446776877081-d282a0f896e2?w=400&h=300&fit=crop&crop=center',
       desc: 'Nature级别论文引言章节的可读性审查',
       tags: ['Nature论文', '引言', '可读性'],
+      category: '未分类',
       content: `【角色】你是一位专业的科学写作编辑，专门负责提升学术论文的可读性。
 
 【背景】我需要你审查我的论文引言章节，确保它对广泛的科学读者群体都具有良好的可读性。
@@ -2669,6 +2690,7 @@ To enhance bearing reliability, deep learning models have been increasingly adop
       cover: 'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=400&h=300&fit=crop&crop=center',
       desc: 'Nature级别论文讨论章节的深度提升',
       tags: ['Nature论文', '讨论', '深度提升'],
+      category: '未分类',
       content: `【角色】你是一位资深的科学研究专家，擅长深度分析和理论思考。
 
 【背景】我的论文讨论章节需要提升深度，使其达到Nature级别期刊的要求。
@@ -2705,6 +2727,7 @@ To enhance bearing reliability, deep learning models have been increasingly adop
       cover: 'https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?w=400&h=300&fit=crop&crop=center',
       desc: 'Nature级别论文局限性的诚实讨论',
       tags: ['Nature论文', '局限性', '诚实讨论'],
+      category: '未分类',
       content: `【角色】你是一位诚实、客观的科学家，深知诚实讨论研究局限性的重要性。
 
 【背景】我需要在论文中诚实地讨论研究的局限性，这是Nature等顶级期刊非常重视的。
@@ -2746,6 +2769,7 @@ To enhance bearing reliability, deep learning models have been increasingly adop
       cover: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=400&h=300&fit=crop&crop=center',
       desc: 'Nature级别论文未来研究方向的议程设计',
       tags: ['Nature论文', '未来研究', '议程设计'],
+      category: '未分类',
       content: `【角色】你是一位具有前瞻性的科学研究战略家，擅长规划未来研究方向。
 
 【背景】基于当前研究的发现和局限性，我需要设计一个有说服力的未来研究议程。
@@ -2788,6 +2812,7 @@ To enhance bearing reliability, deep learning models have been increasingly adop
       cover: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=400&h=300&fit=crop&crop=center',
       desc: 'Nature级别论文跨领域影响的深度分析',
       tags: ['Nature论文', '跨领域', '影响分析'],
+      category: '未分类',
       content: `【角色】你是一位跨学科研究专家，擅长分析科学发现的跨领域影响。
 
 【背景】我需要分析我的研究发现对其他相关领域可能产生的影响，这对于Nature级别的论文非常重要。
@@ -2830,6 +2855,7 @@ To enhance bearing reliability, deep learning models have been increasingly adop
       cover: 'https://images.unsplash.com/photo-1446776877081-d282a0f896e2?w=400&h=300&fit=crop&crop=center',
       desc: 'Nature级别论文全球意义的战略定位',
       tags: ['Nature论文', '全球意义', '战略定位'],
+      category: '未分类',
       content: `【角色】你是一位国际科学政策专家，擅长从全球视角评估科学研究的意义。
 
 【背景】我需要将我的研究置于全球背景下，突出其全球意义，这是Nature等国际顶级期刊的重要评价标准。
@@ -2872,6 +2898,7 @@ To enhance bearing reliability, deep learning models have been increasingly adop
       cover: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=400&h=300&fit=crop&crop=center',
       desc: 'Nature级别论文突破性成果的叙事构建',
       tags: ['Nature论文', '突破性', '叙事构建'],
+      category: '未分类',
       content: `【角色】你是一位科学传播专家，擅长构建引人入胜的科学突破叙事。
 
 【背景】我需要将我的研究成果包装成一个有说服力的"突破性"叙事，以符合Nature等顶级期刊对创新性的要求。
@@ -2914,6 +2941,7 @@ To enhance bearing reliability, deep learning models have been increasingly adop
       cover: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=400&h=300&fit=crop&crop=center',
       desc: 'Nature级别论文范式转换的深度论证',
       tags: ['Nature论文', '范式转换', '深度论证'],
+      category: '未分类',
       content: `【角色】你是一位科学哲学专家，深谙科学范式转换的理论和实践。
 
 【背景】我的研究可能代表了某种范式转换，我需要构建有力的论证来支持这一观点。
