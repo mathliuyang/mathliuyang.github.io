@@ -1251,7 +1251,17 @@
                 document.querySelectorAll('.filter-btn').forEach(btn => {
                     btn.classList.remove('active');
                 });
-                document.querySelector(`[data-category="${category}"]`).classList.add('active');
+                
+                // Find the button with matching data-category attribute
+                const targetButton = Array.from(document.querySelectorAll('.filter-btn')).find(btn => 
+                    btn.getAttribute('data-category') === category
+                );
+                
+                if (targetButton) {
+                    targetButton.classList.add('active');
+                } else {
+                    console.error('Filter button not found for category:', category);
+                }
 
                 // Filter templates
                 let filteredTemplates = {};
@@ -1517,7 +1527,7 @@
                     // 如果模板库标签页是激活状态，渲染模板
                     const templatesTab = document.querySelector('.tab[onclick="switchTab(\'templates\')"]');
                     const templatesContent = document.getElementById('templates');
-                    if (templatesTab && templatesTab.classList.contains('active') && 
+                    if (templatesTab && templatesTab.classList.contains('active') &&
                         templatesContent && templatesContent.classList.contains('active')) {
                         renderTemplates();
                     }
