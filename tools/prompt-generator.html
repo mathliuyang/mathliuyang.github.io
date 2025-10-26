@@ -881,7 +881,8 @@
                 flex-direction: column;
             }
         }
-    /* 二级下拉菜单样式 */
+
+        /* 二级下拉菜单样式 */
         .dropdown-container {
             position: relative;
             width: 100%;
@@ -1040,11 +1041,11 @@
             .dropdown-menu {
                 max-height: 300px;
             }
-            
+
             .template-item {
                 padding: 0.75rem 1rem 0.75rem 1.5rem;
             }
-            
+
             .template-desc {
                 display: none;
             }
@@ -1066,7 +1067,7 @@
         [data-theme="dark"] .category-count {
             background: rgba(255, 255, 255, 0.1);
         }
-        </style>
+    </style>
 </head>
 
 <body>
@@ -1114,12 +1115,12 @@
             </div>
 
             <div class="mode-tabs">
-                <button class="tab active" onclick="switchTab('generator')">智能生成</button>
-                <button class="tab" onclick="switchTab('templates')">模板库</button>
+                <button class="tab" onclick="switchTab('generator')">智能生成</button>
+                <button class="tab active" onclick="switchTab('templates')">模板库</button>
             </div>
 
             <!-- Generator Mode -->
-            <div id="generator" class="tab-content active">
+            <div id="generator" class="tab-content">
                 <div class="main-grid">
                     <div class="panel">
                         <h2 class="panel-title">配置参数</h2>
@@ -1135,7 +1136,8 @@
                                     <!-- 动态生成的二级菜单将在这里 -->
                                 </div>
                             </div>
-                            <select class="form-select" id="templateSelect" onchange="loadTemplate()" style="display: none;">
+                            <select class="form-select" id="templateSelect" onchange="loadTemplate()"
+                                style="display: none;">
                                 <option value="">请选择模板...</option>
                             </select>
                         </div>
@@ -1168,7 +1170,7 @@
             </div>
 
             <!-- Templates Mode -->
-            <div id="templates" class="tab-content">
+            <div id="templates" class="tab-content active">
                 <!-- 筛选功能 -->
                 <div class="filter-section">
                     <h3 class="filter-title">按来源筛选</h3>
@@ -1266,7 +1268,7 @@
 
                 // Re-render templates with filtered results
                 renderTemplates(filteredTemplates);
-                
+
                 // Update category counts to reflect current filter state
                 updateCategoryCounts();
             }
@@ -1326,7 +1328,7 @@
             // 初始化二级下拉菜单
             function initializeDropdownMenu() {
                 const dropdownMenu = document.getElementById('dropdownMenu');
-                
+
                 // 按分类分组模板
                 const templatesByCategory = {};
                 Object.entries(window.templates).forEach(([id, template]) => {
@@ -1353,8 +1355,8 @@
                                 </div>
                                 <div class="template-items" id="category-${category}">
                                     ${templates
-                                        .sort((a, b) => a.name.localeCompare(b.name, 'zh-CN'))
-                                        .map(template => `
+                                .sort((a, b) => a.name.localeCompare(b.name, 'zh-CN'))
+                                .map(template => `
                                             <div class="template-item" 
                                                  onclick="selectTemplate('${template.id}', '${template.name.replace(/'/g, "\\'")}')"
                                                  data-template-id="${template.id}">
@@ -1376,10 +1378,10 @@
                 const dropdown = document.getElementById('templateDropdown');
                 const menu = document.getElementById('dropdownMenu');
                 const display = document.querySelector('.dropdown-display');
-                
+
                 menu.classList.toggle('show');
                 display.classList.toggle('active');
-                
+
                 // 点击外部关闭下拉菜单
                 if (menu.classList.contains('show')) {
                     setTimeout(() => {
@@ -1395,7 +1397,7 @@
                 const dropdown = document.getElementById('templateDropdown');
                 const menu = document.getElementById('dropdownMenu');
                 const display = document.querySelector('.dropdown-display');
-                
+
                 if (!dropdown.contains(event.target)) {
                     menu.classList.remove('show');
                     display.classList.remove('active');
@@ -1413,18 +1415,18 @@
             function selectTemplate(templateId, templateName) {
                 // 更新显示文本
                 document.getElementById('dropdownText').textContent = templateName;
-                
+
                 // 更新选中状态
                 document.querySelectorAll('.template-item').forEach(item => {
                     item.classList.remove('selected');
                 });
                 document.querySelector(`[data-template-id="${templateId}"]`).classList.add('selected');
-                
+
                 // 更新隐藏的select元素并触发加载
                 const templateSelect = document.getElementById('templateSelect');
                 templateSelect.value = templateId;
                 loadTemplate();
-                
+
                 // 关闭下拉菜单
                 setTimeout(() => {
                     const menu = document.getElementById('dropdownMenu');
@@ -1442,7 +1444,7 @@
                 // Extract unique categories from templates and count templates in each category
                 const categoryCounts = {};
                 let totalCount = 0;
-                
+
                 Object.entries(window.templates).forEach(([id, template]) => {
                     if (template.category) {
                         categoryCounts[template.category] = (categoryCounts[template.category] || 0) + 1;
@@ -1480,7 +1482,7 @@
                 // Count templates in each category
                 const categoryCounts = {};
                 let totalCount = 0;
-                
+
                 Object.entries(window.templates).forEach(([id, template]) => {
                     if (template.category) {
                         categoryCounts[template.category] = (categoryCounts[template.category] || 0) + 1;
@@ -1493,7 +1495,7 @@
                 buttons.forEach(button => {
                     const category = button.getAttribute('data-category');
                     const count = category === 'all' ? totalCount : (categoryCounts[category] || 0);
-                    
+
                     // Update the count span if it exists, otherwise create it
                     let countSpan = button.querySelector('.category-count');
                     if (!countSpan) {
@@ -1511,6 +1513,14 @@
                 if (typeof window.templates !== 'undefined' && Object.keys(window.templates).length > 0) {
                     initializeTemplateSelector();
                     generateFilterButtons(); // 动态生成筛选按钮
+
+                    // 如果模板库标签页是激活状态，渲染模板
+                    const templatesTab = document.querySelector('.tab[onclick="switchTab(\'templates\')"]');
+                    const templatesContent = document.getElementById('templates');
+                    if (templatesTab && templatesTab.classList.contains('active') && 
+                        templatesContent && templatesContent.classList.contains('active')) {
+                        renderTemplates();
+                    }
                 } else {
                     console.warn('Templates not loaded yet, retrying...');
                     // 如果templates未定义，等待一段时间后重试
@@ -1518,6 +1528,14 @@
                         if (typeof window.templates !== 'undefined' && Object.keys(window.templates).length > 0) {
                             initializeTemplateSelector();
                             generateFilterButtons(); // 动态生成筛选按钮
+
+                            // 如果模板库标签页是激活状态，渲染模板
+                            const templatesTab = document.querySelector('.tab[onclick="switchTab(\'templates\')"]');
+                            const templatesContent = document.getElementById('templates');
+                            if (templatesTab && templatesTab.classList.contains('active') &&
+                                templatesContent && templatesContent.classList.contains('active')) {
+                                renderTemplates();
+                            }
                         } else {
                             console.error('Failed to load templates from prompt-templates.js');
                             showToast('模板加载失败，请刷新页面重试');
@@ -1780,7 +1798,7 @@
 
                     // Update dropdown display text and selection state
                     document.getElementById('dropdownText').textContent = currentTemplate.name;
-                    
+
                     // Update selected state in dropdown menu
                     document.querySelectorAll('.template-item').forEach(item => {
                         item.classList.remove('selected');
@@ -1968,10 +1986,10 @@
             function handleFieldInput(input) {
                 const formGroup = input.closest('.form-group');
                 if (!formGroup) return;
-                
+
                 const label = formGroup.querySelector('.form-label.required');
                 if (!label) return;
-                
+
                 // 如果有输入值，添加filled类，*号变绿
                 if (input.value.trim()) {
                     label.classList.add('filled');
@@ -2165,6 +2183,19 @@
                     // 已经验证过，直接显示内容
                     document.getElementById('passwordModal').style.display = 'none';
                     document.getElementById('mainContent').classList.add('authenticated');
+
+                    // 如果模板库标签页是激活状态，渲染模板
+                    setTimeout(() => {
+                        const templatesTab = document.querySelector('.tab[onclick="switchTab(\'templates\')"]');
+                        const templatesContent = document.getElementById('templates');
+                        if (templatesTab && templatesTab.classList.contains('active') &&
+                            templatesContent && templatesContent.classList.contains('active')) {
+                            // 确保模板数据已加载
+                            if (window.templates && Object.keys(window.templates).length > 0) {
+                                renderTemplates();
+                            }
+                        }
+                    }, 100);
                 } else {
                     // 需要验证，显示密码模态框
                     document.getElementById('passwordModal').style.display = 'flex';
