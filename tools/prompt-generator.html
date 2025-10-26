@@ -1774,6 +1774,18 @@
                     // Set template in selector
                     document.getElementById('templateSelect').value = templateId;
 
+                    // Update dropdown display text and selection state
+                    document.getElementById('dropdownText').textContent = currentTemplate.name;
+                    
+                    // Update selected state in dropdown menu
+                    document.querySelectorAll('.template-item').forEach(item => {
+                        item.classList.remove('selected');
+                    });
+                    const selectedItem = document.querySelector(`[data-template-id="${templateId}"]`);
+                    if (selectedItem) {
+                        selectedItem.classList.add('selected');
+                    }
+
                     // Load the template form
                     loadTemplate();
                 }
