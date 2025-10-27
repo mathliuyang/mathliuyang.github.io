@@ -1251,12 +1251,12 @@
                 document.querySelectorAll('.filter-btn').forEach(btn => {
                     btn.classList.remove('active');
                 });
-                
+
                 // Find the button with matching data-category attribute
-                const targetButton = Array.from(document.querySelectorAll('.filter-btn')).find(btn => 
+                const targetButton = Array.from(document.querySelectorAll('.filter-btn')).find(btn =>
                     btn.getAttribute('data-category') === category
                 );
-                
+
                 if (targetButton) {
                     targetButton.classList.add('active');
                 } else {
@@ -1324,52 +1324,12 @@
                 const templateSelect = document.getElementById('templateSelect');
                 templateSelect.innerHTML = '<option value="">请选择模板...</option>';
 
-                // 按分类分组并按分类首次出现顺序排列
-                const templatesByCategory = {};
                 Object.entries(window.templates).forEach(([id, template]) => {
-                    const category = template.category || '未分类';
-                    if (!templatesByCategory[category]) {
-                        templatesByCategory[category] = [];
-                    }
-                    templatesByCategory[category].push({ id, ...template });
+                    const option = document.createElement('option');
+                    option.value = id;
+                    option.textContent = template.name;
+                    templateSelect.appendChild(option);
                 });
-
-                // 获取分类首次出现的顺序
-                const getCategoryFirstAppearanceOrder = (category) => {
-                    let firstIndex = Infinity;
-                    const templatesArray = Object.entries(window.templates);
-                    templatesArray.forEach(([id, template], index) => {
-                        if (template.category === category && index < firstIndex) {
-                            firstIndex = index;
-                        }
-                    });
-                    return firstIndex === Infinity ? Object.keys(window.templates).length : firstIndex;
-                };
-
-                // 按分类首次出现顺序添加选项
-                Object.entries(templatesByCategory)
-                    .sort(([categoryA], [categoryB]) => {
-                        const orderA = getCategoryFirstAppearanceOrder(categoryA);
-                        const orderB = getCategoryFirstAppearanceOrder(categoryB);
-                        return orderA - orderB;
-                    })
-                    .forEach(([category, templates]) => {
-                        // 添加分类分组标签
-                        const groupLabel = document.createElement('optgroup');
-                        groupLabel.label = category;
-                        
-                        // 按名称排序分类内的模板
-                        templates.sort((a, b) => a.name.localeCompare(b.name, 'zh-CN'));
-                        
-                        templates.forEach(template => {
-                            const option = document.createElement('option');
-                            option.value = template.id;
-                            option.textContent = template.name;
-                            groupLabel.appendChild(option);
-                        });
-                        
-                        templateSelect.appendChild(groupLabel);
-                    });
 
                 // 初始化新的二级下拉菜单
                 initializeDropdownMenu();
@@ -1379,44 +1339,35 @@
             function initializeDropdownMenu() {
                 const dropdownMenu = document.getElementById('dropdownMenu');
 
-                // 按分类分组模板
+                // 按分类分组模板，保持原始顺序
                 const templatesByCategory = {};
+                const categoryOrder = {}; // 记录分类首次出现的顺序
+                let orderIndex = 0;
+                
                 Object.entries(window.templates).forEach(([id, template]) => {
                     const category = template.category || '未分类';
                     if (!templatesByCategory[category]) {
                         templatesByCategory[category] = [];
+                        categoryOrder[category] = orderIndex++;
                     }
-                    templatesByCategory[category].push({ id, ...template });
+                    templatesByCategory[category].push({ id, ...template, originalIndex: Object.keys(window.templates).indexOf(id) });
                 });
 
-                // 获取分类首次出现的顺序
-                const getCategoryFirstAppearanceOrder = (category) => {
-                    let firstIndex = Infinity;
-                    const templatesArray = Object.entries(window.templates);
-                    templatesArray.forEach(([id, template], index) => {
-                        if (template.category === category && index < firstIndex) {
-                            firstIndex = index;
-                        }
+                // 调试输出：显示分类和模板的排序结果
+                console.log('=== 模板排序调试信息 ===');
+                Object.entries(templatesByCategory)
+                    .sort(([catA], [catB]) => categoryOrder[catA] - categoryOrder[catB])
+                    .forEach(([category, templates]) => {
+                        console.log(`分类: ${category} (顺序: ${categoryOrder[category]})`);
+                        templates.sort((a, b) => a.originalIndex - b.originalIndex).forEach((template, index) => {
+                            console.log(`  ${index + 1}. ${template.name} (原始索引: ${template.originalIndex})`);
+                        });
                     });
-                    return firstIndex === Infinity ? Object.keys(window.templates).length : firstIndex;
-                };
+                console.log('======================');
 
-                // 生成二级菜单HTML，按分类首次出现顺序排序
-                const sortedCategories = Object.entries(templatesByCategory)
-                    .sort(([categoryA], [categoryB]) => {
-                        const orderA = getCategoryFirstAppearanceOrder(categoryA);
-                        const orderB = getCategoryFirstAppearanceOrder(categoryB);
-                        return orderA - orderB;
-                    });
-                
-                // 调试输出：显示分类排序结果
-                console.log('分类排序结果（按首次出现顺序）：');
-                sortedCategories.forEach(([category], index) => {
-                    const order = getCategoryFirstAppearanceOrder(category);
-                    console.log(`${index + 1}. ${category} (首次出现在第${order + 1}个模板)`);
-                });
-
-                dropdownMenu.innerHTML = sortedCategories
+                // 生成二级菜单HTML，分类按首次出现顺序排序，模板按原始顺序排序
+                dropdownMenu.innerHTML = Object.entries(templatesByCategory)
+                    .sort(([catA], [catB]) => categoryOrder[catA] - categoryOrder[catB])
                     .map(([category, templates]) => {
                         const categoryCount = templates.length;
                         return `
@@ -1430,7 +1381,7 @@
                                 </div>
                                 <div class="template-items" id="category-${category}">
                                     ${templates
-                                .sort((a, b) => a.name.localeCompare(b.name, 'zh-CN'))
+                                .sort((a, b) => a.originalIndex - b.originalIndex) // 按原始顺序排序
                                 .map(template => `
                                             <div class="template-item" 
                                                  onclick="selectTemplate('${template.id}', '${template.name.replace(/'/g, "\\'")}')"
@@ -1552,13 +1503,13 @@
                         });
                         return firstIndex === Infinity ? Object.keys(window.templates).length : firstIndex;
                     };
-                    
+
                     const orderA = getFirstAppearanceOrder(a);
                     const orderB = getFirstAppearanceOrder(b);
-                    
+
                     return orderA - orderB;
                 });
-                
+
                 sortedCategories.forEach(category => {
                     const button = document.createElement('button');
                     button.className = 'filter-btn';
@@ -1988,7 +1939,7 @@
                         // 使用简单的字符串替换，只替换未转义的中括号
                         const searchPattern = `[${fieldName}]`;
                         const escapedPattern = `\\[${fieldName}\\]`;
-                        
+
                         // 先将转义的括号替换为临时占位符
                         content = content.replace(new RegExp(escapedPattern.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g'), `__ESCAPED_BRACKET_${fieldName}__`);
                         // 然后替换正常的括号
