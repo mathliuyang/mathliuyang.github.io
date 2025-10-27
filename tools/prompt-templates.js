@@ -6,7 +6,7 @@ window.templates = {
    'prompt-opt-001': {
       name: '提示词生成专家',
       icon: '🧠',
-      cover: 'https://images.unsplash.com/photo-1503551723145-6c040742065b?w=400&h=300&fit=crop&crop=center',
+      cover: 'https://i0.hdslb.com/bfs/archive/550d9cba840dae53b9c45738bb9bba2c3b56bc9e.jpg?w=400&h=300&fit=crop&crop=center',
       desc: '将任何需求转化为结构化、可复用的高质量提示词模板',
       tags: ['提示词设计', '模板生成', '多场景适配'],
       category: '常用工具',
@@ -63,7 +63,7 @@ window.templates = {
    'prompt-opt-002': {
       name: '提示词格式优化工具',
       icon: '🛠️',
-      cover: 'https://cdn-icons-png.flaticon.com/512/2920/2920277.png',
+      cover: 'https://i-blog.csdnimg.cn/direct/90db42b98f4d4357ae6b3826d4fc151f.png?auto=format&fit=crop&w=1350&q=80',
       desc: '将用户提供的提示词描述自动格式化并补全缺失字段。',
       tags: ['提示词优化', '格式化工具', '自动化'],
       category: '常用工具',
@@ -91,7 +91,7 @@ window.templates = {
    "prompt-opt-003": {
       "name": "通知回复 · 邮件生成器",
       "icon": "📤",
-      "cover": "https://images.unsplash.com/photo-1596524430615-b46475ddff6e?auto=format&fit=crop&w=1350&q=80",
+      "cover": "https://gd-hbimg.huaban.com/ca6329d97d74a54f5fbbc6bfdfc04d45acc4b3c01d040-ziqtoA_fw1200webp?auto=format&fit=crop&w=1350&q=80",
       "desc": "基于通知内容自动生成规范、专业的回复或提交邮件，支持附件确认和自定义细节，直接复制使用，提高邮件处理效率。",
       "tags": ["通知回复", "提交邮件", "场景通用"],
       "category": "常用工具",
@@ -99,9 +99,9 @@ window.templates = {
    },
    // ==================== 公众号推文 ====================
    'prompt-wx-001': {
-      name: '科研论文 · 科普推文创作系统',
+      name: '公众号智创 · 学术论文推荐',
       icon: '📱',
-      cover: 'https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=400&h=300&fit=crop&crop=center',
+      cover: 'https://gd-hbimg.huaban.com/77c1c31d06c9d3517940cca67fd8232a20ad762187f161-dcHLWH_fw1200webp?w=400&h=300&fit=crop&crop=center',
       desc: '将复杂科研论文转化为引人入胜的科普推文（计算数学 & AI for Science方向）',
       tags: ['科普写作', '学术传播', '社交媒体'],
       category: '内容运营｜智核学术',
@@ -366,9 +366,9 @@ window.templates = {
 `
    },
    'prompt-wx-002': {
-      name: '期刊推荐 · 信息标准化格式转换',
+      name: '公众号智创 · 精选期刊推荐',
       icon: '📚',
-      cover: 'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=400&h=300&fit=crop&crop=center',
+      cover: 'https://gd-hbimg.huaban.com/fa7a9af5d35fa7d0fd04f10a565813d81a52f24c12e5f3-CyFbpQ_fw1200webp?w=400&h=300&fit=crop&crop=center',
       desc: '将原始期刊数据标准化为结构化JSON格式，服务于学术期刊数据库建设与投稿决策支持系统',
       tags: ['信息标准化', '投稿决策', '期刊数据库'],
       category: '内容运营｜智核学术',
@@ -576,9 +576,9 @@ window.templates = {
 - 保持格式美观，使用4空格缩进`
    },
    'prompt-wx-003': {
-      name: '科研工具 · 推文创作系统',
+      name: '公众号智创 · 科研工具推荐',
       icon: '🔧',
-      cover: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=400&h=300&fit=crop&crop=center',
+      cover: 'https://gd-hbimg.huaban.com/5eae6b33b73eba64e7f28883c1a78ba4dc0a7ef1804f3-1BTwBk_fw1200webp?w=400&h=300&fit=crop&crop=center',
       desc: '生成专业的科研工具推荐文章，格式规范，内容详实',
       tags: ['科研工具', '推荐文章', '学术写作'],
       category: '内容运营｜智核学术',
@@ -732,7 +732,7 @@ window.templates = {
    "prompt-academic-001": {
       "name": "顶刊标题重构器",
       "icon": "✨",
-      "cover": "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?auto=format&fit=crop&w=1350&q=80",
+      "cover": "https://gd-hbimg.huaban.com/b902aa26817dc220e3224ebb1ee9e2c1dc05be8d90e20-gqCqfa_fw1200webp?auto=format&fit=crop&w=1350&q=80",
       "desc": "将平淡论文标题升级为Nature/Science级别的精准表达",
       "tags": ["学术写作", "标题优化", "顶刊投稿"],
       "category": "科研工具｜论文",
@@ -742,7 +742,7 @@ window.templates = {
    "prompt-academic-002": {
       "name": "方法命名与缩写设计大师",
       "icon": "🔤",
-      "cover": "https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?auto=format&fit=crop&w=1350&q=80",
+      "cover": "https://gd-hbimg.huaban.com/e1100d827735548252c9c4b9a1b7fc0d7020130a3a7ef-2PROHM_fw1200webp?auto=format&fit=crop&w=1350&q=80",
       "desc": "为研究方法设计专业易记的学术缩写，必要时反向优化标题",
       "tags": ["方法命名", "缩写设计", "标题优化"],
       "category": "科研工具｜论文",
@@ -762,7 +762,7 @@ window.templates = {
    "prompt-academic-004": {
       "name": "文献反向植入器",
       "icon": "📚",
-      "cover": "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?auto=format&fit=crop&w=1350&q=80",
+      "cover": "https://gd-hbimg.huaban.com/38e4839361bb0b383244e94edac640e0728497a2120833-tuBS1b_fw1200webp?auto=format&fit=crop&w=1350&q=80",
       "desc": "为已有论文智能匹配并插入高质量真实文献引用",
       "tags": ["文献检索", "引用插入", "学术规范"],
       "category": "科研工具｜论文",
@@ -781,7 +781,7 @@ window.templates = {
    "prompt-academic-006": {
       "name": "论文全文纠错润色师",
       "icon": "🖊️",
-      "cover": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=1350&q=80",
+      "cover": "https://gd-hbimg.huaban.com/2c28ddf4c9beee9760c45d6905074ee12cc2ffb118eb2-4Wc5tZ_fw1200webp?auto=format&fit=crop&w=1350&q=80",
       "desc": "自动识别论文语言，中英双语一键扫描全文语法、术语、逻辑、格式并给出对照修改方案。",
       "tags": ["双语润色", "语法逻辑", "格式审查"],
       "category": "科研工具｜论文",
@@ -791,7 +791,7 @@ window.templates = {
    "prompt-academic-007": {
       "name": "智译｜段落翻译",
       "icon": "🔬",
-      "cover": "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?auto=format&fit=crop&w=1350&q=80",
+      "cover": "https://www.scipaperpub.com/wp-content/uploads/2019/11/ss7.jpg?auto=format&fit=crop&w=1350&q=80",
       "desc": "专业译者，对标顶刊标准，确保译文直接可投稿。",
       "tags": ["学术翻译", "期刊投稿", "双语润色"],
       "category": "科研工具｜论文",
