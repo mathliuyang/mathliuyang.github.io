@@ -1886,8 +1886,8 @@
                             return;
                         }
 
-                        // 如果字段有值则使用实际值，否则使用占位符或空字符串
-                        fieldValues[field.name] = value || field.placeholder || '';
+                        // 如果字段有值则使用实际值，否则保留原始字段名格式
+                        fieldValues[field.name] = value || `[${field.name}]`;
                     });
 
                     // 如果有验证错误，停止处理
