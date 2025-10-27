@@ -1666,9 +1666,11 @@
             function extractDynamicFields(content) {
                 try {
                     const fields = [];
-                    // 修改正则表达式，排除转义的中括号 \[...\]
-                    const fieldPattern = /(?<!\\)\[([^\]]+)\](?!\\)/g;
-                    const matches = [...content.matchAll(fieldPattern)];
+                    // 先移除所有转义的中括号 \[...\]，避免匹配到它们
+                    const cleanedContent = content.replace(/\\\[.*?\\\]/g, '');
+                    // 然后匹配剩余的正常中括号 [...]
+                    const fieldPattern = /\[([^\]]+)\]/g;
+                    const matches = [...cleanedContent.matchAll(fieldPattern)];
 
                     if (matches.length === 0) {
                         console.info('No dynamic fields found in template');
@@ -1898,14 +1900,22 @@
 
                     // 替换模板中的动态字段（只替换未转义的括号）
                     Object.entries(fieldValues).forEach(([fieldName, value]) => {
-                        // 使用负向前瞻和负向后顾来避免替换转义的括号 \[...\]
-                        const escapedFieldName = fieldName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-                        const pattern = new RegExp(`(?<!\\\\)\\[${escapedFieldName}\\](?!\\\\)`, 'g');
-                        content = content.replace(pattern, value);
+                        // 使用简单的字符串替换，只替换未转义的中括号
+                        const searchPattern = `[${fieldName}]`;
+                        const escapedPattern = `\\[${fieldName}\\]`;
+                        
+                        // 先将转义的括号替换为临时占位符
+                        content = content.replace(new RegExp(escapedPattern.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g'), `__ESCAPED_BRACKET_${fieldName}__`);
+                        // 然后替换正常的括号
+                        content = content.replace(new RegExp(searchPattern.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g'), value);
+                        // 最后恢复转义的括号
+                        content = content.replace(new RegExp(`__ESCAPED_BRACKET_${fieldName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}__`, 'g'), escapedPattern);
                     });
 
                     // 检查是否还有未替换的字段（排除转义的括号）
-                    const remainingFields = content.match(/(?<!\\)\[[^\]]+\](?!\\)/g);
+                    // 先移除转义的括号，再检查剩余的正常括号
+                    const cleanedContent = content.replace(/\\\[.*?\\\]/g, '');
+                    const remainingFields = cleanedContent.match(/\[[^\]]+\]/g);
                     if (remainingFields) {
                         console.warn('Unprocessed fields found:', remainingFields);
                     }
