@@ -994,7 +994,15 @@ To enhance bearing reliability, deep learning models have been increasingly adop
    "content": "完整的提示词内容"
 }`
    },
-
+   "prompt-1-009": {
+      "name": "文献综述一键生成助手",
+      "icon": "🔍",
+      "cover": "https://images.unsplash.com/photo-1507842217343-583bb7270b66?auto=format&fit=crop&w=1350&q=80",
+      "desc": "从确定主题、生成关键词到检索真实文献并输出综述大纲，全流程辅助完成文献综述初稿。",
+      "tags": ["文献综述", "关键词生成", "真实文献检索"],
+      "category": "常用工具",
+      "content": "【Step 1 确定主题并生成关键词】\n我正在写一篇关于“[主题]”的文献综述。请帮助我生成5–10个可用于Google Scholar、PubMed等数据库检索的关键词及其同义词，仅需给出词表，无需解释。\n\n【Step 2 文献检索】\n请基于上述生成的关键词词表为我检索[检索年份，xxxx 年以后发表]年以后发表、相关度最高的[检索论文的数量]篇真实学术文献，按APA格式列出，并给出每篇的DOI或PubMed链接（确保真实有效匹配）。\n\n【Step 3 生成文献综述初步大纲】\n请根据主题及上述文献，撰写一份详细的文献综述大纲，包含：\n1. 引言（研究背景与重要性）；\n2. 理论背景（核心概念与理论框架）；\n3. 研究现状（按主题或时间顺序归纳主要成果）；\n4. 研究挑战与争议（不足与分歧）；\n5. 结论（总结发现、研究空白及未来方向）。\n确保逻辑清晰、层次分明，可直接用于Nature、Science 等高质量期刊的科研论文写作。"
+   },
    // ==================== 审稿回信｜指南 ====================
    "prompt-2-001": {
       "name": "审稿意见·总体回应",
@@ -1071,7 +1079,7 @@ To enhance bearing reliability, deep learning models have been increasingly adop
    "prompt-2-009": {
       "name": "不可行建议·建设回应",
       "icon": "🚀",
-      "cover": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1350&q=80",
+      "cover": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1350&q=80",
       "desc": "将客观无法完成的建议转化为未来研究方向并写入局限性部分以示尊重。",
       "tags": ["不可行建议", "未来研究", "局限性转化"],
       "category": "审稿回信｜指南",
@@ -1181,7 +1189,7 @@ To enhance bearing reliability, deep learning models have been increasingly adop
    "prompt-3-001": {
       "name": "生态位·竞争分析",
       "icon": "🕵️‍♂️",
-      "cover": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1350&q=80",
+      "cover": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1350&q=80",
       "desc": "基于顶尖学者近5年成果识别理论内核与技术壁垒找出差异化竞争切入点。",
       "tags": ["竞争生态位", "差异化定位", "顶尖对手"],
       "category": "国自科申报｜策略",
@@ -1208,7 +1216,7 @@ To enhance bearing reliability, deep learning models have been increasingly adop
    "prompt-3-004": {
       "name": "预算ROI·投资视角",
       "icon": "💰",
-      "cover": "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&w=1350&q=80",
+      "cover": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1350&q=80",
       "desc": "以科学投资回报率视角将预算重构为战略投资模块并论证其必要性效率。",
       "tags": ["预算ROI", "投资模块", "效率论证"],
       "category": "国自科申报｜策略",
@@ -1217,7 +1225,7 @@ To enhance bearing reliability, deep learning models have been increasingly adop
    "prompt-3-005": {
       "name": "风险矩阵·应对预案",
       "icon": "⚠️",
-      "cover": "https://images.unsplash.com/photo-1581093458791-9d2fb0d6c7c1?auto=format&fit=crop&w=1350&q=80",
+      "cover": "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&w=1350&q=80",
       "desc": "构建技术进度数据三维风险矩阵为高风险高影响条目设计具体可操作预案。",
       "tags": ["风险矩阵", "应对预案", "可行性"],
       "category": "国自科申报｜策略",
@@ -1262,7 +1270,7 @@ To enhance bearing reliability, deep learning models have been increasingly adop
    "prompt-3-010": {
       "name": "数据管理·DMP",
       "icon": "🗃️",
-      "cover": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1350&q=80",
+      "cover": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1350&q=80",
       "desc": "撰写含采集存储共享知识产权及责任人的开放科学规范数据管理计划。",
       "tags": ["数据管理计划", "开放科学", "共享存储"],
       "category": "国自科申报｜策略",
@@ -1289,7 +1297,7 @@ To enhance bearing reliability, deep learning models have been increasingly adop
    "prompt-3-013": {
       "name": "落选解读·归因分析",
       "icon": "📉",
-      "cover": "https://images.unsplash.com/photo-1581093458791-9d2fb0d6c7c1?auto=format&fit=crop&w=1350&q=80",
+      "cover": "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&w=1350&q=80",
       "desc": "分类正负面意见并归因科学问题方案基础或表述确定致命硬伤和主攻方向。",
       "tags": ["落选解读", "归因分析", "主攻方向"],
       "category": "国自科申报｜策略",
