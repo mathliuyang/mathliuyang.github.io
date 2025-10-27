@@ -1666,7 +1666,8 @@
             function extractDynamicFields(content) {
                 try {
                     const fields = [];
-                    const fieldPattern = /\[([^\]]+)\]/g;
+                    // 修改正则表达式，排除转义的中括号 \[...\]
+                    const fieldPattern = /(?<!\\)\[([^\]]+)\](?!\\)/g;
                     const matches = [...content.matchAll(fieldPattern)];
 
                     if (matches.length === 0) {
@@ -1895,14 +1896,16 @@
                         return;
                     }
 
-                    // 替换模板中的动态字段
+                    // 替换模板中的动态字段（只替换未转义的括号）
                     Object.entries(fieldValues).forEach(([fieldName, value]) => {
-                        const pattern = new RegExp(`\\[${fieldName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\]`, 'g');
+                        // 使用负向前瞻和负向后顾来避免替换转义的括号 \[...\]
+                        const escapedFieldName = fieldName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                        const pattern = new RegExp(`(?<!\\\\)\\[${escapedFieldName}\\](?!\\\\)`, 'g');
                         content = content.replace(pattern, value);
                     });
 
-                    // 检查是否还有未替换的字段
-                    const remainingFields = content.match(/\[[^\]]+\]/g);
+                    // 检查是否还有未替换的字段（排除转义的括号）
+                    const remainingFields = content.match(/(?<!\\)\[[^\]]+\](?!\\)/g);
                     if (remainingFields) {
                         console.warn('Unprocessed fields found:', remainingFields);
                     }
