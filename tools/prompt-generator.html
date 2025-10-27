@@ -1473,8 +1473,28 @@
                 allButton.onclick = () => filterTemplates('all');
                 filterContainer.appendChild(allButton);
 
-                // Add category buttons with counts
-                Array.from(Object.keys(categoryCounts)).sort().forEach(category => {
+                // Add category buttons with counts, ordered by first appearance in templates
+                const sortedCategories = Array.from(Object.keys(categoryCounts)).sort((a, b) => {
+                    // 获取分类在模板中首次出现的顺序
+                    const getFirstAppearanceOrder = (category) => {
+                        let firstIndex = Infinity;
+                        // 使用Object.entries保持模板在对象中的原始顺序
+                        const templatesArray = Object.entries(window.templates);
+                        templatesArray.forEach(([id, template], index) => {
+                            if (template.category === category && index < firstIndex) {
+                                firstIndex = index;
+                            }
+                        });
+                        return firstIndex === Infinity ? Object.keys(window.templates).length : firstIndex;
+                    };
+                    
+                    const orderA = getFirstAppearanceOrder(a);
+                    const orderB = getFirstAppearanceOrder(b);
+                    
+                    return orderA - orderB;
+                });
+                
+                sortedCategories.forEach(category => {
                     const button = document.createElement('button');
                     button.className = 'filter-btn';
                     button.setAttribute('data-category', category);
