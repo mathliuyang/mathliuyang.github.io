@@ -4766,31 +4766,31 @@
                             
                             // 创建GIF动画（如果有多个图表）
                             if (images.length > 1) {
-                                showToast('正在生成GIF动画...');
+                                showToast('正在生成图表动画...');
                                 try {
-                                    console.log('开始创建GIF，图表数量:', images.length);
-                                    const gifBlob = await createChartGIF(images, 2000); // 每2秒切换
-                                    console.log('GIF创建成功，文件大小:', gifBlob.size);
+                                    console.log('开始创建动画，图表数量:', images.length);
+                                    const videoBlob = await createChartGIF(images, 2000); // 每2秒切换
+                                    console.log('动画创建成功，文件大小:', videoBlob.size);
                                     
-                                    // 将GIF添加到ZIP文件
-                                    zip.file('color-scheme-charts.gif', gifBlob);
-                                    showToast('GIF动画生成完成！');
-                                } catch (gifError) {
-                                    console.error('创建GIF失败:', gifError);
-                                    console.error('错误堆栈:', gifError.stack);
+                                    // 将动画添加到ZIP文件（使用.webm扩展名）
+                                    zip.file('color-scheme-charts.webm', videoBlob);
+                                    showToast('图表动画生成完成！');
+                                } catch (videoError) {
+                                    console.error('创建动画失败:', videoError);
+                                    console.error('错误堆栈:', videoError.stack);
                                     
-                                    // 如果GIF生成失败，尝试创建一个简单的文本说明文件
+                                    // 如果动画生成失败，尝试创建一个简单的文本说明文件
                                     try {
-                                        const fallbackText = `颜色方案图表合集\n\n包含 ${images.length} 个图表:\n${images.map(img => `- ${img.nameCN}`).join('\n')}\n\n原始GIF生成失败，但所有图表图片已包含在本压缩包中。`;
+                                        const fallbackText = `颜色方案图表合集\n\n包含 ${images.length} 个图表:\n${images.map(img => `- ${img.nameCN}`).join('\n')}\n\n原始动画生成失败，但所有图表图片已包含在本压缩包中。`;
                                         zip.file('color-scheme-charts-info.txt', fallbackText);
-                                        showToast('GIF生成失败，已添加说明文件代替');
+                                        showToast('动画生成失败，已添加说明文件代替');
                                     } catch (fallbackError) {
                                         console.error('创建说明文件也失败:', fallbackError);
-                                        showToast('GIF生成失败，继续打包其他文件...');
+                                        showToast('动画生成失败，继续打包其他文件...');
                                     }
                                 }
                             } else {
-                                console.log('图表数量不足，跳过GIF生成，当前数量:', images.length);
+                                console.log('图表数量不足，跳过动画生成，当前数量:', images.length);
                             }
                             
                             // 生成ZIP文件（确保GIF生成完成后再执行）
@@ -4878,80 +4878,96 @@
             showToast('正在逐个下载图表...');
         }
 
-        // 辅助函数：创建GIF动画
+        // 辅助函数：创建GIF动画（简化版，使用Canvas录制）
         async function createChartGIF(images, frameDelay = 2000) {
             try {
                 console.log('createChartGIF开始执行，图表数量:', images.length);
                 
-                // 加载gif.js库
-                await loadGifJs();
+                // 创建canvas和录制器
+                const canvas = document.createElement('canvas');
+                canvas.width = 800;
+                canvas.height = 400;
+                const ctx = canvas.getContext('2d');
                 
-                if (!window.GIF) {
-                    throw new Error('GIF库加载失败');
-                }
-
-                // 创建GIF编码器 - 使用更简单的配置
-                const gif = new GIF({
-                    workers: 1,  // 减少worker数量
-                    quality: 1,  // 降低质量以提高成功率
-                    width: 800,  // 减小尺寸
-                    height: 400,
-                    repeat: 0 // 0表示无限循环
+                // 创建MediaRecorder来录制canvas
+                const stream = canvas.captureStream(30); // 30fps
+                const chunks = [];
+                
+                const recorder = new MediaRecorder(stream, {
+                    mimeType: 'video/webm;codecs=vp8',
+                    videoBitsPerSecond: 1000000
                 });
-
-                console.log('GIF编码器创建成功');
-
-                // 为每个图表创建帧
-                for (let i = 0; i < images.length; i++) {
-                    console.log('处理第', i + 1, '个图表:', images[i].nameCN);
-                    const image = images[i];
-                    
-                    // 创建临时canvas来绘制当前帧
-                    const frameCanvas = document.createElement('canvas');
-                    frameCanvas.width = 800;
-                    frameCanvas.height = 400;
-                    const frameCtx = frameCanvas.getContext('2d');
-                    
-                    // 设置白色背景
-                    frameCtx.fillStyle = '#ffffff';
-                    frameCtx.fillRect(0, 0, frameCanvas.width, frameCanvas.height);
-                    
-                    // 直接绘制原始图表图片，不添加标题以保持简洁
-                    const img = new Image();
-                    await new Promise((resolve, reject) => {
-                        img.onload = resolve;
-                        img.onerror = () => reject(new Error(`图片加载失败: ${image.nameCN}`));
-                        img.src = image.dataURL;
-                    });
-                    
-                    // 将图片绘制到帧中（居中显示）
-                    frameCtx.drawImage(img, 0, 0, frameCanvas.width, frameCanvas.height);
-                    
-                    // 添加帧到GIF
-                    gif.addFrame(frameCanvas, { delay: frameDelay });
-                    console.log('第', i + 1, '帧添加完成');
-                }
-
-                console.log('所有帧添加完成，开始生成GIF...');
-
-                // 生成GIF
+                
+                recorder.ondataavailable = (e) => {
+                    if (e.data.size > 0) {
+                        chunks.push(e.data);
+                    }
+                };
+                
                 return new Promise((resolve, reject) => {
-                    gif.on('finished', function(blob) {
-                        console.log('GIF生成成功，文件大小:', blob.size);
+                    recorder.onstop = () => {
+                        const blob = new Blob(chunks, { type: 'video/webm' });
+                        console.log('WebM视频生成成功，文件大小:', blob.size);
                         resolve(blob);
-                    });
+                    };
                     
-                    gif.on('error', function(error) {
-                        console.error('GIF生成失败:', error);
+                    recorder.onerror = (error) => {
+                        console.error('录制失败:', error);
                         reject(error);
-                    });
+                    };
                     
-                    gif.render();
-                    console.log('GIF渲染开始...');
+                    recorder.start();
+                    console.log('开始录制...');
+                    
+                    // 录制每个图表
+                    let currentIndex = 0;
+                    
+                    function drawNextFrame() {
+                        if (currentIndex >= images.length) {
+                            // 所有帧录制完成
+                            recorder.stop();
+                            return;
+                        }
+                        
+                        const image = images[currentIndex];
+                        console.log('录制第', currentIndex + 1, '个图表:', image.nameCN);
+                        
+                        // 清空画布
+                        ctx.fillStyle = '#ffffff';
+                        ctx.fillRect(0, 0, canvas.width, canvas.height);
+                        
+                        // 绘制图表
+                        const img = new Image();
+                        img.onload = () => {
+                            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                            
+                            // 添加标题
+                            ctx.fillStyle = '#333333';
+                            ctx.font = 'bold 20px Arial';
+                            ctx.textAlign = 'center';
+                            ctx.fillText(image.nameCN, canvas.width / 2, 30);
+                            
+                            currentIndex++;
+                            
+                            // 继续录制下一帧（延迟后）
+                            setTimeout(drawNextFrame, frameDelay);
+                        };
+                        
+                        img.onerror = () => {
+                            console.error('图片加载失败:', image.nameCN);
+                            currentIndex++;
+                            setTimeout(drawNextFrame, frameDelay);
+                        };
+                        
+                        img.src = image.dataURL;
+                    }
+                    
+                    // 开始录制第一帧
+                    drawNextFrame();
                 });
                 
             } catch (error) {
-                console.error('创建GIF失败:', error);
+                console.error('创建录制失败:', error);
                 throw error;
             }
         }
