@@ -2451,6 +2451,15 @@
                 colorCountSelect.dispatchEvent(new Event('change'));
             }
             
+            // 自动生成图表预览
+            setTimeout(() => {
+                const mainChartPreview = document.getElementById('mainChartPreview');
+                if (mainChartPreview) {
+                    mainChartPreview.style.display = 'block';
+                    generateMainChartPreview();
+                }
+            }, 150);
+            
             showToast(`已应用全部 ${window.extractedColors.length} 种颜色到配色方案`);
         }
 
@@ -2540,6 +2549,15 @@
                 // 触发change事件以更新相关显示
                 colorCountSelect.dispatchEvent(new Event('change'));
             }
+            
+            // 自动生成图表预览
+            setTimeout(() => {
+                const mainChartPreview = document.getElementById('mainChartPreview');
+                if (mainChartPreview) {
+                    mainChartPreview.style.display = 'block';
+                    generateMainChartPreview();
+                }
+            }, 150);
             
             showToast(`已应用待选区的 ${window.selectedColors.length} 种颜色`);
         }
