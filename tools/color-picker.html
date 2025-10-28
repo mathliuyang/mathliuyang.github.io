@@ -147,6 +147,158 @@
             color: var(--text-dim);
         }
 
+        /* 科研风格强化样式 */
+        .scientific-enhancement {
+            font-family: 'Times New Roman', 'Georgia', serif;
+            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+        }
+
+        .chart-container {
+            background: #ffffff;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            padding: 20px;
+            margin: 20px 0;
+            position: relative;
+        }
+
+        .chart-container::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #007bff, #28a745, #ffc107, #dc3545);
+            border-radius: 10px;
+            z-index: -1;
+            opacity: 0.1;
+        }
+
+        .scientific-title {
+            font-family: 'Times New Roman', serif;
+            font-size: 18px;
+            font-weight: bold;
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 15px;
+            letter-spacing: 0.5px;
+        }
+
+        .chart-controls {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        .chart-select {
+            font-family: 'Arial', sans-serif;
+            font-size: 14px;
+            padding: 8px 12px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            background: #ffffff;
+            color: #495057;
+            transition: all 0.2s ease;
+        }
+
+        .chart-select:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+        }
+
+        .chart-btn {
+            font-family: 'Arial', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .chart-btn:hover {
+            background: linear-gradient(135deg, #0056b3 0%, #004085 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+        }
+
+        .download-btn {
+            background: linear-gradient(135deg, #28a745 0%, #1e7e34 100%);
+        }
+
+        .download-btn:hover {
+            background: linear-gradient(135deg, #1e7e34 0%, #155724 100%);
+            box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+        }
+
+        /* 专业图表画布样式 */
+        canvas {
+            border: 2px solid #dee2e6;
+            border-radius: 6px;
+            background: #ffffff;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        /* 图例样式强化 */
+        .legend-professional {
+            font-family: 'Arial', sans-serif;
+            font-size: 12px;
+            color: #2c3e50;
+            background: rgba(255, 255, 255, 0.95);
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            padding: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* 科研期刊风格的配色方案 */
+        .nature-palette {
+            --primary-blue: #1f77b4;
+            --nature-orange: #ff7f0e;
+            --nature-green: #2ca02c;
+            --nature-red: #d62728;
+            --nature-purple: #9467bd;
+            --nature-brown: #8c564b;
+            --nature-pink: #e377c2;
+            --nature-gray: #7f7f7f;
+            --nature-olive: #bcbd22;
+            --nature-cyan: #17becf;
+        }
+
+        /* 高端科研界面样式 */
+        .research-interface {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border: 1px solid #adb5bd;
+            border-radius: 8px;
+            padding: 25px;
+            margin: 20px 0;
+            position: relative;
+        }
+
+        .research-interface::after {
+            content: 'Scientific Visualization';
+            position: absolute;
+            top: -10px;
+            left: 20px;
+            background: #ffffff;
+            padding: 0 10px;
+            font-size: 12px;
+            color: #6c757d;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
         .controls {
             display: flex;
             gap: 2rem;
@@ -480,6 +632,88 @@
             align-items: center;
         }
 
+        /* Chart preview section */
+        .chart-preview-section {
+            margin-top: 2rem;
+            border-top: 1px solid var(--border);
+            padding-top: 2rem;
+        }
+
+        .chart-preview-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .chart-controls {
+            display: flex;
+            gap: 0.8rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .chart-select {
+            padding: 0.6rem 1rem;
+            border: 1px solid var(--border);
+            background: var(--bg);
+            color: var(--text);
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 120px;
+        }
+
+        .chart-select:focus {
+            outline: none;
+            border-color: var(--text);
+        }
+
+        .chart-btn {
+            padding: 0.6rem 1.2rem;
+            border: 1px solid var(--text);
+            background: var(--text);
+            color: var(--bg);
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .chart-btn:hover {
+            background: transparent;
+            color: var(--text);
+        }
+
+        .chart-btn.secondary {
+            background: transparent;
+            color: var(--text);
+        }
+
+        .chart-btn.secondary:hover {
+            background: var(--text);
+            color: var(--bg);
+        }
+
+        .chart-container {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            padding: 1.5rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 400px;
+            overflow: auto;
+        }
+
+        #chartCanvas {
+            max-width: 100%;
+            height: auto;
+            background: var(--bg);
+        }
+
         /* URL modal styles */
         .url-input {
             width: 100%;
@@ -707,6 +941,32 @@
         <div class="palette-display">
             <h2 class="palette-title">配色方案</h2>
             <div class="colors-grid" id="colorsGrid"></div>
+        </div>
+
+        <!-- Chart preview section for main palette -->
+        <div class="chart-preview-section research-interface" id="mainChartPreview" style="display: none;">
+            <div class="chart-preview-header">
+                <h2 class="chart-title scientific-title">科研图表预览 - Scientific Chart Preview</h2>
+                <div class="chart-controls">
+                    <select id="mainChartType" class="scheme-select">
+                        <option value="line">线性图 (Line Chart)</option>
+                        <option value="bar">柱状图 (Bar Chart)</option>
+                        <option value="pie">饼图 (Pie Chart)</option>
+                        <option value="box">箱线图 (Box Plot)</option>
+                        <option value="heatmap">热力图 (Heatmap)</option>
+                        <option value="distribution">分布图 (Distribution)</option>
+                        <option value="radar">雷达图 (Radar Chart)</option>
+                        <option value="violin">小提琴图 (Violin Plot)</option>
+                        <option value="scatter">散点图 (Scatter Plot)</option>
+                        <option value="contour">等高线图 (Contour Plot)</option>
+                    </select>
+                    <button id="mainGenerateChart" class="action-btn primary">生成预览</button>
+                    <button id="mainDownloadChart" class="action-btn">下载图表</button>
+                </div>
+            </div>
+            <div class="chart-container">
+                <canvas id="mainChartCanvas" width="1000" height="500"></canvas>
+            </div>
         </div>
 
         <div class="export-section">
@@ -1005,6 +1265,17 @@
 
             displayPalette();
             generateExportCode();
+
+            // 显示并自动更新主页面图表预览
+            const mainChartPreview = document.getElementById('mainChartPreview');
+            if (mainChartPreview) {
+                mainChartPreview.style.display = 'block';
+                setTimeout(() => {
+                    if (document.getElementById('mainChartCanvas')) {
+                        generateMainChartPreview();
+                    }
+                }, 100);
+            }
         }
 
         function generateMonochromatic(hsl, count = 5) {
@@ -1832,7 +2103,7 @@
 
             grid.innerHTML = palettes.map(p => `
                 <div class="color-card preset-card">
-                    <div class="color-swatch">
+                    <div class="color-swatch" onclick='applyPresetPaletteToChart(${JSON.stringify(p.colors)}, ${JSON.stringify(p.name)})' style="cursor: pointer;">
                         <div class="swatch-row">
                             ${p.colors.map(c => `<div class=\"swatch\" style=\"background:${c}\"></div>`).join('')}
                         </div>
@@ -1842,7 +2113,7 @@
                             <div class="color-name">${p.name}</div>
                             <div class="color-values" style="font-size: 0.7rem;">${p.source} · ${count}色</div>
                         </div>
-                        <button class="action-btn" style="padding: 0.4rem 0.8rem;" onclick='applyPresetPalette(${JSON.stringify(p.colors)}, ${JSON.stringify(p.name)})'>应用</button>
+                        <button class="action-btn" style="padding: 0.4rem 0.8rem;" onclick='applyPresetPaletteAndReturn(${JSON.stringify(p.colors)}, ${JSON.stringify(p.name)})'>应用</button>
                     </div>
                 </div>
             `).join('');
@@ -1897,7 +2168,1429 @@
             displayPalette();
             generateExportCode();
             showToast(`已应用预设：${name} (${colors.length}色)`);
+
+            // 显示主页面图表预览区域并自动生成图表
+            const mainChartPreview = document.getElementById('mainChartPreview');
+            if (mainChartPreview) {
+                mainChartPreview.style.display = 'block';
+                // 自动生成主页面图表预览
+                setTimeout(() => {
+                    generateMainChartPreview();
+                }, 100);
+            }
         }
+
+        // 点击色卡直接应用到图表预览
+        function applyPresetPaletteToChart(colors, name) {
+            // 直接应用到主页面图表预览
+            const mainChartPreview = document.getElementById('mainChartPreview');
+            if (mainChartPreview) {
+                mainChartPreview.style.display = 'block';
+                // 设置当前调色板用于图表预览
+                window.currentChartPalette = colors.slice();
+                // 自动生成图表预览
+                setTimeout(() => {
+                    generateMainChartPreview();
+                }, 100);
+                showToast(`已应用配色到图表预览：${name} (${colors.length}色)`);
+            }
+        }
+
+        // 应用按钮：返回生成器并应用色卡
+        function applyPresetPaletteAndReturn(colors, name) {
+            // 应用配色到主生成器
+            applyPresetPalette(colors, name);
+            // 返回生成器页面
+            closePresetSection();
+        }
+
+        // Academic chart helper functions (Nature journal style)
+        function drawAcademicGrid(ctx, width, height, padding) {
+            const chartWidth = width - 2 * padding;
+            const chartHeight = height - 2 * padding;
+
+            // Nature风格：绘制完整的图表边框
+            ctx.strokeStyle = '#000000';  // Nature期刊使用纯黑色
+            ctx.lineWidth = 1.5;  // 稍细的线条
+            ctx.beginPath();
+            // 绘制完整的矩形边框
+            ctx.rect(padding, padding, chartWidth, chartHeight);
+            ctx.stroke();
+
+            // Nature风格：绘制网格线（更淡的颜色）
+            ctx.strokeStyle = '#e8e8e8';  // 更淡的灰色
+            ctx.lineWidth = 0.5;  // 更细的网格线
+
+            // 垂直网格线（减少数量，更简洁）
+            for (let i = 1; i < 6; i++) {  // 从10减少到6条
+                const x = padding + (chartWidth * i) / 6;
+                ctx.beginPath();
+                ctx.moveTo(x, padding);
+                ctx.lineTo(x, height - padding);
+                ctx.stroke();
+            }
+
+            // 水平网格线（减少数量）
+            for (let i = 1; i < 5; i++) {  // 从8减少到5条
+                const y = padding + (chartHeight * i) / 5;
+                ctx.beginPath();
+                ctx.moveTo(padding, y);
+                ctx.lineTo(width - padding, y);
+                ctx.stroke();
+            }
+        }
+
+        function drawAxisLabels(ctx, width, height, padding, xLabel, yLabel) {
+            ctx.fillStyle = '#000000';  // Nature风格：纯黑色文字
+            ctx.font = '12px "Arial", sans-serif';  // Nature风格：Arial字体，稍小尺寸
+            ctx.textAlign = 'center';
+
+            // X轴标签
+            ctx.fillText(xLabel, width / 2, height - 35);
+
+            // Y轴标签
+            ctx.save();
+            ctx.translate(25, height / 2);
+            ctx.rotate(-Math.PI / 2);
+            ctx.fillText(yLabel, 0, 0);
+            ctx.restore();
+        }
+
+        function drawLegend(ctx, width, height, colors, count, labels, position = 'outside-right') {
+            let legendX, legendY, legendWidth, legendHeight;
+            const itemHeight = 20;
+            const padding = 10;
+
+            // 根据位置参数调整图例位置
+            if (position === 'outside-right') {
+                // Nature风格：图例在图表右侧（画布内部）
+                legendWidth = 140;
+                legendHeight = count * itemHeight + 2 * padding;
+                legendX = width - legendWidth - 10; // 在画布右侧内部
+                legendY = (height - legendHeight) / 2;
+            } else if (position === 'outside-bottom') {
+                // 图例在图表下方
+                legendWidth = Math.min(width - 40, count * 100);
+                legendHeight = itemHeight + 2 * padding;
+                legendX = (width - legendWidth) / 2;
+                legendY = height - legendHeight - 10; // 在画布下方内部
+            } else {
+                // 默认位置：图表内部右上角
+                legendWidth = 140;
+                legendHeight = count * itemHeight + 2 * padding;
+                legendX = width - legendWidth - 20;
+                legendY = 50;
+            }
+
+            // 绘制图例背景（Nature风格：简洁白色背景）
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.95)';
+            ctx.strokeStyle = '#d5d8dc';
+            ctx.lineWidth = 1;
+            ctx.fillRect(legendX, legendY, legendWidth, legendHeight);
+            ctx.strokeRect(legendX, legendY, legendWidth, legendHeight);
+
+            // 设置文本样式（Nature风格：清晰易读）
+            ctx.font = '11px "Arial", sans-serif';
+            ctx.textAlign = 'left';
+
+            for (let i = 0; i < count; i++) {
+                let itemX, itemY;
+
+                if (position === 'outside-bottom') {
+                    // 水平排列
+                    itemX = legendX + padding + (i * (legendWidth - 2 * padding) / count);
+                    itemY = legendY + padding;
+                } else {
+                    // 垂直排列
+                    itemX = legendX + padding;
+                    itemY = legendY + padding + i * itemHeight;
+                }
+
+                // 绘制颜色标记（Nature风格：圆形或方形标记）
+                ctx.fillStyle = colors[i % colors.length];
+                if (position === 'outside-right' || position === 'outside-bottom') {
+                    // Nature风格：使用圆形标记
+                    ctx.beginPath();
+                    ctx.arc(itemX + 6, itemY + 6, 5, 0, 2 * Math.PI);
+                    ctx.fill();
+                    ctx.strokeStyle = '#2c3e50';
+                    ctx.lineWidth = 1;
+                    ctx.stroke();
+                } else {
+                    // 传统方形标记
+                    ctx.fillRect(itemX, itemY, 15, 12);
+                    ctx.strokeStyle = '#2c3e50';
+                    ctx.strokeRect(itemX, itemY, 15, 12);
+                }
+
+                // 绘制标签（Nature风格：简洁字体）
+                ctx.fillStyle = '#2c3e50';
+                const labelX = position === 'outside-bottom' ? itemX : itemX + 18;
+                const labelY = position === 'outside-bottom' ? itemY + 25 : itemY + 9;
+                ctx.fillText(labels[i] || `Series ${i + 1}`, labelX, labelY);
+            }
+        }
+
+        function drawColorBar(ctx, width, height, colors, levels, minZ, maxZ) {
+            const barWidth = 20;
+            const barHeight = height - 200;
+            const barX = width - 60;
+            const barY = 100;
+
+            // 绘制颜色条背景
+            ctx.fillStyle = '#ffffff';
+            ctx.strokeStyle = '#333333';
+            ctx.lineWidth = 1;
+            ctx.fillRect(barX - 2, barY - 2, barWidth + 4, barHeight + 4);
+            ctx.strokeRect(barX - 2, barY - 2, barWidth + 4, barHeight + 4);
+
+            // 绘制颜色渐变
+            for (let i = 0; i < colors.length; i++) {
+                const segmentHeight = barHeight / colors.length;
+                const y = barY + i * segmentHeight;
+
+                ctx.fillStyle = colors[i];
+                ctx.fillRect(barX, y, barWidth, segmentHeight);
+            }
+
+            // 绘制刻度和标签
+            ctx.fillStyle = '#333333';
+            ctx.font = '10px "Times New Roman", serif';
+            ctx.textAlign = 'left';
+            ctx.textBaseline = 'middle';
+
+            // 绘制最小值、最大值和中间值
+            const tickValues = [maxZ, (maxZ + minZ) / 2, minZ];
+            const tickPositions = [barY, barY + barHeight / 2, barY + barHeight];
+
+            for (let i = 0; i < tickValues.length; i++) {
+                const value = tickValues[i].toFixed(2);
+                const y = tickPositions[i];
+
+                // 绘制刻度线
+                ctx.strokeStyle = '#333333';
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                ctx.moveTo(barX + barWidth, y);
+                ctx.lineTo(barX + barWidth + 5, y);
+                ctx.stroke();
+
+                // 绘制标签
+                ctx.fillText(value, barX + barWidth + 8, y);
+            }
+
+            // 添加颜色条标题
+            ctx.save();
+            ctx.translate(barX + barWidth + 35, barY + barHeight / 2);
+            ctx.rotate(-Math.PI / 2);
+            ctx.font = '11px "Times New Roman", serif';
+            ctx.textAlign = 'center';
+            ctx.fillText('数值', 0, 0);
+            ctx.restore();
+        }
+
+        function drawChartTitle(ctx, width, title) {
+            ctx.fillStyle = '#000000';  // Nature风格：纯黑色
+            ctx.font = '14px "Arial", sans-serif';  // Nature风格：Arial字体，适中尺寸
+            ctx.textAlign = 'center';
+            ctx.fillText(title, width / 2, 25);
+        }
+
+        // Chart generation functions
+        // 已移除generateChartPreview函数 - 预设方案板块不再需要图表预览
+
+        // Main page chart generation function
+        function generateMainChartPreview() {
+            const chartType = document.getElementById('mainChartType').value;
+            const canvas = document.getElementById('mainChartCanvas');
+            const ctx = canvas.getContext('2d');
+
+            // 清除画布
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // 获取当前配色方案 - 优先使用图表专用调色板
+            const colors = window.currentChartPalette || (currentPalette.length > 0 ? currentPalette : ['#3498db', '#e74c3c', '#2ecc71', '#f39c12', '#9b59b6', '#1abc9c', '#34495e', '#e67e22']);
+
+            try {
+                switch (chartType) {
+                    case 'line':
+                        drawLineChart(ctx, canvas, colors);
+                        break;
+                    case 'bar':
+                        drawBarChart(ctx, canvas, colors);
+                        break;
+                    case 'pie':
+                        drawPieChart(ctx, canvas, colors);
+                        break;
+                    case 'box':
+                        drawBoxPlot(ctx, canvas, colors);
+                        break;
+                    case 'heatmap':
+                        drawHeatmap(ctx, canvas, colors);
+                        break;
+                    case 'distribution':
+                        drawDistributionChart(ctx, canvas, colors);
+                        break;
+                    case 'radar':
+                        drawRadarChart(ctx, canvas, colors);
+                        break;
+                    case 'violin':
+                        drawViolinPlot(ctx, canvas, colors);
+                        break;
+                    case 'scatter':
+                        drawScatterPlot(ctx, canvas, colors);
+                        break;
+                    case 'contour':
+                        drawContourPlot(ctx, canvas, colors);
+                        break;
+                    default:
+                        drawLineChart(ctx, canvas, colors);
+                }
+                showToast(`已生成${getChartTypeName(chartType)}预览`);
+            } catch (error) {
+                console.error('Chart generation error:', error);
+                showToast('图表生成失败，请重试');
+            }
+        }
+
+        function getChartTypeName(type) {
+            const names = {
+                'line': '线性图',
+                'bar': '柱状图',
+                'pie': '饼图',
+                'box': '箱线图',
+                'heatmap': '热力图',
+                'distribution': '函数分布图',
+                'radar': '雷达图',
+                'violin': '小提琴图',
+                'scatter': '散点图',
+                'contour': '等高线图'
+            };
+            return names[type] || '图表';
+        }
+
+        function drawLineChart(ctx, canvas, colors) {
+            const width = canvas.width;
+            const height = canvas.height;
+            const padding = 100;
+            const chartWidth = width - 2 * padding;
+            const chartHeight = height - 2 * padding;
+
+            // 清空画布
+            ctx.clearRect(0, 0, width, height);
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, width, height);
+
+            // 根据配色数量动态调整数据集数量
+            const datasets = Math.min(colors.length, 16); // 支持最多16条线
+            const dataPoints = 50; // 增加数据点以提高精度
+            const data = [];
+
+            // 生成科学数据模拟（不同的函数模式）
+            for (let i = 0; i < datasets; i++) {
+                const series = [];
+                for (let j = 0; j < dataPoints; j++) {
+                    const x = j / (dataPoints - 1);
+                    let y;
+                    switch (i % 4) {
+                        case 0: // 指数增长
+                            y = 0.1 + 0.7 * Math.pow(x, 2) + 0.05 * Math.random();
+                            break;
+                        case 1: // 对数增长
+                            y = 0.2 + 0.6 * Math.log(1 + 4 * x) / Math.log(5) + 0.05 * Math.random();
+                            break;
+                        case 2: // 正弦波动
+                            y = 0.5 + 0.3 * Math.sin(3 * Math.PI * x + i * Math.PI / 4) + 0.05 * Math.random();
+                            break;
+                        case 3: // 线性趋势
+                            y = 0.3 + 0.4 * x + 0.1 * Math.sin(8 * Math.PI * x) + 0.05 * Math.random();
+                            break;
+                    }
+                    series.push({ x, y: Math.max(0.05, Math.min(0.95, y)) });
+                }
+                data.push(series);
+            }
+
+            // 绘制专业网格系统
+            drawAcademicGrid(ctx, width, height, padding);
+
+            // 绘制坐标轴标签
+            drawAxisLabels(ctx, width, height, padding, 'Time (s)', 'Response (μV)');
+
+            // 绘制数据线（更专业的样式）
+            data.forEach((series, index) => {
+                const color = colors[index % colors.length];
+
+                // 绘制数据线
+                ctx.strokeStyle = color;
+                ctx.lineWidth = 2.5;
+                ctx.lineCap = 'round';
+                ctx.lineJoin = 'round';
+                ctx.beginPath();
+
+                series.forEach((point, i) => {
+                    const x = padding + point.x * chartWidth;
+                    const y = height - padding - point.y * chartHeight;
+                    if (i === 0) {
+                        ctx.moveTo(x, y);
+                    } else {
+                        ctx.lineTo(x, y);
+                    }
+                });
+                ctx.stroke();
+
+                // 绘制数据点（科学图表风格）
+                ctx.fillStyle = color;
+                ctx.strokeStyle = '#ffffff';
+                ctx.lineWidth = 1;
+                series.forEach((point, i) => {
+                    if (i % 3 === 0) { // 每3个点显示一个标记
+                        const x = padding + point.x * chartWidth;
+                        const y = height - padding - point.y * chartHeight;
+                        ctx.beginPath();
+                        ctx.arc(x, y, 4, 0, 2 * Math.PI);
+                        ctx.fill();
+                        ctx.stroke();
+                    }
+                });
+            });
+
+            // 绘制图例（类似颜色条的右侧位置）
+            const legendLabels = [];
+            for (let i = 0; i < datasets; i++) {
+                legendLabels.push(`Series ${String.fromCharCode(65 + i)}`); // A, B, C, ...
+            }
+            drawLineChartLegend(ctx, width, height, colors, datasets, legendLabels);
+
+            // 添加图表标题
+            drawChartTitle(ctx, width, '线性图 - 智核学术');
+        }
+
+        // 专门为线性图绘制类似颜色条位置的图例
+        function drawLineChartLegend(ctx, width, height, colors, datasets, labels) {
+            const legendWidth = 15;
+            const legendHeight = height - 200;
+            const legendX = width - 60;
+            const legendY = 100;
+            const itemHeight = legendHeight / datasets;
+
+            // 绘制图例背景
+            ctx.fillStyle = '#ffffff';
+            ctx.strokeStyle = '#333333';
+            ctx.lineWidth = 1;
+            ctx.fillRect(legendX - 2, legendY - 2, legendWidth + 4, legendHeight + 4);
+            ctx.strokeRect(legendX - 2, legendY - 2, legendWidth + 4, legendHeight + 4);
+
+            // 绘制每个系列的颜色块和标签
+            for (let i = 0; i < datasets; i++) {
+                const y = legendY + i * itemHeight;
+                const centerY = y + itemHeight / 2;
+
+                // 绘制颜色块
+                ctx.fillStyle = colors[i % colors.length];
+                ctx.fillRect(legendX, y, legendWidth, itemHeight);
+
+                // 绘制标签
+                ctx.fillStyle = '#333333';
+                ctx.font = '10px "Times New Roman", serif';
+                ctx.textAlign = 'left';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(labels[i], legendX + legendWidth + 8, centerY);
+            }
+
+            // 添加图例标题
+            ctx.save();
+            ctx.translate(legendX + legendWidth + 35, legendY + legendHeight / 2);
+            ctx.rotate(-Math.PI / 2);
+            ctx.font = '11px "Times New Roman", serif';
+            ctx.textAlign = 'center';
+            ctx.fillText('系列', 0, 0);
+            ctx.restore();
+        }
+
+        function drawBarChart(ctx, canvas, colors) {
+            const width = canvas.width;
+            const height = canvas.height;
+            const padding = 80;
+            const chartWidth = width - 2 * padding;
+            const chartHeight = height - 2 * padding;
+
+            // 清除画布
+            ctx.clearRect(0, 0, width, height);
+
+            // 动态设置类别数量（基于配色数量）
+            const categories = Math.min(colors.length, 16);
+            const barWidth = chartWidth / categories * 0.6;
+            const barSpacing = chartWidth / categories * 0.4;
+
+            // 生成科学数据（模拟实验结果）
+            const data = [];
+            const labels = [];
+            for (let i = 0; i < categories; i++) {
+                // 模拟不同实验条件的结果
+                const baseValue = 0.3 + 0.4 * Math.sin(i * Math.PI / (categories - 1));
+                const noise = (Math.random() - 0.5) * 0.2;
+                data.push(Math.max(0.1, Math.min(0.9, baseValue + noise)));
+                labels.push(`Group ${String.fromCharCode(65 + i)}`); // A, B, C, ...
+            }
+
+            // 绘制专业网格系统
+            drawAcademicGrid(ctx, width, height, padding);
+
+            // 绘制坐标轴标签
+            drawAxisLabels(ctx, width, height, padding, 'Experimental Groups', 'Response Rate (%)');
+
+            // 绘制柱状图（学术风格）
+            data.forEach((value, index) => {
+                const x = padding + (index * chartWidth / categories) + barSpacing / 2;
+                const barHeight = value * chartHeight;
+                const y = height - padding - barHeight;
+
+                // 柱子填充
+                ctx.fillStyle = colors[index % colors.length];
+                ctx.fillRect(x, y, barWidth, barHeight);
+
+                // 柱子边框（专业外观）
+                ctx.strokeStyle = '#333333';
+                ctx.lineWidth = 1;
+                ctx.strokeRect(x, y, barWidth, barHeight);
+
+                // 数值标签（在柱子顶部）
+                ctx.fillStyle = '#333333';
+                ctx.font = '12px "Times New Roman", serif';
+                ctx.textAlign = 'center';
+                const percentage = (value * 100).toFixed(1);
+                ctx.fillText(`${percentage}%`, x + barWidth / 2, y - 8);
+
+                // X轴标签
+                ctx.fillStyle = '#333333';
+                ctx.font = '11px "Times New Roman", serif';
+                ctx.textAlign = 'center';
+                ctx.fillText(labels[index], x + barWidth / 2, height - padding + 20);
+            });
+
+            // 绘制Y轴刻度和标签
+            for (let i = 0; i <= 10; i++) {
+                const y = height - padding - (i / 10) * chartHeight;
+                const value = (i * 10).toString();
+
+                // 刻度线
+                ctx.strokeStyle = '#e0e0e0';
+                ctx.lineWidth = 0.5;
+                ctx.beginPath();
+                ctx.moveTo(padding - 5, y);
+                ctx.lineTo(padding, y);
+                ctx.stroke();
+
+                // 刻度标签
+                ctx.fillStyle = '#333333';
+                ctx.font = '10px "Times New Roman", serif';
+                ctx.textAlign = 'right';
+                ctx.fillText(value, padding - 10, y + 3);
+            }
+
+            // 添加图表标题
+            drawChartTitle(ctx, width, '柱状图 - 智核学术');
+        }
+
+        function drawBoxPlot(ctx, canvas, colors) {
+            const width = canvas.width;
+            const height = canvas.height;
+            const padding = 80;
+            const chartWidth = width - 2 * padding;
+            const chartHeight = height - 2 * padding;
+
+            // 清除画布
+            ctx.clearRect(0, 0, width, height);
+
+            // 动态设置组数（基于配色数量）
+            const groups = Math.min(colors.length, 16);
+            const boxWidth = Math.max(20, chartWidth / groups * 0.5);
+
+            // 绘制专业网格系统
+            drawAcademicGrid(ctx, width, height, padding);
+
+            // 绘制坐标轴标签
+            drawAxisLabels(ctx, width, height, padding, 'Treatment Groups', 'Measurement Values');
+
+            // 绘制箱线图（学术风格）
+            const boxData = [];
+            for (let i = 0; i < groups; i++) {
+                const x = padding + (i + 0.5) * chartWidth / groups;
+
+                // 生成更真实的科学数据分布
+                const baseValue = 0.4 + 0.3 * Math.sin(i * Math.PI / (groups - 1));
+                const spread = 0.15 + 0.1 * Math.random();
+
+                // 五数概括统计
+                const min = Math.max(0.05, baseValue - spread * 1.5);
+                const q1 = baseValue - spread * 0.7;
+                const median = baseValue + (Math.random() - 0.5) * spread * 0.3;
+                const q3 = baseValue + spread * 0.7;
+                const max = Math.min(0.95, baseValue + spread * 1.5);
+
+                // 转换为画布坐标
+                const y1 = height - padding - min * chartHeight;
+                const y2 = height - padding - q1 * chartHeight;
+                const yMedian = height - padding - median * chartHeight;
+                const y3 = height - padding - q3 * chartHeight;
+                const y4 = height - padding - max * chartHeight;
+
+                const color = colors[i % colors.length];
+
+                // 箱体填充（半透明）
+                ctx.fillStyle = color + '30';
+                ctx.fillRect(x - boxWidth / 2, y3, boxWidth, y2 - y3);
+
+                // 箱体边框
+                ctx.strokeStyle = color;
+                ctx.lineWidth = 2;
+                ctx.strokeRect(x - boxWidth / 2, y3, boxWidth, y2 - y3);
+
+                // 中位数线（加粗）
+                ctx.strokeStyle = '#333333';
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                ctx.moveTo(x - boxWidth / 2, yMedian);
+                ctx.lineTo(x + boxWidth / 2, yMedian);
+                ctx.stroke();
+
+                // 须线
+                ctx.strokeStyle = color;
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                // 上须线
+                ctx.moveTo(x, y3);
+                ctx.lineTo(x, y4);
+                // 下须线
+                ctx.moveTo(x, y2);
+                ctx.lineTo(x, y1);
+                ctx.stroke();
+
+                // 端点横线
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(x - boxWidth / 3, y1);
+                ctx.lineTo(x + boxWidth / 3, y1);
+                ctx.moveTo(x - boxWidth / 3, y4);
+                ctx.lineTo(x + boxWidth / 3, y4);
+                ctx.stroke();
+
+                // 异常值点（随机生成少量）
+                if (Math.random() < 0.3) {
+                    const outlierY = height - padding - (max + 0.1 + Math.random() * 0.1) * chartHeight;
+                    ctx.fillStyle = color;
+                    ctx.beginPath();
+                    ctx.arc(x, outlierY, 3, 0, 2 * Math.PI);
+                    ctx.fill();
+                }
+
+                // X轴标签
+                ctx.fillStyle = '#333333';
+                ctx.font = '11px "Times New Roman", serif';
+                ctx.textAlign = 'center';
+                ctx.fillText(`T${i + 1}`, x, height - padding + 20);
+
+                // 存储数据用于统计显示
+                boxData.push({ min, q1, median, q3, max, color });
+            }
+
+            // 绘制Y轴刻度
+            for (let i = 0; i <= 10; i++) {
+                const y = height - padding - (i / 10) * chartHeight;
+                const value = (i / 10).toFixed(1);
+
+                // 刻度线
+                ctx.strokeStyle = '#e0e0e0';
+                ctx.lineWidth = 0.5;
+                ctx.beginPath();
+                ctx.moveTo(padding - 5, y);
+                ctx.lineTo(padding, y);
+                ctx.stroke();
+
+                // 刻度标签
+                ctx.fillStyle = '#333333';
+                ctx.font = '10px "Times New Roman", serif';
+                ctx.textAlign = 'right';
+                ctx.fillText(value, padding - 10, y + 3);
+            }
+
+            // 添加图表标题
+            drawChartTitle(ctx, width, '箱线图 - 智核学术');
+        }
+
+        function drawHeatmap(ctx, canvas, colors) {
+            const width = canvas.width;
+            const height = canvas.height;
+            const padding = 80;
+            const chartWidth = width - 2 * padding;
+            const chartHeight = height - 2 * padding;
+
+            // 清空画布
+            ctx.clearRect(0, 0, width, height);
+
+            // 动态调整网格大小，支持更多颜色
+            const maxColors = Math.min(colors.length, 16); // 支持最多16种颜色
+            const rows = Math.ceil(Math.sqrt(maxColors * 0.8));
+            const cols = Math.ceil(maxColors * 1.2 / rows);
+            const cellWidth = chartWidth / cols;
+            const cellHeight = chartHeight / rows;
+
+            // 绘制学术化网格和坐标轴
+            drawAcademicGrid(ctx, width, height, padding, 5, 5);
+            drawAxisLabels(ctx, width, height, padding, 'Spatial Coordinate (mm)', 'Temperature (°C)');
+
+            // 生成科学化热力图数据（模拟温度分布）
+            const data = [];
+            for (let i = 0; i < rows; i++) {
+                const row = [];
+                for (let j = 0; j < cols; j++) {
+                    // 生成高斯分布的温度数据
+                    const centerX = cols / 2;
+                    const centerY = rows / 2;
+                    const distance = Math.sqrt(Math.pow(j - centerX, 2) + Math.pow(i - centerY, 2));
+                    const maxDistance = Math.sqrt(Math.pow(centerX, 2) + Math.pow(centerY, 2));
+                    const normalizedDistance = distance / maxDistance;
+                    const temperature = Math.exp(-2 * normalizedDistance) + 0.1 * Math.random();
+                    row.push(Math.min(1, Math.max(0, temperature)));
+                }
+                data.push(row);
+            }
+
+            // 绘制热力图单元格
+            for (let i = 0; i < rows; i++) {
+                for (let j = 0; j < cols; j++) {
+                    const value = data[i][j];
+                    const colorIndex = Math.floor(value * (maxColors - 1));
+                    const color = colors[colorIndex % colors.length];
+
+                    const x = padding + j * cellWidth;
+                    const y = padding + i * cellHeight;
+
+                    // 绘制带透明度的单元格
+                    const alpha = Math.floor((0.3 + value * 0.7) * 255).toString(16).padStart(2, '0');
+                    ctx.fillStyle = color + alpha;
+                    ctx.fillRect(x, y, cellWidth, cellHeight);
+
+                    // 绘制单元格边框
+                    ctx.strokeStyle = '#ffffff';
+                    ctx.lineWidth = 0.5;
+                    ctx.strokeRect(x, y, cellWidth, cellHeight);
+
+                    // 在较大单元格中显示数值
+                    if (cellWidth > 30 && cellHeight > 20) {
+                        ctx.fillStyle = value > 0.5 ? '#ffffff' : '#333333';
+                        ctx.font = '9px "Times New Roman", serif';
+                        ctx.textAlign = 'center';
+                        ctx.fillText((value * 100).toFixed(0), x + cellWidth / 2, y + cellHeight / 2 + 3);
+                    }
+                }
+            }
+
+            // 绘制颜色条图例
+            const legendX = width - padding + 20;
+            const legendY = padding;
+            const legendWidth = 20;
+            const legendHeight = chartHeight;
+
+            for (let i = 0; i < 100; i++) {
+                const value = i / 99;
+                const colorIndex = Math.floor(value * (maxColors - 1));
+                const color = colors[colorIndex % colors.length];
+                const y = legendY + (1 - value) * legendHeight;
+
+                ctx.fillStyle = color;
+                ctx.fillRect(legendX, y, legendWidth, legendHeight / 100 + 1);
+            }
+
+            // 颜色条边框和标签
+            ctx.strokeStyle = '#333333';
+            ctx.lineWidth = 1;
+            ctx.strokeRect(legendX, legendY, legendWidth, legendHeight);
+
+            // 颜色条刻度标签
+            for (let i = 0; i <= 4; i++) {
+                const value = i / 4;
+                const y = legendY + (1 - value) * legendHeight;
+                ctx.fillStyle = '#333333';
+                ctx.font = '10px "Times New Roman", serif';
+                ctx.textAlign = 'left';
+                ctx.fillText((value * 100).toFixed(0), legendX + legendWidth + 5, y + 3);
+            }
+
+            // 添加学术化标题
+            drawChartTitle(ctx, width, '热力图 - 智核学术');
+        }
+
+        function drawDistributionChart(ctx, canvas, colors) {
+            const width = canvas.width;
+            const height = canvas.height;
+            const padding = 80;
+            const chartWidth = width - 2 * padding;
+            const chartHeight = height - 2 * padding;
+
+            // 清空画布
+            ctx.clearRect(0, 0, width, height);
+
+            // 动态调整分布数量，支持更多颜色
+            const maxDistributions = Math.min(colors.length, 16);
+
+            // 绘制学术化网格和坐标轴
+            drawAcademicGrid(ctx, width, height, padding, 10, 5);
+            drawAxisLabels(ctx, width, height, padding, 'Variable X', 'Probability Density');
+
+            // 生成不同类型的概率分布
+            const distributionTypes = ['normal', 'exponential', 'gamma', 'beta'];
+
+            // 绘制分布曲线
+            for (let d = 0; d < maxDistributions; d++) {
+                const points = 200;
+                const color = colors[d % colors.length];
+                const distType = distributionTypes[d % distributionTypes.length];
+
+                // 设置不同分布的参数
+                let mean, std, lambda, alpha, beta;
+                switch (distType) {
+                    case 'normal':
+                        mean = 0.2 + (d / maxDistributions) * 0.6;
+                        std = 0.08 + Math.random() * 0.04;
+                        break;
+                    case 'exponential':
+                        lambda = 2 + d * 0.5;
+                        break;
+                    case 'gamma':
+                        alpha = 2 + d * 0.3;
+                        beta = 1.5;
+                        break;
+                    case 'beta':
+                        alpha = 2 + d * 0.2;
+                        beta = 2 + (maxDistributions - d) * 0.2;
+                        break;
+                }
+
+                ctx.strokeStyle = color;
+                ctx.lineWidth = 2.5;
+                ctx.lineCap = 'round';
+                ctx.lineJoin = 'round';
+                ctx.beginPath();
+
+                let maxY = 0;
+                const yValues = [];
+
+                // 计算所有Y值以找到最大值进行归一化
+                for (let i = 0; i < points; i++) {
+                    const x = i / (points - 1);
+                    let y;
+
+                    switch (distType) {
+                        case 'normal':
+                            y = Math.exp(-0.5 * Math.pow((x - mean) / std, 2)) / (std * Math.sqrt(2 * Math.PI));
+                            break;
+                        case 'exponential':
+                            y = x > 0 ? lambda * Math.exp(-lambda * x) : 0;
+                            break;
+                        case 'gamma':
+                            y = x > 0 ? Math.pow(x, alpha - 1) * Math.exp(-x / beta) / (Math.pow(beta, alpha) * gamma(alpha)) : 0;
+                            break;
+                        case 'beta':
+                            y = x > 0 && x < 1 ? Math.pow(x, alpha - 1) * Math.pow(1 - x, beta - 1) / betaFunction(alpha, beta) : 0;
+                            break;
+                    }
+                    yValues.push(y);
+                    maxY = Math.max(maxY, y);
+                }
+
+                // 绘制归一化的分布曲线
+                for (let i = 0; i < points; i++) {
+                    const x = i / (points - 1);
+                    const normalizedY = yValues[i] / maxY;
+                    const canvasX = padding + x * chartWidth;
+                    const canvasY = height - padding - (normalizedY * chartHeight * 0.8);
+
+                    if (i === 0) {
+                        ctx.moveTo(canvasX, canvasY);
+                    } else {
+                        ctx.lineTo(canvasX, canvasY);
+                    }
+                }
+                ctx.stroke();
+
+                // 绘制分布下方的填充区域
+                ctx.fillStyle = color + '20';
+                ctx.beginPath();
+                ctx.moveTo(padding, height - padding);
+                for (let i = 0; i < points; i++) {
+                    const x = i / (points - 1);
+                    const normalizedY = yValues[i] / maxY;
+                    const canvasX = padding + x * chartWidth;
+                    const canvasY = height - padding - (normalizedY * chartHeight * 0.8);
+                    ctx.lineTo(canvasX, canvasY);
+                }
+                ctx.lineTo(padding + chartWidth, height - padding);
+                ctx.closePath();
+                ctx.fill();
+            }
+
+            // 绘制图例
+            const legendData = [];
+            for (let d = 0; d < maxDistributions; d++) {
+                const distType = distributionTypes[d % distributionTypes.length];
+                legendData.push(`${distType.charAt(0).toUpperCase() + distType.slice(1)} Distribution ${d + 1}`);
+            }
+            drawLegend(ctx, width, height, colors.slice(0, maxDistributions), legendData, 'outside-right');
+
+            // 添加学术化标题
+            drawChartTitle(ctx, width, '面积图 - 智核学术');
+        }
+
+        // 辅助函数：伽马函数近似
+        function gamma(z) {
+            return Math.sqrt(2 * Math.PI / z) * Math.pow(z / Math.E, z);
+        }
+
+        // 辅助函数：贝塔函数近似
+        function betaFunction(a, b) {
+            return gamma(a) * gamma(b) / gamma(a + b);
+        }
+
+        function drawRadarChart(ctx, canvas, colors) {
+            const width = canvas.width;
+            const height = canvas.height;
+            const centerX = width / 2;
+            const centerY = height / 2;
+            const radius = Math.min(width, height) / 2 - 120;
+
+            // 清空画布
+            ctx.clearRect(0, 0, width, height);
+
+            // 固定轴数为8，数据集数量根据颜色数量动态调整
+            const axes = 8; // 固定8个轴
+            const maxDatasets = Math.min(colors.length, 16);
+            const datasets = Math.max(1, maxDatasets); // 数据集数量跟随颜色数量
+
+            // 绘制雷达图网格（同心圆）
+            ctx.strokeStyle = '#e0e0e0';
+            ctx.lineWidth = 1;
+
+            for (let i = 1; i <= 5; i++) {
+                ctx.beginPath();
+                ctx.arc(centerX, centerY, radius * i / 5, 0, 2 * Math.PI);
+                ctx.stroke();
+
+                // 添加网格标签
+                ctx.fillStyle = '#666666';
+                ctx.font = '10px "Times New Roman", serif';
+                ctx.textAlign = 'center';
+                ctx.fillText((i * 20).toString(), centerX + radius * i / 5 + 10, centerY - 5);
+            }
+
+            // 绘制轴线和标签
+            const axisLabels = [
+                'Performance', 'Efficiency', 'Accuracy', 'Reliability', 'Scalability',
+                'Security', 'Usability', 'Maintainability', 'Flexibility', 'Innovation',
+                'Quality', 'Speed'
+            ];
+
+            ctx.strokeStyle = '#333333';
+            ctx.lineWidth = 1;
+
+            for (let i = 0; i < axes; i++) {
+                const angle = (i * 2 * Math.PI) / axes - Math.PI / 2;
+                const endX = centerX + Math.cos(angle) * radius;
+                const endY = centerY + Math.sin(angle) * radius;
+
+                // 绘制轴线
+                ctx.beginPath();
+                ctx.moveTo(centerX, centerY);
+                ctx.lineTo(endX, endY);
+                ctx.stroke();
+
+                // 绘制轴标签
+                const labelX = centerX + Math.cos(angle) * (radius + 25);
+                const labelY = centerY + Math.sin(angle) * (radius + 25);
+
+                ctx.fillStyle = '#333333';
+                ctx.font = '11px "Times New Roman", serif';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+
+                // 根据角度调整文本对齐
+                if (Math.cos(angle) < -0.1) {
+                    ctx.textAlign = 'right';
+                } else if (Math.cos(angle) > 0.1) {
+                    ctx.textAlign = 'left';
+                }
+
+                ctx.fillText(axisLabels[i % axisLabels.length], labelX, labelY);
+            }
+
+            // 绘制数据集
+            const legendData = [];
+            for (let d = 0; d < datasets; d++) {
+                const color = colors[d % colors.length];
+
+                // 生成科学化的数据（基于不同的性能模式）
+                const data = [];
+                const basePattern = d; // 不同数据集有不同的基础模式
+
+                for (let i = 0; i < axes; i++) {
+                    let value;
+                    switch (basePattern % 3) {
+                        case 0: // 高性能模式
+                            value = 0.6 + 0.3 * Math.sin(i * Math.PI / axes) + 0.1 * Math.random();
+                            break;
+                        case 1: // 平衡模式
+                            value = 0.5 + 0.2 * Math.cos(i * Math.PI / axes) + 0.15 * Math.random();
+                            break;
+                        case 2: // 特化模式
+                            value = 0.4 + 0.4 * (i % 2) + 0.1 * Math.random();
+                            break;
+                    }
+                    data.push(Math.min(1, Math.max(0.1, value)));
+                }
+
+                // 绘制数据区域（填充）
+                ctx.fillStyle = color + '25';
+                ctx.strokeStyle = color;
+                ctx.lineWidth = 2.5;
+                ctx.lineCap = 'round';
+                ctx.lineJoin = 'round';
+
+                ctx.beginPath();
+                for (let i = 0; i < axes; i++) {
+                    const angle = (i * 2 * Math.PI) / axes - Math.PI / 2;
+                    const x = centerX + Math.cos(angle) * radius * data[i];
+                    const y = centerY + Math.sin(angle) * radius * data[i];
+
+                    if (i === 0) {
+                        ctx.moveTo(x, y);
+                    } else {
+                        ctx.lineTo(x, y);
+                    }
+                }
+                ctx.closePath();
+                ctx.fill();
+                ctx.stroke();
+
+                // 绘制数据点
+                ctx.fillStyle = color;
+                for (let i = 0; i < axes; i++) {
+                    const angle = (i * 2 * Math.PI) / axes - Math.PI / 2;
+                    const x = centerX + Math.cos(angle) * radius * data[i];
+                    const y = centerY + Math.sin(angle) * radius * data[i];
+
+                    ctx.beginPath();
+                    ctx.arc(x, y, 4, 0, 2 * Math.PI);
+                    ctx.fill();
+
+                    // 白色边框
+                    ctx.strokeStyle = '#ffffff';
+                    ctx.lineWidth = 1.5;
+                    ctx.stroke();
+                }
+
+                legendData.push(`Dataset ${d + 1}`);
+            }
+
+            // 绘制图例（Nature风格：外部右侧）
+            drawLegend(ctx, width, height, colors.slice(0, datasets), legendData, 'outside-right');
+
+            // 添加学术化标题
+            drawChartTitle(ctx, width, '雷达图 - 智核学术');
+        }
+
+        function drawViolinPlot(ctx, canvas, colors) {
+            const width = canvas.width;
+            const height = canvas.height;
+            const padding = 80;
+            const chartWidth = width - 2 * padding;
+            const chartHeight = height - 2 * padding;
+
+            // 为小提琴图增加额外的垂直留白
+            const violinPadding = chartHeight * 0.1; // 上下各留10%的空间
+            const violinHeight = chartHeight - 2 * violinPadding;
+
+            // 清空画布
+            ctx.clearRect(0, 0, width, height);
+
+            // 动态调整组数，支持更多颜色
+            const maxGroups = Math.min(colors.length, 16);
+            const groups = Math.max(2, maxGroups);
+
+            // 绘制学术化网格和坐标轴
+            drawAcademicGrid(ctx, width, height, padding);
+            drawAxisLabels(ctx, width, height, padding, 'Group Categories', 'Distribution Density');
+
+            // 生成科学化的小提琴图数据
+            const violinData = [];
+            const groupLabels = [
+                'Control', 'Treatment A', 'Treatment B', 'Treatment C', 'Treatment D',
+                'Condition E', 'Condition F', 'Condition G', 'Condition H', 'Condition I'
+            ];
+
+            for (let i = 0; i < groups; i++) {
+                // 为每个组生成不同的分布特征
+                const distributionType = i % 4;
+                const data = [];
+
+                // 生成200个数据点用于密度估计
+                for (let j = 0; j < 200; j++) {
+                    let value;
+                    switch (distributionType) {
+                        case 0: // 正态分布
+                            value = 0.5 + 0.15 * (Math.random() + Math.random() - 1);
+                            break;
+                        case 1: // 双峰分布
+                            value = Math.random() < 0.5 ?
+                                0.3 + 0.1 * Math.random() :
+                                0.7 + 0.1 * Math.random();
+                            break;
+                        case 2: // 偏态分布
+                            value = Math.pow(Math.random(), 1.5) * 0.8 + 0.1;
+                            break;
+                        case 3: // 均匀分布
+                            value = 0.2 + 0.6 * Math.random();
+                            break;
+                    }
+                    data.push(Math.min(1, Math.max(0, value)));
+                }
+                violinData.push(data);
+            }
+
+            // 绘制小提琴图
+            const legendData = [];
+            for (let i = 0; i < groups; i++) {
+                const x = padding + (i + 0.5) * chartWidth / groups;
+                const violinWidth = Math.min(chartWidth / groups * 0.7, 60);
+                const color = colors[i % colors.length];
+
+                // 计算核密度估计
+                const densityPoints = 100;
+                const densities = [];
+
+                for (let j = 0; j < densityPoints; j++) {
+                    const y = j / (densityPoints - 1);
+                    let density = 0;
+                    const bandwidth = 0.05;
+
+                    // 高斯核密度估计
+                    for (const dataPoint of violinData[i]) {
+                        const diff = (y - dataPoint) / bandwidth;
+                        density += Math.exp(-0.5 * diff * diff);
+                    }
+                    density = density / (violinData[i].length * bandwidth * Math.sqrt(2 * Math.PI));
+                    densities.push(density);
+                }
+
+                // 标准化密度值
+                const maxDensity = Math.max(...densities);
+                const normalizedDensities = densities.map(d => d / maxDensity);
+
+                // 绘制小提琴形状（填充）
+                ctx.fillStyle = color + '40';
+                ctx.strokeStyle = color;
+                ctx.lineWidth = 2;
+                ctx.lineCap = 'round';
+                ctx.lineJoin = 'round';
+
+                ctx.beginPath();
+                // 右半边
+                for (let j = 0; j < densityPoints; j++) {
+                    const y = padding + violinPadding + j * violinHeight / (densityPoints - 1);
+                    const width = normalizedDensities[j] * violinWidth / 2;
+
+                    if (j === 0) {
+                        ctx.moveTo(x, y);
+                    } else {
+                        ctx.lineTo(x + width, y);
+                    }
+                }
+
+                // 左半边
+                for (let j = densityPoints - 1; j >= 0; j--) {
+                    const y = padding + violinPadding + j * violinHeight / (densityPoints - 1);
+                    const width = normalizedDensities[j] * violinWidth / 2;
+                    ctx.lineTo(x - width, y);
+                }
+
+                ctx.closePath();
+                ctx.fill();
+                ctx.stroke();
+
+                // 计算并绘制统计线
+                const sortedData = violinData[i].sort((a, b) => a - b);
+                const q1 = sortedData[Math.floor(sortedData.length * 0.25)];
+                const median = sortedData[Math.floor(sortedData.length * 0.5)];
+                const q3 = sortedData[Math.floor(sortedData.length * 0.75)];
+
+                // 绘制四分位数线
+                ctx.strokeStyle = '#333333';
+                ctx.lineWidth = 2;
+
+                // 中位数线（粗线）
+                const medianY = padding + violinPadding + (1 - median) * violinHeight;
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                ctx.moveTo(x - violinWidth / 6, medianY);
+                ctx.lineTo(x + violinWidth / 6, medianY);
+                ctx.stroke();
+
+                // 四分位数线（细线）
+                ctx.lineWidth = 1.5;
+                const q1Y = padding + violinPadding + (1 - q1) * violinHeight;
+                const q3Y = padding + violinPadding + (1 - q3) * violinHeight;
+
+                ctx.beginPath();
+                ctx.moveTo(x - violinWidth / 8, q1Y);
+                ctx.lineTo(x + violinWidth / 8, q1Y);
+                ctx.stroke();
+
+                ctx.beginPath();
+                ctx.moveTo(x - violinWidth / 8, q3Y);
+                ctx.lineTo(x + violinWidth / 8, q3Y);
+                ctx.stroke();
+
+                // 绘制中心线
+                ctx.strokeStyle = color;
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                ctx.moveTo(x, q1Y);
+                ctx.lineTo(x, q3Y);
+                ctx.stroke();
+
+                legendData.push(groupLabels[i % groupLabels.length]);
+            }
+
+            // 绘制X轴标签
+            ctx.fillStyle = '#333333';
+            ctx.font = '10px "Times New Roman", serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'top';
+
+            for (let i = 0; i < groups; i++) {
+                const x = padding + (i + 0.5) * chartWidth / groups;
+                ctx.fillText(legendData[i], x, height - padding + 10);
+            }
+
+            // 绘制Y轴刻度和标签
+            for (let i = 0; i <= 5; i++) {
+                const y = padding + i * chartHeight / 5;
+                const value = (1 - i / 5).toFixed(1);
+
+                // 刻度线
+                ctx.strokeStyle = '#cccccc';
+                ctx.lineWidth = 0.5;
+                ctx.beginPath();
+                ctx.moveTo(padding - 5, y);
+                ctx.lineTo(padding, y);
+                ctx.stroke();
+
+                // 标签
+                ctx.fillStyle = '#666666';
+                ctx.font = '9px "Times New Roman", serif';
+                ctx.textAlign = 'right';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(value, padding - 8, y);
+            }
+
+            // 绘制图例（Nature风格：外部右侧）
+            drawLegend(ctx, width, height, colors.slice(0, groups), legendData, 'outside-right');
+
+            // 添加学术化标题
+            drawChartTitle(ctx, width, '小提琴图 - 智核学术');
+        }
+
+        function drawScatterPlot(ctx, canvas, colors) {
+            const width = canvas.width;
+            const height = canvas.height;
+            const padding = 80;
+            const chartWidth = width - 2 * padding;
+            const chartHeight = height - 2 * padding;
+
+            // 清空画布
+            ctx.clearRect(0, 0, width, height);
+
+            // 动态调整组数和数据点数量，支持更多颜色
+            const maxGroups = Math.min(colors.length, 16);
+            const groups = Math.max(2, maxGroups);
+            const pointsPerGroup = Math.max(20, Math.min(50, 300 / groups)); // 根据组数调整点数
+
+            // 绘制学术化网格和坐标轴
+            drawAcademicGrid(ctx, width, height, padding);
+            drawAxisLabels(ctx, width, height, padding, 'Independent Variable (X)', 'Dependent Variable (Y)');
+
+            // 生成科学化的散点数据
+            const scatterData = [];
+            const groupLabels = [
+                'Control Group', 'Treatment A', 'Treatment B', 'Treatment C', 'Treatment D',
+                'Condition E', 'Condition F', 'Condition G', 'Condition H', 'Condition I',
+                'Sample J', 'Sample K'
+            ];
+
+            for (let g = 0; g < groups; g++) {
+                const groupData = [];
+                const color = colors[g % colors.length];
+
+                // 为每个组生成不同的相关性模式
+                const correlationType = g % 5;
+                const baseX = 0.1 + (g / (groups - 1)) * 0.8; // 分布在X轴上
+                const baseY = 0.3 + Math.random() * 0.4; // Y轴基准位置
+
+                for (let i = 0; i < pointsPerGroup; i++) {
+                    let x, y;
+
+                    switch (correlationType) {
+                        case 0: // 正相关
+                            x = baseX + (Math.random() - 0.5) * 0.15;
+                            y = baseY + 0.3 * (x - baseX) + (Math.random() - 0.5) * 0.1;
+                            break;
+                        case 1: // 负相关
+                            x = baseX + (Math.random() - 0.5) * 0.15;
+                            y = baseY - 0.3 * (x - baseX) + (Math.random() - 0.5) * 0.1;
+                            break;
+                        case 2: // 二次关系
+                            x = baseX + (Math.random() - 0.5) * 0.2;
+                            const dx = x - baseX;
+                            y = baseY + 2 * dx * dx + (Math.random() - 0.5) * 0.08;
+                            break;
+                        case 3: // 聚类模式
+                            const angle = Math.random() * 2 * Math.PI;
+                            const radius = Math.random() * 0.08;
+                            x = baseX + Math.cos(angle) * radius;
+                            y = baseY + Math.sin(angle) * radius;
+                            break;
+                        case 4: // 随机分布
+                            x = baseX + (Math.random() - 0.5) * 0.2;
+                            y = 0.2 + Math.random() * 0.6;
+                            break;
+                    }
+
+                    // 确保点在图表范围内
+                    x = Math.min(0.95, Math.max(0.05, x));
+                    y = Math.min(0.95, Math.max(0.05, y));
+
+                    groupData.push({ x, y, color });
+                }
+
+                scatterData.push({
+                    data: groupData,
+                    color: color,
+                    label: groupLabels[g % groupLabels.length]
+                });
+            }
+
+            // 绘制散点
+            const legendData = [];
+            for (let g = 0; g < groups; g++) {
+                const group = scatterData[g];
+                const color = group.color;
+
+                // 绘制数据点
+                ctx.fillStyle = color + 'CC'; // 半透明
+                ctx.strokeStyle = color;
+                ctx.lineWidth = 1.5;
+
+                for (const point of group.data) {
+                    const x = padding + point.x * chartWidth;
+                    const y = height - padding - point.y * chartHeight;
+
+                    ctx.beginPath();
+                    ctx.arc(x, y, 4, 0, 2 * Math.PI);
+                    ctx.fill();
+                    ctx.stroke();
+                }
+
+                // 计算并绘制趋势线（简单线性回归）
+                if (group.data.length > 3) {
+                    const n = group.data.length;
+                    let sumX = 0, sumY = 0, sumXY = 0, sumXX = 0;
+
+                    for (const point of group.data) {
+                        sumX += point.x;
+                        sumY += point.y;
+                        sumXY += point.x * point.y;
+                        sumXX += point.x * point.x;
+                    }
+
+                    const slope = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX);
+                    const intercept = (sumY - slope * sumX) / n;
+
+                    // 绘制趋势线
+                    if (!isNaN(slope) && !isNaN(intercept)) {
+                        ctx.strokeStyle = color;
+                        ctx.lineWidth = 2;
+                        ctx.setLineDash([5, 5]);
+
+                        const x1 = 0.05;
+                        const x2 = 0.95;
+                        const y1 = slope * x1 + intercept;
+                        const y2 = slope * x2 + intercept;
+
+                        if (y1 >= 0 && y1 <= 1 && y2 >= 0 && y2 <= 1) {
+                            ctx.beginPath();
+                            ctx.moveTo(padding + x1 * chartWidth, height - padding - y1 * chartHeight);
+                            ctx.lineTo(padding + x2 * chartWidth, height - padding - y2 * chartHeight);
+                            ctx.stroke();
+                        }
+
+                        ctx.setLineDash([]);
+                    }
+                }
+
+                legendData.push(group.label);
+            }
+
+            // 绘制X轴刻度和标签
+            ctx.fillStyle = '#666666';
+            ctx.font = '9px "Times New Roman", serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'top';
+
+            for (let i = 0; i <= 5; i++) {
+                const x = padding + i * chartWidth / 5;
+                const value = (i * 20).toFixed(0);
+
+                // 刻度线
+                ctx.strokeStyle = '#cccccc';
+                ctx.lineWidth = 0.5;
+                ctx.beginPath();
+                ctx.moveTo(x, height - padding);
+                ctx.lineTo(x, height - padding + 5);
+                ctx.stroke();
+
+                // 标签
+                ctx.fillText(value, x, height - padding + 8);
+            }
+
+            // 绘制Y轴刻度和标签
+            for (let i = 0; i <= 5; i++) {
+                const y = height - padding - i * chartHeight / 5;
+                const value = (i * 20).toFixed(0);
+
+                // 刻度线
+                ctx.strokeStyle = '#cccccc';
+                ctx.lineWidth = 0.5;
+                ctx.beginPath();
+                ctx.moveTo(padding - 5, y);
+                ctx.lineTo(padding, y);
+                ctx.stroke();
+
+                // 标签
+                ctx.fillStyle = '#666666';
+                ctx.font = '9px "Times New Roman", serif';
+                ctx.textAlign = 'right';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(value, padding - 8, y);
+            }
+
+            // 绘制图例（Nature风格：外部右侧）
+            drawLegend(ctx, width, height, colors.slice(0, groups), legendData, 'outside-right');
+
+            // 添加学术化标题
+            drawChartTitle(ctx, width, '散点图 - 智核学术');
+        }
+
+        // 已移除downloadChart函数 - 预设方案板块不再需要下载功能
 
         // Events for presets
         const presetCountEl = document.getElementById('presetColorCount');
@@ -1907,10 +3600,369 @@
             });
         }
 
+        // 等高线图绘制函数
+        function drawContourPlot(ctx, canvas, colors) {
+            const width = canvas.width;
+            const height = canvas.height;
+            const padding = 100;
+            const chartWidth = width - 2 * padding;
+            const chartHeight = height - 2 * padding;
+
+            // 清空画布
+            ctx.clearRect(0, 0, width, height);
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, width, height);
+
+            // 根据配色数量动态调整等高线数量
+            const contourLevels = Math.min(colors.length, 16);
+            const resolution = 80; // 网格分辨率
+
+            // 生成随机种子，确保每次数据不同
+            const seed = Math.random() * 10;
+            const offset1 = Math.random() * 2 - 1;
+            const offset2 = Math.random() * 2 - 1;
+            const frequency = 1 + Math.random() * 2;
+
+            // 生成二维函数数据（模拟科学数据，每次都不同）
+            const data = [];
+            for (let i = 0; i <= resolution; i++) {
+                data[i] = [];
+                for (let j = 0; j <= resolution; j++) {
+                    const x = (i / resolution) * 4 - 2; // -2 到 2
+                    const y = (j / resolution) * 4 - 2; // -2 到 2
+
+                    // 复杂的二维函数：高斯分布 + 波动（加入随机性）
+                    const z = Math.exp(-((x - offset1) * (x - offset1) + (y - offset2) * (y - offset2)) / 2) *
+                        Math.cos(frequency * Math.PI * Math.sqrt(x * x + y * y) + seed) +
+                        0.3 * Math.exp(-((x - offset2) * (x - offset2) + (y - offset1) * (y - offset1)) / 0.5) +
+                        0.2 * Math.sin(frequency * x + seed) * Math.cos(frequency * y + seed);
+                    data[i][j] = z;
+                }
+            }
+
+            // 找到数据的最小值和最大值
+            let minZ = Infinity, maxZ = -Infinity;
+            for (let i = 0; i <= resolution; i++) {
+                for (let j = 0; j <= resolution; j++) {
+                    minZ = Math.min(minZ, data[i][j]);
+                    maxZ = Math.max(maxZ, data[i][j]);
+                }
+            }
+
+            // 绘制专业网格系统
+            drawAcademicGrid(ctx, width, height, padding);
+
+            // 计算等高线级别
+            const levels = [];
+            for (let i = 0; i < contourLevels; i++) {
+                levels.push(minZ + (maxZ - minZ) * i / (contourLevels - 1));
+            }
+
+            // 绘制等高线
+            ctx.lineWidth = 1.5;
+            for (let levelIndex = 0; levelIndex < levels.length; levelIndex++) {
+                const level = levels[levelIndex];
+                const color = colors[levelIndex % colors.length];
+                ctx.strokeStyle = color;
+
+                // 使用 marching squares 算法绘制等高线
+                for (let i = 0; i < resolution; i++) {
+                    for (let j = 0; j < resolution; j++) {
+                        const x1 = padding + (i / resolution) * chartWidth;
+                        const y1 = padding + (j / resolution) * chartHeight;
+                        const x2 = padding + ((i + 1) / resolution) * chartWidth;
+                        const y2 = padding + ((j + 1) / resolution) * chartHeight;
+
+                        // 获取四个角的值
+                        const v1 = data[i][j];
+                        const v2 = data[i + 1] ? data[i + 1][j] : v1;
+                        const v3 = data[i + 1] && data[i + 1][j + 1] ? data[i + 1][j + 1] : v1;
+                        const v4 = data[i][j + 1] ? data[i][j + 1] : v1;
+
+                        // 简化的等高线绘制
+                        if ((v1 <= level && v2 > level) || (v1 > level && v2 <= level)) {
+                            ctx.beginPath();
+                            ctx.moveTo(x1 + (x2 - x1) * (level - v1) / (v2 - v1), y1);
+                            ctx.lineTo(x1 + (x2 - x1) * (level - v1) / (v2 - v1), y1 + 2);
+                            ctx.stroke();
+                        }
+
+                        if ((v2 <= level && v3 > level) || (v2 > level && v3 <= level)) {
+                            ctx.beginPath();
+                            ctx.moveTo(x2, y1 + (y2 - y1) * (level - v2) / (v3 - v2));
+                            ctx.lineTo(x2 + 2, y1 + (y2 - y1) * (level - v2) / (v3 - v2));
+                            ctx.stroke();
+                        }
+
+                        if ((v3 <= level && v4 > level) || (v3 > level && v4 <= level)) {
+                            ctx.beginPath();
+                            ctx.moveTo(x1 + (x2 - x1) * (level - v4) / (v3 - v4), y2);
+                            ctx.lineTo(x1 + (x2 - x1) * (level - v4) / (v3 - v4), y2 + 2);
+                            ctx.stroke();
+                        }
+
+                        if ((v4 <= level && v1 > level) || (v4 > level && v1 <= level)) {
+                            ctx.beginPath();
+                            ctx.moveTo(x1, y1 + (y2 - y1) * (level - v1) / (v4 - v1));
+                            ctx.lineTo(x1 + 2, y1 + (y2 - y1) * (level - v1) / (v4 - v1));
+                            ctx.stroke();
+                        }
+                    }
+                }
+            }
+
+            // 绘制更精细的等高线（使用更复杂的算法）
+            for (let levelIndex = 0; levelIndex < levels.length; levelIndex++) {
+                const level = levels[levelIndex];
+                const color = colors[levelIndex % colors.length];
+                ctx.strokeStyle = color;
+                ctx.lineWidth = 1.2;
+
+                // 绘制连续的等高线
+                for (let i = 0; i < resolution - 1; i++) {
+                    for (let j = 0; j < resolution - 1; j++) {
+                        const points = [];
+
+                        // 检查网格边界上的交点
+                        const v00 = data[i][j];
+                        const v10 = data[i + 1][j];
+                        const v11 = data[i + 1][j + 1];
+                        const v01 = data[i][j + 1];
+
+                        // 左边界
+                        if ((v00 <= level && v01 > level) || (v00 > level && v01 <= level)) {
+                            const t = (level - v00) / (v01 - v00);
+                            points.push({
+                                x: padding + (i / resolution) * chartWidth,
+                                y: padding + ((j + t) / resolution) * chartHeight
+                            });
+                        }
+
+                        // 下边界
+                        if ((v00 <= level && v10 > level) || (v00 > level && v10 <= level)) {
+                            const t = (level - v00) / (v10 - v00);
+                            points.push({
+                                x: padding + ((i + t) / resolution) * chartWidth,
+                                y: padding + (j / resolution) * chartHeight
+                            });
+                        }
+
+                        // 右边界
+                        if ((v10 <= level && v11 > level) || (v10 > level && v11 <= level)) {
+                            const t = (level - v10) / (v11 - v10);
+                            points.push({
+                                x: padding + ((i + 1) / resolution) * chartWidth,
+                                y: padding + ((j + t) / resolution) * chartHeight
+                            });
+                        }
+
+                        // 上边界
+                        if ((v01 <= level && v11 > level) || (v01 > level && v11 <= level)) {
+                            const t = (level - v01) / (v11 - v01);
+                            points.push({
+                                x: padding + ((i + t) / resolution) * chartWidth,
+                                y: padding + ((j + 1) / resolution) * chartHeight
+                            });
+                        }
+
+                        // 连接交点
+                        if (points.length >= 2) {
+                            ctx.beginPath();
+                            ctx.moveTo(points[0].x, points[0].y);
+                            for (let k = 1; k < points.length; k++) {
+                                ctx.lineTo(points[k].x, points[k].y);
+                            }
+                            ctx.stroke();
+                        }
+                    }
+                }
+            }
+
+            // 绘制坐标轴标签
+            drawAxisLabels(ctx, width, height, padding, 'X轴', 'Y轴');
+
+            // 绘制颜色条（Color Bar）
+            drawColorBar(ctx, width, height, colors, levels, minZ, maxZ);
+
+            // 绘制图表标题
+            drawChartTitle(ctx, width, '等高线图 - 智核学术');
+
+            // 等高线图不需要图例，直接返回
+        }
+
+        // 添加图表预览事件监听器
+        // 已移除chartTypeSelect相关事件监听器 - 预设方案板块不再需要图表预览功能
+
+        // 添加主页面图表预览事件监听器
+        const mainChartType = document.getElementById('mainChartType');
+        const mainGenerateChartBtn = document.getElementById('mainGenerateChart');
+        const mainDownloadChartBtn = document.getElementById('mainDownloadChart');
+
+        if (mainChartType) {
+            mainChartType.addEventListener('change', generateMainChartPreview);
+
+            // 添加鼠标悬停和键盘导航功能
+            let mainCurrentIndex = 0;
+            const mainOptions = mainChartType.options;
+
+            // 鼠标悬停选择
+            mainChartType.addEventListener('mouseover', function () {
+                this.focus();
+            });
+
+            // 键盘方向键切换 - 直接切换无需回车确认
+            mainChartType.addEventListener('keydown', function (e) {
+                if (e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    mainCurrentIndex = Math.min(mainCurrentIndex + 1, mainOptions.length - 1);
+                    // 直接更新选择并生成预览
+                    this.selectedIndex = mainCurrentIndex;
+                    generateMainChartPreview();
+                } else if (e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    mainCurrentIndex = Math.max(mainCurrentIndex - 1, 0);
+                    // 直接更新选择并生成预览
+                    this.selectedIndex = mainCurrentIndex;
+                    generateMainChartPreview();
+                }
+            });
+
+            // 初始化当前索引
+            mainChartType.addEventListener('focus', function () {
+                mainCurrentIndex = this.selectedIndex;
+            });
+        }
+
+        if (mainGenerateChartBtn) {
+            mainGenerateChartBtn.addEventListener('click', generateMainChartPreview);
+        }
+
+        if (mainDownloadChartBtn) {
+            mainDownloadChartBtn.addEventListener('click', function () {
+                const canvas = document.getElementById('mainChartCanvas');
+                if (canvas) {
+                    const link = document.createElement('a');
+                    link.download = 'color-scheme-chart.png';
+                    link.href = canvas.toDataURL();
+                    link.click();
+                    showToast('图表已下载');
+                }
+            });
+        }
+
         // Expose preset functions
         window.openPresetSection = openPresetSection;
         window.closePresetSection = closePresetSection;
         window.switchPresetCategory = switchPresetCategory;
+
+        // 饼图绘制函数
+        function drawPieChart(ctx, canvas, colors) {
+            const width = canvas.width;
+            const height = canvas.height;
+            const padding = 80;
+            const centerX = width / 2;
+            const centerY = height / 2;
+            const radius = Math.min(width, height) / 2 - padding;
+
+            // 清空画布
+            ctx.clearRect(0, 0, width, height);
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, width, height);
+
+            // 根据配色数量动态调整扇形数量
+            const segments = Math.min(colors.length, 16); // 最多16个扇形
+            const data = [];
+            const labels = [];
+
+            // 生成科学数据（模拟实验结果分布）
+            let total = 0;
+            for (let i = 0; i < segments; i++) {
+                // 模拟不同类别的占比，使用更真实的分布
+                const baseValue = 0.5 + 0.4 * Math.sin(i * Math.PI / segments);
+                const randomFactor = 0.3 + 0.7 * Math.random();
+                const value = baseValue * randomFactor;
+                data.push(value);
+                total += value;
+                labels.push(`类别${String.fromCharCode(65 + i)}`); // A, B, C, ...
+            }
+
+            // 标准化数据，确保总和为100%
+            for (let i = 0; i < data.length; i++) {
+                data[i] = data[i] / total;
+            }
+
+            // 绘制饼图扇形
+            let currentAngle = -Math.PI / 2; // 从12点方向开始
+
+            for (let i = 0; i < segments; i++) {
+                const sliceAngle = data[i] * 2 * Math.PI;
+                const color = colors[i % colors.length];
+
+                // 绘制扇形
+                ctx.fillStyle = color;
+                ctx.beginPath();
+                ctx.moveTo(centerX, centerY);
+                ctx.arc(centerX, centerY, radius, currentAngle, currentAngle + sliceAngle);
+                ctx.closePath();
+                ctx.fill();
+
+                // 绘制扇形边框（学术风格）
+                ctx.strokeStyle = '#ffffff';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+
+                // 计算标签位置（在扇形中心）
+                const labelAngle = currentAngle + sliceAngle / 2;
+                const labelRadius = radius * 0.7;
+                const labelX = centerX + Math.cos(labelAngle) * labelRadius;
+                const labelY = centerY + Math.sin(labelAngle) * labelRadius;
+
+                // 绘制百分比标签
+                const percentage = (data[i] * 100).toFixed(1);
+                ctx.fillStyle = '#ffffff';
+                ctx.font = 'bold 12px "Times New Roman", serif';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+
+                // 添加文字阴影效果
+                ctx.shadowColor = 'rgba(0,0,0,0.5)';
+                ctx.shadowBlur = 2;
+                ctx.fillText(`${percentage}%`, labelX, labelY);
+                ctx.shadowBlur = 0;
+
+                currentAngle += sliceAngle;
+            }
+
+            // 绘制图例（右侧垂直排列）
+            const legendX = width - 150;
+            const legendY = 100;
+            const legendItemHeight = 25;
+
+            ctx.font = '12px "Times New Roman", serif';
+            ctx.textAlign = 'left';
+            ctx.textBaseline = 'middle';
+
+            for (let i = 0; i < segments; i++) {
+                const y = legendY + i * legendItemHeight;
+                const color = colors[i % colors.length];
+
+                // 绘制图例色块
+                ctx.fillStyle = color;
+                ctx.fillRect(legendX, y - 8, 16, 16);
+                ctx.strokeStyle = '#333333';
+                ctx.lineWidth = 1;
+                ctx.strokeRect(legendX, y - 8, 16, 16);
+
+                // 绘制图例文字
+                ctx.fillStyle = '#333333';
+                const percentage = (data[i] * 100).toFixed(1);
+                ctx.fillText(`${labels[i]} (${percentage}%)`, legendX + 25, y);
+            }
+
+            // 添加图表标题
+            drawChartTitle(ctx, width, '饼图 - 智核学术');
+        }
+
         window.applyPresetPalette = applyPresetPalette;
 
         // Initial generation - 先更新颜色数量选项，再生成配色方案
