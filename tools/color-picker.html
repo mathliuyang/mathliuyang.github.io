@@ -981,15 +981,15 @@
                 </div>
 
                 <div class="export-panel">
-                    <h3 class="export-panel-title">JavaScript</h3>
-                    <div class="export-code" id="jsCode"></div>
-                    <button class="copy-btn" onclick="copyCode('js')">复制JavaScript</button>
+                    <h3 class="export-panel-title">Python</h3>
+                    <div class="export-code" id="pythonCode"></div>
+                    <button class="copy-btn" onclick="copyCode('python')">复制Python</button>
                 </div>
 
                 <div class="export-panel">
-                    <h3 class="export-panel-title">Tailwind</h3>
-                    <div class="export-code" id="tailwindCode"></div>
-                    <button class="copy-btn" onclick="copyCode('tailwind')">复制Tailwind</button>
+                    <h3 class="export-panel-title">Matlab</h3>
+                    <div class="export-code" id="matlabCode"></div>
+                    <button class="copy-btn" onclick="copyCode('matlab')">复制Matlab</button>
                 </div>
             </div>
         </div>
@@ -1510,24 +1510,24 @@
             ).join('\n')}\n}`;
             document.getElementById('cssCode').textContent = cssCode;
 
-            // JavaScript
-            const jsCode = `const colors = {\n${currentPalette.map((color, i) =>
-                `  color${i + 1}: '${color}',`
-            ).join('\n')}\n};`;
-            document.getElementById('jsCode').textContent = jsCode;
+            // Python
+            const pythonCode = `# 配色方案\ncolors = [\n${currentPalette.map((color, i) =>
+                `    '${color}',  # 颜色${i + 1}`
+            ).join('\n')}\n]\n\n# 使用示例\nprint(f"配色方案包含 {len(colors)} 种颜色")\nfor i, color in enumerate(colors):\n    print(f"颜色{i+1}: {color}")`;
+            document.getElementById('pythonCode').textContent = pythonCode;
 
-            // Tailwind
-            const tailwindCode = `module.exports = {\n  theme: {\n    extend: {\n      colors: {\n${currentPalette.map((color, i) =>
-                `        'primary-${i + 1}': '${color}',`
-            ).join('\n')}\n      }\n    }\n  }\n}`;
-            document.getElementById('tailwindCode').textContent = tailwindCode;
+            // Matlab
+            const matlabCode = `% 配色方案\ncolors = {\n${currentPalette.map((color, i) =>
+                `    '${color}', ... % 颜色${i + 1}`
+            ).join('\n')}\n};\n\n% 使用示例\nfprintf('配色方案包含 %d 种颜色\\n', length(colors));\nfor i = 1:length(colors)\n    fprintf('颜色%d: %s\\n', i, colors{i});\nend`;
+            document.getElementById('matlabCode').textContent = matlabCode;
         }
 
         function copyCode(type) {
             let text = '';
             if (type === 'css') text = document.getElementById('cssCode').textContent;
-            if (type === 'js') text = document.getElementById('jsCode').textContent;
-            if (type === 'tailwind') text = document.getElementById('tailwindCode').textContent;
+            if (type === 'python') text = document.getElementById('pythonCode').textContent;
+            if (type === 'matlab') text = document.getElementById('matlabCode').textContent;
 
             navigator.clipboard.writeText(text);
             showToast('代码已复制到剪贴板');
