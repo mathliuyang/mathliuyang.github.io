@@ -1925,7 +1925,7 @@
             const img = document.getElementById('originalImage');
             const container = document.getElementById('imagePreviewContainer');
             const layout = document.getElementById('colorExtractionLayout');
-            
+
             if (!img || !container || !layout) return;
 
             // 等待图片加载完成
@@ -1938,7 +1938,7 @@
             function adjustImageLayout() {
                 const imgWidth = img.naturalWidth || img.width;
                 const imgHeight = img.naturalHeight || img.height;
-                
+
                 if (imgWidth === 0 || imgHeight === 0) return;
 
                 // 计算图片比例
@@ -1956,33 +1956,33 @@
                     container.style.width = '400px';
                     container.style.maxWidth = '400px';
                     container.style.margin = '0 2rem 0 0';
-                    
+
                     // 设置横向图片尺寸
                     img.style.width = '100%';
                     img.style.height = 'auto';
                     img.style.maxHeight = '250px';
                     img.style.objectFit = 'contain';
-                    
+
                 } else if (isPortrait) {
                     // 竖向图片：左右布局，图片在左，较窄尺寸
                     container.style.flex = '0 0 280px';
                     container.style.width = '280px';
                     container.style.maxWidth = '280px';
                     container.style.margin = '0 2rem 0 0';
-                    
+
                     // 设置竖向图片尺寸
                     img.style.width = '100%';
                     img.style.height = 'auto';
                     img.style.maxHeight = '400px';
                     img.style.objectFit = 'contain';
-                    
+
                 } else {
                     // 方形图片：适中显示
                     container.style.flex = '0 0 320px';
                     container.style.width = '320px';
                     container.style.maxWidth = '320px';
                     container.style.margin = '0 2rem 0 0';
-                    
+
                     // 设置方形图片尺寸
                     img.style.width = '100%';
                     img.style.height = 'auto';
@@ -1998,7 +1998,7 @@
         // 响应式布局处理
         function handleResponsiveLayout(layout, container, isLandscape, isPortrait) {
             const screenWidth = window.innerWidth;
-            
+
             if (screenWidth <= 768) {
                 // 移动端：保持左右布局，但调整尺寸
                 layout.style.flexDirection = 'row';
@@ -2006,7 +2006,7 @@
                 container.style.width = '140px';
                 container.style.maxWidth = '140px';
                 container.style.margin = '0 1rem 0 0';
-                
+
                 // 移动端图片尺寸
                 const img = container.querySelector('img');
                 if (img) {
@@ -2014,14 +2014,14 @@
                     img.style.height = 'auto';
                     img.style.maxHeight = '180px';
                 }
-                
+
                 if (screenWidth <= 480) {
                     // 小屏手机：更紧凑的布局
                     container.style.flex = '0 0 100px';
                     container.style.width = '100px';
                     container.style.maxWidth = '100px';
                     container.style.margin = '0 0.5rem 0 0';
-                    
+
                     if (img) {
                         img.style.maxHeight = '120px';
                     }
@@ -2030,7 +2030,7 @@
         }
 
         // 监听窗口大小变化，重新调整布局
-        window.addEventListener('resize', function() {
+        window.addEventListener('resize', function () {
             if (document.getElementById('originalImage')) {
                 adaptImagePreview();
             }
@@ -2301,7 +2301,7 @@
                 if (!closestColor) {
                     // 扩展匹配范围，放宽色相限制
                     const expandedColors = [];
-                    
+
                     // 收集所有色彩，包括变体
                     for (const category of Object.values(traditionalColors)) {
                         expandedColors.push(...category);
@@ -2311,13 +2311,13 @@
                             expandedColors.push(...category);
                         }
                     }
-                    
+
                     // 在放宽的范围内重新匹配
                     let backupMinDistance = Infinity;
                     for (const color of expandedColors) {
                         let hueDistance = Math.abs(hsl.h - color.h);
                         if (hueDistance > 180) hueDistance = 360 - hueDistance;
-                        
+
                         // 放宽色相范围到原来的2倍
                         if (hueDistance <= color.range * 2) {
                             const distance = Math.sqrt(
@@ -2325,14 +2325,14 @@
                                 Math.pow((hsl.s - color.s) / 100, 2) +
                                 Math.pow((hsl.l - color.l) / 100, 2)
                             );
-                            
+
                             if (distance < backupMinDistance) {
                                 backupMinDistance = distance;
                                 closestColor = color;
                             }
                         }
                     }
-                    
+
                     // 如果还是找不到，使用智能生成名称
                     if (!closestColor) {
                         // 基于HSL值的智能色彩命名
@@ -2342,20 +2342,20 @@
                             '黄绿', '草绿', '正绿', '青绿', '正青', '蓝青',
                             '正蓝', '紫蓝', '正紫', '红紫'
                         ];
-                        
+
                         const baseName = hueNames[hueSection] || '正红';
-                        
+
                         // 根据饱和度和明度添加修饰
                         let prefix = '';
                         let suffix = '';
-                        
+
                         if (hsl.s < 30) prefix = '灰';
                         else if (hsl.s < 60) prefix = '淡';
                         else if (hsl.s > 85) prefix = '艳';
-                        
+
                         if (hsl.l < 25) suffix = '（深）';
                         else if (hsl.l > 80) suffix = '（浅）';
-                        
+
                         colorName = prefix + baseName + suffix;
                     } else {
                         colorName = closestColor.name;
@@ -4498,21 +4498,21 @@
                         const hdCanvas = document.createElement('canvas');
                         hdCanvas.width = originalCanvas.width; // 保持与网页相同尺寸
                         hdCanvas.height = originalCanvas.height; // 保持与网页相同尺寸
-                        
+
                         const hdCtx = hdCanvas.getContext('2d');
-                        
+
                         // 设置高画质渲染
                         hdCtx.imageSmoothingEnabled = true;
                         hdCtx.imageSmoothingQuality = 'high';
-                        
+
                         // 确保白色背景
                         hdCtx.fillStyle = '#ffffff';
                         hdCtx.fillRect(0, 0, hdCanvas.width, hdCanvas.height);
-                        
+
                         // 获取当前图表类型和配色
                         const chartType = document.getElementById('mainChartType').value || 'line';
                         const colors = window.currentChartPalette || (currentPalette.length > 0 ? currentPalette : ['#3498db', '#e74c3c', '#2ecc71', '#f39c12', '#9b59b6', '#1abc9c', '#34495e', '#e67e22']);
-                        
+
                         // 重新绘制图表到高清画布
                         switch (chartType) {
                             case 'line':
@@ -4548,13 +4548,13 @@
                             default:
                                 drawLineChart(hdCtx, hdCanvas, colors);
                         }
-                        
+
                         // 下载图表（保持与网页相同尺寸）
                         const link = document.createElement('a');
                         link.download = `color-scheme-${chartType}-chart.png`;
                         link.href = hdCanvas.toDataURL('image/png');
                         link.click();
-                        
+
                         showToast('高清图表已下载');
                     } catch (error) {
                         console.error('下载图表失败:', error);
@@ -4576,41 +4576,41 @@
                 try {
                     // 获取当前配色方案
                     const colors = currentPalette.length > 0 ? currentPalette : ['#3498db', '#e74c3c', '#2ecc71', '#f39c12', '#9b59b6'];
-                    
+
                     // 创建色卡画布 - 只包含一行小方块，保持标准尺寸
                     const colorCardCanvas = document.createElement('canvas');
                     const colorSize = 100; // 颜色方块大小（标准尺寸）
                     const spacing = 20; // 间距（标准尺寸）
                     const margin = 40; // 边距（标准尺寸）
-                    
+
                     // 计算画布尺寸 - 紧凑的一行布局
                     const cardWidth = Math.max(800, colors.length * (colorSize + spacing) - spacing + 2 * margin);
                     const cardHeight = colorSize + 60; // 仅包含方块和下方色值
-                    
+
                     colorCardCanvas.width = cardWidth;
                     colorCardCanvas.height = cardHeight;
                     const ctx = colorCardCanvas.getContext('2d');
-                    
+
                     // 设置纯白色背景
                     ctx.fillStyle = '#ffffff';
                     ctx.fillRect(0, 0, cardWidth, cardHeight);
-                    
+
                     // 计算居中位置
                     const totalWidth = colors.length * colorSize + (colors.length - 1) * spacing;
                     const startX = (cardWidth - totalWidth) / 2;
                     const centerY = 20;
-                    
+
                     // 绘制颜色方块（一行展示）
                     colors.forEach((color, index) => {
                         const x = startX + index * (colorSize + spacing);
                         const y = centerY;
-                        
+
                         // 绘制颜色方块（圆角矩形）
                         const radius = 8;
                         ctx.fillStyle = color;
                         roundRect(ctx, x, y, colorSize, colorSize, radius);
                         ctx.fill();
-                        
+
                         // 添加颜色代码（下方居中）
                         ctx.fillStyle = '#333333';
                         ctx.font = '18px "Segoe UI", Arial, sans-serif';
@@ -4618,13 +4618,13 @@
                         ctx.textBaseline = 'top';
                         ctx.fillText(color.toUpperCase(), x + colorSize / 2, y + colorSize + 10);
                     });
-                    
+
                     // 下载色卡（标准尺寸）
                     const link = document.createElement('a');
                     link.download = `color-palette-${Date.now()}.png`;
                     link.href = colorCardCanvas.toDataURL('image/png');
                     link.click();
-                    
+
                     showToast('色卡已下载');
                 } catch (error) {
                     console.error('下载色卡失败:', error);
@@ -4632,7 +4632,7 @@
                 }
             });
         }
-        
+
         // 辅助函数：绘制圆角矩形
         function roundRect(ctx, x, y, width, height, radius) {
             ctx.beginPath();
@@ -4654,10 +4654,10 @@
             downloadAllChartsBtn.addEventListener('click', async function () {
                 try {
                     showToast('正在生成所有图表，请稍候...');
-                    
+
                     // 获取当前配色
                     const colors = window.currentChartPalette || (currentPalette.length > 0 ? currentPalette : ['#3498db', '#e74c3c', '#2ecc71', '#f39c12', '#9b59b6', '#1abc9c', '#34495e', '#e67e22']);
-                    
+
                     // 所有支持的图表类型
                     const chartTypes = [
                         { type: 'line', name: '线性图' },
@@ -4677,7 +4677,7 @@
                     tempCanvas.width = 1000; // 保持与网页相同尺寸
                     tempCanvas.height = 500; // 保持与网页相同尺寸
                     const tempCtx = tempCanvas.getContext('2d');
-                    
+
                     // 设置高画质渲染
                     tempCtx.imageSmoothingEnabled = true;
                     tempCtx.imageSmoothingQuality = 'high';
@@ -4687,11 +4687,11 @@
                     // 生成所有图表
                     for (let i = 0; i < chartTypes.length; i++) {
                         const chartInfo = chartTypes[i];
-                        
+
                         // 清空画布并设置白色背景
                         tempCtx.fillStyle = '#ffffff';
                         tempCtx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
-                        
+
                         // 根据图表类型生成对应的图表
                         try {
                             switch (chartInfo.type) {
@@ -4726,7 +4726,7 @@
                                     drawContourPlot(tempCtx, tempCanvas, colors);
                                     break;
                             }
-                            
+
                             // 添加到图片数组 - 使用高清PNG
                             images.push({
                                 name: `color-scheme-${chartInfo.type}.png`,
@@ -4734,7 +4734,7 @@
                                 type: chartInfo.type,
                                 nameCN: chartInfo.name
                             });
-                            
+
                             showToast(`已生成 ${chartInfo.name}...`);
                         } catch (error) {
                             console.error(`生成${chartInfo.name}失败:`, error);
@@ -4747,76 +4747,79 @@
                         return;
                     }
 
+                    // 生成GIF动画（每2秒切换一个图）
+                    let gifBlob = null;
+                    try {
+                        showToast('正在生成GIF动画，请稍候...');
+                        gifBlob = await createGIFAnimation(images, 2000); // 2秒切换间隔
+                        showToast('GIF动画生成完成！');
+                    } catch (error) {
+                        console.error('生成GIF动画失败:', error);
+                        showToast('GIF动画生成失败，继续打包静态图表...');
+                    }
+
                     // 如果有多个图表，创建ZIP文件
                     if (images.length > 1) {
                         // 使用JSZip库创建压缩包
                         try {
                             // 动态加载JSZip库
                             await loadJSZip();
-                            
+
                             const JSZip = window.JSZip;
                             const zip = new JSZip();
-                            
+
                             // 添加所有图片到ZIP
                             images.forEach((image, index) => {
                                 // 将dataURL转换为blob
                                 const base64Data = image.dataURL.split(',')[1];
                                 zip.file(image.name, base64Data, { base64: true });
                             });
-                            
-                            // 创建GIF动画（如果有多个图表）
-                            if (images.length > 1) {
-                                showToast('正在生成图表动画...');
-                                try {
-                                    console.log('开始创建动画，图表数量:', images.length);
-                                    const videoBlob = await createChartGIF(images, 2000); // 每2秒切换
-                                    console.log('动画创建成功，文件大小:', videoBlob.size);
-                                    
-                                    // 将动画添加到ZIP文件（使用.webm扩展名）
-                                    zip.file('color-scheme-charts.webm', videoBlob);
-                                    showToast('图表动画生成完成！');
-                                } catch (videoError) {
-                                    console.error('创建动画失败:', videoError);
-                                    console.error('错误堆栈:', videoError.stack);
-                                    
-                                    // 如果动画生成失败，尝试创建一个简单的文本说明文件
-                                    try {
-                                        const fallbackText = `颜色方案图表合集\n\n包含 ${images.length} 个图表:\n${images.map(img => `- ${img.nameCN}`).join('\n')}\n\n原始动画生成失败，但所有图表图片已包含在本压缩包中。`;
-                                        zip.file('color-scheme-charts-info.txt', fallbackText);
-                                        showToast('动画生成失败，已添加说明文件代替');
-                                    } catch (fallbackError) {
-                                        console.error('创建说明文件也失败:', fallbackError);
-                                        showToast('动画生成失败，继续打包其他文件...');
-                                    }
-                                }
-                            } else {
-                                console.log('图表数量不足，跳过动画生成，当前数量:', images.length);
+
+                            // 如果GIF生成成功，添加到ZIP
+                            if (gifBlob) {
+                                zip.file('color-scheme-charts-animation.gif', gifBlob);
                             }
-                            
-                            // 生成ZIP文件（确保GIF生成完成后再执行）
-                            console.log('开始生成ZIP文件...');
+
+                            // 生成ZIP文件
                             const zipBlob = await zip.generateAsync({ type: 'blob' });
-                            console.log('ZIP文件生成成功，大小:', zipBlob.size);
-                            
+
                             // 创建下载链接
                             const link = document.createElement('a');
                             link.download = `color-scheme-charts-${Date.now()}.zip`;
                             link.href = URL.createObjectURL(zipBlob);
                             link.click();
-                            
-                            showToast(`成功打包下载 ${images.length} 个图表${images.length > 1 ? '和GIF动画' : ''}！`);
+
+                            showToast(`成功打包下载 ${images.length} 个图表${gifBlob ? ' 和 GIF动画' : ''}！`);
                         } catch (error) {
                             console.error('创建ZIP文件失败:', error);
-                            // 如果ZIP创建失败，逐个下载
+                            // 如果ZIP创建失败，但GIF生成成功，单独下载GIF
+                            if (gifBlob) {
+                                const gifLink = document.createElement('a');
+                                gifLink.download = `color-scheme-charts-animation-${Date.now()}.gif`;
+                                gifLink.href = URL.createObjectURL(gifBlob);
+                                gifLink.click();
+                                showToast('ZIP创建失败，已单独下载GIF动画');
+                            }
+                            // 如果ZIP创建失败，逐个下载静态图表
                             downloadImagesIndividually(images);
                         }
                     } else {
                         // 只有一个图表时直接下载
-                        const link = document.createElement('a');
-                        link.download = images[0].name;
-                        link.href = images[0].dataURL;
-                        link.click();
-                        showToast('图表已下载');
+                        if (gifBlob) {
+                            // 如果生成了GIF，优先下载GIF
+                            const gifLink = document.createElement('a');
+                            gifLink.download = `color-scheme-charts-animation-${Date.now()}.gif`;
+                            gifLink.href = URL.createObjectURL(gifBlob);
+                            gifLink.click();
+                            showToast('GIF动画已下载');
+                        } else {
+                            // 没有GIF，下载静态图表
+                            const link = document.createElement('a');
+                            link.download = images[0].name;
+                            link.href = images[0].dataURL;
+                            link.click();
+                            showToast('图表已下载');
+                        }
                     }
                 } catch (error) {
                     console.error('打包下载失败:', error);
@@ -4832,7 +4835,7 @@
                     resolve();
                     return;
                 }
-                
+
                 const script = document.createElement('script');
                 script.src = 'https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js';
                 script.onload = () => resolve();
@@ -4845,24 +4848,89 @@
         function loadGifJs() {
             return new Promise((resolve, reject) => {
                 if (window.GIF) {
-                    console.log('GIF库已加载');
                     resolve();
                     return;
                 }
-                
-                console.log('开始加载GIF库...');
+
                 const script = document.createElement('script');
                 script.src = 'https://cdnjs.cloudflare.com/ajax/libs/gif.js/0.2.0/gif.js';
-                script.onload = () => {
-                    console.log('GIF库加载成功');
-                    resolve();
-                };
-                script.onerror = () => {
-                    console.error('GIF库加载失败');
-                    reject(new Error('加载gif.js库失败'));
-                };
+                script.onload = () => resolve();
+                script.onerror = () => reject(new Error('加载gif.js库失败'));
                 document.head.appendChild(script);
             });
+        }
+
+        // 创建GIF动画函数
+        async function createGIFAnimation(images, frameDelay = 2000) {
+            try {
+                // 动态加载gif.js库
+                await loadGifJs();
+                
+                const GIF = window.GIF;
+                const gif = new GIF({
+                    workers: 2,
+                    quality: 10,
+                    width: 1000,
+                    height: 500,
+                    repeat: 0 // 无限循环
+                });
+
+                // 为每个图表创建帧
+                for (let i = 0; i < images.length; i++) {
+                    const image = images[i];
+                    
+                    // 创建临时canvas来绘制带标签的图表
+                    const frameCanvas = document.createElement('canvas');
+                    frameCanvas.width = 1000;
+                    frameCanvas.height = 500;
+                    const frameCtx = frameCanvas.getContext('2d');
+                    
+                    // 绘制白色背景
+                    frameCtx.fillStyle = '#ffffff';
+                    frameCtx.fillRect(0, 0, 1000, 500);
+                    
+                    // 绘制图表图像
+                    const img = new Image();
+                    await new Promise((resolve, reject) => {
+                        img.onload = resolve;
+                        img.onerror = reject;
+                        img.src = image.dataURL;
+                    });
+                    
+                    frameCtx.drawImage(img, 0, 0, 1000, 500);
+                    
+                    // 添加图表类型标签
+                    frameCtx.fillStyle = '#333333';
+                    frameCtx.font = 'bold 24px Arial, sans-serif';
+                    frameCtx.textAlign = 'center';
+                    frameCtx.fillText(image.nameCN, 500, 30);
+                    
+                    // 添加帧延迟提示
+                    frameCtx.fillStyle = '#666666';
+                    frameCtx.font = '14px Arial, sans-serif';
+                    frameCtx.fillText(`(${frameDelay/1000}秒后切换)`, 500, 470);
+                    
+                    // 添加到GIF
+                    gif.addFrame(frameCanvas, { delay: frameDelay });
+                }
+
+                // 返回Promise，当GIF生成完成时resolve
+                return new Promise((resolve, reject) => {
+                    gif.on('finished', function(blob) {
+                        resolve(blob);
+                    });
+                    
+                    gif.on('error', function(error) {
+                        reject(error);
+                    });
+                    
+                    gif.render();
+                });
+                
+            } catch (error) {
+                console.error('创建GIF动画失败:', error);
+                throw error;
+            }
         }
 
         // 辅助函数：逐个下载图片（当ZIP创建失败时）
@@ -4876,100 +4944,6 @@
                 }, index * 500); // 每500ms下载一个，避免浏览器限制
             });
             showToast('正在逐个下载图表...');
-        }
-
-        // 辅助函数：创建GIF动画（简化版，使用Canvas录制）
-        async function createChartGIF(images, frameDelay = 2000) {
-            try {
-                console.log('createChartGIF开始执行，图表数量:', images.length);
-                
-                // 创建canvas和录制器
-                const canvas = document.createElement('canvas');
-                canvas.width = 800;
-                canvas.height = 400;
-                const ctx = canvas.getContext('2d');
-                
-                // 创建MediaRecorder来录制canvas
-                const stream = canvas.captureStream(30); // 30fps
-                const chunks = [];
-                
-                const recorder = new MediaRecorder(stream, {
-                    mimeType: 'video/webm;codecs=vp8',
-                    videoBitsPerSecond: 1000000
-                });
-                
-                recorder.ondataavailable = (e) => {
-                    if (e.data.size > 0) {
-                        chunks.push(e.data);
-                    }
-                };
-                
-                return new Promise((resolve, reject) => {
-                    recorder.onstop = () => {
-                        const blob = new Blob(chunks, { type: 'video/webm' });
-                        console.log('WebM视频生成成功，文件大小:', blob.size);
-                        resolve(blob);
-                    };
-                    
-                    recorder.onerror = (error) => {
-                        console.error('录制失败:', error);
-                        reject(error);
-                    };
-                    
-                    recorder.start();
-                    console.log('开始录制...');
-                    
-                    // 录制每个图表
-                    let currentIndex = 0;
-                    
-                    function drawNextFrame() {
-                        if (currentIndex >= images.length) {
-                            // 所有帧录制完成
-                            recorder.stop();
-                            return;
-                        }
-                        
-                        const image = images[currentIndex];
-                        console.log('录制第', currentIndex + 1, '个图表:', image.nameCN);
-                        
-                        // 清空画布
-                        ctx.fillStyle = '#ffffff';
-                        ctx.fillRect(0, 0, canvas.width, canvas.height);
-                        
-                        // 绘制图表
-                        const img = new Image();
-                        img.onload = () => {
-                            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                            
-                            // 添加标题
-                            ctx.fillStyle = '#333333';
-                            ctx.font = 'bold 20px Arial';
-                            ctx.textAlign = 'center';
-                            ctx.fillText(image.nameCN, canvas.width / 2, 30);
-                            
-                            currentIndex++;
-                            
-                            // 继续录制下一帧（延迟后）
-                            setTimeout(drawNextFrame, frameDelay);
-                        };
-                        
-                        img.onerror = () => {
-                            console.error('图片加载失败:', image.nameCN);
-                            currentIndex++;
-                            setTimeout(drawNextFrame, frameDelay);
-                        };
-                        
-                        img.src = image.dataURL;
-                    }
-                    
-                    // 开始录制第一帧
-                    drawNextFrame();
-                });
-                
-            } catch (error) {
-                console.error('创建录制失败:', error);
-                throw error;
-            }
         }
 
         // Expose preset functions
