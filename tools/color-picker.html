@@ -4768,19 +4768,26 @@
                             if (images.length > 1) {
                                 showToast('正在生成GIF动画...');
                                 try {
+                                    console.log('开始创建GIF，图表数量:', images.length);
                                     const gifBlob = await createChartGIF(images, 2000); // 每2秒切换
+                                    console.log('GIF创建成功，文件大小:', gifBlob.size);
                                     
                                     // 将GIF添加到ZIP文件
                                     zip.file('color-scheme-charts.gif', gifBlob);
                                     showToast('GIF动画生成完成！');
                                 } catch (gifError) {
                                     console.error('创建GIF失败:', gifError);
+                                    console.error('错误堆栈:', gifError.stack);
                                     showToast('GIF生成失败，继续打包其他文件...');
                                 }
+                            } else {
+                                console.log('图表数量不足，跳过GIF生成，当前数量:', images.length);
                             }
                             
-                            // 生成ZIP文件
+                            // 生成ZIP文件（确保GIF生成完成后再执行）
+                            console.log('开始生成ZIP文件...');
                             const zipBlob = await zip.generateAsync({ type: 'blob' });
+                            console.log('ZIP文件生成成功，大小:', zipBlob.size);
                             
                             // 创建下载链接
                             const link = document.createElement('a');
@@ -4788,7 +4795,7 @@
                             link.href = URL.createObjectURL(zipBlob);
                             link.click();
                             
-                            showToast(`成功打包下载 ${images.length} 个图表和GIF动画！`);
+                            showToast(`成功打包下载 ${images.length} 个图表${images.length > 1 ? '和GIF动画' : ''}！`);
                         } catch (error) {
                             console.error('创建ZIP文件失败:', error);
                             // 如果ZIP创建失败，逐个下载
@@ -4829,14 +4836,22 @@
         function loadGifJs() {
             return new Promise((resolve, reject) => {
                 if (window.GIF) {
+                    console.log('GIF库已加载');
                     resolve();
                     return;
                 }
                 
+                console.log('开始加载GIF库...');
                 const script = document.createElement('script');
                 script.src = 'https://cdnjs.cloudflare.com/ajax/libs/gif.js/0.2.0/gif.js';
-                script.onload = () => resolve();
-                script.onerror = () => reject(new Error('加载gif.js库失败'));
+                script.onload = () => {
+                    console.log('GIF库加载成功');
+                    resolve();
+                };
+                script.onerror = () => {
+                    console.error('GIF库加载失败');
+                    reject(new Error('加载gif.js库失败'));
+                };
                 document.head.appendChild(script);
             });
         }
@@ -4857,6 +4872,8 @@
         // 辅助函数：创建GIF动画
         async function createChartGIF(images, frameDelay = 2000) {
             try {
+                console.log('createChartGIF开始执行，图表数量:', images.length);
+                
                 // 加载gif.js库
                 await loadGifJs();
                 
@@ -4873,8 +4890,11 @@
                     repeat: 0 // 0表示无限循环
                 });
 
+                console.log('GIF编码器创建成功');
+
                 // 为每个图表创建帧
                 for (let i = 0; i < images.length; i++) {
+                    console.log('处理第', i + 1, '个图表:', images[i].nameCN);
                     const image = images[i];
                     
                     // 创建临时canvas来绘制当前帧
@@ -4887,48 +4907,38 @@
                     frameCtx.fillStyle = '#ffffff';
                     frameCtx.fillRect(0, 0, frameCanvas.width, frameCanvas.height);
                     
-                    // 绘制图表标题
-                    frameCtx.fillStyle = '#333333';
-                    frameCtx.font = 'bold 24px "Times New Roman", serif';
-                    frameCtx.textAlign = 'center';
-                    frameCtx.fillText(image.nameCN, frameCanvas.width / 2, 40);
-                    
-                    // 绘制图表图片
+                    // 直接绘制原始图表图片，不添加标题以保持简洁
                     const img = new Image();
                     await new Promise((resolve, reject) => {
                         img.onload = resolve;
-                        img.onerror = reject;
+                        img.onerror = () => reject(new Error(`图片加载失败: ${image.nameCN}`));
                         img.src = image.dataURL;
                     });
                     
-                    // 将图片绘制到帧中（居中，留出标题空间）
-                    const imgWidth = 1000;
-                    const imgHeight = 500;
-                    const titleHeight = 60;
-                    const availableHeight = imgHeight - titleHeight - 20;
-                    const scale = Math.min(imgWidth / img.width, availableHeight / img.height);
-                    const drawWidth = img.width * scale * 0.9;
-                    const drawHeight = img.height * scale * 0.9;
-                    const drawX = (imgWidth - drawWidth) / 2;
-                    const drawY = titleHeight + (availableHeight - drawHeight) / 2;
-                    
-                    frameCtx.drawImage(img, drawX, drawY, drawWidth, drawHeight);
+                    // 将图片绘制到帧中（居中显示）
+                    frameCtx.drawImage(img, 0, 0, frameCanvas.width, frameCanvas.height);
                     
                     // 添加帧到GIF
                     gif.addFrame(frameCanvas, { delay: frameDelay });
+                    console.log('第', i + 1, '帧添加完成');
                 }
+
+                console.log('所有帧添加完成，开始生成GIF...');
 
                 // 生成GIF
                 return new Promise((resolve, reject) => {
                     gif.on('finished', function(blob) {
+                        console.log('GIF生成成功，文件大小:', blob.size);
                         resolve(blob);
                     });
                     
                     gif.on('error', function(error) {
+                        console.error('GIF生成失败:', error);
                         reject(error);
                     });
                     
                     gif.render();
+                    console.log('GIF渲染开始...');
                 });
                 
             } catch (error) {
