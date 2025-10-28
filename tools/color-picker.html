@@ -1826,8 +1826,8 @@
             window.allExtractedColors = allColors || displayColors;
             window.originalImageUrl = originalImageUrl;
 
-            // Create color count selector
-            const colorCountSelector = allColors && allColors.length > displayColors.length ? `
+            // Create color count selector - 始终显示选择框，只要检测到颜色
+            const colorCountSelector = allColors && allColors.length > 0 ? `
                 <div style="margin-bottom: 1rem; padding: 1rem; background: var(--bg-secondary); border-radius: 8px; border: 1px solid var(--border);">
                     <div style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
                         <span style="font-weight: 500; color: var(--text);">显示主要配色数量：</span>
@@ -1841,18 +1841,21 @@
                 </div>
             ` : '';
 
-            // 创建新的左右布局结构
+            // 创建自适应的图片预览HTML
+            const imagePreviewHtml = originalImageUrl ? `
+                <div id="imagePreviewContainer" style="flex: 0 0 auto; text-align: center; margin-bottom: 1rem;">
+                    <img id="originalImage" src="${originalImageUrl}" style="border-radius: 12px; border: 2px solid var(--border); box-shadow: 0 8px 24px rgba(0,0,0,0.15); transition: transform 0.3s ease; max-width: 100%;" alt="原图预览" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">
+                    <p style="margin-top: 0.8rem; font-size: 0.85rem; color: var(--text-dim); font-weight: 500;">原图预览</p>
+                </div>
+            ` : '';
+
+            // 创建新的自适应布局结构
             container.innerHTML = `
                 <div style="margin-bottom: 1.5rem;">
                     ${colorCountSelector}
-                    <div style="display: flex; gap: 2rem; align-items: flex-start; flex-wrap: wrap;">
-                        <!-- 左侧：封面图 -->
-                        ${originalImageUrl ? `
-                        <div style="flex: 0 0 320px; text-align: center;">
-                            <img src="${originalImageUrl}" style="width: 100%; max-width: 320px; height: 240px; object-fit: cover; border-radius: 12px; border: 2px solid var(--border); box-shadow: 0 8px 24px rgba(0,0,0,0.15); transition: transform 0.3s ease;" alt="原图预览" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">
-                            <p style="margin-top: 0.8rem; font-size: 0.85rem; color: var(--text-dim); font-weight: 500;">原图预览</p>
-                        </div>
-                        ` : ''}
+                    <div id="colorExtractionLayout" style="display: flex; gap: 2rem; align-items: flex-start; flex-wrap: wrap;">
+                        <!-- 左侧：自适应图片预览 -->
+                        ${imagePreviewHtml}
                         
                         <!-- 右侧：色块展示 -->
                         <div style="flex: 1; min-width: 300px;">
@@ -1877,8 +1880,6 @@
                             
                             <div style="display: flex; gap: 0.8rem; justify-content: flex-start; flex-wrap: wrap;">
                                 <button class="action-btn primary" onclick="useAllExtractedColors()" style="padding: 0.6rem 1.2rem; font-size: 0.9rem; border-radius: 8px; font-weight: 500;">✨ 应用全部配色</button>
-                                <button class="action-btn" onclick="showAllColors()" style="padding: 0.6rem 1.2rem; font-size: 0.9rem; border-radius: 8px; font-weight: 500;">显示所有颜色</button>
-                                <button class="action-btn" onclick="clearColorSelection()" style="padding: 0.6rem 1.2rem; font-size: 0.9rem; border-radius: 8px; font-weight: 500;">清空待选区</button>
                             </div>
                             
                             <!-- 待选区 -->
@@ -1902,6 +1903,13 @@
                 window.selectedColors = [];
             }
             updateSelectedColorsDisplay();
+
+            // 如果有原图，设置自适应显示
+            if (originalImageUrl) {
+                setTimeout(() => {
+                    adaptImagePreview();
+                }, 100);
+            }
         }
 
         function useExtractedColor(color) {
@@ -1909,6 +1917,122 @@
             generatePalette();
             showToast(`已应用颜色：${color}`);
         }
+
+        // 自适应图片预览函数 - 根据图片比例自动选择横向或竖向展示
+        function adaptImagePreview() {
+            const img = document.getElementById('originalImage');
+            const container = document.getElementById('imagePreviewContainer');
+            const layout = document.getElementById('colorExtractionLayout');
+            
+            if (!img || !container || !layout) return;
+
+            // 等待图片加载完成
+            if (img.complete) {
+                adjustImageLayout();
+            } else {
+                img.onload = adjustImageLayout;
+            }
+
+            function adjustImageLayout() {
+                const imgWidth = img.naturalWidth || img.width;
+                const imgHeight = img.naturalHeight || img.height;
+                
+                if (imgWidth === 0 || imgHeight === 0) return;
+
+                // 计算图片比例
+                const aspectRatio = imgWidth / imgHeight;
+                const isLandscape = aspectRatio > 1.2; // 横向图片（宽高比大于1.2）
+                const isPortrait = aspectRatio < 0.8; // 竖向图片（宽高比小于0.8）
+                const isSquare = !isLandscape && !isPortrait; // 方形图片
+
+                // 所有图片都使用左右布局，只是尺寸不同
+                layout.style.flexDirection = 'row';
+
+                if (isLandscape) {
+                    // 横向图片：左右布局，图片在左，较宽尺寸
+                    container.style.flex = '0 0 400px';
+                    container.style.width = '400px';
+                    container.style.maxWidth = '400px';
+                    container.style.margin = '0 2rem 0 0';
+                    
+                    // 设置横向图片尺寸
+                    img.style.width = '100%';
+                    img.style.height = 'auto';
+                    img.style.maxHeight = '250px';
+                    img.style.objectFit = 'contain';
+                    
+                } else if (isPortrait) {
+                    // 竖向图片：左右布局，图片在左，较窄尺寸
+                    container.style.flex = '0 0 280px';
+                    container.style.width = '280px';
+                    container.style.maxWidth = '280px';
+                    container.style.margin = '0 2rem 0 0';
+                    
+                    // 设置竖向图片尺寸
+                    img.style.width = '100%';
+                    img.style.height = 'auto';
+                    img.style.maxHeight = '400px';
+                    img.style.objectFit = 'contain';
+                    
+                } else {
+                    // 方形图片：适中显示
+                    container.style.flex = '0 0 320px';
+                    container.style.width = '320px';
+                    container.style.maxWidth = '320px';
+                    container.style.margin = '0 2rem 0 0';
+                    
+                    // 设置方形图片尺寸
+                    img.style.width = '100%';
+                    img.style.height = 'auto';
+                    img.style.maxHeight = '320px';
+                    img.style.objectFit = 'contain';
+                }
+
+                // 添加响应式处理
+                handleResponsiveLayout(layout, container, isLandscape, isPortrait);
+            }
+        }
+
+        // 响应式布局处理
+        function handleResponsiveLayout(layout, container, isLandscape, isPortrait) {
+            const screenWidth = window.innerWidth;
+            
+            if (screenWidth <= 768) {
+                // 移动端：保持左右布局，但调整尺寸
+                layout.style.flexDirection = 'row';
+                container.style.flex = '0 0 140px';
+                container.style.width = '140px';
+                container.style.maxWidth = '140px';
+                container.style.margin = '0 1rem 0 0';
+                
+                // 移动端图片尺寸
+                const img = container.querySelector('img');
+                if (img) {
+                    img.style.width = '100%';
+                    img.style.height = 'auto';
+                    img.style.maxHeight = '180px';
+                }
+                
+                if (screenWidth <= 480) {
+                    // 小屏手机：更紧凑的布局
+                    container.style.flex = '0 0 100px';
+                    container.style.width = '100px';
+                    container.style.maxWidth = '100px';
+                    container.style.margin = '0 0.5rem 0 0';
+                    
+                    if (img) {
+                        img.style.maxHeight = '120px';
+                    }
+                }
+            }
+        }
+
+        // 监听窗口大小变化，重新调整布局
+        window.addEventListener('resize', function() {
+            if (document.getElementById('originalImage')) {
+                adaptImagePreview();
+            }
+        });
 
         // 获取颜色信息 - 中国传统色命名
         function getColorInfo(hexColor) {
@@ -2319,11 +2443,10 @@
         }
 
         // 显示所有颜色
+        // 显示所有颜色功能已移除 - 使用应用全部配色替代
         function showAllColors() {
-            if (!window.allExtractedColors || window.allExtractedColors.length === 0) return;
-
-            displayExtractedColors(window.allExtractedColors, window.allExtractedColors, window.originalImageUrl);
-            showToast(`显示全部 ${window.allExtractedColors.length} 种颜色`);
+            // 功能已整合到 useAllExtractedColors 中
+            useAllExtractedColors();
         }
 
         // 添加颜色到待选区
@@ -2399,12 +2522,11 @@
             showToast(`已应用待选区的 ${window.selectedColors.length} 种颜色`);
         }
 
-        // 清空待选区
+        // 清空待选区功能已移除 - 待选区功能已简化
         function clearColorSelection() {
-            // 确保selectedColors是数组，然后清空
+            // 功能已移除，待选区逻辑已优化
             window.selectedColors = [];
             updateSelectedColorsDisplay();
-            showToast('已清空待选区');
         }
 
         // 更新显示的颜色数量
@@ -2429,10 +2551,10 @@
             showToast('颜色代码导出功能已移至导出代码板块');
         }
 
-        // 重新提取颜色
+        // 重新提取颜色功能已移除 - 功能已整合优化
         function regenerateColors() {
-            // 重新提取功能已被移除，使用显示所有颜色替代
-            showToast('请使用"显示所有颜色"功能查看完整配色');
+            // 功能已整合到主流程中，无需重新提取
+            showToast('配色提取功能已优化，当前显示即为完整配色');
         }
 
         function closeImagePreview() {
