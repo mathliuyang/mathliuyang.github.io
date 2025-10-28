@@ -188,6 +188,13 @@
             font-size: 0.85rem;
             cursor: pointer;
             transition: all 0.3s ease;
+            position: relative;
+        }
+
+        /* 为select元素添加自定义悬停提示样式 */
+        .scheme-select option:hover {
+            background: var(--text);
+            color: var(--bg);
         }
 
         .scheme-select:hover,
@@ -406,6 +413,68 @@
             transform: translateY(0);
         }
 
+        /* URL modal styles */
+        .url-input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid var(--border);
+            background: transparent;
+            color: var(--text);
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .url-input:focus {
+            outline: none;
+            border-color: var(--text);
+        }
+
+        .url-input::placeholder {
+            color: var(--text-dim);
+            opacity: 0.7;
+        }
+
+        /* Button group styling */
+        .button-group {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .button-group .action-btn {
+            padding: 0.6rem 1rem;
+            font-size: 0.8rem;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--bg);
+            border: 1px solid var(--border);
+            padding: 2rem;
+            min-width: 400px;
+            max-width: 90vw;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        [data-theme="light"] .modal-content {
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
         @media (max-width: 768px) {
             nav {
                 padding: 1rem 2rem;
@@ -439,6 +508,22 @@
 
             .export-formats {
                 grid-template-columns: 1fr;
+            }
+
+            /* Modal responsive styles */
+            .modal-content {
+                min-width: 300px;
+                padding: 1.5rem;
+                margin: 1rem;
+            }
+
+            .button-group {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .button-group .action-btn {
+                width: 100%;
             }
         }
     </style>
@@ -478,21 +563,51 @@
 
             <div class="control-group">
                 <span class="control-label">从图片提取</span>
-                <input type="file" id="imageUpload" accept="image/*" style="display: none;">
-                <button class="action-btn" onclick="document.getElementById('imageUpload').click()">
-                    上传图片
-                </button>
+                <div class="button-group">
+                    <input type="file" id="imageUpload" accept="image/*" style="display: none;">
+                    <button class="action-btn" onclick="document.getElementById('imageUpload').click()">
+                        上传图片
+                    </button>
+                    <button class="action-btn" onclick="showUrlInput()">
+                        链接提取
+                    </button>
+                </div>
+            </div>
+
+            <!-- URL input modal -->
+            <div id="urlModal" class="modal-overlay" style="display: none;">
+                <div class="modal-content">
+                    <h3 style="margin-bottom: 1rem; font-weight: 500;">从图片链接提取颜色</h3>
+                    <input type="url" id="imageUrl" class="url-input" placeholder="输入图片链接 (支持 JPG, PNG, GIF, WebP)"
+                        style="margin-bottom: 1rem;">
+                    <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+                        <button class="action-btn" onclick="hideUrlInput()">取消</button>
+                        <button class="action-btn primary" onclick="extractFromUrl()">提取颜色</button>
+                    </div>
+                </div>
             </div>
 
             <div class="control-group">
                 <span class="control-label">配色模式</span>
                 <select class="scheme-select" id="schemeType">
-                    <option value="monochromatic">单色</option>
-                    <option value="analogous">类似色</option>
-                    <option value="complementary">互补色</option>
-                    <option value="triadic">三角色</option>
-                    <option value="tetradic">四角色</option>
-                    <option value="split-complementary">分裂互补</option>
+                    <option value="monochromatic" title="单色：同一色相的明度渐变，2-16色可选，简约优雅">单色</option>
+                    <option value="analogous" title="类似色：相邻120°色环分布，2-16色可选，和谐自然">类似色</option>
+                    <option value="complementary" title="互补色：色相+180°强烈对比，仅2色，视觉冲击力强">互补色</option>
+                    <option value="triadic" title="三角色：等距120°三色组合，仅3色，平衡稳定">三角色</option>
+                    <option value="tetradic" title="四角色：90°间隔四色组合，仅4色，丰富多彩">四角色</option>
+                    <option value="split-complementary" title="分裂互补：互补色±30°三色，2-3色，对比柔和">分裂互补</option>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <span class="control-label">颜色数量</span>
+                <select class="scheme-select" id="colorCount">
+                    <option value="3">3色</option>
+                    <option value="4">4色</option>
+                    <option value="5" selected>5色</option>
+                    <option value="6">6色</option>
+                    <option value="7">7色</option>
+                    <option value="8">8色</option>
                 </select>
             </div>
 
@@ -509,8 +624,7 @@
                     <span style="font-size: 0.9rem; color: var(--text-dim);">提取的颜色</span>
                     <button class="action-btn" onclick="closeImagePreview()" style="padding: 0.4rem 1rem;">关闭</button>
                 </div>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(80px, 1fr)); gap: 1rem;"
-                    id="extractedColors"></div>
+                <div id="extractedColors"></div>
             </div>
         </div>
 
@@ -646,10 +760,71 @@
             };
         }
 
+        // 配色模式改变时更新颜色数量选择器
+        function updateColorCountOptions() {
+            const schemeType = document.getElementById('schemeType').value;
+            const colorCountSelect = document.getElementById('colorCount');
+            
+            // 记住之前选择的颜色数量
+            const previousCount = parseInt(colorCountSelect.value) || 5;
+            
+            // 清除现有选项
+            colorCountSelect.innerHTML = '';
+            
+            // 根据配色模式设置选项
+            switch (schemeType) {
+                case 'complementary':
+                    colorCountSelect.innerHTML = '<option value="2" selected>2色</option>';
+                    break;
+                case 'triadic':
+                    colorCountSelect.innerHTML = '<option value="3" selected>3色</option>';
+                    break;
+                case 'tetradic':
+                    colorCountSelect.innerHTML = '<option value="4" selected>4色</option>';
+                    break;
+                case 'split-complementary':
+                    // 2-3色可选，尽量保留之前的选择
+                    const splitCount = Math.min(Math.max(previousCount, 2), 3);
+                    colorCountSelect.innerHTML = `
+                        <option value="2" ${splitCount === 2 ? 'selected' : ''}>2色</option>
+                        <option value="3" ${splitCount === 3 ? 'selected' : ''}>3色</option>
+                    `;
+                    break;
+                default:
+                    // monochromatic 和 analogous：2-16色可选，尽量保留之前的选择
+                    const monoCount = Math.min(Math.max(previousCount, 2), 16);
+                    let options = '';
+                    for (let i = 2; i <= 16; i++) {
+                        const selected = i === monoCount ? 'selected' : '';
+                        options += `<option value="${i}" ${selected}>${i}色</option>`;
+                    }
+                    colorCountSelect.innerHTML = options;
+            }
+        }
+
         // Generate color schemes
         function generatePalette() {
             const baseColor = document.getElementById('baseColor').value;
             const schemeType = document.getElementById('schemeType').value;
+            let colorCount = parseInt(document.getElementById('colorCount').value);
+            
+            // 根据配色模式设置固定的颜色数量限制
+            switch (schemeType) {
+                case 'complementary':
+                    colorCount = 2; // 互补色仅2色
+                    break;
+                case 'triadic':
+                    colorCount = 3; // 三角色仅3色
+                    break;
+                case 'tetradic':
+                    colorCount = 4; // 四角色仅4色
+                    break;
+                case 'split-complementary':
+                    colorCount = Math.min(Math.max(colorCount, 2), 3); // 分裂互补色2-3色
+                    break;
+                // monochromatic 和 analogous 保持原有数量
+            }
+            
             const rgb = hexToRgb(baseColor);
             const hsl = rgbToHsl(rgb.r, rgb.g, rgb.b);
 
@@ -657,98 +832,219 @@
 
             switch (schemeType) {
                 case 'monochromatic':
-                    colors = generateMonochromatic(hsl);
+                    colors = generateMonochromatic(hsl, colorCount);
                     break;
                 case 'analogous':
-                    colors = generateAnalogous(hsl);
+                    colors = generateAnalogous(hsl, colorCount);
                     break;
                 case 'complementary':
-                    colors = generateComplementary(hsl);
+                    colors = generateComplementary(hsl, colorCount);
                     break;
                 case 'triadic':
-                    colors = generateTriadic(hsl);
+                    colors = generateTriadic(hsl, colorCount);
                     break;
                 case 'tetradic':
-                    colors = generateTetradic(hsl);
+                    colors = generateTetradic(hsl, colorCount);
                     break;
                 case 'split-complementary':
-                    colors = generateSplitComplementary(hsl);
+                    colors = generateSplitComplementary(hsl, colorCount);
                     break;
             }
 
-            // Replace only unlocked colors
-            currentPalette = currentPalette.map((color, index) => {
-                return lockedColors.has(index) ? color : colors[index];
-            });
-
+            // Handle locked colors and array length adjustment
             if (currentPalette.length === 0) {
                 currentPalette = colors;
+            } else {
+                // Create new array with correct length
+                const newPalette = [];
+                for (let i = 0; i < colors.length; i++) {
+                    if (lockedColors.has(i) && i < currentPalette.length) {
+                        // Keep locked color if it exists
+                        newPalette[i] = currentPalette[i];
+                    } else {
+                        // Use new color
+                        newPalette[i] = colors[i];
+                    }
+                }
+                currentPalette = newPalette;
+                
+                // Clean up locked colors that are beyond the new array length
+                const newLockedColors = new Set();
+                for (let index of lockedColors) {
+                    if (index < currentPalette.length) {
+                        newLockedColors.add(index);
+                    }
+                }
+                lockedColors = newLockedColors;
             }
 
             displayPalette();
             generateExportCode();
         }
 
-        function generateMonochromatic(hsl) {
-            return [
-                hslToHex(hsl.h, hsl.s, Math.min(hsl.l + 30, 95)),
-                hslToHex(hsl.h, hsl.s, Math.min(hsl.l + 15, 90)),
-                hslToHex(hsl.h, hsl.s, hsl.l),
-                hslToHex(hsl.h, hsl.s, Math.max(hsl.l - 15, 10)),
-                hslToHex(hsl.h, hsl.s, Math.max(hsl.l - 30, 5))
-            ];
+        function generateMonochromatic(hsl, count = 5) {
+            const colors = [];
+            const maxLightness = 95;
+            const minLightness = 5;
+            const step = (maxLightness - minLightness) / (count - 1);
+
+            for (let i = 0; i < count; i++) {
+                const lightness = maxLightness - (step * i);
+                colors.push(hslToHex(hsl.h, hsl.s, Math.max(minLightness, Math.min(maxLightness, lightness))));
+            }
+
+            return colors;
         }
 
-        function generateAnalogous(hsl) {
-            return [
-                hslToHex((hsl.h - 60 + 360) % 360, hsl.s, hsl.l),
-                hslToHex((hsl.h - 30 + 360) % 360, hsl.s, hsl.l),
-                hslToHex(hsl.h, hsl.s, hsl.l),
-                hslToHex((hsl.h + 30) % 360, hsl.s, hsl.l),
-                hslToHex((hsl.h + 60) % 360, hsl.s, hsl.l)
-            ];
+        function generateAnalogous(hsl, count = 5) {
+            const colors = [];
+            const baseHue = hsl.h;
+            const range = 120; // 总范围120度
+            const step = range / (count - 1);
+
+            for (let i = 0; i < count; i++) {
+                const hue = (baseHue - range / 2 + step * i + 360) % 360;
+                colors.push(hslToHex(hue, hsl.s, hsl.l));
+            }
+
+            return colors;
         }
 
-        function generateComplementary(hsl) {
+        function generateComplementary(hsl, count = 5) {
+            const colors = [];
             const comp = (hsl.h + 180) % 360;
-            return [
-                hslToHex(hsl.h, hsl.s, Math.min(hsl.l + 20, 90)),
-                hslToHex(hsl.h, hsl.s, hsl.l),
-                hslToHex(hsl.h, hsl.s, Math.max(hsl.l - 20, 10)),
-                hslToHex(comp, hsl.s, hsl.l),
-                hslToHex(comp, hsl.s, Math.max(hsl.l - 20, 10))
-            ];
+
+            if (count <= 4) {
+                // 少量颜色：基础色 + 互补色 + 它们的亮色或暗色
+                // 优化：先生成基础色，再生成互补色，增强对比效果
+                colors.push(hslToHex(hsl.h, hsl.s, hsl.l)); // 基础色（中等明度）
+                colors.push(hslToHex(comp, hsl.s, hsl.l)); // 互补色（中等明度）
+                if (count >= 3) {
+                    colors.push(hslToHex(hsl.h, hsl.s, Math.max(hsl.l - 25, 15))); // 基础色暗色
+                }
+                if (count >= 4) {
+                    colors.push(hslToHex(comp, hsl.s, Math.min(hsl.l + 25, 85))); // 互补色亮色
+                }
+            } else {
+                // 5个或更多：添加更多明暗变化
+                colors.push(hslToHex(hsl.h, hsl.s, hsl.l)); // 基础色
+                colors.push(hslToHex(comp, hsl.s, hsl.l)); // 互补色
+                colors.push(hslToHex(hsl.h, hsl.s, Math.max(hsl.l - 25, 15))); // 基础色暗色
+                colors.push(hslToHex(comp, hsl.s, Math.min(hsl.l + 25, 85))); // 互补色亮色
+                colors.push(hslToHex(hsl.h, hsl.s, Math.min(hsl.l + 25, 85))); // 基础色亮色
+
+                // 超过5个颜色时，添加更多饱和度和明度变化
+                for (let i = 5; i < count; i++) {
+                    if (i % 2 === 0) {
+                        // 基础色系列：调整饱和度
+                        colors.push(hslToHex(hsl.h, Math.max(hsl.s - 20, 30), Math.max(hsl.l - 15, 20)));
+                    } else {
+                        // 互补色系列：调整饱和度
+                        colors.push(hslToHex(comp, Math.max(hsl.s - 20, 30), Math.min(hsl.l + 15, 80)));
+                    }
+                }
+            }
+
+            return colors.slice(0, count);
         }
 
-        function generateTriadic(hsl) {
-            return [
-                hslToHex(hsl.h, hsl.s, hsl.l),
-                hslToHex((hsl.h + 120) % 360, hsl.s, hsl.l),
-                hslToHex((hsl.h + 240) % 360, hsl.s, hsl.l),
-                hslToHex(hsl.h, Math.max(hsl.s - 20, 20), hsl.l),
-                hslToHex((hsl.h + 120) % 360, Math.max(hsl.s - 20, 20), hsl.l)
-            ];
+        function generateTriadic(hsl, count = 5) {
+            const colors = [];
+            const hues = [hsl.h, (hsl.h + 120) % 360, (hsl.h + 240) % 360];
+
+            if (count <= 3) {
+                // 少量颜色：只使用基础的三角色
+                for (let i = 0; i < count; i++) {
+                    colors.push(hslToHex(hues[i], hsl.s, hsl.l));
+                }
+            } else {
+                // 更多颜色：添加饱和度和明度变化
+                for (let i = 0; i < count; i++) {
+                    const hueIndex = i % 3;
+                    const hue = hues[hueIndex];
+
+                    if (i < 3) {
+                        // 前3个：基础饱和度和明度
+                        colors.push(hslToHex(hue, hsl.s, hsl.l));
+                    } else {
+                        // 超过3个：添加饱和度和明度变化
+                        const saturation = Math.max(hsl.s - 20, 20);
+                        const lightness = (i % 2 === 0) ? Math.min(hsl.l + 15, 90) : Math.max(hsl.l - 15, 10);
+                        colors.push(hslToHex(hue, saturation, lightness));
+                    }
+                }
+            }
+
+            return colors.slice(0, count);
         }
 
-        function generateTetradic(hsl) {
-            return [
-                hslToHex(hsl.h, hsl.s, hsl.l),
-                hslToHex((hsl.h + 90) % 360, hsl.s, hsl.l),
-                hslToHex((hsl.h + 180) % 360, hsl.s, hsl.l),
-                hslToHex((hsl.h + 270) % 360, hsl.s, hsl.l),
-                hslToHex(hsl.h, Math.max(hsl.s - 30, 20), hsl.l)
-            ];
+        function generateTetradic(hsl, count = 5) {
+            const colors = [];
+            const hues = [hsl.h, (hsl.h + 90) % 360, (hsl.h + 180) % 360, (hsl.h + 270) % 360];
+
+            if (count <= 4) {
+                // 少量颜色：只使用基础的四角色
+                for (let i = 0; i < count; i++) {
+                    colors.push(hslToHex(hues[i], hsl.s, hsl.l));
+                }
+            } else {
+                // 更多颜色：添加饱和度和明度变化
+                for (let i = 0; i < count; i++) {
+                    const hueIndex = i % 4;
+                    const hue = hues[hueIndex];
+
+                    if (i < 4) {
+                        // 前4个：基础饱和度和明度
+                        colors.push(hslToHex(hue, hsl.s, hsl.l));
+                    } else {
+                        // 超过4个：添加饱和度和明度变化
+                        const saturation = Math.max(hsl.s - 30, 20);
+                        const lightness = (i % 2 === 0) ? Math.min(hsl.l + 15, 90) : Math.max(hsl.l - 15, 10);
+                        colors.push(hslToHex(hue, saturation, lightness));
+                    }
+                }
+            }
+
+            return colors.slice(0, count);
         }
 
-        function generateSplitComplementary(hsl) {
+        function generateSplitComplementary(hsl, count = 5) {
+            const colors = [];
             const comp = (hsl.h + 180) % 360;
-            return [
-                hslToHex(hsl.h, hsl.s, hsl.l),
-                hslToHex((comp - 30 + 360) % 360, hsl.s, hsl.l),
-                hslToHex((comp + 30) % 360, hsl.s, hsl.l),
-                hslToHex(hsl.h, Math.max(hsl.s - 20, 20), hsl.l),
-                hslToHex(hsl.h, hsl.s, Math.max(hsl.l - 20, 10))
-            ];
+            const hues = [hsl.h, (comp - 30 + 360) % 360, (comp + 30) % 360];
+
+            if (count <= 3) {
+                // 少量颜色：只使用基础的分裂互补色
+                for (let i = 0; i < count; i++) {
+                    colors.push(hslToHex(hues[i], hsl.s, hsl.l));
+                }
+            } else {
+                // 更多颜色：添加饱和度和明度变化
+                for (let i = 0; i < count; i++) {
+                    const hueIndex = i % 3;
+                    const hue = hues[hueIndex];
+
+                    if (i < 3) {
+                        // 前3个：基础饱和度和明度
+                        colors.push(hslToHex(hue, hsl.s, hsl.l));
+                    } else {
+                        // 超过3个：添加饱和度和明度变化
+                        if (hueIndex === 0) {
+                            // 基础色的变化
+                            if (i % 2 === 0) {
+                                colors.push(hslToHex(hue, Math.max(hsl.s - 20, 20), hsl.l));
+                            } else {
+                                colors.push(hslToHex(hue, hsl.s, Math.max(hsl.l - 20, 10)));
+                            }
+                        } else {
+                            // 互补色的变化
+                            colors.push(hslToHex(hue, Math.max(hsl.s - 15, 25), Math.min(hsl.l + 10, 85)));
+                        }
+                    }
+                }
+            }
+
+            return colors.slice(0, count);
         }
 
         function hslToHex(h, s, l) {
@@ -893,6 +1189,9 @@
         }
 
         function extractColorsFromImage(img) {
+            // 保存原始图片数据供重新提取使用
+            window.lastProcessedImage = img;
+
             const canvas = document.createElement('canvas');
             const ctx = canvas.getContext('2d');
 
@@ -983,7 +1282,7 @@
                     return brightB - brightA;
                 });
 
-                displayExtractedColors(clusters);
+                displayExtractedColors(clusters, img.src);
                 showToast('成功提取 ' + clusters.length + ' 种颜色');
             } catch (error) {
                 console.error('提取颜色失败:', error);
@@ -1048,18 +1347,56 @@
                 .map(c => rgbToHex(c.r, c.g, c.b));
         }
 
-        function displayExtractedColors(colors) {
+        function displayExtractedColors(colors, originalImageUrl = null) {
             const container = document.getElementById('extractedColors');
             const preview = document.getElementById('imagePreview');
 
-            container.innerHTML = colors.map(color => `
-                <div style="cursor: pointer;" onclick="useExtractedColor('${color}')">
-                    <div style="width: 100%; height: 60px; background: ${color}; border: 1px solid var(--border); margin-bottom: 0.5rem;"></div>
-                    <div style="text-align: center; font-size: 0.75rem; font-family: 'Courier New', monospace;">${color}</div>
+            // 创建新的左右布局结构
+            container.innerHTML = `
+                <div style="margin-bottom: 1.5rem;">
+                    <div style="display: flex; gap: 2rem; align-items: flex-start; flex-wrap: wrap;">
+                        <!-- 左侧：封面图 -->
+                        ${originalImageUrl ? `
+                        <div style="flex: 0 0 320px; text-align: center;">
+                            <img src="${originalImageUrl}" style="width: 100%; max-width: 320px; height: 240px; object-fit: cover; border-radius: 12px; border: 2px solid var(--border); box-shadow: 0 8px 24px rgba(0,0,0,0.15); transition: transform 0.3s ease;" alt="原图预览" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">
+                            <p style="margin-top: 0.8rem; font-size: 0.85rem; color: var(--text-dim); font-weight: 500;">原图预览</p>
+                        </div>
+                        ` : ''}
+                        
+                        <!-- 右侧：色块展示 -->
+                        <div style="flex: 1; min-width: 300px;">
+                            <div id="colorPalette" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
+                                ${colors.map((color, index) => `
+                                <div class="color-extraction-item" style="cursor: pointer;" onclick="useExtractedColor('${color}')" data-color="${color}" data-index="${index}">
+                                    <div style="width: 100%; height: 100px; background: ${color}; border-radius: 10px; border: 2px solid var(--border); transition: all 0.3s ease; box-shadow: 0 4px 12px rgba(0,0,0,0.1); position: relative; overflow: hidden;" onmouseover="this.style.transform='scale(1.05)'; this.style.boxShadow='0 8px 24px rgba(0,0,0,0.2)';" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)';">
+                                        <div style="position: absolute; inset: 0; background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(0,0,0,0.1) 100%);"></div>
+                                    </div>
+                                    <div style="text-align: center; margin-top: 0.8rem;">
+                                        <div style="font-size: 0.8rem; font-family: 'Courier New', monospace; color: var(--text); font-weight: 600; letter-spacing: 0.5px;">${color}</div>
+                                        <div style="font-size: 0.7rem; color: var(--text-dim); margin-top: 0.3rem; font-weight: 500;">
+                                            ${getColorInfo(color)}
+                                        </div>
+                                    </div>
+                                </div>
+                                `).join('')}
+                            </div>
+                            
+                            <div style="display: flex; gap: 0.8rem; justify-content: flex-start; flex-wrap: wrap;">
+                                <button class="action-btn primary" onclick="useAllExtractedColors()" style="padding: 0.6rem 1.2rem; font-size: 0.9rem; border-radius: 8px; font-weight: 500;">✨ 应用全部配色</button>
+                                <button class="action-btn" onclick="downloadColorPalette()" style="padding: 0.6rem 1.2rem; font-size: 0.9rem; border-radius: 8px; font-weight: 500;">下载调色板</button>
+                                <button class="action-btn" onclick="exportColorCodes()" style="padding: 0.6rem 1.2rem; font-size: 0.9rem; border-radius: 8px; font-weight: 500;">导出代码</button>
+                                <button class="action-btn" onclick="regenerateColors()" style="padding: 0.6rem 1.2rem; font-size: 0.9rem; border-radius: 8px; font-weight: 500;">重新提取</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            `).join('');
+            `;
 
             preview.style.display = 'block';
+
+            // 保存当前提取的颜色供后续使用
+            window.extractedColors = colors;
+            window.originalImageUrl = originalImageUrl;
         }
 
         function useExtractedColor(color) {
@@ -1068,14 +1405,293 @@
             showToast(`已应用颜色：${color}`);
         }
 
+        // 获取颜色信息
+        function getColorInfo(hexColor) {
+            const rgb = hexToRgb(hexColor);
+            const hsl = rgbToHsl(rgb.r, rgb.g, rgb.b);
+            const brightness = Math.round((rgb.r + rgb.g + rgb.b) / 3);
+
+            let colorName = '';
+            if (hsl.s < 20) {
+                colorName = brightness > 200 ? '浅灰' : brightness > 100 ? '中灰' : '深灰';
+            } else {
+                const hueNames = ['红', '橙', '黄', '黄绿', '绿', '青绿', '青', '蓝', '紫', '品红'];
+                const hueIndex = Math.floor(hsl.h / 36);
+                const saturation = hsl.s > 70 ? '鲜艳' : hsl.s > 40 ? '中等' : '暗淡';
+                const lightness = hsl.l > 70 ? '浅色' : hsl.l > 30 ? '中等' : '深色';
+                colorName = `${saturation}${lightness}${hueNames[hueIndex]}`;
+            }
+
+            return `${colorName} | 亮度:${brightness}`;
+        }
+
+        // 设置为基础颜色
+        function setBaseColor(color) {
+            document.getElementById('baseColor').value = color;
+            showToast(`已设置为基础颜色：${color}`);
+        }
+
+        // 排序功能
+        function sortExtractedColors(sortBy) {
+            if (!window.extractedColors) return;
+
+            let sortedColors = [...window.extractedColors];
+
+            if (sortBy === 'brightness') {
+                sortedColors.sort((a, b) => {
+                    const rgbA = hexToRgb(a);
+                    const rgbB = hexToRgb(b);
+                    const brightA = rgbA.r + rgbA.g + rgbA.b;
+                    const brightB = rgbB.r + rgbB.g + rgbB.b;
+                    return brightB - brightA; // 从亮到暗
+                });
+            } else if (sortBy === 'hue') {
+                sortedColors.sort((a, b) => {
+                    const rgbA = hexToRgb(a);
+                    const rgbB = hexToRgb(b);
+                    const hslA = rgbToHsl(rgbA.r, rgbA.g, rgbA.b);
+                    const hslB = rgbToHsl(rgbB.r, rgbB.g, rgbB.b);
+                    return hslA.h - hslB.h; // 按色相排序
+                });
+            }
+
+            displayExtractedColors(sortedColors, window.originalImageUrl);
+            showToast(`已按${sortBy === 'brightness' ? '亮度' : '色相'}排序`);
+        }
+
+        // 应用所有提取的颜色
+        function useAllExtractedColors() {
+            if (!window.extractedColors || window.extractedColors.length === 0) return;
+
+            // 将提取的颜色应用到配色方案
+            currentPalette = [...window.extractedColors];
+            displayPalette();
+            showToast(`已应用全部 ${window.extractedColors.length} 种颜色到配色方案`);
+        }
+
+        // 下载调色板
+        function downloadColorPalette() {
+            if (!window.extractedColors) return;
+
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            const colorSize = 100;
+            const padding = 10;
+
+            canvas.width = window.extractedColors.length * (colorSize + padding) + padding;
+            canvas.height = colorSize + 40;
+
+            // 绘制颜色块
+            window.extractedColors.forEach((color, index) => {
+                const x = padding + index * (colorSize + padding);
+                ctx.fillStyle = color;
+                ctx.fillRect(x, 0, colorSize, colorSize);
+
+                // 绘制颜色代码
+                ctx.fillStyle = '#ffffff';
+                ctx.font = '12px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText(color, x + colorSize / 2, colorSize + 20);
+            });
+
+            // 下载
+            const link = document.createElement('a');
+            link.download = `color-palette-${Date.now()}.png`;
+            link.href = canvas.toDataURL();
+            link.click();
+
+            showToast('调色板已下载');
+        }
+
+        // 导出颜色代码
+        function exportColorCodes() {
+            if (!window.extractedColors) return;
+
+            const codes = window.extractedColors.map(color => {
+                const rgb = hexToRgb(color);
+                const hsl = rgbToHsl(rgb.r, rgb.g, rgb.b);
+                return {
+                    hex: color,
+                    rgb: `rgb(${rgb.r}, ${rgb.g}, ${rgb.b})`,
+                    hsl: `hsl(${Math.round(hsl.h)}, ${Math.round(hsl.s)}%, ${Math.round(hsl.l)}%)`
+                };
+            });
+
+            const exportText = codes.map(c =>
+                `${c.hex} | ${c.rgb} | ${c.hsl}`
+            ).join('\n');
+
+            navigator.clipboard.writeText(exportText);
+            showToast('颜色代码已复制到剪贴板');
+        }
+
+        // 重新提取颜色
+        function regenerateColors() {
+            if (window.lastProcessedImage) {
+                extractColorsFromImage(window.lastProcessedImage);
+                showToast('正在重新提取颜色...');
+            } else {
+                showToast('没有可重新提取的图片');
+            }
+        }
+
         function closeImagePreview() {
             document.getElementById('imagePreview').style.display = 'none';
         }
 
         window.closeImagePreview = closeImagePreview;
         window.useExtractedColor = useExtractedColor;
+        window.useAllExtractedColors = useAllExtractedColors;
 
-        // Initial generation
+        // URL image extraction functions
+        window.showUrlInput = showUrlInput;
+        window.hideUrlInput = hideUrlInput;
+        window.extractFromUrl = extractFromUrl;
+
+        function showUrlInput() {
+            document.getElementById('urlModal').style.display = 'block';
+            document.getElementById('imageUrl').focus();
+        }
+
+        function hideUrlInput() {
+            document.getElementById('urlModal').style.display = 'none';
+            document.getElementById('imageUrl').value = '';
+        }
+
+        function extractFromUrl() {
+            const url = document.getElementById('imageUrl').value.trim();
+
+            if (!url) {
+                showToast('请输入图片链接');
+                return;
+            }
+
+            // Validate URL format
+            try {
+                new URL(url);
+            } catch (error) {
+                showToast('请输入有效的图片链接');
+                return;
+            }
+
+            // Check if URL ends with common image extensions or contains image keywords
+            const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.bmp', '.svg'];
+
+            // 检查图片扩展名和参数格式（支持连字符格式如 fw1200webp）
+            const hasImageExtension = imageExtensions.some(ext => {
+                const lowerUrl = url.toLowerCase();
+                return lowerUrl.includes(ext) ||
+                    lowerUrl.includes(ext.replace('.', '')) || // 支持没有点的格式
+                    imageExtensions.some(e => lowerUrl.includes('fw1200' + e.replace('.', ''))); // 支持 fw1200webp 格式
+            });
+
+            // 检查图片相关关键词和托管平台
+            const imageKeywords = [
+                '/image/', '/img/', 'photo', 'picture', 'pic',
+                'hbimg', // 花瓣图片域名
+                'huaban', // 花瓣网
+                'alicdn', // 阿里云CDN
+                'qpic.cn', // QQ图片
+                'qlogo.cn', // QQ头像
+                'bdimg', // 百度图片
+                'sinaimg', // 新浪微博图片
+                '126.net', // 网易图片
+                'imgurl', 'imgur', // 国外图片托管
+                'cloudinary', 'imageshack', 'photobucket'
+            ];
+
+            const hasImageKeywords = imageKeywords.some(keyword =>
+                url.toLowerCase().includes(keyword)
+            );
+
+            // 检查图片尺寸参数
+            const imageParams = ['fw1200', 'fw240', 'fw480', 'fw640', 'fw800', 'size', 'width', 'height', 'w=', 'h='];
+            const hasImageParams = imageParams.some(param =>
+                url.toLowerCase().includes(param)
+            );
+
+            // 综合判断是否为图片链接
+            const isLikelyImage = hasImageExtension || (hasImageKeywords && hasImageParams) ||
+                (hasImageExtension && url.includes('?')) ||
+                (hasImageExtension && url.includes('#'));
+
+            if (!isLikelyImage) {
+                showToast('请输入有效的图片链接 (支持 JPG, PNG, GIF, WebP 等格式)');
+                return;
+            }
+
+            hideUrlInput();
+            showToast('正在加载图片...');
+
+            const img = new Image();
+            let corsTried = false;
+            let proxyTried = false;
+
+            img.onload = function () {
+                extractColorsFromImage(img);
+                showToast('图片加载成功，正在提取颜色...');
+            };
+
+            img.onerror = function () {
+                if (!corsTried) {
+                    // Try without CORS
+                    corsTried = true;
+                    img.crossOrigin = null;
+                    img.src = url;
+                } else if (!proxyTried && !url.startsWith('data:')) {
+                    // Try with CORS proxy as fallback
+                    proxyTried = true;
+                    showToast('尝试使用代理加载图片...');
+
+                    // Use a CORS proxy service
+                    const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`;
+                    img.crossOrigin = 'anonymous';
+                    img.src = proxyUrl;
+                } else {
+                    showToast('图片加载失败，可能是跨域限制或链接无效');
+                    console.error('Failed to load image from URL:', url);
+
+                    // Suggest using proxy or alternative approach
+                    setTimeout(() => {
+                        showToast('提示：可尝试下载图片后使用上传功能');
+                    }, 2000);
+                }
+            };
+
+            // First try with CORS
+            img.crossOrigin = 'anonymous';
+
+            // Try to load the image
+            try {
+                img.src = url;
+            } catch (error) {
+                console.error('Error loading image:', error);
+                showToast('图片加载失败：' + error.message);
+            }
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('urlModal').addEventListener('click', function (e) {
+            if (e.target === this) {
+                hideUrlInput();
+            }
+        });
+
+        // Handle Enter key in URL input
+        document.getElementById('imageUrl').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                extractFromUrl();
+            }
+        });
+
+        // 监听配色模式变化，自动更新颜色数量选项
+        document.getElementById('schemeType').addEventListener('change', function() {
+            updateColorCountOptions();
+            generatePalette(); // 自动生成新的配色方案
+        });
+
+        // Initial generation - 先更新颜色数量选项，再生成配色方案
+        updateColorCountOptions();
         generatePalette();
     </script>
 </body>
