@@ -593,9 +593,9 @@
                     <option value="monochromatic" title="单色：同一色相的明度渐变，2-16色可选，简约优雅">单色</option>
                     <option value="analogous" title="类似色：相邻120°色环分布，2-16色可选，和谐自然">类似色</option>
                     <option value="complementary" title="互补色：色相+180°强烈对比，仅2色，视觉冲击力强">互补色</option>
+                    <option value="split-complementary" title="分裂互补：互补色±30°三色，2-3色，对比柔和">分裂互补</option>
                     <option value="triadic" title="三角色：等距120°三色组合，仅3色，平衡稳定">三角色</option>
                     <option value="tetradic" title="四角色：90°间隔四色组合，仅4色，丰富多彩">四角色</option>
-                    <option value="split-complementary" title="分裂互补：互补色±30°三色，2-3色，对比柔和">分裂互补</option>
                 </select>
             </div>
 
@@ -764,13 +764,13 @@
         function updateColorCountOptions() {
             const schemeType = document.getElementById('schemeType').value;
             const colorCountSelect = document.getElementById('colorCount');
-            
+
             // 记住之前选择的颜色数量
             const previousCount = parseInt(colorCountSelect.value) || 5;
-            
+
             // 清除现有选项
             colorCountSelect.innerHTML = '';
-            
+
             // 根据配色模式设置选项
             switch (schemeType) {
                 case 'complementary':
@@ -807,7 +807,7 @@
             const baseColor = document.getElementById('baseColor').value;
             const schemeType = document.getElementById('schemeType').value;
             let colorCount = parseInt(document.getElementById('colorCount').value);
-            
+
             // 根据配色模式设置固定的颜色数量限制
             switch (schemeType) {
                 case 'complementary':
@@ -824,7 +824,7 @@
                     break;
                 // monochromatic 和 analogous 保持原有数量
             }
-            
+
             const rgb = hexToRgb(baseColor);
             const hsl = rgbToHsl(rgb.r, rgb.g, rgb.b);
 
@@ -867,7 +867,7 @@
                     }
                 }
                 currentPalette = newPalette;
-                
+
                 // Clean up locked colors that are beyond the new array length
                 const newLockedColors = new Set();
                 for (let index of lockedColors) {
@@ -1685,7 +1685,7 @@
         });
 
         // 监听配色模式变化，自动更新颜色数量选项
-        document.getElementById('schemeType').addEventListener('change', function() {
+        document.getElementById('schemeType').addEventListener('change', function () {
             updateColorCountOptions();
             generatePalette(); // 自动生成新的配色方案
         });
