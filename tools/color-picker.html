@@ -2441,6 +2441,16 @@
             // 将提取的颜色应用到配色方案
             currentPalette = [...window.extractedColors];
             displayPalette();
+            
+            // 同步颜色数量到生成器
+            const colorCountSelect = document.getElementById('colorCount');
+            if (colorCountSelect) {
+                // 设置颜色数量选择框的值
+                colorCountSelect.value = window.extractedColors.length;
+                // 触发change事件以更新相关显示
+                colorCountSelect.dispatchEvent(new Event('change'));
+            }
+            
             showToast(`已应用全部 ${window.extractedColors.length} 种颜色到配色方案`);
         }
 
@@ -2521,6 +2531,16 @@
 
             currentPalette = [...window.selectedColors];
             displayPalette();
+            
+            // 同步颜色数量到生成器
+            const colorCountSelect = document.getElementById('colorCount');
+            if (colorCountSelect) {
+                // 设置颜色数量选择框的值
+                colorCountSelect.value = window.selectedColors.length;
+                // 触发change事件以更新相关显示
+                colorCountSelect.dispatchEvent(new Event('change'));
+            }
+            
             showToast(`已应用待选区的 ${window.selectedColors.length} 种颜色`);
         }
 
