@@ -962,6 +962,7 @@
                     </select>
                     <button id="mainGenerateChart" class="action-btn primary">生成预览</button>
                     <button id="mainDownloadChart" class="action-btn">下载图表</button>
+                    <button id="downloadAllCharts" class="action-btn primary">打包下载所有图表</button>
                 </div>
             </div>
             <div class="chart-container">
@@ -4480,6 +4481,176 @@
                     showToast('图表已下载');
                 }
             });
+        }
+
+        // 添加打包下载所有图表功能
+        const downloadAllChartsBtn = document.getElementById('downloadAllCharts');
+        if (downloadAllChartsBtn) {
+            downloadAllChartsBtn.addEventListener('click', async function () {
+                try {
+                    showToast('正在生成所有图表，请稍候...');
+                    
+                    // 获取当前配色
+                    const colors = window.currentChartPalette || (currentPalette.length > 0 ? currentPalette : ['#3498db', '#e74c3c', '#2ecc71', '#f39c12', '#9b59b6', '#1abc9c', '#34495e', '#e67e22']);
+                    
+                    // 所有支持的图表类型
+                    const chartTypes = [
+                        { type: 'line', name: '线性图' },
+                        { type: 'bar', name: '柱状图' },
+                        { type: 'pie', name: '饼图' },
+                        { type: 'box', name: '箱线图' },
+                        { type: 'heatmap', name: '热力图' },
+                        { type: 'distribution', name: '函数分布图' },
+                        { type: 'radar', name: '雷达图' },
+                        { type: 'violin', name: '小提琴图' },
+                        { type: 'scatter', name: '散点图' },
+                        { type: 'contour', name: '等高线图' }
+                    ];
+
+                    // 创建临时canvas用于生成图表
+                    const tempCanvas = document.createElement('canvas');
+                    tempCanvas.width = 1000;
+                    tempCanvas.height = 500;
+                    const tempCtx = tempCanvas.getContext('2d');
+
+                    const images = [];
+
+                    // 生成所有图表
+                    for (let i = 0; i < chartTypes.length; i++) {
+                        const chartInfo = chartTypes[i];
+                        
+                        // 清空画布
+                        tempCtx.clearRect(0, 0, tempCanvas.width, tempCanvas.height);
+                        
+                        // 根据图表类型生成对应的图表
+                        try {
+                            switch (chartInfo.type) {
+                                case 'line':
+                                    drawLineChart(tempCtx, tempCanvas, colors);
+                                    break;
+                                case 'bar':
+                                    drawBarChart(tempCtx, tempCanvas, colors);
+                                    break;
+                                case 'pie':
+                                    drawPieChart(tempCtx, tempCanvas, colors);
+                                    break;
+                                case 'box':
+                                    drawBoxPlot(tempCtx, tempCanvas, colors);
+                                    break;
+                                case 'heatmap':
+                                    drawHeatmap(tempCtx, tempCanvas, colors);
+                                    break;
+                                case 'distribution':
+                                    drawDistributionChart(tempCtx, tempCanvas, colors);
+                                    break;
+                                case 'radar':
+                                    drawRadarChart(tempCtx, tempCanvas, colors);
+                                    break;
+                                case 'violin':
+                                    drawViolinPlot(tempCtx, tempCanvas, colors);
+                                    break;
+                                case 'scatter':
+                                    drawScatterPlot(tempCtx, tempCanvas, colors);
+                                    break;
+                                case 'contour':
+                                    drawContourPlot(tempCtx, tempCanvas, colors);
+                                    break;
+                            }
+                            
+                            // 添加到图片数组
+                            images.push({
+                                name: `color-scheme-${chartInfo.type}.png`,
+                                dataURL: tempCanvas.toDataURL('image/png'),
+                                type: chartInfo.type,
+                                nameCN: chartInfo.name
+                            });
+                            
+                            showToast(`已生成 ${chartInfo.name}...`);
+                        } catch (error) {
+                            console.error(`生成${chartInfo.name}失败:`, error);
+                            showToast(`生成${chartInfo.name}失败，跳过...`);
+                        }
+                    }
+
+                    if (images.length === 0) {
+                        showToast('没有成功生成任何图表');
+                        return;
+                    }
+
+                    // 如果有多个图表，创建ZIP文件
+                    if (images.length > 1) {
+                        // 使用JSZip库创建压缩包
+                        try {
+                            // 动态加载JSZip库
+                            await loadJSZip();
+                            
+                            const JSZip = window.JSZip;
+                            const zip = new JSZip();
+                            
+                            // 添加所有图片到ZIP
+                            images.forEach((image, index) => {
+                                // 将dataURL转换为blob
+                                const base64Data = image.dataURL.split(',')[1];
+                                zip.file(image.name, base64Data, { base64: true });
+                            });
+                            
+                            // 生成ZIP文件
+                            const zipBlob = await zip.generateAsync({ type: 'blob' });
+                            
+                            // 创建下载链接
+                            const link = document.createElement('a');
+                            link.download = `color-scheme-charts-${Date.now()}.zip`;
+                            link.href = URL.createObjectURL(zipBlob);
+                            link.click();
+                            
+                            showToast(`成功打包下载 ${images.length} 个图表！`);
+                        } catch (error) {
+                            console.error('创建ZIP文件失败:', error);
+                            // 如果ZIP创建失败，逐个下载
+                            downloadImagesIndividually(images);
+                        }
+                    } else {
+                        // 只有一个图表时直接下载
+                        const link = document.createElement('a');
+                        link.download = images[0].name;
+                        link.href = images[0].dataURL;
+                        link.click();
+                        showToast('图表已下载');
+                    }
+                } catch (error) {
+                    console.error('打包下载失败:', error);
+                    showToast('打包下载失败，请重试');
+                }
+            });
+        }
+
+        // 辅助函数：动态加载JSZip库
+        function loadJSZip() {
+            return new Promise((resolve, reject) => {
+                if (window.JSZip) {
+                    resolve();
+                    return;
+                }
+                
+                const script = document.createElement('script');
+                script.src = 'https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js';
+                script.onload = () => resolve();
+                script.onerror = () => reject(new Error('加载JSZip库失败'));
+                document.head.appendChild(script);
+            });
+        }
+
+        // 辅助函数：逐个下载图片（当ZIP创建失败时）
+        function downloadImagesIndividually(images) {
+            images.forEach((image, index) => {
+                setTimeout(() => {
+                    const link = document.createElement('a');
+                    link.download = image.name;
+                    link.href = image.dataURL;
+                    link.click();
+                }, index * 500); // 每500ms下载一个，避免浏览器限制
+            });
+            showToast('正在逐个下载图表...');
         }
 
         // Expose preset functions
