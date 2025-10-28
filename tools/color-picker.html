@@ -2834,6 +2834,16 @@
         function applyPresetPaletteAndReturn(colors, name) {
             // 应用配色到主生成器
             applyPresetPalette(colors, name);
+            
+            // 同步颜色数量到生成器
+            const colorCountSelect = document.getElementById('colorCount');
+            if (colorCountSelect) {
+                // 设置颜色数量选择框的值
+                colorCountSelect.value = colors.length;
+                // 触发change事件以更新相关显示
+                colorCountSelect.dispatchEvent(new Event('change'));
+            }
+            
             // 返回生成器页面
             closePresetSection();
         }
