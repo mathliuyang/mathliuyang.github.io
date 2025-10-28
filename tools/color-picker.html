@@ -2866,6 +2866,18 @@
             
             // 返回生成器页面
             closePresetSection();
+            
+            // 确保图表预览区域可见并立即生成预览
+            const mainChartPreview = document.getElementById('mainChartPreview');
+            if (mainChartPreview) {
+                mainChartPreview.style.display = 'block';
+                // 延迟生成预览以确保DOM完全更新
+                setTimeout(() => {
+                    if (document.getElementById('mainChartCanvas')) {
+                        generateMainChartPreview();
+                    }
+                }, 150);
+            }
         }
 
         // Academic chart helper functions (Nature journal style)
