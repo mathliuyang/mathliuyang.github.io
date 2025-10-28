@@ -3167,7 +3167,8 @@
                     default:
                         drawLineChart(ctx, canvas, colors);
                 }
-                showToast(`已生成${getChartTypeName(chartType)}预览`);
+                // 移除页面加载时的预览提示，避免干扰用户体验
+                // showToast(`已生成${getChartTypeName(chartType)}预览`);
             } catch (error) {
                 console.error('Chart generation error:', error);
                 showToast('图表生成失败，请重试');
