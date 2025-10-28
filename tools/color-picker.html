@@ -1577,14 +1577,18 @@
             reader.onload = function (event) {
                 const img = new Image();
                 img.onload = function () {
-                    extractColorsFromImage(img);
+                    const result = extractColorsFromImage(img, 8, false);
+                    // 如果返回的是对象，处理结果
+                    if (result && result.mainColors) {
+                        displayExtractedColors(result.mainColors, result.allColors, img.src);
+                    }
                 };
                 img.src = event.target.result;
             };
             reader.readAsDataURL(file);
         }
 
-        function extractColorsFromImage(img) {
+        function extractColorsFromImage(img, maxColors = 8, extractAll = false) {
             // 保存原始图片数据供重新提取使用
             window.lastProcessedImage = img;
 
@@ -1592,7 +1596,7 @@
             const ctx = canvas.getContext('2d');
 
             // Resize image for faster processing
-            const maxSize = 150;
+            const maxSize = 200; // 增加分辨率以获得更精确的颜色
             const scale = Math.min(maxSize / img.width, maxSize / img.height);
             canvas.width = img.width * scale;
             canvas.height = img.height * scale;
@@ -1603,87 +1607,157 @@
                 const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
                 const pixels = imageData.data;
 
-                // Collect color samples
-                const colorMap = {};
-                for (let i = 0; i < pixels.length; i += 16) { // Sample every 4 pixels
+                // Collect all colors with better sampling
+                const colorMap = new Map();
+                for (let i = 0; i < pixels.length; i += 8) { // Sample every pixel for better accuracy
                     const r = pixels[i];
                     const g = pixels[i + 1];
                     const b = pixels[i + 2];
                     const a = pixels[i + 3];
 
-                    if (a > 200) { // Only non-transparent pixels
-                        // Quantize colors to reduce variations
-                        const qr = Math.round(r / 10) * 10;
-                        const qg = Math.round(g / 10) * 10;
-                        const qb = Math.round(b / 10) * 10;
+                    if (a > 128) { // Only non-transparent pixels with better threshold
+                        // More precise quantization
+                        const qr = Math.round(r / 8) * 8; // Finer quantization
+                        const qg = Math.round(g / 8) * 8;
+                        const qb = Math.round(b / 8) * 8;
                         const key = `${qr},${qg},${qb}`;
 
-                        colorMap[key] = (colorMap[key] || 0) + 1;
+                        colorMap.set(key, (colorMap.get(key) || 0) + 1);
                     }
                 }
 
-                // Get most frequent colors
-                const sortedColors = Object.entries(colorMap)
-                    .sort((a, b) => b[1] - a[1])
-                    .slice(0, 30) // Take top 30
-                    .map(([key]) => {
+                // Convert to array and sort by frequency
+                const colorArray = Array.from(colorMap.entries())
+                    .map(([key, count]) => {
                         const [r, g, b] = key.split(',').map(Number);
-                        return { r, g, b };
-                    });
+                        return { r, g, b, count, key };
+                    })
+                    .sort((a, b) => b.count - a.count);
 
-                // Simple clustering by color similarity
+                // Advanced color clustering with better similarity detection
                 const clusters = [];
                 const used = new Set();
+                const minDistance = 45; // Stricter similarity threshold
 
-                for (let color of sortedColors) {
-                    if (used.has(`${color.r},${color.g},${color.b}`)) continue;
+                for (let color of colorArray) {
+                    if (used.has(color.key)) continue;
 
-                    let similar = [color];
-                    used.add(`${color.r},${color.g},${color.b}`);
+                    let clusterColors = [color];
+                    let totalR = color.r, totalG = color.g, totalB = color.b;
+                    let totalWeight = color.count;
+                    used.add(color.key);
 
-                    for (let other of sortedColors) {
-                        const key = `${other.r},${other.g},${other.b}`;
-                        if (used.has(key)) continue;
+                    // Find similar colors with better distance calculation
+                    for (let other of colorArray) {
+                        if (used.has(other.key)) continue;
 
+                        // Use CIEDE2000-like perceptual distance (simplified)
+                        const lab1 = rgbToLab(color.r, color.g, color.b);
+                        const lab2 = rgbToLab(other.r, other.g, other.b);
                         const dist = Math.sqrt(
-                            Math.pow(color.r - other.r, 2) +
-                            Math.pow(color.g - other.g, 2) +
-                            Math.pow(color.b - other.b, 2)
+                            Math.pow(lab1.l - lab2.l, 2) +
+                            Math.pow(lab1.a - lab2.a, 2) +
+                            Math.pow(lab1.b - lab2.b, 2)
                         );
 
-                        if (dist < 60) {
-                            similar.push(other);
-                            used.add(key);
+                        if (dist < minDistance) {
+                            clusterColors.push(other);
+                            totalR += other.r * other.count;
+                            totalG += other.g * other.count;
+                            totalB += other.b * other.count;
+                            totalWeight += other.count;
+                            used.add(other.key);
                         }
                     }
 
-                    // Average the similar colors
-                    const avg = {
-                        r: Math.round(similar.reduce((s, c) => s + c.r, 0) / similar.length),
-                        g: Math.round(similar.reduce((s, c) => s + c.g, 0) / similar.length),
-                        b: Math.round(similar.reduce((s, c) => s + c.b, 0) / similar.length)
+                    // Calculate weighted average
+                    const avgColor = {
+                        r: Math.round(totalR / totalWeight),
+                        g: Math.round(totalG / totalWeight),
+                        b: Math.round(totalB / totalWeight),
+                        count: totalWeight
                     };
 
-                    clusters.push(rgbToHex(avg.r, avg.g, avg.b));
-
-                    if (clusters.length >= 8) break;
+                    clusters.push(avgColor);
                 }
 
-                // Sort by brightness
+                // Sort by frequency (popularity) and brightness
                 clusters.sort((a, b) => {
-                    const rgbA = hexToRgb(a);
-                    const rgbB = hexToRgb(b);
-                    const brightA = rgbA.r + rgbA.g + rgbA.b;
-                    const brightB = rgbB.r + rgbB.g + rgbB.b;
-                    return brightB - brightA;
+                    // Primary sort by frequency, secondary by brightness
+                    if (Math.abs(a.count - b.count) > a.count * 0.1) {
+                        return b.count - a.count;
+                    } else {
+                        const brightA = a.r + a.g + a.b;
+                        const brightB = b.r + b.g + b.b;
+                        return brightB - brightA;
+                    }
                 });
 
-                displayExtractedColors(clusters, img.src);
-                showToast('成功提取 ' + clusters.length + ' 种颜色');
+                // Convert to hex colors
+                const allColors = clusters.map(c => rgbToHex(c.r, c.g, c.b));
+
+                // Store all colors for user selection
+                window.allExtractedColors = allColors;
+
+                // Get recommended count from user input or default
+                const recommendedCount = window.recommendedColorCount || maxColors;
+
+                if (extractAll) {
+                    // 如果需要提取所有颜色，直接返回
+                    return {
+                        mainColors: allColors.slice(0, Math.min(maxColors, allColors.length)),
+                        allColors: allColors
+                    };
+                }
+
+                const displayColors = allColors.slice(0, Math.min(recommendedCount, allColors.length));
+
+                displayExtractedColors(displayColors, allColors, img.src);
+                showToast(`成功提取 ${allColors.length} 种颜色，显示前 ${displayColors.length} 种主要配色`);
+
             } catch (error) {
                 console.error('提取颜色失败:', error);
                 showToast('提取失败，请重试');
             }
+        }
+
+        // Helper function: RGB to LAB (simplified)
+        function rgbToLab(r, g, b) {
+            // Simplified RGB to LAB conversion for better perceptual uniformity
+            const xyz = rgbToXyz(r, g, b);
+            return xyzToLab(xyz.x, xyz.y, xyz.z);
+        }
+
+        function rgbToXyz(r, g, b) {
+            r = r / 255;
+            g = g / 255;
+            b = b / 255;
+
+            r = r > 0.04045 ? Math.pow((r + 0.055) / 1.055, 2.4) : r / 12.92;
+            g = g > 0.04045 ? Math.pow((g + 0.055) / 1.055, 2.4) : g / 12.92;
+            b = b > 0.04045 ? Math.pow((b + 0.055) / 1.055, 2.4) : b / 12.92;
+
+            const x = r * 0.4124564 + g * 0.3575761 + b * 0.1804375;
+            const y = r * 0.2126729 + g * 0.7151522 + b * 0.0721750;
+            const z = r * 0.0193339 + g * 0.1191920 + b * 0.9503041;
+
+            return { x: x * 100, y: y * 100, z: z * 100 };
+        }
+
+        function xyzToLab(x, y, z) {
+            x = x / 95.047;
+            y = y / 100.000;
+            z = z / 108.883;
+
+            x = x > 0.008856 ? Math.pow(x, 1 / 3) : (7.787 * x + 16 / 116);
+            y = y > 0.008856 ? Math.pow(y, 1 / 3) : (7.787 * y + 16 / 116);
+            z = z > 0.008856 ? Math.pow(z, 1 / 3) : (7.787 * z + 16 / 116);
+
+            const l = 116 * y - 16;
+            const a = 500 * (x - y);
+            const b = 200 * (y - z);
+
+            return { l, a, b };
         }
 
         function kMeansClustering(colors, k) {
@@ -1743,13 +1817,34 @@
                 .map(c => rgbToHex(c.r, c.g, c.b));
         }
 
-        function displayExtractedColors(colors, originalImageUrl = null) {
+        function displayExtractedColors(displayColors, allColors = null, originalImageUrl = null) {
             const container = document.getElementById('extractedColors');
             const preview = document.getElementById('imagePreview');
+
+            // Store colors for later use
+            window.extractedColors = displayColors;
+            window.allExtractedColors = allColors || displayColors;
+            window.originalImageUrl = originalImageUrl;
+
+            // Create color count selector
+            const colorCountSelector = allColors && allColors.length > displayColors.length ? `
+                <div style="margin-bottom: 1rem; padding: 1rem; background: var(--bg-secondary); border-radius: 8px; border: 1px solid var(--border);">
+                    <div style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
+                        <span style="font-weight: 500; color: var(--text);">显示主要配色数量：</span>
+                        <select id="colorCountSelect" onchange="updateDisplayedColors()" style="padding: 0.5rem; border: 1px solid var(--border); border-radius: 6px; background: var(--bg); color: var(--text);">
+                            ${Array.from({ length: Math.min(allColors.length, 16) }, (_, i) =>
+                `<option value="${i + 1}" ${i + 1 === displayColors.length ? 'selected' : ''}>${i + 1}色</option>`
+            ).join('')}
+                        </select>
+                        <span style="font-size: 0.85rem; color: var(--text-dim);">共检测到 ${allColors.length} 种颜色</span>
+                    </div>
+                </div>
+            ` : '';
 
             // 创建新的左右布局结构
             container.innerHTML = `
                 <div style="margin-bottom: 1.5rem;">
+                    ${colorCountSelector}
                     <div style="display: flex; gap: 2rem; align-items: flex-start; flex-wrap: wrap;">
                         <!-- 左侧：封面图 -->
                         ${originalImageUrl ? `
@@ -1762,8 +1857,8 @@
                         <!-- 右侧：色块展示 -->
                         <div style="flex: 1; min-width: 300px;">
                             <div id="colorPalette" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
-                                ${colors.map((color, index) => `
-                                <div class="color-extraction-item" style="cursor: pointer;" onclick="useExtractedColor('${color}')" data-color="${color}" data-index="${index}">
+                                ${displayColors.map((color, index) => `
+                                <div class="color-extraction-item" style="cursor: pointer; position: relative;" onclick="useExtractedColor('${color}')" data-color="${color}" data-index="${index}">
                                     <div style="width: 100%; height: 100px; background: ${color}; border-radius: 10px; border: 2px solid var(--border); transition: all 0.3s ease; box-shadow: 0 4px 12px rgba(0,0,0,0.1); position: relative; overflow: hidden;" onmouseover="this.style.transform='scale(1.05)'; this.style.boxShadow='0 8px 24px rgba(0,0,0,0.2)';" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)';">
                                         <div style="position: absolute; inset: 0; background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(0,0,0,0.1) 100%);"></div>
                                     </div>
@@ -1773,15 +1868,27 @@
                                             ${getColorInfo(color)}
                                         </div>
                                     </div>
+                                    <div style="position: absolute; top: 8px; right: 8px; display: flex; gap: 4px;">
+                                        <button onclick="event.stopPropagation(); addToColorSelection('${color}')" title="添加到待选区" style="width: 24px; height: 24px; border: none; border-radius: 50%; background: rgba(255,255,255,0.9); color: var(--text); font-size: 12px; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.2); transition: all 0.2s ease;" onmouseover="this.style.transform='scale(1.1); background: rgba(255,255,255,1);'" onmouseout="this.style.transform='scale(1)'">＋</button>
+                                    </div>
                                 </div>
                                 `).join('')}
                             </div>
                             
                             <div style="display: flex; gap: 0.8rem; justify-content: flex-start; flex-wrap: wrap;">
                                 <button class="action-btn primary" onclick="useAllExtractedColors()" style="padding: 0.6rem 1.2rem; font-size: 0.9rem; border-radius: 8px; font-weight: 500;">✨ 应用全部配色</button>
-                                <button class="action-btn" onclick="downloadColorPalette()" style="padding: 0.6rem 1.2rem; font-size: 0.9rem; border-radius: 8px; font-weight: 500;">下载调色板</button>
-                                <button class="action-btn" onclick="exportColorCodes()" style="padding: 0.6rem 1.2rem; font-size: 0.9rem; border-radius: 8px; font-weight: 500;">导出代码</button>
-                                <button class="action-btn" onclick="regenerateColors()" style="padding: 0.6rem 1.2rem; font-size: 0.9rem; border-radius: 8px; font-weight: 500;">重新提取</button>
+                                <button class="action-btn" onclick="showAllColors()" style="padding: 0.6rem 1.2rem; font-size: 0.9rem; border-radius: 8px; font-weight: 500;">显示所有颜色</button>
+                                <button class="action-btn" onclick="clearColorSelection()" style="padding: 0.6rem 1.2rem; font-size: 0.9rem; border-radius: 8px; font-weight: 500;">清空待选区</button>
+                            </div>
+                            
+                            <!-- 待选区 -->
+                            <div id="colorSelectionArea" style="margin-top: 1.5rem; padding: 1rem; background: var(--bg-secondary); border-radius: 8px; border: 1px solid var(--border); display: none;">
+                                <h4 style="margin: 0 0 1rem 0; font-size: 1rem; color: var(--text);">待选配色区</h4>
+                                <div id="selectedColors" style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1rem;"></div>
+                                <div style="display: flex; gap: 0.5rem;">
+                                    <button class="action-btn primary" onclick="applySelectedColors()" style="padding: 0.4rem 0.8rem; font-size: 0.8rem;">应用待选配色</button>
+                                    <button class="action-btn" onclick="clearColorSelection()" style="padding: 0.4rem 0.8rem; font-size: 0.8rem;">清空</button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -1790,9 +1897,11 @@
 
             preview.style.display = 'block';
 
-            // 保存当前提取的颜色供后续使用
-            window.extractedColors = colors;
-            window.originalImageUrl = originalImageUrl;
+            // 初始化待选区
+            if (!window.selectedColors) {
+                window.selectedColors = [];
+            }
+            updateSelectedColorsDisplay();
         }
 
         function useExtractedColor(color) {
@@ -1801,24 +1910,368 @@
             showToast(`已应用颜色：${color}`);
         }
 
-        // 获取颜色信息
+        // 获取颜色信息 - 中国传统色命名
         function getColorInfo(hexColor) {
             const rgb = hexToRgb(hexColor);
             const hsl = rgbToHsl(rgb.r, rgb.g, rgb.b);
             const brightness = Math.round((rgb.r + rgb.g + rgb.b) / 3);
 
+            // 中国传统色命名系统
+            // 中国传统色彩体系 - 基于正色与间色分类，参考《中国传统色》和十二绘色谱
+            const traditionalColors = {
+                // 正色 - 五方正色
+                red: [
+                    { name: '正红', h: 0, s: 90, l: 50, range: 8, hex: '#ff0000' }, // 五方正色
+                    { name: '朱砂', h: 5, s: 85, l: 50, range: 6, hex: '#ff461f' }, // 矿物颜料
+                    { name: '银朱', h: 10, s: 90, l: 55, range: 6, hex: '#ff4e20' }, // 人工合成
+                    { name: '朱红', h: 15, s: 85, l: 55, range: 6, hex: '#ff5533' }, // 朱砂调和
+                    { name: '丹', h: 20, s: 80, l: 60, range: 8, hex: '#ff5533' }, // 炼丹之色
+                    { name: '彤', h: 25, s: 85, l: 55, range: 6, hex: '#f35336' } // 赤色深者
+                ],
+                orange: [
+                    { name: '正橙', h: 35, s: 85, l: 60, range: 8, hex: '#ff8c00' }, // 五方间色
+                    { name: '赭石', h: 40, s: 75, l: 50, range: 8, hex: '#a7573b' }, // 矿物颜料
+                    { name: '雄黄', h: 45, s: 80, l: 55, range: 8, hex: '#ff9f43' }, // 矿物颜料
+                    { name: '炎', h: 50, s: 85, l: 60, range: 8, hex: '#ff7f50' }, // 火焰之色
+                    { name: '琥珀', h: 55, s: 80, l: 65, range: 8, hex: '#ffbf00' }, // 宝石之色
+                    { name: '玳瑁', h: 60, s: 70, l: 55, range: 8, hex: '#d2691e' } // 龟甲之色
+                ],
+                yellow: [
+                    { name: '正黄', h: 60, s: 90, l: 60, range: 8, hex: '#ffff00' }, // 五方正色，帝王专用
+                    { name: '金黄', h: 65, s: 85, l: 65, range: 8, hex: '#ffd700' }, // 黄金之色
+                    { name: '柘黄', h: 70, s: 80, l: 60, range: 8, hex: '#ffa500' }, // 柘木染色
+                    { name: '缃叶', h: 75, s: 75, l: 70, range: 8, hex: '#ffdb58' }, // 桑叶初色
+                    { name: '秋香', h: 80, s: 70, l: 65, range: 8, hex: '#d4a76a' }, // 秋叶之色
+                    { name: '松花', h: 85, s: 65, l: 70, range: 8, hex: '#bce672' } // 松花之色
+                ],
+                green: [
+                    { name: '正绿', h: 120, s: 85, l: 50, range: 8, hex: '#00ff00' }, // 五方间色
+                    { name: '翡翠', h: 125, s: 85, l: 60, range: 8, hex: '#2edfa3' }, // 翡翠宝石
+                    { name: '青翠', h: 130, s: 80, l: 50, range: 8, hex: '#00b578' }, // 青山之色
+                    { name: '碧绿', h: 135, s: 75, l: 55, range: 8, hex: '#3eede7' }, // 碧水之色
+                    { name: '石绿', h: 140, s: 75, l: 50, range: 8, hex: '#16a951' }, // 矿物颜料
+                    { name: '草绿', h: 145, s: 70, l: 55, range: 8, hex: '#40e0d0' } // 春草之色
+                ],
+                cyan: [
+                    { name: '正青', h: 180, s: 85, l: 55, range: 8, hex: '#00ffff' }, // 五方正色
+                    { name: '天青', h: 185, s: 80, l: 65, range: 8, hex: '#7bcfa6' }, // 天青汝窑
+                    { name: '石青', h: 190, s: 85, l: 50, range: 8, hex: '#1685a9' }, // 矿物颜料
+                    { name: '空青', h: 195, s: 80, l: 55, range: 8, hex: '#00e09e' }, // 空青宝石
+                    { name: '曾青', h: 200, s: 75, l: 60, range: 8, hex: '#78cdd1' }, // 层青之色
+                    { name: '翠青', h: 205, s: 70, l: 50, range: 8, hex: '#70f3ff' } // 翠玉之色
+                ],
+                blue: [
+                    { name: '正蓝', h: 240, s: 85, l: 50, range: 8, hex: '#0000ff' }, // 五方间色
+                    { name: '群青', h: 245, s: 85, l: 50, range: 8, hex: '#4169e1' }, // 矿物颜料
+                    { name: '靛蓝', h: 250, s: 90, l: 45, range: 8, hex: '#177cb0' }, // 靛草染色
+                    { name: '花青', h: 255, s: 80, l: 40, range: 8, hex: '#26466d' }, // 植物颜料
+                    { name: '藏蓝', h: 260, s: 90, l: 35, range: 8, hex: '#2e317c' }, // 藏传之色
+                    { name: '帝释青', h: 265, s: 85, l: 30, range: 8, hex: '#003d6b' } // 佛经天色
+                ],
+                purple: [
+                    { name: '正紫', h: 300, s: 85, l: 50, range: 8, hex: '#8b00ff' }, // 五方间色
+                    { name: '暮山紫', h: 285, s: 70, l: 50, range: 8, hex: '#503c4f' }, // 暮山紫雾
+                    { name: '紫棠', h: 290, s: 75, l: 45, range: 8, hex: '#8d4bbb' }, // 紫棠之色
+                    { name: '凤紫', h: 295, s: 80, l: 55, range: 8, hex: '#915ea5' }, // 凤凰之色
+                    { name: '雪青', h: 305, s: 75, l: 60, range: 8, hex: '#b0a4e3' }, // 雪中之青
+                    { name: '丁香', h: 310, s: 70, l: 55, range: 8, hex: '#cca4e3' } // 丁香花色
+                ]
+            };
+
+            // 传统色彩雅称 - 细分色彩层次
+            const colorVariants = {
+                // 红色系细分
+                lightRed: [
+                    { name: '胭脂水', h: 350, s: 60, l: 75, range: 6, hex: '#f9906f' }, // 胭脂稀释
+                    { name: '粉红', h: 345, s: 65, l: 70, range: 6, hex: '#ffb3a7' }, // 淡雅之红
+                    { name: '桃红', h: 340, s: 70, l: 65, range: 6, hex: '#f47983' }, // 桃花之色
+                    { name: '海棠红', h: 335, s: 75, l: 55, range: 6, hex: '#db5a6b' }, // 海棠花色
+                    { name: '玫瑰', h: 330, s: 80, l: 60, range: 6, hex: '#f05e6b' }, // 玫瑰之色
+                    { name: '嫣红', h: 325, s: 75, l: 60, range: 6, hex: '#ef7a82' } // 嫣然之红
+                ],
+                deepRed: [
+                    { name: '殷红', h: 0, s: 90, l: 30, range: 6, hex: '#6b1b16' }, // 深红之色
+                    { name: '绛红', h: 5, s: 85, l: 35, range: 6, hex: '#8c1c1c' }, // 深绛之色
+                    { name: '赭红', h: 10, s: 80, l: 40, range: 6, hex: '#9d2933' }, // 赭石调和
+                    { name: '殷红', h: 15, s: 85, l: 25, range: 6, hex: '#6b1b16' }, // 血色深红
+                    { name: '胭脂', h: 20, s: 90, l: 45, range: 6, hex: '#ff461f' }, // 胭脂本色
+                    { name: '茜色', h: 25, s: 85, l: 40, range: 6, hex: '#cb3a56' } // 茜草染色
+                ],
+                // 黄色系细分
+                lightYellow: [
+                    { name: '米黄', h: 55, s: 45, l: 80, range: 6, hex: '#f7e8aa' }, // 米色之黄
+                    { name: '乳黄', h: 60, s: 50, l: 85, range: 6, hex: '#fffaf4' }, // 乳白之黄
+                    { name: '鹅黄', h: 65, s: 55, l: 75, range: 6, hex: '#fff143' }, // 鹅雏之色
+                    { name: '柳黄', h: 70, s: 60, l: 70, range: 6, hex: '#c9dd22' }, // 柳叶之色
+                    { name: '葱黄', h: 75, s: 65, l: 65, range: 6, hex: '#a3d900' }, // 葱叶之色
+                    { name: '嫩黄', h: 80, s: 70, l: 70, range: 6, hex: '#d9d919' } // 嫩芽之色
+                ],
+                deepYellow: [
+                    { name: '土黄', h: 45, s: 60, l: 45, range: 6, hex: '#c89f83' }, // 土壤之色
+                    { name: '昏黄', h: 50, s: 65, l: 40, range: 6, hex: '#b9a077' }, // 黄昏之色
+                    { name: '柘黄', h: 55, s: 70, l: 50, range: 6, hex: '#d4a76a' }, // 柘木染色
+                    { name: '缃叶', h: 60, s: 75, l: 55, range: 6, hex: '#ffdb58' }, // 桑叶之色
+                    { name: '秋香', h: 65, s: 80, l: 60, range: 6, hex: '#d4a76a' }, // 秋叶之色
+                    { name: '金黄', h: 70, s: 85, l: 65, range: 6, hex: '#ffd700' } // 黄金之色
+                ],
+                // 绿色系细分
+                lightGreen: [
+                    { name: '嫩绿', h: 120, s: 60, l: 75, range: 6, hex: '#bddd22' }, // 嫩芽之色
+                    { name: '新绿', h: 125, s: 65, l: 70, range: 6, hex: '#bddd22' }, // 新叶之色
+                    { name: '柳绿', h: 130, s: 70, l: 65, range: 6, hex: '#afdd22' }, // 柳叶之色
+                    { name: '葱绿', h: 135, s: 75, l: 60, range: 6, hex: '#9ed048' }, // 葱叶之色
+                    { name: '豆绿', h: 140, s: 70, l: 60, range: 6, hex: '#9ed048' }, // 豆荚之色
+                    { name: '竹青', h: 145, s: 65, l: 55, range: 6, hex: '#16a951' } // 竹子之色
+                ],
+                deepGreen: [
+                    { name: '深绿', h: 120, s: 85, l: 35, range: 6, hex: '#005831' }, // 深绿本色
+                    { name: '墨绿', h: 125, s: 90, l: 25, range: 6, hex: '#0b3d27' }, // 墨绿之色
+                    { name: '苍绿', h: 130, s: 80, l: 30, range: 6, hex: '#224b31' }, // 苍郁之色
+                    { name: '石绿', h: 135, s: 85, l: 40, range: 6, hex: '#16a951' }, // 石绿颜料
+                    { name: '青翠', h: 140, s: 80, l: 35, range: 6, hex: '#00b578' }, // 青山之色
+                    { name: '碧绿', h: 145, s: 75, l: 40, range: 6, hex: '#3eede7' } // 碧水之色
+                ],
+                // 蓝色系细分
+                lightBlue: [
+                    { name: '天蓝', h: 200, s: 60, l: 75, range: 6, hex: '#87ceeb' }, // 天空之色
+                    { name: '月白', h: 205, s: 25, l: 85, range: 6, hex: '#f2f2f2' }, // 月光之白
+                    { name: '莹白', h: 210, s: 20, l: 90, range: 6, hex: '#f0fcff' }, // 晶莹之白
+                    { name: '天水碧', h: 215, s: 65, l: 70, range: 6, hex: '#7fecad' }, // 天水碧色
+                    { name: '空青', h: 220, s: 70, l: 65, range: 6, hex: '#00e09e' }, // 空青宝石
+                    { name: '翠青', h: 225, s: 75, l: 60, range: 6, hex: '#70f3ff' } // 翠玉之色
+                ],
+                deepBlue: [
+                    { name: '深蓝', h: 240, s: 90, l: 30, range: 6, hex: '#003d6b' }, // 深蓝本色
+                    { name: '藏蓝', h: 245, s: 85, l: 35, range: 6, hex: '#2e317c' }, // 藏传之色
+                    { name: '靛蓝', h: 250, s: 90, l: 40, range: 6, hex: '#177cb0' }, // 靛草染色
+                    { name: '花青', h: 255, s: 85, l: 30, range: 6, hex: '#26466d' }, // 花青颜料
+                    { name: '群青', h: 260, s: 90, l: 45, range: 6, hex: '#4169e1' }, // 群青颜料
+                    { name: '帝释青', h: 265, s: 85, l: 25, range: 6, hex: '#003d6b' } // 佛经天色
+                ],
+                // 紫色系细分
+                lightPurple: [
+                    { name: '雪青', h: 260, s: 50, l: 70, range: 6, hex: '#b0a4e3' }, // 雪中之青
+                    { name: '淡紫', h: 270, s: 55, l: 75, range: 6, hex: '#dcc7e1' }, // 淡紫之色
+                    { name: '丁香', h: 280, s: 60, l: 65, range: 6, hex: '#cca4e3' }, // 丁香花色
+                    { name: '藕荷', h: 290, s: 45, l: 70, range: 6, hex: '#e4c6d0' }, // 藕荷之色
+                    { name: '玫瑰紫', h: 300, s: 65, l: 60, range: 6, hex: '#c77eb5' }, // 玫瑰之紫
+                    { name: '凤紫', h: 310, s: 70, l: 55, range: 6, hex: '#915ea5' } // 凤凰之紫
+                ],
+                deepPurple: [
+                    { name: '深紫', h: 270, s: 90, l: 30, range: 6, hex: '#4b0082' }, // 深紫本色
+                    { name: '墨紫', h: 280, s: 85, l: 25, range: 6, hex: '#5d3f6a' }, // 墨紫之色
+                    { name: '乌紫', h: 290, s: 90, l: 20, range: 6, hex: '#5a5a8a' }, // 乌紫之色
+                    { name: '紫棠', h: 300, s: 80, l: 30, range: 6, hex: '#8d4bbb' }, // 紫棠之色
+                    { name: '暮山紫', h: 285, s: 75, l: 35, range: 6, hex: '#503c4f' }, // 暮山紫雾
+                    { name: '紫檀', h: 295, s: 85, l: 25, range: 6, hex: '#4c221b' } // 紫檀木色
+                ]
+            };
+
+            // 灰度色系 - 参考中国传统灰白色彩
+            const grayColors = [
+                { name: '精白', brightness: 250 }, // 最纯净的白
+                { name: '银白', brightness: 240 }, // #e9e7ef
+                { name: '霜色', brightness: 230 }, // #e9f1f6
+                { name: '雪白', brightness: 220 }, // #f0fcff
+                { name: '莹白', brightness: 210 }, // 晶莹之白
+                { name: '月白', brightness: 200 }, // 月光之白
+                { name: '铅白', brightness: 190 }, // #f0f0f4
+                { name: '玉灰', brightness: 180 }, // 玉石之灰
+                { name: '珠灰', brightness: 170 }, // 珍珠之灰
+                { name: '素色', brightness: 160 }, // 素雅之灰
+                { name: '烟灰', brightness: 150 }, // 轻烟之灰
+                { name: '铅华', brightness: 140 }, // 铅粉之灰
+                { name: '墨灰', brightness: 130 }, // 淡墨之灰
+                { name: '苍色', brightness: 120 }, // 苍穹之灰
+                { name: '玄灰', brightness: 110 }, // 玄天之灰
+                { name: '黛色', brightness: 100 }, // 青黛之灰
+                { name: '墨色', brightness: 90 }, // 浓墨之色
+                { name: '玄色', brightness: 80 }, // 玄天之色
+                { name: '乌色', brightness: 70 }, // 乌鸦之黑
+                { name: '漆黑', brightness: 60 }, // 漆墨之黑
+                { name: '乌黑', brightness: 50 }, // 纯黑之色
+                { name: '墨黑', brightness: 40 } // 最深沉的黑
+            ];
+
             let colorName = '';
-            if (hsl.s < 20) {
-                colorName = brightness > 200 ? '浅灰' : brightness > 100 ? '中灰' : '深灰';
+
+            // 处理灰度色
+            if (hsl.s < 15) {
+                const grayColor = grayColors.find(g => brightness >= g.brightness) || grayColors[grayColors.length - 1];
+                colorName = grayColor.name;
             } else {
-                const hueNames = ['红', '橙', '黄', '黄绿', '绿', '青绿', '青', '蓝', '紫', '品红'];
-                const hueIndex = Math.floor(hsl.h / 36);
-                const saturation = hsl.s > 70 ? '鲜艳' : hsl.s > 40 ? '中等' : '暗淡';
-                const lightness = hsl.l > 70 ? '浅色' : hsl.l > 30 ? '中等' : '深色';
-                colorName = `${saturation}${lightness}${hueNames[hueIndex]}`;
+                // 确定主要色相类别
+                const hueCategory = getHueCategory(hsl.h);
+                let candidateColors = [];
+
+                // 根据饱和度和明度选择合适的色彩层次
+                if (hsl.s < 50) {
+                    // 低饱和度 - 选择淡雅色调
+                    if (colorVariants[hueCategory + 'Light']) {
+                        candidateColors = colorVariants[hueCategory + 'Light'];
+                    } else {
+                        candidateColors = traditionalColors[hueCategory] || [];
+                    }
+                } else if (hsl.s > 80 && hsl.l < 40) {
+                    // 高饱和度+低明度 - 选择深沉色调
+                    if (colorVariants[hueCategory + 'Deep']) {
+                        candidateColors = colorVariants[hueCategory + 'Deep'];
+                    } else {
+                        candidateColors = traditionalColors[hueCategory] || [];
+                    }
+                } else {
+                    // 标准色调
+                    candidateColors = traditionalColors[hueCategory] || [];
+                }
+
+                // 在选定的色彩范围内寻找最接近的颜色
+                let minDistance = Infinity;
+                let closestColor = null;
+
+                for (const color of candidateColors) {
+                    // 计算色相距离，考虑色相的循环性质
+                    let hueDistance = Math.abs(hsl.h - color.h);
+                    if (hueDistance > 180) hueDistance = 360 - hueDistance;
+
+                    // 只在色相范围内匹配
+                    if (hueDistance <= color.range) {
+                        const distance = Math.sqrt(
+                            Math.pow(hueDistance / color.range, 2) +
+                            Math.pow((hsl.s - color.s) / 100, 2) +
+                            Math.pow((hsl.l - color.l) / 100, 2)
+                        );
+
+                        if (distance < minDistance) {
+                            minDistance = distance;
+                            closestColor = color;
+                        }
+                    }
+                }
+
+                // 如果在细分色彩中没有找到合适的，在所有正色中查找
+                if (!closestColor) {
+                    for (const category of Object.values(traditionalColors)) {
+                        for (const color of category) {
+                            let hueDistance = Math.abs(hsl.h - color.h);
+                            if (hueDistance > 180) hueDistance = 360 - hueDistance;
+
+                            if (hueDistance <= color.range) {
+                                const distance = Math.sqrt(
+                                    Math.pow(hueDistance / color.range, 2) +
+                                    Math.pow((hsl.s - color.s) / 100, 2) +
+                                    Math.pow((hsl.l - color.l) / 100, 2)
+                                );
+
+                                if (distance < minDistance) {
+                                    minDistance = distance;
+                                    closestColor = color;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // 如果仍然没有找到合适的颜色，使用智能备用匹配
+                if (!closestColor) {
+                    // 扩展匹配范围，放宽色相限制
+                    const expandedColors = [];
+                    
+                    // 收集所有色彩，包括变体
+                    for (const category of Object.values(traditionalColors)) {
+                        expandedColors.push(...category);
+                    }
+                    for (const category of Object.values(colorVariants)) {
+                        if (Array.isArray(category)) {
+                            expandedColors.push(...category);
+                        }
+                    }
+                    
+                    // 在放宽的范围内重新匹配
+                    let backupMinDistance = Infinity;
+                    for (const color of expandedColors) {
+                        let hueDistance = Math.abs(hsl.h - color.h);
+                        if (hueDistance > 180) hueDistance = 360 - hueDistance;
+                        
+                        // 放宽色相范围到原来的2倍
+                        if (hueDistance <= color.range * 2) {
+                            const distance = Math.sqrt(
+                                Math.pow(hueDistance / (color.range * 2), 2) +
+                                Math.pow((hsl.s - color.s) / 100, 2) +
+                                Math.pow((hsl.l - color.l) / 100, 2)
+                            );
+                            
+                            if (distance < backupMinDistance) {
+                                backupMinDistance = distance;
+                                closestColor = color;
+                            }
+                        }
+                    }
+                    
+                    // 如果还是找不到，使用智能生成名称
+                    if (!closestColor) {
+                        // 基于HSL值的智能色彩命名
+                        const hueSection = Math.floor(hsl.h / 30); // 每30度一个区间
+                        const hueNames = [
+                            '正红', '朱红', '橙红', '正橙', '黄橙', '正黄',
+                            '黄绿', '草绿', '正绿', '青绿', '正青', '蓝青',
+                            '正蓝', '紫蓝', '正紫', '红紫'
+                        ];
+                        
+                        const baseName = hueNames[hueSection] || '正红';
+                        
+                        // 根据饱和度和明度添加修饰
+                        let prefix = '';
+                        let suffix = '';
+                        
+                        if (hsl.s < 30) prefix = '灰';
+                        else if (hsl.s < 60) prefix = '淡';
+                        else if (hsl.s > 85) prefix = '艳';
+                        
+                        if (hsl.l < 25) suffix = '（深）';
+                        else if (hsl.l > 80) suffix = '（浅）';
+                        
+                        colorName = prefix + baseName + suffix;
+                    } else {
+                        colorName = closestColor.name;
+                    }
+                } else {
+                    colorName = closestColor.name;
+                }
+
+                // 根据饱和度和明度添加修饰词
+                if (hsl.s < 30) {
+                    colorName = '淡' + colorName;
+                } else if (hsl.s > 85) {
+                    colorName = '浓' + colorName;
+                }
+
+                if (hsl.l > 85) {
+                    colorName = colorName + '（浅）';
+                } else if (hsl.l < 25) {
+                    colorName = colorName + '（深）';
+                }
             }
 
-            return `${colorName} | 亮度:${brightness}`;
+            // 辅助函数：根据色相值确定色相类别
+            function getHueCategory(hue) {
+                if (hue < 0) hue += 360;
+                if (hue >= 360) hue -= 360;
+
+                if (hue >= 345 || hue < 15) return 'red';
+                if (hue >= 15 && hue < 45) return 'orange';
+                if (hue >= 45 && hue < 75) return 'yellow';
+                if (hue >= 75 && hue < 105) return 'green';
+                if (hue >= 105 && hue < 165) return 'green';
+                if (hue >= 165 && hue < 195) return 'cyan';
+                if (hue >= 195 && hue < 225) return 'cyan';
+                if (hue >= 225 && hue < 255) return 'blue';
+                if (hue >= 255 && hue < 285) return 'blue';
+                if (hue >= 285 && hue < 315) return 'purple';
+                if (hue >= 315 && hue < 345) return 'purple';
+                return 'red'; // 默认返回红色
+            }
+
+            return `${colorName} | ${brightness}`;
         }
 
         // 设置为基础颜色
@@ -1865,70 +2318,121 @@
             showToast(`已应用全部 ${window.extractedColors.length} 种颜色到配色方案`);
         }
 
-        // 下载调色板
-        function downloadColorPalette() {
-            if (!window.extractedColors) return;
+        // 显示所有颜色
+        function showAllColors() {
+            if (!window.allExtractedColors || window.allExtractedColors.length === 0) return;
 
-            const canvas = document.createElement('canvas');
-            const ctx = canvas.getContext('2d');
-            const colorSize = 100;
-            const padding = 10;
-
-            canvas.width = window.extractedColors.length * (colorSize + padding) + padding;
-            canvas.height = colorSize + 40;
-
-            // 绘制颜色块
-            window.extractedColors.forEach((color, index) => {
-                const x = padding + index * (colorSize + padding);
-                ctx.fillStyle = color;
-                ctx.fillRect(x, 0, colorSize, colorSize);
-
-                // 绘制颜色代码
-                ctx.fillStyle = '#ffffff';
-                ctx.font = '12px Arial';
-                ctx.textAlign = 'center';
-                ctx.fillText(color, x + colorSize / 2, colorSize + 20);
-            });
-
-            // 下载
-            const link = document.createElement('a');
-            link.download = `color-palette-${Date.now()}.png`;
-            link.href = canvas.toDataURL();
-            link.click();
-
-            showToast('调色板已下载');
+            displayExtractedColors(window.allExtractedColors, window.allExtractedColors, window.originalImageUrl);
+            showToast(`显示全部 ${window.allExtractedColors.length} 种颜色`);
         }
 
-        // 导出颜色代码
+        // 添加颜色到待选区
+        function addToColorSelection(color) {
+            // 确保selectedColors是数组
+            if (!Array.isArray(window.selectedColors)) {
+                window.selectedColors = [];
+            }
+
+            if (!window.selectedColors.includes(color)) {
+                window.selectedColors.push(color);
+                updateSelectedColorsDisplay();
+                showToast(`已添加 ${color} 到待选区`);
+            } else {
+                showToast(`颜色 ${color} 已在待选区中`);
+            }
+        }
+
+        // 更新待选区显示
+        function updateSelectedColorsDisplay() {
+            const selectionArea = document.getElementById('colorSelectionArea');
+            const selectedColorsDiv = document.getElementById('selectedColors');
+
+            // 确保selectedColors是数组
+            if (!Array.isArray(window.selectedColors)) {
+                window.selectedColors = [];
+            }
+
+            if (window.selectedColors.length === 0) {
+                selectionArea.style.display = 'none';
+                return;
+            }
+
+            selectionArea.style.display = 'block';
+            selectedColorsDiv.innerHTML = window.selectedColors.map((color, index) => `
+                <div style="position: relative; cursor: pointer;" onclick="removeFromColorSelection('${color}')" title="点击移除">
+                    <div style="width: 40px; height: 40px; background: ${color}; border-radius: 6px; border: 1px solid var(--border); transition: all 0.2s ease;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'"></div>
+                    <div style="position: absolute; top: -4px; right: -4px; width: 16px; height: 16px; background: rgba(255,0,0,0.8); color: white; border-radius: 50%; font-size: 10px; text-align: center; line-height: 16px; cursor: pointer;">×</div>
+                </div>
+            `).join('');
+        }
+
+        // 从待选区移除颜色
+        function removeFromColorSelection(color) {
+            // 确保selectedColors是数组
+            if (!Array.isArray(window.selectedColors)) {
+                window.selectedColors = [];
+                return;
+            }
+
+            const index = window.selectedColors.indexOf(color);
+            if (index > -1) {
+                window.selectedColors.splice(index, 1);
+                updateSelectedColorsDisplay();
+                showToast(`已从待选区移除 ${color}`);
+            }
+        }
+
+        // 应用待选区颜色
+        function applySelectedColors() {
+            // 确保selectedColors是数组
+            if (!Array.isArray(window.selectedColors)) {
+                window.selectedColors = [];
+            }
+
+            if (window.selectedColors.length === 0) {
+                showToast('待选区为空');
+                return;
+            }
+
+            currentPalette = [...window.selectedColors];
+            displayPalette();
+            showToast(`已应用待选区的 ${window.selectedColors.length} 种颜色`);
+        }
+
+        // 清空待选区
+        function clearColorSelection() {
+            // 确保selectedColors是数组，然后清空
+            window.selectedColors = [];
+            updateSelectedColorsDisplay();
+            showToast('已清空待选区');
+        }
+
+        // 更新显示的颜色数量
+        function updateDisplayedColors() {
+            const select = document.getElementById('colorCountSelect');
+            if (!select || !window.allExtractedColors) return;
+
+            const count = parseInt(select.value);
+            const displayColors = window.allExtractedColors.slice(0, count);
+            displayExtractedColors(displayColors, window.allExtractedColors, window.originalImageUrl);
+        }
+
+        // 下载调色板 - 现在移动到导出代码板块
+        function downloadColorPalette() {
+            // 此功能已移动到导出代码板块
+            showToast('调色板下载功能已移至导出代码板块');
+        }
+
+        // 导出颜色代码 - 移动到导出代码板块
         function exportColorCodes() {
-            if (!window.extractedColors) return;
-
-            const codes = window.extractedColors.map(color => {
-                const rgb = hexToRgb(color);
-                const hsl = rgbToHsl(rgb.r, rgb.g, rgb.b);
-                return {
-                    hex: color,
-                    rgb: `rgb(${rgb.r}, ${rgb.g}, ${rgb.b})`,
-                    hsl: `hsl(${Math.round(hsl.h)}, ${Math.round(hsl.s)}%, ${Math.round(hsl.l)}%)`
-                };
-            });
-
-            const exportText = codes.map(c =>
-                `${c.hex} | ${c.rgb} | ${c.hsl}`
-            ).join('\n');
-
-            navigator.clipboard.writeText(exportText);
-            showToast('颜色代码已复制到剪贴板');
+            // 此功能已移动到导出代码板块
+            showToast('颜色代码导出功能已移至导出代码板块');
         }
 
         // 重新提取颜色
         function regenerateColors() {
-            if (window.lastProcessedImage) {
-                extractColorsFromImage(window.lastProcessedImage);
-                showToast('正在重新提取颜色...');
-            } else {
-                showToast('没有可重新提取的图片');
-            }
+            // 重新提取功能已被移除，使用显示所有颜色替代
+            showToast('请使用"显示所有颜色"功能查看完整配色');
         }
 
         function closeImagePreview() {
@@ -3972,6 +4476,10 @@
         window.applyPresetPalette = applyPresetPalette;
 
         // Initial generation - 先更新颜色数量选项，再生成配色方案
+        // 初始化待选区数组
+        if (!window.selectedColors) {
+            window.selectedColors = [];
+        }
         updateColorCountOptions();
         generatePalette();
     </script>
