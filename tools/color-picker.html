@@ -4508,80 +4508,110 @@
                     // 获取当前配色方案
                     const colors = currentPalette.length > 0 ? currentPalette : ['#3498db', '#e74c3c', '#2ecc71', '#f39c12', '#9b59b6'];
                     
-                    // 创建色卡画布
+                    // 创建高清色卡画布
                     const colorCardCanvas = document.createElement('canvas');
-                    const cardWidth = 800;
-                    const cardHeight = 600;
-                    const colorHeight = 80;
-                    const margin = 40;
-                    const colorWidth = cardWidth - 2 * margin;
+                    const dpi = 2; // 高清倍数
+                    const cardWidth = 1200 * dpi; // 实际像素宽度
+                    const cardHeight = 800 * dpi; // 实际像素高度
+                    const margin = 60 * dpi;
+                    const colorSize = 120 * dpi; // 颜色方块大小
+                    const spacing = 30 * dpi; // 间距
                     
                     colorCardCanvas.width = cardWidth;
                     colorCardCanvas.height = cardHeight;
                     const ctx = colorCardCanvas.getContext('2d');
                     
+                    // 设置高画质渲染
+                    ctx.imageSmoothingEnabled = true;
+                    ctx.imageSmoothingQuality = 'high';
+                    
                     // 清空画布并设置背景
                     ctx.fillStyle = '#ffffff';
                     ctx.fillRect(0, 0, cardWidth, cardHeight);
                     
-                    // 添加标题
-                    ctx.fillStyle = '#333333';
-                    ctx.font = 'bold 24px Arial';
+                    // 添加优雅标题
+                    ctx.fillStyle = '#2c3e50';
+                    ctx.font = `bold ${48 * dpi}px "Segoe UI", "Helvetica Neue", Arial, sans-serif`;
                     ctx.textAlign = 'center';
-                    ctx.fillText('配色方案色卡', cardWidth / 2, 30);
+                    ctx.textBaseline = 'middle';
+                    ctx.fillText('Color Palette', cardWidth / 2, margin / 2);
                     
-                    // 绘制每个颜色块
+                    // 计算一行能放多少个颜色
+                    const maxColorsPerRow = Math.floor((cardWidth - 2 * margin + spacing) / (colorSize + spacing));
+                    const colorsPerRow = Math.min(colors.length, maxColorsPerRow);
+                    const totalWidth = colorsPerRow * colorSize + (colorsPerRow - 1) * spacing;
+                    const startX = (cardWidth - totalWidth) / 2;
+                    
+                    // 绘制颜色方块（一行展示）
                     colors.forEach((color, index) => {
-                        const y = margin + index * (colorHeight + 10);
+                        const row = Math.floor(index / colorsPerRow);
+                        const col = index % colorsPerRow;
+                        const x = startX + col * (colorSize + spacing);
+                        const y = margin + row * (colorSize + spacing * 2);
                         
-                        // 绘制颜色块
+                        // 绘制颜色方块（圆角矩形）
+                        const radius = 12 * dpi;
                         ctx.fillStyle = color;
-                        ctx.fillRect(margin, y, colorWidth, colorHeight);
+                        roundRect(ctx, x, y, colorSize, colorSize, radius);
+                        ctx.fill();
                         
-                        // 添加边框
-                        ctx.strokeStyle = '#dddddd';
-                        ctx.lineWidth = 1;
-                        ctx.strokeRect(margin, y, colorWidth, colorHeight);
+                        // 添加优雅边框
+                        ctx.strokeStyle = '#e0e0e0';
+                        ctx.lineWidth = 2 * dpi;
+                        roundRect(ctx, x, y, colorSize, colorSize, radius);
+                        ctx.stroke();
                         
-                        // 添加颜色信息
-                        ctx.fillStyle = '#333333';
-                        ctx.font = '14px Arial';
-                        ctx.textAlign = 'left';
-                        ctx.fillText(`颜色 ${index + 1}`, margin + 10, y + 25);
-                        
-                        ctx.fillText(`HEX: ${color}`, margin + 10, y + 45);
-                        
-                        // 转换为RGB显示
-                        const rgb = hexToRgb(color);
-                        if (rgb) {
-                            ctx.fillText(`RGB: ${rgb.r}, ${rgb.g}, ${rgb.b}`, margin + 10, y + 65);
-                        }
-                        
-                        // 转换为HSL显示
-                        const hsl = rgbToHsl(rgb.r, rgb.g, rgb.b);
-                        if (hsl) {
-                            ctx.fillText(`HSL: ${hsl.h}°, ${hsl.s}%, ${hsl.l}%`, margin + 10, y + 80);
-                        }
+                        // 添加颜色代码（下方）
+                        ctx.fillStyle = '#2c3e50';
+                        ctx.font = `${24 * dpi}px "Segoe UI", "Helvetica Neue", Arial, sans-serif`;
+                        ctx.textAlign = 'center';
+                        ctx.textBaseline = 'top';
+                        ctx.fillText(color.toUpperCase(), x + colorSize / 2, y + colorSize + 15 * dpi);
                     });
                     
-                    // 添加底部信息
-                    ctx.fillStyle = '#666666';
-                    ctx.font = '12px Arial';
+                    // 添加底部装饰信息
+                    const bottomY = cardHeight - margin / 2;
+                    ctx.fillStyle = '#7f8c8d';
+                    ctx.font = `${20 * dpi}px "Segoe UI", "Helvetica Neue", Arial, sans-serif`;
                     ctx.textAlign = 'center';
-                    ctx.fillText(`生成时间: ${new Date().toLocaleString('zh-CN')}`, cardWidth / 2, cardHeight - 20);
+                    ctx.textBaseline = 'middle';
                     
-                    // 下载色卡
+                    const currentTime = new Date().toLocaleString('zh-CN', {
+                        year: 'numeric',
+                        month: '2-digit',
+                        day: '2-digit',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    });
+                    ctx.fillText(`Generated on ${currentTime}`, cardWidth / 2, bottomY);
+                    
+                    // 下载高清色卡
                     const link = document.createElement('a');
-                    link.download = `color-card-${Date.now()}.png`;
-                    link.href = colorCardCanvas.toDataURL('image/png');
+                    link.download = `color-palette-${Date.now()}.png`;
+                    link.href = colorCardCanvas.toDataURL('image/png', 1.0);
                     link.click();
                     
-                    showToast('色卡已下载');
+                    showToast('高清色卡已下载');
                 } catch (error) {
                     console.error('下载色卡失败:', error);
                     showToast('下载色卡失败，请重试');
                 }
             });
+        }
+        
+        // 辅助函数：绘制圆角矩形
+        function roundRect(ctx, x, y, width, height, radius) {
+            ctx.beginPath();
+            ctx.moveTo(x + radius, y);
+            ctx.lineTo(x + width - radius, y);
+            ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+            ctx.lineTo(x + width, y + height - radius);
+            ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+            ctx.lineTo(x + radius, y + height);
+            ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+            ctx.lineTo(x, y + radius);
+            ctx.quadraticCurveTo(x, y, x + radius, y);
+            ctx.closePath();
         }
 
         // 添加打包下载所有图表功能
