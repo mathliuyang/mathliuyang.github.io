@@ -961,6 +961,7 @@
                         <option value="contour">等高线图 (Contour Plot)</option>
                     </select>
                     <button id="mainGenerateChart" class="action-btn primary">生成预览</button>
+                    <button id="downloadColorCard" class="action-btn">下载色卡</button>
                     <button id="mainDownloadChart" class="action-btn">下载图表</button>
                     <button id="downloadAllCharts" class="action-btn primary">打包下载所有图表</button>
                 </div>
@@ -4479,6 +4480,90 @@
                     link.href = canvas.toDataURL();
                     link.click();
                     showToast('图表已下载');
+                }
+            });
+        }
+
+        // 添加下载色卡功能
+        const downloadColorCardBtn = document.getElementById('downloadColorCard');
+        if (downloadColorCardBtn) {
+            downloadColorCardBtn.addEventListener('click', function () {
+                try {
+                    // 获取当前配色方案
+                    const colors = currentPalette.length > 0 ? currentPalette : ['#3498db', '#e74c3c', '#2ecc71', '#f39c12', '#9b59b6'];
+                    
+                    // 创建色卡画布
+                    const colorCardCanvas = document.createElement('canvas');
+                    const cardWidth = 800;
+                    const cardHeight = 600;
+                    const colorHeight = 80;
+                    const margin = 40;
+                    const colorWidth = cardWidth - 2 * margin;
+                    
+                    colorCardCanvas.width = cardWidth;
+                    colorCardCanvas.height = cardHeight;
+                    const ctx = colorCardCanvas.getContext('2d');
+                    
+                    // 清空画布并设置背景
+                    ctx.fillStyle = '#ffffff';
+                    ctx.fillRect(0, 0, cardWidth, cardHeight);
+                    
+                    // 添加标题
+                    ctx.fillStyle = '#333333';
+                    ctx.font = 'bold 24px Arial';
+                    ctx.textAlign = 'center';
+                    ctx.fillText('配色方案色卡', cardWidth / 2, 30);
+                    
+                    // 绘制每个颜色块
+                    colors.forEach((color, index) => {
+                        const y = margin + index * (colorHeight + 10);
+                        
+                        // 绘制颜色块
+                        ctx.fillStyle = color;
+                        ctx.fillRect(margin, y, colorWidth, colorHeight);
+                        
+                        // 添加边框
+                        ctx.strokeStyle = '#dddddd';
+                        ctx.lineWidth = 1;
+                        ctx.strokeRect(margin, y, colorWidth, colorHeight);
+                        
+                        // 添加颜色信息
+                        ctx.fillStyle = '#333333';
+                        ctx.font = '14px Arial';
+                        ctx.textAlign = 'left';
+                        ctx.fillText(`颜色 ${index + 1}`, margin + 10, y + 25);
+                        
+                        ctx.fillText(`HEX: ${color}`, margin + 10, y + 45);
+                        
+                        // 转换为RGB显示
+                        const rgb = hexToRgb(color);
+                        if (rgb) {
+                            ctx.fillText(`RGB: ${rgb.r}, ${rgb.g}, ${rgb.b}`, margin + 10, y + 65);
+                        }
+                        
+                        // 转换为HSL显示
+                        const hsl = rgbToHsl(rgb.r, rgb.g, rgb.b);
+                        if (hsl) {
+                            ctx.fillText(`HSL: ${hsl.h}°, ${hsl.s}%, ${hsl.l}%`, margin + 10, y + 80);
+                        }
+                    });
+                    
+                    // 添加底部信息
+                    ctx.fillStyle = '#666666';
+                    ctx.font = '12px Arial';
+                    ctx.textAlign = 'center';
+                    ctx.fillText(`生成时间: ${new Date().toLocaleString('zh-CN')}`, cardWidth / 2, cardHeight - 20);
+                    
+                    // 下载色卡
+                    const link = document.createElement('a');
+                    link.download = `color-card-${Date.now()}.png`;
+                    link.href = colorCardCanvas.toDataURL('image/png');
+                    link.click();
+                    
+                    showToast('色卡已下载');
+                } catch (error) {
+                    console.error('下载色卡失败:', error);
+                    showToast('下载色卡失败，请重试');
                 }
             });
         }
