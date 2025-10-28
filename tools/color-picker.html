@@ -4764,6 +4764,21 @@
                                 zip.file(image.name, base64Data, { base64: true });
                             });
                             
+                            // 创建GIF动画（如果有多个图表）
+                            if (images.length > 1) {
+                                showToast('正在生成GIF动画...');
+                                try {
+                                    const gifBlob = await createChartGIF(images, 2000); // 每2秒切换
+                                    
+                                    // 将GIF添加到ZIP文件
+                                    zip.file('color-scheme-charts.gif', gifBlob);
+                                    showToast('GIF动画生成完成！');
+                                } catch (gifError) {
+                                    console.error('创建GIF失败:', gifError);
+                                    showToast('GIF生成失败，继续打包其他文件...');
+                                }
+                            }
+                            
                             // 生成ZIP文件
                             const zipBlob = await zip.generateAsync({ type: 'blob' });
                             
@@ -4773,7 +4788,7 @@
                             link.href = URL.createObjectURL(zipBlob);
                             link.click();
                             
-                            showToast(`成功打包下载 ${images.length} 个图表！`);
+                            showToast(`成功打包下载 ${images.length} 个图表和GIF动画！`);
                         } catch (error) {
                             console.error('创建ZIP文件失败:', error);
                             // 如果ZIP创建失败，逐个下载
@@ -4810,6 +4825,22 @@
             });
         }
 
+        // 辅助函数：动态加载gif.js库
+        function loadGifJs() {
+            return new Promise((resolve, reject) => {
+                if (window.GIF) {
+                    resolve();
+                    return;
+                }
+                
+                const script = document.createElement('script');
+                script.src = 'https://cdnjs.cloudflare.com/ajax/libs/gif.js/0.2.0/gif.js';
+                script.onload = () => resolve();
+                script.onerror = () => reject(new Error('加载gif.js库失败'));
+                document.head.appendChild(script);
+            });
+        }
+
         // 辅助函数：逐个下载图片（当ZIP创建失败时）
         function downloadImagesIndividually(images) {
             images.forEach((image, index) => {
@@ -4821,6 +4852,89 @@
                 }, index * 500); // 每500ms下载一个，避免浏览器限制
             });
             showToast('正在逐个下载图表...');
+        }
+
+        // 辅助函数：创建GIF动画
+        async function createChartGIF(images, frameDelay = 2000) {
+            try {
+                // 加载gif.js库
+                await loadGifJs();
+                
+                if (!window.GIF) {
+                    throw new Error('GIF库加载失败');
+                }
+
+                // 创建GIF编码器
+                const gif = new GIF({
+                    workers: 2,
+                    quality: 10,
+                    width: 1000,
+                    height: 500,
+                    repeat: 0 // 0表示无限循环
+                });
+
+                // 为每个图表创建帧
+                for (let i = 0; i < images.length; i++) {
+                    const image = images[i];
+                    
+                    // 创建临时canvas来绘制当前帧
+                    const frameCanvas = document.createElement('canvas');
+                    frameCanvas.width = 1000;
+                    frameCanvas.height = 500;
+                    const frameCtx = frameCanvas.getContext('2d');
+                    
+                    // 设置白色背景
+                    frameCtx.fillStyle = '#ffffff';
+                    frameCtx.fillRect(0, 0, frameCanvas.width, frameCanvas.height);
+                    
+                    // 绘制图表标题
+                    frameCtx.fillStyle = '#333333';
+                    frameCtx.font = 'bold 24px "Times New Roman", serif';
+                    frameCtx.textAlign = 'center';
+                    frameCtx.fillText(image.nameCN, frameCanvas.width / 2, 40);
+                    
+                    // 绘制图表图片
+                    const img = new Image();
+                    await new Promise((resolve, reject) => {
+                        img.onload = resolve;
+                        img.onerror = reject;
+                        img.src = image.dataURL;
+                    });
+                    
+                    // 将图片绘制到帧中（居中，留出标题空间）
+                    const imgWidth = 1000;
+                    const imgHeight = 500;
+                    const titleHeight = 60;
+                    const availableHeight = imgHeight - titleHeight - 20;
+                    const scale = Math.min(imgWidth / img.width, availableHeight / img.height);
+                    const drawWidth = img.width * scale * 0.9;
+                    const drawHeight = img.height * scale * 0.9;
+                    const drawX = (imgWidth - drawWidth) / 2;
+                    const drawY = titleHeight + (availableHeight - drawHeight) / 2;
+                    
+                    frameCtx.drawImage(img, drawX, drawY, drawWidth, drawHeight);
+                    
+                    // 添加帧到GIF
+                    gif.addFrame(frameCanvas, { delay: frameDelay });
+                }
+
+                // 生成GIF
+                return new Promise((resolve, reject) => {
+                    gif.on('finished', function(blob) {
+                        resolve(blob);
+                    });
+                    
+                    gif.on('error', function(error) {
+                        reject(error);
+                    });
+                    
+                    gif.render();
+                });
+                
+            } catch (error) {
+                console.error('创建GIF失败:', error);
+                throw error;
+            }
         }
 
         // Expose preset functions
