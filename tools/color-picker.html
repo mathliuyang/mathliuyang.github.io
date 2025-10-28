@@ -954,7 +954,7 @@
                         <option value="pie">饼图 (Pie Chart)</option>
                         <option value="box">箱线图 (Box Plot)</option>
                         <option value="heatmap">热力图 (Heatmap)</option>
-                        <option value="distribution">分布图 (Distribution)</option>
+                        <option value="distribution">面积图 (Area Chart)</option>
                         <option value="radar">雷达图 (Radar Chart)</option>
                         <option value="violin">小提琴图 (Violin Plot)</option>
                         <option value="scatter">散点图 (Scatter Plot)</option>
@@ -2994,17 +2994,41 @@
 
             // 绘制刻度和标签
             ctx.fillStyle = '#333333';
-            ctx.font = '12px "Microsoft YaHei", "微软雅黑", "SimHei", "黑体", sans-serif';  // 统一刻度标签字体
+            ctx.font = '10px "Microsoft YaHei", "微软雅黑", "SimHei", "黑体", sans-serif';  // 统一刻度标签字体
             ctx.textAlign = 'left';
             ctx.textBaseline = 'middle';
 
-            // 绘制最小值、最大值和中间值
-            const tickValues = [maxZ, (maxZ + minZ) / 2, minZ];
-            const tickPositions = [barY, barY + barHeight / 2, barY + barHeight];
+            // 根据数据范围自动调整刻度数量
+            const dataRange = maxZ - minZ;
+            let tickCount;
+            
+            if (dataRange <= 0.1) {
+                tickCount = 5;  // 小范围数据：5个刻度
+            } else if (dataRange <= 0.5) {
+                tickCount = 6;  // 中等范围数据：6个刻度
+            } else if (dataRange <= 1.0) {
+                tickCount = 7;  // 较大范围数据：7个刻度
+            } else {
+                tickCount = 8;  // 大范围数据：8个刻度
+            }
 
-            for (let i = 0; i < tickValues.length; i++) {
-                const value = tickValues[i].toFixed(2);
-                const y = tickPositions[i];
+            // 生成刻度值和位置
+            for (let i = 0; i < tickCount; i++) {
+                const ratio = i / (tickCount - 1);
+                const value = minZ + ratio * dataRange;
+                const y = barY + (1 - ratio) * barHeight;
+
+                // 格式化数值显示
+                let formattedValue;
+                if (Math.abs(value) < 0.01) {
+                    formattedValue = value.toExponential(1);
+                } else if (dataRange < 1) {
+                    formattedValue = value.toFixed(3);
+                } else if (dataRange < 10) {
+                    formattedValue = value.toFixed(2);
+                } else {
+                    formattedValue = value.toFixed(1);
+                }
 
                 // 绘制刻度线
                 ctx.strokeStyle = '#333333';
@@ -3015,7 +3039,7 @@
                 ctx.stroke();
 
                 // 绘制标签
-                ctx.fillText(value, barX + barWidth + 8, y);
+                ctx.fillText(formattedValue, barX + barWidth + 8, y);
             }
 
             // 添加颜色条标题
@@ -3024,7 +3048,7 @@
             ctx.rotate(-Math.PI / 2);
             ctx.font = '12px "Microsoft YaHei", "微软雅黑", "SimHei", "黑体", sans-serif';  // 统一颜色条标题字体
             ctx.textAlign = 'center';
-            ctx.fillText('数值', 0, 0);
+            // ctx.fillText('Intensity', 0, 0);
             ctx.restore();
         }
 
@@ -3169,10 +3193,52 @@
             }
 
             // 绘制专业网格系统
-            drawAcademicGrid(ctx, width, height, padding);
-
-            // 绘制坐标轴标签
+            drawAcademicGrid(ctx, width, height, padding, 10, 5);
             drawAxisLabels(ctx, width, height, padding, 'Time (s)', 'Response (μV)');
+
+            // 添加X轴刻度
+            ctx.fillStyle = '#666666';
+            ctx.font = '9px "Times New Roman", serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'top';
+
+            for (let i = 0; i <= 10; i++) {
+                const x = padding + i * chartWidth / 10;
+                const value = (i * 10).toString();
+
+                // 刻度线
+                ctx.strokeStyle = '#cccccc';
+                ctx.lineWidth = 0.5;
+                ctx.beginPath();
+                ctx.moveTo(x, height - padding);
+                ctx.lineTo(x, height - padding + 5);
+                ctx.stroke();
+
+                // 标签
+                ctx.fillText(value, x, height - padding + 8);
+            }
+
+            // 添加Y轴刻度
+            ctx.fillStyle = '#666666';
+            ctx.font = '9px "Times New Roman", serif';
+            ctx.textAlign = 'right';
+            ctx.textBaseline = 'middle';
+
+            for (let i = 0; i <= 10; i++) {
+                const y = height - padding - i * chartHeight / 10;
+                const value = (i * 10).toString();
+
+                // 刻度线
+                ctx.strokeStyle = '#cccccc';
+                ctx.lineWidth = 0.5;
+                ctx.beginPath();
+                ctx.moveTo(padding - 5, y);
+                ctx.lineTo(padding, y);
+                ctx.stroke();
+
+                // 标签
+                ctx.fillText(value, padding - 8, y);
+            }
 
             // 绘制数据线（更专业的样式）
             data.forEach((series, index) => {
@@ -3212,12 +3278,12 @@
                 });
             });
 
-            // 绘制图例（横放在X轴与标签中间）
-            const legendLabels = [];
-            for (let i = 0; i < datasets; i++) {
-                legendLabels.push(`Series ${String.fromCharCode(65 + i)}`); // A, B, C, ...
-            }
-            drawLineChartLegendBottom(ctx, width, height, colors, datasets, legendLabels);
+            // 图例已移除（根据用户需求）
+            // const legendLabels = [];
+            // for (let i = 0; i < datasets; i++) {
+            //     legendLabels.push(`Series ${String.fromCharCode(65 + i)}`); // A, B, C, ...
+            // }
+            // drawLineChartLegendBottom(ctx, width, height, colors, datasets, legendLabels);
 
             // 添加图表标题
             drawChartTitle(ctx, width, '线性图 - 智核学术');
@@ -3274,28 +3340,36 @@
 
         // 线性图底部横向图例（横放在X轴与标签中间）
         function drawLineChartLegendBottom(ctx, width, height, colors, datasets, labels) {
-            const itemWidth = 80;  // 每项宽度
-            const itemHeight = 20;  // 每项高度
-            const lineLength = 25;  // 线条长度
-            const spacing = 8;  // 元素间距
+            const itemWidth = 90;  // 每项宽度（从80增加到90）
+            const itemHeight = 25;  // 每项高度（从20增加到25）
+            const lineLength = 25;  // 线条长度保持不变
+            const spacing = 15;  // 元素间距（从8增加到15）
 
-            // 超过8色时自动分成2行
-            const maxPerRow = 8;
+            // 智能行数控制：小于8个单行显示，大于18个双行显示，中间值最多2行
+            let maxPerRow;
+            if (datasets <= 8) {
+                maxPerRow = datasets; // 小于等于8个时单行显示
+            } else if (datasets > 18) {
+                maxPerRow = Math.ceil(datasets / 2); // 大于18个时双行显示
+            } else {
+                maxPerRow = Math.ceil(datasets / 2); // 8-18个时最多2行
+            }
+
             const rows = Math.ceil(datasets / maxPerRow);
-            const itemsInRow = Math.ceil(datasets / rows);
 
             // 计算图例总宽度和位置（居中放置在X轴上方）
             const totalWidth = Math.min(datasets, maxPerRow) * itemWidth;
-            const totalHeight = rows * (itemHeight + 5); // 5px行间距
+            const rowSpacing = rows > 1 ? 3.33 : 0; // 双行时间距缩小为1/3（10px->3.33px）
+            const totalHeight = rows * itemHeight + (rows - 1) * rowSpacing; // 精确计算总高度
             const legendX = (width - totalWidth) / 2;  // 水平居中
-            const legendY = height - 70 - (rows - 1) * (itemHeight - 5); // 两行时往上移动，避免与X轴标签重叠（减少上移距离）
+            const legendY = height - 60 - (rows - 1) * rowSpacing; // 调整垂直位置
 
             // 绘制每个系列的水平排列图例项（支持多行）
             for (let i = 0; i < datasets; i++) {
                 const row = Math.floor(i / maxPerRow);
                 const col = i % maxPerRow;
                 const x = legendX + col * itemWidth + 10;
-                const y = legendY + row * (itemHeight + 5);
+                const y = legendY + row * (itemHeight + rowSpacing); // 使用缩小后的行间距
                 const color = colors[i % colors.length];
 
                 // 绘制线条样本（2.5px线宽，与数据线一致）
@@ -3510,7 +3584,7 @@
                 ctx.fillStyle = '#333333';
                 ctx.font = '11px "Times New Roman", serif';
                 ctx.textAlign = 'center';
-                ctx.fillText(`T${i + 1}`, x, height - padding + 20);
+                ctx.fillText(`Series ${i + 1}`, x, height - padding + 20);
 
                 // 存储数据用于统计显示
                 boxData.push({ min, q1, median, q3, max, color });
@@ -3664,6 +3738,50 @@
             drawAcademicGrid(ctx, width, height, padding, 10, 5);
             drawAxisLabels(ctx, width, height, padding, 'Variable X', 'Probability Density');
 
+            // 添加X轴刻度
+            ctx.fillStyle = '#666666';
+            ctx.font = '9px "Times New Roman", serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'top';
+
+            for (let i = 0; i <= 10; i++) {
+                const x = padding + i * chartWidth / 10;
+                const value = (i * 10).toString();
+
+                // 刻度线
+                ctx.strokeStyle = '#cccccc';
+                ctx.lineWidth = 0.5;
+                ctx.beginPath();
+                ctx.moveTo(x, height - padding);
+                ctx.lineTo(x, height - padding + 5);
+                ctx.stroke();
+
+                // 标签
+                ctx.fillText(value, x, height - padding + 8);
+            }
+
+            // 添加Y轴刻度
+            ctx.fillStyle = '#666666';
+            ctx.font = '9px "Times New Roman", serif';
+            ctx.textAlign = 'right';
+            ctx.textBaseline = 'middle';
+
+            for (let i = 0; i <= 10; i++) {
+                const y = height - padding - i * chartHeight / 10;
+                const value = (i * 10).toString();
+
+                // 刻度线
+                ctx.strokeStyle = '#cccccc';
+                ctx.lineWidth = 0.5;
+                ctx.beginPath();
+                ctx.moveTo(padding - 5, y);
+                ctx.lineTo(padding, y);
+                ctx.stroke();
+
+                // 标签
+                ctx.fillText(value, padding - 8, y);
+            }
+
             // 生成不同类型的概率分布
             const distributionTypes = ['normal', 'exponential', 'gamma', 'beta'];
 
@@ -3756,13 +3874,12 @@
                 ctx.fill();
             }
 
-            // 绘制图例
-            const legendData = [];
-            for (let d = 0; d < maxDistributions; d++) {
-                const distType = distributionTypes[d % distributionTypes.length];
-                legendData.push(`${distType.charAt(0).toUpperCase() + distType.slice(1)} Distribution ${d + 1}`);
-            }
-            drawLegend(ctx, width, height, colors.slice(0, maxDistributions), legendData, 'outside-right');
+            // 图例已移除（根据用户需求）
+            // const legendLabels = [];
+            // for (let d = 0; d < maxDistributions; d++) {
+            //     legendLabels.push(`Series ${String.fromCharCode(65 + d)}`); // SeriesA, SeriesB, SeriesC, ...
+            // }
+            // drawLineChartLegendBottom(ctx, width, height, colors, maxDistributions, legendLabels);
 
             // 添加学术化标题
             drawChartTitle(ctx, width, '面积图 - 智核学术');
@@ -3916,7 +4033,7 @@
                     ctx.stroke();
                 }
 
-                legendData.push(`Dataset ${d + 1}`);
+                legendData.push(String.fromCharCode(65 + d)); // A, B, C, ...
             }
 
             // 绘制图例（Nature风格：外部右侧）
@@ -4087,7 +4204,7 @@
                 ctx.lineTo(x, q3Y);
                 ctx.stroke();
 
-                legendData.push(groupLabels[i % groupLabels.length]);
+                legendData.push(`Series ${String.fromCharCode(65 + i)}`); // SeriesA, SeriesB, SeriesC, ...
             }
 
             // 绘制X轴标签
@@ -4122,8 +4239,7 @@
                 ctx.fillText(value, padding - 8, y);
             }
 
-            // 绘制图例（Nature风格：外部右侧）
-            drawLegend(ctx, width, height, colors.slice(0, groups), legendData, 'outside-right');
+            // 小提琴图不需要图例，图例信息已在X轴标签中显示
 
             // 添加学术化标题
             drawChartTitle(ctx, width, '小提琴图 - 智核学术');
@@ -4268,7 +4384,7 @@
                     }
                 }
 
-                legendData.push(group.label);
+                legendData.push(`Series ${String.fromCharCode(65 + g)}`); // SeriesA, SeriesB, SeriesC, ...
             }
 
             // 绘制X轴刻度和标签
@@ -4314,8 +4430,8 @@
                 ctx.fillText(value, padding - 8, y);
             }
 
-            // 绘制图例（Nature风格：外部右侧）
-            drawLegend(ctx, width, height, colors.slice(0, groups), legendData, 'outside-right');
+            // 图例已移除（根据用户需求）
+            // drawLineChartLegendBottom(ctx, width, height, colors, groups, legendData);
 
             // 添加学术化标题
             drawChartTitle(ctx, width, '散点图 - 智核学术');
@@ -4510,7 +4626,51 @@
             }
 
             // 绘制坐标轴标签
-            drawAxisLabels(ctx, width, height, padding, 'X轴', 'Y轴');
+            drawAxisLabels(ctx, width, height, padding, 'Spatial Coordinate (X)', 'Spatial Coordinate (Y)');
+
+            // 添加X轴刻度
+            ctx.fillStyle = '#666666';
+            ctx.font = '9px "Times New Roman", serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'top';
+
+            for (let i = 0; i <= 10; i++) {
+                const x = padding + i * chartWidth / 10;
+                const value = (i * 10).toString();
+
+                // 刻度线
+                ctx.strokeStyle = '#cccccc';
+                ctx.lineWidth = 0.5;
+                ctx.beginPath();
+                ctx.moveTo(x, height - padding);
+                ctx.lineTo(x, height - padding + 5);
+                ctx.stroke();
+
+                // 标签
+                ctx.fillText(value, x, height - padding + 8);
+            }
+
+            // 添加Y轴刻度
+            ctx.fillStyle = '#666666';
+            ctx.font = '9px "Times New Roman", serif';
+            ctx.textAlign = 'right';
+            ctx.textBaseline = 'middle';
+
+            for (let i = 0; i <= 10; i++) {
+                const y = height - padding - i * chartHeight / 10;
+                const value = (i * 10).toString();
+
+                // 刻度线
+                ctx.strokeStyle = '#cccccc';
+                ctx.lineWidth = 0.5;
+                ctx.beginPath();
+                ctx.moveTo(padding - 5, y);
+                ctx.lineTo(padding, y);
+                ctx.stroke();
+
+                // 标签
+                ctx.fillText(value, padding - 8, y);
+            }
 
             // 绘制颜色条（Color Bar）
             drawColorBar(ctx, width, height, colors, levels, minZ, maxZ);
@@ -4558,8 +4718,18 @@
                 }
             });
 
-            // 初始化当前索引
+            // 初始化当前索引 - 确保从当前选中的选项开始
             mainChartType.addEventListener('focus', function () {
+                mainCurrentIndex = this.selectedIndex;
+            });
+
+            // 页面加载时初始化索引 - 确保初始状态正确
+            if (mainChartType.selectedIndex >= 0) {
+                mainCurrentIndex = mainChartType.selectedIndex;
+            }
+
+            // 选项改变时同步索引 - 确保用户手动选择后索引正确
+            mainChartType.addEventListener('change', function () {
                 mainCurrentIndex = this.selectedIndex;
             });
         }
@@ -5087,10 +5257,8 @@
         function drawPieChart(ctx, canvas, colors) {
             const width = canvas.width;
             const height = canvas.height;
-            const padding = 85;  // 优化边距：确保充足的标签空间
             const centerX = width / 2;
             const centerY = height / 2;
-            const radius = Math.min(width, height) / 2 - padding;
 
             // 清空画布
             ctx.clearRect(0, 0, width, height);
@@ -5111,13 +5279,18 @@
                 const value = baseValue * randomFactor;
                 data.push(value);
                 total += value;
-                labels.push(`类别${String.fromCharCode(65 + i)}`); // A, B, C, ...
+                labels.push(`Series ${String.fromCharCode(65 + i)}`); // A, B, C, ...
             }
 
             // 标准化数据，确保总和为100%
             for (let i = 0; i < data.length; i++) {
                 data[i] = data[i] / total;
             }
+
+            // 根据扇形数量选择不同的绘制风格
+            const isSimpleStyle = segments <= 8;
+            const radius = isSimpleStyle ? Math.min(width, height) / 2 - 85 : Math.min(width, height) / 2 - 120;
+            const padding = isSimpleStyle ? 85 : 120;
 
             // 绘制饼图扇形
             let currentAngle = -Math.PI / 2; // 从12点方向开始
@@ -5139,52 +5312,90 @@
                 ctx.lineWidth = 2;
                 ctx.stroke();
 
-                // 计算标签位置（在扇形中心）
-                const labelAngle = currentAngle + sliceAngle / 2;
-                const labelRadius = radius * 0.7;
-                const labelX = centerX + Math.cos(labelAngle) * labelRadius;
-                const labelY = centerY + Math.sin(labelAngle) * labelRadius;
+                if (isSimpleStyle) {
+                    // 简单风格：在扇形内显示百分比
+                    const labelAngle = currentAngle + sliceAngle / 2;
+                    const labelRadius = radius * 0.7;
+                    const labelX = centerX + Math.cos(labelAngle) * labelRadius;
+                    const labelY = centerY + Math.sin(labelAngle) * labelRadius;
 
-                // 绘制百分比标签
-                const percentage = (data[i] * 100).toFixed(1);
-                ctx.fillStyle = '#ffffff';
-                ctx.font = 'bold 12px "Times New Roman", serif';
-                ctx.textAlign = 'center';
-                ctx.textBaseline = 'middle';
+                    // 绘制百分比标签
+                    const percentage = (data[i] * 100).toFixed(1);
+                    ctx.fillStyle = '#ffffff';
+                    ctx.font = 'bold 12px "Times New Roman", serif';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
 
-                // 添加文字阴影效果
-                ctx.shadowColor = 'rgba(0,0,0,0.5)';
-                ctx.shadowBlur = 2;
-                ctx.fillText(`${percentage}%`, labelX, labelY);
-                ctx.shadowBlur = 0;
+                    // 添加文字阴影效果
+                    ctx.shadowColor = 'rgba(0,0,0,0.5)';
+                    ctx.shadowBlur = 2;
+                    ctx.fillText(`${percentage}%`, labelX, labelY);
+                    ctx.shadowBlur = 0;
+                } else {
+                    // 科研风格：使用线条指向的标签
+                    const labelAngle = currentAngle + sliceAngle / 2;
+                    const labelRadius = radius + 30;
+                    const labelX = centerX + Math.cos(labelAngle) * labelRadius;
+                    const labelY = centerY + Math.sin(labelAngle) * labelRadius;
+
+                    // 绘制指向线条
+                    const lineStartX = centerX + Math.cos(labelAngle) * (radius + 5);
+                    const lineStartY = centerY + Math.sin(labelAngle) * (radius + 5);
+                    const lineEndX = centerX + Math.cos(labelAngle) * (radius + 25);
+                    const lineEndY = centerY + Math.sin(labelAngle) * (radius + 25);
+
+                    ctx.strokeStyle = '#333333';
+                    ctx.lineWidth = 1;
+                    ctx.beginPath();
+                    ctx.moveTo(lineStartX, lineStartY);
+                    ctx.lineTo(lineEndX, lineEndY);
+                    ctx.stroke();
+
+                    // 绘制水平延长线
+                    const finalLabelX = labelX + (labelAngle > Math.PI / 2 && labelAngle < 3 * Math.PI / 2 ? -80 : 20);
+                    ctx.beginPath();
+                    ctx.moveTo(lineEndX, lineEndY);
+                    ctx.lineTo(finalLabelX, lineEndY);
+                    ctx.stroke();
+
+                    // 绘制标签
+                    const percentage = (data[i] * 100).toFixed(1);
+                    ctx.fillStyle = '#333333';
+                    ctx.font = '10px "Times New Roman", serif';
+                    ctx.textAlign = labelAngle > Math.PI / 2 && labelAngle < 3 * Math.PI / 2 ? 'right' : 'left';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillText(`${labels[i]}: ${percentage}%`, finalLabelX, lineEndY);
+                }
 
                 currentAngle += sliceAngle;
             }
 
-            // 绘制图例（右侧垂直排列）
-            const legendX = width - 150;
-            const legendY = 100;
-            const legendItemHeight = 25;
+            if (isSimpleStyle) {
+                // 简单风格：绘制右侧图例
+                const legendX = width - 150;
+                const legendY = 100;
+                const legendItemHeight = 25;
 
-            ctx.font = '12px "Times New Roman", serif';
-            ctx.textAlign = 'left';
-            ctx.textBaseline = 'middle';
+                ctx.font = '12px "Times New Roman", serif';
+                ctx.textAlign = 'left';
+                ctx.textBaseline = 'middle';
 
-            for (let i = 0; i < segments; i++) {
-                const y = legendY + i * legendItemHeight;
-                const color = colors[i % colors.length];
+                for (let i = 0; i < segments; i++) {
+                    const y = legendY + i * legendItemHeight;
+                    const color = colors[i % colors.length];
 
-                // 绘制图例色块
-                ctx.fillStyle = color;
-                ctx.fillRect(legendX, y - 8, 16, 16);
-                ctx.strokeStyle = '#333333';
-                ctx.lineWidth = 1;
-                ctx.strokeRect(legendX, y - 8, 16, 16);
+                    // 绘制图例色块
+                    ctx.fillStyle = color;
+                    ctx.fillRect(legendX, y - 8, 16, 16);
+                    ctx.strokeStyle = '#333333';
+                    ctx.lineWidth = 1;
+                    ctx.strokeRect(legendX, y - 8, 16, 16);
 
-                // 绘制图例文字
-                ctx.fillStyle = '#333333';
-                const percentage = (data[i] * 100).toFixed(1);
-                ctx.fillText(`${labels[i]} (${percentage}%)`, legendX + 25, y);
+                    // 绘制图例文字
+                    ctx.fillStyle = '#333333';
+                    const percentage = (data[i] * 100).toFixed(1);
+                    ctx.fillText(`${labels[i]} (${percentage}%)`, legendX + 25, y);
+                }
             }
 
             // 添加图表标题
