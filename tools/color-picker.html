@@ -4492,11 +4492,10 @@
                 const originalCanvas = document.getElementById('mainChartCanvas');
                 if (originalCanvas) {
                     try {
-                        // 创建高清版本用于下载
+                        // 创建与网页展示相同尺寸的版本用于下载
                         const hdCanvas = document.createElement('canvas');
-                        const dpi = 3; // 3倍高清
-                        hdCanvas.width = originalCanvas.width * dpi;
-                        hdCanvas.height = originalCanvas.height * dpi;
+                        hdCanvas.width = originalCanvas.width; // 保持与网页相同尺寸
+                        hdCanvas.height = originalCanvas.height; // 保持与网页相同尺寸
                         
                         const hdCtx = hdCanvas.getContext('2d');
                         
@@ -4548,10 +4547,10 @@
                                 drawLineChart(hdCtx, hdCanvas, colors);
                         }
                         
-                        // 下载高清图表
+                        // 下载图表（保持与网页相同尺寸）
                         const link = document.createElement('a');
                         link.download = `color-scheme-${chartType}-chart.png`;
-                        link.href = hdCanvas.toDataURL('image/png', 1.0);
+                        link.href = hdCanvas.toDataURL('image/png');
                         link.click();
                         
                         showToast('高清图表已下载');
@@ -4576,24 +4575,19 @@
                     // 获取当前配色方案
                     const colors = currentPalette.length > 0 ? currentPalette : ['#3498db', '#e74c3c', '#2ecc71', '#f39c12', '#9b59b6'];
                     
-                    // 创建高清色卡画布 - 只包含一行小方块
+                    // 创建色卡画布 - 只包含一行小方块，保持标准尺寸
                     const colorCardCanvas = document.createElement('canvas');
-                    const dpi = 3; // 高清倍数
-                    const colorSize = 100 * dpi; // 颜色方块大小
-                    const spacing = 20 * dpi; // 间距
-                    const margin = 40 * dpi;
+                    const colorSize = 100; // 颜色方块大小（标准尺寸）
+                    const spacing = 20; // 间距（标准尺寸）
+                    const margin = 40; // 边距（标准尺寸）
                     
                     // 计算画布尺寸 - 紧凑的一行布局
-                    const cardWidth = Math.max(800 * dpi, colors.length * (colorSize + spacing) - spacing + 2 * margin);
-                    const cardHeight = colorSize + 60 * dpi; // 仅包含方块和下方色值
+                    const cardWidth = Math.max(800, colors.length * (colorSize + spacing) - spacing + 2 * margin);
+                    const cardHeight = colorSize + 60; // 仅包含方块和下方色值
                     
                     colorCardCanvas.width = cardWidth;
                     colorCardCanvas.height = cardHeight;
                     const ctx = colorCardCanvas.getContext('2d');
-                    
-                    // 设置高画质渲染
-                    ctx.imageSmoothingEnabled = true;
-                    ctx.imageSmoothingQuality = 'high';
                     
                     // 设置纯白色背景
                     ctx.fillStyle = '#ffffff';
@@ -4602,7 +4596,7 @@
                     // 计算居中位置
                     const totalWidth = colors.length * colorSize + (colors.length - 1) * spacing;
                     const startX = (cardWidth - totalWidth) / 2;
-                    const centerY = 20 * dpi;
+                    const centerY = 20;
                     
                     // 绘制颜色方块（一行展示）
                     colors.forEach((color, index) => {
@@ -4610,23 +4604,23 @@
                         const y = centerY;
                         
                         // 绘制颜色方块（圆角矩形）
-                        const radius = 8 * dpi;
+                        const radius = 8;
                         ctx.fillStyle = color;
                         roundRect(ctx, x, y, colorSize, colorSize, radius);
                         ctx.fill();
                         
                         // 添加颜色代码（下方居中）
                         ctx.fillStyle = '#333333';
-                        ctx.font = `${18 * dpi}px "Segoe UI", Arial, sans-serif`;
+                        ctx.font = '18px "Segoe UI", Arial, sans-serif';
                         ctx.textAlign = 'center';
                         ctx.textBaseline = 'top';
-                        ctx.fillText(color.toUpperCase(), x + colorSize / 2, y + colorSize + 10 * dpi);
+                        ctx.fillText(color.toUpperCase(), x + colorSize / 2, y + colorSize + 10);
                     });
                     
-                    // 下载高清色卡
+                    // 下载色卡（标准尺寸）
                     const link = document.createElement('a');
                     link.download = `color-palette-${Date.now()}.png`;
-                    link.href = colorCardCanvas.toDataURL('image/png', 1.0);
+                    link.href = colorCardCanvas.toDataURL('image/png');
                     link.click();
                     
                     showToast('色卡已下载');
@@ -4676,11 +4670,10 @@
                         { type: 'contour', name: '等高线图' }
                     ];
 
-                    // 创建高清临时canvas用于生成图表
+                    // 创建与网页展示相同尺寸的临时canvas用于生成图表
                     const tempCanvas = document.createElement('canvas');
-                    const dpi = 3; // 3倍高清
-                    tempCanvas.width = 1000 * dpi;
-                    tempCanvas.height = 500 * dpi;
+                    tempCanvas.width = 1000; // 保持与网页相同尺寸
+                    tempCanvas.height = 500; // 保持与网页相同尺寸
                     const tempCtx = tempCanvas.getContext('2d');
                     
                     // 设置高画质渲染
