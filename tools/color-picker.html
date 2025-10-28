@@ -2132,6 +2132,7 @@
             const generatorPalette = document.getElementById('colorsGrid')?.closest('.palette-display');
             const exportSection = document.querySelector('.export-section');
             const imagePreview = document.getElementById('imagePreview');
+            const mainChartPreview = document.getElementById('mainChartPreview');
 
             // 切换为预设板块视图
             section.style.display = 'block';
@@ -2139,6 +2140,7 @@
             if (generatorPalette) generatorPalette.style.display = 'none';
             if (exportSection) exportSection.style.display = 'none';
             if (imagePreview) imagePreview.style.display = 'none';
+            if (mainChartPreview) mainChartPreview.style.display = 'none'; // 隐藏主页面图表预览
 
             // 默认到精选
             currentPresetCategory = 'curated';
@@ -2153,6 +2155,7 @@
             const generatorPalette = document.getElementById('colorsGrid')?.closest('.palette-display');
             const exportSection = document.querySelector('.export-section');
             const imagePreview = document.getElementById('imagePreview');
+            const mainChartPreview = document.getElementById('mainChartPreview');
 
             // 返回生成器视图
             section.style.display = 'none';
@@ -2160,6 +2163,7 @@
             if (generatorPalette) generatorPalette.style.display = '';
             if (exportSection) exportSection.style.display = '';
             if (imagePreview) imagePreview.style.display = 'none'; // 保持图片预览默认隐藏
+            if (mainChartPreview) mainChartPreview.style.display = ''; // 恢复主页面图表预览的默认显示状态
         }
 
         function applyPresetPalette(colors, name) {
@@ -2169,9 +2173,10 @@
             generateExportCode();
             showToast(`已应用预设：${name} (${colors.length}色)`);
 
-            // 显示主页面图表预览区域并自动生成图表
+            // 只有在主生成器页面才显示图表预览（预设方案板块隐藏时）
+            const presetSection = document.getElementById('presetSection');
             const mainChartPreview = document.getElementById('mainChartPreview');
-            if (mainChartPreview) {
+            if (mainChartPreview && presetSection && presetSection.style.display === 'none') {
                 mainChartPreview.style.display = 'block';
                 // 自动生成主页面图表预览
                 setTimeout(() => {
@@ -2182,9 +2187,10 @@
 
         // 点击色卡直接应用到图表预览
         function applyPresetPaletteToChart(colors, name) {
-            // 直接应用到主页面图表预览
+            // 只有在主生成器页面才显示图表预览（预设方案板块隐藏时）
+            const presetSection = document.getElementById('presetSection');
             const mainChartPreview = document.getElementById('mainChartPreview');
-            if (mainChartPreview) {
+            if (mainChartPreview && presetSection && presetSection.style.display === 'none') {
                 mainChartPreview.style.display = 'block';
                 // 设置当前调色板用于图表预览
                 window.currentChartPalette = colors.slice();
