@@ -413,6 +413,73 @@
             transform: translateY(0);
         }
 
+        /* Preset palettes section */
+        .preset-section {
+            margin-top: 3rem;
+            border-top: 1px solid var(--border);
+            padding-top: 3rem;
+        }
+
+        .preset-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .preset-title {
+            font-size: 1.2rem;
+            font-weight: 500;
+            letter-spacing: -0.01em;
+        }
+
+        .preset-controls {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-bottom: 1.5rem;
+        }
+
+        .preset-tabs {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .preset-tab {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--border);
+            background: transparent;
+            color: var(--text-dim);
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .preset-tab:hover,
+        .preset-tab.active {
+            color: var(--bg);
+            background: var(--text);
+            border-color: var(--text);
+        }
+
+        .swatch-row {
+            display: flex;
+            width: 100%;
+            height: 150px;
+        }
+
+        .swatch {
+            flex: 1;
+        }
+
+        .preset-card .color-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
         /* URL modal styles */
         .url-input {
             width: 100%;
@@ -525,130 +592,15 @@
             .button-group .action-btn {
                 width: 100%;
             }
-        }
 
-        /* 预设方案样式 */
-        .preset-schemes {
-            margin-bottom: 3rem;
-            padding: 2rem;
-            background: var(--bg-secondary);
-            border-radius: 12px;
-            border: 1px solid var(--border);
-        }
+            .preset-controls {
+                flex-direction: column;
+                align-items: flex-start;
+            }
 
-        .preset-categories {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 2rem;
-            flex-wrap: wrap;
-        }
-
-        .preset-category-btn {
-            padding: 0.6rem 1.2rem;
-            border: 1px solid var(--border);
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            font-size: 0.9rem;
-            font-weight: 500;
-        }
-
-        .preset-category-btn:hover {
-            border-color: var(--accent);
-            color: var(--accent);
-        }
-
-        .preset-category-btn.active {
-            background: var(--accent);
-            color: white;
-            border-color: var(--accent);
-        }
-
-        .preset-schemes-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 1.5rem;
-        }
-
-        .preset-scheme-card {
-            background: var(--bg-primary);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 1.5rem;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .preset-scheme-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            border-color: var(--accent);
-        }
-
-        .preset-scheme-title {
-            font-size: 1.1rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-            color: var(--text-primary);
-        }
-
-        .preset-scheme-desc {
-            font-size: 0.9rem;
-            color: var(--text-dim);
-            margin-bottom: 1rem;
-        }
-
-        .preset-scheme-colors {
-            display: flex;
-            gap: 0.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .preset-color-swatch {
-            width: 30px;
-            height: 30px;
-            border-radius: 6px;
-            border: 2px solid var(--border);
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .preset-color-swatch:hover {
-            transform: scale(1.1);
-            border-color: var(--accent);
-        }
-
-        .preset-scheme-actions {
-            display: flex;
-            gap: 0.5rem;
-            justify-content: space-between;
-        }
-
-        .preset-action-btn {
-            padding: 0.4rem 0.8rem;
-            border: 1px solid var(--border);
-            background: var(--bg-secondary);
-            color: var(--text-primary);
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 0.8rem;
-            transition: all 0.2s ease;
-        }
-
-        .preset-action-btn:hover {
-            background: var(--accent);
-            color: white;
-            border-color: var(--accent);
-        }
-
-        .preset-color-count {
-            font-size: 0.8rem;
-            color: var(--text-dim);
-            display: flex;
-            align-items: center;
-            gap: 0.3rem;
+            .preset-tabs {
+                width: 100%;
+            }
         }
     </style>
 </head>
@@ -738,7 +690,7 @@
             <div class="action-buttons">
                 <button class="action-btn primary" onclick="generatePalette()">生成配色</button>
                 <button class="action-btn" onclick="randomColor()">随机颜色</button>
-                <button class="action-btn" onclick="showPresetSchemes()">预设方案</button>
+                <button class="action-btn" onclick="openPresetSection()">预设方案</button>
             </div>
         </div>
 
@@ -750,23 +702,6 @@
                 </div>
                 <div id="extractedColors"></div>
             </div>
-        </div>
-
-        <!-- 预设方案板块 -->
-        <div id="presetSchemes" class="preset-schemes" style="display: none;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
-                <h2 class="palette-title">科研配色预设</h2>
-                <button class="action-btn" onclick="hidePresetSchemes()" style="padding: 0.4rem 1rem;">关闭</button>
-            </div>
-            
-            <div class="preset-categories">
-                <button class="preset-category-btn active" onclick="showPresetCategory('nature')">Nature</button>
-                <button class="preset-category-btn" onclick="showPresetCategory('science')">Science</button>
-                <button class="preset-category-btn" onclick="showPresetCategory('cell')">Cell</button>
-                <button class="preset-category-btn" onclick="showPresetCategory('general')">通用科研</button>
-            </div>
-            
-            <div class="preset-schemes-grid" id="presetSchemesGrid"></div>
         </div>
 
         <div class="palette-display">
@@ -796,9 +731,58 @@
                 </div>
             </div>
         </div>
+
+        <!-- Preset palettes section -->
+        <div class="preset-section" id="presetSection" style="display: none;">
+            <div class="preset-header">
+                <h2 class="preset-title">预设配色方案</h2>
+                <div class="button-group">
+                    <button class="action-btn" onclick="closePresetSection()">返回生成器</button>
+                </div>
+            </div>
+
+            <div class="preset-controls">
+                <div class="control-group">
+                    <span class="control-label">颜色数量</span>
+                    <select class="scheme-select" id="presetColorCount">
+                        <option value="2">2色</option>
+                        <option value="3">3色</option>
+                        <option value="4">4色</option>
+                        <option value="5" selected>5色</option>
+                        <option value="6">6色</option>
+                        <option value="7">7色</option>
+                        <option value="8">8色</option>
+                        <option value="9">9色</option>
+                        <option value="10">10色</option>
+                        <option value="11">11色</option>
+                        <option value="12">12色</option>
+                        <option value="13">13色</option>
+                        <option value="14">14色</option>
+                        <option value="15">15色</option>
+                        <option value="16">16色</option>
+                    </select>
+                </div>
+
+                <div class="preset-tabs">
+                    <button class="preset-tab active" onclick="switchPresetCategory('curated', this)">精选</button>
+                    <button class="preset-tab" onclick="switchPresetCategory('nature', this)">Nature</button>
+                    <button class="preset-tab" onclick="switchPresetCategory('science', this)">Science</button>
+                    <button class="preset-tab" onclick="switchPresetCategory('cell', this)">Cell</button>
+                    <button class="preset-tab" onclick="switchPresetCategory('covers', this)">封面配图</button>
+                </div>
+            </div>
+
+            <div class="palette-display">
+                <h3 class="palette-title" style="margin-top: 0;">方案列表</h3>
+                <div class="colors-grid" id="presetGrid"></div>
+            </div>
+        </div>
     </div>
 
     <div class="toast" id="toast"></div>
+
+    <!-- 预设数据：外部文件，避免插值扩展并便于维护 -->
+    <script src="preset-palettes.js"></script>
 
     <script>
         // Theme toggle
@@ -1309,212 +1293,6 @@
         window.copyCode = copyCode;
         window.copyColor = copyColor;
         window.toggleLock = toggleLock;
-        window.showPresetSchemes = showPresetSchemes;
-        window.hidePresetSchemes = hidePresetSchemes;
-        window.showPresetCategory = showPresetCategory;
-        window.applyPresetScheme = applyPresetScheme;
-
-        // 预设方案数据
-        const presetSchemesData = {
-            nature: [
-                {
-                    name: "Nature 经典蓝",
-                    description: "Nature期刊经典配色，专业简洁",
-                    colors: ["#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", "#8c564b", "#e377c2", "#7f7f7f"],
-                    tags: ["经典", "简洁"]
-                },
-                {
-                    name: "Nature 绿色系",
-                    description: "生物科学常用绿色渐变",
-                    colors: ["#2e8b57", "#3cb371", "#90ee90", "#228b22", "#006400", "#32cd32", "#00ff32", "#adff2f"],
-                    tags: ["生物", "绿色"]
-                },
-                {
-                    name: "Nature 暖色系",
-                    description: "温暖色调，适合生态学图表",
-                    colors: ["#ff6b35", "#f7931e", "#ffd23f", "#ff8c42", "#ff6b6b", "#ffa726", "#ff7043", "#ff5722"],
-                    tags: ["生态", "温暖"]
-                },
-                {
-                    name: "Nature 冷色系",
-                    description: "冷静专业的冷色调",
-                    colors: ["#4a90e2", "#5ba3f5", "#7bb3f0", "#95c5f3", "#b8d4f1", "#3d85c6", "#6fa8dc", "#9fc5e8"],
-                    tags: ["专业", "冷静"]
-                }
-            ],
-            science: [
-                {
-                    name: "Science 标准色",
-                    description: "Science期刊标准配色方案",
-                    colors: ["#4472c4", "#ed7d31", "#a5a5a5", "#ffc000", "#70ad47", "#c55a11", "#7030a0", "#00b0f0"],
-                    tags: ["标准", "权威"]
-                },
-                {
-                    name: "Science 彩虹色",
-                    description: "彩虹渐变，适合多数据系列",
-                    colors: ["#e74c3c", "#f39c12", "#f1c40f", "#2ecc71", "#3498db", "#9b59b6", "#34495e", "#16a085"],
-                    tags: ["彩虹", "渐变"]
-                },
-                {
-                    name: "Science 深色调",
-                    description: "深色背景专用高对比度",
-                    colors: ["#ff6b6b", "#4ecdc4", "#45b7d1", "#96ceb4", "#ffeaa7", "#dda0dd", "#98d8c8", "#f7dc6f"],
-                    tags: ["深色", "高对比"]
-                },
-                {
-                    name: "Science 浅色调",
-                    description: "浅色背景专用柔和配色",
-                    colors: ["#a8dadc", "#457b9d", "#1d3557", "#f1faee", "#e63946", "#a1c181", "#619b8a", "#fcca46"],
-                    tags: ["浅色", "柔和"]
-                }
-            ],
-            cell: [
-                {
-                    name: "Cell 经典紫",
-                    description: "Cell期刊经典紫色系",
-                    colors: ["#8e44ad", "#9b59b6", "#663399", "#9370db", "#ba55d3", "#dda0dd", "#e6e6fa", "#f8f8ff"],
-                    tags: ["经典", "紫色"]
-                },
-                {
-                    name: "Cell 生物色",
-                    description: "细胞生物学专用配色",
-                    colors: ["#27ae60", "#2ecc71", "#1abc9c", "#16a085", "#f39c12", "#e67e22", "#d35400", "#c0392b"],
-                    tags: ["生物", "细胞"]
-                },
-                {
-                    name: "Cell 分子色",
-                    description: "分子生物学研究配色",
-                    colors: ["#3498db", "#2980b9", "#34495e", "#2c3e50", "#e74c3c", "#c0392b", "#f39c12", "#d35400"],
-                    tags: ["分子", "专业"]
-                },
-                {
-                    name: "Cell 医学色",
-                    description: "医学研究专用配色",
-                    colors: ["#e74c3c", "#c0392b", "#a93226", "#922b21", "#7d3c98", "#6c3483", "#5b2c6f", "#4a235a"],
-                    tags: ["医学", "研究"]
-                }
-            ],
-            general: [
-                {
-                    name: "科研通用色",
-                    description: "适用于各种科研图表的通用配色",
-                    colors: ["#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", "#8c564b", "#e377c2", "#7f7f7f"],
-                    tags: ["通用", "标准"]
-                },
-                {
-                    name: "高对比色",
-                    description: "高对比度，适合黑白打印",
-                    colors: ["#000000", "#ff0000", "#00ff00", "#0000ff", "#ffff00", "#ff00ff", "#00ffff", "#808080"],
-                    tags: ["高对比", "打印友好"]
-                },
-                {
-                    name: "色盲友好",
-                    description: "色盲友好的配色方案",
-                    colors: ["#0077bb", "#33bbee", "#009988", "#ee7733", "#cc3311", "#ee3377", "#bbbbbb", "#000000"],
-                    tags: ["色盲友好", "无障碍"]
-                },
-                {
-                    name: "渐变色系",
-                    description: "平滑渐变的色彩系列",
-                    colors: ["#667eea", "#764ba2", "#f093fb", "#f5576c", "#4facfe", "#00f2fe", "#43e97b", "#38f9d7"],
-                    tags: ["渐变", "现代"]
-                }
-            ]
-        };
-
-        // 预设方案功能函数
-        function showPresetSchemes() {
-            document.getElementById('presetSchemes').style.display = 'block';
-            document.querySelector('.palette-display').style.display = 'none';
-            document.querySelector('.export-section').style.display = 'none';
-            showPresetCategory('nature');
-            window.scrollTo({ top: document.getElementById('presetSchemes').offsetTop - 20, behavior: 'smooth' });
-        }
-
-        function hidePresetSchemes() {
-            document.getElementById('presetSchemes').style.display = 'none';
-            document.querySelector('.palette-display').style.display = 'block';
-            document.querySelector('.export-section').style.display = 'block';
-        }
-
-        function showPresetCategory(category) {
-            // 更新按钮状态
-            document.querySelectorAll('.preset-category-btn').forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
-
-            // 显示对应类别的预设方案
-            const schemes = presetSchemesData[category] || [];
-            const grid = document.getElementById('presetSchemesGrid');
-            
-            grid.innerHTML = schemes.map(scheme => `
-                <div class="preset-scheme-card" onclick="applyPresetScheme('${category}', '${scheme.name}')">
-                    <div class="preset-scheme-title">${scheme.name}</div>
-                    <div class="preset-scheme-desc">${scheme.description}</div>
-                    <div class="preset-scheme-colors">
-                        ${scheme.colors.slice(0, 8).map(color => `
-                            <div class="preset-color-swatch" 
-                                 style="background-color: ${color}" 
-                                 onclick="event.stopPropagation(); copyColor('${color}', event)"
-                                 title="点击复制 ${color}">
-                            </div>
-                        `).join('')}
-                    </div>
-                    <div class="preset-scheme-actions">
-                        <div class="preset-color-count">
-                            <span>🎨 ${scheme.colors.length}色</span>
-                            ${scheme.tags.map(tag => `<span style="background: var(--accent); color: white; padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.7rem;">${tag}</span>`).join('')}
-                        </div>
-                        <button class="preset-action-btn" onclick="event.stopPropagation(); applyPresetScheme('${category}', '${scheme.name}')">
-                            应用方案
-                        </button>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        function applyPresetScheme(category, schemeName) {
-            const scheme = presetSchemesData[category].find(s => s.name === schemeName);
-            if (!scheme) return;
-
-            // 获取当前选择的颜色数量
-            const colorCount = parseInt(document.getElementById('colorCount').value);
-            
-            // 根据需要的颜色数量调整配色方案
-            let finalColors = scheme.colors.slice(0, colorCount);
-            
-            // 如果颜色数量不足，进行智能扩展
-            if (finalColors.length < colorCount) {
-                finalColors = expandColorScheme(finalColors, colorCount);
-            }
-
-            // 应用配色方案
-            currentPalette = finalColors;
-            displayPalette();
-            hidePresetSchemes();
-            showToast(`已应用 ${schemeName} 配色方案`);
-        }
-
-        function expandColorScheme(colors, targetCount) {
-            if (colors.length >= targetCount) return colors.slice(0, targetCount);
-            
-            const result = [...colors];
-            const baseColor = colors[0];
-            
-            // 使用HSL插值生成额外颜色
-            const hsl = rgbToHsl(hexToRgb(baseColor).r, hexToRgb(baseColor).g, hexToRgb(baseColor).b);
-            
-            while (result.length < targetCount) {
-                const variation = result.length - colors.length + 1;
-                const newHue = (hsl.h + variation * 30) % 360;
-                const newSat = Math.max(20, Math.min(80, hsl.s + variation * 10));
-                const newLight = Math.max(30, Math.min(70, hsl.l + variation * 5));
-                
-                const newRgb = hslToRgb(newHue, newSat, newLight);
-                result.push(rgbToHex(newRgb.r, newRgb.g, newRgb.b));
-            }
-            
-            return result.slice(0, targetCount);
-        }
 
         // Image color extraction
         const imageUpload = document.getElementById('imageUpload');
@@ -2036,6 +1814,104 @@
             updateColorCountOptions();
             generatePalette(); // 自动生成新的配色方案
         });
+
+        // 预设板块逻辑（外部数据，不做插值扩展）
+
+        let currentPresetCategory = 'curated';
+
+        function renderPresetPalettes(category = currentPresetCategory) {
+            const grid = document.getElementById('presetGrid');
+            const count = parseInt(document.getElementById('presetColorCount').value);
+            const group = (window.PRESET_GROUPS && window.PRESET_GROUPS[category]) || {};
+            const palettes = group[count] || [];
+
+            if (!palettes.length) {
+                grid.innerHTML = `<div style="color: var(--text-dim); font-size: 0.9rem;">该类别暂未包含 ${count} 色预设</div>`;
+                return;
+            }
+
+            grid.innerHTML = palettes.map(p => `
+                <div class="color-card preset-card">
+                    <div class="color-swatch">
+                        <div class="swatch-row">
+                            ${p.colors.map(c => `<div class=\"swatch\" style=\"background:${c}\"></div>`).join('')}
+                        </div>
+                    </div>
+                    <div class="color-info">
+                        <div>
+                            <div class="color-name">${p.name}</div>
+                            <div class="color-values" style="font-size: 0.7rem;">${p.source} · ${count}色</div>
+                        </div>
+                        <button class="action-btn" style="padding: 0.4rem 0.8rem;" onclick='applyPresetPalette(${JSON.stringify(p.colors)}, ${JSON.stringify(p.name)})'>应用</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function switchPresetCategory(category, btn) {
+            currentPresetCategory = category;
+            document.querySelectorAll('.preset-tab').forEach(el => el.classList.remove('active'));
+            if (btn) btn.classList.add('active');
+            renderPresetPalettes(category);
+        }
+
+        function openPresetSection() {
+            const section = document.getElementById('presetSection');
+            const controls = document.querySelector('.controls');
+            const generatorPalette = document.getElementById('colorsGrid')?.closest('.palette-display');
+            const exportSection = document.querySelector('.export-section');
+            const imagePreview = document.getElementById('imagePreview');
+
+            // 切换为预设板块视图
+            section.style.display = 'block';
+            if (controls) controls.style.display = 'none';
+            if (generatorPalette) generatorPalette.style.display = 'none';
+            if (exportSection) exportSection.style.display = 'none';
+            if (imagePreview) imagePreview.style.display = 'none';
+
+            // 默认到精选
+            currentPresetCategory = 'curated';
+            const tabs = document.querySelectorAll('.preset-tab');
+            tabs.forEach((el, i) => el.classList.toggle('active', i === 0));
+            renderPresetPalettes('curated');
+        }
+
+        function closePresetSection() {
+            const section = document.getElementById('presetSection');
+            const controls = document.querySelector('.controls');
+            const generatorPalette = document.getElementById('colorsGrid')?.closest('.palette-display');
+            const exportSection = document.querySelector('.export-section');
+            const imagePreview = document.getElementById('imagePreview');
+
+            // 返回生成器视图
+            section.style.display = 'none';
+            if (controls) controls.style.display = '';
+            if (generatorPalette) generatorPalette.style.display = '';
+            if (exportSection) exportSection.style.display = '';
+            if (imagePreview) imagePreview.style.display = 'none'; // 保持图片预览默认隐藏
+        }
+
+        function applyPresetPalette(colors, name) {
+            currentPalette = colors.slice();
+            lockedColors = new Set();
+            displayPalette();
+            generateExportCode();
+            showToast(`已应用预设：${name} (${colors.length}色)`);
+        }
+
+        // Events for presets
+        const presetCountEl = document.getElementById('presetColorCount');
+        if (presetCountEl) {
+            presetCountEl.addEventListener('change', function () {
+                renderPresetPalettes();
+            });
+        }
+
+        // Expose preset functions
+        window.openPresetSection = openPresetSection;
+        window.closePresetSection = closePresetSection;
+        window.switchPresetCategory = switchPresetCategory;
+        window.applyPresetPalette = applyPresetPalette;
 
         // Initial generation - 先更新颜色数量选项，再生成配色方案
         updateColorCountOptions();
