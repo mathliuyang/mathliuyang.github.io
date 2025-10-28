@@ -4778,7 +4778,16 @@
                                 } catch (gifError) {
                                     console.error('创建GIF失败:', gifError);
                                     console.error('错误堆栈:', gifError.stack);
-                                    showToast('GIF生成失败，继续打包其他文件...');
+                                    
+                                    // 如果GIF生成失败，尝试创建一个简单的文本说明文件
+                                    try {
+                                        const fallbackText = `颜色方案图表合集\n\n包含 ${images.length} 个图表:\n${images.map(img => `- ${img.nameCN}`).join('\n')}\n\n原始GIF生成失败，但所有图表图片已包含在本压缩包中。`;
+                                        zip.file('color-scheme-charts-info.txt', fallbackText);
+                                        showToast('GIF生成失败，已添加说明文件代替');
+                                    } catch (fallbackError) {
+                                        console.error('创建说明文件也失败:', fallbackError);
+                                        showToast('GIF生成失败，继续打包其他文件...');
+                                    }
                                 }
                             } else {
                                 console.log('图表数量不足，跳过GIF生成，当前数量:', images.length);
@@ -4881,12 +4890,12 @@
                     throw new Error('GIF库加载失败');
                 }
 
-                // 创建GIF编码器
+                // 创建GIF编码器 - 使用更简单的配置
                 const gif = new GIF({
-                    workers: 2,
-                    quality: 10,
-                    width: 1000,
-                    height: 500,
+                    workers: 1,  // 减少worker数量
+                    quality: 1,  // 降低质量以提高成功率
+                    width: 800,  // 减小尺寸
+                    height: 400,
                     repeat: 0 // 0表示无限循环
                 });
 
@@ -4899,8 +4908,8 @@
                     
                     // 创建临时canvas来绘制当前帧
                     const frameCanvas = document.createElement('canvas');
-                    frameCanvas.width = 1000;
-                    frameCanvas.height = 500;
+                    frameCanvas.width = 800;
+                    frameCanvas.height = 400;
                     const frameCtx = frameCanvas.getContext('2d');
                     
                     // 设置白色背景
