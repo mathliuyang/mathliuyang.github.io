@@ -959,12 +959,14 @@
                         <option value="violin">小提琴图 (Violin Plot)</option>
                         <option value="scatter">散点图 (Scatter Plot)</option>
                         <option value="contour">等高线图 (Contour Plot)</option>
-                        <option value="flowchart">流程图 (Flowchart)</option>
-                        <option value="mindmap">思维导图 (Mind Map)</option>
-                        <option value="techroadmap">技术路线图 (Tech Roadmap)</option>
-                        <option value="network">网络图 (Network Graph)</option>
-                        <option value="timeline">时间轴 (Timeline)</option>
-                        <option value="orgchart">组织结构图 (Org Chart)</option>
+                        <optgroup label="━━━ 高级科研图表 (Advanced Research Charts) ━━━">
+                            <option value="flowchart">流程图 (Flowchart - Nature Style)</option>
+                            <option value="roadmap">技术路线图 (Technology Roadmap)</option>
+                            <option value="mindmap">思维导图 (Mind Map)</option>
+                            <option value="network">网络图 (Network Diagram)</option>
+                            <option value="timeline">时间轴图 (Timeline Chart)</option>
+                            <option value="orgchart">组织架构图 (Organizational Chart)</option>
+                        </optgroup>
                     </select>
                     <button id="mainGenerateChart" class="action-btn primary">生成预览</button>
                     <button id="downloadColorCard" class="action-btn">下载色卡</button>
@@ -3191,20 +3193,20 @@
                     case 'flowchart':
                         drawFlowchart(ctx, canvas, colors);
                         break;
+                    case 'roadmap':
+                        drawRoadmap(ctx, canvas.width, canvas.height, colors);
+                        break;
                     case 'mindmap':
                         drawMindMap(ctx, canvas, colors);
                         break;
-                    case 'techroadmap':
-                        drawTechRoadmap(ctx, canvas, colors);
-                        break;
                     case 'network':
-                        drawNetwork(ctx, canvas, colors);
+                        drawNetworkDiagram(ctx, canvas, colors);
                         break;
                     case 'timeline':
                         drawTimeline(ctx, canvas, colors);
                         break;
                     case 'orgchart':
-                        drawOrgChart(ctx, canvas, colors);
+                        drawOrganizationalChart(ctx, canvas.width, canvas.height, colors);
                         break;
                     default:
                         drawLineChart(ctx, canvas, colors);
@@ -3224,19 +3226,19 @@
                 'pie': '饼图',
                 'box': '箱线图',
                 'heatmap': '热力图',
-                'distribution': '函数分布图',
+                'distribution': '面积图',
                 'radar': '雷达图',
                 'violin': '小提琴图',
                 'scatter': '散点图',
                 'contour': '等高线图',
                 'flowchart': '流程图',
+                'roadmap': '技术路线图',
                 'mindmap': '思维导图',
-                'techroadmap': '技术路线图',
                 'network': '网络图',
-                'timeline': '时间轴',
-                'orgchart': '组织结构图'
+                'timeline': '时间轴图',
+                'orgchart': '组织架构图'
             };
-            return names[type] || '图表';
+            return names[type] || '未知图表';
         }
 
         function drawLineChart(ctx, canvas, colors) {
@@ -4998,7 +5000,7 @@
                     // 获取当前配色
                     const colors = window.currentChartPalette || (currentPalette.length > 0 ? currentPalette : ['#3498db', '#e74c3c', '#2ecc71', '#f39c12', '#9b59b6', '#1abc9c', '#34495e', '#e67e22']);
 
-                    // 所有支持的图表类型
+                    // 所有支持的图表类型 - 包含所有图表
                     const chartTypes = [
                         { type: 'line', name: '线性图' },
                         { type: 'bar', name: '柱状图' },
@@ -5010,12 +5012,12 @@
                         { type: 'violin', name: '小提琴图' },
                         { type: 'scatter', name: '散点图' },
                         { type: 'contour', name: '等高线图' },
-                        { type: 'flowchart', name: '流程图' },
+                        { type: 'flowchart', name: '科研流程图' },
+                        { type: 'roadmap', name: '技术路线图' },
                         { type: 'mindmap', name: '思维导图' },
-                        { type: 'techroadmap', name: '技术路线图' },
                         { type: 'network', name: '网络图' },
-                        { type: 'timeline', name: '时间轴' },
-                        { type: 'orgchart', name: '组织结构图' }
+                        { type: 'timeline', name: '时间轴图' },
+                        { type: 'orgchart', name: '组织架构图' }
                     ];
 
                     // 创建与网页展示相同尺寸的临时canvas用于生成图表
@@ -5074,20 +5076,20 @@
                                 case 'flowchart':
                                     drawFlowchart(tempCtx, tempCanvas, colors);
                                     break;
+                                case 'roadmap':
+                                    drawRoadmap(tempCtx, tempCanvas.width, tempCanvas.height, colors);
+                                    break;
                                 case 'mindmap':
                                     drawMindMap(tempCtx, tempCanvas, colors);
                                     break;
-                                case 'techroadmap':
-                                    drawTechRoadmap(tempCtx, tempCanvas, colors);
-                                    break;
                                 case 'network':
-                                    drawNetwork(tempCtx, tempCanvas, colors);
+                                    drawNetworkDiagram(tempCtx, tempCanvas, colors);
                                     break;
                                 case 'timeline':
                                     drawTimeline(tempCtx, tempCanvas, colors);
                                     break;
                                 case 'orgchart':
-                                    drawOrgChart(tempCtx, tempCanvas, colors);
+                                    drawOrganizationalChart(tempCtx, tempCanvas.width, tempCanvas.height, colors);
                                     break;
                             }
 
@@ -5473,13 +5475,41 @@
                     ctx.lineTo(finalLabelX, lineEndY);
                     ctx.stroke();
 
-                    // 绘制标签
+                    // 绘制标签 - 增强可读性和防重叠
                     const percentage = (data[i] * 100).toFixed(1);
-                    ctx.fillStyle = '#333333';
-                    ctx.font = '10px "Times New Roman", serif';
+                    ctx.fillStyle = '#2c3e50';
+                    ctx.font = 'bold 11px "Times New Roman", serif';
                     ctx.textAlign = labelAngle > Math.PI / 2 && labelAngle < 3 * Math.PI / 2 ? 'right' : 'left';
                     ctx.textBaseline = 'middle';
-                    ctx.fillText(`${labels[i]}: ${percentage}%`, finalLabelX, lineEndY);
+
+                    // 添加文字阴影增强可读性
+                    ctx.shadowColor = 'rgba(255,255,255,0.8)';
+                    ctx.shadowBlur = 2;
+                    ctx.shadowOffsetX = 1;
+                    ctx.shadowOffsetY = 1;
+
+                    // 确保标签不会重叠 - 调整Y位置
+                    let adjustedY = lineEndY;
+                    if (i > 0) {
+                        // 计算前一个扇形的角度位置
+                        let prevAngle = -Math.PI / 2; // 从12点方向开始
+                        for (let j = 0; j < i - 1; j++) {
+                            prevAngle += data[j] * 2 * Math.PI;
+                        }
+                        prevAngle += data[i - 1] * Math.PI; // 前一个扇形的中点
+                        const prevY = centerY + (radius + 30) * Math.sin(prevAngle);
+                        if (Math.abs(adjustedY - prevY) < 20) {
+                            adjustedY = prevY + (adjustedY > prevY ? 20 : -20);
+                        }
+                    }
+
+                    ctx.fillText(`${labels[i]}: ${percentage}%`, finalLabelX, adjustedY);
+
+                    // 重置阴影
+                    ctx.shadowColor = 'transparent';
+                    ctx.shadowBlur = 0;
+                    ctx.shadowOffsetX = 0;
+                    ctx.shadowOffsetY = 0;
                 }
 
                 currentAngle += sliceAngle;
@@ -5517,255 +5547,1179 @@
             drawChartTitle(ctx, width, '饼图 - 智核学术');
         }
 
-        window.applyPresetPalette = applyPresetPalette;
+        // ========== 高级科研图表函数 (Advanced Research Charts) ==========
 
-        // 添加新的图表绘制函数
         function drawFlowchart(ctx, canvas, colors) {
             const width = canvas.width;
             const height = canvas.height;
+            const padding = 80; // 增加边距
 
-            // 清空画布
-            ctx.clearRect(0, 0, width, height);
-            ctx.fillStyle = '#ffffff';
-            ctx.fillRect(0, 0, width, height);
-
-            // Nature风格流程图设计
-            const centerX = width / 2;
-            const centerY = height / 2;
-            const nodeWidth = 120;
-            const nodeHeight = 60;
-            const nodeSpacing = 80;
-
-            // 设置Nature期刊风格的字体和颜色
-            ctx.font = '14px "Arial", sans-serif';
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-
-            // 恢复字体
-            ctx.font = '14px "Arial", sans-serif';
-
-            // 定义流程节点
-            const nodes = [
-                { x: centerX, y: centerY - nodeSpacing * 2, text: 'Sample\nCollection', type: 'start' },
-                { x: centerX, y: centerY - nodeSpacing, text: 'Preprocessing', type: 'process' },
-                { x: centerX - nodeSpacing * 1.5, y: centerY, text: 'Method A', type: 'decision' },
-                { x: centerX + nodeSpacing * 1.5, y: centerY, text: 'Method B', type: 'decision' },
-                { x: centerX - nodeSpacing * 1.5, y: centerY + nodeSpacing, text: 'Analysis A', type: 'process' },
-                { x: centerX + nodeSpacing * 1.5, y: centerY + nodeSpacing, text: 'Analysis B', type: 'process' },
-                { x: centerX, y: centerY + nodeSpacing * 2, text: 'Data Integration', type: 'process' },
-                { x: centerX, y: centerY + nodeSpacing * 3, text: 'Results', type: 'end' }
-            ];
-
-            // 绘制连接线
-            ctx.strokeStyle = colors[1] || '#7f8c8d';
-            ctx.lineWidth = 2;
-
-            // 垂直主线
-            ctx.beginPath();
-            ctx.moveTo(centerX, centerY - nodeSpacing * 2 + nodeHeight / 2);
-            ctx.lineTo(centerX, centerY - nodeSpacing - nodeHeight / 2);
-            ctx.stroke();
-
-            // 分支线
-            ctx.beginPath();
-            ctx.moveTo(centerX, centerY - nodeSpacing + nodeHeight / 2);
-            ctx.lineTo(centerX - nodeSpacing * 1.5, centerY - nodeHeight / 2);
-            ctx.moveTo(centerX, centerY - nodeSpacing + nodeHeight / 2);
-            ctx.lineTo(centerX + nodeSpacing * 1.5, centerY - nodeHeight / 2);
-            ctx.stroke();
-
-            // 汇聚线
-            ctx.beginPath();
-            ctx.moveTo(centerX - nodeSpacing * 1.5, centerY + nodeSpacing + nodeHeight / 2);
-            ctx.lineTo(centerX, centerY + nodeSpacing * 2 - nodeHeight / 2);
-            ctx.moveTo(centerX + nodeSpacing * 1.5, centerY + nodeSpacing + nodeHeight / 2);
-            ctx.lineTo(centerX, centerY + nodeSpacing * 2 - nodeHeight / 2);
-            ctx.stroke();
-
-            // 最终线
-            ctx.beginPath();
-            ctx.moveTo(centerX, centerY + nodeSpacing * 2 + nodeHeight / 2);
-            ctx.lineTo(centerX, centerY + nodeSpacing * 3 - nodeHeight / 2);
-            ctx.stroke();
-
-            // 绘制箭头
-            function drawArrow(x, y, angle) {
-                ctx.save();
-                ctx.translate(x, y);
-                ctx.rotate(angle);
-                ctx.beginPath();
-                ctx.moveTo(-8, -5);
-                ctx.lineTo(0, 0);
-                ctx.lineTo(-8, 5);
-                ctx.closePath();
-                ctx.fillStyle = colors[1] || '#7f8c8d';
-                ctx.fill();
-                ctx.restore();
+            // 颜色鲁棒性检查
+            if (!colors || colors.length === 0) {
+                colors = ['#3498db', '#e74c3c', '#2ecc71', '#f39c12', '#9b59b6', '#1abc9c', '#34495e', '#e67e22'];
             }
 
-            // 在关键位置绘制箭头
-            drawArrow(centerX, centerY - nodeSpacing - nodeHeight / 2, Math.PI / 2);
-            drawArrow(centerX, centerY + nodeSpacing * 2 - nodeHeight / 2, Math.PI / 2);
-            drawArrow(centerX, centerY + nodeSpacing * 3 - nodeHeight / 2, Math.PI / 2);
+            // 清空画布并设置渐变背景
+            ctx.clearRect(0, 0, width, height);
+            const bgGradient = ctx.createLinearGradient(0, 0, width, height);
+            bgGradient.addColorStop(0, 'rgba(240, 248, 255, 0.8)');
+            bgGradient.addColorStop(1, 'rgba(230, 240, 250, 0.8)');
+            ctx.fillStyle = bgGradient;
+            ctx.fillRect(0, 0, width, height);
 
-            // 绘制节点
-            nodes.forEach((node, index) => {
-                const color = colors[index % colors.length];
+            // 动态配色适应：确保所有颜色都能被使用
+            const colorCount = colors.length;
+            const nodeColorMapping = (index) => colors[index % colorCount];
+            const connectionColorMapping = (index) => colors[(index + Math.floor(colorCount / 2)) % colorCount];
 
-                // 根据节点类型绘制不同形状
-                if (node.type === 'start' || node.type === 'end') {
-                    // 圆角矩形
-                    const radius = 15;
-                    ctx.fillStyle = color;
-                    roundRect(ctx, node.x - nodeWidth / 2, node.y - nodeHeight / 2, nodeWidth, nodeHeight, radius);
-                    ctx.fill();
-                    ctx.strokeStyle = '#2c3e50';
-                    ctx.lineWidth = 2;
-                    ctx.stroke();
-                } else if (node.type === 'decision') {
-                    // 菱形
-                    ctx.fillStyle = color;
-                    ctx.beginPath();
-                    ctx.moveTo(node.x, node.y - nodeHeight / 2);
-                    ctx.lineTo(node.x + nodeWidth / 2, node.y);
-                    ctx.lineTo(node.x, node.y + nodeHeight / 2);
-                    ctx.lineTo(node.x - nodeWidth / 2, node.y);
-                    ctx.closePath();
-                    ctx.fill();
-                    ctx.strokeStyle = '#2c3e50';
-                    ctx.lineWidth = 2;
-                    ctx.stroke();
-                } else {
-                    // 矩形
-                    ctx.fillStyle = color;
-                    ctx.fillRect(node.x - nodeWidth / 2, node.y - nodeHeight / 2, nodeWidth, nodeHeight);
-                    ctx.strokeStyle = '#2c3e50';
-                    ctx.lineWidth = 2;
-                    ctx.strokeRect(node.x - nodeWidth / 2, node.y - nodeHeight / 2, nodeWidth, nodeHeight);
+            // 动态定义节点 - 根据颜色数量调整节点数量和分布
+            let nodes = [];
+            if (colorCount >= 10) {
+                // 超丰富流程图 - 完整学术研究流程
+                nodes = [
+                    { id: 'literature', text: 'Literature\nReview', x: 0.1, y: 0.1, type: 'rect', width: 120, height: 60 },
+                    { id: 'hypothesis', text: 'Research\nHypothesis', x: 0.3, y: 0.1, type: 'ellipse', width: 130, height: 65 },
+                    { id: 'ethics', text: 'Ethics\nApproval', x: 0.5, y: 0.1, type: 'rect', width: 110, height: 60 },
+                    { id: 'design', text: 'Experimental\nDesign', x: 0.7, y: 0.1, type: 'rect', width: 120, height: 60 },
+                    { id: 'pilot', text: 'Pilot\nStudy', x: 0.9, y: 0.1, type: 'rect', width: 100, height: 60 },
+
+                    { id: 'data', text: 'Data\nCollection', x: 0.9, y: 0.35, type: 'rect', width: 110, height: 60 },
+                    { id: 'quality', text: 'Quality\nControl', x: 0.7, y: 0.35, type: 'diamond', width: 120, height: 70 },
+                    { id: 'analysis', text: 'Statistical\nAnalysis', x: 0.5, y: 0.35, type: 'rect', width: 120, height: 60 },
+                    { id: 'validation', text: 'Result\nValidation', x: 0.3, y: 0.35, type: 'rect', width: 120, height: 60 },
+
+                    { id: 'decision', text: 'Significant\nResults?', x: 0.5, y: 0.6, type: 'diamond', width: 140, height: 80 },
+                    { id: 'revise', text: 'Hypothesis\nRefinement', x: 0.1, y: 0.6, type: 'rect', width: 130, height: 65 },
+                    { id: 'manuscript', text: 'Manuscript\nPreparation', x: 0.7, y: 0.6, type: 'rect', width: 130, height: 65 },
+
+                    { id: 'review', text: 'Peer\nReview', x: 0.9, y: 0.6, type: 'rect', width: 100, height: 60 },
+                    { id: 'journal', text: 'Journal\nSubmission', x: 0.5, y: 0.85, type: 'ellipse', width: 140, height: 70 }
+                ];
+            } else if (colorCount >= 7) {
+                // 完整流程图 - 改善布局避免遮挡
+                nodes = [
+                    { id: 'start', text: 'Research\nHypothesis', x: 0.15, y: 0.12, type: 'ellipse', width: 130, height: 65 },
+                    { id: 'design', text: 'Experimental\nDesign', x: 0.45, y: 0.12, type: 'rect', width: 120, height: 60 },
+                    { id: 'data', text: 'Data\nCollection', x: 0.75, y: 0.12, type: 'rect', width: 110, height: 60 },
+                    { id: 'analysis', text: 'Statistical\nAnalysis', x: 0.75, y: 0.38, type: 'rect', width: 120, height: 60 },
+                    { id: 'decision', text: 'Significant\nResults?', x: 0.45, y: 0.45, type: 'diamond', width: 130, height: 75 },
+                    { id: 'revise', text: 'Hypothesis\nRefinement', x: 0.15, y: 0.45, type: 'rect', width: 120, height: 60 },
+                    { id: 'publish', text: 'Manuscript\nPreparation', x: 0.45, y: 0.72, type: 'rect', width: 130, height: 65 },
+                    { id: 'journal', text: 'Journal\nSubmission', x: 0.45, y: 0.88, type: 'ellipse', width: 130, height: 65 }
+                ];
+            } else if (colorCount >= 5) {
+                // 简化流程图 - 更好的间距
+                nodes = [
+                    { id: 'start', text: 'Research\nStart', x: 0.2, y: 0.18, type: 'ellipse', width: 120, height: 60 },
+                    { id: 'design', text: 'Design &\nData Collection', x: 0.5, y: 0.28, type: 'rect', width: 140, height: 65 },
+                    { id: 'analysis', text: 'Analysis &\nValidation', x: 0.8, y: 0.38, type: 'rect', width: 130, height: 60 },
+                    { id: 'decision', text: 'Results\nAcceptable?', x: 0.5, y: 0.58, type: 'diamond', width: 130, height: 75 },
+                    { id: 'publish', text: 'Publication', x: 0.5, y: 0.82, type: 'ellipse', width: 120, height: 60 }
+                ];
+            } else {
+                // 最简流程图 - 更好的分布
+                nodes = [
+                    { id: 'start', text: 'Research\nStart', x: 0.25, y: 0.25, type: 'ellipse', width: 130, height: 65 },
+                    { id: 'process', text: 'Research\nProcess', x: 0.5, y: 0.5, type: 'rect', width: 140, height: 75 },
+                    { id: 'end', text: 'Research\nComplete', x: 0.75, y: 0.75, type: 'ellipse', width: 130, height: 65 }
+                ];
+            }
+
+            // 动态定义连接关系 - 改善标签位置
+            let connections = [];
+            if (colorCount >= 10) {
+                connections = [
+                    { from: 'literature', to: 'hypothesis' },
+                    { from: 'hypothesis', to: 'ethics' },
+                    { from: 'ethics', to: 'design' },
+                    { from: 'design', to: 'pilot' },
+                    { from: 'pilot', to: 'data' },
+                    { from: 'data', to: 'quality' },
+                    { from: 'quality', to: 'analysis', label: 'Pass' },
+                    { from: 'quality', to: 'data', label: 'Fail' },
+                    { from: 'analysis', to: 'validation' },
+                    { from: 'validation', to: 'decision' },
+                    { from: 'decision', to: 'manuscript', label: 'Yes' },
+                    { from: 'decision', to: 'revise', label: 'No' },
+                    { from: 'revise', to: 'hypothesis' },
+                    { from: 'manuscript', to: 'review' },
+                    { from: 'review', to: 'journal' }
+                ];
+            } else if (colorCount >= 7) {
+                connections = [
+                    { from: 'start', to: 'design' },
+                    { from: 'design', to: 'data' },
+                    { from: 'data', to: 'analysis' },
+                    { from: 'analysis', to: 'decision' },
+                    { from: 'decision', to: 'publish', label: 'Yes', labelOffset: { x: 15, y: -10 } },
+                    { from: 'decision', to: 'revise', label: 'No', labelOffset: { x: -15, y: -10 } },
+                    { from: 'revise', to: 'design' },
+                    { from: 'publish', to: 'journal' }
+                ];
+            } else if (colorCount >= 5) {
+                connections = [
+                    { from: 'start', to: 'design' },
+                    { from: 'design', to: 'analysis' },
+                    { from: 'analysis', to: 'decision' },
+                    { from: 'decision', to: 'publish', label: 'Yes', labelOffset: { x: 0, y: -15 } },
+                    { from: 'decision', to: 'design', label: 'No', labelOffset: { x: -20, y: 0 } }
+                ];
+            } else {
+                connections = [
+                    { from: 'start', to: 'process' },
+                    { from: 'process', to: 'end' }
+                ];
+            }
+
+            // 绘制连接线（先绘制以免覆盖节点）- 使用拐弯线条避免遮挡
+            connections.forEach((conn, index) => {
+                const fromNode = nodes.find(n => n.id === conn.from);
+                const toNode = nodes.find(n => n.id === conn.to);
+
+                if (fromNode && toNode) {
+                    const fromX = fromNode.x * (width - 2 * padding) + padding;
+                    const fromY = fromNode.y * (height - 2 * padding) + padding;
+                    const toX = toNode.x * (width - 2 * padding) + padding;
+                    const toY = toNode.y * (height - 2 * padding) + padding;
+
+                    // 使用动态颜色映射
+                    const lineColor = connectionColorMapping(index);
+                    ctx.strokeStyle = lineColor;
+                    ctx.lineWidth = 3;
+                    ctx.setLineDash([]);
+
+                    // 绘制带阴影的箭头线
+                    ctx.shadowColor = 'rgba(0, 0, 0, 0.2)';
+                    ctx.shadowBlur = 4;
+                    ctx.shadowOffsetX = 2;
+                    ctx.shadowOffsetY = 2;
+
+                    // 使用拐弯线条避免遮挡
+                    drawCurvedArrow(ctx, fromX, fromY, toX, toY, lineColor);
+
+                    // 重置阴影
+                    ctx.shadowColor = 'transparent';
+                    ctx.shadowBlur = 0;
+                    ctx.shadowOffsetX = 0;
+                    ctx.shadowOffsetY = 0;
+
+                    // 添加标签 - 改善标签位置避免遮挡
+                    if (conn.label) {
+                        let labelX = (fromX + toX) / 2;
+                        let labelY = (fromY + toY) / 2;
+
+                        // 应用标签偏移量
+                        if (conn.labelOffset) {
+                            labelX += conn.labelOffset.x;
+                            labelY += conn.labelOffset.y;
+                        }
+
+                        ctx.font = 'bold 12px "Times New Roman", serif';
+                        ctx.textAlign = 'center';
+                        ctx.textBaseline = 'middle';
+
+                        // 添加白色背景和边框 - 增大背景区域
+                        const textWidth = ctx.measureText(conn.label).width;
+                        const bgPadding = 8;
+                        const bgHeight = 22;
+
+                        // 背景阴影
+                        ctx.shadowColor = 'rgba(0, 0, 0, 0.15)';
+                        ctx.shadowBlur = 3;
+                        ctx.shadowOffsetX = 1;
+                        ctx.shadowOffsetY = 1;
+
+                        ctx.fillStyle = '#ffffff';
+                        ctx.fillRect(labelX - textWidth / 2 - bgPadding, labelY - bgHeight / 2, textWidth + 2 * bgPadding, bgHeight);
+
+                        // 重置阴影
+                        ctx.shadowColor = 'transparent';
+                        ctx.shadowBlur = 0;
+                        ctx.shadowOffsetX = 0;
+                        ctx.shadowOffsetY = 0;
+
+                        ctx.strokeStyle = lineColor;
+                        ctx.lineWidth = 1.5;
+                        ctx.strokeRect(labelX - textWidth / 2 - bgPadding, labelY - bgHeight / 2, textWidth + 2 * bgPadding, bgHeight);
+
+                        ctx.fillStyle = lineColor;
+                        ctx.fillText(conn.label, labelX, labelY);
+                    }
                 }
-
-                // 绘制文字
-                ctx.fillStyle = '#ffffff';
-                ctx.font = 'bold 12px "Arial", sans-serif';
-                const lines = node.text.split('\n');
-                lines.forEach((line, lineIndex) => {
-                    ctx.fillText(line, node.x, node.y + (lineIndex - (lines.length - 1) / 2) * 16);
-                });
             });
 
+            // 绘制节点（带渐变和阴影效果）
+            nodes.forEach((node, index) => {
+                const x = node.x * (width - 2 * padding) + padding;
+                const y = node.y * (height - 2 * padding) + padding;
+                const nodeWidth = node.width;
+                const nodeHeight = node.height;
+                const color = nodeColorMapping(index);
+
+                // 节点阴影
+                ctx.shadowColor = 'rgba(0, 0, 0, 0.25)';
+                ctx.shadowBlur = 8;
+                ctx.shadowOffsetX = 3;
+                ctx.shadowOffsetY = 3;
+
+                // 创建渐变效果
+                const gradient = ctx.createLinearGradient(x - nodeWidth / 2, y - nodeHeight / 2, x - nodeWidth / 2, y + nodeHeight / 2);
+                gradient.addColorStop(0, color);
+                gradient.addColorStop(1, adjustBrightness(color, -0.2));
+                ctx.fillStyle = gradient;
+
+                ctx.strokeStyle = adjustBrightness(color, -0.3);
+                ctx.lineWidth = 2;
+
+                // 根据节点类型绘制不同形状
+                switch (node.type) {
+                    case 'ellipse':
+                        ctx.beginPath();
+                        ctx.ellipse(x, y, nodeWidth / 2, nodeHeight / 2, 0, 0, 2 * Math.PI);
+                        ctx.fill();
+                        ctx.stroke();
+                        break;
+                    case 'diamond':
+                        ctx.beginPath();
+                        ctx.moveTo(x, y - nodeHeight / 2);
+                        ctx.lineTo(x + nodeWidth / 2, y);
+                        ctx.lineTo(x, y + nodeHeight / 2);
+                        ctx.lineTo(x - nodeWidth / 2, y);
+                        ctx.closePath();
+                        ctx.fill();
+                        ctx.stroke();
+                        break;
+                    default: // rect
+                        ctx.fillRect(x - nodeWidth / 2, y - nodeHeight / 2, nodeWidth, nodeHeight);
+                        ctx.strokeRect(x - nodeWidth / 2, y - nodeHeight / 2, nodeWidth, nodeHeight);
+                        break;
+                }
+
+                // 重置阴影
+                ctx.shadowColor = 'transparent';
+                ctx.shadowBlur = 0;
+                ctx.shadowOffsetX = 0;
+                ctx.shadowOffsetY = 0;
+
+                // 绘制文本（带阴影效果）
+                ctx.shadowColor = 'rgba(0, 0, 0, 0.3)';
+                ctx.shadowBlur = 2;
+                ctx.fillStyle = '#ffffff';
+                ctx.font = 'bold 12px "Times New Roman", serif';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+
+                const lines = node.text.split('\n');
+                const lineHeight = 15;
+                const startY = y - (lines.length - 1) * lineHeight / 2;
+
+                lines.forEach((line, lineIndex) => {
+                    ctx.fillText(line, x, startY + lineIndex * lineHeight);
+                });
+
+                // 重置阴影
+                ctx.shadowColor = 'transparent';
+                ctx.shadowBlur = 0;
+            });
+
+            // 辅助函数：调整颜色亮度
+            function adjustBrightness(color, amount) {
+                const hex = color.replace('#', '');
+                const r = Math.max(0, Math.min(255, parseInt(hex.substr(0, 2), 16) + amount * 255));
+                const g = Math.max(0, Math.min(255, parseInt(hex.substr(2, 2), 16) + amount * 255));
+                const b = Math.max(0, Math.min(255, parseInt(hex.substr(4, 2), 16) + amount * 255));
+                return `#${Math.round(r).toString(16).padStart(2, '0')}${Math.round(g).toString(16).padStart(2, '0')}${Math.round(b).toString(16).padStart(2, '0')}`;
+            }
+
             // 添加图表标题
-            drawChartTitle(ctx, width, '流程图 - 智核学术');
+            drawChartTitle(ctx, width, '科研流程图 - 智核学术');
+        }
+
+        function drawRoadmap(ctx, width, height, colors) {
+            const padding = 80; // 增加边距
+
+            // 颜色鲁棒性检查
+            if (!colors || colors.length === 0) {
+                colors = ['#3498db', '#e74c3c', '#2ecc71', '#f39c12', '#9b59b6', '#1abc9c', '#34495e', '#e67e22'];
+            }
+
+            // 清空画布并设置渐变背景
+            ctx.clearRect(0, 0, width, height);
+            const bgGradient = ctx.createLinearGradient(0, 0, width, height);
+            bgGradient.addColorStop(0, 'rgba(245, 250, 255, 0.9)');
+            bgGradient.addColorStop(1, 'rgba(235, 245, 255, 0.9)');
+            ctx.fillStyle = bgGradient;
+            ctx.fillRect(0, 0, width, height);
+
+            // 动态配色适应：确保所有颜色都能被使用
+            const colorCount = colors.length;
+            const phaseColorMapping = (index) => colors[index % colorCount];
+            const connectionColorMapping = (index) => colors[(index + Math.floor(colorCount / 3)) % colorCount];
+
+            // 动态定义阶段 - 根据颜色数量调整阶段数量和内容，改善布局避免重叠
+            let phases = [];
+            if (colorCount >= 10) {
+                // 超丰富技术路线图 - 多行布局，增大两行间距
+                phases = [
+                    // 第一行 - 增加水平间距，调整垂直位置
+                    { title: 'Phase I\nFoundation', items: ['Literature Review', 'Methodology'], x: 0.1, y: 0.18, duration: '2 months' },
+                    { title: 'Phase II\nDesign', items: ['System Design', 'Architecture'], x: 0.28, y: 0.18, duration: '2 months' },
+                    { title: 'Phase III\nPrototype', items: ['Initial Build', 'Testing'], x: 0.46, y: 0.18, duration: '3 months' },
+                    { title: 'Phase IV\nDevelopment', items: ['Full Implementation', 'Integration'], x: 0.64, y: 0.18, duration: '4 months' },
+                    { title: 'Phase V\nOptimization', items: ['Performance Tuning', 'Bug Fixes'], x: 0.82, y: 0.18, duration: '2 months' },
+
+                    // 第二行 - 显著增大垂直间距，优化水平分布
+                    { title: 'Phase VI\nValidation', items: ['Comprehensive Testing', 'User Studies'], x: 0.1, y: 0.78, duration: '3 months' },
+                    { title: 'Phase VII\nDeployment', items: ['Production Setup', 'Launch'], x: 0.28, y: 0.78, duration: '2 months' },
+                    { title: 'Phase VIII\nMaintenance', items: ['Support', 'Updates'], x: 0.46, y: 0.78, duration: 'Ongoing' },
+                    { title: 'Phase IX\nEvolution', items: ['Feature Enhancement', 'Scaling'], x: 0.64, y: 0.78, duration: 'Ongoing' },
+                    { title: 'Phase X\nLegacy', items: ['Documentation', 'Knowledge Transfer'], x: 0.82, y: 0.78, duration: '1 month' }
+                ];
+            } else if (colorCount >= 6) {
+                // 完整技术路线图 - 改善间距
+                phases = [
+                    { title: 'Phase I\nFoundation', items: ['Literature Review', 'Methodology Design', 'Pilot Study'], x: 0.12, y: 0.4, duration: '3 months' },
+                    { title: 'Phase II\nDevelopment', items: ['Algorithm Design', 'Prototype Build', 'Initial Testing'], x: 0.28, y: 0.4, duration: '4 months' },
+                    { title: 'Phase III\nValidation', items: ['Comprehensive Testing', 'Performance Analysis', 'Optimization'], x: 0.44, y: 0.4, duration: '3 months' },
+                    { title: 'Phase IV\nIntegration', items: ['System Integration', 'Field Testing', 'Documentation'], x: 0.6, y: 0.4, duration: '2 months' },
+                    { title: 'Phase V\nDeployment', items: ['Production Setup', 'Launch', 'Monitoring'], x: 0.76, y: 0.4, duration: '2 months' },
+                    { title: 'Phase VI\nMaintenance', items: ['Bug Fixes', 'Updates', 'Support'], x: 0.92, y: 0.4, duration: 'Ongoing' }
+                ];
+            } else if (colorCount >= 4) {
+                // 标准技术路线图 - 更好的分布
+                phases = [
+                    { title: 'Phase I\nFoundation', items: ['Research', 'Design', 'Planning'], x: 0.15, y: 0.4, duration: '3 months' },
+                    { title: 'Phase II\nDevelopment', items: ['Implementation', 'Testing', 'Refinement'], x: 0.4, y: 0.4, duration: '4 months' },
+                    { title: 'Phase III\nValidation', items: ['Validation', 'Analysis', 'Optimization'], x: 0.65, y: 0.4, duration: '3 months' },
+                    { title: 'Phase IV\nDeployment', items: ['Integration', 'Launch', 'Support'], x: 0.9, y: 0.4, duration: '2 months' }
+                ];
+            } else {
+                // 简化技术路线图 - 垂直布局
+                phases = [
+                    { title: 'Phase I\nPlanning', items: ['Research', 'Design'], x: 0.3, y: 0.3, duration: '2 months' },
+                    { title: 'Phase II\nExecution', items: ['Development', 'Testing'], x: 0.7, y: 0.6, duration: '4 months' }
+                ];
+            }
+
+            // 绘制主时间轴（带渐变效果）- 根据布局调整
+            let timelineY;
+            if (colorCount >= 10) {
+                // 多行布局时绘制两条时间轴
+                const timelineY1 = height * 0.15;
+                const timelineY2 = height * 0.55;
+
+                // 第一条时间轴
+                const gradient1 = ctx.createLinearGradient(padding, timelineY1, width - padding, timelineY1);
+                for (let i = 0; i < 5; i++) {
+                    gradient1.addColorStop(i / 4, phaseColorMapping(i));
+                }
+                ctx.strokeStyle = gradient1;
+                ctx.lineWidth = 5;
+                ctx.lineCap = 'round';
+                ctx.beginPath();
+                ctx.moveTo(padding + 20, timelineY1);
+                ctx.lineTo(width - padding - 20, timelineY1);
+                ctx.stroke();
+
+                // 第二条时间轴
+                const gradient2 = ctx.createLinearGradient(padding, timelineY2, width - padding, timelineY2);
+                for (let i = 5; i < 10; i++) {
+                    gradient2.addColorStop((i - 5) / 4, phaseColorMapping(i));
+                }
+                ctx.strokeStyle = gradient2;
+                ctx.beginPath();
+                ctx.moveTo(padding + 20, timelineY2);
+                ctx.lineTo(width - padding - 20, timelineY2);
+                ctx.stroke();
+            } else {
+                // 单行布局
+                timelineY = height * 0.2;
+                const gradient = ctx.createLinearGradient(padding, timelineY, width - padding, timelineY);
+
+                phases.forEach((phase, index) => {
+                    const position = index / Math.max(1, phases.length - 1);
+                    gradient.addColorStop(position, phaseColorMapping(index));
+                });
+
+                ctx.strokeStyle = gradient;
+                ctx.lineWidth = 5;
+                ctx.lineCap = 'round';
+                ctx.beginPath();
+                ctx.moveTo(padding + 20, timelineY);
+                ctx.lineTo(width - padding - 20, timelineY);
+                ctx.stroke();
+            }
+
+            // 绘制阶段 - 调整卡片尺寸避免重叠
+            phases.forEach((phase, index) => {
+                const x = phase.x * (width - 2 * padding) + padding;
+                const y = phase.y * (height - 2 * padding) + padding;
+
+                // 根据颜色数量调整卡片尺寸
+                let phaseWidth, phaseHeight;
+                if (colorCount >= 10) {
+                    phaseWidth = 100;   // 适当增加宽度确保内容显示
+                    phaseHeight = 140;  // 适当增加高度
+                } else if (colorCount >= 6) {
+                    phaseWidth = 120;   // 中等卡片
+                    phaseHeight = 160;
+                } else {
+                    phaseWidth = 140;   // 标准卡片
+                    phaseHeight = 180;
+                }
+
+                const phaseColor = phaseColorMapping(index);
+
+                // 阶段连接线到时间轴
+                let targetTimelineY;
+                if (colorCount >= 10) {
+                    targetTimelineY = index < 5 ? height * 0.15 : height * 0.55;
+                } else {
+                    targetTimelineY = height * 0.15; // 统一时间轴位置
+                }
+
+                ctx.strokeStyle = phaseColor;
+                ctx.lineWidth = 3;
+                ctx.setLineDash([]);
+                ctx.beginPath();
+                ctx.moveTo(x, targetTimelineY);
+                ctx.lineTo(x, y - phaseHeight / 2 - 10);
+                ctx.stroke();
+
+                // 时间轴节点
+                ctx.fillStyle = phaseColor;
+                ctx.beginPath();
+                ctx.arc(x, targetTimelineY, 6, 0, 2 * Math.PI);
+                ctx.fill();
+                ctx.strokeStyle = '#ffffff';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+
+                // 预计算内容高度，避免后续重绘
+                const maxItemsForHeight = colorCount >= 10 ? 2 : 3;
+                const itemsForHeight = phase.items.slice(0, maxItemsForHeight);
+                const estimatedContentHeight = 95 + (itemsForHeight.length * 15) + (phase.items.length > maxItemsForHeight ? 15 : 0) + 30;
+                const finalPhaseHeight = Math.max(phaseHeight, estimatedContentHeight);
+
+                // 阶段卡片阴影
+                ctx.shadowColor = 'rgba(0, 0, 0, 0.15)';
+                ctx.shadowBlur = 8;
+                ctx.shadowOffsetX = 3;
+                ctx.shadowOffsetY = 4;
+
+                // 阶段卡片背景渐变
+                const cardGradient = ctx.createLinearGradient(x - phaseWidth / 2, y - finalPhaseHeight / 2, x - phaseWidth / 2, y + finalPhaseHeight / 2);
+                cardGradient.addColorStop(0, phaseColor);
+                cardGradient.addColorStop(1, adjustBrightness(phaseColor, -0.2));
+                ctx.fillStyle = cardGradient;
+
+                // 绘制圆角矩形 - 使用最终高度
+                const radius = 12;
+                ctx.beginPath();
+                ctx.roundRect(x - phaseWidth / 2, y - finalPhaseHeight / 2, phaseWidth, finalPhaseHeight, radius);
+                ctx.fill();
+
+                // 卡片边框
+                ctx.strokeStyle = adjustBrightness(phaseColor, -0.3);
+                ctx.lineWidth = 2;
+                ctx.stroke();
+
+                // 重置阴影
+                ctx.shadowColor = 'transparent';
+                ctx.shadowBlur = 0;
+                ctx.shadowOffsetX = 0;
+                ctx.shadowOffsetY = 0;
+
+                // 阶段标题 - 使用最终高度
+                ctx.fillStyle = '#ffffff';
+                ctx.font = 'bold 14px "Times New Roman", serif';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+
+                const titleLines = phase.title.split('\n');
+                titleLines.forEach((line, lineIndex) => {
+                    ctx.fillText(line, x, y - finalPhaseHeight / 2 + 25 + lineIndex * 16);
+                });
+
+                // 持续时间
+                ctx.font = 'italic 11px "Times New Roman", serif';
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+                ctx.fillText(phase.duration, x, y - finalPhaseHeight / 2 + 65);
+
+                // 分隔线
+                ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                ctx.moveTo(x - phaseWidth / 2 + 15, y - finalPhaseHeight / 2 + 75);
+                ctx.lineTo(x + phaseWidth / 2 - 15, y - finalPhaseHeight / 2 + 75);
+                ctx.stroke();
+
+                // 任务列表 - 智能文字换行和布局优化
+                ctx.font = '10px "Times New Roman", serif';
+                ctx.fillStyle = '#ffffff';
+                ctx.textAlign = 'left';
+
+                let currentItemY = y - finalPhaseHeight / 2 + 95;
+                const maxTextWidth = phaseWidth - 35;
+                const lineHeight = 12; // 减小行高以节省空间
+                const itemSpacing = 3; // 减小项目间距
+                const maxItemsToShow = colorCount >= 10 ? 2 : 3; // 根据卡片大小限制显示项目数
+
+                // 限制显示的任务数量，避免溢出
+                const itemsToShow = phase.items.slice(0, maxItemsToShow);
+
+                itemsToShow.forEach((item, itemIndex) => {
+                    // 项目符号
+                    ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+                    ctx.beginPath();
+                    ctx.arc(x - phaseWidth / 2 + 18, currentItemY, 2, 0, 2 * Math.PI);
+                    ctx.fill();
+
+                    // 智能文字换行处理 - 改进算法
+                    ctx.fillStyle = '#ffffff';
+                    ctx.textAlign = 'left';
+
+                    // 首先尝试单行显示
+                    if (ctx.measureText(item).width <= maxTextWidth) {
+                        ctx.fillText(item, x - phaseWidth / 2 + 25, currentItemY);
+                        currentItemY += lineHeight + itemSpacing;
+                    } else {
+                        // 需要换行处理
+                        const words = item.split(' ');
+                        let lines = [];
+                        let currentLine = '';
+
+                        // 按单词分割并组合成行
+                        words.forEach(word => {
+                            const testLine = currentLine + (currentLine ? ' ' : '') + word;
+                            const testWidth = ctx.measureText(testLine).width;
+
+                            if (testWidth <= maxTextWidth) {
+                                currentLine = testLine;
+                            } else {
+                                if (currentLine) {
+                                    lines.push(currentLine);
+                                    currentLine = word;
+                                } else {
+                                    // 单个单词太长，需要截断
+                                    let truncatedWord = word;
+                                    while (ctx.measureText(truncatedWord + '...').width > maxTextWidth && truncatedWord.length > 1) {
+                                        truncatedWord = truncatedWord.slice(0, -1);
+                                    }
+                                    lines.push(truncatedWord + (truncatedWord.length < word.length ? '...' : ''));
+                                }
+                            }
+                        });
+
+                        if (currentLine) {
+                            lines.push(currentLine);
+                        }
+
+                        // 限制最多显示2行，避免卡片溢出
+                        const maxLines = 2;
+                        const linesToShow = lines.slice(0, maxLines);
+                        if (lines.length > maxLines) {
+                            // 如果有更多行，在最后一行末尾添加省略号
+                            const lastLine = linesToShow[maxLines - 1];
+                            let truncatedLastLine = lastLine;
+                            while (ctx.measureText(truncatedLastLine + '...').width > maxTextWidth && truncatedLastLine.length > 1) {
+                                truncatedLastLine = truncatedLastLine.slice(0, -1);
+                            }
+                            linesToShow[maxLines - 1] = truncatedLastLine + '...';
+                        }
+
+                        // 绘制多行文字
+                        linesToShow.forEach((line, lineIndex) => {
+                            ctx.fillText(line, x - phaseWidth / 2 + 25, currentItemY + lineIndex * lineHeight);
+                        });
+
+                        // 更新下一个项目的Y位置
+                        currentItemY += linesToShow.length * lineHeight + itemSpacing;
+                    }
+                });
+
+                // 如果有更多任务未显示，添加省略提示
+                if (phase.items.length > maxItemsToShow) {
+                    ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+                    ctx.font = 'italic 9px "Times New Roman", serif';
+                    ctx.fillText(`+${phase.items.length - maxItemsToShow} more...`, x - phaseWidth / 2 + 25, currentItemY);
+                    currentItemY += lineHeight + itemSpacing;
+                }
+
+                // 简化进度条位置计算 - 使用预计算的最终高度
+                const progressBarHeight = 6;
+                const progressBottomMargin = 12;
+                const progressY = y + finalPhaseHeight / 2 - progressBottomMargin - progressBarHeight / 2;
+                const progressWidth = phaseWidth - 30;
+                const progress = (index + 1) / phases.length;
+
+                // 进度条背景
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
+                ctx.fillRect(x - progressWidth / 2, progressY - progressBarHeight / 2, progressWidth, progressBarHeight);
+
+                // 进度条填充
+                ctx.fillStyle = '#ffffff';
+                ctx.fillRect(x - progressWidth / 2, progressY - progressBarHeight / 2, progressWidth * progress, progressBarHeight);
+
+                // 进度条边框，增强视觉效果
+                ctx.strokeStyle = 'rgba(255, 255, 255, 0.5)';
+                ctx.lineWidth = 1;
+                ctx.strokeRect(x - progressWidth / 2, progressY - progressBarHeight / 2, progressWidth, progressBarHeight);
+            });
+
+            // 绘制里程碑连接线 - 改善多行布局的连接
+            if (colorCount >= 10) {
+                // 多行布局：只连接同一行的相邻阶段
+                // 第一行连接
+                for (let i = 0; i < 4; i++) {
+                    const currentPhase = phases[i];
+                    const nextPhase = phases[i + 1];
+
+                    const x1 = currentPhase.x * (width - 2 * padding) + padding + 55;
+                    const y1 = currentPhase.y * (height - 2 * padding) + padding;
+                    const x2 = nextPhase.x * (width - 2 * padding) + padding - 55;
+                    const y2 = nextPhase.y * (height - 2 * padding) + padding;
+
+                    ctx.strokeStyle = connectionColorMapping(i);
+                    ctx.lineWidth = 2;
+                    ctx.setLineDash([6, 3]);
+
+                    ctx.beginPath();
+                    ctx.moveTo(x1, y1);
+                    ctx.lineTo(x2, y2);
+                    ctx.stroke();
+
+                    // 箭头
+                    const angle = Math.atan2(y2 - y1, x2 - x1);
+                    const arrowLength = 10;
+
+                    ctx.setLineDash([]);
+                    ctx.beginPath();
+                    ctx.moveTo(x2, y2);
+                    ctx.lineTo(x2 - arrowLength * Math.cos(angle - Math.PI / 6), y2 - arrowLength * Math.sin(angle - Math.PI / 6));
+                    ctx.moveTo(x2, y2);
+                    ctx.lineTo(x2 - arrowLength * Math.cos(angle + Math.PI / 6), y2 - arrowLength * Math.sin(angle + Math.PI / 6));
+                    ctx.stroke();
+                }
+
+                // 第二行连接
+                for (let i = 5; i < 9; i++) {
+                    const currentPhase = phases[i];
+                    const nextPhase = phases[i + 1];
+
+                    const x1 = currentPhase.x * (width - 2 * padding) + padding + 55;
+                    const y1 = currentPhase.y * (height - 2 * padding) + padding;
+                    const x2 = nextPhase.x * (width - 2 * padding) + padding - 55;
+                    const y2 = nextPhase.y * (height - 2 * padding) + padding;
+
+                    ctx.strokeStyle = connectionColorMapping(i);
+                    ctx.lineWidth = 2;
+                    ctx.setLineDash([6, 3]);
+
+                    ctx.beginPath();
+                    ctx.moveTo(x1, y1);
+                    ctx.lineTo(x2, y2);
+                    ctx.stroke();
+
+                    // 箭头
+                    const angle = Math.atan2(y2 - y1, x2 - x1);
+                    const arrowLength = 10;
+
+                    ctx.setLineDash([]);
+                    ctx.beginPath();
+                    ctx.moveTo(x2, y2);
+                    ctx.lineTo(x2 - arrowLength * Math.cos(angle - Math.PI / 6), y2 - arrowLength * Math.sin(angle - Math.PI / 6));
+                    ctx.moveTo(x2, y2);
+                    ctx.lineTo(x2 - arrowLength * Math.cos(angle + Math.PI / 6), y2 - arrowLength * Math.sin(angle + Math.PI / 6));
+                    ctx.stroke();
+                }
+
+                // 跨行连接（从第一行最后一个到第二行第一个）
+                const phase4 = phases[4];
+                const phase5 = phases[5];
+                const x1 = phase4.x * (width - 2 * padding) + padding;
+                const y1 = phase4.y * (height - 2 * padding) + padding + 70;
+                const x2 = phase5.x * (width - 2 * padding) + padding;
+                const y2 = phase5.y * (height - 2 * padding) + padding - 70;
+
+                ctx.strokeStyle = connectionColorMapping(4);
+                ctx.lineWidth = 3;
+                ctx.setLineDash([8, 4]);
+
+                ctx.beginPath();
+                ctx.moveTo(x1, y1);
+                ctx.lineTo(x2, y2);
+                ctx.stroke();
+
+                // 跨行箭头
+                const crossAngle = Math.atan2(y2 - y1, x2 - x1);
+                const crossArrowLength = 15;
+
+                ctx.setLineDash([]);
+                ctx.beginPath();
+                ctx.moveTo(x2, y2);
+                ctx.lineTo(x2 - crossArrowLength * Math.cos(crossAngle - Math.PI / 6), y2 - crossArrowLength * Math.sin(crossAngle - Math.PI / 6));
+                ctx.moveTo(x2, y2);
+                ctx.lineTo(x2 - crossArrowLength * Math.cos(crossAngle + Math.PI / 6), y2 - crossArrowLength * Math.sin(crossAngle + Math.PI / 6));
+                ctx.stroke();
+            } else {
+                // 单行布局：正常连接
+                for (let i = 0; i < phases.length - 1; i++) {
+                    const currentPhase = phases[i];
+                    const nextPhase = phases[i + 1];
+
+                    let cardWidth = colorCount >= 6 ? 120 : 140;
+                    const x1 = currentPhase.x * (width - 2 * padding) + padding + cardWidth / 2;
+                    const y1 = currentPhase.y * (height - 2 * padding) + padding;
+                    const x2 = nextPhase.x * (width - 2 * padding) + padding - cardWidth / 2;
+                    const y2 = nextPhase.y * (height - 2 * padding) + padding;
+
+                    ctx.strokeStyle = connectionColorMapping(i);
+                    ctx.lineWidth = 2;
+                    ctx.setLineDash([8, 4]);
+
+                    ctx.beginPath();
+                    ctx.moveTo(x1, y1);
+                    ctx.lineTo(x2, y2);
+                    ctx.stroke();
+
+                    // 箭头
+                    const angle = Math.atan2(y2 - y1, x2 - x1);
+                    const arrowLength = 12;
+
+                    ctx.setLineDash([]);
+                    ctx.beginPath();
+                    ctx.moveTo(x2, y2);
+                    ctx.lineTo(x2 - arrowLength * Math.cos(angle - Math.PI / 6), y2 - arrowLength * Math.sin(angle - Math.PI / 6));
+                    ctx.moveTo(x2, y2);
+                    ctx.lineTo(x2 - arrowLength * Math.cos(angle + Math.PI / 6), y2 - arrowLength * Math.sin(angle + Math.PI / 6));
+                    ctx.stroke();
+                }
+            }
+
+            // 辅助函数：调整颜色亮度
+            function adjustBrightness(color, amount) {
+                const hex = color.replace('#', '');
+                const r = Math.max(0, Math.min(255, parseInt(hex.substr(0, 2), 16) + amount * 255));
+                const g = Math.max(0, Math.min(255, parseInt(hex.substr(2, 2), 16) + amount * 255));
+                const b = Math.max(0, Math.min(255, parseInt(hex.substr(4, 2), 16) + amount * 255));
+                return `#${Math.round(r).toString(16).padStart(2, '0')}${Math.round(g).toString(16).padStart(2, '0')}${Math.round(b).toString(16).padStart(2, '0')}`;
+            }
+
+            // 添加图表标题
+            drawChartTitle(ctx, width, '技术路线图 - 智核学术');
         }
 
         function drawMindMap(ctx, canvas, colors) {
             const width = canvas.width;
             const height = canvas.height;
-
-            // 清空画布
-            ctx.clearRect(0, 0, width, height);
-            ctx.fillStyle = '#ffffff';
-            ctx.fillRect(0, 0, width, height);
-
-            // 思维导图参数
             const centerX = width / 2;
             const centerY = height / 2;
-            const mainNodeRadius = 40;
-            const branchLength = 120;
-            const subBranchLength = 80;
+            const padding = 60; // 增加边距
 
-            // 设置学术风格
-            ctx.font = '14px "Arial", sans-serif';
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
+            // 鲁棒性检查
+            if (!colors || colors.length === 0) {
+                colors = ['#3498db', '#e74c3c', '#2ecc71', '#f39c12', '#9b59b6', '#1abc9c'];
+            }
 
+            // 动态颜色映射函数
+            const branchColorMapping = (index) => colors[index % colors.length];
+            const subnodeColorMapping = (branchIndex, subnodeIndex) => {
+                const colorIndex = (branchIndex * 3 + subnodeIndex + 1) % colors.length;
+                return colors[colorIndex];
+            };
 
+            // 设置背景渐变
+            const bgGradient = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, Math.max(width, height) / 2);
+            bgGradient.addColorStop(0, '#ffffff');
+            bgGradient.addColorStop(1, '#f8f9fa');
+            ctx.fillStyle = bgGradient;
+            ctx.fillRect(0, 0, width, height);
 
-            // 中心主题
-            const centerColor = colors[0] || '#3498db';
-            ctx.fillStyle = centerColor;
-            ctx.beginPath();
-            ctx.arc(centerX, centerY, mainNodeRadius, 0, 2 * Math.PI);
-            ctx.fill();
-            ctx.strokeStyle = '#2c3e50';
-            ctx.lineWidth = 3;
-            ctx.stroke();
+            // 辅助函数：调整颜色亮度
+            function adjustBrightness(color, factor) {
+                if (!color || typeof color !== 'string') return '#3498db';
+                if (color.startsWith('#')) {
+                    const hex = color.slice(1);
+                    const num = parseInt(hex, 16);
+                    const r = Math.min(255, Math.max(0, (num >> 16) + factor));
+                    const g = Math.min(255, Math.max(0, (num >> 8 & 0x00FF) + factor));
+                    const b = Math.min(255, Math.max(0, (num & 0x0000FF) + factor));
+                    return `#${((r << 16) | (g << 8) | b).toString(16).padStart(6, '0')}`;
+                }
+                return color;
+            }
 
-            // 中心文字
-            ctx.fillStyle = '#ffffff';
-            ctx.font = 'bold 16px "Arial", sans-serif';
-            ctx.fillText('Research', centerX, centerY - 8);
-            ctx.fillText('Topic', centerX, centerY + 8);
-
-            // 主要分支
-            const mainBranches = [
-                { angle: 0, text: 'Methodology', subTopics: ['Experimental Design', 'Data Collection', 'Statistical Analysis'] },
-                { angle: Math.PI / 3, text: 'Literature', subTopics: ['Background Study', 'Gap Analysis', 'Theoretical Framework'] },
-                { angle: 2 * Math.PI / 3, text: 'Results', subTopics: ['Key Findings', 'Data Visualization', 'Statistical Tests'] },
-                { angle: Math.PI, text: 'Discussion', subTopics: ['Interpretation', 'Comparison', 'Implications'] },
-                { angle: 4 * Math.PI / 3, text: 'Conclusion', subTopics: ['Summary', 'Contributions', 'Future Work'] },
-                { angle: 5 * Math.PI / 3, text: 'References', subTopics: ['Primary Sources', 'Secondary Sources', 'Citations'] }
+            // 动态生成分支数量和内容 - 非对称布局
+            const numBranches = Math.max(2, Math.min(colors.length, 12)); // 支持更多分支
+            const branchTopics = [
+                'Quantitative\nMethods', 'Qualitative\nMethods', 'Mixed\nMethods', 'Data\nCollection',
+                'Analysis\nTechniques', 'Research\nDesign', 'Ethics &\nValidation', 'Publication\n& Sharing',
+                'Literature\nReview', 'Hypothesis\nFormation', 'Sampling\nMethods', 'Statistical\nModeling'
+            ];
+            const subnodeTopics = [
+                ['Surveys', 'Experiments', 'Statistical\nAnalysis'],
+                ['Interviews', 'Focus Groups', 'Case Studies'],
+                ['Sequential', 'Concurrent', 'Transformative'],
+                ['Primary Data', 'Secondary Data', 'Big Data'],
+                ['Descriptive', 'Inferential', 'Predictive'],
+                ['Experimental', 'Observational', 'Longitudinal'],
+                ['IRB Approval', 'Validity', 'Reliability'],
+                ['Peer Review', 'Open Access', 'Reproducibility'],
+                ['Systematic', 'Meta-Analysis', 'Scoping'],
+                ['Null/Alternative', 'Directional', 'Non-directional'],
+                ['Random', 'Stratified', 'Convenience'],
+                ['Regression', 'Classification', 'Clustering']
             ];
 
-            // 绘制主要分支
+            // 中心主题 - 增大中心节点，充分利用空间
+            const centerRadius = Math.min(width, height) * (colors.length > 8 ? 0.12 : 0.14);
+            const centerNode = {
+                text: 'Research\nMethodology',
+                x: centerX,
+                y: centerY,
+                radius: centerRadius,
+                color: colors[0] || '#3498db'
+            };
+
+            // 非对称分支布局 - 根据颜色数量调整，优化防重叠
+            const mainBranches = [];
+
+            // 定义非对称角度分布 - 改进算法避免重叠
+            const getAsymmetricAngles = (count) => {
+                const angles = [];
+                if (count <= 4) {
+                    // 少量分支：使用黄金角度分布
+                    const goldenAngle = Math.PI * (3 - Math.sqrt(5)); // 黄金角度
+                    for (let i = 0; i < count; i++) {
+                        angles.push(i * goldenAngle + Math.PI * 0.1);
+                    }
+                } else if (count <= 6) {
+                    // 中等分支：不规则分布
+                    const baseAngles = [0, Math.PI * 0.45, Math.PI * 0.85, Math.PI * 1.25, Math.PI * 1.6, Math.PI * 1.9];
+                    for (let i = 0; i < count; i++) {
+                        angles.push(baseAngles[i] + (Math.random() - 0.5) * 0.2);
+                    }
+                } else if (count <= 8) {
+                    // 较多分支：螺旋分布
+                    for (let i = 0; i < count; i++) {
+                        const spiralFactor = 1 + i * 0.1;
+                        angles.push((i * 2 * Math.PI * spiralFactor) / count + Math.PI * 0.15);
+                    }
+                } else {
+                    // 大量分支：多层螺旋布局，增加间距
+                    const innerCount = Math.ceil(count * 0.5);
+                    const outerCount = count - innerCount;
+
+                    // 内层分支 - 更大间距
+                    for (let i = 0; i < innerCount; i++) {
+                        const baseAngle = (i * 2 * Math.PI) / innerCount;
+                        const offset = (Math.random() - 0.5) * 0.3;
+                        angles.push(baseAngle + offset);
+                    }
+                    // 外层分支 - 错位排列，增加随机性
+                    for (let i = 0; i < outerCount; i++) {
+                        const baseAngle = (i * 2 * Math.PI) / outerCount + Math.PI / outerCount;
+                        const offset = (Math.random() - 0.5) * 0.4;
+                        angles.push(baseAngle + offset);
+                    }
+                }
+                return angles;
+            };
+
+            const branchAngles = getAsymmetricAngles(numBranches);
+
+            for (let i = 0; i < numBranches; i++) {
+                const angle = branchAngles[i] || (i * 2 * Math.PI) / numBranches;
+
+                // 动态距离 - 防止超出边界，增加防重叠逻辑
+                let baseDistance = Math.min(width, height) * 0.22;
+                if (colors.length > 8) {
+                    baseDistance = Math.min(width, height) * 0.16; // 进一步缩小距离
+                } else if (colors.length > 6) {
+                    baseDistance = Math.min(width, height) * 0.19; // 中等缩小
+                }
+
+                // 添加层级偏移，内外层不同距离
+                const isInnerLayer = i < Math.ceil(numBranches * 0.5);
+                const layerOffset = isInnerLayer ? 0 : Math.min(width, height) * 0.05;
+
+                // 减少随机偏移，提高可预测性
+                const randomOffset = (Math.random() - 0.5) * 0.15; // 减小随机性
+                const distance = baseDistance + layerOffset + baseDistance * randomOffset;
+
+                // 动态调整子节点数量，避免过度拥挤
+                const subnodeCount = colors.length > 10 ?
+                    Math.min(2, Math.max(1, Math.floor(colors.length / Math.max(6, numBranches)))) :
+                    Math.min(3, Math.max(1, Math.floor(colors.length / Math.max(4, numBranches))));
+
+                const branch = {
+                    text: branchTopics[i] || `Branch ${i + 1}`,
+                    angle: angle,
+                    distance: distance,
+                    color: branchColorMapping(i + 1),
+                    subnodes: [],
+                    isInnerLayer: isInnerLayer
+                };
+
+                // 为每个分支生成子节点 - 优化防重叠分布
+                for (let j = 0; j < subnodeCount; j++) {
+                    // 根据颜色数量调整子节点角度分布
+                    const subnodeAngleSpread = colors.length > 10 ? 0.25 :
+                        colors.length > 8 ? 0.3 : 0.4;
+                    const subnodeAngle = (j - (subnodeCount - 1) / 2) * subnodeAngleSpread +
+                        (Math.random() - 0.5) * 0.1; // 减小随机性
+
+                    // 动态子节点距离
+                    const subnodeDistance = Math.min(width, height) *
+                        (colors.length > 10 ? 0.08 : colors.length > 8 ? 0.10 : 0.12);
+
+                    branch.subnodes.push({
+                        text: subnodeTopics[i] ? subnodeTopics[i][j] || `Sub ${j + 1}` : `Sub ${j + 1}`,
+                        angle: subnodeAngle,
+                        distance: subnodeDistance
+                    });
+                }
+
+                mainBranches.push(branch);
+            }
+
+            // 绘制从中心到主分支的连接线 - 增强视觉效果
             mainBranches.forEach((branch, index) => {
-                const color = colors[(index + 1) % colors.length];
-                const mainEndX = centerX + Math.cos(branch.angle) * branchLength;
-                const mainEndY = centerY + Math.sin(branch.angle) * branchLength;
+                const branchX = centerX + Math.cos(branch.angle) * branch.distance;
+                const branchY = centerY + Math.sin(branch.angle) * branch.distance;
 
-                // 绘制主线
-                ctx.strokeStyle = color;
-                ctx.lineWidth = 4;
+                // 边界检查
+                if (branchX < padding || branchX > width - padding || branchY < padding || branchY > height - padding) {
+                    return; // 跳过超出边界的分支
+                }
+
+                // 绘制主分支连接线 - 渐变效果
+                const lineGradient = ctx.createLinearGradient(centerX, centerY, branchX, branchY);
+                lineGradient.addColorStop(0, adjustBrightness(branch.color, 30));
+                lineGradient.addColorStop(1, branch.color);
+
+                ctx.strokeStyle = lineGradient;
+                ctx.lineWidth = Math.min(width, height) * (colors.length > 8 ? 0.006 : 0.008);
+                ctx.lineCap = 'round';
+                ctx.shadowColor = 'rgba(0,0,0,0.2)';
+                ctx.shadowBlur = 3;
+                ctx.shadowOffsetX = 1;
+                ctx.shadowOffsetY = 1;
+
                 ctx.beginPath();
-                ctx.moveTo(centerX + Math.cos(branch.angle) * mainNodeRadius, centerY + Math.sin(branch.angle) * mainNodeRadius);
-                ctx.lineTo(mainEndX - Math.cos(branch.angle) * 25, mainEndY - Math.sin(branch.angle) * 25);
+                ctx.moveTo(centerX, centerY);
+                ctx.lineTo(branchX, branchY);
                 ctx.stroke();
 
-                // 主节点
-                ctx.fillStyle = color;
+                // 重置阴影
+                ctx.shadowColor = 'transparent';
+                ctx.shadowBlur = 0;
+                ctx.shadowOffsetX = 0;
+                ctx.shadowOffsetY = 0;
+
+                // 绘制子节点连接线 - 优化样式
+                branch.subnodes.forEach(subnode => {
+                    const subX = branchX + Math.cos(branch.angle + subnode.angle) * subnode.distance;
+                    const subY = branchY + Math.sin(branch.angle + subnode.angle) * subnode.distance;
+
+                    // 检查边界，防止节点超出画布
+                    if (subX < padding || subX > width - padding || subY < padding || subY > height - padding) {
+                        return; // 跳过超出边界的节点
+                    }
+
+                    ctx.strokeStyle = adjustBrightness(branch.color, -20);
+                    ctx.lineWidth = Math.min(width, height) * (colors.length > 8 ? 0.003 : 0.004);
+                    ctx.lineCap = 'round';
+
+                    ctx.beginPath();
+                    ctx.moveTo(branchX, branchY);
+                    ctx.lineTo(subX, subY);
+                    ctx.stroke();
+                });
+            });
+
+            // 绘制中心节点 - 增强设计
+            const centerGradient = ctx.createRadialGradient(
+                centerNode.x, centerNode.y - centerNode.radius * 0.3, 0,
+                centerNode.x, centerNode.y, centerNode.radius
+            );
+            centerGradient.addColorStop(0, adjustBrightness(centerNode.color, 40));
+            centerGradient.addColorStop(1, adjustBrightness(centerNode.color, -20));
+
+            ctx.fillStyle = centerGradient;
+            ctx.shadowColor = 'rgba(0,0,0,0.3)';
+            ctx.shadowBlur = 8;
+            ctx.shadowOffsetX = 2;
+            ctx.shadowOffsetY = 2;
+
+            ctx.beginPath();
+            ctx.arc(centerNode.x, centerNode.y, centerNode.radius, 0, 2 * Math.PI);
+            ctx.fill();
+
+            ctx.strokeStyle = adjustBrightness(centerNode.color, -40);
+            ctx.lineWidth = 3;
+            ctx.shadowColor = 'transparent';
+            ctx.stroke();
+
+            // 绘制中心节点文本 - 增强可读性
+            ctx.fillStyle = '#ffffff';
+            ctx.font = `bold ${Math.min(width, height) * 0.02}px "Times New Roman", serif`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.shadowColor = 'rgba(0,0,0,0.5)';
+            ctx.shadowBlur = 2;
+
+            const centerLines = centerNode.text.split('\n');
+            const lineHeight = Math.min(width, height) * 0.022;
+            centerLines.forEach((line, lineIndex) => {
+                const yOffset = (lineIndex - (centerLines.length - 1) / 2) * lineHeight;
+                ctx.fillText(line, centerNode.x, centerNode.y + yOffset);
+            });
+
+            ctx.shadowColor = 'transparent';
+            ctx.shadowBlur = 0;
+
+            // 绘制主分支节点 - 优化设计
+            mainBranches.forEach((branch, index) => {
+                const branchX = centerX + Math.cos(branch.angle) * branch.distance;
+                const branchY = centerY + Math.sin(branch.angle) * branch.distance;
+
+                // 边界检查
+                if (branchX < padding || branchX > width - padding || branchY < padding || branchY > height - padding) {
+                    return; // 跳过超出边界的分支
+                }
+
+                // 动态调整分支节点大小，增大圆圈充分利用空间
+                const branchRadius = Math.min(width, height) *
+                    (colors.length > 12 ? 0.05 :
+                        colors.length > 10 ? 0.055 :
+                            colors.length > 8 ? 0.06 : 0.08);
+
+                // 主分支节点渐变
+                const branchGradient = ctx.createRadialGradient(
+                    branchX, branchY - branchRadius * 0.3, 0,
+                    branchX, branchY, branchRadius
+                );
+                branchGradient.addColorStop(0, adjustBrightness(branch.color, 30));
+                branchGradient.addColorStop(1, adjustBrightness(branch.color, -15));
+
+                ctx.fillStyle = branchGradient;
+                ctx.shadowColor = 'rgba(0,0,0,0.25)';
+                ctx.shadowBlur = 6;
+                ctx.shadowOffsetX = 1;
+                ctx.shadowOffsetY = 1;
+
                 ctx.beginPath();
-                ctx.arc(mainEndX, mainEndY, 25, 0, 2 * Math.PI);
+                ctx.arc(branchX, branchY, branchRadius, 0, 2 * Math.PI);
                 ctx.fill();
-                ctx.strokeStyle = '#2c3e50';
+
+                ctx.strokeStyle = adjustBrightness(branch.color, -30);
                 ctx.lineWidth = 2;
+                ctx.shadowColor = 'transparent';
                 ctx.stroke();
 
-                // 主节点文字
+                // 绘制主分支文本 - 动态字体大小，防止文字溢出
                 ctx.fillStyle = '#ffffff';
-                ctx.font = 'bold 11px "Arial", sans-serif';
-                const words = branch.text.split(' ');
-                words.forEach((word, wordIndex) => {
-                    ctx.fillText(word, mainEndX, mainEndY + (wordIndex - (words.length - 1) / 2) * 12);
+                const branchFontSize = Math.min(width, height) * (colors.length > 8 ? 0.012 : 0.015);
+                ctx.font = `bold ${branchFontSize}px "Times New Roman", serif`;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.shadowColor = 'rgba(0,0,0,0.4)';
+                ctx.shadowBlur = 1;
+
+                const branchLines = branch.text.split('\n');
+                const branchLineHeight = branchFontSize * 1.1;
+
+                // 检查文字是否会溢出圆圈，如果溢出则缩短文字
+                branchLines.forEach((line, lineIndex) => {
+                    const yOffset = (lineIndex - (branchLines.length - 1) / 2) * branchLineHeight;
+
+                    // 计算文字宽度，如果超出圆圈直径则截断
+                    const maxWidth = branchRadius * 1.8; // 允许文字稍微超出圆圈
+                    let displayText = line;
+
+                    if (ctx.measureText(displayText).width > maxWidth) {
+                        while (ctx.measureText(displayText + '...').width > maxWidth && displayText.length > 0) {
+                            displayText = displayText.slice(0, -1);
+                        }
+                        displayText += '...';
+                    }
+
+                    ctx.fillText(displayText, branchX, branchY + yOffset);
                 });
 
-                // 子分支
-                branch.subTopics.forEach((subTopic, subIndex) => {
-                    const subAngle = branch.angle + (subIndex - 1) * Math.PI / 12;
-                    const subEndX = mainEndX + Math.cos(subAngle) * subBranchLength;
-                    const subEndY = mainEndY + Math.sin(subAngle) * subBranchLength;
+                ctx.shadowColor = 'transparent';
 
-                    // 绘制子线
-                    ctx.strokeStyle = color;
-                    ctx.lineWidth = 2;
-                    ctx.beginPath();
-                    ctx.moveTo(mainEndX + Math.cos(subAngle) * 25, mainEndY + Math.sin(subAngle) * 25);
-                    ctx.lineTo(subEndX - Math.cos(subAngle) * 15, subEndY - Math.sin(subAngle) * 15);
-                    ctx.stroke();
+                // 绘制子节点 - 优化布局
+                branch.subnodes.forEach((subnode, subIndex) => {
+                    const subX = branchX + Math.cos(branch.angle + subnode.angle) * subnode.distance;
+                    const subY = branchY + Math.sin(branch.angle + subnode.angle) * subnode.distance;
 
-                    // 子节点
-                    ctx.fillStyle = color;
-                    ctx.globalAlpha = 0.7;
+                    // 边界检查
+                    if (subX < padding || subX > width - padding || subY < padding || subY > height - padding) {
+                        return;
+                    }
+
+                    // 动态调整子节点大小，增大圆圈充分利用空间
+                    const subRadius = Math.min(width, height) *
+                        (colors.length > 12 ? 0.035 :
+                            colors.length > 10 ? 0.04 :
+                                colors.length > 8 ? 0.045 : 0.055);
+                    const subColor = subnodeColorMapping(index, subIndex);
+
+                    // 子节点渐变
+                    const subGradient = ctx.createRadialGradient(
+                        subX, subY - subRadius * 0.3, 0,
+                        subX, subY, subRadius
+                    );
+                    subGradient.addColorStop(0, adjustBrightness(subColor, 25));
+                    subGradient.addColorStop(1, adjustBrightness(subColor, -10));
+
+                    ctx.fillStyle = subGradient;
+                    ctx.shadowColor = 'rgba(0,0,0,0.2)';
+                    ctx.shadowBlur = 4;
+
                     ctx.beginPath();
-                    ctx.arc(subEndX, subEndY, 15, 0, 2 * Math.PI);
+                    ctx.arc(subX, subY, subRadius, 0, 2 * Math.PI);
                     ctx.fill();
-                    ctx.globalAlpha = 1;
-                    ctx.strokeStyle = '#2c3e50';
-                    ctx.lineWidth = 1;
+
+                    ctx.strokeStyle = adjustBrightness(subColor, -25);
+                    ctx.lineWidth = 1.5;
+                    ctx.shadowColor = 'transparent';
                     ctx.stroke();
 
-                    // 子节点文字
+                    // 绘制子节点文本 - 自适应字体大小，防止文字溢出
                     ctx.fillStyle = '#ffffff';
-                    ctx.font = '9px "Arial", sans-serif';
-                    ctx.fillText(subTopic, subEndX, subEndY);
+                    const fontSize = Math.min(width, height) * 0.012;
+                    ctx.font = `bold ${fontSize}px "Times New Roman", serif`;
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.shadowColor = 'rgba(0,0,0,0.3)';
+                    ctx.shadowBlur = 1;
+
+                    const subLines = subnode.text.split('\n');
+                    const subLineHeight = fontSize * 1.1;
+
+                    // 检查子节点文字是否会溢出圆圈，如果溢出则缩短文字
+                    subLines.forEach((line, lineIndex) => {
+                        const yOffset = (lineIndex - (subLines.length - 1) / 2) * subLineHeight;
+
+                        // 计算文字宽度，如果超出圆圈直径则截断
+                        const maxWidth = subRadius * 1.8; // 允许文字稍微超出圆圈
+                        let displayText = line;
+
+                        if (ctx.measureText(displayText).width > maxWidth) {
+                            while (ctx.measureText(displayText + '...').width > maxWidth && displayText.length > 0) {
+                                displayText = displayText.slice(0, -1);
+                            }
+                            displayText += '...';
+                        }
+
+                        ctx.fillText(displayText, subX, subY + yOffset);
+                    });
+
+                    ctx.shadowColor = 'transparent';
                 });
             });
 
@@ -5773,336 +6727,425 @@
             drawChartTitle(ctx, width, '思维导图 - 智核学术');
         }
 
-        function drawTechRoadmap(ctx, canvas, colors) {
+        function drawNetworkDiagram(ctx, canvas, colors) {
             const width = canvas.width;
             const height = canvas.height;
+            const padding = 80;
 
-            // 清空画布
-            ctx.clearRect(0, 0, width, height);
-            ctx.fillStyle = '#ffffff';
-            ctx.fillRect(0, 0, width, height);
-
-            // 技术路线图参数
-            const startYear = 2020;
-            const endYear = 2030;
-            const timelineY = height * 0.7;
-            const milestoneRadius = 8;
-
-            // 设置学术风格
-            ctx.font = '12px "Arial", sans-serif';
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-
-
-
-            // 绘制时间轴
-            const timelineStartX = width * 0.1;
-            const timelineEndX = width * 0.9;
-            const timelineLength = timelineEndX - timelineStartX;
-
-            ctx.strokeStyle = colors[0] || '#3498db';
-            ctx.lineWidth = 4;
-            ctx.beginPath();
-            ctx.moveTo(timelineStartX, timelineY);
-            ctx.lineTo(timelineEndX, timelineY);
-            ctx.stroke();
-
-            // 绘制时间标记和里程碑
-            const years = [];
-            for (let year = startYear; year <= endYear; year += 2) {
-                years.push(year);
+            // 鲁棒性检查
+            if (!colors || colors.length === 0) {
+                colors = ['#3498db', '#e74c3c', '#2ecc71', '#f39c12', '#9b59b6', '#1abc9c', '#e67e22', '#34495e'];
             }
 
-            years.forEach((year, index) => {
-                const x = timelineStartX + (index / (years.length - 1)) * timelineLength;
+            // 辅助函数：调整颜色亮度
+            function adjustBrightness(color, percent) {
+                const num = parseInt(color.replace("#", ""), 16);
+                const amt = Math.round(2.55 * percent);
+                const R = (num >> 16) + amt;
+                const G = (num >> 8 & 0x00FF) + amt;
+                const B = (num & 0x0000FF) + amt;
+                return "#" + (0x1000000 + (R < 255 ? R < 1 ? 0 : R : 255) * 0x10000 +
+                    (G < 255 ? G < 1 ? 0 : G : 255) * 0x100 +
+                    (B < 255 ? B < 1 ? 0 : B : 255)).toString(16).slice(1);
+            }
 
-                // 时间刻度
-                ctx.strokeStyle = colors[0] || '#3498db';
-                ctx.lineWidth = 2;
-                ctx.beginPath();
-                ctx.moveTo(x, timelineY - 10);
-                ctx.lineTo(x, timelineY + 10);
-                ctx.stroke();
-
-                // 年份文字
-                ctx.fillStyle = '#2c3e50';
-                ctx.font = 'bold 12px "Arial", sans-serif';
-                ctx.fillText(year.toString(), x, timelineY + 25);
-
-                // 里程碑
-                if (index > 0 && index < years.length - 1) {
-                    const colorIndex = (index % (colors.length - 1)) + 1;
-                    const color = colors[colorIndex] || '#e74c3c';
-
-                    // 里程碑圆圈
-                    ctx.fillStyle = color;
-                    ctx.beginPath();
-                    ctx.arc(x, timelineY, milestoneRadius, 0, 2 * Math.PI);
-                    ctx.fill();
-                    ctx.strokeStyle = '#ffffff';
-                    ctx.lineWidth = 2;
-                    ctx.stroke();
-
-                    // 里程碑标签
-                    const milestones = [
-                        'Phase 1:\nResearch',
-                        'Phase 2:\nDevelopment',
-                        'Phase 3:\nTesting',
-                        'Phase 4:\nDeployment',
-                        'Phase 5:\nOptimization'
-                    ];
-
-                    if (index - 1 < milestones.length) {
-                        ctx.fillStyle = color;
-                        ctx.font = 'bold 10px "Arial", sans-serif';
-                        const lines = milestones[index - 1].split('\n');
-                        lines.forEach((line, lineIndex) => {
-                            ctx.fillText(line, x, timelineY - 30 - lineIndex * 12);
-                        });
-
-                        // 连接线
-                        ctx.strokeStyle = color;
-                        ctx.lineWidth = 1;
-                        ctx.setLineDash([3, 3]);
-                        ctx.beginPath();
-                        ctx.moveTo(x, timelineY - 15);
-                        ctx.lineTo(x, timelineY - 10);
-                        ctx.stroke();
-                        ctx.setLineDash([]);
-                    }
-                }
-            });
-
-            // 绘制技术发展路径
-            const techPaths = [
-                {
-                    name: 'AI/ML',
-                    color: colors[1] || '#e74c3c',
-                    milestones: [
-                        { year: 2021, desc: 'Basic ML' },
-                        { year: 2024, desc: 'Deep Learning' },
-                        { year: 2027, desc: 'Advanced AI' },
-                        { year: 2030, desc: 'General AI' }
-                    ]
-                },
-                {
-                    name: 'Quantum Computing',
-                    color: colors[2] || '#2ecc71',
-                    milestones: [
-                        { year: 2022, desc: 'Qubit Research' },
-                        { year: 2025, desc: 'Quantum Supremacy' },
-                        { year: 2028, desc: 'Commercial QC' },
-                        { year: 2030, desc: 'Quantum Networks' }
-                    ]
-                },
-                {
-                    name: 'Biotechnology',
-                    color: colors[3] || '#f39c12',
-                    milestones: [
-                        { year: 2020, desc: 'Gene Editing' },
-                        { year: 2023, desc: 'Personalized Med' },
-                        { year: 2026, desc: 'Synthetic Biology' },
-                        { year: 2029, desc: 'Bio-computing' }
-                    ]
-                }
-            ];
-
-            techPaths.forEach((path, pathIndex) => {
-                const pathY = timelineY - 80 - pathIndex * 60;
-
-                // 路径标签
-                ctx.fillStyle = path.color;
-                ctx.font = 'bold 12px "Arial", sans-serif';
-                ctx.textAlign = 'left';
-                ctx.fillText(path.name, timelineStartX - 80, pathY);
-
-                // 绘制路径线
-                ctx.strokeStyle = path.color;
-                ctx.lineWidth = 3;
-                ctx.beginPath();
-
-                path.milestones.forEach((milestone, index) => {
-                    const yearIndex = (milestone.year - startYear) / 2;
-                    const x = timelineStartX + (yearIndex / (years.length - 1)) * timelineLength;
-
-                    if (index === 0) {
-                        ctx.moveTo(x, pathY);
-                    } else {
-                        ctx.lineTo(x, pathY);
-                    }
-
-                    // 里程碑点
-                    ctx.fillStyle = path.color;
-                    ctx.beginPath();
-                    ctx.arc(x, pathY, 5, 0, 2 * Math.PI);
-                    ctx.fill();
-                    ctx.strokeStyle = '#ffffff';
-                    ctx.lineWidth = 1;
-                    ctx.stroke();
-
-                    // 里程碑描述
-                    ctx.fillStyle = path.color;
-                    ctx.font = '9px "Arial", sans-serif';
-                    ctx.textAlign = 'center';
-                    ctx.fillText(milestone.desc, x, pathY - 15);
-                });
-
-                ctx.strokeStyle = path.color;
-                ctx.lineWidth = 3;
-                ctx.stroke();
-            });
-
-            // 添加图表标题
-            drawChartTitle(ctx, width, '技术路线图 - 智核学术');
-        }
-
-        function drawNetwork(ctx, canvas, colors) {
-            const width = canvas.width;
-            const height = canvas.height;
-
-            // 清空画布
-            ctx.clearRect(0, 0, width, height);
-            ctx.fillStyle = '#ffffff';
+            // 设置渐变背景
+            const bgGradient = ctx.createLinearGradient(0, 0, width, height);
+            bgGradient.addColorStop(0, '#f8f9fa');
+            bgGradient.addColorStop(1, '#e9ecef');
+            ctx.fillStyle = bgGradient;
             ctx.fillRect(0, 0, width, height);
 
-            // 网络图参数
-            const centerX = width / 2;
-            const centerY = height / 2;
-            const nodeRadius = 15;
-            const connectionWidth = 2;
+            // 动态生成网络节点 - 根据颜色数量调整
+            const colorCount = colors.length;
+            let nodes = [];
+            let edges = [];
 
-            // 设置学术风格
-            ctx.font = '10px "Arial", sans-serif';
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-
-
-
-            // 定义网络节点
-            const nodes = [
-                { id: 0, x: centerX, y: centerY, label: 'Core Lab', type: 'core', connections: [1, 2, 3, 4, 5] },
-                { id: 1, x: centerX - 120, y: centerY - 80, label: 'University A', type: 'institution', connections: [0, 2, 6] },
-                { id: 2, x: centerX + 120, y: centerY - 80, label: 'University B', type: 'institution', connections: [0, 1, 7] },
-                { id: 3, x: centerX - 150, y: centerY + 60, label: 'Research Inst', type: 'institution', connections: [0, 4, 8] },
-                { id: 4, x: centerX + 150, y: centerY + 60, label: 'Company X', type: 'company', connections: [0, 3, 9] },
-                { id: 5, x: centerX, y: centerY - 120, label: 'Funding Agency', type: 'funding', connections: [0, 6, 7] },
-                { id: 6, x: centerX - 180, y: centerY - 40, label: 'Lab 1', type: 'lab', connections: [1, 5] },
-                { id: 7, x: centerX + 180, y: centerY - 40, label: 'Lab 2', type: 'lab', connections: [2, 5] },
-                { id: 8, x: centerX - 100, y: centerY + 120, label: 'Dataset A', type: 'resource', connections: [3] },
-                { id: 9, x: centerX + 100, y: centerY + 120, label: 'Dataset B', type: 'resource', connections: [4] }
+            // 基础节点标签库
+            const nodeLabels = [
+                'Data\nSource', 'Processing\nUnit', 'Analysis\nEngine', 'ML\nModel',
+                'Validation\nModule', 'Output\nInterface', 'Feedback\nLoop', 'Storage\nSystem',
+                'Security\nLayer', 'Cache\nSystem', 'Load\nBalancer', 'API\nGateway',
+                'Monitor\nService', 'Backup\nSystem', 'Queue\nManager', 'Scheduler',
+                'Auth\nService', 'Config\nManager', 'Log\nAggregator', 'Metrics\nCollector'
             ];
 
-            // 绘制连接线
-            const drawnConnections = new Set();
-            nodes.forEach(node => {
-                node.connections.forEach(targetId => {
-                    const connectionKey = [node.id, targetId].sort().join('-');
-                    if (!drawnConnections.has(connectionKey)) {
-                        drawnConnections.add(connectionKey);
+            const nodeTypes = [
+                'input', 'process', 'analysis', 'model', 'validation', 'output',
+                'feedback', 'storage', 'security', 'cache', 'balancer', 'gateway',
+                'monitor', 'backup', 'queue', 'scheduler', 'auth', 'config', 'log', 'metrics'
+            ];
 
-                        const targetNode = nodes[targetId];
-                        const color = colors[(node.id + targetId) % colors.length];
+            // 根据颜色数量确定节点数量 - 优化减少球体数量
+            let numNodes;
+            if (colorCount <= 6) {
+                numNodes = Math.max(6, colorCount + 1); // 最少6个，最多7个
+            } else if (colorCount <= 10) {
+                numNodes = Math.min(10, colorCount + 2); // 8-12个
+            } else if (colorCount <= 15) {
+                numNodes = Math.min(14, colorCount + 1); // 11-16个
+            } else {
+                numNodes = Math.min(16, Math.floor(colorCount * 0.8)); // 大幅减少节点数量
+            }
 
-                        // 绘制连接线
-                        ctx.strokeStyle = color;
-                        ctx.lineWidth = connectionWidth;
-                        ctx.globalAlpha = 0.6;
-                        ctx.beginPath();
-                        ctx.moveTo(node.x, node.y);
-                        ctx.lineTo(targetNode.x, targetNode.y);
-                        ctx.stroke();
-                        ctx.globalAlpha = 1;
+            // 生成节点位置 - 改进布局算法，增加防重叠逻辑
+            for (let i = 0; i < numNodes; i++) {
+                let x, y;
 
-                        // 绘制连接强度指示器
-                        const midX = (node.x + targetNode.x) / 2;
-                        const midY = (node.y + targetNode.y) / 2;
-
-                        ctx.fillStyle = color;
-                        ctx.beginPath();
-                        ctx.arc(midX, midY, 3, 0, 2 * Math.PI);
-                        ctx.fill();
-                    }
-                });
-            });
-
-            // 绘制节点
-            nodes.forEach(node => {
-                let color;
-                let borderColor = '#2c3e50';
-
-                switch (node.type) {
-                    case 'core':
-                        color = colors[0] || '#e74c3c';
-                        break;
-                    case 'institution':
-                        color = colors[1] || '#3498db';
-                        break;
-                    case 'company':
-                        color = colors[2] || '#2ecc71';
-                        break;
-                    case 'funding':
-                        color = colors[3] || '#f39c12';
-                        break;
-                    case 'lab':
-                        color = colors[4] || '#9b59b6';
-                        break;
-                    case 'resource':
-                        color = colors[5] || '#1abc9c';
-                        break;
-                    default:
-                        color = colors[6] || '#34495e';
+                if (numNodes <= 8) {
+                    // 原始布局 - 增加间距
+                    const positions = [
+                        [0.15, 0.25], [0.4, 0.15], [0.65, 0.25], [0.85, 0.4],
+                        [0.75, 0.65], [0.5, 0.75], [0.25, 0.65], [0.15, 0.45]
+                    ];
+                    [x, y] = positions[i] || [0.5, 0.5];
+                } else if (numNodes <= 12) {
+                    // 双层圆形布局 - 增加层间距离
+                    const layer = i < 6 ? 0 : 1;
+                    const angleStep = (2 * Math.PI) / (layer === 0 ? 6 : numNodes - 6);
+                    const angle = angleStep * (layer === 0 ? i : i - 6);
+                    const radius = layer === 0 ? 0.22 : 0.42; // 增加层间距离
+                    x = 0.5 + radius * Math.cos(angle);
+                    y = 0.5 + radius * Math.sin(angle);
+                } else {
+                    // 三层圆形布局 - 优化层间距离和角度偏移
+                    const layer = i < 5 ? 0 : i < 10 ? 1 : 2;
+                    const layerSizes = [5, 5, numNodes - 10];
+                    const angleStep = (2 * Math.PI) / layerSizes[layer];
+                    const layerIndex = layer === 0 ? i : layer === 1 ? i - 5 : i - 10;
+                    // 添加角度偏移避免节点对齐
+                    const angleOffset = layer * Math.PI / layerSizes[layer];
+                    const angle = angleStep * layerIndex + angleOffset;
+                    const radius = [0.18, 0.32, 0.46][layer]; // 优化层间距离
+                    x = 0.5 + radius * Math.cos(angle);
+                    y = 0.5 + radius * Math.sin(angle);
                 }
 
-                // 绘制节点
-                ctx.fillStyle = color;
+                // 确保节点在边界内，增加边距
+                x = Math.max(0.12, Math.min(0.88, x));
+                y = Math.max(0.18, Math.min(0.82, y));
+
+                // 动态调整节点大小，防止重叠
+                const baseSize = numNodes > 12 ? 25 : numNodes > 8 ? 30 : 35;
+                const size = baseSize + Math.random() * 10; // 减小随机范围
+                const importance = 0.5 + Math.random() * 0.5; // 0.5-1.0
+
+                nodes.push({
+                    id: String.fromCharCode(65 + i), // A, B, C, ...
+                    label: nodeLabels[i % nodeLabels.length],
+                    x: x,
+                    y: y,
+                    size: size,
+                    type: nodeTypes[i % nodeTypes.length],
+                    importance: importance
+                });
+            }
+
+            // 动态生成连接关系 - 优化连接数量，减少复杂度和交叉
+            const connectionTypes = ['data', 'process', 'validate', 'train', 'feedback', 'output', 'adjust', 'store', 'retrieve', 'direct', 'secure', 'cache', 'balance', 'monitor', 'backup'];
+            const flowTypes = ['high', 'medium', 'low'];
+
+            // 确保每个节点至少有一个连接，但限制总连接数，优化连接策略减少交叉
+            for (let i = 0; i < numNodes; i++) {
+                const fromNode = nodes[i];
+
+                // 根据节点数量动态调整连接数，避免过度复杂
+                let maxConnections;
+                if (numNodes <= 8) {
+                    maxConnections = 1; // 减少连接数，避免交叉
+                } else if (numNodes <= 12) {
+                    maxConnections = 1; // 大幅减少连接数
+                } else {
+                    maxConnections = 1; // 大量节点时每个节点只有1个连接
+                }
+
+                const numConnections = Math.min(1, numNodes - 1);
+
+                for (let j = 0; j < numConnections; j++) {
+                    let toIndex;
+                    let attempts = 0;
+                    let bestDistance = Infinity;
+                    let bestIndex = -1;
+
+                    // 优先连接到距离适中的节点，避免长距离连接造成交叉
+                    for (let k = 0; k < numNodes; k++) {
+                        if (k !== i && !edges.some(e => e.from === fromNode.id && e.to === nodes[k].id)) {
+                            const dx = fromNode.x - nodes[k].x;
+                            const dy = fromNode.y - nodes[k].y;
+                            const distance = Math.sqrt(dx * dx + dy * dy);
+
+                            // 寻找距离适中的节点（不太近也不太远）
+                            const idealDistance = 0.2; // 理想距离
+                            const distanceScore = Math.abs(distance - idealDistance);
+
+                            if (distanceScore < bestDistance) {
+                                bestDistance = distanceScore;
+                                bestIndex = k;
+                            }
+                        }
+                    }
+
+                    if (bestIndex !== -1) {
+                        const toNode = nodes[bestIndex];
+                        const weight = 0.3 + Math.random() * 0.7; // 0.3-1.0
+
+                        edges.push({
+                            from: fromNode.id,
+                            to: toNode.id,
+                            weight: weight,
+                            type: connectionTypes[edges.length % connectionTypes.length],
+                            flow: flowTypes[Math.floor(Math.random() * 3)]
+                        });
+                    }
+                }
+            }
+
+            // 更严格地限制连接数量，根据节点数量动态调整
+            const maxEdges = Math.min(edges.length, Math.floor(numNodes * 0.8)); // 进一步减少连接数
+            edges = edges.slice(0, maxEdges);
+
+            // 绘制连接线 - 优化样式
+            edges.forEach((edge, index) => {
+                const fromNode = nodes.find(n => n.id === edge.from);
+                const toNode = nodes.find(n => n.id === edge.to);
+
+                if (fromNode && toNode) {
+                    const fromX = fromNode.x * (width - 2 * padding) + padding;
+                    const fromY = fromNode.y * (height - 2 * padding) + padding;
+                    const toX = toNode.x * (width - 2 * padding) + padding;
+                    const toY = toNode.y * (height - 2 * padding) + padding;
+
+                    // 计算节点边缘的连接点
+                    const dx = toX - fromX;
+                    const dy = toY - fromY;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    const fromRadius = fromNode.size;
+                    const toRadius = toNode.size;
+
+                    const startX = fromX + (dx / distance) * fromRadius;
+                    const startY = fromY + (dy / distance) * fromRadius;
+                    const endX = toX - (dx / distance) * toRadius;
+                    const endY = toY - (dy / distance) * toRadius;
+
+                    // 根据权重和流量设置线条样式
+                    const baseWidth = 2;
+                    const lineWidth = baseWidth + edge.weight * 6;
+                    const alpha = 0.4 + edge.weight * 0.6;
+                    const edgeColor = colors[index % colors.length];
+
+                    // 创建渐变连接线
+                    const gradient = ctx.createLinearGradient(startX, startY, endX, endY);
+                    gradient.addColorStop(0, edgeColor + Math.floor(alpha * 255).toString(16).padStart(2, '0'));
+                    gradient.addColorStop(1, adjustBrightness(edgeColor, -20) + Math.floor(alpha * 255).toString(16).padStart(2, '0'));
+
+                    ctx.strokeStyle = gradient;
+                    ctx.lineWidth = lineWidth;
+                    ctx.lineCap = 'round';
+
+                    // 绘制曲线连接 - 更自然的曲线
+                    const midX = (startX + endX) / 2;
+                    const midY = (startY + endY) / 2;
+                    const controlOffset = Math.min(50, distance * 0.2);
+                    const perpX = -dy / distance * controlOffset;
+                    const perpY = dx / distance * controlOffset;
+                    const controlX = midX + perpX * (index % 2 === 0 ? 1 : -1);
+                    const controlY = midY + perpY * (index % 2 === 0 ? 1 : -1);
+
+                    // 添加阴影效果
+                    ctx.shadowColor = 'rgba(0,0,0,0.2)';
+                    ctx.shadowBlur = 3;
+                    ctx.shadowOffsetX = 1;
+                    ctx.shadowOffsetY = 1;
+
+                    ctx.beginPath();
+                    ctx.moveTo(startX, startY);
+                    ctx.quadraticCurveTo(controlX, controlY, endX, endY);
+                    ctx.stroke();
+
+                    ctx.shadowColor = 'transparent';
+                    ctx.shadowBlur = 0;
+                    ctx.shadowOffsetX = 0;
+                    ctx.shadowOffsetY = 0;
+
+                    // 绘制增强的箭头
+                    const angle = Math.atan2(endY - controlY, endX - controlX);
+                    const arrowLength = Math.min(20, lineWidth * 3);
+                    const arrowAngle = Math.PI / 5;
+
+                    ctx.fillStyle = edgeColor;
+                    ctx.beginPath();
+                    ctx.moveTo(endX, endY);
+                    ctx.lineTo(
+                        endX - arrowLength * Math.cos(angle - arrowAngle),
+                        endY - arrowLength * Math.sin(angle - arrowAngle)
+                    );
+                    ctx.lineTo(
+                        endX - arrowLength * 0.6 * Math.cos(angle),
+                        endY - arrowLength * 0.6 * Math.sin(angle)
+                    );
+                    ctx.lineTo(
+                        endX - arrowLength * Math.cos(angle + arrowAngle),
+                        endY - arrowLength * Math.sin(angle + arrowAngle)
+                    );
+                    ctx.closePath();
+                    ctx.fill();
+
+                    // 添加权重标签 - 优化显示
+                    if (edge.weight > 0.6) {
+                        ctx.fillStyle = '#2c3e50';
+                        ctx.font = `bold ${Math.max(10, lineWidth)}px "Times New Roman", serif`;
+                        ctx.textAlign = 'center';
+                        ctx.textBaseline = 'middle';
+
+                        const labelX = (startX + endX) / 2 + perpX * 0.3;
+                        const labelY = (startY + endY) / 2 + perpY * 0.3;
+
+                        // 白色背景圆形
+                        const weightText = edge.weight.toFixed(1);
+                        const textMetrics = ctx.measureText(weightText);
+                        const bgRadius = Math.max(textMetrics.width / 2 + 3, 8);
+
+                        ctx.fillStyle = 'rgba(255,255,255,0.9)';
+                        ctx.beginPath();
+                        ctx.arc(labelX, labelY, bgRadius, 0, 2 * Math.PI);
+                        ctx.fill();
+
+                        ctx.strokeStyle = edgeColor;
+                        ctx.lineWidth = 1;
+                        ctx.stroke();
+
+                        ctx.fillStyle = '#2c3e50';
+                        ctx.fillText(weightText, labelX, labelY);
+                    }
+                }
+            });
+
+            // 绘制节点 - 增强视觉效果
+            nodes.forEach((node, index) => {
+                const x = node.x * (width - 2 * padding) + padding;
+                const y = node.y * (height - 2 * padding) + padding;
+                const nodeSize = node.size * (0.8 + node.importance * 0.4);
+
+                // 根据节点类型和重要性选择颜色
+                const baseColor = colors[index % colors.length];
+                const nodeColor = adjustBrightness(baseColor, node.importance * 20 - 10);
+
+                // 绘制节点光晕效果
+                const glowGradient = ctx.createRadialGradient(x, y, 0, x, y, nodeSize * 1.5);
+                glowGradient.addColorStop(0, nodeColor + '40');
+                glowGradient.addColorStop(1, nodeColor + '00');
+                ctx.fillStyle = glowGradient;
                 ctx.beginPath();
-                ctx.arc(node.x, node.y, nodeRadius, 0, 2 * Math.PI);
+                ctx.arc(x, y, nodeSize * 1.5, 0, 2 * Math.PI);
                 ctx.fill();
-                ctx.strokeStyle = borderColor;
-                ctx.lineWidth = 2;
+
+                // 绘制节点阴影
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.25)';
+                ctx.beginPath();
+                ctx.arc(x + 3, y + 3, nodeSize, 0, 2 * Math.PI);
+                ctx.fill();
+
+                // 绘制节点渐变
+                const nodeGradient = ctx.createRadialGradient(
+                    x - nodeSize * 0.3, y - nodeSize * 0.3, 0,
+                    x, y, nodeSize
+                );
+                nodeGradient.addColorStop(0, adjustBrightness(nodeColor, 30));
+                nodeGradient.addColorStop(0.7, nodeColor);
+                nodeGradient.addColorStop(1, adjustBrightness(nodeColor, -20));
+
+                ctx.fillStyle = nodeGradient;
+                ctx.beginPath();
+                ctx.arc(x, y, nodeSize, 0, 2 * Math.PI);
+                ctx.fill();
+
+                // 绘制节点边框
+                ctx.strokeStyle = adjustBrightness(nodeColor, -40);
+                ctx.lineWidth = 3;
                 ctx.stroke();
 
-                // 节点标签
+                // 内部高光
+                ctx.strokeStyle = adjustBrightness(nodeColor, 50);
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                ctx.arc(x - nodeSize * 0.2, y - nodeSize * 0.2, nodeSize * 0.3, 0, 2 * Math.PI);
+                ctx.stroke();
+
+                // 绘制节点标签 - 增强可读性，防止文字溢出
                 ctx.fillStyle = '#ffffff';
-                ctx.font = 'bold 8px "Arial", sans-serif';
-                const words = node.label.split(' ');
-                if (words.length > 1) {
-                    words.forEach((word, index) => {
-                        ctx.fillText(word, node.x, node.y + (index - 0.5) * 8);
-                    });
-                } else {
-                    ctx.fillText(node.label, node.x, node.y);
-                }
+                const fontSize = Math.max(11, nodeSize * 0.25);
+                ctx.font = `bold ${fontSize}px "Times New Roman", serif`;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.shadowColor = 'rgba(0,0,0,0.5)';
+                ctx.shadowBlur = 2;
+
+                const lines = node.label.split('\n');
+                const lineHeight = fontSize * 1.1;
+
+                // 检查文字是否会溢出圆圈，如果溢出则缩短文字
+                lines.forEach((line, lineIndex) => {
+                    const yOffset = (lineIndex - (lines.length - 1) / 2) * lineHeight;
+
+                    // 计算文字宽度，如果超出圆圈直径则截断
+                    const maxWidth = nodeSize * 1.6; // 允许文字稍微超出圆圈
+                    let displayText = line;
+
+                    if (ctx.measureText(displayText).width > maxWidth) {
+                        while (ctx.measureText(displayText + '...').width > maxWidth && displayText.length > 0) {
+                            displayText = displayText.slice(0, -1);
+                        }
+                        displayText += '...';
+                    }
+
+                    ctx.fillText(displayText, x, y + yOffset);
+                });
+
+                ctx.shadowColor = 'transparent';
+                ctx.shadowBlur = 0;
+
+                // 绘制节点ID - 优化位置
+                ctx.fillStyle = adjustBrightness(nodeColor, -60);
+                ctx.font = `bold ${Math.max(8, nodeSize * 0.2)}px "Times New Roman", serif`;
+                ctx.fillText(node.id, x + nodeSize * 0.6, y - nodeSize * 0.6);
             });
 
-            // 绘制图例
-            const legendX = width - 150;
-            const legendY = height - 150;
-            const legendItems = [
-                { label: 'Core Lab', color: colors[0] || '#e74c3c' },
-                { label: 'University', color: colors[1] || '#3498db' },
-                { label: 'Company', color: colors[2] || '#2ecc71' },
-                { label: 'Funding', color: colors[3] || '#f39c12' }
-            ];
+            // 添加增强的图例 - 调整位置到左下角避免遮挡节点
+            const legendX = 20;
+            const legendY = height - 160;
+            const legendWidth = 200;
+            const legendHeight = 140;
 
-            ctx.font = '10px "Arial", sans-serif';
+            // 图例背景渐变
+            const legendGradient = ctx.createLinearGradient(legendX, legendY, legendX, legendY + legendHeight);
+            legendGradient.addColorStop(0, 'rgba(248,249,250,0.95)');
+            legendGradient.addColorStop(1, 'rgba(233,236,239,0.95)');
+            ctx.fillStyle = legendGradient;
+            ctx.fillRect(legendX - 10, legendY - 10, legendWidth, legendHeight);
+
+            ctx.strokeStyle = '#dee2e6';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(legendX - 10, legendY - 10, legendWidth, legendHeight);
+
+            // 图例标题
+            ctx.fillStyle = '#2c3e50';
+            ctx.font = 'bold 14px "Times New Roman", serif';
             ctx.textAlign = 'left';
+            ctx.fillText('Network Analysis', legendX, legendY);
+
+            // 图例内容
+            ctx.font = '11px "Times New Roman", serif';
+            const legendItems = [
+                '• Node Size: Processing Capacity',
+                '• Node Glow: Importance Level',
+                '• Edge Width: Connection Strength',
+                '• Edge Curve: Data Flow Path',
+                '• Numbers: Weight Values (>0.6)',
+                '• Colors: Component Types'
+            ];
 
             legendItems.forEach((item, index) => {
-                const y = legendY + index * 20;
-
-                // 图例色块
-                ctx.fillStyle = item.color;
-                ctx.beginPath();
-                ctx.arc(legendX + 8, y, 6, 0, 2 * Math.PI);
-                ctx.fill();
-                ctx.strokeStyle = '#2c3e50';
-                ctx.lineWidth = 1;
-                ctx.stroke();
-
-                // 图例文字
-                ctx.fillStyle = '#2c3e50';
-                ctx.fillText(item.label, legendX + 20, y + 2);
+                ctx.fillText(item, legendX, legendY + 25 + index * 16);
             });
 
             // 添加图表标题
@@ -6113,314 +7156,782 @@
             const width = canvas.width;
             const height = canvas.height;
 
-            // 清空画布
-            ctx.clearRect(0, 0, width, height);
-            ctx.fillStyle = '#ffffff';
-            ctx.fillRect(0, 0, width, height);
-
-            // 时间轴参数
-            const centerY = height / 2;
-            const startYear = 2018;
-            const endYear = 2028;
-            const timelineWidth = width * 0.8;
-            const timelineStartX = (width - timelineWidth) / 2;
-
-            // 设置学术风格
-            ctx.font = '12px "Arial", sans-serif';
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-
-
-
-            // 绘制主时间轴
-            ctx.strokeStyle = colors[0] || '#3498db';
-            ctx.lineWidth = 4;
-            ctx.beginPath();
-            ctx.moveTo(timelineStartX, centerY);
-            ctx.lineTo(timelineStartX + timelineWidth, centerY);
-            ctx.stroke();
-
-            // 生成年份点
-            const years = [];
-            for (let year = startYear; year <= endYear; year++) {
-                years.push(year);
+            // 鲁棒性检查：确保颜色数组有效
+            if (!colors || !Array.isArray(colors) || colors.length === 0) {
+                colors = ['#2563eb', '#dc2626', '#059669', '#d97706', '#7c3aed', '#0891b2', '#374151', '#ea580c'];
             }
 
-            // 绘制年份点和标签
-            years.forEach((year, index) => {
-                const x = timelineStartX + (index / (years.length - 1)) * timelineWidth;
+            // Nature期刊高级风格配色方案
+            const natureStyle = {
+                primary: '#1a202c',      // 更深的主色调
+                secondary: '#4a5568',    // 优雅的次要色
+                accent: '#3182ce',       // 科学蓝
+                background: '#ffffff',   // 纯白背景
+                grid: '#e2e8f0',        // 精细网格
+                timeline: '#2d3748',     // 时间轴主线
+                cardBg: '#f7fafc',      // 卡片背景
+                shadow: 'rgba(0, 0, 0, 0.08)'
+            };
 
-                // 年份点
-                ctx.fillStyle = colors[0] || '#3498db';
-                ctx.beginPath();
-                ctx.arc(x, centerY, 8, 0, 2 * Math.PI);
-                ctx.fill();
-                ctx.strokeStyle = '#ffffff';
-                ctx.lineWidth = 2;
-                ctx.stroke();
-
-                // 年份标签
-                ctx.fillStyle = '#2c3e50';
-                ctx.font = 'bold 12px "Arial", sans-serif';
-                ctx.fillText(year.toString(), x, centerY + 30);
-            });
-
-            // 定义研究事件
-            const events = [
-                { year: 2018, title: 'Project Start', desc: 'Initial research proposal submitted', type: 'milestone', position: 'top' },
-                { year: 2019, title: 'Literature Review', desc: 'Comprehensive survey completed', type: 'research', position: 'bottom' },
-                { year: 2020, title: 'Methodology Design', desc: 'Experimental framework established', type: 'development', position: 'top' },
-                { year: 2021, title: 'Data Collection', desc: 'Primary dataset gathered', type: 'data', position: 'bottom' },
-                { year: 2022, title: 'First Results', desc: 'Initial findings published', type: 'achievement', position: 'top' },
-                { year: 2023, title: 'Conference Presentation', desc: 'Presented at international conference', type: 'milestone', position: 'bottom' },
-                { year: 2024, title: 'Journal Publication', desc: 'Paper accepted in top-tier journal', type: 'achievement', position: 'top' },
-                { year: 2025, title: 'Collaboration', desc: 'Partnership with industry established', type: 'development', position: 'bottom' },
-                { year: 2026, title: 'Extended Study', desc: 'Follow-up research initiated', type: 'research', position: 'top' },
-                { year: 2027, title: 'Technology Transfer', desc: 'Results applied in practice', type: 'achievement', position: 'bottom' },
-                { year: 2028, title: 'Project Conclusion', desc: 'Final report and future directions', type: 'milestone', position: 'top' }
-            ];
-
-            // 绘制事件
-            events.forEach((event, index) => {
-                const yearIndex = (event.year - startYear) / 1; // 每年一个事件
-                const x = timelineStartX + (yearIndex / (years.length - 1)) * timelineWidth;
-                const offsetY = event.position === 'top' ? -80 : 80;
-                const eventY = centerY + offsetY;
-
-                // 连接线
-                ctx.strokeStyle = colors[(index % (colors.length - 1)) + 1] || '#7f8c8d';
-                ctx.lineWidth = 2;
-                ctx.setLineDash([3, 3]);
-                ctx.beginPath();
-                ctx.moveTo(x, centerY);
-                ctx.lineTo(x, eventY);
-                ctx.stroke();
-                ctx.setLineDash([]);
-
-                // 事件图标
-                const color = colors[(index % (colors.length - 1)) + 1] || '#e74c3c';
-                ctx.fillStyle = color;
-
-                if (event.type === 'milestone') {
-                    // 菱形里程碑
-                    ctx.beginPath();
-                    ctx.moveTo(x, eventY - 12);
-                    ctx.lineTo(x + 12, eventY);
-                    ctx.lineTo(x, eventY + 12);
-                    ctx.lineTo(x - 12, eventY);
-                    ctx.closePath();
-                    ctx.fill();
-                } else if (event.type === 'achievement') {
-                    // 星形成就
-                    drawStar(ctx, x, eventY, 12, 6, 5);
-                    ctx.fill();
-                } else {
-                    // 圆形其他事件
-                    ctx.beginPath();
-                    ctx.arc(x, eventY, 12, 0, 2 * Math.PI);
-                    ctx.fill();
-                }
-
-                ctx.strokeStyle = '#ffffff';
-                ctx.lineWidth = 2;
-                ctx.stroke();
-
-                // 事件标题
-                ctx.fillStyle = '#2c3e50';
-                ctx.font = 'bold 11px "Arial", sans-serif';
-                ctx.fillText(event.title, x, eventY - 25);
-
-                // 事件描述
-                ctx.fillStyle = '#7f8c8d';
-                ctx.font = '9px "Arial", sans-serif';
-                const words = event.desc.split(' ');
-                const midPoint = Math.ceil(words.length / 2);
-                const line1 = words.slice(0, midPoint).join(' ');
-                const line2 = words.slice(midPoint).join(' ');
-
-                if (line2) {
-                    ctx.fillText(line1, x, eventY + 20);
-                    ctx.fillText(line2, x, eventY + 32);
-                } else {
-                    ctx.fillText(line1, x, eventY + 26);
-                }
-            });
-
-            // 添加图表标题
-            drawChartTitle(ctx, width, '时间轴 - 智核学术');
-        }
-
-        function drawOrgChart(ctx, canvas, colors) {
-            const width = canvas.width;
-            const height = canvas.height;
-
-            // 清空画布
-            ctx.clearRect(0, 0, width, height);
-            ctx.fillStyle = '#ffffff';
+            // 清空画布，使用Nature风格纯白背景
+            ctx.fillStyle = natureStyle.background;
             ctx.fillRect(0, 0, width, height);
 
-            // 组织结构图参数
-            const nodeWidth = 100;
-            const nodeHeight = 50;
-            const levelHeight = 80;
-            const startY = 80;
+            // 计算优化的边距和布局 - 确保不超出边框
+            const margin = Math.min(width, height) * 0.08; // 增加边距
+            const contentWidth = width - 2 * margin;
+            const contentHeight = height - 2 * margin;
 
-            // 设置学术风格
-            ctx.font = '10px "Arial", sans-serif';
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
+            // 统一标题样式 - 预留足够空间
+            const titleAreaHeight = 120; // 增加标题区域高度
+            drawChartTitle(ctx, width, '时间轴图 - 智核学术');
 
-            // 绘制标题
-            ctx.fillStyle = '#2c3e50';
-            ctx.font = 'bold 18px "Arial", sans-serif';
-            ctx.fillText('Research Organization Structure', width / 2, 40);
+            // 根据颜色数量决定时间轴布局策略 - Nature期刊级别优化
+            const colorCount = colors.length;
+            let timelineCount, eventsPerTimeline;
 
-            // 定义组织结构
-            const orgData = [
-                { level: 0, name: 'Principal\nInvestigator', title: 'PI', x: width / 2, y: startY },
-                { level: 1, name: 'Postdoc\nResearcher', title: 'Postdoc', x: width / 2, y: startY + levelHeight },
-                { level: 2, name: 'PhD Student\n(Year 3-4)', title: 'Senior PhD', x: width / 2 - 120, y: startY + levelHeight * 2 },
-                { level: 2, name: 'PhD Student\n(Year 1-2)', title: 'Junior PhD', x: width / 2, y: startY + levelHeight * 2 },
-                { level: 2, name: 'Master\nStudent', title: 'MSc', x: width / 2 + 120, y: startY + levelHeight * 2 },
-                { level: 3, name: 'Research\nAssistant', title: 'RA', x: width / 2 - 180, y: startY + levelHeight * 3 },
-                { level: 3, name: 'Lab\nTechnician', title: 'Tech', x: width / 2 - 60, y: startY + levelHeight * 3 },
-                { level: 3, name: 'Undergrad\nStudent', title: 'UG', x: width / 2 + 60, y: startY + levelHeight * 3 },
-                { level: 3, name: 'Visiting\nScholar', title: 'Visitor', x: width / 2 + 180, y: startY + levelHeight * 3 }
+            // 更智能的布局策略，考虑视觉平衡和可读性
+            if (colorCount <= 3) {
+                // 单条时间轴，最佳视觉效果
+                timelineCount = 1;
+                eventsPerTimeline = colorCount;
+            } else if (colorCount <= 6) {
+                // 双条时间轴，保持良好间距
+                timelineCount = 2;
+                eventsPerTimeline = Math.ceil(colorCount / 2);
+            } else if (colorCount <= 12) {
+                // 三条时间轴，平衡密度和可读性
+                timelineCount = 3;
+                eventsPerTimeline = Math.ceil(colorCount / 3);
+            } else if (colorCount <= 20) {
+                // 四条时间轴，处理中等数量
+                timelineCount = 4;
+                eventsPerTimeline = Math.ceil(colorCount / 4);
+            } else {
+                // 五条时间轴，处理大量配色
+                timelineCount = 5;
+                eventsPerTimeline = Math.ceil(colorCount / 5);
+            }
+
+            // 计算时间轴布局参数 - Nature风格精确控制
+            const sideMargin = Math.max(100, width * 0.08); // 更宽的侧边距
+            const timelineStartX = margin + sideMargin;
+            const timelineEndX = width - margin - sideMargin;
+            const timelineLength = timelineEndX - timelineStartX;
+
+            // 动态计算可用高度，预留更多空间防止超出边框
+            const availableTimelineHeight = contentHeight - titleAreaHeight - 140; // 增加底部边距
+
+            // 根据时间轴数量计算最优间距 - 防止遮挡和超出边框
+            const cardHeight = timelineCount >= 5 ? 40 : (timelineCount >= 4 ? 50 : (timelineCount >= 3 ? 60 : (timelineCount >= 2 ? 70 : 80))); // 适当减小卡片高度
+            const cardOffset = cardHeight + 20; // 卡片到时间轴的距离
+            const minTimelineSpacing = cardOffset * 2 + 25; // 确保上下卡片不重叠，适当减小间距
+
+            // 计算实际间距，确保不会遮挡
+            let actualTimelineSpacing;
+            if (timelineCount === 1) {
+                actualTimelineSpacing = 0;
+            } else {
+                const idealSpacing = availableTimelineHeight / (timelineCount + 1);
+                actualTimelineSpacing = Math.max(minTimelineSpacing, idealSpacing);
+
+                // 如果间距过大，适当缩小但保持最小值
+                if (actualTimelineSpacing > 200) {
+                    actualTimelineSpacing = Math.min(200, Math.max(minTimelineSpacing, idealSpacing * 0.8));
+                }
+            }
+
+            // 计算第一条时间轴的Y坐标，确保居中
+            const totalUsedHeight = (timelineCount - 1) * actualTimelineSpacing;
+            const firstTimelineY = margin + titleAreaHeight + (availableTimelineHeight - totalUsedHeight) / 2;
+
+            // 动态生成事件数据
+            const eventTemplates = [
+                { title: 'Research Initiation', desc: 'Problem identification\nand hypothesis formation', phase: 'Planning' },
+                { title: 'Literature Analysis', desc: 'Comprehensive review\nof existing knowledge', phase: 'Foundation' },
+                { title: 'Experimental Design', desc: 'Methodology development\nand protocol establishment', phase: 'Preparation' },
+                { title: 'Data Collection', desc: 'Systematic evidence\ngathering and validation', phase: 'Execution' },
+                { title: 'Results Analysis', desc: 'Statistical processing\nand pattern recognition', phase: 'Analysis' },
+                { title: 'Peer Review', desc: 'Expert evaluation\nand feedback integration', phase: 'Validation' },
+                { title: 'Publication', desc: 'Knowledge dissemination\nand community sharing', phase: 'Completion' },
+                { title: 'Follow-up Studies', desc: 'Extended research\nand replication efforts', phase: 'Extension' },
+                { title: 'Clinical Trials', desc: 'Real-world testing\nand validation', phase: 'Application' },
+                { title: 'Implementation', desc: 'Practical deployment\nand scaling', phase: 'Deployment' },
+                { title: 'Impact Assessment', desc: 'Long-term evaluation\nand measurement', phase: 'Evaluation' },
+                { title: 'Innovation Cycle', desc: 'Next generation\nresearch planning', phase: 'Innovation' }
             ];
 
-            // 绘制连接线
-            ctx.strokeStyle = colors[1] || '#7f8c8d';
+            // 绘制多条时间轴
+            let eventIndex = 0;
+            for (let timelineIdx = 0; timelineIdx < timelineCount; timelineIdx++) {
+                const timelineY = firstTimelineY + timelineIdx * actualTimelineSpacing;
+
+                // 计算当前时间轴的事件数量
+                const remainingEvents = colorCount - eventIndex;
+                const currentTimelineEvents = Math.min(eventsPerTimeline, remainingEvents);
+
+                if (currentTimelineEvents <= 0) break;
+
+                // 绘制时间轴线 - 渐变效果
+                const gradient = ctx.createLinearGradient(timelineStartX, 0, timelineEndX, 0);
+                gradient.addColorStop(0, natureStyle.accent);
+                gradient.addColorStop(0.5, natureStyle.timeline);
+                gradient.addColorStop(1, natureStyle.accent);
+
+                ctx.strokeStyle = gradient;
+                ctx.lineWidth = 3;
+                ctx.lineCap = 'round';
+                ctx.beginPath();
+                ctx.moveTo(timelineStartX, timelineY);
+                ctx.lineTo(timelineEndX, timelineY);
+                ctx.stroke();
+
+                // 计算事件间距
+                const eventSpacing = currentTimelineEvents > 1 ? timelineLength / (currentTimelineEvents + 1) : timelineLength / 2;
+
+                // 绘制当前时间轴的事件
+                for (let i = 0; i < currentTimelineEvents; i++) {
+                    const eventX = timelineStartX + (i + 1) * eventSpacing;
+                    const eventColor = colors[eventIndex % colors.length];
+                    const eventData = eventTemplates[eventIndex % eventTemplates.length];
+
+                    // 交替上下布局，但为多时间轴优化间距 - 鲁棒性改进
+                    const isTop = (eventIndex % 2 === 0);
+
+                    // 根据时间轴数量动态调整卡片偏移和大小 - Nature期刊标准
+                    let cardWidth;
+                    if (timelineCount >= 5) {
+                        cardWidth = Math.max(120, Math.min(160, timelineLength / (eventsPerTimeline + 1) * 0.7));
+                    } else if (timelineCount === 4) {
+                        cardWidth = Math.max(140, Math.min(180, timelineLength / (eventsPerTimeline + 1) * 0.75));
+                    } else if (timelineCount === 3) {
+                        cardWidth = Math.max(160, Math.min(200, timelineLength / (eventsPerTimeline + 1) * 0.8));
+                    } else if (timelineCount === 2) {
+                        cardWidth = Math.max(180, Math.min(220, timelineLength / (eventsPerTimeline + 1) * 0.85));
+                    } else {
+                        cardWidth = Math.max(200, Math.min(250, timelineLength / (eventsPerTimeline + 1) * 0.9));
+                    }
+
+                    // 确保卡片不会重叠 - 智能间距调整
+                    const maxCardWidth = (eventSpacing * 0.9);
+                    cardWidth = Math.min(cardWidth, maxCardWidth);
+
+                    const cardY = isTop ? timelineY - cardOffset : timelineY + 40;
+
+                    // 绘制连接线
+                    ctx.strokeStyle = adjustBrightness(eventColor, 0.7);
+                    ctx.lineWidth = 2;
+                    ctx.setLineDash([6, 3]);
+                    ctx.beginPath();
+                    ctx.moveTo(eventX, timelineY);
+                    ctx.lineTo(eventX, cardY + (isTop ? (cardOffset - 20) : -20));
+                    ctx.stroke();
+                    ctx.setLineDash([]);
+
+                    // 绘制时间轴节点
+                    // 外圈光晕效果
+                    const glowGradient = ctx.createRadialGradient(eventX, timelineY, 0, eventX, timelineY, 12);
+                    glowGradient.addColorStop(0, adjustBrightness(eventColor, 1.2));
+                    glowGradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
+                    ctx.fillStyle = glowGradient;
+                    ctx.beginPath();
+                    ctx.arc(eventX, timelineY, 12, 0, 2 * Math.PI);
+                    ctx.fill();
+
+                    // 主节点
+                    ctx.fillStyle = eventColor;
+                    ctx.beginPath();
+                    ctx.arc(eventX, timelineY, 8, 0, 2 * Math.PI);
+                    ctx.fill();
+
+                    // 节点内圈
+                    ctx.fillStyle = natureStyle.background;
+                    ctx.beginPath();
+                    ctx.arc(eventX, timelineY, 5, 0, 2 * Math.PI);
+                    ctx.fill();
+
+                    // 绘制事件卡片 - Nature期刊级别视觉设计
+                    const cardX = eventX - cardWidth / 2;
+
+                    // 智能边界检测和调整 - 防止卡片超出画布
+                    const minCardX = timelineStartX - cardWidth / 2 + 10;
+                    const maxCardX = timelineEndX - cardWidth / 2 - 10;
+                    const adjustedCardX = Math.max(minCardX, Math.min(maxCardX, cardX));
+
+                    // 高质量阴影效果 - 多层阴影
+                    ctx.fillStyle = 'rgba(0, 0, 0, 0.04)';
+                    ctx.fillRect(adjustedCardX + 4, cardY + 4, cardWidth, cardHeight);
+                    ctx.fillStyle = 'rgba(0, 0, 0, 0.08)';
+                    ctx.fillRect(adjustedCardX + 2, cardY + 2, cardWidth, cardHeight);
+
+                    // 卡片背景 - Nature期刊风格渐变
+                    const cardGradient = ctx.createLinearGradient(adjustedCardX, cardY, adjustedCardX, cardY + cardHeight);
+                    cardGradient.addColorStop(0, '#ffffff');
+                    cardGradient.addColorStop(0.3, '#fefefe');
+                    cardGradient.addColorStop(0.7, '#fcfcfc');
+                    cardGradient.addColorStop(1, '#f8f9fa');
+                    ctx.fillStyle = cardGradient;
+                    ctx.fillRect(adjustedCardX, cardY, cardWidth, cardHeight);
+
+                    // 卡片左侧彩色指示条 - 更宽更醒目
+                    const indicatorWidth = Math.max(4, cardWidth * 0.025);
+                    ctx.fillStyle = eventColor;
+                    ctx.fillRect(adjustedCardX, cardY, indicatorWidth, cardHeight);
+
+                    // 卡片边框 - 精细边框设计
+                    ctx.strokeStyle = 'rgba(0, 0, 0, 0.06)';
+                    ctx.lineWidth = 0.5;
+                    ctx.strokeRect(adjustedCardX, cardY, cardWidth, cardHeight);
+
+                    // 内部高光边框
+                    ctx.strokeStyle = 'rgba(255, 255, 255, 0.8)';
+                    ctx.lineWidth = 0.5;
+                    ctx.strokeRect(adjustedCardX + 0.5, cardY + 0.5, cardWidth - 1, cardHeight - 1);
+
+                    // 文本内容 - Nature期刊级别排版
+                    const textPadding = indicatorWidth + 8;
+                    const availableTextWidth = cardWidth - textPadding - 8;
+
+                    // 动态字体大小 - 基于卡片尺寸和内容密度
+                    const baseFontSize = Math.max(8, Math.min(12, cardWidth / 15));
+                    const titleFontSize = Math.max(10, Math.min(16, cardWidth / 12));
+                    const phaseFontSize = Math.max(7, Math.min(10, cardWidth / 18));
+
+                    // 阶段标签 - 优雅的小标签设计
+                    ctx.fillStyle = adjustBrightness(eventColor, 0.85);
+                    ctx.font = `600 ${phaseFontSize}px "SF Pro Text", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif`;
+                    ctx.textAlign = 'left';
+                    ctx.textBaseline = 'top';
+                    const phaseY = cardY + 6;
+                    ctx.fillText(eventData.phase.toUpperCase(), adjustedCardX + textPadding, phaseY);
+
+                    // 事件标题 - 主要内容，加粗显示
+                    ctx.fillStyle = '#1a202c';
+                    ctx.font = `700 ${titleFontSize}px "SF Pro Display", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif`;
+                    const titleText = truncateText(ctx, eventData.title, availableTextWidth);
+                    const titleY = phaseY + phaseFontSize + 4;
+                    ctx.fillText(titleText, adjustedCardX + textPadding, titleY);
+
+                    // 智能描述显示 - 根据可用空间调整
+                    const remainingHeight = cardHeight - (titleY - cardY) - titleFontSize - 8;
+                    if (remainingHeight > baseFontSize + 4) {
+                        ctx.fillStyle = '#4a5568';
+                        ctx.font = `400 ${baseFontSize}px "SF Pro Text", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif`;
+
+                        const descLines = eventData.desc.split('\n');
+                        const lineHeight = baseFontSize + 2;
+                        const maxLines = Math.floor(remainingHeight / lineHeight);
+
+                        if (maxLines >= 1) {
+                            const descY = titleY + titleFontSize + 4;
+                            descLines.slice(0, maxLines).forEach((line, idx) => {
+                                if (descY + idx * lineHeight + baseFontSize <= cardY + cardHeight - 4) {
+                                    const lineText = truncateText(ctx, line.trim(), availableTextWidth);
+                                    ctx.fillText(lineText, adjustedCardX + textPadding, descY + idx * lineHeight);
+                                }
+                            });
+                        }
+                    }
+
+                    // 年份标签 - 优化居中显示
+                    const year = 2020 + eventIndex;
+                    const yearBoxWidth = 36;
+                    const yearBoxHeight = 18;
+                    const yearBoxX = eventX - yearBoxWidth / 2;
+                    const yearBoxY = timelineY + 15;
+
+                    // 年份背景
+                    ctx.fillStyle = natureStyle.background;
+                    ctx.fillRect(yearBoxX, yearBoxY, yearBoxWidth, yearBoxHeight);
+
+                    // 年份边框
+                    ctx.strokeStyle = eventColor;
+                    ctx.lineWidth = 1;
+                    ctx.strokeRect(yearBoxX, yearBoxY, yearBoxWidth, yearBoxHeight);
+
+                    // 年份文字 - 确保居中
+                    ctx.fillStyle = eventColor;
+                    ctx.font = 'bold 10px "SF Pro Text", "Helvetica Neue", Arial, sans-serif';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillText(year.toString(), eventX, yearBoxY + yearBoxHeight / 2);
+
+                    eventIndex++;
+                }
+            }
+
+            // 文本截断函数
+            function truncateText(ctx, text, maxWidth) {
+                if (ctx.measureText(text).width <= maxWidth) {
+                    return text;
+                }
+
+                let truncated = text;
+                while (ctx.measureText(truncated + '...').width > maxWidth && truncated.length > 0) {
+                    truncated = truncated.slice(0, -1);
+                }
+                return truncated + '...';
+            }
+
+            // 亮度调整辅助函数
+            function adjustBrightness(color, factor) {
+                const hex = color.replace('#', '');
+                const r = Math.min(255, Math.max(0, parseInt(hex.substr(0, 2), 16) * factor));
+                const g = Math.min(255, Math.max(0, parseInt(hex.substr(2, 2), 16) * factor));
+                const b = Math.min(255, Math.max(0, parseInt(hex.substr(4, 2), 16) * factor));
+                return `rgb(${Math.round(r)}, ${Math.round(g)}, ${Math.round(b)})`;
+            }
+
+            // 现代化图例和说明
+            const legendY = height - margin - 25;
+            ctx.fillStyle = natureStyle.secondary;
+            ctx.font = '11px "SF Pro Text", "Helvetica Neue", Arial, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'top';
+
+
+            // 添加现代化的装饰边框
+            ctx.strokeStyle = natureStyle.grid;
+            ctx.lineWidth = 1.5;
+            ctx.setLineDash([8, 4]);
+            ctx.strokeRect(margin / 2, margin / 2, width - margin, height - margin);
+            ctx.setLineDash([]);
+        }
+        // 辅助函数：绘制箭头
+        function drawArrow(ctx, fromX, fromY, toX, toY, color) {
+            const headLength = 15;
+            const headAngle = Math.PI / 6;
+            const angle = Math.atan2(toY - fromY, toX - fromX);
+
+            // 调整起点和终点，避免箭头与节点重叠
+            const adjustedFromX = fromX + Math.cos(angle) * 60;
+            const adjustedFromY = fromY + Math.sin(angle) * 30;
+            const adjustedToX = toX - Math.cos(angle) * 60;
+            const adjustedToY = toY - Math.sin(angle) * 30;
+
+            ctx.strokeStyle = color;
             ctx.lineWidth = 2;
 
-            // PI到Postdoc
+            // 绘制箭头主体
             ctx.beginPath();
-            ctx.moveTo(width / 2, startY + nodeHeight / 2);
-            ctx.lineTo(width / 2, startY + levelHeight - nodeHeight / 2);
+            ctx.moveTo(adjustedFromX, adjustedFromY);
+            ctx.lineTo(adjustedToX, adjustedToY);
             ctx.stroke();
 
-            // Postdoc到PhD/MSc学生
+            // 绘制箭头头部
             ctx.beginPath();
-            ctx.moveTo(width / 2, startY + levelHeight + nodeHeight / 2);
-            ctx.lineTo(width / 2 - 120, startY + levelHeight * 2 - nodeHeight / 2);
-            ctx.moveTo(width / 2, startY + levelHeight + nodeHeight / 2);
-            ctx.lineTo(width / 2, startY + levelHeight * 2 - nodeHeight / 2);
-            ctx.moveTo(width / 2, startY + levelHeight + nodeHeight / 2);
-            ctx.lineTo(width / 2 + 120, startY + levelHeight * 2 - nodeHeight / 2);
+            ctx.moveTo(adjustedToX, adjustedToY);
+            ctx.lineTo(
+                adjustedToX - headLength * Math.cos(angle - headAngle),
+                adjustedToY - headLength * Math.sin(angle - headAngle)
+            );
+            ctx.moveTo(adjustedToX, adjustedToY);
+            ctx.lineTo(
+                adjustedToX - headLength * Math.cos(angle + headAngle),
+                adjustedToY - headLength * Math.sin(angle + headAngle)
+            );
             ctx.stroke();
-
-            // 学生到助理/技师等
-            const studentPositions = [width / 2 - 120, width / 2, width / 2 + 120];
-            const staffPositions = [width / 2 - 180, width / 2 - 60, width / 2 + 60, width / 2 + 180];
-
-            studentPositions.forEach((studentX, index) => {
-                if (index < 2) { // 只连接前两个学生到部分助理
-                    const staffX1 = staffPositions[index * 2];
-                    const staffX2 = staffPositions[index * 2 + 1];
-
-                    ctx.beginPath();
-                    ctx.moveTo(studentX, startY + levelHeight * 2 + nodeHeight / 2);
-                    ctx.lineTo(staffX1, startY + levelHeight * 3 - nodeHeight / 2);
-                    ctx.moveTo(studentX, startY + levelHeight * 2 + nodeHeight / 2);
-                    ctx.lineTo(staffX2, startY + levelHeight * 3 - nodeHeight / 2);
-                    ctx.stroke();
-                } else { // MSc学生连接到剩下的助理
-                    ctx.beginPath();
-                    ctx.moveTo(studentX, startY + levelHeight * 2 + nodeHeight / 2);
-                    ctx.lineTo(staffPositions[2], startY + levelHeight * 3 - nodeHeight / 2);
-                    ctx.moveTo(studentX, startY + levelHeight * 2 + nodeHeight / 2);
-                    ctx.lineTo(staffPositions[3], startY + levelHeight * 3 - nodeHeight / 2);
-                    ctx.stroke();
-                }
-            });
-
-            // 绘制节点
-            orgData.forEach((member, index) => {
-                const color = colors[index % colors.length];
-
-                // 根据级别设置不同的样式
-                let nodeColor = color;
-                if (member.level === 0) { // PI
-                    nodeColor = colors[0] || '#e74c3c';
-                } else if (member.level === 1) { // Postdoc
-                    nodeColor = colors[1] || '#3498db';
-                } else if (member.level === 2) { // Students
-                    nodeColor = colors[2] || '#2ecc71';
-                } else { // Staff
-                    nodeColor = colors[3] || '#f39c12';
-                }
-
-                // 绘制节点
-                ctx.fillStyle = nodeColor;
-                roundRect(ctx, member.x - nodeWidth / 2, member.y - nodeHeight / 2, nodeWidth, nodeHeight, 8);
-                ctx.fill();
-                ctx.strokeStyle = '#2c3e50';
-                ctx.lineWidth = 2;
-                ctx.stroke();
-
-                // 绘制姓名
-                ctx.fillStyle = '#ffffff';
-                ctx.font = 'bold 9px "Arial", sans-serif';
-                const nameLines = member.name.split('\n');
-                nameLines.forEach((line, lineIndex) => {
-                    ctx.fillText(line, member.x, member.y - 10 + lineIndex * 10);
-                });
-
-                // 绘制职位
-                ctx.fillStyle = '#ffffff';
-                ctx.font = 'bold 8px "Arial", sans-serif';
-                ctx.fillText(member.title, member.x, member.y + 15);
-            });
-
-            // 绘制图例
-            const legendX = width - 120;
-            const legendY = height - 120;
-            const legendItems = [
-                { label: 'PI', color: colors[0] || '#e74c3c' },
-                { label: 'Postdoc', color: colors[1] || '#3498db' },
-                { label: 'Students', color: colors[2] || '#2ecc71' },
-                { label: 'Support Staff', color: colors[3] || '#f39c12' }
-            ];
-
-            ctx.font = '10px "Arial", sans-serif';
-            ctx.textAlign = 'left';
-
-            legendItems.forEach((item, index) => {
-                const y = legendY + index * 20;
-
-                // 图例色块
-                ctx.fillStyle = item.color;
-                ctx.fillRect(legendX, y - 6, 12, 12);
-                ctx.strokeStyle = '#2c3e50';
-                ctx.lineWidth = 1;
-                ctx.strokeRect(legendX, y - 6, 12, 12);
-
-                // 图例文字
-                ctx.fillStyle = '#2c3e50';
-                ctx.fillText(item.label, legendX + 18, y);
-            });
-
-            // 添加图表标题
-            drawChartTitle(ctx, width, '组织结构图 - 智核学术');
         }
 
-        // 辅助函数：绘制星形
-        function drawStar(ctx, cx, cy, outerRadius, innerRadius, points) {
-            let angle = Math.PI / 2;
-            const angleStep = Math.PI / points;
+        // 拐弯箭头绘制函数 - 避免遮挡
+        function drawCurvedArrow(ctx, fromX, fromY, toX, toY, color) {
+            const headLength = 15;
+            const headAngle = Math.PI / 6;
 
-            ctx.beginPath();
-            ctx.moveTo(cx, cy - outerRadius);
+            // 调整起点和终点，避免箭头与节点重叠
+            const angle = Math.atan2(toY - fromY, toX - fromX);
+            const adjustedFromX = fromX + Math.cos(angle) * 60;
+            const adjustedFromY = fromY + Math.sin(angle) * 30;
+            const adjustedToX = toX - Math.cos(angle) * 60;
+            const adjustedToY = toY - Math.sin(angle) * 30;
 
-            for (let i = 0; i < 2 * points; i++) {
-                const radius = i % 2 === 0 ? outerRadius : innerRadius;
-                const x = cx + Math.cos(angle) * radius;
-                const y = cy + Math.sin(angle) * radius;
-                ctx.lineTo(x, y);
-                angle += angleStep;
+            ctx.strokeStyle = color;
+            ctx.lineWidth = 2;
+
+            // 计算控制点，创建弯曲路径
+            const dx = adjustedToX - adjustedFromX;
+            const dy = adjustedToY - adjustedFromY;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+
+            // 根据距离和方向调整弯曲程度
+            let controlOffset = Math.min(distance * 0.3, 80);
+
+            // 如果是垂直或水平线，增加弯曲
+            if (Math.abs(dx) < 50 || Math.abs(dy) < 50) {
+                controlOffset = Math.max(controlOffset, 60);
             }
 
-            ctx.closePath();
+            // 计算控制点位置
+            const midX = (adjustedFromX + adjustedToX) / 2;
+            const midY = (adjustedFromY + adjustedToY) / 2;
+
+            // 垂直于连线方向的偏移
+            const perpAngle = angle + Math.PI / 2;
+            const controlX = midX + Math.cos(perpAngle) * controlOffset;
+            const controlY = midY + Math.sin(perpAngle) * controlOffset;
+
+            // 绘制二次贝塞尔曲线
+            ctx.beginPath();
+            ctx.moveTo(adjustedFromX, adjustedFromY);
+            ctx.quadraticCurveTo(controlX, controlY, adjustedToX, adjustedToY);
+            ctx.stroke();
+
+            // 计算箭头头部的角度（基于曲线终点的切线方向）
+            const finalAngle = Math.atan2(adjustedToY - controlY, adjustedToX - controlX);
+
+            // 绘制箭头头部
+            ctx.beginPath();
+            ctx.moveTo(adjustedToX, adjustedToY);
+            ctx.lineTo(
+                adjustedToX - headLength * Math.cos(finalAngle - headAngle),
+                adjustedToY - headLength * Math.sin(finalAngle - headAngle)
+            );
+            ctx.moveTo(adjustedToX, adjustedToY);
+            ctx.lineTo(
+                adjustedToX - headLength * Math.cos(finalAngle + headAngle),
+                adjustedToY - headLength * Math.sin(finalAngle + headAngle)
+            );
+            ctx.stroke();
         }
+
+        // 组织架构图绘制函数 - Nature风格优化版本
+        function drawOrganizationalChart(ctx, width, height, colors) {
+            // 确保颜色数组的健壮性
+            if (!colors || colors.length === 0) {
+                colors = ['#2563eb', '#dc2626', '#059669', '#d97706', '#7c3aed',
+                    '#0891b2', '#374151', '#ea580c'];
+            }
+
+            // Nature期刊风格配色
+            const natureStyle = {
+                background: '#ffffff',
+                primary: '#1f2937',
+                secondary: '#6b7280',
+                accent: '#3b82f6',
+                border: '#e5e7eb',
+                shadow: 'rgba(0, 0, 0, 0.1)'
+            };
+
+            // 清空画布并设置纯白背景
+            ctx.fillStyle = natureStyle.background;
+            ctx.fillRect(0, 0, width, height);
+
+            // 计算安全边距，确保内容不溢出
+            const margin = Math.min(width, height) * 0.06;
+            const availableWidth = width - 2 * margin;
+            const availableHeight = height - 2 * margin - 120; // 为标题预留空间
+
+            // 根据颜色数量动态生成组织架构数据
+            function generateOrgData(colorCount) {
+                const departments = [
+                    'AI Research', 'Data Science', 'Engineering', 'Product', 'Marketing',
+                    'Operations', 'Finance', 'HR', 'Legal', 'Strategy', 'Innovation', 'Quality'
+                ];
+
+                const titles = [
+                    'Director', 'Manager', 'Lead', 'Senior', 'Principal', 'Chief',
+                    'Head', 'VP', 'Specialist', 'Coordinator', 'Analyst', 'Expert'
+                ];
+
+                const names = [
+                    'Dr. Zhang', 'Dr. Li', 'Dr. Wang', 'Dr. Chen', 'Dr. Liu', 'Dr. Wu',
+                    'Dr. Zhao', 'Dr. Sun', 'Dr. Ma', 'Dr. Xu', 'Dr. Zhou', 'Dr. Yang'
+                ];
+
+                // 根据颜色数量决定层级结构
+                let maxLevels, nodesPerLevel;
+
+                if (colorCount <= 4) {
+                    maxLevels = 3;
+                    nodesPerLevel = [1, Math.min(3, colorCount - 1), Math.max(0, colorCount - 4)];
+                } else if (colorCount <= 8) {
+                    maxLevels = 3;
+                    nodesPerLevel = [1, Math.min(4, Math.ceil((colorCount - 1) / 2)), colorCount - 1 - Math.min(4, Math.ceil((colorCount - 1) / 2))];
+                } else if (colorCount <= 12) {
+                    maxLevels = 4;
+                    nodesPerLevel = [1, 3, Math.min(5, colorCount - 4), Math.max(0, colorCount - 9)];
+                } else {
+                    maxLevels = 4;
+                    nodesPerLevel = [1, 4, Math.min(6, Math.ceil((colorCount - 5) / 2)), colorCount - 5 - Math.min(6, Math.ceil((colorCount - 5) / 2))];
+                }
+
+                // 构建组织架构树
+                const orgData = {
+                    name: 'Research Institute',
+                    title: 'CEO: Prof. Zhang',
+                    level: 0,
+                    children: []
+                };
+
+                let nodeIndex = 1; // 跳过根节点
+
+                // 生成第一级节点
+                for (let i = 0; i < nodesPerLevel[1] && nodeIndex < colorCount; i++) {
+                    const dept = departments[i % departments.length];
+                    const title = titles[i % titles.length];
+                    const name = names[i % names.length];
+
+                    const firstLevelNode = {
+                        name: dept,
+                        title: `${title}: ${name}`,
+                        level: 1,
+                        children: []
+                    };
+
+                    // 为每个第一级节点添加子节点
+                    if (maxLevels > 2 && nodesPerLevel[2] > 0) {
+                        const childrenCount = Math.ceil(nodesPerLevel[2] / nodesPerLevel[1]);
+                        for (let j = 0; j < childrenCount && nodeIndex < colorCount - 1; j++) {
+                            nodeIndex++;
+                            if (nodeIndex >= colorCount) break;
+
+                            const childDept = departments[(nodeIndex + 5) % departments.length];
+                            const childTitle = titles[(nodeIndex + 3) % titles.length];
+                            const childName = names[(nodeIndex + 2) % names.length];
+
+                            const secondLevelNode = {
+                                name: childDept + ' Team',
+                                title: `${childTitle}: ${childName}`,
+                                level: 2,
+                                children: []
+                            };
+
+                            // 添加第三级节点（如果需要）
+                            if (maxLevels > 3 && nodesPerLevel[3] > 0) {
+                                const grandChildrenCount = Math.ceil(nodesPerLevel[3] / nodesPerLevel[2]);
+                                for (let k = 0; k < grandChildrenCount && nodeIndex < colorCount - 1; k++) {
+                                    nodeIndex++;
+                                    if (nodeIndex >= colorCount) break;
+
+                                    const grandChildDept = departments[(nodeIndex + 7) % departments.length];
+                                    const grandChildTitle = titles[(nodeIndex + 4) % titles.length];
+                                    const grandChildName = names[(nodeIndex + 6) % names.length];
+
+                                    secondLevelNode.children.push({
+                                        name: grandChildDept + ' Unit',
+                                        title: `${grandChildTitle}: ${grandChildName}`,
+                                        level: 3
+                                    });
+                                }
+                            }
+
+                            firstLevelNode.children.push(secondLevelNode);
+                        }
+                    }
+
+                    orgData.children.push(firstLevelNode);
+                    nodeIndex++;
+                }
+
+                return orgData;
+            }
+
+            const orgData = generateOrgData(colors.length);
+
+            // 智能布局算法 - 防止重叠和溢出
+            const nodeWidth = Math.max(120, Math.min(180, availableWidth / Math.max(6, Math.ceil(Math.sqrt(colors.length)))));
+            const nodeHeight = 50;
+
+            // 动态计算层级间距
+            const maxLevel = Math.max(...getAllNodes(orgData).map(n => n.level));
+            const levelHeight = Math.max(80, Math.min(140, availableHeight / (maxLevel + 1.5)));
+
+            // 获取所有节点的扁平列表
+            function getAllNodes(node) {
+                let nodes = [node];
+                if (node.children) {
+                    node.children.forEach(child => {
+                        nodes = nodes.concat(getAllNodes(child));
+                    });
+                }
+                return nodes;
+            }
+
+            // 计算每一层的节点数量
+            const levelCounts = {};
+            getAllNodes(orgData).forEach(node => {
+                levelCounts[node.level] = (levelCounts[node.level] || 0) + 1;
+            });
+
+            // 计算所有节点的位置
+            const nodePositions = [];
+            const levelCounters = {}; // 跟踪每层已放置的节点数
+
+            function calculatePositions(node, level, parentX, parentIndex) {
+                if (!levelCounters[level]) levelCounters[level] = 0;
+
+                const nodesInLevel = levelCounts[level];
+                const currentIndex = levelCounters[level];
+
+                let y = margin + 100 + level * levelHeight;
+                let x;
+
+                if (level === 0) {
+                    // 根节点居中
+                    x = width / 2;
+                } else {
+                    // 智能分布算法
+                    if (nodesInLevel === 1) {
+                        x = width / 2;
+                    } else if (nodesInLevel <= 6) {
+                        // 少量节点时均匀分布
+                        const spacing = Math.min(availableWidth / (nodesInLevel + 1), nodeWidth * 1.8);
+                        const totalWidth = (nodesInLevel - 1) * spacing;
+                        const startX = (width - totalWidth) / 2;
+                        x = startX + currentIndex * spacing;
+                    } else {
+                        // 多节点时采用多行布局
+                        const nodesPerRow = Math.ceil(Math.sqrt(nodesInLevel));
+                        const currentRow = Math.floor(currentIndex / nodesPerRow);
+                        const indexInRow = currentIndex % nodesPerRow;
+                        const nodesInCurrentRow = Math.min(nodesPerRow, nodesInLevel - currentRow * nodesPerRow);
+
+                        const rowSpacing = Math.min(availableWidth / (nodesInCurrentRow + 1), nodeWidth * 1.6);
+                        const totalRowWidth = (nodesInCurrentRow - 1) * rowSpacing;
+                        const rowStartX = (width - totalRowWidth) / 2;
+
+                        x = rowStartX + indexInRow * rowSpacing;
+
+                        // 调整Y位置以适应多行
+                        const additionalRowOffset = currentRow * (nodeHeight + 20);
+                        y += additionalRowOffset;
+                    }
+                }
+
+                // 确保节点在画布范围内
+                x = Math.max(margin + nodeWidth / 2 + 5,
+                    Math.min(width - margin - nodeWidth / 2 - 5, x));
+
+                const position = {
+                    node,
+                    x,
+                    y: y,
+                    level,
+                    parentX: level > 0 ? parentX : null,
+                    index: currentIndex
+                };
+                nodePositions.push(position);
+                levelCounters[level]++;
+
+                if (node.children) {
+                    node.children.forEach((child, index) => {
+                        calculatePositions(child, level + 1, x, index);
+                    });
+                }
+            }
+
+            calculatePositions(orgData, 0, 0, 0);
+
+            // 绘制连接线 - 优化的连接算法
+            ctx.strokeStyle = natureStyle.secondary;
+            ctx.lineWidth = 1.5;
+
+            nodePositions.forEach(pos => {
+                if (pos.parentX !== null) {
+                    const parentPos = nodePositions.find(p =>
+                        p.level === pos.level - 1 && Math.abs(p.x - pos.parentX) < 50
+                    );
+
+                    if (parentPos) {
+                        // 智能连接线绘制
+                        const startY = parentPos.y + nodeHeight / 2;
+                        const endY = pos.y - nodeHeight / 2;
+                        const midY = (startY + endY) / 2;
+
+                        ctx.beginPath();
+                        ctx.moveTo(parentPos.x, startY);
+                        ctx.lineTo(parentPos.x, midY);
+                        ctx.lineTo(pos.x, midY);
+                        ctx.lineTo(pos.x, endY);
+                        ctx.stroke();
+
+                        // 添加连接点
+                        ctx.fillStyle = natureStyle.accent;
+                        ctx.beginPath();
+                        ctx.arc(parentPos.x, midY, 2, 0, 2 * Math.PI);
+                        ctx.fill();
+                        ctx.beginPath();
+                        ctx.arc(pos.x, midY, 2, 0, 2 * Math.PI);
+                        ctx.fill();
+                    }
+                }
+            });
+
+            // 绘制节点 - Nature期刊风格
+            nodePositions.forEach((pos, index) => {
+                const x = pos.x - nodeWidth / 2;
+                const y = pos.y - nodeHeight / 2;
+                const color = colors[index % colors.length];
+
+                // 节点阴影 - 更精细
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.08)';
+                ctx.fillRect(x + 2, y + 2, nodeWidth, nodeHeight);
+
+                // 节点背景 - 使用渐变
+                const gradient = ctx.createLinearGradient(x, y, x, y + nodeHeight);
+                gradient.addColorStop(0, color);
+                gradient.addColorStop(1, adjustBrightness(color, 0.85));
+                ctx.fillStyle = gradient;
+                ctx.fillRect(x, y, nodeWidth, nodeHeight);
+
+                // 节点边框 - Nature风格细边框
+                ctx.strokeStyle = adjustBrightness(color, 0.7);
+                ctx.lineWidth = 1.5;
+                ctx.strokeRect(x, y, nodeWidth, nodeHeight);
+
+                // 内部高光
+                ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+                ctx.lineWidth = 1;
+                ctx.strokeRect(x + 1, y + 1, nodeWidth - 2, nodeHeight - 2);
+
+                // 文本处理 - 优化可读性
+                ctx.fillStyle = '#ffffff';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+
+                // 部门名称 - 加粗
+                ctx.font = 'bold 10px "SF Pro Text", "Helvetica Neue", Arial, sans-serif';
+                const nameText = truncateText(ctx, pos.node.name, nodeWidth - 8);
+                ctx.fillText(nameText, pos.x, pos.y - 7);
+
+                // 负责人姓名 - 常规字体
+                ctx.font = '8px "SF Pro Text", "Helvetica Neue", Arial, sans-serif';
+                const titleText = truncateText(ctx, pos.node.title, nodeWidth - 8);
+                ctx.fillText(titleText, pos.x, pos.y + 7);
+            });
+
+            // 文本截断函数 - 防止溢出
+            function truncateText(ctx, text, maxWidth) {
+                if (ctx.measureText(text).width <= maxWidth) {
+                    return text;
+                }
+
+                let truncated = text;
+                while (ctx.measureText(truncated + '...').width > maxWidth && truncated.length > 0) {
+                    truncated = truncated.slice(0, -1);
+                }
+                return truncated + '...';
+            }
+
+            // 亮度调整函数
+            function adjustBrightness(color, factor) {
+                const hex = color.replace('#', '');
+                const r = Math.min(255, Math.max(0, parseInt(hex.substr(0, 2), 16) * factor));
+                const g = Math.min(255, Math.max(0, parseInt(hex.substr(2, 2), 16) * factor));
+                const b = Math.min(255, Math.max(0, parseInt(hex.substr(4, 2), 16) * factor));
+                return `rgb(${Math.round(r)}, ${Math.round(g)}, ${Math.round(b)})`;
+            }
+
+            // 统一标题样式
+            drawChartTitle(ctx, width, '组织架构图 - 智核学术');
+
+            // 图例说明
+            const legendY = height - margin + 15;
+            ctx.fillStyle = natureStyle.secondary;
+            ctx.font = '10px "SF Pro Text", "Helvetica Neue", Arial, sans-serif';
+            ctx.textAlign = 'center';
+
+        } window.applyPresetPalette = applyPresetPalette;
 
         // Initial generation - 先更新颜色数量选项，再生成配色方案
         // 初始化待选区数组
