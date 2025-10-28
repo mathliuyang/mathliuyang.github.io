@@ -498,8 +498,8 @@
 
         .export-formats {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
         }
 
         .export-panel {
@@ -1529,9 +1529,25 @@
             document.getElementById('matlabCode').textContent = matlabCode;
 
             // txt 文本
-            const txtCode = currentPalette.map((color, i) =>
-                `颜色${i + 1}: ${color}`
-            ).join('\n');
+            const txtCode = `配色方案信息
+生成时间: ${new Date().toLocaleString('zh-CN')}
+颜色数量: ${currentPalette.length}
+
+颜色列表:
+${currentPalette.map((color, i) =>
+    `颜色${i + 1}: ${color} (RGB: ${hexToRgb(color)?.r}, ${hexToRgb(color)?.g}, ${hexToRgb(color)?.b})`
+).join('\n')}
+
+颜色搭配建议:
+${currentPalette.length >= 2 ? `主色调: ${currentPalette[0]}
+辅助色: ${currentPalette[1]}
+${currentPalette.length >= 3 ? `点缀色: ${currentPalette[2]}` : ''}` : ''}
+
+使用场景建议:
+- 网页设计: 适用于背景、文字、按钮等元素
+- 平面设计: 适用于海报、宣传册、名片等
+- UI界面: 适用于应用界面、图标、导航等
+- 数据可视化: 适用于图表、图形、统计展示等`;
             document.getElementById('txtCode').textContent = txtCode;
         }
 
