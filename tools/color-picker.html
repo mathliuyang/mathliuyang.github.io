@@ -4057,8 +4057,10 @@
             const chartWidth = width - 2 * padding;
             const chartHeight = height - 2 * padding;
 
-            // 清空画布
+            // 清空画布并设置白色背景
             ctx.clearRect(0, 0, width, height);
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, width, height);
 
             // 动态调整组数和数据点数量，支持更多颜色
             const maxGroups = Math.min(colors.length, 16);
