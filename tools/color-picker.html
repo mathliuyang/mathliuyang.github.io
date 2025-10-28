@@ -2875,17 +2875,21 @@
         }
 
         function drawAxisLabels(ctx, width, height, padding, xLabel, yLabel) {
-            ctx.fillStyle = '#000000';  // Nature风格：纯黑色文字
-            ctx.font = '12px "Arial", sans-serif';  // Nature风格：Arial字体，稍小尺寸
+            // 高标准科研图表坐标轴标签规范
+            ctx.fillStyle = '#000000';  // 纯黑色，确保高对比度
+            ctx.font = 'bold 14px "Microsoft YaHei", "微软雅黑", "SimHei", "黑体", sans-serif';  // 中文标准：微软雅黑/黑体，14px，加粗
             ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
 
-            // X轴标签
-            ctx.fillText(xLabel, width / 2, height - 35);
+            // X轴标签 - 精确位置控制
+            const xLabelY = height - 25;  // 距离底部25px，确保合适间距
+            ctx.fillText(xLabel, width / 2, xLabelY);
 
-            // Y轴标签
+            // Y轴标签 - 优化位置和旋转
             ctx.save();
-            ctx.translate(25, height / 2);
+            ctx.translate(30, height / 2);  // 距离左侧30px，垂直居中
             ctx.rotate(-Math.PI / 2);
+            ctx.textAlign = 'center';
             ctx.fillText(yLabel, 0, 0);
             ctx.restore();
         }
@@ -2893,7 +2897,7 @@
         function drawLegend(ctx, width, height, colors, count, labels, position = 'outside-right') {
             let legendX, legendY, legendWidth, legendHeight;
             const itemHeight = 20;
-            const padding = 10;
+            const padding = 15;  // 优化边距：从10调整为15，提供更好的图表空间
 
             // 根据位置参数调整图例位置
             if (position === 'outside-right') {
@@ -2916,15 +2920,15 @@
                 legendY = 50;
             }
 
-            // 绘制图例背景（Nature风格：简洁白色背景）
+            // 绘制图例背景（学术标准：简洁白色背景，1.5px边框）
             ctx.fillStyle = 'rgba(255, 255, 255, 0.95)';
-            ctx.strokeStyle = '#d5d8dc';
-            ctx.lineWidth = 1;
+            ctx.strokeStyle = '#333333';  // 使用深灰色边框确保高对比度
+            ctx.lineWidth = 1.5;  // 增加边框宽度提升视觉效果
             ctx.fillRect(legendX, legendY, legendWidth, legendHeight);
             ctx.strokeRect(legendX, legendY, legendWidth, legendHeight);
 
-            // 设置文本样式（Nature风格：清晰易读）
-            ctx.font = '11px "Arial", sans-serif';
+            // 设置文本样式（中文科研标准：微软雅黑/黑体，12px，高对比度）
+            ctx.font = '12px "Microsoft YaHei", "微软雅黑", "SimHei", "黑体", sans-serif';  // 统一图例字体
             ctx.textAlign = 'left';
 
             for (let i = 0; i < count; i++) {
@@ -2940,25 +2944,26 @@
                     itemY = legendY + padding + i * itemHeight;
                 }
 
-                // 绘制颜色标记（Nature风格：圆形或方形标记）
+                // 绘制颜色标记（学术标准：高对比度标记）
                 ctx.fillStyle = colors[i % colors.length];
                 if (position === 'outside-right' || position === 'outside-bottom') {
-                    // Nature风格：使用圆形标记
+                    // 学术标准：使用圆形标记，黑色边框
                     ctx.beginPath();
                     ctx.arc(itemX + 6, itemY + 6, 5, 0, 2 * Math.PI);
                     ctx.fill();
-                    ctx.strokeStyle = '#2c3e50';
-                    ctx.lineWidth = 1;
+                    ctx.strokeStyle = '#000000';  // 纯黑色边框确保最高对比度
+                    ctx.lineWidth = 1.5;  // 增加边框宽度
                     ctx.stroke();
                 } else {
                     // 传统方形标记
                     ctx.fillRect(itemX, itemY, 15, 12);
-                    ctx.strokeStyle = '#2c3e50';
+                    ctx.strokeStyle = '#000000';  // 纯黑色边框确保最高对比度
+                    ctx.lineWidth = 1.5;  // 增加边框宽度
                     ctx.strokeRect(itemX, itemY, 15, 12);
                 }
 
-                // 绘制标签（Nature风格：简洁字体）
-                ctx.fillStyle = '#2c3e50';
+                // 绘制标签（中文科研标准：高对比度黑色字体）
+                ctx.fillStyle = '#000000';  // 使用纯黑色确保最高对比度
                 const labelX = position === 'outside-bottom' ? itemX : itemX + 18;
                 const labelY = position === 'outside-bottom' ? itemY + 25 : itemY + 9;
                 ctx.fillText(labels[i] || `Series ${i + 1}`, labelX, labelY);
@@ -2989,7 +2994,7 @@
 
             // 绘制刻度和标签
             ctx.fillStyle = '#333333';
-            ctx.font = '10px "Times New Roman", serif';
+            ctx.font = '12px "Microsoft YaHei", "微软雅黑", "SimHei", "黑体", sans-serif';  // 统一刻度标签字体
             ctx.textAlign = 'left';
             ctx.textBaseline = 'middle';
 
@@ -3017,17 +3022,31 @@
             ctx.save();
             ctx.translate(barX + barWidth + 35, barY + barHeight / 2);
             ctx.rotate(-Math.PI / 2);
-            ctx.font = '11px "Times New Roman", serif';
+            ctx.font = '12px "Microsoft YaHei", "微软雅黑", "SimHei", "黑体", sans-serif';  // 统一颜色条标题字体
             ctx.textAlign = 'center';
             ctx.fillText('数值', 0, 0);
             ctx.restore();
         }
 
         function drawChartTitle(ctx, width, title) {
-            ctx.fillStyle = '#000000';  // Nature风格：纯黑色
-            ctx.font = '14px "Arial", sans-serif';  // Nature风格：Arial字体，适中尺寸
+            // 高标准科研图表标题规范
+            ctx.fillStyle = '#000000';  // 纯黑色标题，确保高对比度
+            ctx.font = 'bold 16px "Microsoft YaHei", "微软雅黑", "SimHei", "黑体", sans-serif';  // 中文标准：微软雅黑/黑体，16px，加粗
             ctx.textAlign = 'center';
-            ctx.fillText(title, width / 2, 25);
+            ctx.textBaseline = 'middle';
+
+            // 精确位置：距离顶部35px，确保合适的边距
+            const titleY = 35;
+            ctx.fillText(title, width / 2, titleY);
+
+            // 添加标题下划线（可选，增强视觉效果）
+            const titleWidth = ctx.measureText(title).width;
+            ctx.strokeStyle = '#333333';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(width / 2 - titleWidth / 2 - 10, titleY + 12);
+            ctx.lineTo(width / 2 + titleWidth / 2 + 10, titleY + 12);
+            ctx.stroke();
         }
 
         // Chart generation functions
@@ -3108,7 +3127,7 @@
         function drawLineChart(ctx, canvas, colors) {
             const width = canvas.width;
             const height = canvas.height;
-            const padding = 100;
+            const padding = 90;  // 优化边距：从100调整为90，提供更好的空间利用率
             const chartWidth = width - 2 * padding;
             const chartHeight = height - 2 * padding;
 
@@ -3193,63 +3212,123 @@
                 });
             });
 
-            // 绘制图例（类似颜色条的右侧位置）
+            // 绘制图例（横放在X轴与标签中间）
             const legendLabels = [];
             for (let i = 0; i < datasets; i++) {
                 legendLabels.push(`Series ${String.fromCharCode(65 + i)}`); // A, B, C, ...
             }
-            drawLineChartLegend(ctx, width, height, colors, datasets, legendLabels);
+            drawLineChartLegendBottom(ctx, width, height, colors, datasets, legendLabels);
 
             // 添加图表标题
             drawChartTitle(ctx, width, '线性图 - 智核学术');
         }
 
-        // 专门为线性图绘制类似颜色条位置的图例
+        // 专门为线性图绘制的标准图例（学术风格）
         function drawLineChartLegend(ctx, width, height, colors, datasets, labels) {
-            const legendWidth = 15;
-            const legendHeight = height - 200;
-            const legendX = width - 60;
-            const legendY = 100;
-            const itemHeight = legendHeight / datasets;
+            const legendX = width - 150;  // 图例位置：右侧
+            const legendY = 60;  // 顶部位置
+            const itemHeight = 25;  // 每项高度
+            const lineLength = 20;  // 线条长度
+            const spacing = 8;  // 元素间距
 
-            // 绘制图例背景
+            // 绘制图例背景（学术标准）
+            const legendWidth = 120;
+            const legendHeight = datasets * itemHeight + 20;
             ctx.fillStyle = '#ffffff';
             ctx.strokeStyle = '#333333';
-            ctx.lineWidth = 1;
-            ctx.fillRect(legendX - 2, legendY - 2, legendWidth + 4, legendHeight + 4);
-            ctx.strokeRect(legendX - 2, legendY - 2, legendWidth + 4, legendHeight + 4);
+            ctx.lineWidth = 1.5;  // 学术标准：1.5px边框
+            ctx.fillRect(legendX - 10, legendY - 10, legendWidth, legendHeight);
+            ctx.strokeRect(legendX - 10, legendY - 10, legendWidth, legendHeight);
 
-            // 绘制每个系列的颜色块和标签
+            // 绘制每个系列的线条和标签（标准线性图图例样式）
             for (let i = 0; i < datasets; i++) {
-                const y = legendY + i * itemHeight;
-                const centerY = y + itemHeight / 2;
+                const y = legendY + i * itemHeight + 15;
+                const color = colors[i % colors.length];
 
-                // 绘制颜色块
-                ctx.fillStyle = colors[i % colors.length];
-                ctx.fillRect(legendX, y, legendWidth, itemHeight);
+                // 绘制线条样本（2.5px线宽，与数据线一致）
+                ctx.strokeStyle = color;
+                ctx.lineWidth = 2.5;
+                ctx.lineCap = 'round';
+                ctx.beginPath();
+                ctx.moveTo(legendX, y);
+                ctx.lineTo(legendX + lineLength, y);
+                ctx.stroke();
+
+                // 绘制数据点样本（4px圆形，白色边框）
+                ctx.fillStyle = color;
+                ctx.strokeStyle = '#ffffff';
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                ctx.arc(legendX + lineLength / 2, y, 4, 0, 2 * Math.PI);
+                ctx.fill();
+                ctx.stroke();
 
                 // 绘制标签
-                ctx.fillStyle = '#333333';
-                ctx.font = '10px "Times New Roman", serif';
+                ctx.fillStyle = '#000000';  // 学术标准：纯黑色文本
+                ctx.font = '12px "Microsoft YaHei", "微软雅黑", "SimHei", "黑体", sans-serif';  // 中文科研标准字体
                 ctx.textAlign = 'left';
                 ctx.textBaseline = 'middle';
-                ctx.fillText(labels[i], legendX + legendWidth + 8, centerY);
+                ctx.fillText(labels[i], legendX + lineLength + spacing, y);
             }
+        }
 
-            // 添加图例标题
-            ctx.save();
-            ctx.translate(legendX + legendWidth + 35, legendY + legendHeight / 2);
-            ctx.rotate(-Math.PI / 2);
-            ctx.font = '11px "Times New Roman", serif';
-            ctx.textAlign = 'center';
-            ctx.fillText('系列', 0, 0);
-            ctx.restore();
+        // 线性图底部横向图例（横放在X轴与标签中间）
+        function drawLineChartLegendBottom(ctx, width, height, colors, datasets, labels) {
+            const itemWidth = 80;  // 每项宽度
+            const itemHeight = 20;  // 每项高度
+            const lineLength = 25;  // 线条长度
+            const spacing = 8;  // 元素间距
+
+            // 超过8色时自动分成2行
+            const maxPerRow = 8;
+            const rows = Math.ceil(datasets / maxPerRow);
+            const itemsInRow = Math.ceil(datasets / rows);
+
+            // 计算图例总宽度和位置（居中放置在X轴上方）
+            const totalWidth = Math.min(datasets, maxPerRow) * itemWidth;
+            const totalHeight = rows * (itemHeight + 5); // 5px行间距
+            const legendX = (width - totalWidth) / 2;  // 水平居中
+            const legendY = height - 70 - (rows - 1) * (itemHeight - 5); // 两行时往上移动，避免与X轴标签重叠（减少上移距离）
+
+            // 绘制每个系列的水平排列图例项（支持多行）
+            for (let i = 0; i < datasets; i++) {
+                const row = Math.floor(i / maxPerRow);
+                const col = i % maxPerRow;
+                const x = legendX + col * itemWidth + 10;
+                const y = legendY + row * (itemHeight + 5);
+                const color = colors[i % colors.length];
+
+                // 绘制线条样本（2.5px线宽，与数据线一致）
+                ctx.strokeStyle = color;
+                ctx.lineWidth = 2.5;
+                ctx.lineCap = 'round';
+                ctx.beginPath();
+                ctx.moveTo(x, y + itemHeight / 2);
+                ctx.lineTo(x + lineLength, y + itemHeight / 2);
+                ctx.stroke();
+
+                // 绘制数据点样本（4px圆形，白色边框）
+                ctx.fillStyle = color;
+                ctx.strokeStyle = '#ffffff';
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                ctx.arc(x + lineLength / 2, y + itemHeight / 2, 4, 0, 2 * Math.PI);
+                ctx.fill();
+                ctx.stroke();
+
+                // 绘制标签
+                ctx.fillStyle = '#000000';  // 学术标准：纯黑色文本
+                ctx.font = '12px "Microsoft YaHei", "微软雅黑", "SimHei", "黑体", sans-serif';  // 中文科研标准字体
+                ctx.textAlign = 'left';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(labels[i], x + lineLength + spacing, y + itemHeight / 2);
+            }
         }
 
         function drawBarChart(ctx, canvas, colors) {
             const width = canvas.width;
             const height = canvas.height;
-            const padding = 80;
+            const padding = 85;  // 优化边距：从80调整为85，确保充足的标签空间
             const chartWidth = width - 2 * padding;
             const chartHeight = height - 2 * padding;
 
@@ -3297,14 +3376,14 @@
 
                 // 数值标签（在柱子顶部）
                 ctx.fillStyle = '#333333';
-                ctx.font = '12px "Times New Roman", serif';
+                ctx.font = '12px "Microsoft YaHei", "微软雅黑", "SimHei", "黑体", sans-serif';  // 统一中文字体
                 ctx.textAlign = 'center';
                 const percentage = (value * 100).toFixed(1);
                 ctx.fillText(`${percentage}%`, x + barWidth / 2, y - 8);
 
                 // X轴标签
                 ctx.fillStyle = '#333333';
-                ctx.font = '11px "Times New Roman", serif';
+                ctx.font = '12px "Microsoft YaHei", "微软雅黑", "SimHei", "黑体", sans-serif';  // 统一中文字体
                 ctx.textAlign = 'center';
                 ctx.fillText(labels[index], x + barWidth / 2, height - padding + 20);
             });
@@ -3324,7 +3403,7 @@
 
                 // 刻度标签
                 ctx.fillStyle = '#333333';
-                ctx.font = '10px "Times New Roman", serif';
+                ctx.font = '12px "Microsoft YaHei", "微软雅黑", "SimHei", "黑体", sans-serif';  // 统一中文字体
                 ctx.textAlign = 'right';
                 ctx.fillText(value, padding - 10, y + 3);
             }
@@ -3336,7 +3415,7 @@
         function drawBoxPlot(ctx, canvas, colors) {
             const width = canvas.width;
             const height = canvas.height;
-            const padding = 80;
+            const padding = 85;  // 优化边距：确保充足的标签空间
             const chartWidth = width - 2 * padding;
             const chartHeight = height - 2 * padding;
 
@@ -3452,7 +3531,7 @@
 
                 // 刻度标签
                 ctx.fillStyle = '#333333';
-                ctx.font = '10px "Times New Roman", serif';
+                ctx.font = '12px "Microsoft YaHei", "微软雅黑", "SimHei", "黑体", sans-serif';  // 统一中文字体
                 ctx.textAlign = 'right';
                 ctx.fillText(value, padding - 10, y + 3);
             }
@@ -3464,7 +3543,7 @@
         function drawHeatmap(ctx, canvas, colors) {
             const width = canvas.width;
             const height = canvas.height;
-            const padding = 80;
+            const padding = 85;  // 优化边距：确保充足的标签空间
             const chartWidth = width - 2 * padding;
             const chartHeight = height - 2 * padding;
 
@@ -3524,7 +3603,7 @@
                     // 在较大单元格中显示数值
                     if (cellWidth > 30 && cellHeight > 20) {
                         ctx.fillStyle = value > 0.5 ? '#ffffff' : '#333333';
-                        ctx.font = '9px "Times New Roman", serif';
+                        ctx.font = '12px "Microsoft YaHei", "微软雅黑", "SimHei", "黑体", sans-serif';  // 统一中文字体
                         ctx.textAlign = 'center';
                         ctx.fillText((value * 100).toFixed(0), x + cellWidth / 2, y + cellHeight / 2 + 3);
                     }
@@ -3557,7 +3636,7 @@
                 const value = i / 4;
                 const y = legendY + (1 - value) * legendHeight;
                 ctx.fillStyle = '#333333';
-                ctx.font = '10px "Times New Roman", serif';
+                ctx.font = '12px "Microsoft YaHei", "微软雅黑", "SimHei", "黑体", sans-serif';  // 统一中文字体
                 ctx.textAlign = 'left';
                 ctx.fillText((value * 100).toFixed(0), legendX + legendWidth + 5, y + 3);
             }
@@ -3569,7 +3648,7 @@
         function drawDistributionChart(ctx, canvas, colors) {
             const width = canvas.width;
             const height = canvas.height;
-            const padding = 80;
+            const padding = 85;  // 优化边距：确保充足的标签空间
             const chartWidth = width - 2 * padding;
             const chartHeight = height - 2 * padding;
 
@@ -3850,7 +3929,7 @@
         function drawViolinPlot(ctx, canvas, colors) {
             const width = canvas.width;
             const height = canvas.height;
-            const padding = 80;
+            const padding = 85;  // 优化边距：确保充足的标签空间
             const chartWidth = width - 2 * padding;
             const chartHeight = height - 2 * padding;
 
@@ -4053,7 +4132,7 @@
         function drawScatterPlot(ctx, canvas, colors) {
             const width = canvas.width;
             const height = canvas.height;
-            const padding = 80;
+            const padding = 85;  // 优化边距：确保充足的标签空间
             const chartWidth = width - 2 * padding;
             const chartHeight = height - 2 * padding;
 
@@ -4950,7 +5029,7 @@
 
                     frameCtx.drawImage(img, 0, 0, 1000, 500);
 
-                                        // 不添加标题和底部提示，保持图表纯净
+                    // 不添加标题和底部提示，保持图表纯净
 
                     // 添加到GIF
                     gif.addFrame(frameCanvas, { delay: frameDelay });
@@ -5008,7 +5087,7 @@
         function drawPieChart(ctx, canvas, colors) {
             const width = canvas.width;
             const height = canvas.height;
-            const padding = 80;
+            const padding = 85;  // 优化边距：确保充足的标签空间
             const centerX = width / 2;
             const centerY = height / 2;
             const radius = Math.min(width, height) / 2 - padding;
