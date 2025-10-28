@@ -4489,13 +4489,81 @@
 
         if (mainDownloadChartBtn) {
             mainDownloadChartBtn.addEventListener('click', function () {
-                const canvas = document.getElementById('mainChartCanvas');
-                if (canvas) {
-                    const link = document.createElement('a');
-                    link.download = 'color-scheme-chart.png';
-                    link.href = canvas.toDataURL();
-                    link.click();
-                    showToast('图表已下载');
+                const originalCanvas = document.getElementById('mainChartCanvas');
+                if (originalCanvas) {
+                    try {
+                        // 创建高清版本用于下载
+                        const hdCanvas = document.createElement('canvas');
+                        const dpi = 3; // 3倍高清
+                        hdCanvas.width = originalCanvas.width * dpi;
+                        hdCanvas.height = originalCanvas.height * dpi;
+                        
+                        const hdCtx = hdCanvas.getContext('2d');
+                        
+                        // 设置高画质渲染
+                        hdCtx.imageSmoothingEnabled = true;
+                        hdCtx.imageSmoothingQuality = 'high';
+                        
+                        // 确保白色背景
+                        hdCtx.fillStyle = '#ffffff';
+                        hdCtx.fillRect(0, 0, hdCanvas.width, hdCanvas.height);
+                        
+                        // 获取当前图表类型和配色
+                        const chartType = document.getElementById('mainChartType').value || 'line';
+                        const colors = window.currentChartPalette || (currentPalette.length > 0 ? currentPalette : ['#3498db', '#e74c3c', '#2ecc71', '#f39c12', '#9b59b6', '#1abc9c', '#34495e', '#e67e22']);
+                        
+                        // 重新绘制图表到高清画布
+                        switch (chartType) {
+                            case 'line':
+                                drawLineChart(hdCtx, hdCanvas, colors);
+                                break;
+                            case 'bar':
+                                drawBarChart(hdCtx, hdCanvas, colors);
+                                break;
+                            case 'pie':
+                                drawPieChart(hdCtx, hdCanvas, colors);
+                                break;
+                            case 'box':
+                                drawBoxPlot(hdCtx, hdCanvas, colors);
+                                break;
+                            case 'heatmap':
+                                drawHeatmap(hdCtx, hdCanvas, colors);
+                                break;
+                            case 'distribution':
+                                drawDistributionChart(hdCtx, hdCanvas, colors);
+                                break;
+                            case 'radar':
+                                drawRadarChart(hdCtx, hdCanvas, colors);
+                                break;
+                            case 'violin':
+                                drawViolinPlot(hdCtx, hdCanvas, colors);
+                                break;
+                            case 'scatter':
+                                drawScatterPlot(hdCtx, hdCanvas, colors);
+                                break;
+                            case 'contour':
+                                drawContourPlot(hdCtx, hdCanvas, colors);
+                                break;
+                            default:
+                                drawLineChart(hdCtx, hdCanvas, colors);
+                        }
+                        
+                        // 下载高清图表
+                        const link = document.createElement('a');
+                        link.download = `color-scheme-${chartType}-chart.png`;
+                        link.href = hdCanvas.toDataURL('image/png', 1.0);
+                        link.click();
+                        
+                        showToast('高清图表已下载');
+                    } catch (error) {
+                        console.error('下载图表失败:', error);
+                        // 回退到原始canvas
+                        const link = document.createElement('a');
+                        link.download = 'color-scheme-chart.png';
+                        link.href = originalCanvas.toDataURL();
+                        link.click();
+                        showToast('图表已下载（标准清晰度）');
+                    }
                 }
             });
         }
@@ -4508,14 +4576,16 @@
                     // 获取当前配色方案
                     const colors = currentPalette.length > 0 ? currentPalette : ['#3498db', '#e74c3c', '#2ecc71', '#f39c12', '#9b59b6'];
                     
-                    // 创建高清色卡画布
+                    // 创建高清色卡画布 - 只包含一行小方块
                     const colorCardCanvas = document.createElement('canvas');
-                    const dpi = 2; // 高清倍数
-                    const cardWidth = 1200 * dpi; // 实际像素宽度
-                    const cardHeight = 800 * dpi; // 实际像素高度
-                    const margin = 60 * dpi;
-                    const colorSize = 120 * dpi; // 颜色方块大小
-                    const spacing = 30 * dpi; // 间距
+                    const dpi = 3; // 高清倍数
+                    const colorSize = 100 * dpi; // 颜色方块大小
+                    const spacing = 20 * dpi; // 间距
+                    const margin = 40 * dpi;
+                    
+                    // 计算画布尺寸 - 紧凑的一行布局
+                    const cardWidth = Math.max(800 * dpi, colors.length * (colorSize + spacing) - spacing + 2 * margin);
+                    const cardHeight = colorSize + 60 * dpi; // 仅包含方块和下方色值
                     
                     colorCardCanvas.width = cardWidth;
                     colorCardCanvas.height = cardHeight;
@@ -4525,65 +4595,33 @@
                     ctx.imageSmoothingEnabled = true;
                     ctx.imageSmoothingQuality = 'high';
                     
-                    // 清空画布并设置背景
+                    // 设置纯白色背景
                     ctx.fillStyle = '#ffffff';
                     ctx.fillRect(0, 0, cardWidth, cardHeight);
                     
-                    // 添加优雅标题
-                    ctx.fillStyle = '#2c3e50';
-                    ctx.font = `bold ${48 * dpi}px "Segoe UI", "Helvetica Neue", Arial, sans-serif`;
-                    ctx.textAlign = 'center';
-                    ctx.textBaseline = 'middle';
-                    ctx.fillText('Color Palette', cardWidth / 2, margin / 2);
-                    
-                    // 计算一行能放多少个颜色
-                    const maxColorsPerRow = Math.floor((cardWidth - 2 * margin + spacing) / (colorSize + spacing));
-                    const colorsPerRow = Math.min(colors.length, maxColorsPerRow);
-                    const totalWidth = colorsPerRow * colorSize + (colorsPerRow - 1) * spacing;
+                    // 计算居中位置
+                    const totalWidth = colors.length * colorSize + (colors.length - 1) * spacing;
                     const startX = (cardWidth - totalWidth) / 2;
+                    const centerY = 20 * dpi;
                     
                     // 绘制颜色方块（一行展示）
                     colors.forEach((color, index) => {
-                        const row = Math.floor(index / colorsPerRow);
-                        const col = index % colorsPerRow;
-                        const x = startX + col * (colorSize + spacing);
-                        const y = margin + row * (colorSize + spacing * 2);
+                        const x = startX + index * (colorSize + spacing);
+                        const y = centerY;
                         
                         // 绘制颜色方块（圆角矩形）
-                        const radius = 12 * dpi;
+                        const radius = 8 * dpi;
                         ctx.fillStyle = color;
                         roundRect(ctx, x, y, colorSize, colorSize, radius);
                         ctx.fill();
                         
-                        // 添加优雅边框
-                        ctx.strokeStyle = '#e0e0e0';
-                        ctx.lineWidth = 2 * dpi;
-                        roundRect(ctx, x, y, colorSize, colorSize, radius);
-                        ctx.stroke();
-                        
-                        // 添加颜色代码（下方）
-                        ctx.fillStyle = '#2c3e50';
-                        ctx.font = `${24 * dpi}px "Segoe UI", "Helvetica Neue", Arial, sans-serif`;
+                        // 添加颜色代码（下方居中）
+                        ctx.fillStyle = '#333333';
+                        ctx.font = `${18 * dpi}px "Segoe UI", Arial, sans-serif`;
                         ctx.textAlign = 'center';
                         ctx.textBaseline = 'top';
-                        ctx.fillText(color.toUpperCase(), x + colorSize / 2, y + colorSize + 15 * dpi);
+                        ctx.fillText(color.toUpperCase(), x + colorSize / 2, y + colorSize + 10 * dpi);
                     });
-                    
-                    // 添加底部装饰信息
-                    const bottomY = cardHeight - margin / 2;
-                    ctx.fillStyle = '#7f8c8d';
-                    ctx.font = `${20 * dpi}px "Segoe UI", "Helvetica Neue", Arial, sans-serif`;
-                    ctx.textAlign = 'center';
-                    ctx.textBaseline = 'middle';
-                    
-                    const currentTime = new Date().toLocaleString('zh-CN', {
-                        year: 'numeric',
-                        month: '2-digit',
-                        day: '2-digit',
-                        hour: '2-digit',
-                        minute: '2-digit'
-                    });
-                    ctx.fillText(`Generated on ${currentTime}`, cardWidth / 2, bottomY);
                     
                     // 下载高清色卡
                     const link = document.createElement('a');
@@ -4591,7 +4629,7 @@
                     link.href = colorCardCanvas.toDataURL('image/png', 1.0);
                     link.click();
                     
-                    showToast('高清色卡已下载');
+                    showToast('色卡已下载');
                 } catch (error) {
                     console.error('下载色卡失败:', error);
                     showToast('下载色卡失败，请重试');
@@ -4638,11 +4676,16 @@
                         { type: 'contour', name: '等高线图' }
                     ];
 
-                    // 创建临时canvas用于生成图表
+                    // 创建高清临时canvas用于生成图表
                     const tempCanvas = document.createElement('canvas');
-                    tempCanvas.width = 1000;
-                    tempCanvas.height = 500;
+                    const dpi = 3; // 3倍高清
+                    tempCanvas.width = 1000 * dpi;
+                    tempCanvas.height = 500 * dpi;
                     const tempCtx = tempCanvas.getContext('2d');
+                    
+                    // 设置高画质渲染
+                    tempCtx.imageSmoothingEnabled = true;
+                    tempCtx.imageSmoothingQuality = 'high';
 
                     const images = [];
 
@@ -4689,10 +4732,10 @@
                                     break;
                             }
                             
-                            // 添加到图片数组
+                            // 添加到图片数组 - 使用高清PNG
                             images.push({
                                 name: `color-scheme-${chartInfo.type}.png`,
-                                dataURL: tempCanvas.toDataURL('image/png'),
+                                dataURL: tempCanvas.toDataURL('image/png', 1.0),
                                 type: chartInfo.type,
                                 nameCN: chartInfo.name
                             });
