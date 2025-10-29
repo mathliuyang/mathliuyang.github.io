@@ -1647,10 +1647,18 @@
                 // Advanced color clustering with better similarity detection
                 const clusters = [];
                 const used = new Set();
-                const minDistance = 35; // 减小最小距离阈值：从45降到35，保留更多相似但不同的颜色
+                const minDistance = 25; // 进一步减小距离阈值，确保更精确的颜色区分
+                const highSaturationThreshold = 60; // 高饱和度保护阈值
+                const highBrightnessThreshold = 70; // 高亮度保护阈值
 
                 for (let color of colorArray) {
                     if (used.has(color.key)) continue;
+
+                    // 计算当前颜色的HSL值，用于判断是否需要特殊保护
+                    const hsl = rgbToHsl(color.r, color.g, color.b);
+                    const isHighSaturation = hsl.s >= highSaturationThreshold;
+                    const isHighBrightness = hsl.l >= highBrightnessThreshold;
+                    const isSpecialColor = isHighSaturation || isHighBrightness;
 
                     let clusterColors = [color];
                     let totalR = color.r, totalG = color.g, totalB = color.b;
@@ -1661,6 +1669,12 @@
                     for (let other of colorArray) {
                         if (used.has(other.key)) continue;
 
+                        // 计算其他颜色的HSL值
+                        const otherHsl = rgbToHsl(other.r, other.g, other.b);
+                        const otherIsHighSaturation = otherHsl.s >= highSaturationThreshold;
+                        const otherIsHighBrightness = otherHsl.l >= highBrightnessThreshold;
+                        const otherIsSpecial = otherIsHighSaturation || otherIsHighBrightness;
+
                         // Use CIEDE2000-like perceptual distance (simplified)
                         const lab1 = rgbToLab(color.r, color.g, color.b);
                         const lab2 = rgbToLab(other.r, other.g, other.b);
@@ -1670,7 +1684,20 @@
                             Math.pow(lab1.b - lab2.b, 2)
                         );
 
-                        if (dist < minDistance) {
+                        // 特殊颜色保护逻辑：高饱和度或高亮度的颜色不轻易合并
+                        let shouldMerge = false;
+                        if (isSpecialColor && otherIsSpecialColor) {
+                            // 两个都是特殊颜色，只有非常相似才合并
+                            shouldMerge = dist < 15;
+                        } else if (isSpecialColor || otherIsSpecialColor) {
+                            // 一个是特殊颜色，适度保护
+                            shouldMerge = dist < 20;
+                        } else {
+                            // 普通颜色，正常合并
+                            shouldMerge = dist < minDistance;
+                        }
+
+                        if (shouldMerge) {
                             clusterColors.push(other);
                             totalR += other.r * other.count;
                             totalG += other.g * other.count;
@@ -1685,7 +1712,8 @@
                         r: Math.round(totalR / totalWeight),
                         g: Math.round(totalG / totalWeight),
                         b: Math.round(totalB / totalWeight),
-                        count: totalWeight
+                        count: totalWeight,
+                        isSpecial: isSpecialColor // 标记特殊颜色
                     };
 
                     clusters.push(avgColor);
@@ -1693,7 +1721,11 @@
 
                 // Sort by frequency (popularity) and brightness
                 clusters.sort((a, b) => {
-                    // 优化排序算法：更好地平衡频率和视觉重要性
+                    // 高亮颜色保护：特殊颜色优先展示
+                    if (a.isSpecial && !b.isSpecial) return -1;
+                    if (!a.isSpecial && b.isSpecial) return 1;
+                    
+                    // 如果都是特殊颜色或都是普通颜色，按视觉重要性排序
                     const rgbA = {r: a.r, g: a.g, b: a.b};
                     const rgbB = {r: b.r, g: b.g, b: b.b};
                     const hslA = rgbToHsl(rgbA.r, rgbA.g, rgbA.b);
@@ -1711,11 +1743,56 @@
                     }
                 });
 
-                // Convert to hex colors
-                const allColors = clusters.map(c => rgbToHex(c.r, c.g, c.b));
+                // Convert to hex colors and add特殊颜色标记
+                const allColors = clusters.map(c => {
+                    const hex = rgbToHex(c.r, c.g, c.b);
+                    return {
+                        hex: hex,
+                        isSpecial: c.isSpecial || false,
+                        count: c.count
+                    };
+                });
+                
+                // 分离特殊颜色和普通颜色
+                const specialColors = allColors.filter(c => c.isSpecial);
+                const normalColors = allColors.filter(c => !c.isSpecial);
+                
+                // 对普通颜色进行相似性过滤，避免相近颜色重复
+                const filteredNormalColors = [];
+                const usedNormalColors = new Set();
+                
+                for (let color of normalColors) {
+                    if (usedNormalColors.has(color.hex)) continue;
+                    
+                    let isTooSimilar = false;
+                    const hsl1 = hexToHsl(color.hex);
+                    
+                    // 检查是否与已选择的颜色太相似
+                    for (let selected of filteredNormalColors) {
+                        const hsl2 = hexToHsl(selected.hex);
+                        
+                        // 计算色相距离
+                        let hueDiff = Math.abs(hsl1.h - hsl2.h);
+                        if (hueDiff > 180) hueDiff = 360 - hueDiff;
+                        
+                        // 如果色相、饱和度、亮度都很接近，认为是重复颜色
+                        if (hueDiff < 15 && Math.abs(hsl1.s - hsl2.s) < 20 && Math.abs(hsl1.l - hsl2.l) < 15) {
+                            isTooSimilar = true;
+                            break;
+                        }
+                    }
+                    
+                    if (!isTooSimilar) {
+                        filteredNormalColors.push(color);
+                        usedNormalColors.add(color.hex);
+                    }
+                }
+                
+                // 重新组合：特殊颜色在前，过滤后的普通颜色在后
+                const prioritizedColors = [...specialColors, ...filteredNormalColors].map(c => c.hex);
 
                 // Store all colors for user selection
-                window.allExtractedColors = allColors;
+                window.allExtractedColors = prioritizedColors;
 
                 // Get recommended count from user input or default
                 const recommendedCount = window.recommendedColorCount || maxColors;
@@ -1723,15 +1800,15 @@
                 if (extractAll) {
                     // 如果需要提取所有颜色，直接返回
                     return {
-                        mainColors: allColors.slice(0, Math.min(maxColors, allColors.length)),
-                        allColors: allColors
+                        mainColors: prioritizedColors.slice(0, Math.min(maxColors, prioritizedColors.length)),
+                        allColors: prioritizedColors
                     };
                 }
 
-                const displayColors = allColors.slice(0, Math.min(recommendedCount, allColors.length));
+                const displayColors = prioritizedColors.slice(0, Math.min(recommendedCount, prioritizedColors.length));
 
-                displayExtractedColors(displayColors, allColors, img.src);
-                showToast(`成功提取 ${allColors.length} 种颜色，显示前 ${displayColors.length} 种主要配色`);
+                displayExtractedColors(displayColors, prioritizedColors, img.src);
+                showToast(`成功提取 ${prioritizedColors.length} 种颜色，显示前 ${displayColors.length} 种主要配色`);
 
             } catch (error) {
                 console.error('提取颜色失败:', error);
