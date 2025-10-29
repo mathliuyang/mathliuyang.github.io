@@ -19,6 +19,10 @@
             --accent: #ffffff;
             --border: rgba(255, 255, 255, 0.08);
             --text-rgb: 255, 255, 255;
+            --primary: #4a6cf7;
+            --primary-hover: #3a5ce5;
+            --danger: #ff4757;
+            --danger-hover: #ff3838;
         }
 
         [data-theme="light"] {
@@ -28,6 +32,10 @@
             --accent: #000000;
             --border: rgba(0, 0, 0, 0.08);
             --text-rgb: 0, 0, 0;
+            --primary: #4a6cf7;
+            --primary-hover: #3a5ce5;
+            --danger: #ff4757;
+            --danger-hover: #ff3838;
         }
 
         body {
@@ -8776,7 +8784,7 @@ ${currentPalette.map((color, i) =>
 
             if (colorPickerMode) {
                 btn.textContent = '🚫 退出取色器';
-                btn.style.background = '#ff4757';
+                btn.style.background = 'var(--danger)';
                 btn.style.color = 'white';
                 tip.style.display = 'block';
                 img.style.cursor = 'crosshair';
