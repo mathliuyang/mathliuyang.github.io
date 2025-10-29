@@ -1624,7 +1624,7 @@
                     <button id="mainGenerateChart" class="action-btn primary">生成预览</button>
                     <button id="downloadColorCard" class="action-btn">下载色卡</button>
                     <button id="mainDownloadChart" class="action-btn">下载图表</button>
-                    <button id="downloadAllCharts" class="action-btn primary">打包下载所有图表</button>
+                    <button id="downloadAllCharts" class="action-btn primary" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 200px;">打包下载所有图表</button>
                 </div>
             </div>
             <div class="chart-container">
@@ -1687,7 +1687,7 @@
                 </div>
 
                 <div class="preset-tabs">
-                    <button class="preset-tab" onclick="switchPresetCategory('coverPalettes', this)">封面配图</button>
+                    <button class="preset-tab" onclick="switchPresetCategory('coverPalettes', this)">封面言色</button>
                     <button class="preset-tab active" onclick="switchPresetCategory('curated', this)">精选</button>
                 </div>
             </div>
@@ -3777,11 +3777,11 @@ ${currentPalette.map((color, i) =>
             lockedColors = new Set();
             displayPalette();
             generateExportCode();
-            
+
             // 复制所有颜色代码到剪切板
             const colorsText = colors.join(', ');
             navigator.clipboard.writeText(colorsText);
-            
+
             showToast(`已应用并复制预设：${name} (${colors.length}色)`);
 
             // 只有在主生成器页面才显示图表预览（预设方案板块隐藏时）
@@ -3805,11 +3805,11 @@ ${currentPalette.map((color, i) =>
                 mainChartPreview.style.display = 'block';
                 // 设置当前调色板用于图表预览
                 window.currentChartPalette = colors.slice();
-                
+
                 // 复制所有颜色代码到剪切板
                 const colorsText = colors.join(', ');
                 navigator.clipboard.writeText(colorsText);
-                
+
                 // 自动生成图表预览
                 setTimeout(() => {
                     generateMainChartPreview();
