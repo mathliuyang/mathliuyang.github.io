@@ -1513,9 +1513,30 @@
         // Generate export code
         function generateExportCode() {
             // CSS
-            const cssCode = `:root {\n${currentPalette.map((color, i) =>
+            const cssCode = `/* 智核学术配色方案 - CSS变量定义 */
+:root {
+${currentPalette.map((color, i) =>
                 `  --color-${i + 1}: ${color};`
-            ).join('\n')}\n}`;
+            ).join('\n')}
+}
+
+/* 使用示例 */
+.element {
+    background-color: var(--color-1);
+    color: var(--color-2);
+    border: 2px solid var(--color-3);
+}
+
+.button {
+    background: linear-gradient(45deg, var(--color-1), var(--color-2));
+    box-shadow: 0 4px 8px var(--color-3);
+}
+
+.text-gradient {
+    background: linear-gradient(90deg, ${currentPalette.slice(0, 3).join(', ')});
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}`;
             document.getElementById('cssCode').textContent = cssCode;
 
             // Python
