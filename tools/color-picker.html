@@ -1513,7 +1513,7 @@
         // Generate export code
         function generateExportCode() {
             // CSS
-            const cssCode = `/* 智核学术配色方案 - CSS变量定义 */
+            const cssCode = `/* 智核学术·配色方案 */
 :root {
 ${currentPalette.map((color, i) =>
                 `  --color-${i + 1}: ${color};`
@@ -1540,13 +1540,13 @@ ${currentPalette.map((color, i) =>
             document.getElementById('cssCode').textContent = cssCode;
 
             // Python
-            const pythonCode = `# 配色方案\ncolors = [\n${currentPalette.map((color, i) =>
+            const pythonCode = `# 智核学术·配色方案\ncolors = [\n${currentPalette.map((color, i) =>
                 `    '${color}',  # 颜色${i + 1}`
             ).join('\n')}\n]\n\n# 使用示例\nprint(f"配色方案包含 {len(colors)} 种颜色")\nfor i, color in enumerate(colors):\n    print(f"颜色{i+1}: {color}")`;
             document.getElementById('pythonCode').textContent = pythonCode;
 
             // Matlab
-            const matlabCode = `% 配色方案\ncolors = {\n${currentPalette.map((color, i) =>
+            const matlabCode = `% 智核学术·配色方案\ncolors = {\n${currentPalette.map((color, i) =>
                 `    '${color}', ... % 颜色${i + 1}`
             ).join('\n')}\n};\n\n% 使用示例\nfprintf('配色方案包含 %d 种颜色\\n', length(colors));\nfor i = 1:length(colors)\n    fprintf('颜色%d: %s\\n', i, colors{i});\nend`;
             document.getElementById('matlabCode').textContent = matlabCode;
