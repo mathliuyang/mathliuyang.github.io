@@ -298,6 +298,11 @@
             letter-spacing: 0.5px;
         }
 
+        /* 深色模式下的scientific-title样式 */
+        [data-theme="dark"] .scientific-title {
+            color: #e2e8f0;
+        }
+
         .chart-controls {
             background: #f8f9fa;
             border: 1px solid #dee2e6;
@@ -397,6 +402,12 @@
             position: relative;
         }
 
+        /* 深色模式下的科研界面样式 */
+        [data-theme="dark"] .research-interface {
+            background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+            border: 1px solid #4a5568;
+        }
+
         .research-interface::after {
             content: 'Scientific Visualization';
             position: absolute;
@@ -409,6 +420,12 @@
             font-weight: 600;
             letter-spacing: 1px;
             text-transform: uppercase;
+        }
+
+        /* 深色模式下的科研界面标签样式 */
+        [data-theme="dark"] .research-interface::after {
+            background: #1a202c;
+            color: #a0aec0;
         }
 
         .controls {
@@ -455,16 +472,35 @@
             position: relative;
         }
 
+        /* 深色模式下的scheme-select样式 */
+        [data-theme="dark"] .scheme-select {
+            background: #2d3748;
+            border: 1px solid #4a5568;
+            color: #e2e8f0;
+        }
+
         /* 为select元素添加自定义悬停提示样式 */
         .scheme-select option:hover {
             background: var(--text);
             color: var(--bg);
         }
 
+        /* 深色模式下的option样式 */
+        [data-theme="dark"] .scheme-select option {
+            background: #2d3748;
+            color: #e2e8f0;
+        }
+
         .scheme-select:hover,
         .scheme-select:focus {
             outline: none;
             border-color: var(--text);
+        }
+
+        /* 深色模式下的scheme-select悬停和焦点样式 */
+        [data-theme="dark"] .scheme-select:hover,
+        [data-theme="dark"] .scheme-select:focus {
+            border-color: #63b3ed;
         }
 
         .action-buttons {
@@ -484,10 +520,40 @@
             text-transform: uppercase;
         }
 
+        /* 深色模式下的action-btn样式 */
+        [data-theme="dark"] .action-btn {
+            border: 1px solid #4a5568;
+            background: transparent;
+            color: #e2e8f0;
+        }
+        
+        /* 深色模式下下载按钮特殊样式 */
+        [data-theme="dark"] #downloadColorCard,
+        [data-theme="dark"] #mainDownloadChart {
+            color: #1a202c;
+            background: #e2e8f0;
+            border-color: #e2e8f0;
+        }
+        
+        /* 深色模式下下载按钮悬停样式 */
+        [data-theme="dark"] #downloadColorCard:hover,
+        [data-theme="dark"] #mainDownloadChart:hover {
+            color: #ffffff;
+            background: #4a5568;
+            border-color: #63b3ed;
+        }
+
         .action-btn:hover {
             background: var(--text);
             color: var(--bg);
             border-color: var(--text);
+        }
+
+        /* 深色模式下的action-btn悬停样式 */
+        [data-theme="dark"] .action-btn:hover {
+            background: #4a5568;
+            color: #e2e8f0;
+            border-color: #63b3ed;
         }
 
         .action-btn.primary {
@@ -495,9 +561,23 @@
             color: var(--bg);
         }
 
+        /* 深色模式下的primary按钮样式 */
+        [data-theme="dark"] .action-btn.primary {
+            background: #3182ce;
+            color: #ffffff;
+            border-color: #3182ce;
+        }
+
         .action-btn.primary:hover {
             background: transparent;
             color: var(--text);
+        }
+
+        /* 深色模式下的primary按钮悬停样式 */
+        [data-theme="dark"] .action-btn.primary:hover {
+            background: #2c5282;
+            color: #ffffff;
+            border-color: #2c5282;
         }
 
         .palette-display {
@@ -1382,6 +1462,11 @@
             padding-top: 2rem;
         }
 
+        /* 深色模式下的图表预览区域样式 */
+        [data-theme="dark"] .chart-preview-section {
+            border-top: 1px solid #4a5568;
+        }
+
         .chart-preview-header {
             display: flex;
             justify-content: space-between;
@@ -1398,6 +1483,11 @@
             flex-wrap: wrap;
         }
 
+        /* 深色模式下的chart-controls样式 */
+        [data-theme="dark"] .chart-controls {
+            gap: 0.8rem;
+        }
+
         .chart-select {
             padding: 0.6rem 1rem;
             border: 1px solid var(--border);
@@ -1409,9 +1499,27 @@
             min-width: 120px;
         }
 
+        /* 深色模式下的图表选择器样式 */
+        [data-theme="dark"] .chart-select {
+            background: #2d3748;
+            border: 1px solid #4a5568;
+            color: #e2e8f0;
+        }
+
+        /* 深色模式下的图表选择器option样式 */
+        [data-theme="dark"] .chart-select option {
+            background: #2d3748;
+            color: #e2e8f0;
+        }
+
         .chart-select:focus {
             outline: none;
             border-color: var(--text);
+        }
+
+        /* 深色模式下的图表选择器焦点样式 */
+        [data-theme="dark"] .chart-select:focus {
+            border-color: #63b3ed;
         }
 
         .chart-btn {
@@ -1425,9 +1533,23 @@
             white-space: nowrap;
         }
 
+        /* 深色模式下的图表按钮样式 */
+        [data-theme="dark"] .chart-btn {
+            background: #3182ce;
+            border: 1px solid #3182ce;
+            color: #ffffff;
+        }
+
         .chart-btn:hover {
             background: transparent;
             color: var(--text);
+        }
+
+        /* 深色模式下的图表按钮悬停样式 */
+        [data-theme="dark"] .chart-btn:hover {
+            background: #2c5282;
+            color: #ffffff;
+            border-color: #2c5282;
         }
 
         .chart-btn.secondary {
@@ -1435,9 +1557,23 @@
             color: var(--text);
         }
 
+        /* 深色模式下的次要图表按钮样式 */
+        [data-theme="dark"] .chart-btn.secondary {
+            background: transparent;
+            color: #e2e8f0;
+            border-color: #4a5568;
+        }
+
         .chart-btn.secondary:hover {
             background: var(--text);
             color: var(--bg);
+        }
+
+        /* 深色模式下的次要图表按钮悬停样式 */
+        [data-theme="dark"] .chart-btn.secondary:hover {
+            background: #4a5568;
+            color: #ffffff;
+            border-color: #4a5568;
         }
 
         .chart-container {
@@ -1451,10 +1587,21 @@
             overflow: auto;
         }
 
+        /* 深色模式下的图表容器样式 */
+        [data-theme="dark"] .chart-container {
+            background: #2d3748;
+            border: 1px solid #4a5568;
+        }
+
         #chartCanvas {
             max-width: 100%;
             height: auto;
             background: var(--bg);
+        }
+
+        /* 深色模式下的图表画布样式 */
+        [data-theme="dark"] #chartCanvas {
+            background: #2d3748;
         }
 
         /* URL modal styles */
