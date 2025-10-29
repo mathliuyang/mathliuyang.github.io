@@ -1464,7 +1464,10 @@
             <div style="border: 1px solid var(--border); padding: 1rem;">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
                     <span style="font-size: 0.9rem; color: var(--text-dim);">提取的颜色</span>
-                    <button class="action-btn" onclick="closeImagePreview()" style="padding: 0.4rem 1rem;">关闭</button>
+                    <div style="display: flex; gap: 0.5rem;">
+                        <button class="action-btn" id="downloadImageBtn" onclick="downloadOriginalImage()" style="padding: 0.4rem 1rem;" title="下载原始图片">下载图片</button>
+                        <button class="action-btn" onclick="closeImagePreview()" style="padding: 0.4rem 1rem;">关闭</button>
+                    </div>
                 </div>
                 <div id="extractedColors"></div>
             </div>
@@ -3239,9 +3242,54 @@ ${currentPalette.map((color, i) =>
             document.getElementById('imagePreview').style.display = 'none';
         }
 
+        // 下载原始图片功能
+        function downloadOriginalImage() {
+            if (!window.originalImageUrl) {
+                showToast('没有可下载的图片');
+                return;
+            }
+
+            try {
+                // 创建一个临时链接元素用于下载
+                const link = document.createElement('a');
+                link.href = window.originalImageUrl;
+                
+                // 尝试从URL获取文件名，如果没有则使用默认名称
+                let filename = 'extracted-image';
+                try {
+                    const url = new URL(window.originalImageUrl);
+                    const pathname = url.pathname;
+                    if (pathname && pathname !== '/') {
+                        const segments = pathname.split('/');
+                        const lastSegment = segments[segments.length - 1];
+                        if (lastSegment && lastSegment.includes('.')) {
+                            filename = lastSegment;
+                        }
+                    }
+                } catch (e) {
+                    console.warn('无法解析URL，使用默认文件名');
+                }
+
+                // 设置下载属性
+                link.download = filename;
+                link.style.display = 'none';
+                
+                // 添加到DOM，触发点击，然后移除
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                
+                showToast('图片下载已开始');
+            } catch (error) {
+                console.error('下载图片时出错:', error);
+                showToast('下载失败，请尝试右键保存图片');
+            }
+        }
+
         window.closeImagePreview = closeImagePreview;
         window.useExtractedColor = useExtractedColor;
         window.useAllExtractedColors = useAllExtractedColors;
+        window.downloadOriginalImage = downloadOriginalImage;
 
         // URL image extraction functions
         window.showUrlInput = showUrlInput;
