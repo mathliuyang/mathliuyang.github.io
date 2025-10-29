@@ -310,6 +310,20 @@
             return hexColor;
           })
           .filter(color => color !== null); // 移除过滤掉的纯白色及接近纯白色
+        
+        // 确保至少有8种颜色，如果过滤后颜色不足，则保留原始提取的颜色
+        if (sortedColors.length < 8) {
+          const originalColors = Array.from(colorMap.entries())
+            .sort((a, b) => b[1] - a[1])
+            .slice(0, 16)
+            .map(([color]) => {
+              const [r, g, b] = color.split(',').map(Number);
+              return `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`;
+            });
+          return originalColors;
+        }
+        
+        return sortedColors;
 
         callback(sortedColors);
       } catch (error) {
@@ -375,11 +389,21 @@
             if (colors && colors.length > 0) {
               story.colors = colors;
 
-              // 更新配色方案
-              for (let count = 2; count <= Math.min(16, colors.length); count++) {
+              // 更新所有颜色数量的配色方案
+              for (let count = 2; count <= 16; count++) {
                 const existingIndex = coverPalettes[count].findIndex(p => p.coverStory && p.coverStory.id === story.id);
                 if (existingIndex !== -1) {
-                  coverPalettes[count][existingIndex].colors = colors.slice(0, count);
+                  // 确保有足够的颜色，如果不足则重复使用颜色
+                  let paletteColors = colors.slice(0, count);
+                  if (paletteColors.length < count) {
+                    // 如果颜色不足，重复使用颜色直到达到所需数量
+                    const repeatedColors = [];
+                    while (repeatedColors.length < count) {
+                      repeatedColors.push(...colors);
+                    }
+                    paletteColors = repeatedColors.slice(0, count);
+                  }
+                  coverPalettes[count][existingIndex].colors = paletteColors;
                 }
               }
 
@@ -395,7 +419,7 @@
           });
         } else {
           // 如果已有颜色数据，直接生成配色方案
-          for (let count = 2; count <= Math.min(16, story.colors.length); count++) {
+          for (let count = 2; count <= 16; count++) {
             const palette = {
               name: story.title.replace('《Nature》封面故事：', '').replace('《Science》封面故事：', ''),
               source: `${story.category} Cover`,
@@ -403,6 +427,15 @@
               coverStory: story,
               isCoverPalette: true
             };
+
+            // 如果颜色不足，重复使用颜色直到达到所需数量
+            if (palette.colors.length < count) {
+              const repeatedColors = [];
+              while (repeatedColors.length < count) {
+                repeatedColors.push(...story.colors);
+              }
+              palette.colors = repeatedColors.slice(0, count);
+            }
 
             coverPalettes[count].push(palette);
           }
