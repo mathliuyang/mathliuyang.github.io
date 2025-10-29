@@ -47,6 +47,108 @@
             letter-spacing: -0.02em;
         }
 
+        /* 密码验证模态框样式 */
+        .password-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            z-index: 9999;
+            backdrop-filter: blur(10px);
+        }
+
+        .password-container {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            padding: 3rem;
+            border-radius: 8px;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .password-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--text);
+        }
+
+        .password-subtitle {
+            color: var(--text-dim);
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+        }
+
+        .password-input {
+            width: 100%;
+            padding: 1rem;
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text);
+            font-size: 1rem;
+            margin-bottom: 1.5rem;
+            border-radius: 4px;
+            text-align: center;
+            font-family: inherit;
+            line-height: 1.4;
+        }
+
+        .password-input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1);
+        }
+
+        .password-btn {
+            width: 100%;
+            padding: 1rem;
+            background: var(--text);
+            color: var(--bg);
+            border: 1px solid var(--text);
+            font-size: 0.9rem;
+            font-weight: 500;
+            letter-spacing: 0.05em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+        }
+
+        .password-btn:hover {
+            background: transparent;
+            color: var(--text);
+        }
+
+        .password-error {
+            color: #ff4757;
+            font-size: 0.8rem;
+            margin-top: 0.5rem;
+            display: none;
+        }
+
+        .password-hint {
+            color: var(--text-dim);
+            font-size: 0.75rem;
+            margin-top: 1rem;
+            font-style: italic;
+        }
+
+        /* 主要内容初始隐藏 */
+        .main-content {
+            display: none;
+        }
+
+        .main-content.authenticated {
+            display: block;
+        }
+
         nav {
             position: fixed;
             top: 0;
@@ -1488,7 +1590,24 @@
 </head>
 
 <body>
-    <nav>
+    <!-- 密码验证模态框 -->
+    <div id="passwordModal" class="password-modal">
+        <div class="password-container">
+            <h2 class="password-title">访问受限</h2>
+            <p class="password-subtitle">此工具需要密码才能访问</p>
+            <input type="password" id="passwordInput" class="password-input" placeholder="请输入密码" autocomplete="off">
+            <div style="display: flex; gap: 1rem; margin-bottom: 1rem;">
+                <button id="backBtn" class="password-btn" style="background: transparent; color: var(--text); border: 1px solid var(--border);">返回工具集</button>
+                <button id="submitBtn" class="password-btn">验证</button>
+            </div>
+            <div id="passwordError" class="password-error">密码错误，请重试</div>
+            <div class="password-hint">提示：密码为6位数字</div>
+        </div>
+    </div>
+
+    <!-- 主要内容 -->
+    <div class="main-content">
+        <nav>
         <div class="logo" onclick="location.href='../index.html'">图灵的猫 X 智核学术</div>
         <div class="nav-right">
             <ul class="nav-links">
@@ -10021,6 +10140,136 @@ ${currentPalette.map((color, i) =>
 
         // 初始化剪切板粘贴功能
         initClipboardPasteFeature();
+    </script>
+    
+    </div> <!-- main-content 结束 -->
+
+    <script>
+        // 密码验证功能
+        const CORRECT_PASSWORD = "962464"; // 正确的密码
+        const PASSWORD_KEY = "color-picker-password"; // 存储密码验证状态的键
+        const PASSWORD_EXPIRY = 24 * 60 * 60 * 1000; // 24小时有效期
+
+        // 检查是否已验证密码
+        function checkAuthentication() {
+            const authData = localStorage.getItem(PASSWORD_KEY);
+            if (authData) {
+                const { timestamp, authenticated } = JSON.parse(authData);
+                const now = new Date().getTime();
+                
+                // 检查是否在有效期内
+                if (authenticated && (now - timestamp) < PASSWORD_EXPIRY) {
+                    showAuthenticatedContent();
+                    return true;
+                } else {
+                    // 过期则清除记录
+                    localStorage.removeItem(PASSWORD_KEY);
+                }
+            }
+            
+            showPasswordModal();
+            return false;
+        }
+
+        // 验证密码
+        function checkPassword() {
+            const input = document.getElementById('passwordInput').value;
+            const errorElement = document.getElementById('passwordError');
+            
+            if (input === CORRECT_PASSWORD) {
+                // 密码正确，保存验证状态
+                const authData = {
+                    timestamp: new Date().getTime(),
+                    authenticated: true
+                };
+                localStorage.setItem(PASSWORD_KEY, JSON.stringify(authData));
+                
+                showAuthenticatedContent();
+                showToast('验证成功！');
+            } else {
+                // 密码错误，显示错误信息
+                errorElement.style.display = 'block';
+                document.getElementById('passwordInput').value = '';
+                
+                // 3秒后隐藏错误信息
+                setTimeout(() => {
+                    errorElement.style.display = 'none';
+                }, 3000);
+            }
+        }
+
+        // 显示已验证的内容
+        function showAuthenticatedContent() {
+            document.getElementById('passwordModal').style.display = 'none';
+            document.querySelector('.main-content').classList.add('authenticated');
+        }
+
+        // 显示密码输入模态框
+        function showPasswordModal() {
+            document.getElementById('passwordModal').style.display = 'flex';
+            document.querySelector('.main-content').classList.remove('authenticated');
+        }
+
+        // 显示提示消息
+        function showToast(message) {
+            // 创建toast元素
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.textContent = message;
+            toast.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: var(--primary);
+                color: var(--bg);
+                padding: 12px 20px;
+                border-radius: 4px;
+                z-index: 10000;
+                opacity: 0;
+                transform: translateY(-20px);
+                transition: all 0.3s ease;
+            `;
+            
+            document.body.appendChild(toast);
+            
+            // 显示动画
+            setTimeout(() => {
+                toast.style.opacity = '1';
+                toast.style.transform = 'translateY(0)';
+            }, 100);
+            
+            // 3秒后自动隐藏
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateY(-20px)';
+                setTimeout(() => {
+                    if (toast.parentNode) {
+                        toast.parentNode.removeChild(toast);
+                    }
+                }, 300);
+            }, 3000);
+        }
+
+        // 页面加载时检查密码验证状态
+        document.addEventListener('DOMContentLoaded', function() {
+            // 检查是否已验证密码
+            checkAuthentication();
+            
+            // 添加密码输入框回车事件
+            document.getElementById('passwordInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    checkPassword();
+                }
+            });
+            
+            // 添加验证按钮点击事件
+            document.getElementById('submitBtn').addEventListener('click', checkPassword);
+            
+            // 添加返回按钮点击事件
+            document.getElementById('backBtn').addEventListener('click', function() {
+                window.location.href = '../pages/tools.html';
+            });
+        });
     </script>
 </body>
 
