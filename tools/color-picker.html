@@ -1593,16 +1593,17 @@
     <!-- 密码验证模态框 -->
     <div id="passwordModal" class="password-modal">
         <div class="password-container">
-            <h2 class="password-title">访问受限</h2>
-            <p class="password-subtitle">此工具需要密码才能访问</p>
-            <input type="password" id="passwordInput" class="password-input" placeholder="请输入密码" autocomplete="off">
+            <h2 class="password-title">访问验证</h2>
+            <p class="password-subtitle">请输入访问密码以使用配色方案生成器</p>
+            <input type="text" id="passwordInput" class="password-input" placeholder="请输入密码" autocomplete="off"
+                autocapitalize="off" autocorrect="off">
             <div style="display: flex; gap: 1rem; margin-bottom: 1rem;">
-                <button id="backBtn" class="password-btn"
-                    style="background: transparent; color: var(--text); border: 1px solid var(--border);">返回工具集</button>
-                <button id="submitBtn" class="password-btn">验证</button>
+                <button onclick="location.href='../pages/tools.html'" class="password-btn"
+                    style="flex: 1; background: transparent; color: var(--text);">返回工具集</button>
+                <button onclick="checkPassword()" class="password-btn" style="flex: 1;">验证</button>
             </div>
             <div id="passwordError" class="password-error">密码错误，请重试</div>
-            <div class="password-hint">关注【智核学术】公众号，回复【访问密码】即可获取</div>
+            <p class="password-hint">关注【智核学术】公众号，回复【访问密码】即可获取</p>
         </div>
     </div>
 
@@ -10149,68 +10150,63 @@ ${currentPalette.map((color, i) =>
 
     <script>
         // 密码验证功能
-        const CORRECT_PASSWORD = "962464"; // 正确的密码
-        const PASSWORD_KEY = "color-picker-password"; // 存储密码验证状态的键
+        const CORRECT_PASSWORD = '智核学术｜图灵的猫';
+        const PASSWORD_KEY = 'color-picker-password';
         const PASSWORD_EXPIRY = 24 * 60 * 60 * 1000; // 24小时有效期
 
-        // 检查是否已验证密码
+        // 检查是否已经验证过
         function checkAuthentication() {
             const authData = localStorage.getItem(PASSWORD_KEY);
-            if (authData) {
-                const { timestamp, authenticated } = JSON.parse(authData);
+            if (!authData) return false;
+
+            try {
+                const { timestamp } = JSON.parse(authData);
                 const now = new Date().getTime();
 
-                // 检查是否在有效期内
-                if (authenticated && (now - timestamp) < PASSWORD_EXPIRY) {
-                    showAuthenticatedContent();
-                    return true;
-                } else {
-                    // 过期则清除记录
+                // 检查是否过期
+                if (now - timestamp > PASSWORD_EXPIRY) {
                     localStorage.removeItem(PASSWORD_KEY);
+                    return false;
                 }
-            }
 
-            showPasswordModal();
-            return false;
+                return true;
+            } catch (e) {
+                localStorage.removeItem(PASSWORD_KEY);
+                return false;
+            }
         }
 
         // 验证密码
         function checkPassword() {
-            const input = document.getElementById('passwordInput').value;
-            const errorElement = document.getElementById('passwordError');
+            const input = document.getElementById('passwordInput');
+            const error = document.getElementById('passwordError');
+            const password = input.value.trim();
 
-            if (input === CORRECT_PASSWORD) {
-                // 密码正确，保存验证状态
+            // 支持原密码和962464
+            if (password === CORRECT_PASSWORD || password === '962464') {
+                // 保存验证状态
                 const authData = {
                     timestamp: new Date().getTime(),
                     authenticated: true
                 };
                 localStorage.setItem(PASSWORD_KEY, JSON.stringify(authData));
 
-                showAuthenticatedContent();
+                // 隐藏密码模态框，显示主要内容
+                document.getElementById('passwordModal').style.display = 'none';
+                document.querySelector('.main-content').classList.add('authenticated');
             } else {
-                // 密码错误，显示错误信息
-                errorElement.style.display = 'block';
-                document.getElementById('passwordInput').value = '';
+                error.style.display = 'block';
+                input.style.borderColor = '#ff4757';
 
-                // 3秒后隐藏错误信息
+                // 显示错误提示，不自动清空输入，方便用户修改
                 setTimeout(() => {
-                    errorElement.style.display = 'none';
+                    error.style.display = 'none';
+                    input.style.borderColor = '';
                 }, 3000);
             }
         }
 
-        // 显示已验证的内容
-        function showAuthenticatedContent() {
-            document.getElementById('passwordModal').style.display = 'none';
-            document.querySelector('.main-content').classList.add('authenticated');
-        }
 
-        // 显示密码输入模态框
-        function showPasswordModal() {
-            document.getElementById('passwordModal').style.display = 'flex';
-            document.querySelector('.main-content').classList.remove('authenticated');
-        }
 
         // 显示提示消息
         function showToast(message) {
@@ -10252,26 +10248,28 @@ ${currentPalette.map((color, i) =>
             }, 3000);
         }
 
-        // 页面加载时检查密码验证状态
-        document.addEventListener('DOMContentLoaded', function () {
-            // 检查是否已验证密码
-            checkAuthentication();
-
-            // 添加密码输入框回车事件
-            document.getElementById('passwordInput').addEventListener('keypress', function (e) {
-                if (e.key === 'Enter') {
-                    checkPassword();
-                }
-            });
-
-            // 添加验证按钮点击事件
-            document.getElementById('submitBtn').addEventListener('click', checkPassword);
-
-            // 添加返回按钮点击事件
-            document.getElementById('backBtn').addEventListener('click', function () {
-                window.location.href = '../pages/tools.html';
-            });
+        // 回车键验证
+        document.getElementById('passwordInput').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                checkPassword();
+            }
         });
+
+        // 页面加载时检查验证状态
+        window.addEventListener('DOMContentLoaded', function () {
+            if (checkAuthentication()) {
+                // 已经验证过，直接显示内容
+                document.getElementById('passwordModal').style.display = 'none';
+                document.querySelector('.main-content').classList.add('authenticated');
+            } else {
+                // 需要验证，显示密码模态框
+                document.getElementById('passwordModal').style.display = 'flex';
+                document.getElementById('passwordInput').focus();
+            }
+        });
+
+        // 使密码验证函数全局可用
+        window.checkPassword = checkPassword;
     </script>
 </body>
 
