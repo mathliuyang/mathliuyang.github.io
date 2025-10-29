@@ -1650,8 +1650,8 @@
                 
                 // 自适应阈值调整：根据颜色多样性动态调整相似度阈值
                 const colorVariety = calculateColorVariety(colorArray);
-                const baseMinDistance = 20; // 基础距离阈值
-                const minDistance = colorVariety > 0.7 ? baseMinDistance * 0.8 : baseMinDistance; // 颜色丰富时更严格
+                const baseMinDistance = 15; // 更严格的基础距离阈值
+                const minDistance = colorVariety > 0.7 ? baseMinDistance * 0.7 : baseMinDistance; // 颜色丰富时更严格
                 
                 const highSaturationThreshold = 65; // 提高高饱和度保护阈值
                 const highBrightnessThreshold = 75; // 提高高亮度保护阈值
@@ -1693,12 +1693,12 @@
                         let shouldMerge = false;
                         if (isSpecialColor && otherIsSpecial) {
                             // 两个都是特殊颜色，只有非常相似才合并
-                            shouldMerge = dist < 15;
+                            shouldMerge = dist < 12;
                         } else if (isSpecialColor || otherIsSpecial) {
                             // 一个是特殊颜色，适度保护
-                            shouldMerge = dist < 20;
+                            shouldMerge = dist < 18;
                         } else {
-                            // 普通颜色，正常合并
+                            // 普通颜色，更严格地合并
                             shouldMerge = dist < minDistance;
                         }
 
@@ -1794,9 +1794,9 @@
                         if (hueDiff > 180) hueDiff = 360 - hueDiff;
                         
                         // 更严格的相似度判断：
-                        // 1. Delta E < 8.0 (明显的颜色差异)
+                        // 1. Delta E < 5.0 (非常相似的颜色)
                         // 2. 或者色相非常接近且饱和度/亮度都接近
-                        if (deltaE < 8.0 || (hueDiff < 8 && Math.abs(hsl1.s - hsl2.s) < 12 && Math.abs(hsl1.l - hsl2.l) < 10)) {
+                        if (deltaE < 5.0 || (hueDiff < 5 && Math.abs(hsl1.s - hsl2.s) < 8 && Math.abs(hsl1.l - hsl2.l) < 8)) {
                             isTooSimilar = true;
                             break;
                         }
@@ -1809,7 +1809,10 @@
                 }
                 
                 // 重新组合：特殊颜色在前，过滤后的普通颜色在后
-                const prioritizedColors = [...specialColors, ...filteredNormalColors].map(c => c.hex);
+                let prioritizedColors = [...specialColors, ...filteredNormalColors].map(c => c.hex);
+                
+                // 最终强力去重：确保颜色之间有足够的区分度
+                prioritizedColors = finalAggressiveDeduplication(prioritizedColors);
 
                 // Store all colors for user selection
                 window.allExtractedColors = prioritizedColors;
@@ -1829,11 +1832,54 @@
 
                 displayExtractedColors(displayColors, prioritizedColors, img.src);
                 showToast(`成功提取 ${prioritizedColors.length} 种颜色，显示前 ${displayColors.length} 种主要配色`);
+                
+                // 调试信息：显示去重效果
+                console.log(`原始颜色数量: ${allColors.length}, 最终提取数量: ${prioritizedColors.length}, 去重比例: ${((1 - prioritizedColors.length / allColors.length) * 100).toFixed(1)}%`);
 
             } catch (error) {
                 console.error('提取颜色失败:', error);
                 showToast('提取失败，请重试');
             }
+        }
+
+        // Helper function: 最终强力去重，确保颜色有足够区分度
+        function finalAggressiveDeduplication(colors) {
+            if (colors.length <= 1) return colors;
+            
+            const result = [];
+            
+            for (let i = 0; i < colors.length; i++) {
+                const currentColor = colors[i];
+                let isTooSimilar = false;
+                
+                // 检查与已选择颜色的相似度
+                for (let j = 0; j < result.length; j++) {
+                    const rgb1 = hexToRgb(currentColor);
+                    const rgb2 = hexToRgb(result[j]);
+                    
+                    // 使用LAB色彩空间计算感知距离
+                    const lab1 = rgbToLab(rgb1.r, rgb1.g, rgb1.b);
+                    const lab2 = rgbToLab(rgb2.r, rgb2.g, rgb2.b);
+                    
+                    const deltaE = Math.sqrt(
+                        Math.pow(lab1.l - lab2.l, 2) + 
+                        Math.pow(lab1.a - lab2.a, 2) + 
+                        Math.pow(lab1.b - lab2.b, 2)
+                    );
+                    
+                    // 非常严格的标准：Delta E < 6.0 就认为是相似颜色
+                    if (deltaE < 6.0) {
+                        isTooSimilar = true;
+                        break;
+                    }
+                }
+                
+                if (!isTooSimilar) {
+                    result.push(currentColor);
+                }
+            }
+            
+            return result;
         }
 
         // Helper function: 计算颜色数组的多样性指数
