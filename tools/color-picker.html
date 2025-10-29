@@ -5760,9 +5760,10 @@ ${currentPalette.map((color, i) =>
         }
 
         // 添加打包下载所有图表功能
-        const downloadAllChartsBtn = document.getElementById('downloadAllCharts');
-        if (downloadAllChartsBtn) {
-            downloadAllChartsBtn.addEventListener('click', async function () {
+        function initDownloadAllCharts() {
+            const downloadAllChartsBtn = document.getElementById('downloadAllCharts');
+            if (downloadAllChartsBtn) {
+                downloadAllChartsBtn.addEventListener('click', async function () {
                 try {
                     showToast('正在生成所有图表，请稍候...');
 
@@ -5900,62 +5901,97 @@ ${currentPalette.map((color, i) =>
                     if (images.length > 1) {
                         // 使用JSZip库创建压缩包
                         try {
+                            console.log('开始创建ZIP文件，图片数量:', images.length);
+                            showToast('正在创建压缩包...');
+                            
                             // 动态加载JSZip库
                             await loadJSZip();
+                            console.log('JSZip库加载完成');
+
+                            if (!window.JSZip) {
+                                throw new Error('JSZip库未正确加载');
+                            }
 
                             const JSZip = window.JSZip;
                             const zip = new JSZip();
+                            console.log('ZIP对象创建成功');
 
                             // 添加所有图片到ZIP
                             images.forEach((image, index) => {
+                                console.log(`添加图片到ZIP: ${image.name}`);
                                 // 将dataURL转换为blob
                                 const base64Data = image.dataURL.split(',')[1];
                                 zip.file(image.name, base64Data, { base64: true });
                             });
+                            console.log('所有图片已添加到ZIP');
 
                             // 如果GIF生成成功，添加到ZIP
                             if (gifBlob) {
+                                console.log('添加GIF到ZIP');
                                 zip.file('color-scheme-charts-animation.gif', gifBlob);
                             }
 
                             // 生成ZIP文件
+                            console.log('开始生成ZIP文件');
                             const zipBlob = await zip.generateAsync({ type: 'blob' });
+                            console.log('ZIP文件生成成功，大小:', zipBlob.size);
 
                             // 创建下载链接
                             const link = document.createElement('a');
                             link.download = `color-scheme-charts-${Date.now()}.zip`;
                             link.href = URL.createObjectURL(zipBlob);
+                            console.log('创建下载链接:', link.download);
+                            
+                            // 触发下载
+                            document.body.appendChild(link);
                             link.click();
+                            document.body.removeChild(link);
+                            console.log('下载链接已触发');
 
                             showToast(`成功打包下载 ${images.length} 个图表${gifBlob ? ' 和 GIF动画' : ''}！`);
                         } catch (error) {
                             console.error('创建ZIP文件失败:', error);
+                            console.error('错误堆栈:', error.stack);
+                            showToast('创建压缩包失败，请查看控制台了解详情');
+                            
                             // 如果ZIP创建失败，但GIF生成成功，单独下载GIF
                             if (gifBlob) {
+                                console.log('ZIP创建失败，尝试单独下载GIF');
                                 const gifLink = document.createElement('a');
                                 gifLink.download = `color-scheme-charts-animation-${Date.now()}.gif`;
                                 gifLink.href = URL.createObjectURL(gifBlob);
+                                document.body.appendChild(gifLink);
                                 gifLink.click();
+                                document.body.removeChild(gifLink);
                                 showToast('ZIP创建失败，已单独下载GIF动画');
+                            } else {
+                                // 如果ZIP创建失败，逐个下载静态图表
+                                console.log('ZIP创建失败，尝试逐个下载静态图表');
+                                downloadImagesIndividually(images);
                             }
-                            // 如果ZIP创建失败，逐个下载静态图表
-                            downloadImagesIndividually(images);
                         }
                     } else {
                         // 只有一个图表时直接下载
+                        console.log('只有一个图表，直接下载');
                         if (gifBlob) {
                             // 如果生成了GIF，优先下载GIF
+                            console.log('下载GIF动画');
                             const gifLink = document.createElement('a');
                             gifLink.download = `color-scheme-charts-animation-${Date.now()}.gif`;
                             gifLink.href = URL.createObjectURL(gifBlob);
+                            document.body.appendChild(gifLink);
                             gifLink.click();
+                            document.body.removeChild(gifLink);
                             showToast('GIF动画已下载');
                         } else {
                             // 没有GIF，下载静态图表
+                            console.log('下载静态图表');
                             const link = document.createElement('a');
                             link.download = images[0].name;
                             link.href = images[0].dataURL;
+                            document.body.appendChild(link);
                             link.click();
+                            document.body.removeChild(link);
                             showToast('图表已下载');
                         }
                     }
@@ -5965,19 +6001,40 @@ ${currentPalette.map((color, i) =>
                 }
             });
         }
+        }
+
+        // 在DOM加载完成后初始化打包下载功能
+        document.addEventListener('DOMContentLoaded', function() {
+            initDownloadAllCharts();
+        });
 
         // 辅助函数：动态加载JSZip库
         function loadJSZip() {
             return new Promise((resolve, reject) => {
                 if (window.JSZip) {
+                    console.log('JSZip库已存在');
                     resolve();
                     return;
                 }
 
+                console.log('开始加载JSZip库');
                 const script = document.createElement('script');
                 script.src = 'https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js';
-                script.onload = () => resolve();
-                script.onerror = () => reject(new Error('加载JSZip库失败'));
+                
+                script.onload = () => {
+                    console.log('JSZip库加载成功，检查JSZip对象:', typeof window.JSZip);
+                    if (window.JSZip) {
+                        resolve();
+                    } else {
+                        reject(new Error('JSZip库加载成功但JSZip对象不存在'));
+                    }
+                };
+                
+                script.onerror = (error) => {
+                    console.error('JSZip库加载失败:', error);
+                    reject(new Error('加载JSZip库失败'));
+                };
+                
                 document.head.appendChild(script);
             });
         }
@@ -6123,12 +6180,16 @@ ${currentPalette.map((color, i) =>
 
         // 辅助函数：逐个下载图片（当ZIP创建失败时）
         function downloadImagesIndividually(images) {
+            console.log('开始逐个下载图片，数量:', images.length);
             images.forEach((image, index) => {
                 setTimeout(() => {
+                    console.log(`下载图片 ${index + 1}/${images.length}: ${image.name}`);
                     const link = document.createElement('a');
                     link.download = image.name;
                     link.href = image.dataURL;
+                    document.body.appendChild(link);
                     link.click();
+                    document.body.removeChild(link);
                 }, index * 500); // 每500ms下载一个，避免浏览器限制
             });
             showToast('正在逐个下载图表...');
