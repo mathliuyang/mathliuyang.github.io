@@ -2223,6 +2223,7 @@ ${currentPalette.map((color, i) =>
             ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 
             try {
+                // 尝试获取图像数据，如果图片有跨域问题，这里会抛出异常
                 const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
                 const pixels = imageData.data;
 
@@ -2342,7 +2343,14 @@ ${currentPalette.map((color, i) =>
 
             } catch (error) {
                 console.error('提取颜色失败:', error);
-                showToast('提取失败，请重试');
+                
+                // 检查是否是跨域污染错误
+                if (error.message && error.message.includes('tainted')) {
+                    showToast('跨域图片无法提取颜色，请尝试下载后上传');
+                } else {
+                    showToast('提取失败，请重试');
+                }
+                
                 return null;
             }
         }
@@ -3325,51 +3333,19 @@ ${currentPalette.map((color, i) =>
             hideUrlInput();
             showToast('正在加载图片...');
 
-            const img = new Image();
-            let corsTried = false;
-            let proxyTried = false;
-
-            img.onload = function () {
+            // 使用增强的图片加载函数
+            loadImageWithFallback(url, (img, source) => {
                 extractColorsFromImage(img);
-                showToast('图片加载成功，正在提取颜色...');
-            };
+                showToast(`图片加载成功，正在提取颜色...${source ? `(${source})` : ''}`);
+            }, (error) => {
+                showToast('图片加载失败：' + error);
+                console.error('Failed to load image from URL:', url, error);
 
-            img.onerror = function () {
-                if (!corsTried) {
-                    // Try without CORS
-                    corsTried = true;
-                    img.crossOrigin = null;
-                    img.src = url;
-                } else if (!proxyTried && !url.startsWith('data:')) {
-                    // Try with CORS proxy as fallback
-                    proxyTried = true;
-                    showToast('尝试使用代理加载图片...');
-
-                    // Use a CORS proxy service
-                    const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`;
-                    img.crossOrigin = 'anonymous';
-                    img.src = proxyUrl;
-                } else {
-                    showToast('图片加载失败，可能是跨域限制或链接无效');
-                    console.error('Failed to load image from URL:', url);
-
-                    // Suggest using proxy or alternative approach
-                    setTimeout(() => {
-                        showToast('提示：可尝试下载图片后使用上传功能');
-                    }, 2000);
-                }
-            };
-
-            // First try with CORS
-            img.crossOrigin = 'anonymous';
-
-            // Try to load the image
-            try {
-                img.src = url;
-            } catch (error) {
-                console.error('Error loading image:', error);
-                showToast('图片加载失败：' + error.message);
-            }
+                // Suggest using proxy or alternative approach
+                setTimeout(() => {
+                    showToast('提示：可尝试下载图片后使用上传功能');
+                }, 2000);
+            });
         }
 
         // Close modal when clicking outside
@@ -9650,19 +9626,127 @@ ${currentPalette.map((color, i) =>
             return isLikelyImage;
         }
 
+        // 增强的图片加载函数，支持多个代理服务和错误处理
+        function loadImageWithFallback(url, onSuccess, onError) {
+            // 代理服务列表，按优先级排序
+            const proxyServices = [
+                {
+                    name: 'AllOrigins',
+                    url: `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
+                    cors: 'anonymous'
+                },
+                {
+                    name: 'CORS Anywhere',
+                    url: `https://cors-anywhere.herokuapp.com/${url}`,
+                    cors: 'anonymous'
+                },
+                {
+                    name: 'CORS Proxy',
+                    url: `https://cors-proxy.htmldriven.com/?url=${encodeURIComponent(url)}`,
+                    cors: 'anonymous'
+                },
+                {
+                    name: 'ThingProxy',
+                    url: `https://thingproxy.freeboard.io/fetch/${url}`,
+                    cors: 'anonymous'
+                },
+                {
+                    name: 'CodePen',
+                    url: `https://codepen.io/pen/https://r.jina.ai/http://${url.replace(/^https?:\/\//, '')}`,
+                    cors: 'anonymous'
+                },
+                {
+                    name: 'Jina AI',
+                    url: `https://r.jina.ai/http://${url.replace(/^https?:\/\//, '')}`,
+                    cors: 'anonymous'
+                }
+            ];
+
+            let currentStep = 0;
+            const totalSteps = proxyServices.length + 2; // 原始URL + 无CORS + 所有代理
+
+            function tryLoadImage(imageUrl, source, crossOrigin) {
+                return new Promise((resolve, reject) => {
+                    const img = new Image();
+                    
+                    img.onload = () => {
+                        // 验证图片是否可以安全地用于canvas
+                        try {
+                            const testCanvas = document.createElement('canvas');
+                            const testCtx = testCanvas.getContext('2d');
+                            testCanvas.width = 1;
+                            testCanvas.height = 1;
+                            testCtx.drawImage(img, 0, 0, 1, 1);
+                            testCtx.getImageData(0, 0, 1, 1); // 尝试读取像素数据
+                            
+                            // 如果没有抛出错误，说明图片是安全的
+                            resolve({ img, source });
+                        } catch (error) {
+                            // 图片会导致canvas被污染，拒绝这个图片
+                            reject(new Error(`Canvas tainted by cross-origin data from ${source || imageUrl}`));
+                        }
+                    };
+                    
+                    img.onerror = () => {
+                        reject(new Error(`Failed to load image from ${source || imageUrl}`));
+                    };
+                    
+                    if (crossOrigin) {
+                        img.crossOrigin = crossOrigin;
+                    }
+                    
+                    try {
+                        img.src = imageUrl;
+                    } catch (error) {
+                        reject(error);
+                    }
+                });
+            }
+
+            function tryNextMethod() {
+                currentStep++;
+                const progress = Math.round((currentStep / totalSteps) * 100);
+                
+                if (currentStep === 1) {
+                    // 第一步：尝试直接加载（带CORS）
+                    showToast(`正在加载图片... (${progress}%)`);
+                    tryLoadImage(url, null, 'anonymous')
+                        .then(result => onSuccess(result.img, result.source))
+                        .catch(() => tryNextMethod());
+                } else if (currentStep === 2) {
+                    // 第二步：尝试直接加载（不带CORS）
+                    showToast(`尝试无CORS加载... (${progress}%)`);
+                    tryLoadImage(url, null, null)
+                        .then(result => onSuccess(result.img, result.source))
+                        .catch(() => tryNextMethod());
+                } else if (currentStep <= totalSteps) {
+                    // 尝试各种代理服务
+                    const proxyIndex = currentStep - 3;
+                    const proxy = proxyServices[proxyIndex];
+                    
+                    showToast(`尝试${proxy.name}代理... (${progress}%)`);
+                    tryLoadImage(proxy.url, proxy.name, proxy.cors)
+                        .then(result => onSuccess(result.img, result.source))
+                        .catch(() => tryNextMethod());
+                } else {
+                    // 所有方法都失败了
+                    onError('所有加载方法都失败了，可能是图片链接无效或网络问题');
+                }
+            }
+
+            // 开始尝试加载
+            tryNextMethod();
+        }
+
         // 处理剪切板中的图片URL
         function processClipboardUrl(url) {
             showToast('正在从链接加载图片...');
 
-            const img = new Image();
-            let corsTried = false;
-            let proxyTried = false;
-
-            img.onload = function () {
+            loadImageWithFallback(url, (img, source) => {
                 const result = extractColorsFromImage(img, 8, false);
                 if (result && result.mainColors) {
                     displayExtractedColors(result.mainColors, result.allColors, url);
-                    showToast('已从链接图片提取颜色！');
+                    showToast(`已从链接图片提取颜色！${source ? `(${source})` : ''}`);
 
                     // 滚动到结果区域
                     setTimeout(() => {
@@ -9674,44 +9758,15 @@ ${currentPalette.map((color, i) =>
                 } else {
                     showToast('图片颜色提取失败，请重试');
                 }
-            };
+            }, (error) => {
+                showToast('图片加载失败：' + error);
+                console.error('Failed to load image from URL:', url, error);
 
-            img.onerror = function () {
-                if (!corsTried) {
-                    // Try without CORS
-                    corsTried = true;
-                    img.crossOrigin = null;
-                    img.src = url;
-                } else if (!proxyTried && !url.startsWith('data:')) {
-                    // Try with CORS proxy as fallback
-                    proxyTried = true;
-                    showToast('尝试使用代理加载图片...');
-
-                    // Use a CORS proxy service
-                    const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`;
-                    img.crossOrigin = 'anonymous';
-                    img.src = proxyUrl;
-                } else {
-                    showToast('图片加载失败，可能是跨域限制或链接无效');
-                    console.error('Failed to load image from URL:', url);
-
-                    // Suggest using proxy or alternative approach
-                    setTimeout(() => {
-                        showToast('提示：可尝试下载图片后使用上传功能');
-                    }, 2000);
-                }
-            };
-
-            // First try with CORS
-            img.crossOrigin = 'anonymous';
-
-            // Try to load the image
-            try {
-                img.src = url;
-            } catch (error) {
-                console.error('Error loading image:', error);
-                showToast('图片加载失败：' + error.message);
-            }
+                // Suggest using proxy or alternative approach
+                setTimeout(() => {
+                    showToast('提示：可尝试下载图片后使用上传功能');
+                }, 2000);
+            });
         }
 
         function showClipboardTip() {
