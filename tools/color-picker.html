@@ -676,6 +676,448 @@
             align-items: center;
         }
 
+        /* 封面配图特殊样式 */
+        .cover-palette-card {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cover-image-container {
+            width: 100%;
+            height: 120px;
+            overflow: hidden;
+            border-radius: 8px 8px 0 0;
+            position: relative;
+        }
+
+        .cover-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .cover-palette-card:hover .cover-image {
+            transform: scale(1.05);
+        }
+
+        .cover-placeholder {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--bg-secondary), var(--border));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: var(--text-dim);
+        }
+
+        .cover-info {
+            flex-direction: column;
+            align-items: stretch !important;
+            gap: 0.8rem;
+        }
+
+        .cover-story-preview {
+            margin-top: 0.5rem;
+            padding-top: 0.5rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .cover-subtitle {
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            line-height: 1.3;
+            margin-bottom: 0.3rem;
+        }
+
+        .cover-date {
+            font-size: 0.7rem;
+            color: var(--text-dim);
+            opacity: 0.7;
+        }
+
+        .cover-actions {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: flex-end;
+        }
+
+        .action-btn.secondary {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-dim);
+        }
+
+        .action-btn.secondary:hover {
+            background: var(--bg-secondary);
+            border-color: var(--text);
+            color: var(--text);
+        }
+
+        /* 封面故事详情弹窗样式 */
+        .cover-story-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .cover-story-modal .modal-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            opacity: 0;
+        }
+
+        .cover-story-modal .modal-overlay.show {
+            opacity: 1;
+        }
+
+        .cover-story-modal .modal-content {
+            position: relative;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            transform: scale(0.9);
+            opacity: 0;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .cover-story-modal .modal-overlay.show .modal-content {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .modal-header h3 {
+            margin: 0;
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--text-dim);
+            cursor: pointer;
+            padding: 0.2rem;
+            line-height: 1;
+        }
+
+        .modal-close:hover {
+            color: var(--text);
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+            overflow-y: auto;
+            max-height: calc(80vh - 120px);
+        }
+
+        .cover-detail-image {
+            width: 100%;
+            height: 200px;
+            overflow: hidden;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .cover-detail-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .cover-detail-info {
+            line-height: 1.6;
+        }
+
+        .cover-meta {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            font-size: 0.85rem;
+        }
+
+        .cover-journal {
+            font-weight: 500;
+            color: var(--text);
+        }
+
+        .cover-description {
+            margin-top: 1rem;
+            color: var(--text-dim);
+            font-size: 0.9rem;
+        }
+
+        /* 封面故事海报样式 */
+        .cover-story-poster {
+            position: relative;
+            background: white;
+            border-radius: 16px;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: modalSlideIn 0.3s ease-out;
+        }
+
+        .poster-header {
+            position: relative;
+            height: 400px;
+            overflow: hidden;
+        }
+
+        .poster-image {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        .poster-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .cover-placeholder {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+        }
+
+        .cover-placeholder span {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .poster-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+            color: white;
+            padding: 3rem 2rem 2rem;
+        }
+
+        .poster-category {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            display: inline-block;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .poster-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin: 0 0 0.5rem 0;
+            line-height: 1.2;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .poster-subtitle {
+            font-size: 1.2rem;
+            font-weight: 300;
+            margin: 0 0 1rem 0;
+            opacity: 0.9;
+            line-height: 1.4;
+        }
+
+        .poster-date {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            font-weight: 400;
+        }
+
+        .poster-content {
+            padding: 2rem;
+        }
+
+        .story-description {
+            margin-bottom: 2rem;
+        }
+
+        .story-description h3 {
+            color: #333;
+            font-size: 1.3rem;
+            margin: 0 0 1rem 0;
+            font-weight: 600;
+        }
+
+        .story-description p {
+            color: #666;
+            line-height: 1.6;
+            font-size: 1rem;
+            margin: 0;
+        }
+
+        .story-metadata {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: #f8f9fa;
+            border-radius: 12px;
+        }
+
+        .metadata-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+        }
+
+        .metadata-label {
+            font-size: 0.8rem;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 500;
+        }
+
+        .metadata-value {
+            font-size: 1rem;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .color-palette-preview h3 {
+            color: #333;
+            font-size: 1.3rem;
+            margin: 0 0 1rem 0;
+            font-weight: 600;
+        }
+
+        .palette-colors {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .color-dot {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 3px solid white;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .color-dot:hover {
+            transform: scale(1.1);
+        }
+
+        .no-colors {
+            color: #888;
+            font-style: italic;
+            padding: 1rem;
+            text-align: center;
+            background: #f5f5f5;
+            border-radius: 8px;
+        }
+
+        .cover-story-modal .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(0, 0, 0, 0.5);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            transition: background 0.2s ease;
+        }
+
+        .cover-story-modal .modal-close:hover {
+            background: rgba(0, 0, 0, 0.7);
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9) translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .cover-story-modal {
+                padding: 1rem;
+            }
+
+            .poster-header {
+                height: 250px;
+            }
+
+            .poster-title {
+                font-size: 1.8rem;
+            }
+
+            .poster-subtitle {
+                font-size: 1rem;
+            }
+
+            .poster-content {
+                padding: 1.5rem;
+                max-height: 250px;
+            }
+
+            .story-metadata {
+                grid-template-columns: 1fr;
+                gap: 0.8rem;
+            }
+        }
+
         /* Chart preview section */
         .chart-preview-section {
             margin-top: 2rem;
@@ -797,23 +1239,34 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.8);
+            background: rgba(0, 0, 0, 0.7);
             z-index: 1000;
-            backdrop-filter: blur(5px);
-            transition: opacity 0.3s ease;
+            transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            opacity: 0;
+        }
+
+        .modal-overlay.show {
+            opacity: 1;
         }
 
         .modal-content {
             position: absolute;
             top: 50%;
             left: 50%;
-            transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%) scale(0.9);
             background: var(--bg);
             border: 1px solid var(--border);
             padding: 2rem;
             min-width: 400px;
             max-width: 90vw;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            opacity: 0;
+        }
+
+        .modal-overlay.show .modal-content {
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 1;
         }
 
         [data-theme="light"] .modal-content {
@@ -1079,7 +1532,7 @@
 
                 <div class="preset-tabs">
                     <button class="preset-tab active" onclick="switchPresetCategory('curated', this)">精选</button>
-                    <button class="preset-tab" onclick="switchPresetCategory('covers', this)">封面配图</button>
+                    <button class="preset-tab" onclick="switchPresetCategory('coverPalettes', this)">封面配图</button>
                 </div>
             </div>
 
@@ -1506,6 +1959,12 @@
             const grid = document.getElementById('colorsGrid');
             grid.innerHTML = currentPalette.map((color, index) => {
                 const rgb = hexToRgb(color);
+                // 检查rgb是否为null，如果是则使用默认值
+                if (!rgb) {
+                    console.warn(`Invalid color format: ${color}`);
+                    return ''; // 跳过无效颜色
+                }
+
                 const hsl = rgbToHsl(rgb.r, rgb.g, rgb.b);
                 const isLocked = lockedColors.has(index);
 
@@ -1558,16 +2017,16 @@
                 showToast('至少需要保留一种颜色');
                 return;
             }
-            
+
             // Check if the color is locked - locked colors cannot be removed
             if (lockedColors.has(index)) {
                 showToast('锁定的颜色无法移除');
                 return;
             }
-            
+
             // Remove the color from current palette
             currentPalette.splice(index, 1);
-            
+
             // Adjust locked color indices
             const newLockedColors = new Set();
             for (let lockedIndex of lockedColors) {
@@ -1580,7 +2039,7 @@
                 }
             }
             lockedColors = newLockedColors;
-            
+
             // Update the color count selector
             const colorCountSelect = document.getElementById('colorCount');
             if (colorCountSelect) {
@@ -1589,11 +2048,11 @@
                 // Set the new count value
                 colorCountSelect.value = currentPalette.length;
             }
-            
+
             // Redisplay the palette
             displayPalette();
             generateExportCode();
-            
+
             // Show confirmation
             showToast(`已移除颜色 ${index + 1}`);
         }
@@ -1840,9 +2299,16 @@ ${currentPalette.map((color, i) =>
                 displayExtractedColors(displayColors, allColors, img.src);
                 showToast(`成功提取 ${allColors.length} 种颜色，显示前 ${displayColors.length} 种主要配色`);
 
+                // 返回结果对象，供其他函数使用
+                return {
+                    mainColors: displayColors,
+                    allColors: allColors
+                };
+
             } catch (error) {
                 console.error('提取颜色失败:', error);
                 showToast('提取失败，请重试');
+                return null;
             }
         }
 
@@ -1969,8 +2435,14 @@ ${currentPalette.map((color, i) =>
             // 创建自适应的图片预览HTML
             const imagePreviewHtml = originalImageUrl ? `
                 <div id="imagePreviewContainer" style="flex: 0 0 auto; text-align: center; margin-bottom: 1rem;">
-                    <img id="originalImage" src="${originalImageUrl}" style="border-radius: 12px; border: 2px solid var(--border); box-shadow: 0 8px 24px rgba(0,0,0,0.15); transition: transform 0.3s ease; max-width: 100%;" alt="原图预览" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">
+                    <img id="originalImage" src="${originalImageUrl}" style="border-radius: 12px; border: 2px solid var(--border); box-shadow: 0 8px 24px rgba(0,0,0,0.15); transition: transform 0.3s ease; max-width: 100%; cursor: pointer;" alt="原图预览" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'" onclick="handleImageClick(event, this)">
                     <p style="margin-top: 0.8rem; font-size: 0.85rem; color: var(--text-dim); font-weight: 500;">原图预览</p>
+                    <button id="colorPickerBtn" onclick="toggleColorPicker()" style="margin-top: 0.5rem; padding: 0.5rem 1rem; background: var(--primary); color: var(--bg); border: none; border-radius: 6px; cursor: pointer; font-size: 0.8rem; transition: all 0.2s ease;" onmouseover="this.style.background='var(--primary-hover)'" onmouseout="this.style.background='var(--primary)'">
+                        🎨 取色器模式
+                    </button>
+                    <div id="colorPickerTip" style="display: none; margin-top: 0.5rem; padding: 0.5rem; background: var(--bg-secondary); border-radius: 6px; font-size: 0.75rem; color: var(--text); border: 1px solid var(--border);">
+                        点击图片上的任意位置选取颜色
+                    </div>
                 </div>
             ` : '';
 
@@ -2886,27 +3358,165 @@ ${currentPalette.map((color, i) =>
             const palettes = group[count] || [];
 
             if (!palettes.length) {
-                grid.innerHTML = `<div style="color: var(--text-dim); font-size: 0.9rem;">该类别暂未包含 ${count} 色预设</div>`;
+                if (category === 'coverPalettes') {
+                    grid.innerHTML = `<div style="color: var(--text-dim); font-size: 0.9rem; text-align: center; padding: 2rem;">
+                        <div style="margin-bottom: 1rem;">📖 封面配图配色方案正在加载中...</div>
+                        <div style="font-size: 0.8rem;">配色方案将从期刊封面图片自动提取生成</div>
+                    </div>`;
+                } else {
+                    grid.innerHTML = `<div style="color: var(--text-dim); font-size: 0.9rem;">该类别暂未包含 ${count} 色预设</div>`;
+                }
                 return;
             }
 
-            grid.innerHTML = palettes.map(p => `
-                <div class="color-card preset-card">
-                    <div class="color-swatch" onclick='applyPresetPaletteToChart(${JSON.stringify(p.colors)}, ${JSON.stringify(p.name)})' style="cursor: pointer;">
-                        <div class="swatch-row">
-                            ${p.colors.map(c => `<div class=\"swatch\" style=\"background:${c}\"></div>`).join('')}
+            // 封面配图特殊渲染
+            if (category === 'coverPalettes') {
+                grid.innerHTML = palettes.map(p => `
+                    <div class="color-card preset-card cover-palette-card">
+                        ${p.coverStory ? `
+                            <div class="cover-image-container">
+                                <img src="${p.coverStory.imagePath}" alt="${p.coverStory.title}" class="cover-image" 
+                                     onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                <div class="cover-placeholder" style="display: none;">
+                                    <span>📖</span>
+                                </div>
+                            </div>
+                        ` : ''}
+                        <div class="color-swatch" onclick='applyPresetPaletteToChart(${JSON.stringify(p.colors)}, ${JSON.stringify(p.name)})' style="cursor: pointer;">
+                            <div class="swatch-row">
+                                ${p.colors.map(c => `<div class=\"swatch\" style=\"background:${c}\"></div>`).join('')}
+                            </div>
+                        </div>
+                        <div class="color-info cover-info">
+                            <div>
+                                <div class="color-name">${p.name}</div>
+                                <div class="color-values" style="font-size: 0.7rem;">${p.source} · ${count}色</div>
+                                ${p.coverStory ? `
+                                    <div class="cover-story-preview">
+                                        <div class="cover-subtitle">${p.coverStory.subtitle}</div>
+                                        <div class="cover-date">${p.coverStory.date}</div>
+                                    </div>
+                                ` : ''}
+                            </div>
+                            <div class="cover-actions">
+                                <button class="action-btn" style="padding: 0.4rem 0.8rem;" onclick="applyPresetPaletteAndReturn(${JSON.stringify(p.colors).replace(/"/g, '&quot;')}, ${JSON.stringify(p.name).replace(/"/g, '&quot;')})">应用</button>
+                                ${p.coverStory ? `<button class="action-btn secondary" style="padding: 0.4rem 0.8rem;" onclick="showCoverStoryDetail(${JSON.stringify(p.coverStory).replace(/"/g, '&quot;')})">详情</button>` : ''}
+                            </div>
                         </div>
                     </div>
-                    <div class="color-info">
-                        <div>
-                            <div class="color-name">${p.name}</div>
-                            <div class="color-values" style="font-size: 0.7rem;">${p.source} · ${count}色</div>
+                `).join('');
+            } else {
+                // 普通预设配色方案渲染
+                grid.innerHTML = palettes.map(p => `
+                    <div class="color-card preset-card">
+                        <div class="color-swatch" onclick='applyPresetPaletteToChart(${JSON.stringify(p.colors)}, ${JSON.stringify(p.name)})' style="cursor: pointer;">
+                            <div class="swatch-row">
+                                ${p.colors.map(c => `<div class=\"swatch\" style=\"background:${c}\"></div>`).join('')}
+                            </div>
                         </div>
-                        <button class="action-btn" style="padding: 0.4rem 0.8rem;" onclick='applyPresetPaletteAndReturn(${JSON.stringify(p.colors)}, ${JSON.stringify(p.name)})'>应用</button>
+                        <div class="color-info">
+                            <div>
+                                <div class="color-name">${p.name}</div>
+                                <div class="color-values" style="font-size: 0.7rem;">${p.source} · ${count}色</div>
+                            </div>
+                            <button class="action-btn" style="padding: 0.4rem 0.8rem;" onclick="applyPresetPaletteAndReturn(${JSON.stringify(p.colors).replace(/"/g, '&quot;')}, ${JSON.stringify(p.name).replace(/"/g, '&quot;')})">应用</button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+
+        // 封面故事详情显示函数
+        function showCoverStoryDetail(coverStory) {
+            const modal = document.createElement('div');
+            modal.className = 'cover-story-modal';
+            modal.innerHTML = `
+                <div class="modal-overlay" onclick="closeCoverStoryModal(this.parentElement)"></div>
+                <div class="modal-content cover-story-poster">
+                    <button class="modal-close" onclick="closeCoverStoryModal(this.closest('.cover-story-modal'))">×</button>
+                    
+                    <div class="poster-header">
+                        <div class="poster-image">
+                            <img src="${coverStory.imagePath}" alt="${coverStory.title}" 
+                                 onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                            <div class="cover-placeholder" style="display: none;">
+                                <span>📖</span>
+                                <div>封面图片</div>
+                            </div>
+                        </div>
+                        <div class="poster-overlay">
+                            <div class="poster-category">${coverStory.category}</div>
+                            <h1 class="poster-title">${coverStory.title}</h1>
+                            <h2 class="poster-subtitle">${coverStory.subtitle}</h2>
+                            <div class="poster-date">${coverStory.date}</div>
+                        </div>
+                    </div>
+                    
+                    <div class="poster-content">
+                        <div class="story-description">
+                            <h3>故事简介</h3>
+                            <p>${coverStory.description}</p>
+                        </div>
+                        
+                        <div class="story-metadata">
+                            <div class="metadata-item">
+                                <span class="metadata-label">期刊</span>
+                                <span class="metadata-value">${coverStory.category}</span>
+                            </div>
+                            <div class="metadata-item">
+                                <span class="metadata-label">发布日期</span>
+                                <span class="metadata-value">${coverStory.date}</span>
+                            </div>
+                            <div class="metadata-item">
+                                <span class="metadata-label">故事ID</span>
+                                <span class="metadata-value">${coverStory.id}</span>
+                            </div>
+                        </div>
+                        
+                        <div class="color-palette-preview">
+                            <h3>配色方案预览</h3>
+                            <div class="palette-colors">
+                                ${coverStory.colors && coverStory.colors.length > 0 ?
+                    coverStory.colors.map(color => `<div class="color-dot" style="background-color: ${color}" title="${color}"></div>`).join('') :
+                    '<div class="no-colors">配色方案正在生成中...</div>'
+                }
+                            </div>
+                        </div>
                     </div>
                 </div>
-            `).join('');
+            `;
+            document.body.appendChild(modal);
+
+            // 触发动画
+            requestAnimationFrame(() => {
+                const overlay = modal.querySelector('.modal-overlay');
+                overlay.classList.add('show');
+            });
         }
+
+        function closeCoverStoryModal(modal) {
+            const overlay = modal.querySelector('.modal-overlay');
+            overlay.classList.remove('show');
+
+            // 等待动画完成后移除元素
+            setTimeout(() => {
+                if (modal.parentElement) {
+                    modal.remove();
+                }
+            }, 400);
+        }
+
+        // 将函数绑定到全局作用域
+        window.showCoverStoryDetail = showCoverStoryDetail;
+        window.closeCoverStoryModal = closeCoverStoryModal;
+        window.applyPresetPaletteAndReturn = applyPresetPaletteAndReturn;
+        
+        // 更新预设配色方案的函数（供preset-palettes.js调用）
+        window.updatePresetPalettes = function() {
+            if (currentPresetCategory === 'coverPalettes') {
+                renderPresetPalettes('coverPalettes');
+            }
+        };
 
         function switchPresetCategory(category, btn) {
             currentPresetCategory = category;
@@ -2993,6 +3603,14 @@ ${currentPalette.map((color, i) =>
 
         // 应用按钮：返回生成器并应用色卡
         function applyPresetPaletteAndReturn(colors, name) {
+            console.log('applyPresetPaletteAndReturn called with:', colors, name);
+
+            // 验证colors参数
+            if (!colors || !Array.isArray(colors) || colors.length === 0) {
+                console.error('Invalid colors parameter:', colors);
+                return;
+            }
+
             // 应用配色到主生成器
             applyPresetPalette(colors, name);
 
@@ -8048,6 +8666,172 @@ ${currentPalette.map((color, i) =>
 
         } window.applyPresetPalette = applyPresetPalette;
 
+        // 取色器相关功能
+        let colorPickerMode = false;
+        let colorPickerCanvas = null;
+        let colorPickerCtx = null;
+
+        function toggleColorPicker() {
+            colorPickerMode = !colorPickerMode;
+            const btn = document.getElementById('colorPickerBtn');
+            const tip = document.getElementById('colorPickerTip');
+            const img = document.getElementById('originalImage');
+
+            if (colorPickerMode) {
+                btn.textContent = '🚫 退出取色器';
+                btn.style.background = '#ff4757';
+                btn.style.color = 'white';
+                tip.style.display = 'block';
+                img.style.cursor = 'crosshair';
+                setupColorPickerCanvas();
+            } else {
+                btn.textContent = '🎨 取色器模式';
+                btn.style.background = 'var(--primary)';
+                btn.style.color = 'var(--bg)';
+                tip.style.display = 'none';
+                img.style.cursor = 'pointer';
+                if (colorPickerCanvas) {
+                    colorPickerCanvas.remove();
+                    colorPickerCanvas = null;
+                    colorPickerCtx = null;
+                }
+            }
+        }
+
+        function setupColorPickerCanvas() {
+            const img = document.getElementById('originalImage');
+            if (!img) return;
+
+            // 创建隐藏的canvas用于获取像素颜色
+            colorPickerCanvas = document.createElement('canvas');
+            colorPickerCtx = colorPickerCanvas.getContext('2d');
+
+            // 等待图片加载完成
+            if (img.complete) {
+                drawImageToCanvas();
+            } else {
+                img.onload = drawImageToCanvas;
+            }
+
+            function drawImageToCanvas() {
+                colorPickerCanvas.width = img.naturalWidth;
+                colorPickerCanvas.height = img.naturalHeight;
+                colorPickerCtx.drawImage(img, 0, 0);
+            }
+        }
+
+        function handleImageClick(event, img) {
+            if (colorPickerMode && colorPickerCanvas) {
+                // 取色器模式
+                const rect = img.getBoundingClientRect();
+
+                // 更精确的坐标计算，考虑图片的实际显示尺寸和原始尺寸的比例
+                const displayWidth = rect.width;
+                const displayHeight = rect.height;
+                const naturalWidth = img.naturalWidth;
+                const naturalHeight = img.naturalHeight;
+
+                // 计算图片在容器中的实际显示区域（考虑object-fit等样式）
+                const displayAspect = displayWidth / displayHeight;
+                const naturalAspect = naturalWidth / naturalHeight;
+
+                let actualDisplayWidth, actualDisplayHeight, offsetX, offsetY;
+
+                if (displayAspect > naturalAspect) {
+                    // 图片按高度缩放，左右有空白
+                    actualDisplayHeight = displayHeight;
+                    actualDisplayWidth = displayHeight * naturalAspect;
+                    offsetX = (displayWidth - actualDisplayWidth) / 2;
+                    offsetY = 0;
+                } else {
+                    // 图片按宽度缩放，上下有空白
+                    actualDisplayWidth = displayWidth;
+                    actualDisplayHeight = displayWidth / naturalAspect;
+                    offsetX = 0;
+                    offsetY = (displayHeight - actualDisplayHeight) / 2;
+                }
+
+                // 计算点击位置相对于实际图片显示区域的坐标
+                const clickX = event.clientX - rect.left - offsetX;
+                const clickY = event.clientY - rect.top - offsetY;
+
+                // 确保点击在图片区域内
+                if (clickX < 0 || clickX > actualDisplayWidth || clickY < 0 || clickY > actualDisplayHeight) {
+                    showToast('请点击图片区域');
+                    return;
+                }
+
+                // 转换为原始图片坐标
+                const scaleX = naturalWidth / actualDisplayWidth;
+                const scaleY = naturalHeight / actualDisplayHeight;
+
+                const centerX = Math.floor(clickX * scaleX);
+                const centerY = Math.floor(clickY * scaleY);
+
+                try {
+                    // 直接获取点击位置的像素颜色，不使用平均值以保证精确性
+                    const imageData = colorPickerCtx.getImageData(centerX, centerY, 1, 1);
+                    const pixel = imageData.data;
+
+                    const r = pixel[0];
+                    const g = pixel[1];
+                    const b = pixel[2];
+                    const hex = rgbToHex(r, g, b);
+
+                    // 添加到待选区
+                    addToColorSelection(hex);
+                    showToast(`已选取颜色：${hex}`);
+
+                    // 在点击位置显示临时指示器
+                    showColorPickIndicator(event.clientX, event.clientY, hex);
+                } catch (error) {
+                    console.error('取色失败:', error);
+                    showToast('取色失败，请重试');
+                }
+            }
+            // 非取色器模式下不做任何处理，保持原有行为
+        }
+
+        function enableColorPicker(img) {
+            // 这个函数现在由handleImageClick替代，保留以防兼容性问题
+            console.log('enableColorPicker called, but now handled by handleImageClick');
+        }
+
+        function showColorPickIndicator(x, y, color) {
+            const indicator = document.createElement('div');
+            indicator.style.cssText = `
+                position: fixed;
+                left: ${x - 15}px;
+                top: ${y - 15}px;
+                width: 30px;
+                height: 30px;
+                background: ${color};
+                border: 3px solid white;
+                border-radius: 50%;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+                z-index: 10000;
+                pointer-events: none;
+                animation: colorPickPulse 0.6s ease-out forwards;
+            `;
+
+            // 添加动画样式
+            if (!document.getElementById('colorPickerStyles')) {
+                const style = document.createElement('style');
+                style.id = 'colorPickerStyles';
+                style.textContent = `
+                    @keyframes colorPickPulse {
+                        0% { transform: scale(0.5); opacity: 0; }
+                        50% { transform: scale(1.2); opacity: 1; }
+                        100% { transform: scale(1); opacity: 0; }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+
+            document.body.appendChild(indicator);
+            setTimeout(() => indicator.remove(), 600);
+        }
+
         // Initial generation - 先更新颜色数量选项，再生成配色方案
         // 初始化待选区数组
         if (!window.selectedColors) {
@@ -8055,6 +8839,201 @@ ${currentPalette.map((color, i) =>
         }
         updateColorCountOptions();
         generatePalette();
+
+        // 剪切板图片粘贴功能
+        function initClipboardPasteFeature() {
+            // 添加键盘事件监听器
+            document.addEventListener('keydown', function (e) {
+                // Ctrl+V 或 Cmd+V
+                if ((e.ctrlKey || e.metaKey) && e.key === 'v') {
+                    // 检查是否在输入框中，如果是则不处理
+                    const activeElement = document.activeElement;
+                    if (activeElement && (
+                        activeElement.tagName === 'INPUT' ||
+                        activeElement.tagName === 'TEXTAREA' ||
+                        activeElement.contentEditable === 'true'
+                    )) {
+                        return;
+                    }
+
+                    // 阻止默认粘贴行为
+                    e.preventDefault();
+                    handleClipboardPaste();
+                }
+            });
+
+            // 添加paste事件监听器作为备选
+            document.addEventListener('paste', function (e) {
+                const activeElement = document.activeElement;
+                if (activeElement && (
+                    activeElement.tagName === 'INPUT' ||
+                    activeElement.tagName === 'TEXTAREA' ||
+                    activeElement.contentEditable === 'true'
+                )) {
+                    return;
+                }
+
+                e.preventDefault();
+                handleClipboardPaste(e);
+            });
+
+            // 不再自动显示提示信息，只在用户首次使用时显示
+        }
+
+        function handleClipboardPaste(pasteEvent = null) {
+            // 尝试从剪切板读取图片
+            if (navigator.clipboard && navigator.clipboard.read) {
+                navigator.clipboard.read().then(items => {
+                    for (const item of items) {
+                        if (item.types.includes('image/png') || item.types.includes('image/jpeg')) {
+                            item.getType('image/png').then(blob => {
+                                processClipboardImage(blob);
+                            }).catch(() => {
+                                // 尝试jpeg格式
+                                if (item.types.includes('image/jpeg')) {
+                                    item.getType('image/jpeg').then(blob => {
+                                        processClipboardImage(blob);
+                                    }).catch(err => {
+                                        console.error('读取剪切板图片失败:', err);
+                                        showToast('读取剪切板图片失败，请重试');
+                                    });
+                                }
+                            });
+                            return;
+                        }
+                    }
+                    showToast('剪切板中没有找到图片');
+                }).catch(err => {
+                    console.error('访问剪切板失败:', err);
+                    // 降级到paste事件处理
+                    if (pasteEvent) {
+                        handlePasteEvent(pasteEvent);
+                    } else {
+                        showToast('无法访问剪切板，请使用上传图片功能');
+                    }
+                });
+            } else if (pasteEvent) {
+                handlePasteEvent(pasteEvent);
+            } else {
+                showToast('浏览器不支持剪切板API，请使用上传图片功能');
+            }
+        }
+
+        function handlePasteEvent(e) {
+            const items = e.clipboardData?.items;
+            if (!items) {
+                showToast('无法读取剪切板内容');
+                return;
+            }
+
+            for (const item of items) {
+                if (item.type.indexOf('image') !== -1) {
+                    const file = item.getAsFile();
+                    if (file) {
+                        processClipboardImage(file);
+                        return;
+                    }
+                }
+            }
+            showToast('剪切板中没有找到图片');
+        }
+
+        function processClipboardImage(blob) {
+            showToast('正在处理剪切板图片...');
+
+            const reader = new FileReader();
+            reader.onload = function (event) {
+                const img = new Image();
+                img.onload = function () {
+                    // 使用现有的颜色提取功能
+                    const result = extractColorsFromImage(img, 8, false);
+                    if (result && result.mainColors) {
+                        displayExtractedColors(result.mainColors, result.allColors, img.src);
+                        showToast('已从剪切板图片提取颜色！');
+
+                        // 滚动到结果区域
+                        setTimeout(() => {
+                            const resultSection = document.querySelector('#extractedColorsSection');
+                            if (resultSection) {
+                                resultSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                            }
+                        }, 300);
+                    } else {
+                        showToast('图片颜色提取失败，请重试');
+                    }
+                };
+                img.onerror = function () {
+                    showToast('图片加载失败，请重试');
+                };
+                img.src = event.target.result;
+            };
+            reader.onerror = function () {
+                showToast('图片读取失败，请重试');
+            };
+            reader.readAsDataURL(blob);
+        }
+
+        function showClipboardTip() {
+            // 创建一个提示元素
+            const tip = document.createElement('div');
+            tip.id = 'clipboardTip';
+            tip.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: var(--primary);
+                color: white;
+                padding: 12px 16px;
+                border-radius: 8px;
+                font-size: 14px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                z-index: 1000;
+                opacity: 0;
+                transform: translateX(100%);
+                transition: all 0.3s ease;
+                max-width: 280px;
+                line-height: 1.4;
+            `;
+            tip.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <span>📋</span>
+                    <span>按 Ctrl+V 粘贴图片快速提取颜色</span>
+                </div>
+            `;
+
+            document.body.appendChild(tip);
+
+            // 显示动画
+            setTimeout(() => {
+                tip.style.opacity = '1';
+                tip.style.transform = 'translateX(0)';
+            }, 100);
+
+            // 5秒后自动隐藏
+            setTimeout(() => {
+                tip.style.opacity = '0';
+                tip.style.transform = 'translateX(100%)';
+                setTimeout(() => {
+                    if (tip.parentNode) {
+                        tip.parentNode.removeChild(tip);
+                    }
+                }, 300);
+            }, 5000);
+
+            // 点击隐藏
+            tip.addEventListener('click', () => {
+                tip.style.opacity = '0';
+                tip.style.transform = 'translateX(100%)';
+                setTimeout(() => {
+                    if (tip.parentNode) {
+                        tip.parentNode.removeChild(tip);
+                    }
+                }, 300);
+            });
+        }
+
+        // 初始化剪切板粘贴功能
+        initClipboardPasteFeature();
     </script>
 </body>
 
