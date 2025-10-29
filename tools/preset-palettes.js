@@ -74,31 +74,16 @@
   curated[12].push({ name: 'ColorBrewer Set3 12', source: 'ColorBrewer', colors: SET3_12.slice() });
   // 提供 8 色的沉稳对比方案
   curated[8].push({ name: 'ColorBrewer Dark2 8', source: 'ColorBrewer', colors: DARK2_8.slice() });
-
-  // 构建 nature（自然）
-  const nature = ensureGroup();
-  addSubset(nature, NATURE_PASTEL_16, 'Nature Pastel', 'Curated', 16);
-  addSubset(nature, NATURE_DEEP_16, 'Nature Deep', 'Curated', 16);
-
-  // 构建 science（科研高对比）
-  const science = ensureGroup();
-  addSubset(science, SCIENCE_MODERN_16, 'Science Modern', 'Curated', 16);
-  // 作为备选，提供 D3 Category 20 子集
-  addSubset(science, D3_CATEGORY20, 'D3 Category 20', 'D3', 16);
-
-  // 构建 cell（荧光成像）
-  const cell = ensureGroup();
-  addSubset(cell, CELL_FLUO_16, 'Cell Fluorescence', 'Curated', 16);
-
-  // 构建 covers（封面配图）
-  const covers = ensureGroup();
-  addSubset(covers, COVERS_EDITORIAL_16, 'Editorial Cover', 'Curated', 16);
+  
+  // 将原 nature、science、cell、covers 分类的配色方案移到 curated 分类
+  addSubset(curated, NATURE_PASTEL_16, 'Nature Pastel', 'Nature', 16);
+  addSubset(curated, NATURE_DEEP_16, 'Nature Deep', 'Nature', 16);
+  addSubset(curated, SCIENCE_MODERN_16, 'Science Modern', 'Science', 16);
+  addSubset(curated, D3_CATEGORY20, 'D3 Category 20', 'Science', 16);
+  addSubset(curated, CELL_FLUO_16, 'Cell Fluorescence', 'Cell', 16);
+  addSubset(curated, COVERS_EDITORIAL_16, 'Editorial Cover', 'Covers', 16);
 
   window.PRESET_GROUPS = {
     curated,
-    nature,
-    science,
-    cell,
-    covers,
   };
 })();
