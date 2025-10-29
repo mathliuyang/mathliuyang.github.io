@@ -766,6 +766,11 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            pointer-events: auto;
+            user-select: text;
+            -webkit-user-select: text;
+            -moz-user-select: text;
+            -ms-user-select: text;
         }
 
         .cover-story-modal .modal-overlay {
@@ -777,6 +782,7 @@
             background: rgba(0, 0, 0, 0.6);
             transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             opacity: 0;
+            pointer-events: auto;
         }
 
         .cover-story-modal .modal-overlay.show {
@@ -886,9 +892,15 @@
             border-radius: 16px;
             max-width: 800px;
             max-height: 90vh;
-            overflow: hidden;
+            overflow-y: auto;
+            overflow-x: hidden;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
             animation: modalSlideIn 0.3s ease-out;
+            pointer-events: auto;
+            user-select: text;
+            -webkit-user-select: text;
+            -moz-user-select: text;
+            -ms-user-select: text;
         }
 
         .poster-header {
@@ -973,6 +985,13 @@
 
         .poster-content {
             padding: 2rem;
+            overflow-y: auto;
+            max-height: calc(90vh - 400px);
+            pointer-events: auto;
+            user-select: text;
+            -webkit-user-select: text;
+            -moz-user-select: text;
+            -ms-user-select: text;
         }
 
         .story-description {
