@@ -2274,6 +2274,8 @@ ${currentPalette.map((color, i) =>
             const randomHex = '#' + Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0');
             document.getElementById('baseColor').value = randomHex;
             generatePalette();
+            navigator.clipboard.writeText(randomHex);
+            showToast(`已生成并复制随机颜色：${randomHex}`);
         }
 
         function savePalette() {
@@ -2676,7 +2678,8 @@ ${currentPalette.map((color, i) =>
         function useExtractedColor(color) {
             document.getElementById('baseColor').value = color;
             generatePalette();
-            showToast(`已应用颜色：${color}`);
+            navigator.clipboard.writeText(color);
+            showToast(`已应用并复制颜色：${color}`);
         }
 
         // 自适应图片预览函数 - 根据图片比例自动选择横向或竖向展示
@@ -3210,6 +3213,10 @@ ${currentPalette.map((color, i) =>
                 colorCountSelect.dispatchEvent(new Event('change'));
             }
 
+            // 复制所有颜色代码到剪切板
+            const colorsText = window.extractedColors.join(', ');
+            navigator.clipboard.writeText(colorsText);
+
             // 自动生成图表预览
             setTimeout(() => {
                 const mainChartPreview = document.getElementById('mainChartPreview');
@@ -3219,7 +3226,7 @@ ${currentPalette.map((color, i) =>
                 }
             }, 150);
 
-            showToast(`已应用全部 ${window.extractedColors.length} 种颜色到配色方案`);
+            showToast(`已应用并复制全部 ${window.extractedColors.length} 种颜色到配色方案`);
         }
 
         // 显示所有颜色
@@ -3239,9 +3246,11 @@ ${currentPalette.map((color, i) =>
             if (!window.selectedColors.includes(color)) {
                 window.selectedColors.push(color);
                 updateSelectedColorsDisplay();
-                showToast(`已添加 ${color} 到待选区`);
+                navigator.clipboard.writeText(color);
+                showToast(`已添加并复制 ${color} 到待选区`);
             } else {
-                showToast(`颜色 ${color} 已在待选区中`);
+                navigator.clipboard.writeText(color);
+                showToast(`颜色 ${color} 已在待选区中，已复制`);
             }
         }
 
@@ -3300,6 +3309,10 @@ ${currentPalette.map((color, i) =>
             currentPalette = [...window.selectedColors];
             displayPalette();
 
+            // 复制所有待选区颜色代码到剪切板
+            const colorsText = window.selectedColors.join(', ');
+            navigator.clipboard.writeText(colorsText);
+
             // 同步颜色数量到生成器
             const colorCountSelect = document.getElementById('colorCount');
             if (colorCountSelect) {
@@ -3318,7 +3331,7 @@ ${currentPalette.map((color, i) =>
                 }
             }, 150);
 
-            showToast(`已应用待选区的 ${window.selectedColors.length} 种颜色`);
+            showToast(`已应用并复制待选区的 ${window.selectedColors.length} 种颜色`);
         }
 
         // 清空待选区功能已移除 - 待选区功能已简化
@@ -3583,7 +3596,7 @@ ${currentPalette.map((color, i) =>
                         ` : ''}
                         <div class="color-swatch" onclick='event.stopPropagation(); applyPresetPaletteToChart(${JSON.stringify(p.colors)}, ${JSON.stringify(p.name)})' style="cursor: pointer;">
                             <div class="swatch-row">
-                                ${p.colors.map(c => `<div class=\"swatch\" style=\"background:${c}\"></div>`).join('')}
+                                ${p.colors.map(c => `<div class=\"swatch\" style=\"background:${c}\" onclick='event.stopPropagation(); navigator.clipboard.writeText("${c}"); showToast("已复制颜色：${c}")' title="${c}"></div>`).join('')}
                             </div>
                         </div>
                         <div class="cover-actions">
@@ -3598,7 +3611,7 @@ ${currentPalette.map((color, i) =>
                     <div class="color-card preset-card">
                         <div class="color-swatch" onclick='applyPresetPaletteToChart(${JSON.stringify(p.colors)}, ${JSON.stringify(p.name)})' style="cursor: pointer;">
                             <div class="swatch-row">
-                                ${p.colors.map(c => `<div class=\"swatch\" style=\"background:${c}\"></div>`).join('')}
+                                ${p.colors.map(c => `<div class=\"swatch\" style=\"background:${c}\" onclick='event.stopPropagation(); navigator.clipboard.writeText("${c}"); showToast("已复制颜色：${c}")' title="${c}"></div>`).join('')}
                             </div>
                         </div>
                         <div class="color-info">
@@ -3662,7 +3675,7 @@ ${currentPalette.map((color, i) =>
                             <h3>配色方案预览</h3>
                             <div class="palette-colors">
                                 ${coverStory.colors && coverStory.colors.length > 0 ?
-                    coverStory.colors.map(color => `<div class="color-dot" style="background-color: ${color}" title="${color}"></div>`).join('') :
+                    coverStory.colors.map(color => `<div class="color-dot" style="background-color: ${color}" title="${color}" onclick='navigator.clipboard.writeText("${color}"); showToast("已复制颜色：${color}")'></div>`).join('') :
                     '<div class="no-colors">配色方案正在生成中...</div>'
                 }
                             </div>
@@ -3764,7 +3777,12 @@ ${currentPalette.map((color, i) =>
             lockedColors = new Set();
             displayPalette();
             generateExportCode();
-            showToast(`已应用预设：${name} (${colors.length}色)`);
+            
+            // 复制所有颜色代码到剪切板
+            const colorsText = colors.join(', ');
+            navigator.clipboard.writeText(colorsText);
+            
+            showToast(`已应用并复制预设：${name} (${colors.length}色)`);
 
             // 只有在主生成器页面才显示图表预览（预设方案板块隐藏时）
             const presetSection = document.getElementById('presetSection');
@@ -3787,11 +3805,16 @@ ${currentPalette.map((color, i) =>
                 mainChartPreview.style.display = 'block';
                 // 设置当前调色板用于图表预览
                 window.currentChartPalette = colors.slice();
+                
+                // 复制所有颜色代码到剪切板
+                const colorsText = colors.join(', ');
+                navigator.clipboard.writeText(colorsText);
+                
                 // 自动生成图表预览
                 setTimeout(() => {
                     generateMainChartPreview();
                 }, 100);
-                showToast(`已应用配色到图表预览：${name} (${colors.length}色)`);
+                showToast(`已应用并复制配色到图表预览：${name} (${colors.length}色)`);
             }
         }
 
@@ -3807,6 +3830,10 @@ ${currentPalette.map((color, i) =>
 
             // 应用配色到主生成器
             applyPresetPalette(colors, name);
+
+            // 复制所有颜色代码到剪切板
+            const colorsText = colors.join(', ');
+            navigator.clipboard.writeText(colorsText);
 
             // 同步颜色数量到生成器
             const colorCountSelect = document.getElementById('colorCount');
