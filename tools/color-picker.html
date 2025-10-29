@@ -1687,8 +1687,8 @@
                 </div>
 
                 <div class="preset-tabs">
-                    <button class="preset-tab active" onclick="switchPresetCategory('curated', this)">精选</button>
                     <button class="preset-tab" onclick="switchPresetCategory('coverPalettes', this)">封面配图</button>
+                    <button class="preset-tab active" onclick="switchPresetCategory('curated', this)">精选</button>
                 </div>
             </div>
 
@@ -3748,11 +3748,11 @@ ${currentPalette.map((color, i) =>
             if (imagePreview) imagePreview.style.display = 'none';
             if (mainChartPreview) mainChartPreview.style.display = 'none'; // 隐藏主页面图表预览
 
-            // 默认到精选
-            currentPresetCategory = 'curated';
+            // 默认到第一个标签页（封面配图）
+            currentPresetCategory = 'coverPalettes';
             const tabs = document.querySelectorAll('.preset-tab');
             tabs.forEach((el, i) => el.classList.toggle('active', i === 0));
-            renderPresetPalettes('curated');
+            renderPresetPalettes('coverPalettes');
         }
 
         function closePresetSection() {
