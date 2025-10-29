@@ -300,14 +300,17 @@
           .slice(0, 16)
           .map(([color]) => {
             const [r, g, b] = color.split(',').map(Number);
-            return `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`;
-          });
+            const hexColor = `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`;
+            // 过滤掉纯白色
+            return hexColor.toUpperCase() === '#FFFFFF' ? null : hexColor;
+          })
+          .filter(color => color !== null); // 移除过滤掉的纯白色
 
         callback(sortedColors);
       } catch (error) {
         console.warn('颜色提取失败，使用默认配色:', error);
-        // 返回默认配色
-        callback(['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b', '#e377c2', '#7f7f7f']);
+        // 返回默认配色（不包含纯白色）
+      callback(['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b', '#e377c2', '#7f7f7f']);
       }
     };
 
@@ -319,7 +322,7 @@
         startsWithHttp: imagePath.startsWith('http'),
         crossOrigin: img.crossOrigin
       });
-      // 返回默认配色
+      // 返回默认配色（不包含纯白色）
       callback(['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b', '#e377c2', '#7f7f7f']);
     };
 
@@ -341,7 +344,7 @@
         console.log(`处理封面故事: ${story.title}, 图片路径: ${story.imagePath}`);
 
         if (story.colors.length === 0) {
-          // 先提供默认配色，然后异步提取真实颜色
+          // 先提供默认配色（不包含纯白色），然后异步提取真实颜色
           const defaultColors = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf', '#aec7e8', '#ffbb78', '#98df8a', '#ff9896', '#c5b0d5', '#c49c94'];
           story.colors = defaultColors;
           console.log(`为"${story.title}"设置默认配色方案`);

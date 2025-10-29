@@ -3583,7 +3583,13 @@ ${currentPalette.map((color, i) =>
                         ` : ''}
                         <div class="color-swatch" onclick='event.stopPropagation(); applyPresetPaletteToChart(${JSON.stringify(p.colors)}, ${JSON.stringify(p.name)})' style="cursor: pointer;">
                             <div class="swatch-row">
-                                ${p.colors.map(c => `<div class=\"swatch\" style=\"background:${c}\"></div>`).join('')}
+                                ${p.colors.map(c => {
+                                    // 过滤掉纯白色 #FFFFFF 或 #ffffff
+                                    if (c && c.toUpperCase() !== '#FFFFFF') {
+                                        return `<div class="swatch" style="background:${c}"></div>`;
+                                    }
+                                    return '';
+                                }).join('')}
                             </div>
                         </div>
                         <div class="cover-actions">
@@ -3598,7 +3604,13 @@ ${currentPalette.map((color, i) =>
                     <div class="color-card preset-card">
                         <div class="color-swatch" onclick='applyPresetPaletteToChart(${JSON.stringify(p.colors)}, ${JSON.stringify(p.name)})' style="cursor: pointer;">
                             <div class="swatch-row">
-                                ${p.colors.map(c => `<div class=\"swatch\" style=\"background:${c}\"></div>`).join('')}
+                                ${p.colors.map(c => {
+                                    // 过滤掉纯白色 #FFFFFF 或 #ffffff
+                                    if (c && c.toUpperCase() !== '#FFFFFF') {
+                                        return `<div class="swatch" style="background:${c}"></div>`;
+                                    }
+                                    return '';
+                                }).join('')}
                             </div>
                         </div>
                         <div class="color-info">
