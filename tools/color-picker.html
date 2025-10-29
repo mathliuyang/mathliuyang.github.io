@@ -1647,9 +1647,14 @@
                 // Advanced color clustering with better similarity detection
                 const clusters = [];
                 const used = new Set();
-                const minDistance = 25; // 进一步减小距离阈值，确保更精确的颜色区分
-                const highSaturationThreshold = 60; // 高饱和度保护阈值
-                const highBrightnessThreshold = 70; // 高亮度保护阈值
+                
+                // 自适应阈值调整：根据颜色多样性动态调整相似度阈值
+                const colorVariety = calculateColorVariety(colorArray);
+                const baseMinDistance = 20; // 基础距离阈值
+                const minDistance = colorVariety > 0.7 ? baseMinDistance * 0.8 : baseMinDistance; // 颜色丰富时更严格
+                
+                const highSaturationThreshold = 65; // 提高高饱和度保护阈值
+                const highBrightnessThreshold = 75; // 提高高亮度保护阈值
 
                 for (let color of colorArray) {
                     if (used.has(color.key)) continue;
@@ -1768,17 +1773,30 @@
                     const rgb1 = hexToRgb(color.hex);
                     const hsl1 = rgbToHsl(rgb1.r, rgb1.g, rgb1.b);
                     
-                    // 检查是否与已选择的颜色太相似
+                    // 检查是否与已选择的颜色太相似 - 使用更严格的感知距离算法
                     for (let selected of filteredNormalColors) {
                         const rgb2 = hexToRgb(selected.hex);
-                        const hsl2 = rgbToHsl(rgb2.r, rgb2.g, rgb2.b);
                         
-                        // 计算色相距离
+                        // 使用感知更均匀的LAB色彩空间计算颜色距离
+                        const lab1 = rgbToLab(rgb1.r, rgb1.g, rgb1.b);
+                        const lab2 = rgbToLab(rgb2.r, rgb2.g, rgb2.b);
+                        
+                        // 计算Delta E (感知颜色距离) - Delta E < 3.0 时人眼难以区分
+                        const deltaE = Math.sqrt(
+                            Math.pow(lab1.l - lab2.l, 2) + 
+                            Math.pow(lab1.a - lab2.a, 2) + 
+                            Math.pow(lab1.b - lab2.b, 2)
+                        );
+                        
+                        // 同时检查HSL差异作为辅助判断
+                        const hsl2 = rgbToHsl(rgb2.r, rgb2.g, rgb2.b);
                         let hueDiff = Math.abs(hsl1.h - hsl2.h);
                         if (hueDiff > 180) hueDiff = 360 - hueDiff;
                         
-                        // 如果色相、饱和度、亮度都很接近，认为是重复颜色
-                        if (hueDiff < 15 && Math.abs(hsl1.s - hsl2.s) < 20 && Math.abs(hsl1.l - hsl2.l) < 15) {
+                        // 更严格的相似度判断：
+                        // 1. Delta E < 8.0 (明显的颜色差异)
+                        // 2. 或者色相非常接近且饱和度/亮度都接近
+                        if (deltaE < 8.0 || (hueDiff < 8 && Math.abs(hsl1.s - hsl2.s) < 12 && Math.abs(hsl1.l - hsl2.l) < 10)) {
                             isTooSimilar = true;
                             break;
                         }
@@ -1816,6 +1834,35 @@
                 console.error('提取颜色失败:', error);
                 showToast('提取失败，请重试');
             }
+        }
+
+        // Helper function: 计算颜色数组的多样性指数
+        function calculateColorVariety(colorArray) {
+            if (colorArray.length < 2) return 0;
+            
+            let totalDistance = 0;
+            let comparisons = 0;
+            
+            // 计算所有颜色对之间的平均距离
+            for (let i = 0; i < Math.min(colorArray.length, 50); i++) { // 限制计算量
+                for (let j = i + 1; j < Math.min(colorArray.length, 50); j++) {
+                    const lab1 = rgbToLab(colorArray[i].r, colorArray[i].g, colorArray[i].b);
+                    const lab2 = rgbToLab(colorArray[j].r, colorArray[j].g, colorArray[j].b);
+                    
+                    const distance = Math.sqrt(
+                        Math.pow(lab1.l - lab2.l, 2) + 
+                        Math.pow(lab1.a - lab2.a, 2) + 
+                        Math.pow(lab1.b - lab2.b, 2)
+                    );
+                    
+                    totalDistance += distance;
+                    comparisons++;
+                }
+            }
+            
+            const avgDistance = comparisons > 0 ? totalDistance / comparisons : 0;
+            // 将平均距离归一化为0-1之间的多样性指数
+            return Math.min(avgDistance / 50, 1.0);
         }
 
         // Helper function: RGB to LAB (simplified)
