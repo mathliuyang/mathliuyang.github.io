@@ -918,18 +918,22 @@
             position: relative;
             height: 400px;
             overflow: hidden;
+            border-radius: 12px;
         }
 
         .poster-image {
             width: 100%;
             height: 100%;
             position: relative;
+            border-radius: 12px;
+            overflow: hidden;
         }
 
         .poster-image img {
             width: 100%;
             height: 100%;
             object-fit: cover;
+            border-radius: 12px;
         }
 
         .cover-placeholder {
@@ -954,9 +958,10 @@
             bottom: 0;
             left: 0;
             right: 0;
-            background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.85));
             color: white;
             padding: 3rem 2rem 2rem;
+            border-radius: 0 0 12px 12px;
         }
 
         .poster-category {
@@ -3439,7 +3444,7 @@ ${currentPalette.map((color, i) =>
             // 封面配图特殊渲染
             if (category === 'coverPalettes') {
                 grid.innerHTML = palettes.map(p => `
-                    <div class="color-card preset-card cover-palette-card">
+                    <div class="color-card preset-card cover-palette-card" onclick="showCoverStoryDetail(${JSON.stringify(p.coverStory).replace(/"/g, '&quot;')})" style="cursor: pointer;">
                         ${p.coverStory ? `
                             <div class="cover-image-container">
                                 <img src="${p.coverStory.imagePath}" alt="${p.coverStory.title}" class="cover-image" 
@@ -3449,7 +3454,7 @@ ${currentPalette.map((color, i) =>
                                 </div>
                             </div>
                         ` : ''}
-                        <div class="color-swatch" onclick='applyPresetPaletteToChart(${JSON.stringify(p.colors)}, ${JSON.stringify(p.name)})' style="cursor: pointer;">
+                        <div class="color-swatch" onclick='event.stopPropagation(); applyPresetPaletteToChart(${JSON.stringify(p.colors)}, ${JSON.stringify(p.name)})' style="cursor: pointer;">
                             <div class="swatch-row">
                                 ${p.colors.map(c => `<div class=\"swatch\" style=\"background:${c}\"></div>`).join('')}
                             </div>
@@ -3465,7 +3470,7 @@ ${currentPalette.map((color, i) =>
                                     </div>
                                 ` : ''}
                             </div>
-                            <div class="cover-actions">
+                            <div class="cover-actions" onclick="event.stopPropagation();">
                                 <button class="action-btn" style="padding: 0.4rem 0.8rem;" onclick="applyPresetPaletteAndReturn(${JSON.stringify(p.colors).replace(/"/g, '&quot;')}, ${JSON.stringify(p.name).replace(/"/g, '&quot;')})">应用</button>
                                 ${p.coverStory ? `<button class="action-btn secondary" style="padding: 0.4rem 0.8rem;" onclick="showCoverStoryDetail(${JSON.stringify(p.coverStory).replace(/"/g, '&quot;')})">详情</button>` : ''}
                             </div>
@@ -3500,8 +3505,6 @@ ${currentPalette.map((color, i) =>
             modal.innerHTML = `
                 <div class="modal-overlay" onclick="closeCoverStoryModal(this.parentElement)"></div>
                 <div class="modal-content cover-story-poster">
-                    <button class="modal-close" onclick="closeCoverStoryModal(this.closest('.cover-story-modal'))">×</button>
-                    
                     <div class="poster-header">
                         <div class="poster-image">
                             <img src="${coverStory.imagePath}" alt="${coverStory.title}" 
