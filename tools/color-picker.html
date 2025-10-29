@@ -798,7 +798,7 @@
             transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .cover-story-modal .modal-overlay.show .modal-content {
+        .cover-story-modal .modal-content.show {
             transform: scale(1);
             opacity: 1;
         }
@@ -3490,13 +3490,22 @@ ${currentPalette.map((color, i) =>
             // 触发动画
             requestAnimationFrame(() => {
                 const overlay = modal.querySelector('.modal-overlay');
+                const content = modal.querySelector('.modal-content');
                 overlay.classList.add('show');
+                // 给内容也添加show类以触发动画
+                if (content) {
+                    content.classList.add('show');
+                }
             });
         }
 
         function closeCoverStoryModal(modal) {
             const overlay = modal.querySelector('.modal-overlay');
-            overlay.classList.remove('show');
+            const content = modal.querySelector('.modal-content');
+            
+            // 移除遮罩层和内容的show类
+            if (overlay) overlay.classList.remove('show');
+            if (content) content.classList.remove('show');
 
             // 等待动画完成后移除元素
             setTimeout(() => {
@@ -3510,9 +3519,9 @@ ${currentPalette.map((color, i) =>
         window.showCoverStoryDetail = showCoverStoryDetail;
         window.closeCoverStoryModal = closeCoverStoryModal;
         window.applyPresetPaletteAndReturn = applyPresetPaletteAndReturn;
-        
+
         // 更新预设配色方案的函数（供preset-palettes.js调用）
-        window.updatePresetPalettes = function() {
+        window.updatePresetPalettes = function () {
             if (currentPresetCategory === 'coverPalettes') {
                 renderPresetPalettes('coverPalettes');
             }
