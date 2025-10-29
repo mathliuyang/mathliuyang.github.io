@@ -1686,10 +1686,10 @@
 
                         // 特殊颜色保护逻辑：高饱和度或高亮度的颜色不轻易合并
                         let shouldMerge = false;
-                        if (isSpecialColor && otherIsSpecialColor) {
+                        if (isSpecialColor && otherIsSpecial) {
                             // 两个都是特殊颜色，只有非常相似才合并
                             shouldMerge = dist < 15;
-                        } else if (isSpecialColor || otherIsSpecialColor) {
+                        } else if (isSpecialColor || otherIsSpecial) {
                             // 一个是特殊颜色，适度保护
                             shouldMerge = dist < 20;
                         } else {
