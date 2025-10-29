@@ -5695,50 +5695,102 @@ ${currentPalette.map((color, i) =>
                 try {
                     // 获取当前配色方案
                     const colors = currentPalette.length > 0 ? currentPalette : ['#3498db', '#e74c3c', '#2ecc71', '#f39c12', '#9b59b6'];
+                    const colorCount = colors.length;
 
-                    // 创建色卡画布 - 只包含一行小方块，保持标准尺寸
+                    // 创建色卡画布
                     const colorCardCanvas = document.createElement('canvas');
-                    const colorSize = 100; // 颜色方块大小（标准尺寸）
-                    const spacing = 20; // 间距（标准尺寸）
-                    const margin = 40; // 边距（标准尺寸）
+                    const ctx = colorCardCanvas.getContext('2d');
 
-                    // 计算画布尺寸 - 紧凑的一行布局
-                    const cardWidth = Math.max(800, colors.length * (colorSize + spacing) - spacing + 2 * margin);
-                    const cardHeight = colorSize + 60; // 仅包含方块和下方色值
+                    // 根据颜色数量确定布局
+                    let rows, cols, colorSize, spacing, margin;
+                    
+                    if (colorCount <= 7) {
+                        // ≤7个颜色：单行布局
+                        rows = 1;
+                        cols = colorCount;
+                        colorSize = 100;
+                        spacing = 20;
+                        margin = 40;
+                    } else if (colorCount >= 8 && colorCount <= 13) {
+                        // 8-13个颜色：2行布局（均匀分布，奇数时第一行多一个）
+                        rows = 2;
+                        cols = Math.ceil(colorCount / 2);
+                        colorSize = 90;
+                        spacing = 15;
+                        margin = 30;
+                    } else if (colorCount === 15) {
+                        // 15个颜色：3行，每行5个
+                        rows = 3;
+                        cols = 5;
+                        colorSize = 80;
+                        spacing = 15;
+                        margin = 30;
+                    } else if (colorCount === 16) {
+                        // 16个颜色：4行，每行4个
+                        rows = 4;
+                        cols = 4;
+                        colorSize = 80;
+                        spacing = 15;
+                        margin = 30;
+                    } else {
+                        // >16个颜色：自适应布局
+                        rows = Math.ceil(Math.sqrt(colorCount));
+                        cols = Math.ceil(colorCount / rows);
+                        colorSize = Math.max(60, 800 / cols - 10);
+                        spacing = 10;
+                        margin = 20;
+                    }
+
+                    // 计算画布尺寸
+                    const cardWidth = cols * (colorSize + spacing) - spacing + 2 * margin;
+                    const cardHeight = rows * (colorSize + spacing + 30) - spacing + 2 * margin; // +30用于颜色代码
 
                     colorCardCanvas.width = cardWidth;
                     colorCardCanvas.height = cardHeight;
-                    const ctx = colorCardCanvas.getContext('2d');
 
                     // 设置纯白色背景
                     ctx.fillStyle = '#ffffff';
                     ctx.fillRect(0, 0, cardWidth, cardHeight);
 
-                    // 计算居中位置
-                    const totalWidth = colors.length * colorSize + (colors.length - 1) * spacing;
-                    const startX = (cardWidth - totalWidth) / 2;
-                    const centerY = 20;
+                    // 绘制颜色方块
+                    let colorIndex = 0;
+                    for (let row = 0; row < rows && colorIndex < colorCount; row++) {
+                        // 计算当前行的颜色数量（处理奇数情况）
+                        let colorsInThisRow = cols;
+                        if (colorCount >= 8 && colorCount <= 13 && row === rows - 1) {
+                            // 对于8-13个颜色，最后一行可能少于第一行
+                            colorsInThisRow = colorCount - (row * cols);
+                        } else if (colorIndex + cols > colorCount) {
+                            colorsInThisRow = colorCount - colorIndex;
+                        }
 
-                    // 绘制颜色方块（一行展示）
-                    colors.forEach((color, index) => {
-                        const x = startX + index * (colorSize + spacing);
-                        const y = centerY;
+                        // 计算当前行的总宽度和起始位置（居中）
+                        const rowWidth = colorsInThisRow * colorSize + (colorsInThisRow - 1) * spacing;
+                        const startX = (cardWidth - rowWidth) / 2;
+                        const y = margin + row * (colorSize + spacing + 30);
 
-                        // 绘制颜色方块（圆角矩形）
-                        const radius = 8;
-                        ctx.fillStyle = color;
-                        roundRect(ctx, x, y, colorSize, colorSize, radius);
-                        ctx.fill();
+                        for (let col = 0; col < colorsInThisRow && colorIndex < colorCount; col++) {
+                            const x = startX + col * (colorSize + spacing);
+                            const color = colors[colorIndex];
 
-                        // 添加颜色代码（下方居中）
-                        ctx.fillStyle = '#333333';
-                        ctx.font = '18px "Segoe UI", Arial, sans-serif';
-                        ctx.textAlign = 'center';
-                        ctx.textBaseline = 'top';
-                        ctx.fillText(color.toUpperCase(), x + colorSize / 2, y + colorSize + 10);
-                    });
+                            // 绘制颜色方块（圆角矩形）
+                            const radius = Math.max(5, colorSize / 12); // 根据大小调整圆角
+                            ctx.fillStyle = color;
+                            roundRect(ctx, x, y, colorSize, colorSize, radius);
+                            ctx.fill();
 
-                    // 下载色卡（标准尺寸）
+                            // 添加颜色代码（下方居中）
+                            ctx.fillStyle = '#333333';
+                            ctx.font = `${Math.max(12, colorSize / 6)}px "Segoe UI", Arial, sans-serif`;
+                            ctx.textAlign = 'center';
+                            ctx.textBaseline = 'top';
+                            ctx.fillText(color.toUpperCase(), x + colorSize / 2, y + colorSize + 8);
+
+                            colorIndex++;
+                        }
+                    }
+
+                    // 下载色卡
                     const link = document.createElement('a');
                     link.download = `color-palette-${Date.now()}.png`;
                     link.href = colorCardCanvas.toDataURL('image/png');
