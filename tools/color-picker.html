@@ -1587,7 +1587,7 @@
             reader.onload = function (event) {
                 const img = new Image();
                 img.onload = function () {
-                    const result = extractColorsFromImage(img, 8, false);
+                    const result = extractColorsFromImage(img, 16, false); // 增加最大颜色提取数量：从8种增加到16种
                     // 如果返回的是对象，处理结果
                     if (result && result.mainColors) {
                         displayExtractedColors(result.mainColors, result.allColors, img.src);
@@ -1619,17 +1619,17 @@
 
                 // Collect all colors with better sampling
                 const colorMap = new Map();
-                for (let i = 0; i < pixels.length; i += 8) { // Sample every pixel for better accuracy
+                for (let i = 0; i < pixels.length; i += 4) { // 提高采样密度：从每8个像素改为每4个像素采样
                     const r = pixels[i];
                     const g = pixels[i + 1];
                     const b = pixels[i + 2];
                     const a = pixels[i + 3];
 
-                    if (a > 128) { // Only non-transparent pixels with better threshold
-                        // More precise quantization
-                        const qr = Math.round(r / 8) * 8; // Finer quantization
-                        const qg = Math.round(g / 8) * 8;
-                        const qb = Math.round(b / 8) * 8;
+                    if (a > 100) { // 降低透明度阈值：从128降到100，捕获更多半透明像素
+                        // 降低量化精度：从8位量化改为4位量化，保留更多细微颜色差异
+                        const qr = Math.round(r / 4) * 4;
+                        const qg = Math.round(g / 4) * 4;
+                        const qb = Math.round(b / 4) * 4;
                         const key = `${qr},${qg},${qb}`;
 
                         colorMap.set(key, (colorMap.get(key) || 0) + 1);
@@ -1647,7 +1647,7 @@
                 // Advanced color clustering with better similarity detection
                 const clusters = [];
                 const used = new Set();
-                const minDistance = 45; // Stricter similarity threshold
+                const minDistance = 35; // 减小最小距离阈值：从45降到35，保留更多相似但不同的颜色
 
                 for (let color of colorArray) {
                     if (used.has(color.key)) continue;
@@ -1693,13 +1693,21 @@
 
                 // Sort by frequency (popularity) and brightness
                 clusters.sort((a, b) => {
-                    // Primary sort by frequency, secondary by brightness
-                    if (Math.abs(a.count - b.count) > a.count * 0.1) {
-                        return b.count - a.count;
+                    // 优化排序算法：更好地平衡频率和视觉重要性
+                    const rgbA = {r: a.r, g: a.g, b: a.b};
+                    const rgbB = {r: b.r, g: b.g, b: b.b};
+                    const hslA = rgbToHsl(rgbA.r, rgbA.g, rgbA.b);
+                    const hslB = rgbToHsl(rgbB.r, rgbB.g, rgbB.b);
+                    
+                    // 计算视觉重要性权重：考虑饱和度和亮度的影响
+                    const visualWeightA = (hslA.s * 0.6 + (hslA.l > 20 && hslA.l < 80 ? 1 : 0.7) * 0.4) * a.count;
+                    const visualWeightB = (hslB.s * 0.6 + (hslB.l > 20 && hslB.l < 80 ? 1 : 0.7) * 0.4) * b.count;
+                    
+                    // 主要按视觉权重排序，次要按频率排序
+                    if (Math.abs(visualWeightA - visualWeightB) > visualWeightA * 0.15) {
+                        return visualWeightB - visualWeightA;
                     } else {
-                        const brightA = a.r + a.g + a.b;
-                        const brightB = b.r + b.g + b.b;
-                        return brightB - brightA;
+                        return b.count - a.count; // 视觉权重相近时按频率排序
                     }
                 });
 
