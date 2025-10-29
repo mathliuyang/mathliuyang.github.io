@@ -1765,11 +1765,13 @@
                     if (usedNormalColors.has(color.hex)) continue;
                     
                     let isTooSimilar = false;
-                    const hsl1 = hexToHsl(color.hex);
+                    const rgb1 = hexToRgb(color.hex);
+                    const hsl1 = rgbToHsl(rgb1.r, rgb1.g, rgb1.b);
                     
                     // 检查是否与已选择的颜色太相似
                     for (let selected of filteredNormalColors) {
-                        const hsl2 = hexToHsl(selected.hex);
+                        const rgb2 = hexToRgb(selected.hex);
+                        const hsl2 = rgbToHsl(rgb2.r, rgb2.g, rgb2.b);
                         
                         // 计算色相距离
                         let hueDiff = Math.abs(hsl1.h - hsl2.h);
