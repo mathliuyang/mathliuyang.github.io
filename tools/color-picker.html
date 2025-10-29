@@ -8775,60 +8775,351 @@ ${currentPalette.map((color, i) =>
         let colorPickerMode = false;
         let colorPickerCanvas = null;
         let colorPickerCtx = null;
+        let magnifier = null;
+        let magnifierCanvas = null;
+        let magnifierCtx = null;
+        let currentColor = '#000000';
+        let colorPreview = null;
 
         function toggleColorPicker() {
             colorPickerMode = !colorPickerMode;
             const btn = document.getElementById('colorPickerBtn');
             const tip = document.getElementById('colorPickerTip');
-            const img = document.getElementById('originalImage');
+            const images = document.querySelectorAll('#imageContainer img, #originalImage');
 
             if (colorPickerMode) {
                 btn.textContent = '🚫 退出取色器';
                 btn.style.background = 'var(--danger)';
                 btn.style.color = 'white';
                 tip.style.display = 'block';
-                img.style.cursor = 'crosshair';
+                
+                // 初始化取色器
                 setupColorPickerCanvas();
+                createMagnifier();
+                createColorPreview();
+                
+                // 为所有图片添加事件监听器
+                images.forEach(img => {
+                    if (img.complete && img.naturalWidth > 0) {
+                        enableColorPicker(img);
+                    } else {
+                        img.onload = () => enableColorPicker(img);
+                    }
+                });
             } else {
                 btn.textContent = '🎨 取色器模式';
                 btn.style.background = 'var(--primary)';
                 btn.style.color = 'var(--bg)';
                 tip.style.display = 'none';
-                img.style.cursor = 'pointer';
+                
+                // 移除所有图片的事件监听器
+                images.forEach(img => {
+                    if (img.colorPickerHandler) {
+                        img.removeEventListener('click', img.colorPickerHandler);
+                    }
+                    if (img.colorPickerMoveHandler) {
+                        img.removeEventListener('mousemove', img.colorPickerMoveHandler);
+                    }
+                    if (img.colorPickerLeaveHandler) {
+                        img.removeEventListener('mouseleave', img.colorPickerLeaveHandler);
+                    }
+                    img.style.cursor = 'pointer';
+                });
+                
+                // 清理取色器相关元素
+                hideMagnifier();
                 if (colorPickerCanvas) {
                     colorPickerCanvas.remove();
                     colorPickerCanvas = null;
                     colorPickerCtx = null;
                 }
+                if (magnifier) {
+                    magnifier.remove();
+                    magnifier = null;
+                }
+                if (colorPreview) {
+                    colorPreview.remove();
+                    colorPreview = null;
+                }
             }
         }
 
         function setupColorPickerCanvas() {
-            const img = document.getElementById('originalImage');
-            if (!img) return;
+            const images = document.querySelectorAll('#imageContainer img, #originalImage');
+            if (images.length === 0) return;
 
             // 创建隐藏的canvas用于获取像素颜色
             colorPickerCanvas = document.createElement('canvas');
             colorPickerCtx = colorPickerCanvas.getContext('2d');
 
+            // 使用第一张图片初始化canvas
+            const firstImg = images[0];
+            
             // 等待图片加载完成
-            if (img.complete) {
-                drawImageToCanvas();
+            if (firstImg.complete) {
+                drawImageToCanvas(firstImg);
             } else {
-                img.onload = drawImageToCanvas;
+                firstImg.onload = () => drawImageToCanvas(firstImg);
             }
 
-            function drawImageToCanvas() {
+            function drawImageToCanvas(img) {
                 colorPickerCanvas.width = img.naturalWidth;
                 colorPickerCanvas.height = img.naturalHeight;
                 colorPickerCtx.drawImage(img, 0, 0);
             }
         }
 
+        function createMagnifier() {
+            // 创建放大镜容器
+            magnifier = document.createElement('div');
+            magnifier.style.cssText = `
+                position: fixed;
+                width: 150px;
+                height: 150px;
+                border-radius: 50%;
+                border: 3px solid var(--text);
+                box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+                pointer-events: none;
+                z-index: 10000;
+                display: none;
+                overflow: hidden;
+            `;
+            
+            // 创建放大镜内部的canvas
+            magnifierCanvas = document.createElement('canvas');
+            magnifierCanvas.width = 150;
+            magnifierCanvas.height = 150;
+            magnifierCtx = magnifierCanvas.getContext('2d');
+            
+            magnifier.appendChild(magnifierCanvas);
+            document.body.appendChild(magnifier);
+        }
+
+        function createColorPreview() {
+            // 创建颜色预览元素
+            colorPreview = document.createElement('div');
+            colorPreview.style.cssText = `
+                position: fixed;
+                width: 60px;
+                height: 30px;
+                border: 2px solid var(--text);
+                border-radius: 6px;
+                box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+                pointer-events: none;
+                z-index: 10001;
+                display: none;
+                background: #000000;
+            `;
+            
+            // 创建颜色值文本
+            const colorText = document.createElement('div');
+            colorText.style.cssText = `
+                position: absolute;
+                bottom: -25px;
+                left: 0;
+                width: 100%;
+                text-align: center;
+                font-size: 12px;
+                font-family: monospace;
+                color: var(--text);
+                background: var(--bg);
+                padding: 2px 0;
+                border-radius: 3px;
+            `;
+            colorText.id = 'colorText';
+            
+            colorPreview.appendChild(colorText);
+            document.body.appendChild(colorPreview);
+        }
+
+        function handleMouseMove(event, img) {
+            if (!colorPickerMode || !magnifier || !colorPickerCanvas) return;
+            
+            // 如果没有传入img参数，使用事件目标
+            if (!img) {
+                img = event.target;
+                if (!img || (img.tagName !== 'IMG' && !img.closest('img'))) return;
+                if (img.tagName !== 'IMG') {
+                    img = img.closest('img');
+                }
+            }
+            
+            const rect = img.getBoundingClientRect();
+            
+            // 更新canvas以匹配当前图片
+            if (colorPickerCanvas.width !== img.naturalWidth || 
+                colorPickerCanvas.height !== img.naturalHeight) {
+                colorPickerCanvas.width = img.naturalWidth;
+                colorPickerCanvas.height = img.naturalHeight;
+                colorPickerCtx.drawImage(img, 0, 0);
+            }
+            
+            // 计算鼠标在图片中的位置
+            const mouseX = event.clientX - rect.left;
+            const mouseY = event.clientY - rect.top;
+            
+            // 计算图片的实际显示区域
+            const displayWidth = rect.width;
+            const displayHeight = rect.height;
+            const naturalWidth = img.naturalWidth;
+            const naturalHeight = img.naturalHeight;
+            
+            const displayAspect = displayWidth / displayHeight;
+            const naturalAspect = naturalWidth / naturalHeight;
+            
+            let actualDisplayWidth, actualDisplayHeight, offsetX, offsetY;
+            
+            if (displayAspect > naturalAspect) {
+                actualDisplayHeight = displayHeight;
+                actualDisplayWidth = displayHeight * naturalAspect;
+                offsetX = (displayWidth - actualDisplayWidth) / 2;
+                offsetY = 0;
+            } else {
+                actualDisplayWidth = displayWidth;
+                actualDisplayHeight = displayWidth / naturalAspect;
+                offsetX = 0;
+                offsetY = (displayHeight - actualDisplayHeight) / 2;
+            }
+            
+            // 检查鼠标是否在图片区域内
+            const relativeX = mouseX - offsetX;
+            const relativeY = mouseY - offsetY;
+            
+            if (relativeX < 0 || relativeX > actualDisplayWidth || 
+                relativeY < 0 || relativeY > actualDisplayHeight) {
+                hideMagnifier();
+                return;
+            }
+            
+            // 显示放大镜和颜色预览
+            showMagnifier(event.clientX, event.clientY);
+            
+            // 转换为原始图片坐标
+            const scaleX = naturalWidth / actualDisplayWidth;
+            const scaleY = naturalHeight / actualDisplayHeight;
+            
+            const sourceX = Math.floor(relativeX * scaleX);
+            const sourceY = Math.floor(relativeY * scaleY);
+            
+            // 获取当前位置的颜色
+            try {
+                const imageData = colorPickerCtx.getImageData(sourceX, sourceY, 1, 1);
+                const pixel = imageData.data;
+                const r = pixel[0];
+                const g = pixel[1];
+                const b = pixel[2];
+                currentColor = rgbToHex(r, g, b);
+                
+                // 更新颜色预览
+                updateColorPreview(currentColor);
+                
+                // 绘制放大镜内容
+                drawMagnifier(sourceX, sourceY, naturalWidth, naturalHeight);
+            } catch (error) {
+                console.error('取色失败:', error);
+            }
+        }
+
+        function showMagnifier(x, y) {
+            if (!magnifier || !colorPreview) return;
+            
+            // 设置放大镜位置（跟随鼠标，但稍微偏移）
+            magnifier.style.left = `${x + 20}px`;
+            magnifier.style.top = `${y - 75}px`;
+            magnifier.style.display = 'block';
+            
+            // 设置颜色预览位置
+            colorPreview.style.left = `${x + 20}px`;
+            colorPreview.style.top = `${y + 85}px`;
+            colorPreview.style.display = 'block';
+        }
+
+        function hideMagnifier() {
+            if (!magnifier || !colorPreview) return;
+            
+            magnifier.style.display = 'none';
+            colorPreview.style.display = 'none';
+        }
+
+        function updateColorPreview(color) {
+            if (!colorPreview) return;
+            
+            colorPreview.style.background = color;
+            const colorText = document.getElementById('colorText');
+            if (colorText) {
+                colorText.textContent = color;
+            }
+        }
+
+        function drawMagnifier(centerX, centerY, imgWidth, imgHeight) {
+            if (!magnifierCtx || !colorPickerCanvas) return;
+            
+            const magnifierSize = 150;
+            const zoomLevel = 5; // 放大倍数
+            const sourceSize = magnifierSize / zoomLevel;
+            
+            // 清空放大镜
+            magnifierCtx.clearRect(0, 0, magnifierSize, magnifierSize);
+            
+            // 绘制圆形裁剪区域
+            magnifierCtx.save();
+            magnifierCtx.beginPath();
+            magnifierCtx.arc(magnifierSize/2, magnifierSize/2, magnifierSize/2, 0, 2 * Math.PI);
+            magnifierCtx.clip();
+            
+            // 计算源区域
+            const sourceX = Math.max(0, centerX - sourceSize/2);
+            const sourceY = Math.max(0, centerY - sourceSize/2);
+            const sourceWidth = Math.min(sourceSize, imgWidth - sourceX);
+            const sourceHeight = Math.min(sourceSize, imgHeight - sourceY);
+            
+            // 绘制放大的图像
+            magnifierCtx.drawImage(
+                colorPickerCanvas,
+                sourceX, sourceY, sourceWidth, sourceHeight,
+                0, 0, magnifierSize, magnifierSize
+            );
+            
+            // 绘制中心十字线
+            magnifierCtx.strokeStyle = 'rgba(255, 255, 255, 0.8)';
+            magnifierCtx.lineWidth = 1;
+            magnifierCtx.beginPath();
+            magnifierCtx.moveTo(magnifierSize/2, 0);
+            magnifierCtx.lineTo(magnifierSize/2, magnifierSize);
+            magnifierCtx.moveTo(0, magnifierSize/2);
+            magnifierCtx.lineTo(magnifierSize, magnifierSize/2);
+            magnifierCtx.stroke();
+            
+            // 绘制中心点
+            magnifierCtx.fillStyle = 'rgba(255, 0, 0, 0.8)';
+            magnifierCtx.beginPath();
+            magnifierCtx.arc(magnifierSize/2, magnifierSize/2, 3, 0, 2 * Math.PI);
+            magnifierCtx.fill();
+            
+            magnifierCtx.restore();
+        }
+
         function handleImageClick(event, img) {
             if (colorPickerMode && colorPickerCanvas) {
+                // 如果没有传入img参数，使用事件目标
+                if (!img) {
+                    img = event.target;
+                    if (!img || (img.tagName !== 'IMG' && !img.closest('img'))) return;
+                    if (img.tagName !== 'IMG') {
+                        img = img.closest('img');
+                    }
+                }
+                
                 // 取色器模式
                 const rect = img.getBoundingClientRect();
+
+                // 更新canvas以匹配当前图片
+                if (colorPickerCanvas.width !== img.naturalWidth || 
+                    colorPickerCanvas.height !== img.naturalHeight) {
+                    colorPickerCanvas.width = img.naturalWidth;
+                    colorPickerCanvas.height = img.naturalHeight;
+                    colorPickerCtx.drawImage(img, 0, 0);
+                }
 
                 // 更精确的坐标计算，考虑图片的实际显示尺寸和原始尺寸的比例
                 const displayWidth = rect.width;
@@ -8874,14 +9165,8 @@ ${currentPalette.map((color, i) =>
                 const centerY = Math.floor(clickY * scaleY);
 
                 try {
-                    // 直接获取点击位置的像素颜色，不使用平均值以保证精确性
-                    const imageData = colorPickerCtx.getImageData(centerX, centerY, 1, 1);
-                    const pixel = imageData.data;
-
-                    const r = pixel[0];
-                    const g = pixel[1];
-                    const b = pixel[2];
-                    const hex = rgbToHex(r, g, b);
+                    // 使用当前已获取的颜色值
+                    const hex = currentColor;
 
                     // 添加到待选区
                     addToColorSelection(hex);
@@ -8898,8 +9183,28 @@ ${currentPalette.map((color, i) =>
         }
 
         function enableColorPicker(img) {
-            // 这个函数现在由handleImageClick替代，保留以防兼容性问题
-            console.log('enableColorPicker called, but now handled by handleImageClick');
+            // 为单个图片启用取色器功能
+            if (!img) return;
+            
+            // 移除旧的事件监听器，防止重复绑定
+            img.removeEventListener('click', img.colorPickerHandler);
+            img.removeEventListener('mousemove', img.colorPickerMoveHandler);
+            img.removeEventListener('mouseleave', img.colorPickerLeaveHandler);
+
+            // 创建新的事件处理函数
+            img.colorPickerHandler = (e) => handleImageClick(e, img);
+            img.colorPickerMoveHandler = (e) => handleMouseMove(e, img);
+            img.colorPickerLeaveHandler = () => hideMagnifier();
+
+            // 添加事件监听器
+            img.addEventListener('click', img.colorPickerHandler);
+            img.addEventListener('mousemove', img.colorPickerMoveHandler);
+            img.addEventListener('mouseleave', img.colorPickerLeaveHandler);
+
+            // 设置图片样式，确保鼠标事件正常触发
+            img.style.cursor = 'none';
+            img.style.userSelect = 'none';
+            img.draggable = false;
         }
 
         function showColorPickIndicator(x, y, color) {
