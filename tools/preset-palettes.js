@@ -301,10 +301,15 @@
           .map(([color]) => {
             const [r, g, b] = color.split(',').map(Number);
             const hexColor = `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`;
-            // 过滤掉纯白色
-            return hexColor.toUpperCase() === '#FFFFFF' ? null : hexColor;
+            
+            // 过滤掉纯白色及接近纯白色的颜色
+            // 判断标准：RGB值都大于240（接近255）的颜色被认为是接近纯白色
+            if (r > 240 && g > 240 && b > 240) {
+              return null;
+            }
+            return hexColor;
           })
-          .filter(color => color !== null); // 移除过滤掉的纯白色
+          .filter(color => color !== null); // 移除过滤掉的纯白色及接近纯白色
 
         callback(sortedColors);
       } catch (error) {
