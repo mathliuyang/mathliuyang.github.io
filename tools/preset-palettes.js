@@ -300,36 +300,14 @@
           .slice(0, 16)
           .map(([color]) => {
             const [r, g, b] = color.split(',').map(Number);
-            const hexColor = `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`;
-            
-            // 过滤掉纯白色及接近纯白色的颜色
-            // 判断标准：RGB值都大于240（接近255）的颜色被认为是接近纯白色
-            if (r > 240 && g > 240 && b > 240) {
-              return null;
-            }
-            return hexColor;
-          })
-          .filter(color => color !== null); // 移除过滤掉的纯白色及接近纯白色
-        
-        // 确保至少有8种颜色，如果过滤后颜色不足，则保留原始提取的颜色
-        if (sortedColors.length < 8) {
-          const originalColors = Array.from(colorMap.entries())
-            .sort((a, b) => b[1] - a[1])
-            .slice(0, 16)
-            .map(([color]) => {
-              const [r, g, b] = color.split(',').map(Number);
-              return `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`;
-            });
-          return originalColors;
-        }
-        
-        return sortedColors;
+            return `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`;
+          });
 
         callback(sortedColors);
       } catch (error) {
         console.warn('颜色提取失败，使用默认配色:', error);
-        // 返回默认配色（不包含纯白色）
-      callback(['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b', '#e377c2', '#7f7f7f']);
+        // 返回默认配色
+        callback(['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b', '#e377c2', '#7f7f7f']);
       }
     };
 
@@ -341,7 +319,7 @@
         startsWithHttp: imagePath.startsWith('http'),
         crossOrigin: img.crossOrigin
       });
-      // 返回默认配色（不包含纯白色）
+      // 返回默认配色
       callback(['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b', '#e377c2', '#7f7f7f']);
     };
 
@@ -363,7 +341,7 @@
         console.log(`处理封面故事: ${story.title}, 图片路径: ${story.imagePath}`);
 
         if (story.colors.length === 0) {
-          // 先提供默认配色（不包含纯白色），然后异步提取真实颜色
+          // 先提供默认配色，然后异步提取真实颜色
           const defaultColors = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf', '#aec7e8', '#ffbb78', '#98df8a', '#ff9896', '#c5b0d5', '#c49c94'];
           story.colors = defaultColors;
           console.log(`为"${story.title}"设置默认配色方案`);
@@ -389,21 +367,11 @@
             if (colors && colors.length > 0) {
               story.colors = colors;
 
-              // 更新所有颜色数量的配色方案
-              for (let count = 2; count <= 16; count++) {
+              // 更新配色方案
+              for (let count = 2; count <= Math.min(16, colors.length); count++) {
                 const existingIndex = coverPalettes[count].findIndex(p => p.coverStory && p.coverStory.id === story.id);
                 if (existingIndex !== -1) {
-                  // 确保有足够的颜色，如果不足则重复使用颜色
-                  let paletteColors = colors.slice(0, count);
-                  if (paletteColors.length < count) {
-                    // 如果颜色不足，重复使用颜色直到达到所需数量
-                    const repeatedColors = [];
-                    while (repeatedColors.length < count) {
-                      repeatedColors.push(...colors);
-                    }
-                    paletteColors = repeatedColors.slice(0, count);
-                  }
-                  coverPalettes[count][existingIndex].colors = paletteColors;
+                  coverPalettes[count][existingIndex].colors = colors.slice(0, count);
                 }
               }
 
@@ -419,7 +387,7 @@
           });
         } else {
           // 如果已有颜色数据，直接生成配色方案
-          for (let count = 2; count <= 16; count++) {
+          for (let count = 2; count <= Math.min(16, story.colors.length); count++) {
             const palette = {
               name: story.title.replace('《Nature》封面故事：', '').replace('《Science》封面故事：', ''),
               source: `${story.category} Cover`,
@@ -427,15 +395,6 @@
               coverStory: story,
               isCoverPalette: true
             };
-
-            // 如果颜色不足，重复使用颜色直到达到所需数量
-            if (palette.colors.length < count) {
-              const repeatedColors = [];
-              while (repeatedColors.length < count) {
-                repeatedColors.push(...story.colors);
-              }
-              palette.colors = repeatedColors.slice(0, count);
-            }
 
             coverPalettes[count].push(palette);
           }

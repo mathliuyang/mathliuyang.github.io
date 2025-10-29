@@ -720,13 +720,13 @@
             flex-direction: column;
             height: 420px;
             border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
         .cover-palette-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
         }
 
         .cover-image-container {
@@ -764,7 +764,7 @@
             left: 0;
             right: 0;
             padding: 16px;
-            background: linear-gradient(to top, rgba(0,0,0,0.85), rgba(0,0,0,0.4) 70%, transparent);
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.4) 70%, transparent);
             color: white;
             z-index: 2;
         }
@@ -775,11 +775,11 @@
             font-size: 1.1rem;
             margin-bottom: 8px;
             line-height: 1.3;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
         }
 
         .cover-info .color-values {
-            color: rgba(255,255,255,0.9);
+            color: rgba(255, 255, 255, 0.9);
             font-size: 0.85rem;
             font-weight: 500;
         }
@@ -787,9 +787,9 @@
         .cover-story-preview {
             margin-top: 8px;
             padding-top: 8px;
-            border-top: 1px solid rgba(255,255,255,0.2);
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
             font-size: 0.8rem;
-            color: rgba(255,255,255,0.8);
+            color: rgba(255, 255, 255, 0.8);
         }
 
         .cover-actions {
@@ -3583,13 +3583,7 @@ ${currentPalette.map((color, i) =>
                         ` : ''}
                         <div class="color-swatch" onclick='event.stopPropagation(); applyPresetPaletteToChart(${JSON.stringify(p.colors)}, ${JSON.stringify(p.name)})' style="cursor: pointer;">
                             <div class="swatch-row">
-                                ${p.colors.map(c => {
-                                    // 过滤掉纯白色 #FFFFFF 或 #ffffff
-                                    if (c && c.toUpperCase() !== '#FFFFFF') {
-                                        return `<div class="swatch" style="background:${c}"></div>`;
-                                    }
-                                    return '';
-                                }).join('')}
+                                ${p.colors.map(c => `<div class=\"swatch\" style=\"background:${c}\"></div>`).join('')}
                             </div>
                         </div>
                         <div class="cover-actions">
@@ -3604,13 +3598,7 @@ ${currentPalette.map((color, i) =>
                     <div class="color-card preset-card">
                         <div class="color-swatch" onclick='applyPresetPaletteToChart(${JSON.stringify(p.colors)}, ${JSON.stringify(p.name)})' style="cursor: pointer;">
                             <div class="swatch-row">
-                                ${p.colors.map(c => {
-                                    // 过滤掉纯白色 #FFFFFF 或 #ffffff
-                                    if (c && c.toUpperCase() !== '#FFFFFF') {
-                                        return `<div class="swatch" style="background:${c}"></div>`;
-                                    }
-                                    return '';
-                                }).join('')}
+                                ${p.colors.map(c => `<div class=\"swatch\" style=\"background:${c}\"></div>`).join('')}
                             </div>
                         </div>
                         <div class="color-info">
