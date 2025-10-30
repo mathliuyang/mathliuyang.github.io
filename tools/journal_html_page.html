@@ -2402,7 +2402,8 @@
             // 处理封面加载错误的函数
             window.handleCoverError = function(img, localCoverPath) {
                 // 防止无限循环
-                img.onerror = null;
+                if (img.dataset.errorHandled === 'true') return;
+                img.dataset.errorHandled = 'true';
                 
                 // 如果有本地封面路径，先检查文件是否存在
                 if (localCoverPath && localCoverPath.trim() !== '') {
@@ -2435,13 +2436,13 @@
                     return;
                 }
                 
+                // 创建占位符元素
                 const placeholder = document.createElement('div');
                 placeholder.className = 'journal-cover-placeholder';
                 placeholder.innerHTML = '<div class="placeholder-icon">📚</div><div>封面<br>暂缺</div>';
                 
-                // 清空父元素内容并添加占位符
-                img.parentElement.innerHTML = '';
-                img.parentElement.appendChild(placeholder);
+                // 替换img元素为占位符
+                img.parentElement.replaceChild(placeholder, img);
             }
         </script>
 </body>
