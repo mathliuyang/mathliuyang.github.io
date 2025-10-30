@@ -1064,7 +1064,7 @@ let pinnsPapers = [
             "links": {
                 "paper": "https://ieeexplore.ieee.org/document/10630853",
                 "download": "https://www.jianguoyun.com/p/DU3bbZoQ7P3jDRi-r5cGIAA",
-                "cover": "https://i-blog.csdnimg.cn/blog_migrate/fd35c63b886ec8fec4afe1cfc3841012.png",
+                "cover": "https://alumni.dlut.edu.cn/__local/8/29/2C/5B2076814F4FA278AD284648D88_4DF070A9_23DB4.jpg",
                 "code": "https://doi.org/10.5281/zenodo.12538999"
             }
         },
