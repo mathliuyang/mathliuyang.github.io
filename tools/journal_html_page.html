@@ -1803,7 +1803,7 @@
                         <div class="journal-cover-container">
                             <div class="journal-cover">
                                 ${journal.coverImage ?
-                        `<img src="${journal.coverImage}" alt="${journal.name}" onerror="this.onerror=null; this.src='${journal.localCoverImage || ''}'; if(this.src === '') this.parentElement.innerHTML='<div class=&quot;journal-cover-placeholder&quot;>封面<br>暂缺</div>';">` :
+                        `<img src="${journal.coverImage}" alt="${journal.name}" onerror="this.onerror=null; if('${journal.localCoverImage || ''}' !== '') this.src='${journal.localCoverImage}'; else this.parentElement.innerHTML='<div class=&quot;journal-cover-placeholder&quot;>封面<br>暂缺</div>';">` :
                         '<div class="journal-cover-placeholder">封面<br>暂缺</div>'
                     }
                             </div>
