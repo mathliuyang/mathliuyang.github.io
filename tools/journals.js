@@ -2,7 +2,7 @@ let journals = [
     {
         "name": "Advances in Computational Mathematics",
         "chineseName": "计算数学进展",
-        "abbr": "ADV COMPUT MATH""abbr": "ADV COMPUT MATH",
+        "abbr": "ADV COMPUT MATH",
         "impactFactor": 1.7,
         "articles_per_year": 92,
         "region": "荷兰",
@@ -36,7 +36,7 @@ let journals = [
     {
         "name": "Applied Mathematics and Computation",
         "chineseName": "应用数学与计算",
-        "abbr": "APPL MATH COMPUT""abbr": "APPL MATH COMPUT",
+        "abbr": "APPL MATH COMPUT",
         "impactFactor": 3.5,
         "articles_per_year": 511,
         "region": "美国",
@@ -70,7 +70,7 @@ let journals = [
     {
         "name": "Communications in Nonlinear Science and Numerical Simulation",
         "chineseName": "非线性科学与数值模拟通讯",
-        "abbr": "COMMUN NONLINEAR SCI""abbr": "COMMUN NONLINEAR SCI",
+        "abbr": "COMMUN NONLINEAR SCI",
         "impactFactor": 3.4,
         "articles_per_year": 597,
         "region": "荷兰",
@@ -105,7 +105,7 @@ let journals = [
     {
         "name": "Computer Methods in Applied Mechanics and Engineering",
         "chineseName": "应用力学与工程中的计算机方法",
-        "abbr": "COMPUT METHOD APPL M""abbr": "COMPUT METHOD APPL M",
+        "abbr": "COMPUT METHOD APPL M",
         "impactFactor": 6.9,
         "articles_per_year": 665,
         "region": "荷兰",
@@ -139,7 +139,7 @@ let journals = [
     {
         "name": "Computer Physics Communications",
         "chineseName": "计算机物理通讯",
-        "abbr": "COMPUT PHYS COMMUN""abbr": "COMPUT PHYS COMMUN",
+        "abbr": "COMPUT PHYS COMMUN",
         "impactFactor": 7.2,
         "articles_per_year": 311,
         "region": "荷兰",
@@ -173,7 +173,7 @@ let journals = [
     {
         "name": "Computers & Mathematics with Applications",
         "chineseName": "计算机与数学应用",
-        "abbr": "COMPUT MATH APPL""abbr": "COMPUT MATH APPL",
+        "abbr": "COMPUT MATH APPL",
         "impactFactor": 2.9,
         "articles_per_year": 578,
         "region": "英国",
@@ -207,7 +207,7 @@ let journals = [
     {
         "name": "Computational and Applied Mathematics",
         "chineseName": "计算与应用数学",
-        "abbr": "COMPUT APPL MATH""abbr": "COMPUT APPL MATH",
+        "abbr": "COMPUT APPL MATH",
         "impactFactor": 2.5,
         "articles_per_year": 365,
         "region": "巴西",
@@ -241,7 +241,7 @@ let journals = [
     {
         "name": "Engineering with Computers",
         "chineseName": "计算机工程",
-        "abbr": "ENG COMPUT""abbr": "ENG COMPUT",
+        "abbr": "ENG COMPUT",
         "impactFactor": 5.7,
         "articles_per_year": 172,
         "region": "德国",
@@ -275,7 +275,7 @@ let journals = [
     {
         "name": "IMA Journal of Numerical Analysis",
         "chineseName": "IMA数值分析期刊",
-        "abbr": "IMA J NUMER ANAL""abbr": "IMA J NUMER ANAL",
+        "abbr": "IMA J NUMER ANAL",
         "impactFactor": 2.3,
         "articles_per_year": 110,
         "region": "英国",
@@ -309,7 +309,7 @@ let journals = [
     {
         "name": "International Journal for Numerical Methods in Engineering",
         "chineseName": "国际工程数值方法杂志",
-        "abbr": "INT J NUMER METH ENG""abbr": "INT J NUMER METH ENG",
+        "abbr": "INT J NUMER METH ENG",
         "impactFactor": 2.7,
         "articles_per_year": 190,
         "region": "英国",
@@ -342,7 +342,7 @@ let journals = [
     {
         "name": "International Journal of Computer Mathematics",
         "chineseName": "国际计算数学杂志",
-        "abbr": "INT J COMPUT MATH""abbr": "INT J COMPUT MATH",
+        "abbr": "INT J COMPUT MATH",
         "impactFactor": 1.7,
         "articles_per_year": 90,
         "region": "英国",
@@ -375,7 +375,7 @@ let journals = [
     {
         "name": "Journal of Computational and Applied Mathematics",
         "chineseName": "计算与应用数学杂志",
-        "abbr": "J COMPUT APPL MATH""abbr": "J COMPUT APPL MATH",
+        "abbr": "J COMPUT APPL MATH",
         "impactFactor": 2.1,
         "articles_per_year": 533,
         "region": "荷兰",
@@ -409,7 +409,7 @@ let journals = [
     {
         "name": "Journal of Computational Mathematics",
         "chineseName": "计算数学期刊",
-        "abbr": "J COMPUT MATH""abbr": "J COMPUT MATH",
+        "abbr": "J COMPUT MATH",
         "impactFactor": 0.9,
         "articles_per_year": 110,
         "region": "中国",
@@ -443,7 +443,7 @@ let journals = [
     {
         "name": "Journal of Computational Physics",
         "chineseName": "计算物理杂志",
-        "abbr": "J COMPUT PHYS""abbr": "J COMPUT PHYS",
+        "abbr": "J COMPUT PHYS",
         "impactFactor": 3.8,
         "articles_per_year": 551,
         "region": "美国",
@@ -477,7 +477,7 @@ let journals = [
     {
         "name": "Journal of Scientific Computing",
         "chineseName": "科学计算杂志",
-        "abbr": "J SCI COMPUT""abbr": "J SCI COMPUT",
+        "abbr": "J SCI COMPUT",
         "impactFactor": 2.8,
         "articles_per_year": 325,
         "region": "美国",
@@ -511,7 +511,7 @@ let journals = [
     {
         "name": "Mathematical Methods in the Applied Sciences",
         "chineseName": "应用科学中的数学方法",
-        "abbr": "MATH METHOD APPL SCI""abbr": "MATH METHOD APPL SCI",
+        "abbr": "MATH METHOD APPL SCI",
         "impactFactor": 2.1,
         "articles_per_year": 320,
         "region": "英国",
@@ -544,7 +544,7 @@ let journals = [
     {
         "name": "Mathematics and Computers in Simulation",
         "chineseName": "数学与计算机仿真",
-        "abbr": "MATH COMPUT SIMULAT""abbr": "MATH COMPUT SIMULAT",
+        "abbr": "MATH COMPUT SIMULAT",
         "impactFactor": 4.4,
         "articles_per_year": 120,
         "region": "荷兰",
@@ -578,7 +578,7 @@ let journals = [
     {
         "name": "Nature Computational Science",
         "chineseName": "自然计算科学",
-        "abbr": "NAT COMPUT SCI""abbr": "NAT COMPUT SCI",
+        "abbr": "NAT COMPUT SCI",
         "impactFactor": 12,
         "articles_per_year": 74,
         "region": "美国",
@@ -612,7 +612,7 @@ let journals = [
     {
         "name": "Nature Machine Intelligence",
         "chineseName": "自然机器智能",
-        "abbr": "NAT MACH INTELL""abbr": "NAT MACH INTELL",
+        "abbr": "NAT MACH INTELL",
         "impactFactor": 18.8,
         "articles_per_year": 129,
         "region": "英国",
@@ -646,7 +646,7 @@ let journals = [
     {
         "name": "Neural Networks",
         "chineseName": "神经网络",
-        "abbr": "NEURAL NETWORKS""abbr": "NEURAL NETWORKS",
+        "abbr": "NEURAL NETWORKS",
         "impactFactor": 6,
         "articles_per_year": 595,
         "region": "英国",
@@ -680,7 +680,7 @@ let journals = [
     {
         "name": "Neurocomputing",
         "chineseName": "神经计算",
-        "abbr": "NEUROCOMPUTING""abbr": "NEUROCOMPUTING",
+        "abbr": "NEUROCOMPUTING",
         "impactFactor": 5.5,
         "articles_per_year": 903,
         "region": "荷兰",
@@ -714,7 +714,7 @@ let journals = [
     {
         "name": "Nonlinear Dynamics",
         "chineseName": "非线性动力学",
-        "abbr": "NONLINEAR DYNAM""abbr": "NONLINEAR DYNAM",
+        "abbr": "NONLINEAR DYNAM",
         "impactFactor": 5.2,
         "articles_per_year": 986,
         "region": "美国",
@@ -748,7 +748,7 @@ let journals = [
     {
         "name": "Numerical Methods for Partial Differential Equations",
         "chineseName": "偏微分方程数值方法",
-        "abbr": "NUMER METH PART D E""abbr": "NUMER METH PART D E",
+        "abbr": "NUMER METH PART D E",
         "impactFactor": 2.1,
         "articles_per_year": 95,
         "region": "美国",
@@ -781,7 +781,7 @@ let journals = [
     {
         "name": "Communications Physics",
         "chineseName": "通讯物理",
-        "abbr": "COMMUN PHYS-UK""abbr": "COMMUN PHYS-UK",
+        "abbr": "COMMUN PHYS-UK",
         "impactFactor": 5.4,
         "articles_per_year": 351,
         "region": "英国",
@@ -818,7 +818,7 @@ let journals = [
     {
         "name": "SCIENCE CHINA Mathematics",
         "chineseName": "中国科学:数学",
-        "abbr": "SCI CHINA MATH""abbr": "SCI CHINA MATH",
+        "abbr": "SCI CHINA MATH",
         "impactFactor": 1.4,
         "articles_per_year": 115,
         "region": "中国",
@@ -853,7 +853,7 @@ let journals = [
     {
         "name": "SCIENCE CHINA Physics, Mechanics & Astronomy",
         "chineseName": "中国科学:物理学、力学与天文学",
-        "abbr": "SCI CHINA PHYS MECH""abbr": "SCI CHINA PHYS MECH",
+        "abbr": "SCI CHINA PHYS MECH",
         "impactFactor": 7.5,
         "articles_per_year": 196,
         "region": "中国",
@@ -887,7 +887,7 @@ let journals = [
     {
         "name": "SIAM Journal on Scientific Computing",
         "chineseName": "SIAM科学计算杂志",
-        "abbr": "SIAM J SCI COMPUT""abbr": "SIAM J SCI COMPUT",
+        "abbr": "SIAM J SCI COMPUT",
         "impactFactor": 3,
         "articles_per_year": 188,
         "region": "美国",
@@ -920,7 +920,7 @@ let journals = [
     {
         "name": "SIAM Review",
         "chineseName": "SIAM评论",
-        "abbr": "SIAM REV""abbr": "SIAM REV",
+        "abbr": "SIAM REV",
         "impactFactor": 10.8,
         "articles_per_year": 28,
         "region": "美国",
@@ -953,7 +953,7 @@ let journals = [
     {
         "name": "Nature Communications",
         "chineseName": "自然通讯",
-        "abbr": "NAT COMMUN""abbr": "NAT COMMUN",
+        "abbr": "NAT COMMUN",
         "impactFactor": 14.7,
         "articles_per_year": 7910,
         "region": "英国",
@@ -989,7 +989,7 @@ let journals = [
     {
         "name": "Scientific Reports",
         "chineseName": "科学报告",
-        "abbr": "SCI REP-UK""abbr": "SCI REP-UK",
+        "abbr": "SCI REP-UK",
         "impactFactor": 3.8,
         "articles_per_year": 22037,
         "region": "英国",
@@ -1025,7 +1025,7 @@ let journals = [
     {
         "name": "Applied Numerical Mathematics",
         "chineseName": "应用数值数学",
-        "abbr": "APPL NUMER MATH""abbr": "APPL NUMER MATH",
+        "abbr": "APPL NUMER MATH",
         "impactFactor": 2.2,
         "articles_per_year": 164,
         "region": "荷兰",
@@ -1062,7 +1062,7 @@ let journals = [
     {
         "name": "Computers & Fluids",
         "chineseName": "计算机与流体",
-        "abbr": "COMPUT FLUIDS""abbr": "COMPUT FLUIDS",
+        "abbr": "COMPUT FLUIDS",
         "impactFactor": 2.5,
         "articles_per_year": 242,
         "region": "英国",
@@ -1099,7 +1099,7 @@ let journals = [
     {
         "name": "Engineering Applications of Artificial Intelligence",
         "chineseName": "人工智能工程应用",
-        "abbr": "ENG APPL ARTIF INTEL""abbr": "ENG APPL ARTIF INTEL",
+        "abbr": "ENG APPL ARTIF INTEL",
         "impactFactor": 8,
         "articles_per_year": 1909,
         "region": "英国",
