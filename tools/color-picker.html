@@ -6622,7 +6622,7 @@ ${currentPalette.map((color, i) =>
                         width: 1000,
                         height: 500,
                         repeat: 0, // 无限循环
-                        workerScript: 'gif.worker.js'
+                        workerScript: window.location.href.replace(/\/[^\/]*$/, '/gif.worker.js') // 使用绝对URL确保worker文件能正确加载
                     });
 
                     console.log('createGIFAnimation: GIF对象创建成功');
