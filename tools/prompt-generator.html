@@ -1746,7 +1746,7 @@
                                 case 'date':
                                     // 自定义日期输入，支持直接输入数字格式如20251208，按回车键后自动识别为2025年12月08日刊
                                     inputHTML = `<input type="text" class="form-input" id="${fieldId}" ${requiredAttr} 
-                                                 onkeypress="handleDateInputKeyPress(event, this)" oninput="handleFieldInput(this)" maxlength="20">`;
+                                                 onkeypress="handleDateInputKeyPress(event, this)" oninput="handleDateInput(this)" maxlength="20">`;
                                     break;
                                 default:
                                     inputHTML = `<input type="text" class="form-input" id="${fieldId}" ${requiredAttr} oninput="handleFieldInput(this)">`;
@@ -1804,15 +1804,15 @@
                     uniqueFields.forEach(fieldName => {
                         try {
                             const fieldConfig = analyzeFieldType(fieldName);
-                            
+
                             // 确定字段类型，用于switch语句判断
                             let fieldType = fieldConfig.type;
-                            
+
                             // 特殊处理：如果字段名包含日期相关关键词，强制设置为date类型
-                            if (fieldName.includes('日期') || fieldName.includes('时间') || fieldName.includes('date') || fieldName.includes('Date') || fieldName.includes('发表时间') || fieldName.includes('发布时间')) {
+                            if (fieldName.includes('日期') || fieldName.includes('时间') || fieldName.includes('date') || fieldName.includes('Date') || fieldName.includes('发表时间') || fieldName.includes('YYYY年MM月DD日刊') || fieldName.includes('发布时间')) {
                                 fieldType = 'date';
                             }
-                            
+
                             fields.push({
                                 name: fieldName,
                                 label: fieldConfig.label,
@@ -2115,8 +2115,39 @@
                     return;
                 }
 
-                // 处理数字格式：20251009 -> 2025年10月09日刊
-                if (/^\d{8}$/.test(value)) {
+                // 处理4位数字年份格式：2025 -> 2025年
+                if (/^\d{4}$/.test(value)) {
+                    const year = value;
+                    const yearNum = parseInt(year);
+                    
+                    if (yearNum >= 1900 && yearNum <= 2100) {
+                        // 转换为年份格式
+                        input.value = `${year}年`;
+                        showToast(`已转换为：${year}年`);
+                    } else {
+                        showToast('年份格式不正确，请输入有效的4位数字年份');
+                    }
+                }
+                // 处理6位数字格式：202501 -> 2025年1月
+                else if (/^\d{6}$/.test(value)) {
+                    const year = value.substring(0, 4);
+                    const month = value.substring(4, 6);
+                    
+                    const yearNum = parseInt(year);
+                    const monthNum = parseInt(month);
+                    
+                    if (yearNum >= 1900 && yearNum <= 2100 &&
+                        monthNum >= 1 && monthNum <= 12) {
+                        // 转换为年月格式，去掉月份前导零
+                        const monthStr = monthNum.toString();
+                        input.value = `${year}年${monthStr}月`;
+                        showToast(`已转换为：${year}年${monthStr}月`);
+                    } else {
+                        showToast('日期格式不正确，请输入有效的6位数字日期（YYYYMM）');
+                    }
+                }
+                // 处理8位数字格式：20250101 -> 2025年1月1日刊
+                else if (/^\d{8}$/.test(value)) {
                     const year = value.substring(0, 4);
                     const month = value.substring(4, 6);
                     const day = value.substring(6, 8);
@@ -2129,28 +2160,13 @@
                     if (yearNum >= 1900 && yearNum <= 2100 &&
                         monthNum >= 1 && monthNum <= 12 &&
                         dayNum >= 1 && dayNum <= 31) {
-                        // 转换为中文格式，包含年月日和刊
-                        input.value = `${year}年${month}月${day}日刊`;
-                        showToast(`已转换为：${year}年${month}月${day}日刊`);
+                        // 转换为中文格式，包含年月日和刊，去掉月份和日期前导零
+                        const monthStr = monthNum.toString();
+                        const dayStr = dayNum.toString();
+                        input.value = `${year}年${monthStr}月${dayStr}日刊`;
+                        showToast(`已转换为：${year}年${monthStr}月${dayStr}日刊`);
                     } else {
                         showToast('日期格式不正确，请输入有效的8位数字日期');
-                    }
-                }
-                // 处理简写格式：202512 -> 2025年12月01日刊
-                else if (/^\d{6}$/.test(value)) {
-                    const year = value.substring(0, 4);
-                    const month = value.substring(4, 6);
-
-                    const yearNum = parseInt(year);
-                    const monthNum = parseInt(month);
-
-                    if (yearNum >= 1900 && yearNum <= 2100 &&
-                        monthNum >= 1 && monthNum <= 12) {
-                        // 补全为完整日期，默认为当月第一天
-                        input.value = `${year}年${month}月01日刊`;
-                        showToast(`已转换为：${year}年${month}月01日刊`);
-                    } else {
-                        showToast('日期格式不正确，请输入有效的6位数字日期');
                     }
                 }
             }
