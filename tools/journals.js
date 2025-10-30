@@ -425,7 +425,7 @@ let journals = [
         "frequency": "双月刊",
         "founded": "1983年",
         "language": "English",
-        "coverImage": "https://www.global-sci.org/public/journals/15/journalThumbnail_en.png",
+        "coverImage": "https://www.global-sci.org/public/journals/15/journalThumbnail_n.png",
         "website": "https://computmath.cjoe.ac.cn/jcm/EN/0254-9409/home.shtml",
         "authorGuide": "https://computmath.cjoe.ac.cn/jcm/EN/column/column106.shtml",
         "submissionUrl": "https://mc03.manuscriptcentral.com/jcmath",
