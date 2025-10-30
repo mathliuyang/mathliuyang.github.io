@@ -1879,7 +1879,7 @@
                     date: {
                         keywords: ['日期', '时间', 'date', 'Date', '发表时间', '发布时间'],
                         config: {
-                            type: 'date',
+                            type: 'text',
                             placeholder: '请输入日期，按回车键转换：2025年10月09日刊 或 20251009',
                             required: true,
                             maxlength: 8
@@ -2252,6 +2252,9 @@
             window.handleImageError = handleImageError;
             window.handleImageLoadStart = handleImageLoadStart;
             window.handleImageLoadComplete = handleImageLoadComplete;
+            window.handleDateInputKeyPress = handleDateInputKeyPress;
+            window.formatDateInput = formatDateInput;
+            window.handleFieldInput = handleFieldInput;
 
             // Click outside modal to close
             document.getElementById('templateModal').addEventListener('click', (e) => {
