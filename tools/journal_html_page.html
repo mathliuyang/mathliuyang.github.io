@@ -1803,7 +1803,7 @@
                         <div class="journal-cover-container">
                             <div class="journal-cover">
                                 ${journal.coverImage ?
-                        `<img src="${journal.coverImage}" alt="${journal.name}" onerror="this.onerror=null; if('${journal.localCoverImage || ''}' !== '') this.src='${journal.localCoverImage}'; else this.parentElement.innerHTML='<div class=&quot;journal-cover-placeholder&quot;>封面<br>暂缺</div>';">` :
+                        `<img src="${journal.coverImage}" alt="${journal.name}" onerror="handleCoverError(this, '${journal.localCoverImage || ''}')">` :
                         '<div class="journal-cover-placeholder">封面<br>暂缺</div>'
                     }
                             </div>
@@ -2391,6 +2391,24 @@
 
             // 使密码验证函数全局可用
             window.checkPassword = checkPassword;
+
+            // 处理封面加载错误的函数
+            window.handleCoverError = function(img, localCoverPath) {
+                // 防止无限循环
+                img.onerror = null;
+                
+                // 如果有本地封面路径，尝试加载本地封面
+                if (localCoverPath && localCoverPath.trim() !== '') {
+                    img.src = localCoverPath;
+                    // 为本地封面也设置错误处理
+                    img.onerror = function() {
+                        this.parentElement.innerHTML = '<div class="journal-cover-placeholder">封面<br>暂缺</div>';
+                    };
+                } else {
+                    // 没有本地封面，显示占位符
+                    img.parentElement.innerHTML = '<div class="journal-cover-placeholder">封面<br>暂缺</div>';
+                }
+            };
         </script>
 </body>
 
