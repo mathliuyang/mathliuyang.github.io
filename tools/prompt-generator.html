@@ -1804,12 +1804,20 @@
                     uniqueFields.forEach(fieldName => {
                         try {
                             const fieldConfig = analyzeFieldType(fieldName);
+                            
+                            // 确定字段类型，用于switch语句判断
+                            let fieldType = fieldConfig.type;
+                            
+                            // 特殊处理：如果字段名包含日期相关关键词，强制设置为date类型
+                            if (fieldName.includes('日期') || fieldName.includes('时间') || fieldName.includes('date') || fieldName.includes('Date') || fieldName.includes('发表时间') || fieldName.includes('发布时间')) {
+                                fieldType = 'date';
+                            }
+                            
                             fields.push({
                                 name: fieldName,
                                 label: fieldConfig.label,
                                 placeholder: fieldConfig.placeholder,
-                                type: fieldConfig.type,
-
+                                type: fieldType,
                                 required: fieldConfig.required
                             });
                         } catch (error) {
