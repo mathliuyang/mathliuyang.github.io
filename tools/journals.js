@@ -512,7 +512,7 @@ let journals = [
         "frequency": "半月刊",
         "founded": "1979年",
         "language": "English",
-        "coverImage": "https://onlinelibrary.wiley.com/cms/asset/4fbe5733-593d-43d7-bbe8-cd9ea8bf2ca1/mma.v48.16.cover.gif",
+        "coverImage": "https://onlinelibrary.wiley.com/pb-assets/assets/10991476/cover/slide-3-1761755678070.jpg",
         "website": "https://onlinelibrary.wiley.com/journal/10991476",
         "authorGuide": "https://onlinelibrary.wiley.com/page/journal/10991476/homepage/forauthors.html",
         "submissionUrl": "https://mc.manuscriptcentral.com/mma",
