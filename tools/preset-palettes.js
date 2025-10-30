@@ -299,7 +299,18 @@
         imagePath: '/assets/cover/Nature/010/010.png',
         category: 'Nature',
         colors: []
+      },
+      {
+        id: 'Science-001',
+        title: '《Science》封面故事：BioEmu助力蛋白质功能预测',
+        subtitle: '深度学习系统揭示蛋白质动态变化，快速生成多样化构象',
+        description: '蛋白质的功能预测不仅依赖于其序列和结构，还需要理解其动态运动。然而，探索这些运动的可扩展方法一直缺乏。本期《Science》介绍了BioEmu，一个深度学习系统，能够快速生成多样化的蛋白质构象，为蛋白质的柔性和功能提供快速、准确的洞察。图中展示了通过BioEmu采样的环二磷酸腺苷受体模块的蛋白质结构重叠图，展现了其在动态环境下的变化。该技术将为生物分子研究提供强有力的支持。',
+        date: '2025年8月14日刊',
+        imagePath: '/assets/cover/Science/001/001.jpg',
+        category: 'Science',
+        colors: []
       }
+
     ],
     science: [
       // Science 封面故事将在有数据时添加
