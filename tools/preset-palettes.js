@@ -309,7 +309,18 @@
         imagePath: '/assets/cover/Science/001/001.jpg',
         category: 'Science',
         colors: []
+      },
+      {
+        id: 'Science-002',
+        title: '《Science》封面故事：免疫系统的生命历程',
+        subtitle: '从婴儿到老年，免疫系统如何随生命周期演变',
+        description: '本期《科学》封面图呈现了免疫系统在个体生命周期中的变化，从婴儿期到儿童期，再到成年和老年。婴儿的剪影中包含着DNA分子，图中的人物被核膜和质膜包围。这些元素象征着免疫系统在漫长的进化历程中如何随着病毒的基因整合而演化，从单细胞生物到多细胞生物，体现了免疫系统随着生命发展逐步适应环境的过程。',
+        date: '2025年8月7日刊',
+        imagePath: '../assets/cover/Science/002/002.png',
+        category: 'Science',
+        colors: []
       }
+
 
     ],
     science: [
