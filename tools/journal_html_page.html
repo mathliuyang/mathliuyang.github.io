@@ -1803,7 +1803,7 @@
                         <div class="journal-cover-container">
                             <div class="journal-cover">
                                 ${journal.coverImage ?
-                        `<img src="${journal.coverImage}" alt="${journal.name}" onerror="this.parentElement.innerHTML='<div class=\'journal-cover-placeholder\'>封面<br>暂缺</div>'">` :
+                        `<img src="${journal.coverImage}" alt="${journal.name}" onerror="this.onerror=null; this.src='${journal.localCoverImage || ''}'; if(this.src.endsWith('')) this.parentElement.innerHTML='<div class=\'journal-cover-placeholder\'>封面<br>暂缺</div>'">` :
                         '<div class="journal-cover-placeholder">封面<br>暂缺</div>'
                     }
                             </div>
@@ -1982,6 +1982,22 @@
                 if (journal.coverImage) {
                     const img = document.createElement('img');
                     img.src = journal.coverImage;
+                    img.alt = journal.name;
+                    img.onerror = function () {
+                        // 尝试加载本地封面
+                        if (journal.localCoverImage) {
+                            this.onerror = null; // 防止无限循环
+                            this.src = journal.localCoverImage;
+                        } else {
+                            this.parentElement.innerHTML = '<div class="journal-cover-placeholder" style="height:100%;">封面加载失败</div>';
+                        }
+                    };
+                    modalCover.innerHTML = '';
+                    modalCover.appendChild(img);
+                } else if (journal.localCoverImage) {
+                    // 如果没有外部封面但有本地封面，直接显示本地封面
+                    const img = document.createElement('img');
+                    img.src = journal.localCoverImage;
                     img.alt = journal.name;
                     img.onerror = function () {
                         this.parentElement.innerHTML = '<div class="journal-cover-placeholder" style="height:100%;">封面加载失败</div>';
