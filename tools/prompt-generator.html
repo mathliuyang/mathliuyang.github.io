@@ -1890,7 +1890,7 @@
                             type: 'text',
                             placeholder: '请输入日期，按回车键转换：2025年10月09日刊 或 20251009',
                             required: true,
-                            maxlength: 8
+                            maxlength: 20
                         }
                     }
                 };
@@ -2096,8 +2096,22 @@
                 // 如果输入为空，直接返回
                 if (!value) return;
 
-                // 如果已经是中文格式（包含年或月或刊），不做处理
-                if (value.includes('年') || value.includes('月') || value.includes('刊')) {
+                // 如果已经是完整的中文格式（包含年、月、日和刊），不做处理
+                if (value.includes('年') && value.includes('月') && value.includes('日') && value.includes('刊')) {
+                    return;
+                }
+
+                // 处理部分中文格式：YYYY年MM月 -> YYYY年MM月DD日刊
+                if (value.includes('年') && value.includes('月') && !value.includes('日')) {
+                    // 提取年份和月份
+                    const match = value.match(/(\d{4})年(\d{1,2})月/);
+                    if (match) {
+                        const year = match[1];
+                        const month = match[2].padStart(2, '0');
+                        // 默认设为当月第一天
+                        input.value = `${year}年${month}月01日刊`;
+                        showToast(`已补全为：${year}年${month}月01日刊`);
+                    }
                     return;
                 }
 
@@ -2120,7 +2134,7 @@
                         showToast(`已识别：${year}年${month}月${day}日刊`);
                     }
                 }
-                // 处理简写格式：202512 -> 2025年12月
+                // 处理简写格式：202512 -> 2025年12月01日刊
                 else if (/^\d{6}$/.test(value)) {
                     const year = value.substring(0, 4);
                     const month = value.substring(4, 6);
@@ -2130,8 +2144,9 @@
 
                     if (yearNum >= 1900 && yearNum <= 2100 &&
                         monthNum >= 1 && monthNum <= 12) {
-                        input.value = `${year}年${month}月`;
-                        showToast(`已识别：${year}年${month}月`);
+                        // 补全为完整日期，默认为当月第一天
+                        input.value = `${year}年${month}月01日刊`;
+                        showToast(`已识别：${year}年${month}月01日刊`);
                     }
                 }
             }
