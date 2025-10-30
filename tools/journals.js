@@ -31,7 +31,7 @@ let journals = [
         "tips": "该刊是Springer旗下计算数学领域重要期刊,影响因子1.7,中科院4区、JCR Q2分区,川大数学E类。虽然川大评级偏保守,但该刊在计算方法论研究中具有较高认可度,尤其在欧美学术圈颇受重视。期刊强调方法严谨性和广泛适用性,偏好展示计算方法学进步或新颖科学应用的研究,要求方法类论文提供严格理论分析或令人信服的数值实验。对于深度学习求解微分方程方向,该刊持有限接受态度。虽然关注数值分析与建模仿真,但对PINN、Neural Operators等方法要求严格:必须提供收敛性分析或误差估计理论,数值实验需与传统方法充分对比并展示计算效率优势。单纯网络架构创新或经验性结果难以接受,更倾向于深度学习与传统数值方法深度融合、具有坚实理论基础的混合方法。投稿前务必确保理论严谨性和数值验证完整性。审稿周期约12周相对高效,但方法学期刊竞争激烈。需特别注重可读性和数学表达规范性,避免过度依赖黑箱特性而缺乏可解释性。适合已有扎实理论支撑和充分数值验证的成熟研究,纯探索性深度学习应用建议考虑更偏应用的期刊。",
         "indexed": "SCIE",
         "warning": false,
-        "localCoverImage": "assets/cover/AI4SCI/01_ADV_COMPUT_MATH.jpg"
+        "localCoverImage": "../assets/cover/AI4SCI/01_ADV_COMPUT_MATH.jpg"
     },
     {
         "name": "Applied Mathematics and Computation",
@@ -65,7 +65,7 @@ let journals = [
         "tips": "Applied Mathematics and Computation是应用数学领域的知名期刊,中科院2区、JCR Q1,影响因子3.5,川大数学C类评级基本符合其学术水平,在国内应用数学界认可度较高,是性价比突出的主流发表平台。该刊定位于应用数学与数值计算的交叉地带,特别强调算法创新及其在多学科领域的应用,接受面广泛,从纯理论到工程应用均有涵盖。对于深度学习求解微分方程类研究,该刊呈有限接受态度,需要谨慎定位。虽然期刊欢迎new algorithms及computational nature的研究,但其传统定位偏向经典数值方法和应用数学理论。投稿深度学习方法时建议:强调方法的数学理论基础,提供收敛性、稳定性等理论分析,避免纯工程化表述;将神经网络方法与传统应用数学工具(变分法、泛函分析等)建立联系,突出数学本质;提供详尽的数值结果和误差分析,对比主流数值方法;选择具有明确应用背景的问题,体现方法的实用价值。审稿周期较长约9.8个月,年发文量超500篇,接受率相对适中。需注意该刊更青睐融合传统数学工具的混合方法,纯数据驱动的黑箱式深度学习方法可能面临较大挑战。适合已有扎实数学理论分析、能够从应用数学角度阐释深度学习方法的研究,或将神经网络作为辅助工具而非核心贡献的工作。建议作为备选方案,优先考虑计算物理或科学计算类期刊。",
         "indexed": "SCIE",
         "warning": false,
-        "localCoverImage": "assets/cover/AI4SCI/02_APPL_MATH_COMPUT.jpg"
+        "localCoverImage": "../assets/cover/AI4SCI/02_APPL_MATH_COMPUT.jpg"
     },
     {
         "name": "Communications in Nonlinear Science and Numerical Simulation",
@@ -100,7 +100,7 @@ let journals = [
         "tips": "Communications in Nonlinear Science and Numerical Simulation 是中科院1区、JCR Q1期刊,影响因子3.4,川大数学B类评级准确反映了其在应用数学领域的优秀水平,在国内非线性科学和数值计算界享有良好声誉,是高质量成果的重要发表渠道。该刊定位于非线性现象的数学建模、理论分析和数值模拟,强调跨学科性和快速交流,涵盖从混沌湍流到生物物理的广泛应用领域,特别鼓励创新性方法和跨学科研究。对于深度学习求解微分方程类研究,该刊呈高度友好态度,是该领域的重要发表阵地。期刊明确将neural networks、artificial intelligence and machine learning列为研究主题,同时强调numerical methods for ordinary and partial differential equations,深度学习方法作为新兴数值技术完全契合期刊定位。投稿时建议:将方法定位于解决非线性问题的创新计算工具,展示在混沌、分岔、复杂动力学等非线性现象中的应用;提供充分的数值验证和误差分析,与传统非线性求解方法对比;强调方法的跨学科应用价值,如在生物物理、流体力学等领域的潜力;关注可解释性,阐述神经网络如何捕捉非线性特征。审稿周期仅约3个月,在同类期刊中相当高效,年发文近600篇,接受率适中。该刊不设篇幅限制但要求简洁,适合方法论创新明确、应用场景丰富、能体现跨学科价值的研究。推荐作为PINN等方法应用于非线性动力系统的首选投稿目标,性价比极高。",
         "indexed": "SCIE",
         "warning": false,
-        "localCoverImage": "assets/cover/AI4SCI/03_COMMUN_NONLINEAR_SCI.jpg"
+        "localCoverImage": "../assets/cover/AI4SCI/03_COMMUN_NONLINEAR_SCI.jpg"
     },
     {
         "name": "Computer Methods in Applied Mechanics and Engineering",
@@ -134,7 +134,7 @@ let journals = [
         "tips": "1区顶刊，工程应用优先，需要理论分析但不要求完全严格的数学证明。特别适合PINN在结构力学和流体力学中的应用、深度学习加速有限元分析、神经网络本构模型等研究。审稿速度快(约3个月)但要求高，必须与传统FEM/FVM方法详细对比，展示在实际工程尺度问题上的有效性。建议准备工业级测试案例，重点强调计算效率、工程精度和可扩展性。作为1区顶刊(IF=6.9)，适合高水平成果发表。",
         "indexed": "SCIE",
         "warning": false,
-        "localCoverImage": "assets/cover/AI4SCI/04_COMPUT_METHOD_APPL_M.jpg"
+        "localCoverImage": "../assets/cover/AI4SCI/04_COMPUT_METHOD_APPL_M.jpg"
     },
     {
         "name": "Computer Physics Communications",
@@ -168,7 +168,7 @@ let journals = [
         "tips": "该刊是中科院2区、JCR Q1期刊,影响因子7.2,在计算物理领域具有较高学术认可度,川大C级评定基本符合其实际水平,对国内学者晋升评审具有良好认可度。期刊强调计算方法的实际有效性,要求作者在实质性物理问题背景下验证方法,特别重视软件实现与开源共享,鼓励解决现有软件无法处理的前沿问题,体现出方法学与应用并重的特色。对于深度学习求解微分方程类研究,该刊持有限接受态度。虽然期刊欢迎数值方法创新,但PINN、Neural Operators等深度学习方法需要满足严格要求:必须提供充分的数值验证和与传统方法的系统对比,展示在特定物理问题上的实际优势;需要讨论方法的收敛性和误差特性,不能仅停留在黑盒应用层面;强烈建议提供开源代码实现,并在GitHub等平台公开;最关键的是要清晰阐明方法如何推进物理问题的解决,而非单纯的算法创新。审稿周期约12个月,属于较长周期,投稿需提前规划。该刊竞争激烈但相对公平,建议在方法已充分验证、代码完善、物理应用明确的阶段投稿。提高录用率的关键在于:引言面向一般读者阐明创新性与重要性,避免过度技术化;提供完整的性能分析和可复现的实现细节;确保研究确实解决了现有方法无法处理的问题。对于深度学习方法研究者,建议优先考虑发表在更偏重机器学习的计算物理期刊,除非能提供特别严谨的理论分析和突出的物理问题求解优势。",
         "indexed": "SCIE",
         "warning": false,
-        "localCoverImage": "assets/cover/AI4SCI/05_COMPUT_PHYS_COMMUN.jpg"
+        "localCoverImage": "../assets/cover/AI4SCI/05_COMPUT_PHYS_COMMUN.jpg"
     },
     {
         "name": "Computers & Mathematics with Applications",
@@ -202,7 +202,7 @@ let journals = [
         "tips": "该刊是中科院2区、JCR Q1期刊，影响因子2.9，在应用数学领域具有较高学术认可度。川大评级为数学C类，属于主流认可期刊，对于国内学者而言是较好的选择，具有较高的评审认可价值。期刊聚焦偏微分方程数值求解与计算建模，偏好方法学创新与工程应用结合的研究，强调算法的理论严谨性与实际可用性，跨学科研究受到重视。对于深度学习求解微分方程方法（如PINN、Neural Operators、DeepONet等），该刊持有限接受但谨慎的态度。期刊更倾向于传统数值方法，但近年来也开始接受高质量的深度学习相关工作。投稿此类研究需重点展示：第一，严格的收敛性分析和误差估计理论基础；第二，与传统方法（有限元、有限差分等）的充分对比验证；第三，算法的物理可解释性和坚实的数学理论支撑；第四，在复杂实际问题上的计算效率优势和可扩展性。纯数据驱动或缺乏理论支撑的工作较难被接受。审稿周期约6个月，半月刊发文量较大（年578篇），竞争较为激烈。建议确保方法论文具有理论创新或显著性能提升，应用类文章需解决实际工程难题。避免算法描述不清晰或缺乏充分数值实验验证。适合已有成熟理论支撑或充分数值验证的研究投稿，建议作为应用数学领域的重要目标期刊之一。",
         "indexed": "SCIE",
         "warning": false,
-        "localCoverImage": "assets/cover/AI4SCI/06_COMPUT_MATH_APPL.jpg"
+        "localCoverImage": "../assets/cover/AI4SCI/06_COMPUT_MATH_APPL.jpg"
     },
     {
         "name": "Computational and Applied Mathematics",
@@ -236,7 +236,7 @@ let journals = [
         "tips": "该刊是JCR Q1、中科院3区期刊，影响因子2.5，虽然川大评级为数学E类，但其实际学术水平明显高于评级所示，在计算与应用数学领域具有一定国际影响力，对国内学者评审具有中等认可价值。作为巴西计算与应用数学学会的官方期刊，由Springer出版，期刊强调原创性、深度和相关性，特别欢迎具有跨学科特性的研究，连接数学与物理、工程、化学、生物等多个应用领域。对于深度学习求解微分方程方法（如PINN、Neural Operators、DeepONet等），该刊持有限接受态度。作为传统计算数学期刊，编辑更青睐将深度学习方法与数学理论严谨结合的工作。投稿此类研究需重点展示：扎实的数学理论基础和收敛性分析，与经典数值方法的详细对比验证，方法在实际应用问题中的有效性和计算优势，以及跨学科应用价值。纯数据驱动或缺乏数学理论支撑的工作不太适合该刊。审稿周期约3个月，相对较快，年发文量365篇较多，竞争压力适中。建议确保研究具有明确的数学创新或跨学科应用价值，数值实验充分且有说服力，避免方法描述过于简单或缺乏理论深度。适合有一定理论基础和应用验证的中等质量计算数学研究投稿，可作为备选目标期刊，特别适合强调跨学科应用的工作。",
         "indexed": "SCIE",
         "warning": false,
-        "localCoverImage": "assets/cover/AI4SCI/07_COMPUT_APPL_MATH.jpg"
+        "localCoverImage": "../assets/cover/AI4SCI/07_COMPUT_APPL_MATH.jpg"
     },
     {
         "name": "Engineering with Computers",
@@ -270,7 +270,7 @@ let journals = [
         "tips": "《神经网络》作为中科院1区、JCR Q1期刊,影响因子6.0,是神经网络与深度学习领域的顶级国际期刊,川大计算机科学C类评级充分体现其学术价值,对国内学者职称评审和科研考核具有很高认可度。该刊是INNS、APNNS、JNNS三大学会官方期刊,在人工智能领域具有极高声誉。期刊对深度学习求解微分方程的研究高度友好,是PINN、Neural Operators、DeepONet等物理信息神经网络方法的核心发表阵地之一。投稿此类工作时,需要重点展示方法的理论严谨性,包括收敛性分析、误差界估计等数学证明;数值实验需充分,最好涵盖多个基准问题并与传统数值方法进行详细对比;强调计算效率优势和可扩展性;注重物理意义的可解释性分析。期刊欢迎从算法创新、数学分析到工程应用的全方位研究,特别青睐具有跨学科特色和理论深度的工作。需要注意审稿周期约12个月,竞争较为激烈,年发文量595篇但拒稿率较高,建议在研究成果充分成熟、理论分析完备、实验验证充分的情况下投稿。对于深度学习求解PDE的工作,如果能够提供创新的网络架构、严格的理论保证或在复杂实际问题上的突破性应用,将非常适合投稿本刊,是该方向研究者的首选目标期刊之一。",
         "indexed": "SCIE",
         "warning": false,
-        "localCoverImage": "assets/cover/AI4SCI/08_ENG_COMPUT.jpg"
+        "localCoverImage": "../assets/cover/AI4SCI/08_ENG_COMPUT.jpg"
     },
     {
         "name": "IMA Journal of Numerical Analysis",
@@ -304,13 +304,13 @@ let journals = [
         "tips": "该刊是中科院2区、JCR Q1期刊，影响因子2.3，在数值分析领域具有较高学术声誉，川大评级为数学C类，评级准确反映其学术水平，对国内学者具有较高的评审认可度和学术价值。作为牛津大学出版社旗下的传统数值分析期刊，其学术标准严格，强调算法理论的严谨性、算法发展的创新性以及实际应用价值，特别重视理论、开发和应用三者之间的有机互动。期刊偏好具有深厚数学理论基础的方法学研究，注重算法的收敛性分析和误差估计。对于深度学习求解微分方程方法（如PINN、Neural Operators、DeepONet等），该刊持较为谨慎和保守的态度。作为传统数值分析领域的核心期刊，编辑更倾向于经典数值方法和有严格数学理论支撑的算法。投稿此类研究需要特别强调：完备的数学理论框架和收敛性证明，严格的误差分析和稳定性理论，与经典数值方法（有限元、有限差分、谱方法等）的深入理论对比，以及算法的数学可解释性。缺乏严格数学理论或过度依赖数据驱动的工作很难被接受。审稿周期6-12周相对适中，季刊发文量较少（年110篇），竞争较为激烈，录用标准高。建议确保研究具有扎实的数值分析理论基础，证明完整严谨，避免缺乏理论支撑的经验性研究。适合理论成熟、证明完备的高质量数值分析研究投稿，建议作为数值分析领域的重要目标期刊。",
         "indexed": "SCIE",
         "warning": false,
-        "localCoverImage": "assets/cover/AI4SCI/09_IMA_J_NUMER_ANAL.jpeg"
+        "localCoverImage": "../assets/cover/AI4SCI/09_IMA_J_NUMER_ANAL.jpeg"
     },
     {
         "name": "International Journal for Numerical Methods in Engineering",
         "chineseName": "国际工程数值方法杂志",
         "abbr": "INT J NUMER METH ENG",
-        "localCoverImage": "assets/cover/AI4SCI/26_INT_J_NUMER_METH_ENG.jpg",
+        "localCoverImage": "../assets/cover/AI4SCI/26_INT_J_NUMER_METH_ENG.jpg",
         "impactFactor": 2.7,
         "articles_per_year": 190,
         "region": "英国",
@@ -344,7 +344,7 @@ let journals = [
         "name": "International Journal of Computer Mathematics",
         "chineseName": "国际计算数学杂志",
         "abbr": "INT J COMPUT MATH",
-        "localCoverImage": "assets/cover/AI4SCI/27_INT_J_COMPUT_MATH.jpg",
+        "localCoverImage": "../assets/cover/AI4SCI/27_INT_J_COMPUT_MATH.jpg",
         "impactFactor": 1.7,
         "articles_per_year": 90,
         "region": "英国",
@@ -406,7 +406,7 @@ let journals = [
         "tips": "该刊是中科院2区、JCR Q1期刊，影响因子2.1，在计算与应用数学领域具有良好学术声誉，川大评级为数学C类与其实际水平相符，对国内学者具有较好的评审认可度。作为Elsevier旗下的老牌期刊（创刊于1975年），其受众涵盖应用数学家、数值分析师、计算科学家和工程师，强调描述和分析用于解决科学或工程问题的新计算技术，同时重视对现有方法和算法的改进分析，包括有效性和适用性评估。期刊明确要求证明计算效率（收敛性、稳定性、精度等）并通过非平凡数值例子进行说明，不接受仅是现有方法变体且无显著新计算特性的论文。对于深度学习求解微分方程方法（如PINN、Neural Operators、DeepONet等），该刊持有限接受态度。作为传统计算数学期刊，编辑更关注方法的计算效率和数学严谨性。投稿此类研究需重点展示：严格的收敛性、稳定性和精度分析证明，通过非平凡复杂问题的充分数值验证，与传统数值方法的详细对比分析展示计算优势，以及方法的实际工程应用价值。纯理论推导或简单数值实验不足以满足发表标准。审稿周期约3个月较为合理，半月刊年发文量533篇较大，竞争压力适中但质量要求不低。建议确保论文包含实质性计算创新和充分的数值验证，避免方法描述过于简略或数值例子过于简单。适合已有扎实理论基础和充分数值实验验证的计算方法研究投稿，可作为应用数学领域的稳妥选择。",
         "indexed": "SCIE",
         "warning": false,
-        "localCoverImage": "assets/cover/AI4SCI/10_J_COMPUT_APPL_MATH.jpg"
+        "localCoverImage": "../assets/cover/AI4SCI/10_J_COMPUT_APPL_MATH.jpg"
     },
     {
         "name": "Journal of Computational Mathematics",
@@ -425,7 +425,7 @@ let journals = [
         "frequency": "双月刊",
         "founded": "1983年",
         "language": "English",
-        "coverImage": "https://www.global-sci.org/public/journals/15/journalThumbnail_n.png",
+        "coverImage": "https://www.global-sci.org/public/journals/15/journalThumbnail_en.png",
         "website": "https://computmath.cjoe.ac.cn/jcm/EN/0254-9409/home.shtml",
         "authorGuide": "https://computmath.cjoe.ac.cn/jcm/EN/column/column106.shtml",
         "submissionUrl": "https://mc03.manuscriptcentral.com/jcmath",
@@ -440,7 +440,7 @@ let journals = [
         "tips": "《Journal of Computational Mathematics》由Global Science Press出版，是计算数学领域的老牌国际期刊，创刊于1983年，JCR Q2、中科院4区，影响因子约0.9。虽然四川大学评级为数学C类，但在数值分析与计算方法方向上具备一定国际影响力，尤其在中国大陆及东亚数学界具有较高学术认可度(T1)。期刊聚焦于数值分析、计算代数、优化方法、随机模拟、常微分与偏微分方程数值解、计算几何等研究，强调理论创新与算法可证明性。其文章重视方法学严谨性与数值验证的系统性，对创新算法的数学分析与稳定性研究尤为看重。对于基于深度学习的计算方法，如PINN、DeepONet、Neural Operator等，JCM态度较为审慎，一般仅接受与传统数值分析相结合、具备严格误差分析或收敛性理论支撑的工作。若仅为实验驱动的神经网络算法，难以满足刊物要求。该刊审稿周期约2个月，审稿速度较快但退稿率高。投稿时建议突出理论推导、数值分析深度及算法的可解释性。适合数学与计算方法方向研究相对成熟、具有理论贡献的论文投稿，优先级中等，适合作为稳健型国际发表目标。",
         "indexed": "SCIE",
         "warning": false,
-        "localCoverImage": "assets/cover/AI4SCI/11_J_COMPUT_MATH.png"
+        "localCoverImage": "../assets/cover/AI4SCI/11_J_COMPUT_MATH.png"
     },
     {
         "name": "Journal of Computational Physics",
@@ -474,7 +474,7 @@ let journals = [
         "tips": "Journal of Computational Physics是计算物理领域的顶级期刊,中科院1区、JCR Q1,影响因子3.8,川大物理C类评级严重低估了其学术地位。作为该领域最具影响力的旗舰刊物之一,创刊近60年历史,在国内外学术评价体系中均享有极高声誉,是计算物理、计算数学学者的首选投稿目标。该刊定位于物理问题的计算方法前沿,强调跨学科创新和方法论突破,特别重视数学严谨性与计算效率的平衡。对于深度学习求解微分方程类研究,该刊持高度友好态度,是该领域最重要的发表阵地之一。期刊明确鼓励'bridging mathematical, physical modeling and algorithmization, at the frontier between predictive simulation and machine learning'的研究,PINN、Neural Operators、DeepONet等方法的奠基性论文多发表于此。投稿时必须满足:提供严格的误差分析和收敛性证明,展示方法的数学基础;与传统高精度数值方法(谱方法、高阶有限元等)进行详细对比,证明创新性;强调可重复性,必须提供完整代码和数据,这是JCP的硬性要求;阐述计算复杂度、可扩展性和鲁棒性。审稿周期约6.5个月,年发文550篇,竞争极为激烈,拒稿率高。适合方法论创新显著、数学理论扎实、数值实验全面的高质量研究,是冲击学术高峰的理想选择。",
         "indexed": "SCIE",
         "warning": false,
-        "localCoverImage": "assets/cover/AI4SCI/12_J_COMPUT_PHYS.jpg"
+        "localCoverImage": "../assets/cover/AI4SCI/12_J_COMPUT_PHYS.jpg"
     },
     {
         "name": "Journal of Scientific Computing",
@@ -508,13 +508,13 @@ let journals = [
         "tips": "该刊是中科院2区、JCR Q1期刊，影响因子2.8，在科学计算领域具有较高国际声誉，川大评级为数学C类，对国内学者具有良好的评审认可度和学术价值。作为Springer旗下的老牌科学计算期刊（创刊于1986年），其学术水平与同类期刊相当，是应用数学与计算科学交叉领域的重要平台。期刊强调算法创新与方法学发展，偏好理论严谨且具有广泛应用前景的计算方法研究，注重跨学科特性，欢迎能够解决科学与工程实际问题的前沿算法。对于深度学习求解微分方程方法（如PINN、Neural Operators、DeepONet等），该刊持相对开放和友好的态度，近年来已发表多篇相关高质量研究。作为科学计算领域核心期刊，编辑对数值方法与机器学习融合的创新持欢迎态度，但投稿时需重点展示：严格的数值收敛性分析和误差估计，与经典数值方法（有限元、谱方法等）的系统对比，算法在高维或复杂几何问题上的计算效率优势，以及方法的数学理论基础和物理可解释性。纯经验性或缺乏理论分析的工作较难通过评审。审稿周期4-8周相对较快，月刊发文量适中（年325篇），竞争较为激烈。建议确保方法具有理论创新或显著性能提升，数值实验需充分且有说服力，避免算法描述过于简略或缺乏与现有方法的深入比较。适合已有扎实理论基础和充分数值验证的科学计算研究投稿，可作为应用数学与计算科学领域的优先目标期刊。",
         "indexed": "SCIE",
         "warning": false,
-        "localCoverImage": "assets/cover/AI4SCI/13_J_SCI_COMPUT.jpg"
+        "localCoverImage": "../assets/cover/AI4SCI/13_J_SCI_COMPUT.jpg"
     },
     {
         "name": "Mathematical Methods in the Applied Sciences",
         "chineseName": "应用科学中的数学方法",
         "abbr": "MATH METHOD APPL SCI",
-        "localCoverImage": "assets/cover/AI4SCI/28_MATH_METHOD_APPL_SCI.jpg",
+        "localCoverImage": "../assets/cover/AI4SCI/28_MATH_METHOD_APPL_SCI.jpg",
         "impactFactor": 2.1,
         "articles_per_year": 320,
         "region": "英国",
@@ -576,7 +576,7 @@ let journals = [
         "tips": "Mathematics and Computers in Simulation是中科院2区、JCR Q1期刊,影响因子4.4,川大数学E类评级明显低估了该刊实际水平,其作为IMACS官方期刊在计算数学和科学计算领域具有相当影响力,对国内学者而言是被低估的优质发表平台。该刊定位于数学方法与计算机仿真的交叉领域,强调算法开发、系统建模和跨学科应用,接受从简短研究论文到综合教程的多种形式。对于深度学习求解微分方程类研究,该刊呈高度友好态度。期刊明确欢迎numerical analysis和development of algorithms for simulation,深度学习方法作为新兴数值算法完全符合刊物定位。投稿时建议:将神经网络方法定位为创新的数值仿真算法,重点展示算法设计原理、收敛性分析和误差估计;提供充分的数值实验,包括与传统方法(有限元、有限差分等)的系统对比,突出计算效率和精度优势;结合具体应用场景(流体力学、结构力学等),体现方法的工程实用价值。该刊年发文量仅120篇左右,审稿周期约6.5个月,竞争相对温和但质量要求不低。特别适合方法论创新性强、数值实验扎实、能清晰阐述算法数学基础的研究。建议作为PINN、DeepONet等方法论文的理想投稿目标,性价比极高。",
         "indexed": "SCIE",
         "warning": false,
-        "localCoverImage": "assets/cover/AI4SCI/14_MATH_COMPUT_SIMULAT.jpg"
+        "localCoverImage": "../assets/cover/AI4SCI/14_MATH_COMPUT_SIMULAT.jpg"
     },
     {
         "name": "Nature Computational Science",
@@ -610,7 +610,7 @@ let journals = [
         "tips": "本刊是Nature旗下顶级计算科学期刊，中科院1区、JCR Q1，影响因子12.0，在国际计算科学界具有极高声誉，川大CNS评级准确反映其顶级地位，是博士毕业、职称晋升和重大项目的里程碑式成果。期刊强调计算技术和数学模型的创新发展及其在解决复杂科学问题中的应用，既欢迎突破性算法、工具和框架，也重视能以新颖计算方式产生新见解的方法学研究，要求研究显著推动科学研究进展。对于PINN、Neural Operators、DeepONet等深度学习求解微分方程的方法，本刊持高度友好态度，是该领域最理想的顶级发表平台之一。但要求必须在算法和方法学层面有根本性创新，展示对传统计算方法的重大突破，提供严格的理论分析或收敛性保证，在多个复杂实际问题上验证方法的泛化能力和鲁棒性，量化计算效率优势，并清晰阐释方法如何推动相关科学领域的研究范式变革。需要特别注意的是，本刊主要通过约稿发表，年发文量仅74篇，自由投稿竞争极其激烈，录用标准极高。一般不建议作为常规投稿目标，仅适合在取得突破性、开创性成果时冲刺。推荐作为重大创新研究的首选顶级目标。",
         "indexed": "SCIE / ESCI",
         "warning": false,
-        "localCoverImage": "assets/cover/AI4SCI/15_NAT_COMPUT_SCI.jpg"
+        "localCoverImage": "../assets/cover/AI4SCI/15_NAT_COMPUT_SCI.jpg"
     },
     {
         "name": "Nature Machine Intelligence",
@@ -644,7 +644,7 @@ let journals = [
         "tips": "本刊是Nature旗下顶级AI期刊，中科院1区、JCR Q1，影响因子高达18.8，在国内外学术界认可度极高，是人工智能领域的标杆期刊，川大CNS评级准确反映其顶级地位。期刊主要发表机器学习、AI和机器人学的突破性研究，强调对科学发现、社会和工业的重大影响，要求研究在方法论上有重大创新或在应用层面产生变革性影响，标准极为严苛。对于PINN、Neural Operators、DeepONet等深度学习求解微分方程的方法，本刊持有限接受态度，仅在工作展现机器学习方法论的重大理论创新、对科学发现产生突破性影响时才可能被考虑。不能仅仅是方法应用，必须在AI算法本身、理论框架、可解释性、泛化能力等层面有根本性贡献，同时需展示对物理、工程等领域科学范式的变革意义，并讨论社会伦理影响。需要特别注意的是，本刊主要通过约稿发表，年发文量仅129篇，自由投稿竞争极其激烈，录用率极低。一般不建议作为常规投稿目标，除非研究达到了领域顶尖水平并具有里程碑式意义。适合在取得突破性成果、能够引领研究方向时考虑投稿，仅推荐作为重大创新成果的冲刺目标。",
         "indexed": "SCIE",
         "warning": false,
-        "localCoverImage": "assets/cover/AI4SCI/16_NAT_MACH_INTELL.jpg"
+        "localCoverImage": "../assets/cover/AI4SCI/16_NAT_MACH_INTELL.jpg"
     },
     {
         "name": "Neural Networks",
@@ -678,7 +678,7 @@ let journals = [
         "tips": "Neural Networks是中科院1区、JCR Q1顶级期刊,影响因子6.0,在神经网络与深度学习领域具有极高学术声望。川大计算机科学C类评级反映了其在该领域的核心地位,对国内学者晋升评审具有重要价值。该刊对PINN、Neural Operators、DeepONet等深度学习求解微分方程方法高度友好,是该领域的核心发表阵地。投稿时需重点展示:严格的理论分析(收敛性证明、误差界估计)、充分的数值验证(多个基准问题对比)、与传统数值方法的系统对比、计算效率与可扩展性分析,以及物理意义与可解释性讨论。期刊强调神经网络必须是研究核心,单纯将神经网络作为辅助工具的文章不受青睐。审稿周期约12个月,建议提前规划投稿时间。作为三大国际神经网络学会官方期刊,竞争激烈但认可度极高。投稿时应确保方法创新性突出、理论严谨、实验充分,避免仅做应用验证而缺乏理论贡献。适合已有成熟研究成果、完成充分理论分析和数值验证的工作投稿,是深度学习求解微分方程方向的首选期刊之一。",
         "indexed": "SCIE",
         "warning": false,
-        "localCoverImage": "assets/cover/AI4SCI/17_NEURAL_NETWORKS.jpg"
+        "localCoverImage": "../assets/cover/AI4SCI/17_NEURAL_NETWORKS.jpg"
     },
     {
         "name": "Neurocomputing",
@@ -712,7 +712,7 @@ let journals = [
         "tips": "Neurocomputing是神经计算与机器学习领域的权威期刊,中科院2区、JCR Q1分区,影响因子5.5,在计算机人工智能领域具有较高认可度,川大计算机科学B类评级整体符合其学术水平。该刊高度友好于深度学习求解微分方程的研究,PINN、Neural Operators、DeepONet等方法是期刊的核心关注领域,每年发表大量相关论文。投稿此类研究时,期刊特别看重以下几点:首先需要提供扎实的理论分析,包括收敛性证明、误差界推导或复杂度分析;其次要求充分的数值验证,建议在多个基准问题上与传统数值方法进行系统对比,展示深度学习方法的优势与局限;第三要突出计算效率和可扩展性,尤其是处理高维问题或复杂几何的能力;第四强调物理可解释性,说明神经网络如何捕捉物理规律。期刊偏好方法创新与实际应用结合的研究,纯理论推导或缺乏应用场景的工作相对不占优势。审稿周期约5.7个月,年发文量超900篇,竞争较为激烈,建议确保工作具有明确创新点和充分实验验证后再投稿。对于已有初步成果且数值实验完备的深度学习求解PDE研究,该刊是高优先级的投稿选择,录用后可获得领域内较好的学术影响力。",
         "indexed": "SCIE",
         "warning": false,
-        "localCoverImage": "assets/cover/AI4SCI/18_NEUROCOMPUTING.jpg"
+        "localCoverImage": "../assets/cover/AI4SCI/18_NEUROCOMPUTING.jpg"
     },
     {
         "name": "Nonlinear Dynamics",
@@ -746,13 +746,13 @@ let journals = [
         "tips": "Nonlinear Dynamics是中科院2区、JCR Q1期刊,影响因子5.2,在非线性动力学领域具有较高学术地位,川大工程技术C类评级基本符合其实际水平,对国内学者而言是高质量成果的重要发表平台。该刊定位于非线性动力学研究前沿,强调理论创新与实际应用的结合,特别欢迎跨学科和数据驱动方法的研究。对于深度学习求解微分方程类研究,该刊持有限接受态度。虽然期刊明确欢迎data-driven approaches和computational methods,但投稿时需特别注意:必须将深度学习方法与非线性动力系统的物理机制紧密结合,展示对分岔、混沌、稳定性等动力学特性的深刻理解;需提供与传统数值方法的严格对比,证明方法在处理强非线性问题时的优势;建议重点关注PINN等物理信息神经网络在非线性振动、混沌系统识别等方面的应用,而非单纯的数值求解。该刊审稿周期约3个月,年发文量近1000篇,竞争较为激烈。建议在方法创新性、物理意义阐释和数值验证充分性三方面下功夫,避免将深度学习方法作为简单的黑箱工具使用。适合已有较成熟研究成果、能够从动力学角度深入分析深度学习方法机理的学者投稿。",
         "indexed": "SCIE",
         "warning": false,
-        "localCoverImage": "assets/cover/AI4SCI/19_NONLINEAR_DYNAM.jpg"
+        "localCoverImage": "../assets/cover/AI4SCI/19_NONLINEAR_DYNAM.jpg"
     },
     {
         "name": "Numerical Methods for Partial Differential Equations",
         "chineseName": "偏微分方程数值方法",
         "abbr": "NUMER METH PART D E",
-        "localCoverImage": "assets/cover/AI4SCI/29_NUMER_METH_PART_D_E.jpg",
+        "localCoverImage": "../assets/cover/AI4SCI/29_NUMER_METH_PART_D_E.jpg",
         "impactFactor": 2.1,
         "articles_per_year": 95,
         "region": "美国",
@@ -817,7 +817,7 @@ let journals = [
         "tips": "本刊为Nature旗下中科院1区、JCR Q1期刊,影响因子5.4,学术水平较高,在国内物理学界认可度高,适合作为博士毕业或青年教师晋升的重要成果。川大评级CNS,独一档,实际水平显著。期刊强调创新性与跨学科特性,特别欢迎能对物理子领域产生影响的新技术和计算方法,但要求研究必须具有显著进展和新见解。对于PINN、Neural Operators、DeepONet等深度学习求解微分方程的方法,本刊持有限接受态度,适合发表此类工作,但需满足严格标准:必须提供充分的数值验证与误差分析,详细对比传统方法的优劣势,展示计算效率与可扩展性优势,并阐明物理意义与可解释性。单纯的方法介绍难以录用,需结合具体物理问题展示方法的实际价值。审稿周期约13周,属于中等速度,但作为Nature系列竞争激烈,拒稿率较高。建议在研究具有明确物理创新、数值结果充分且方法论证严谨时投稿,确保代码和数据的可重复性。全开放获取模式需支付APC费用,投稿前需确认经费支持。适合作为深度学习物理建模研究的中高端投稿目标,优先级建议为第二至第三选择。",
         "indexed": "SCIE",
         "warning": false,
-        "localCoverImage": "assets/cover/AI4SCI/2399-3650.jpg"
+        "localCoverImage": "../assets/cover/AI4SCI/2399-3650.jpg"
     },
     {
         "name": "SCIENCE CHINA Mathematics",
@@ -852,7 +852,7 @@ let journals = [
         "tips": "对深度学习方法接受度有限，仅推荐给能提供严格数学证明的工作。若是具有完整理论证明的新的PINN方法、深度学习的数学理论基础等研究，可以考虑投稿。要求严格数学证明，理论优先，作为川大评级为 B 的1区期刊(IF=1.4) 对国内评审有较高认可度。",
         "indexed": "SCIE",
         "warning": false,
-        "localCoverImage": "assets/cover/AI4SCI/21_SCI_CHINA_MATH.jpg"
+        "localCoverImage": "../assets/cover/AI4SCI/21_SCI_CHINA_MATH.jpg"
     },
     {
         "name": "SCIENCE CHINA Physics, Mechanics & Astronomy",
@@ -886,13 +886,13 @@ let journals = [
         "tips": "适合国内学者发表AI for Physics研究。可发PINN求解物理PDE(流体、固体力学等)、深度学习在计算物理、计算力学中的应用、物理约束机器学习方法、多尺度物理模拟的深度学习方法等研究。需要物理意义和合理性，强调物理问题求解。作为1区高质量期刊(IF=7.5)认可度好，审稿速度中等(约3.6个月)，对国内学者友好可作为国内晋升成果，建议强调物理意义和实际物理问题的解决。如果你的研究涵盖基础物理、应用物理或跨学科物理学领域，可以考虑投稿。期刊对于原创性强、研究深度高的论文尤为欢迎，特别是能够推动物理学新发现的工作。",
         "indexed": "SCIE",
         "warning": false,
-        "localCoverImage": "assets/cover/AI4SCI/22_SCI_CHINA_PHYS_MECH.jpg"
+        "localCoverImage": "../assets/cover/AI4SCI/22_SCI_CHINA_PHYS_MECH.jpg"
     },
     {
         "name": "SIAM Journal on Scientific Computing",
         "chineseName": "SIAM科学计算杂志",
         "abbr": "SIAM J SCI COMPUT",
-        "localCoverImage": "assets/cover/AI4SCI/30_SIAM_J_SCI_COMPUT.jpg",
+        "localCoverImage": "../assets/cover/AI4SCI/30_SIAM_J_SCI_COMPUT.jpg",
         "impactFactor": 3,
         "articles_per_year": 188,
         "region": "美国",
@@ -926,7 +926,7 @@ let journals = [
         "name": "SIAM Review",
         "chineseName": "SIAM评论",
         "abbr": "SIAM REV",
-        "localCoverImage": "assets/cover/AI4SCI/31_SIAM_REV.jpg",
+        "localCoverImage": "../assets/cover/AI4SCI/31_SIAM_REV.jpg",
         "impactFactor": 10.8,
         "articles_per_year": 28,
         "region": "美国",
@@ -960,7 +960,7 @@ let journals = [
         "name": "Nature Communications",
         "chineseName": "自然通讯",
         "abbr": "NAT COMMUN",
-        "localCoverImage": "assets/cover/AI4SCI/32_NAT_COMMUN.jpg",
+        "localCoverImage": "../assets/cover/AI4SCI/32_NAT_COMMUN.jpg",
         "impactFactor": 14.7,
         "articles_per_year": 7910,
         "region": "英国",
@@ -997,7 +997,7 @@ let journals = [
         "name": "Scientific Reports",
         "chineseName": "科学报告",
         "abbr": "SCI REP-UK",
-        "localCoverImage": "assets/cover/AI4SCI/33_SCI_REP-UK.jpg",
+        "localCoverImage": "../assets/cover/AI4SCI/33_SCI_REP-UK.jpg",
         "impactFactor": 3.8,
         "articles_per_year": 22037,
         "region": "英国",
@@ -1065,7 +1065,7 @@ let journals = [
         "tips": "本刊为中科院2区、JCR Q1期刊，影响因子2.2，在应用数学和数值分析领域具有较好声誉，在国内学术评审中有一定认可度，适合博士生发表或青年学者积累成果。川大评级D可能低估了其实际学术水平，该刊在计算数学社区内评价较高。期刊强调计算数学和数值分析的传统方法与新技术，既接受严格的数学证明也欢迎启发式方法，特别关注新研究领域，要求论文完整、相对独立，引言应易于理解。对于PINN、Neural Operators、DeepONet等深度学习求解微分方程的方法，本刊持有限接受态度，作为传统数值分析期刊，要求此类工作必须提供严格的理论分析（收敛性证明、误差界估计）、充分的数值验证实验、与经典数值方法的详细对比、计算效率的量化评估，以及清晰的数学解释。单纯的应用案例不太适合，需要在方法学或理论层面有实质贡献。审稿周期约7.5个月，属于较长周期，需提前做好投稿规划。年发文量164篇较少，竞争适中但质量要求较高。特别注意：分数阶微积分领域每月投稿限制为5篇，该方向需谨慎投稿时机。适合在方法学理论成熟、数值验证充分时投稿，优先级建议为第三至第四选择。",
         "indexed": "SCIE",
         "warning": false,
-        "localCoverImage": "assets/cover/AI4SCI/23_APPL_NUMER_MATH.jpg"
+        "localCoverImage": "../assets/cover/AI4SCI/23_APPL_NUMER_MATH.jpg"
     },
     {
         "name": "Computers & Fluids",
@@ -1102,7 +1102,7 @@ let journals = [
         "tips": "本刊为中科院3区、JCR Q2期刊，影响因子2.5，在计算流体力学领域具有良好声誉，在国内学术评审中认可度中等，适合博士生发表或青年学者常规产出。川大评级工程技术C与实际水平基本相符。期刊强调计算技术在流体问题中的核心作用，既重视数值方法发展也关注工程应用，具有显著的多学科交叉特性，要求研究在方法学或应用层面有实质贡献。对于PINN、Neural Operators、DeepONet等深度学习求解流体力学微分方程的方法，本刊持高度友好态度，在官方Aims & Scope中明确表示欢迎机器学习应用于流体建模的论文，是该领域的理想发表平台。但要求必须展现优秀的科学品质：必须与传统CFD方法进行系统对比、清晰呈现训练和验证案例且具有充分多样性、深入分析模型的物理一致性和理论基础、客观讨论方法的局限性和优势。单纯展示机器学习效果而缺乏科学深度的工作不会被接受。审稿周期约9个月，属于较长周期，需提前做好投稿规划，建议预留至少一年时间。年发文量242篇，竞争适中但质量把关严格。适合在深度学习方法针对流体问题已充分验证、与传统方法对比完整、物理解释清晰时投稿，优先级建议为第二至第三选择，特别适合计算流体力学背景的研究者。",
         "indexed": "SCIE",
         "warning": false,
-        "localCoverImage": "assets/cover/AI4SCI/24_COMPUT_FLUIDS.jpg"
+        "localCoverImage": "../assets/cover/AI4SCI/24_COMPUT_FLUIDS.jpg"
     },
     {
         "name": "Engineering Applications of Artificial Intelligence",
@@ -1139,13 +1139,13 @@ let journals = [
         "tips": "该刊是IFAC旗下的人工智能工程应用旗舰期刊，中科院1区Top期刊，影响因子8.0，在计算机科学和工程技术多个学科均位列Q1区前15%，学术认可度高。川大评级为C类可能低估了其实际水平，该刊在AI工程应用领域具有重要影响力，对国内学者职称晋升和项目申报有较好支撑作用。期刊强调AI方法的实际工程应用，要求投稿必须展示真实世界的工程问题求解，并使用公开数据集验证以确保可复现性，纯理论或算法创新而缺乏工程验证的稿件会被直接拒稿。对于深度学习求解微分方程类研究(如PINNs、DeepONet、Neural Operators)，该刊持有限接受态度。虽然期刊明确将'深度学习及其实际应用'列为重点领域，但投稿时必须强调工程应用价值而非数学方法本身：需要选择具体工程问题(如结构优化、流体控制、故障诊断)作为应用场景，提供与传统工程方法(有限元、CFD等)的详细对比，展示计算效率提升和实时性优势，使用工业标准数据集或实际工程数据验证。纯方法论研究或仅在学术基准问题上测试的稿件不符合期刊定位。特别注意期刊明确禁止标题和摘要中使用未定义缩写，必须采用单栏格式，且严格限制新型'隐喻启发式元启发式算法'的投稿。审稿周期较长(约9个月)，需提前规划，但Elsevier平台流程透明，可随时跟踪进度。年发文量近2000篇，竞争激烈但录用容量大。建议在研究具备充分工程验证、实测数据支撑、可复现性强时投稿，优先级适合作为应用导向成果的主要发表渠道。",
         "indexed": "SCIE, EI, Scopus, PubMed Central",
         "warning": false,
-        "localCoverImage": "assets/cover/AI4SCI/25_ENG_APPL_ARTIF_INTEL.jpg"
+        "localCoverImage": "../assets/cover/AI4SCI/25_ENG_APPL_ARTIF_INTEL.jpg"
     },
     {
         "name": "SIAM Journal on Numerical Analysis",
         "chineseName": "SIAM数值分析杂志",
         "abbr": "SIAM J NUMER ANAL",
-        "localCoverImage": "assets/cover/AI4SCI/34_SIAM_J_NUMER_ANAL.jpg",
+        "localCoverImage": "../assets/cover/AI4SCI/34_SIAM_J_NUMER_ANAL.jpg",
         "impactFactor": 2.8,
         "articles_per_year": 116,
         "region": "美国",
@@ -1182,7 +1182,7 @@ let journals = [
         "name": "SIAM Journal on Applied Mathematics",
         "chineseName": "SIAM应用数学杂志",
         "abbr": "SIAM J APPL MATH",
-        "localCoverImage": "assets/cover/AI4SCI/35_SIAM_J_APPL_MATH.jpg",
+        "localCoverImage": "../assets/cover/AI4SCI/35_SIAM_J_APPL_MATH.jpg",
         "impactFactor": 1.9,
         "articles_per_year": 105,
         "region": "美国",
