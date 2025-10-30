@@ -731,7 +731,7 @@ window.templates = {
       "name": "顶刊封面故事生成器",
       "icon": "📰",
       "cover": "https://images.unsplash.com/photo-1457369804613-52c61a468e7d?auto=format&fit=crop&w=1350&q=80",
-      "localCoverImage": "./assets/prompt_cover/prompt-id-cover-story.jpg",
+      "localCoverImage": "./assets/prompt_cover/prompt-wx-004.png",
       "desc": "输入期刊封面与故事，自动输出标准JS格式的封面故事条目",
       "tags": ["顶刊", "封面故事", "结构化输出"],
       "category": "内容运营｜智核学术",
