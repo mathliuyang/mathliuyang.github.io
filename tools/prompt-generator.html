@@ -1744,9 +1744,9 @@
                                     inputHTML = `<input type="number" class="form-input" id="${fieldId}" ${requiredAttr} oninput="handleFieldInput(this)">`;
                                     break;
                                 case 'date':
-                                    // 自定义日期输入，支持直接输入数字格式如20251208，按回车键后自动识别为2025年12月
+                                    // 自定义日期输入，支持直接输入数字格式如20251208，按回车键后自动识别为2025年12月08日刊
                                     inputHTML = `<input type="text" class="form-input" id="${fieldId}" ${requiredAttr} 
-                                                 onkeypress="handleDateInputKeyPress(event, this)" oninput="handleFieldInput(this)" maxlength="8">`;
+                                                 onkeypress="handleDateInputKeyPress(event, this)" oninput="handleFieldInput(this)" maxlength="20">`;
                                     break;
                                 default:
                                     inputHTML = `<input type="text" class="form-input" id="${fieldId}" ${requiredAttr} oninput="handleFieldInput(this)">`;
@@ -2131,7 +2131,9 @@
                         dayNum >= 1 && dayNum <= 31) {
                         // 转换为中文格式，包含年月日和刊
                         input.value = `${year}年${month}月${day}日刊`;
-                        showToast(`已识别：${year}年${month}月${day}日刊`);
+                        showToast(`已转换为：${year}年${month}月${day}日刊`);
+                    } else {
+                        showToast('日期格式不正确，请输入有效的8位数字日期');
                     }
                 }
                 // 处理简写格式：202512 -> 2025年12月01日刊
@@ -2146,7 +2148,9 @@
                         monthNum >= 1 && monthNum <= 12) {
                         // 补全为完整日期，默认为当月第一天
                         input.value = `${year}年${month}月01日刊`;
-                        showToast(`已识别：${year}年${month}月01日刊`);
+                        showToast(`已转换为：${year}年${month}月01日刊`);
+                    } else {
+                        showToast('日期格式不正确，请输入有效的6位数字日期');
                     }
                 }
             }
