@@ -1186,11 +1186,11 @@ let journals = [
         "impactFactor": 1.9,
         "articles_per_year": 105,
         "region": "美国",
-        "jcrZone": "Q1",
+        "jcrZone": "Q2",
         "casZone": "4区",
         "scuZone": "数学 E",
         "reviewTime": "约12月",
-        "publisher": "Society for Industrial and Applied Mathematics Publications",
+        "publisher": "SIAM",
         "issn": "0036-1399",
         "eissn": "1095-712X",
         "frequency": "双月刊",
@@ -1211,7 +1211,7 @@ let journals = [
         "scope": "SIAM Journal on Applied Mathematics (SIAP) is an interdisciplinary journal containing research articles that treat scientific problems using methods that are of mathematical interest. Appropriate subject areas include the physical, engineering, financial, and life sciences. Examples are problems in fluid mechanics, including reaction-diffusion problems, sedimentation, combustion, and transport theory; solid mechanics; elasticity; electromagnetic theory and optics; materials science; mathematical biology, including population dynamics, biomechanics, and physiology; linear and nonlinear wave propagation, including scattering theory and wave propagation in random media; inverse problems; nonlinear dynamics; and stochastic processes, including queueing theory. Mathematical techniques of interest include asymptotic methods, bifurcation theory, dynamical systems theory, complex network theory, computational methods, and probabilistic and statistical methods.",
         "scopeCN": "本刊为跨学科应用数学期刊，刊载运用具有数学意义的方法解决科学问题的研究论文。适用领域涵盖物理、工程、金融及生命科学中的各类问题，如流体力学（反应扩散、沉积、燃烧、输运）、固体力学、电磁理论、材料科学、数学生物学（种群动力学、生物力学、生理学）、线性与非线性波的传播、反问题、非线性动力学、随机过程与排队论等；关注的数学技术包括渐近方法、分岔理论、动力系统理论、复杂网络理论、计算方法以及概率统计方法。",
         "researchAreas": "数学 - 应用数学, 物理 - 流体力学, 工程 - 固体力学, 生物 - 数学生物学",
-        "tips": "期刊定位为应用数学旗舰之一，JCR Q1、CAS数学4区，IF≈1.9，重质量不逐热点。川大“数学 E”明显低估其国际影响，国内评审对SIAM体系认可度高。期刊强调“数学驱动的跨学科应用”，偏好渐近、动力系统、概率统计等理论工具解决真实物理/生物/金融问题，纯数值实验或工程报告难以送审。对深度学习求解微分方程持“有限接受”态度：PINN、Neural Operators若仅作黑箱预测基本拒稿，需给出网络逼近误差与方程残差的渐近估计、收敛率或泛化界，并与经典有限差分/有限元进行可重复对比；同时展示网络在高维或参数反演中的唯一优势。审稿周期官宣12个月，实际常达14个月，年发文仅百篇，录取率<15%。投稿前务必用SIAP近三年文章作为理论对照组，引言中突出数学贡献而非工程创新；若含计算实验，需提供网格细化、参数敏感性及代码仓库。适合已具备较完整理论结果、且能证明深度学习在维数灾难或反问题中带来本质加速的团队投稿；",
+        "tips": "期刊定位为应用数学旗舰之一，JCR Q2、CAS数学4区，IF≈1.9，重质量不逐热点。川大“数学 E”，国内评审对SIAM体系认可度高。期刊强调“数学驱动的跨学科应用”，偏好渐近、动力系统、概率统计等理论工具解决真实物理/生物/金融问题，纯数值实验或工程报告难以送审。对深度学习求解微分方程持“有限接受”态度：PINN、Neural Operators若仅作黑箱预测基本拒稿，需给出网络逼近误差与方程残差的渐近估计、收敛率或泛化界，并与经典有限差分/有限元进行可重复对比；同时展示网络在高维或参数反演中的唯一优势。审稿周期官宣12个月，实际常达14个月，年发文仅百篇，录取率<15%。投稿前务必用SIAP近三年文章作为理论对照组，引言中突出数学贡献而非工程创新；若含计算实验，需提供网格细化、参数敏感性及代码仓库。适合已具备较完整理论结果、且能证明深度学习在维数灾难或反问题中带来本质加速的团队投稿；",
         "indexed": "SCIE",
         "warning": false
     }
