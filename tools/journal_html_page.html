@@ -2429,9 +2429,17 @@
             
             // 显示封面占位符
             function showCoverPlaceholder(img) {
+                // 检查img元素和其父元素是否存在
+                if (!img || !img.parentElement) {
+                    console.error('无法显示封面占位符：元素不存在');
+                    return;
+                }
+                
                 const placeholder = document.createElement('div');
                 placeholder.className = 'journal-cover-placeholder';
                 placeholder.innerHTML = '<div class="placeholder-icon">📚</div><div>封面<br>暂缺</div>';
+                
+                // 清空父元素内容并添加占位符
                 img.parentElement.innerHTML = '';
                 img.parentElement.appendChild(placeholder);
             }
