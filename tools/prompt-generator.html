@@ -724,17 +724,22 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, 
-                rgba(255,255,255,0) 0%, 
-                rgba(255,255,255,0.2) 50%, 
-                rgba(255,255,255,0) 100%);
+            background: linear-gradient(90deg,
+                    rgba(255, 255, 255, 0) 0%,
+                    rgba(255, 255, 255, 0.2) 50%,
+                    rgba(255, 255, 255, 0) 100%);
             background-size: 200% 100%;
             animation: shimmer 1.5s infinite;
         }
 
         @keyframes shimmer {
-            0% { background-position: -200% 0; }
-            100% { background-position: 200% 0; }
+            0% {
+                background-position: -200% 0;
+            }
+
+            100% {
+                background-position: 200% 0;
+            }
         }
 
         .template-card:hover .template-cover img {
@@ -1247,12 +1252,12 @@
             // 处理图片加载错误，支持本地封面图片回退
             function handleImageError(imgElement, localCoverPath, fallbackIcon) {
                 console.warn(`远程图片加载失败: ${imgElement.src}`);
-                
+
                 // 尝试使用本地封面图片
                 if (localCoverPath && localCoverPath.trim() !== '') {
                     // 构建正确的本地图片路径，相对于tools目录
                     let localImagePath = localCoverPath;
-                    
+
                     // 如果路径以'./'开头，替换为'../'
                     if (localCoverPath.startsWith('./')) {
                         localImagePath = '../' + localCoverPath.substring(2);
@@ -1261,24 +1266,24 @@
                     else if (!localCoverPath.startsWith('../')) {
                         localImagePath = '../' + localCoverPath;
                     }
-                    
+
                     console.log(`尝试加载本地封面图片: ${localImagePath}`);
                     console.log(`原始本地路径: ${localCoverPath}`);
-                    
+
                     // 设置新的src并立即检查
                     imgElement.src = localImagePath;
                     console.log(`图片元素当前src: ${imgElement.src}`);
-                    
+
                     // 为本地图片也添加错误处理，防止本地图片也不存在
-                    imgElement.onerror = function() {
+                    imgElement.onerror = function () {
                         console.error(`本地封面图片也加载失败: ${localImagePath}`);
                         console.error(`图片元素当前src: ${imgElement.src}`);
                         // 最后回退到图标
                         imgElement.parentElement.innerHTML = `<div class="template-icon">${fallbackIcon}</div>`;
                     };
-                    
+
                     // 添加成功加载的处理
-                    imgElement.onload = function() {
+                    imgElement.onload = function () {
                         console.log(`本地封面图片加载成功: ${localImagePath}`);
                     };
                 } else {
@@ -1423,7 +1428,7 @@
                 const templatesByCategory = {};
                 const categoryOrder = {}; // 记录分类首次出现的顺序
                 let orderIndex = 0;
-                
+
                 Object.entries(window.templates).forEach(([id, template]) => {
                     const category = template.category || '未分类';
                     if (!templatesByCategory[category]) {
@@ -1875,7 +1880,7 @@
                         keywords: ['日期', '时间', 'date', 'Date', '发表时间', '发布时间'],
                         config: {
                             type: 'date',
-                            placeholder: '请输入日期，按回车键转换：2025年12月 或 20251208',
+                            placeholder: '请输入日期，按回车键转换：2025年10月09日刊 或 20251009',
                             required: true
                         }
                     }
@@ -2082,12 +2087,12 @@
                 // 如果输入为空，直接返回
                 if (!value) return;
 
-                // 如果已经是中文格式（包含年或月），不做处理
-                if (value.includes('年') || value.includes('月')) {
+                // 如果已经是中文格式（包含年或月或刊），不做处理
+                if (value.includes('年') || value.includes('月') || value.includes('刊')) {
                     return;
                 }
 
-                // 处理数字格式：20251208 -> 2025年12月
+                // 处理数字格式：20251009 -> 2025年10月09日刊
                 if (/^\d{8}$/.test(value)) {
                     const year = value.substring(0, 4);
                     const month = value.substring(4, 6);
@@ -2101,9 +2106,9 @@
                     if (yearNum >= 1900 && yearNum <= 2100 &&
                         monthNum >= 1 && monthNum <= 12 &&
                         dayNum >= 1 && dayNum <= 31) {
-                        // 转换为中文格式，只显示年和月
-                        input.value = `${year}年${month}月`;
-                        showToast(`已识别：${year}年${month}月`);
+                        // 转换为中文格式，包含年月日和刊
+                        input.value = `${year}年${month}月${day}日刊`;
+                        showToast(`已识别：${year}年${month}月${day}日刊`);
                     }
                 }
                 // 处理简写格式：202512 -> 2025年12月
