@@ -2148,12 +2148,60 @@
             document.addEventListener('click', function (e) {
                 const memberCard = e.target.closest('.member-card');
                 if (memberCard && !e.target.closest('.copy-btn')) {
+                    // 检查用户是否正在选择文本
+                    const selection = window.getSelection();
+                    const selectedText = selection.toString().trim();
+                    
+                    // 如果有选中的文本，不触发跳转
+                    if (selectedText.length > 0) {
+                        return;
+                    }
+                    
+                    // 检查鼠标移动距离，如果移动距离较大，可能是拖拽选择文本
+                    if (memberCard.dataset.mouseDownTime) {
+                        const mouseDownTime = parseInt(memberCard.dataset.mouseDownTime);
+                        const currentTime = new Date().getTime();
+                        const timeDiff = currentTime - mouseDownTime;
+                        
+                        // 如果按下时间超过200ms，可能是文本选择操作
+                        if (timeDiff > 200) {
+                            return;
+                        }
+                    }
+                    
                     const memberId = memberCard.dataset.memberId;
                     const member = teamMembers.find(m => m.id === memberId);
                     if (member) {
                         showMemberDetails(member);
                     }
                 }
+            });
+            
+            // 添加鼠标按下事件监听，用于记录按下时间
+            document.addEventListener('mousedown', function (e) {
+                const memberCard = e.target.closest('.member-card');
+                if (memberCard) {
+                    memberCard.dataset.mouseDownTime = new Date().getTime().toString();
+                }
+            });
+            
+            // 添加鼠标选择事件监听，用于检测文本选择
+            document.addEventListener('selectstart', function (e) {
+                const memberCard = e.target.closest('.member-card');
+                if (memberCard) {
+                    memberCard.dataset.isSelecting = 'true';
+                }
+            });
+            
+            // 添加鼠标选择结束事件监听
+            document.addEventListener('mouseup', function (e) {
+                // 延迟清除选择状态，确保点击事件处理时能获取到选择状态
+                setTimeout(() => {
+                    const memberCards = document.querySelectorAll('.member-card');
+                    memberCards.forEach(card => {
+                        delete card.dataset.isSelecting;
+                    });
+                }, 10);
             });
 
             // 关闭模态框
