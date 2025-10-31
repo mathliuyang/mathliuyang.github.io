@@ -1275,18 +1275,7 @@
                 <li><a href="contact.html">联系</a></li>
             </ul>
             <button class="theme-btn" id="theme-toggle">
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="12" cy="12" r="5"></circle>
-                    <line x1="12" y1="1" x2="12" y2="3"></line>
-                    <line x1="12" y1="21" x2="12" y2="23"></line>
-                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-                    <line x1="1" y1="12" x2="3" y2="12"></line>
-                    <line x1="21" y1="12" x2="23" y2="12"></line>
-                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-                </svg>
+                <span id="themeIcon">◐</span>
             </button>
         </div>
     </nav>
@@ -1527,9 +1516,22 @@
             // 设置主题切换功能
             const themeToggle = document.getElementById('theme-toggle');
             if (themeToggle) {
+                // 获取主题图标元素
+                const themeIcon = document.getElementById('themeIcon');
+                
+                // 设置初始图标状态
+                const currentTheme = document.documentElement.getAttribute('data-theme');
+                if (themeIcon) {
+                    themeIcon.textContent = currentTheme === 'dark' ? '◐' : '◑';
+                    themeIcon.style.color = currentTheme === 'dark' ? '#ffffff' : '#000000';
+                }
+                
                 // 移除之前的事件监听器（如果有的话）
                 const newThemeToggle = themeToggle.cloneNode(true);
                 themeToggle.parentNode.replaceChild(newThemeToggle, themeToggle);
+                
+                // 获取新元素中的图标元素
+                const newThemeIcon = document.getElementById('themeIcon');
                 
                 // 添加主题切换事件监听器
                 newThemeToggle.addEventListener('click', function () {
@@ -1537,6 +1539,12 @@
                     const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
                     document.documentElement.setAttribute('data-theme', newTheme);
                     localStorage.setItem('theme', newTheme);
+                    
+                    // 更新图标
+                    if (newThemeIcon) {
+                        newThemeIcon.textContent = newTheme === 'dark' ? '◐' : '◑';
+                        newThemeIcon.style.color = newTheme === 'dark' ? '#ffffff' : '#000000';
+                    }
                 });
             }
             
@@ -2033,11 +2041,26 @@
         function setupEventListeners() {
             // 主题切换
             const themeToggle = document.getElementById('theme-toggle');
+            const themeIcon = document.getElementById('themeIcon');
+            
+            // 设置初始图标状态
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            if (themeIcon) {
+                themeIcon.textContent = currentTheme === 'dark' ? '◐' : '◑';
+                themeIcon.style.color = currentTheme === 'dark' ? '#ffffff' : '#000000';
+            }
+            
             themeToggle.addEventListener('click', function () {
                 const currentTheme = document.documentElement.getAttribute('data-theme');
                 const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
                 document.documentElement.setAttribute('data-theme', newTheme);
                 localStorage.setItem('theme', newTheme);
+                
+                // 更新图标
+                if (themeIcon) {
+                    themeIcon.textContent = newTheme === 'dark' ? '◐' : '◑';
+                    themeIcon.style.color = newTheme === 'dark' ? '#ffffff' : '#000000';
+                }
             });
 
             // 基金信息中英文切换
