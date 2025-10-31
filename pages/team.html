@@ -2089,6 +2089,17 @@
                         nameElement.textContent = nameElement.dataset.cn;
                     }
                 });
+                
+                // 如果当前是基金预览模式且有选中的基金，立即更新预览内容
+                if (previewMode === 'funding') {
+                    const checkedBoxes = document.querySelectorAll('.funding-checkbox:checked');
+                    if (checkedBoxes.length > 0) {
+                        updatePreview();
+                        // 显示语言切换通知
+                        const isEnglish = this.classList.contains('active');
+                        showPreviewNotification(`已切换到${isEnglish ? '英文' : '中文'}模式`);
+                    }
+                }
             });
 
             // 搜索功能
