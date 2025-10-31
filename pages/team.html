@@ -1615,6 +1615,9 @@
 
             // 设置事件监听器
             setupEventListeners();
+            
+            // 确保主题切换功能正常工作
+            setupThemeToggle();
 
             // 初始化拖拽回退功能
             setupDragUndo();
@@ -2039,30 +2042,6 @@
 
         // 设置事件监听器
         function setupEventListeners() {
-            // 主题切换
-            const themeToggle = document.getElementById('theme-toggle');
-            const themeIcon = document.getElementById('themeIcon');
-            
-            // 设置初始图标状态
-            const currentTheme = document.documentElement.getAttribute('data-theme');
-            if (themeIcon) {
-                themeIcon.textContent = currentTheme === 'dark' ? '◐' : '◑';
-                themeIcon.style.color = currentTheme === 'dark' ? '#ffffff' : '#000000';
-            }
-            
-            themeToggle.addEventListener('click', function () {
-                const currentTheme = document.documentElement.getAttribute('data-theme');
-                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-                document.documentElement.setAttribute('data-theme', newTheme);
-                localStorage.setItem('theme', newTheme);
-                
-                // 更新图标
-                if (themeIcon) {
-                    themeIcon.textContent = newTheme === 'dark' ? '◐' : '◑';
-                    themeIcon.style.color = newTheme === 'dark' ? '#ffffff' : '#000000';
-                }
-            });
-
             // 基金信息中英文切换
             const fundingLangToggle = document.getElementById('funding-lang-toggle');
             fundingLangToggle.addEventListener('click', function () {
@@ -2199,6 +2178,42 @@
 
             // 复制选中的基金信息
             // 注意：此功能已移至复制预览按钮，避免功能冗余
+        }
+
+        // 设置主题切换功能
+        function setupThemeToggle() {
+            const themeToggle = document.getElementById('theme-toggle');
+            const themeIcon = document.getElementById('themeIcon');
+            
+            if (!themeToggle || !themeIcon) return;
+            
+            // 移除之前的事件监听器（如果有的话）
+            const newThemeToggle = themeToggle.cloneNode(true);
+            themeToggle.parentNode.replaceChild(newThemeToggle, themeToggle);
+            
+            // 获取新元素中的图标元素
+            const newThemeIcon = document.getElementById('themeIcon');
+            
+            // 设置初始图标状态
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            if (newThemeIcon) {
+                newThemeIcon.textContent = currentTheme === 'dark' ? '◐' : '◑';
+                newThemeIcon.style.color = currentTheme === 'dark' ? '#ffffff' : '#000000';
+            }
+            
+            // 添加主题切换事件监听器
+            newThemeToggle.addEventListener('click', function () {
+                const currentTheme = document.documentElement.getAttribute('data-theme');
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                document.documentElement.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+                
+                // 更新图标
+                if (newThemeIcon) {
+                    newThemeIcon.textContent = newTheme === 'dark' ? '◐' : '◑';
+                    newThemeIcon.style.color = newTheme === 'dark' ? '#ffffff' : '#000000';
+                }
+            });
         }
 
         // 渲染团队成员卡片
