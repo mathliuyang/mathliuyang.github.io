@@ -942,7 +942,7 @@
         <!-- Sidebar -->
         <aside class="sidebar">
             <div class="profile">
-                <div class="avatar"><img src="../assets/images/avatar.jpg" alt="头像"
+                <div class="avatar"><img id="avatarImg" src="../assets/images/avatar.jpg" alt="头像"
                         style="width: 120px; height: 120px; border-radius: 50%; object-fit: cover;"></div>
                 <h1>刘洋<a href="https://orcid.org/0000-0001-7668-3467" target="_blank" data-tooltip="ORCID"
                         style="margin-left: 6px; display: inline-block; text-decoration: none;"><img
@@ -1662,6 +1662,32 @@
                     }
                 });
             });
+
+            // 头像点击计数和跳转逻辑
+            let avatarClickCount = 0;
+            let avatarClickTimer = null;
+            const avatarImg = document.getElementById('avatarImg');
+            
+            if (avatarImg) {
+                avatarImg.addEventListener('click', function() {
+                    avatarClickCount++;
+                    
+                    // 清除之前的定时器
+                    if (avatarClickTimer) {
+                        clearTimeout(avatarClickTimer);
+                    }
+                    
+                    // 设置新的定时器，2秒后重置计数
+                    avatarClickTimer = setTimeout(() => {
+                        avatarClickCount = 0;
+                    }, 2000);
+                    
+                    // 如果点击次数达到5次，跳转到team.html
+                    if (avatarClickCount >= 5) {
+                        window.location.href = 'team.html';
+                    }
+                });
+            }
         });
     </script>
 </body>
