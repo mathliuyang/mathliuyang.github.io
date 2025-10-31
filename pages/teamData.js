@@ -44,7 +44,7 @@ const teamMembers = [
         emails: ["liudong@uestc.edu.cn"],
         phones: ["13980956120"],
         orcid: "0009-0002-4768-9039",
-        avatar: "https://example.com/avatar/liudong.jpg", // 可替换为实际头像链接
+        avatar: "../assets/avatar/liudong.jpg", // 可替换为实际头像链接
         position: "团队负责人"
     },
     {
@@ -60,7 +60,7 @@ const teamMembers = [
         emails: ["wangkai@example.com"],
         phones: ["13812345678"],
         orcid: "0000-0002-1234-5678",
-        avatar: "https://example.com/avatar/wangkai.jpg",
+        avatar: "../assets/avatar/wangkai.jpg",
         position: "核心成员"
     },
     {
@@ -76,7 +76,7 @@ const teamMembers = [
         emails: ["wangfei@example.com"],
         phones: ["13987654321"],
         orcid: "0000-0002-2345-6789",
-        avatar: "https://example.com/avatar/wangfei.jpg",
+        avatar: "../assets/avatar/wangfei.jpg",
         position: "核心成员"
     },
     {
@@ -92,7 +92,7 @@ const teamMembers = [
         emails: ["liuzhouyu@example.com"],
         phones: ["13611111111"],
         orcid: "0000-0002-3456-7890",
-        avatar: "https://example.com/avatar/liuzhouyu.jpg",
+        avatar: "../assets/avatar/liuzhouyu.jpg",
         position: "研究成员"
     },
     {
@@ -108,7 +108,7 @@ const teamMembers = [
         emails: ["danghaoning@example.com"],
         phones: ["13722222222"],
         orcid: "0000-0002-4567-8901",
-        avatar: "https://example.com/avatar/danghaoning.jpg",
+        avatar: "../assets/avatar/danghaoning.jpg",
         position: "研究成员"
     },
     {
@@ -124,7 +124,7 @@ const teamMembers = [
         emails: ["wangjunfeng@example.com"],
         phones: ["13833333333"],
         orcid: "0000-0002-5678-9012",
-        avatar: "https://example.com/avatar/wangjunfeng.jpg",
+        avatar: "../assets/avatar/wangjunfeng.jpg",
         position: "研究成员"
     },
     {
@@ -140,7 +140,7 @@ const teamMembers = [
         emails: ["zhangbin@example.com"],
         phones: ["13944444444"],
         orcid: "0000-0002-6789-0123",
-        avatar: "https://example.com/avatar/zhangbin.jpg",
+        avatar: "../assets/avatar/zhangbin.jpg",
         position: "研究成员"
     },
     {
@@ -156,7 +156,7 @@ const teamMembers = [
         emails: ["xule@example.com"],
         phones: ["13655555555"],
         orcid: "0000-0002-7890-1234",
-        avatar: "https://example.com/avatar/xule.jpg",
+        avatar: "../assets/avatar/xule.jpg",
         position: "研究成员"
     },
     {
@@ -172,7 +172,7 @@ const teamMembers = [
         emails: ["luomaokang@example.com"],
         phones: ["13766666666"],
         orcid: "0000-0002-8901-2345",
-        avatar: "https://example.com/avatar/luomaokang.jpg",
+        avatar: "../assets/avatar/luomaokang.jpg",
         position: "核心成员"
     },
     {
@@ -188,7 +188,7 @@ const teamMembers = [
         emails: ["fengziliang@example.com"],
         phones: ["13877777777"],
         orcid: "0000-0002-9012-3456",
-        avatar: "https://example.com/avatar/fengziliang.jpg",
+        avatar: "../assets/avatar/fengziliang.jpg",
         position: "研究成员"
     },
     {
@@ -204,7 +204,7 @@ const teamMembers = [
         emails: ["zhangjinchao@example.com"],
         phones: ["13988888888"],
         orcid: "0000-0002-0123-4567",
-        avatar: "https://example.com/avatar/zhangjinchao.jpg",
+        avatar: "../assets/avatar/zhangjinchao.jpg",
         position: "研究成员"
     },
     {
@@ -220,7 +220,7 @@ const teamMembers = [
         emails: ["zhangqian@example.com"],
         phones: ["13699999999"],
         orcid: "0000-0002-1234-5678",
-        avatar: "https://example.com/avatar/zhangqian.jpg",
+        avatar: "../assets/avatar/zhangqian.jpg",
         position: "研究成员"
     },
     {
@@ -236,13 +236,13 @@ const teamMembers = [
         emails: ["zhaochen@example.com"],
         phones: ["13700000000"],
         orcid: "0000-0002-2345-6789",
-        avatar: "https://example.com/avatar/zhaochen.jpg",
+        avatar: "../assets/avatar/zhaochen.jpg",
         position: "研究成员"
     },
     {
         id: "liuzhengu",
         name: "刘贞谷",
-        englishName: "Zhengu Liu",
+        englishName: "Zhenyu Liu",
         gender: "男",
         degree: "博士",
         title: "副教授",
@@ -252,7 +252,7 @@ const teamMembers = [
         emails: ["liuzhengu@example.com"],
         phones: ["13811111111"],
         orcid: "0000-0002-3456-7890",
-        avatar: "https://example.com/avatar/liuzhengu.jpg",
+        avatar: "../assets/avatar/liuzhenyu.jpg",
         position: "核心成员"
     },
     {
@@ -268,7 +268,7 @@ const teamMembers = [
         emails: ["liaozhen@example.com"],
         phones: ["13922222222"],
         orcid: "0000-0002-4567-8901",
-        avatar: "https://example.com/avatar/liaozhen.jpg",
+        avatar: "../assets/avatar/liaozhen.jpg",
         position: "研究成员"
     },
     {
@@ -284,7 +284,7 @@ const teamMembers = [
         emails: ["wuchao@example.com"],
         phones: ["13633333333"],
         orcid: "0000-0002-5678-9012",
-        avatar: "https://example.com/avatar/wuchao.jpg",
+        avatar: "../assets/avatar/wuchao.jpg",
         position: "研究成员"
     },
     {
@@ -300,7 +300,7 @@ const teamMembers = [
         emails: ["liuyang@example.com"],
         phones: ["13744444444"],
         orcid: "0000-0002-6789-0123",
-        avatar: "../assets/cover/Science/001/001.jpg",
+        avatar: "../assets/avatar/liuyang.jpg",
         position: "研究成员"
     },
     {
@@ -316,7 +316,7 @@ const teamMembers = [
         emails: ["chenqilong@example.com"],
         phones: ["13855555555"],
         orcid: "0000-0002-7890-1234",
-        avatar: "https://example.com/avatar/chenqilong.jpg",
+        avatar: "../assets/avatar/chenqilong.jpg",
         position: "研究成员"
     },
     {
@@ -332,7 +332,7 @@ const teamMembers = [
         emails: ["jiangyong@example.com"],
         phones: ["13966666666"],
         orcid: "0000-0002-8901-2345",
-        avatar: "https://example.com/avatar/jiangyong.jpg",
+        avatar: "../assets/avatar/jiangyong.jpg",
         position: "研究成员"
     },
     {
@@ -348,7 +348,7 @@ const teamMembers = [
         emails: ["hekangjun@example.com"],
         phones: ["13677777777"],
         orcid: "0000-0002-9012-3456",
-        avatar: "https://example.com/avatar/hekangjun.jpg",
+        avatar: "../assets/avatar/hekangjun.jpg",
         position: "研究成员"
     },
     {
@@ -364,7 +364,7 @@ const teamMembers = [
         emails: ["renzhiyuan@example.com"],
         phones: ["13888888888"],
         orcid: "0000-0002-0123-4567",
-        avatar: "https://example.com/avatar/renzhiyuan.jpg",
+        avatar: "../assets/avatar/renzhiyuan.jpg",
         position: "研究成员"
     },
     {
@@ -380,7 +380,7 @@ const teamMembers = [
         emails: ["zhaixiyan@example.com"],
         phones: ["13999999999"],
         orcid: "0000-0002-1234-5678",
-        avatar: "https://example.com/avatar/zhaixiyan.jpg",
+        avatar: "../assets/avatar/zhaixiyan.jpg",
         position: "研究成员"
     },
     {
@@ -396,7 +396,7 @@ const teamMembers = [
         emails: ["zhangzhenyuan@example.com"],
         phones: ["13600000000"],
         orcid: "0000-0002-2345-6789",
-        avatar: "https://example.com/avatar/zhangzhenyuan.jpg",
+        avatar: "../assets/avatar/zhangzhenyuan.jpg",
         position: "研究成员"
     }
 ];
