@@ -44,7 +44,7 @@ const teamMembers = [
         emails: ["liudong@npic.ac.cn"],
         phones: ["13980956120"],
         orcid: "0009-0002-4768-9039",
-        avatar: "/assets/avatar/liudong.jpg",
+        avatar: "../assets/avatar/liudong.jpg",
         position: "团队负责人"
     },
     {
@@ -59,7 +59,7 @@ const teamMembers = [
         institutionEn: "Nuclear Power Institute of China, State Key Laboratory of Advanced Nuclear Energy Technology, Chengdu 610213, China",
         emails: ["lxu_tju@outlook.com"],
         phones: ["18482129886"],
-        avatar: "/assets/avatar/xule.jpg",
+        avatar: "../assets/avatar/xule.jpg",
         position: "研究成员"
     },
     {
@@ -74,7 +74,7 @@ const teamMembers = [
         institutionEn: "College of Computer Science (School of Software and School of Artificial Intelligence), Sichuan University, Chengdu 610065, China",
         emails: ["mathliuyang@163.com"],
         phones: ["19522123213"],
-        avatar: "/assets/avatar/liuyang.jpg",
+        avatar: "../assets/avatar/liuyang.jpg",
         position: "核心成员"
     },
     {
@@ -89,7 +89,7 @@ const teamMembers = [
         institutionEn: "Nuclear Power Institute of China, State Key Laboratory of Advanced Nuclear Energy Technology, Chengdu 610213, China",
         emails: ["npicliaozhen@163.com"],
         phones: ["19180770226"],
-        avatar: "/assets/avatar/liaozhen.jpg",
+        avatar: "../assets/avatar/liaozhen.jpg",
         position: "研究成员"
     },
     {
@@ -104,7 +104,7 @@ const teamMembers = [
         institutionEn: "Nuclear Power Institute of China, State Key Laboratory of Advanced Nuclear Energy Technology, Chengdu 610213, China",
         emails: ["1135228970@qq.com"],
         phones: [],
-        avatar: "/assets/avatar/jiangyong.jpg",
+        avatar: "../assets/avatar/jiangyong.jpg",
         position: "研究成员"
     },
     {
@@ -119,7 +119,7 @@ const teamMembers = [
         institutionEn: "College of Computer Science (School of Software and School of Artificial Intelligence), Sichuan University, Chengdu 610065, China",
         emails: ["wangjf@scu.edu.cn"],
         phones: [],
-        avatar: "/assets/avatar/wangjunfeng.jpg",
+        avatar: "../assets/avatar/wangjunfeng.jpg",
         position: "核心成员"
     },
     {
@@ -134,7 +134,7 @@ const teamMembers = [
         institutionEn: "College of Computer Science (School of Software and School of Artificial Intelligence), Sichuan University, Chengdu 610065, China",
         emails: ["makaluo@scu.edu.cn"],
         phones: [],
-        avatar: "/assets/avatar/luomaokang.jpg",
+        avatar: "../assets/avatar/luomaokang.jpg",
         position: "核心成员"
     },
     {
@@ -149,7 +149,7 @@ const teamMembers = [
         institutionEn: "School of Mathematics and Statistics, Xi'an Jiaotong University, Xi'an 710049, China",
         emails: ["feiwang.xjtu@xjtu.edu.cn"],
         phones: ["13119131365"],
-        avatar: "/assets/avatar/wangfei.jpg",
+        avatar: "../assets/avatar/wangfei.jpg",
         position: "核心成员"
     },
     {
@@ -164,7 +164,7 @@ const teamMembers = [
         institutionEn: "School of Mathematics and Statistics, Xi'an Jiaotong University, Xi'an 710049, China",
         emails: ["haoningdang.xjtu@stu.xjtu.edu.cn"],
         phones: ["18340619868"],
-        avatar: "/assets/avatar/danghaoning.jpg",
+        avatar: "../assets/avatar/danghaoning.jpg",
         position: "研究成员"
     },
     {
@@ -179,7 +179,7 @@ const teamMembers = [
         institutionEn: "Zhejiang Institute of Modern Physics, School of Physics, Zhejiang University, Hangzhou 310058, China",
         emails: ["wangkai1@zju.edu.cn"],
         phones: [],
-        avatar: "/assets/avatar/wangkai.jpg",
+        avatar: "../assets/avatar/wangkai.jpg",
         position: "核心成员"
     },
     {
@@ -194,7 +194,7 @@ const teamMembers = [
         institutionEn: "School of Energy and Power Engineering, Xi'an Jiaotong University, Xi'an 710049, China",
         emails: ["zhouyuliu@xjtu.edu.cn"],
         phones: ["17791978005"],
-        avatar: "/assets/avatar/liuzhouyu.jpg",
+        avatar: "../assets/avatar/liuzhouyu.jpg",
         position: "研究成员"
     },
     {
@@ -209,7 +209,7 @@ const teamMembers = [
         institutionEn: "Nuclear Power Institute of China, State Key Laboratory of Advanced Nuclear Energy Technology, Chengdu 610213, China",
         emails: ["jsszwtzb@163.com"],
         phones: ["13551191758"],
-        avatar: "/assets/avatar/zhangbin.jpg",
+        avatar: "../assets/avatar/zhangbin.jpg",
         position: "研究成员"
     },
     {
@@ -224,7 +224,7 @@ const teamMembers = [
         institutionEn: "Nuclear Power Institute of China, State Key Laboratory of Advanced Nuclear Energy Technology, Chengdu 610213, China",
         emails: ["22031110387@stu.xidian.edu.cn"],
         phones: ["18894330931"],
-        avatar: "/assets/avatar/wuchao.jpg",
+        avatar: "../assets/avatar/wuchao.jpg",
         position: "研究成员"
     },
     {
@@ -239,7 +239,7 @@ const teamMembers = [
         institutionEn: "Fundamental Science on Nuclear Safety and Simulation Technology Laboratory, Harbin Engineering University, Harbin, 150001, China",
         emails: ["13935397912@hrbeu.edu.cn"],
         phones: ["13935397912"],
-        avatar: "/assets/avatar/zhangjinchao.jpg",
+        avatar: "../assets/avatar/zhangjinchao.jpg",
         position: "研究成员"
     },
     {
@@ -254,7 +254,7 @@ const teamMembers = [
         institutionEn: "Nuclear Power Institute of China, State Key Laboratory of Advanced Nuclear Energy Technology, Chengdu 610213, China",
         emails: ["894860272@qq.com"],
         phones: ["19980816294"],
-        avatar: "/assets/avatar/chenqilong.jpg",
+        avatar: "../assets/avatar/chenqilong.jpg",
         position: "研究成员"
     },
     {
@@ -269,7 +269,7 @@ const teamMembers = [
         institutionEn: "Nuclear Power Institute of China, State Key Laboratory of Advanced Nuclear Energy Technology, Chengdu 610213, China",
         emails: ["zhangqian0515@zju.edu.cn"],
         phones: ["17604664028"],
-        avatar: "/assets/avatar/zhangqian.jpg",
+        avatar: "../assets/avatar/zhangqian.jpg",
         position: "研究成员"
     },
     {
@@ -284,7 +284,7 @@ const teamMembers = [
         institutionEn: "Nuclear Power Institute of China, State Key Laboratory of Advanced Nuclear Energy Technology, Chengdu 610213, China",
         emails: ["820982892@qq.com"],
         phones: ["18382350304"],
-        avatar: "/assets/avatar/hekangjun.jpg",
+        avatar: "../assets/avatar/hekangjun.jpg",
         position: "研究成员"
     },
     {
@@ -299,7 +299,7 @@ const teamMembers = [
         institutionEn: "Nuclear Power Institute of China, State Key Laboratory of Advanced Nuclear Energy Technology, Chengdu 610213, China",
         emails: ["zhenyuliuchn@foxmail.com"],
         phones: ["17828093154"],
-        avatar: "/assets/avatar/liuzhenyu.jpg",
+        avatar: "../assets/avatar/liuzhenyu.jpg",
         position: "核心成员"
     },
     {
@@ -314,7 +314,7 @@ const teamMembers = [
         institutionEn: "Nuclear Power Institute of China, State Key Laboratory of Advanced Nuclear Energy Technology, Chengdu 610213, China",
         emails: ["zhaochen@npic.ac.cn"],
         phones: ["15680832829"],
-        avatar: "/assets/avatar/zhaochen.jpg",
+        avatar: "../assets/avatar/zhaochen.jpg",
         position: "研究成员"
     },
     {
@@ -330,7 +330,7 @@ const teamMembers = [
         emails: ["renzhiyuan@uestc.edu.cn"],
         phones: [],
         orcid: "0009-0005-5682-787X",
-        avatar: "/assets/avatar/renzhiyuan.jpg",
+        avatar: "../assets/avatar/renzhiyuan.jpg",
         position: "研究成员"
     },
     {
@@ -345,7 +345,7 @@ const teamMembers = [
         institutionEn: "College of Computer Science (School of Software and School of Artificial Intelligence), Sichuan University, Chengdu 610065, China",
         emails: ["fengziliang@scu.edu.cn"],
         phones: ["13982101801"],
-        avatar: "/assets/avatar/fengziliang.jpg",
+        avatar: "../assets/avatar/fengziliang.jpg",
         position: "研究成员"
     },
     {
@@ -360,7 +360,7 @@ const teamMembers = [
         institutionEn: "Nuclear Power Institute of China, State Key Laboratory of Advanced Nuclear Energy Technology, Chengdu 610213, China",
         emails: [],
         phones: [],
-        avatar: "/assets/avatar/zhaixiyan.jpg",
+        avatar: "../assets/avatar/zhaixiyan.jpg",
         position: "研究成员"
     },
     {
@@ -375,7 +375,7 @@ const teamMembers = [
         institutionEn: "Nuclear Power Institute of China, State Key Laboratory of Advanced Nuclear Energy Technology, Chengdu 610213, China",
         emails: [],
         phones: [],
-        avatar: "/assets/avatar/zhangzhenyuan.jpg",
+        avatar: "../assets/avatar/zhangzhenyuan.jpg",
         position: "研究成员"
     },
     {
@@ -390,7 +390,7 @@ const teamMembers = [
         institutionEn: "Institute of Applied Physics and Computational Mathematics, China Academy of Engineering Physics, Beijing 100094, China",
         emails: ["deng_li@iapcm.ac.cn"],
         phones: [],
-        avatar: "/assets/avatar/dengli.jpg",
+        avatar: "../assets/avatar/dengli.jpg",
         position: "核心成员"
     },
     {
@@ -405,7 +405,7 @@ const teamMembers = [
         institutionEn: "Nuclear Power Institute of China, State Key Laboratory of Advanced Nuclear Energy Technology, Chengdu 610213, China",
         emails: [],
         phones: [],
-        avatar: "/assets/avatar/wangxueqiang.jpg",
+        avatar: "../assets/avatar/wangxueqiang.jpg",
         position: "研究成员"
     },
     {
@@ -420,7 +420,7 @@ const teamMembers = [
         institutionEn: "Nuclear Power Institute of China, State Key Laboratory of Advanced Nuclear Energy Technology, Chengdu 610213, China",
         emails: [],
         phones: [],
-        avatar: "/assets/avatar/yucaiyang.jpg",
+        avatar: "../assets/avatar/yucaiyang.jpg",
         position: "研究成员"
     }
 ];
