@@ -2512,7 +2512,9 @@ ORCID: ${member.orcid || '未提供'}`;
 
                         const fundingText = formatFundingInfo(selectedFunding, isEnglish);
                         copyToClipboard(fundingText);
-                        showPreviewNotification(`已复制 ${checkedBoxes.length} 个基金信息`);
+                        
+                        // 显示弹窗提醒
+                        showCopySuccessModal(`已成功复制 ${checkedBoxes.length} 个基金信息到剪贴板`);
                         
                         // 更新预览
                         updatePreview();
@@ -2538,7 +2540,9 @@ ORCID: ${member.orcid || '未提供'}`;
                         }).join('\n\n');
 
                         copyToClipboard(memberText);
-                        showPreviewNotification(`已复制 ${checkedBoxes.length} 个成员信息`);
+                        
+                        // 显示弹窗提醒
+                        showCopySuccessModal(`已成功复制 ${checkedBoxes.length} 个成员信息到剪贴板`);
                         
                         // 更新预览
                         updatePreview();
@@ -2739,6 +2743,125 @@ ORCID: ${member.orcid || '未提供'}`;
             setTimeout(() => {
                 notification.classList.remove('show');
             }, 2000);
+        }
+
+        // 显示复制成功弹窗
+        function showCopySuccessModal(message) {
+            // 创建弹窗元素
+            const modal = document.createElement('div');
+            modal.className = 'copy-success-modal';
+            modal.innerHTML = `
+                <div class="modal-content">
+                    <div class="modal-icon">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#4CAF50" stroke-width="2">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                        </svg>
+                    </div>
+                    <div class="modal-message">${message}</div>
+                    <button class="modal-close-btn">确定</button>
+                </div>
+            `;
+
+            // 添加弹窗样式
+            const style = document.createElement('style');
+            style.textContent = `
+                .copy-success-modal {
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background-color: rgba(0, 0, 0, 0.5);
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    z-index: 10000;
+                    animation: fadeIn 0.3s ease;
+                }
+                
+                .copy-success-modal .modal-content {
+                    background-color: white;
+                    border-radius: 8px;
+                    padding: 24px;
+                    max-width: 400px;
+                    width: 90%;
+                    text-align: center;
+                    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+                    animation: slideIn 0.3s ease;
+                }
+                
+                .copy-success-modal .modal-icon {
+                    margin-bottom: 16px;
+                }
+                
+                .copy-success-modal .modal-message {
+                    font-size: 16px;
+                    color: #333;
+                    margin-bottom: 20px;
+                    line-height: 1.5;
+                }
+                
+                .copy-success-modal .modal-close-btn {
+                    background-color: #4CAF50;
+                    color: white;
+                    border: none;
+                    border-radius: 4px;
+                    padding: 10px 24px;
+                    font-size: 14px;
+                    cursor: pointer;
+                    transition: background-color 0.2s;
+                }
+                
+                .copy-success-modal .modal-close-btn:hover {
+                    background-color: #45a049;
+                }
+                
+                @keyframes fadeIn {
+                    from { opacity: 0; }
+                    to { opacity: 1; }
+                }
+                
+                @keyframes slideIn {
+                    from { transform: translateY(-20px); opacity: 0; }
+                    to { transform: translateY(0); opacity: 1; }
+                }
+            `;
+
+            // 添加样式和弹窗到页面
+            document.head.appendChild(style);
+            document.body.appendChild(modal);
+
+            // 添加关闭按钮事件
+            const closeBtn = modal.querySelector('.modal-close-btn');
+            closeBtn.addEventListener('click', function() {
+                modal.style.animation = 'fadeOut 0.3s ease';
+                setTimeout(() => {
+                    document.body.removeChild(modal);
+                    document.head.removeChild(style);
+                }, 300);
+            });
+
+            // 点击弹窗背景也可以关闭
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    modal.style.animation = 'fadeOut 0.3s ease';
+                    setTimeout(() => {
+                        document.body.removeChild(modal);
+                        document.head.removeChild(style);
+                    }, 300);
+                }
+            });
+
+            // 添加淡出动画
+            const fadeOutStyle = document.createElement('style');
+            fadeOutStyle.textContent = `
+                @keyframes fadeOut {
+                    from { opacity: 1; }
+                    to { opacity: 0; }
+                }
+            `;
+            document.head.appendChild(fadeOutStyle);
         }
 
         // 更新复制函数以支持预览
