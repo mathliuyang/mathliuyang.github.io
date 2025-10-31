@@ -1,0 +1,2876 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AIDING团队信息 - Team</title>
+    <script src="teamData.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #000000;
+            --text: #ffffff;
+            --text-dim: #666666;
+            --accent: #ffffff;
+            --border: rgba(255, 255, 255, 0.08);
+            --card-bg: rgba(255, 255, 255, 0.02);
+            --shadow: rgba(0, 0, 0, 0.3);
+        }
+
+        [data-theme="light"] {
+            --bg: #ffffff;
+            --text: #000000;
+            --text-dim: #999999;
+            --accent: #000000;
+            --border: rgba(0, 0, 0, 0.08);
+            --card-bg: rgba(0, 0, 0, 0.02);
+            --shadow: rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.8;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            letter-spacing: -0.02em;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1.5rem 4rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        [data-theme="light"] nav {
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        .logo {
+            font-size: 1rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            cursor: pointer;
+        }
+
+        .nav-right {
+            display: flex;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-dim);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            letter-spacing: 0.02em;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--text);
+        }
+
+        .theme-btn {
+            width: 36px;
+            height: 36px;
+            border: 1px solid var(--border);
+            background: transparent;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .theme-btn:hover {
+            border-color: var(--text);
+            transform: scale(1.1);
+        }
+
+        /* 移动端触摸优化 */
+        @media (hover: none) and (pointer: coarse) {
+            .theme-btn:active {
+                border-color: var(--text);
+                transform: scale(1.05);
+            }
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 140px 4rem 6rem;
+        }
+
+        /* Header Section */
+        .header {
+            margin-bottom: 4rem;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        .header h1 {
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 300;
+            margin-bottom: 1rem;
+            letter-spacing: -0.02em;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            color: var(--text-dim);
+            max-width: 600px;
+        }
+
+        /* Controls Section */
+        .controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 300px;
+            padding: 0.8rem 1.2rem;
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text);
+            font-size: 0.9rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: var(--text);
+        }
+
+        .filter-btn {
+            padding: 0.8rem 1.5rem;
+            border: 1px solid var(--border);
+            background: transparent;
+            color: var(--text-dim);
+            font-size: 0.85rem;
+            letter-spacing: 0.05em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            border-color: var(--text);
+            color: var(--text);
+            background: var(--text);
+            color: var(--bg);
+        }
+
+        /* Team Members Grid */
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 4rem;
+        }
+
+        .member-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 0;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            opacity: 0;
+            animation: fadeInUp 0.6s ease forwards;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .member-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px var(--shadow);
+        }
+
+        .member-card:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .member-card:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .member-card:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+
+        .member-card:nth-child(4) {
+            animation-delay: 0.4s;
+        }
+
+        .member-card:nth-child(5) {
+            animation-delay: 0.5s;
+        }
+
+        .member-card:nth-child(6) {
+            animation-delay: 0.6s;
+        }
+
+        .card-header {
+            display: flex;
+            padding: 2rem 2rem 1.5rem;
+            gap: 1.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .avatar-section {
+            flex-shrink: 0;
+        }
+
+        .member-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--text), var(--text-dim));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            overflow: hidden;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .member-card:hover .member-avatar {
+            transform: scale(1.05);
+            border-color: var(--accent);
+        }
+
+        .member-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .info-section {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .member-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .member-info h3 {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin: 0;
+            color: var(--text);
+        }
+
+        .member-info .english-name {
+            font-size: 0.9rem;
+            color: var(--text-dim);
+            margin: 0;
+        }
+
+        .tags-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.375rem;
+            margin-top: 0.75rem;
+        }
+
+        .tag {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.2rem 0.6rem;
+            border-radius: 0.375rem;
+            font-size: 0.7rem;
+            font-weight: 500;
+            letter-spacing: 0.03em;
+            transition: all 0.2s ease;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            color: var(--text-dim);
+        }
+
+        .tag-title {
+            color: var(--text);
+            border-color: var(--accent);
+        }
+
+        .tag-position {
+            color: var(--text);
+            border-color: var(--accent);
+            opacity: 0.9;
+        }
+
+        .tag:hover {
+            transform: translateY(-1px);
+            border-color: var(--accent);
+            color: var(--text);
+            box-shadow: 0 2px 4px var(--shadow);
+        }
+
+        .card-details {
+            padding: 1.5rem 2rem 2rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .member-details {
+            margin-top: 0;
+        }
+
+        .detail-row {
+            display: flex;
+            margin-bottom: 1rem;
+            font-size: 0.85rem;
+            align-items: flex-start;
+        }
+
+        .detail-label {
+            width: 80px;
+            color: var(--text-dim);
+            flex-shrink: 0;
+            padding-top: 0.2rem;
+        }
+
+        .detail-value {
+            flex: 1;
+            word-break: break-word;
+            line-height: 1.6;
+        }
+
+        .detail-value a {
+            color: var(--text);
+            text-decoration: none;
+        }
+
+        .detail-value a:hover {
+            text-decoration: underline;
+        }
+
+        /* 中英文切换按钮样式 */
+        .detail-label-with-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .lang-toggle-btn {
+            background: none;
+            border: none;
+            color: var(--accent);
+            cursor: pointer;
+            padding: 0.25rem;
+            border-radius: 0.25rem;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 0.5rem;
+        }
+
+        .lang-toggle-btn:hover {
+            background-color: var(--hover-bg);
+            transform: scale(1.1);
+        }
+
+        .lang-toggle-btn svg {
+            transition: transform 0.3s;
+        }
+
+        .lang-toggle-btn.active svg {
+            transform: rotate(180deg);
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            width: 32px;
+            height: 32px;
+            border: 1px solid var(--border);
+            background: transparent;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            opacity: 0.7;
+        }
+
+        .copy-btn:hover {
+            opacity: 1;
+            border-color: var(--text);
+            transform: scale(1.1);
+        }
+
+        /* Funding Section */
+        .funding-section {
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border);
+        }
+
+        /* Preview Section */
+        .preview-section {
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border);
+            position: relative;
+        }
+
+        .preview-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .preview-header h2 {
+            font-size: 1.8rem;
+            font-weight: 300;
+            letter-spacing: -0.02em;
+        }
+
+        .preview-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .preview-content {
+            min-height: 200px;
+            padding: 2rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: var(--card-bg);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: auto;
+        }
+
+        .preview-placeholder {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 200px;
+            color: var(--text-dim);
+            text-align: center;
+            gap: 1rem;
+        }
+
+        .preview-placeholder svg {
+            opacity: 0.5;
+        }
+
+        .preview-placeholder p {
+            font-size: 0.9rem;
+            max-width: 400px;
+            line-height: 1.6;
+        }
+
+        .preview-text {
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            word-break: break-word;
+            color: var(--text);
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 4px;
+            border: 1px solid var(--border);
+        }
+
+        [data-theme="light"] .preview-text {
+            background: rgba(0, 0, 0, 0.02);
+        }
+
+        .preview-format-toggle {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .format-option {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--border);
+            background: transparent;
+            color: var(--text-dim);
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-radius: 4px;
+        }
+
+        .format-option.active,
+        .format-option:hover {
+            border-color: var(--text);
+            color: var(--text);
+        }
+
+        .preview-notification {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: var(--text);
+            color: var(--bg);
+            border-radius: 4px;
+            font-size: 0.85rem;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .preview-notification.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .funding-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .funding-header h2 {
+            font-size: 1.8rem;
+            font-weight: 300;
+            letter-spacing: -0.02em;
+        }
+
+        .funding-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        #funding-lang-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #funding-lang-toggle.active {
+            background-color: var(--text);
+            color: var(--bg);
+        }
+
+        .action-btn {
+            padding: 0.6rem 1.2rem;
+            border: 1px solid var(--border);
+            background: transparent;
+            color: var(--text-dim);
+            font-size: 0.85rem;
+            letter-spacing: 0.05em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .action-btn:hover {
+            border-color: var(--text);
+            color: var(--text);
+        }
+
+        .action-btn.primary {
+            background: var(--text);
+            color: var(--bg);
+            border-color: var(--text);
+        }
+
+        .action-btn.primary:hover {
+            opacity: 0.8;
+        }
+
+        .funding-list {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .funding-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            position: relative;
+            cursor: move;
+        }
+
+        .funding-item:hover {
+            border-color: var(--text);
+        }
+
+        .funding-item.dragging {
+            opacity: 0.5;
+            transform: rotate(5deg);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            z-index: 100;
+        }
+
+        .funding-item.drag-over {
+            border-color: var(--accent);
+            background-color: rgba(255, 255, 255, 0.05);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .funding-item.drag-over-before {
+            border-top: 3px solid var(--accent);
+            background-color: rgba(255, 255, 255, 0.03);
+        }
+
+        .funding-item.drag-over-after {
+            border-bottom: 3px solid var(--accent);
+            background-color: rgba(255, 255, 255, 0.03);
+        }
+
+        .funding-item.drag-success {
+            animation: dragSuccess 0.3s ease;
+        }
+
+        @keyframes dragSuccess {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.02);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        /* 拖拽时的全局视觉反馈 */
+        body.dragging-active {
+            cursor: move;
+            user-select: none;
+        }
+
+        body.dragging-active .funding-item:not(.dragging) {
+            opacity: 0.8;
+            transition: opacity 0.2s ease;
+        }
+
+        body.dragging-active .funding-item:hover:not(.dragging) {
+            opacity: 1;
+        }
+
+        /* 拖拽手柄增强样式 */
+        .drag-handle {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 16px;
+            height: 20px;
+            cursor: grab;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0.6;
+            transition: opacity 0.2s ease, transform 0.2s ease;
+        }
+
+        .drag-handle:hover {
+            opacity: 1;
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .drag-handle:active {
+            cursor: grabbing;
+            transform: translateY(-50%) scale(0.95);
+        }
+
+        .drag-handle::before {
+            content: '';
+            width: 100%;
+            height: 2px;
+            background: var(--text-secondary);
+            border-radius: 1px;
+            margin: 2px 0;
+            box-shadow: 0 4px 0 var(--text-secondary), 0 8px 0 var(--text-secondary);
+        }
+
+        /* 拖拽时的项目样式 */
+        .funding-item.dragging {
+            opacity: 0.7;
+            transform: rotate(2deg) scale(1.02);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            position: relative;
+        }
+
+        /* 拖拽时的列表样式 */
+        .funding-list.dragging-active {
+            background-color: rgba(255, 255, 255, 0.02);
+            border-radius: 8px;
+            padding: 8px;
+            margin: -8px;
+        }
+
+        .drag-handle {
+            position: absolute;
+            left: 0.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 20px;
+            height: 20px;
+            cursor: move;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.2rem;
+            opacity: 0.5;
+            transition: opacity 0.3s ease;
+        }
+
+        .funding-item:hover .drag-handle {
+            opacity: 0.8;
+        }
+
+        .drag-handle::before,
+        .drag-handle::after {
+            content: '';
+            width: 14px;
+            height: 2px;
+            background-color: var(--text-dim);
+            border-radius: 1px;
+        }
+
+        .drag-handle::before {
+            margin-bottom: 2px;
+        }
+
+        .drag-handle::after {
+            margin-top: 2px;
+        }
+
+        .funding-checkbox {
+            width: 20px;
+            height: 20px;
+            margin-left: 2rem;
+            margin-right: 1rem;
+            cursor: pointer;
+        }
+
+        .funding-content {
+            flex: 1;
+        }
+
+        .funding-name {
+            font-size: 0.9rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .funding-grant {
+            font-size: 0.8rem;
+            color: var(--text-dim);
+        }
+
+        .funding-copy {
+            padding: 0.4rem 0.8rem;
+            border: 1px solid var(--border);
+            background: transparent;
+            color: var(--text-dim);
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .funding-copy:hover {
+            border-color: var(--text);
+            color: var(--text);
+        }
+
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            padding: 1rem 1.5rem;
+            background: var(--text);
+            color: var(--bg);
+            border-radius: 8px;
+            box-shadow: 0 4px 20px var(--shadow);
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        /* 成员详情模态框 */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            overflow-y: auto;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal.show {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            animation: slideUp 0.3s ease;
+            margin: 2rem 0;
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            padding: 2rem 2rem 1rem;
+            border-bottom: 1px solid var(--border);
+            position: relative;
+        }
+
+        .modal-avatar {
+            margin-right: 1.5rem;
+        }
+
+        .modal-avatar .member-avatar {
+            width: 80px;
+            height: 80px;
+            font-size: 2rem;
+            font-weight: 600;
+        }
+
+        .modal-member-info {
+            flex: 1;
+        }
+
+        .modal-member-info h2 {
+            margin: 0 0 0.5rem 0;
+            color: var(--text);
+            font-size: 1.5rem;
+        }
+
+        .modal-tags {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            width: 32px;
+            height: 32px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.2s ease;
+        }
+
+        .modal-close:hover {
+            background: var(--border);
+        }
+
+        .modal-body {
+            padding: 2rem;
+        }
+
+        .detail-section {
+            margin-bottom: 2rem;
+        }
+
+        .detail-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .detail-section h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--text);
+        }
+
+        .detail-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .detail-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .detail-item-label {
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            font-weight: 500;
+        }
+
+        .detail-item-value {
+            font-size: 1rem;
+            color: var(--text);
+            word-break: break-word;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 统计数据样式 */
+        .stats {
+            display: flex;
+            gap: 4rem;
+            margin-top: 2rem;
+        }
+
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 300;
+            letter-spacing: -0.03em;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .team-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .container {
+                padding: 140px 2rem 6rem;
+            }
+
+            nav {
+                padding: 1.5rem 2rem;
+            }
+
+            /* 预览区响应式布局 */
+            .preview-section {
+                margin-top: 2rem;
+            }
+
+            .preview-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+
+            .preview-header h2 {
+                font-size: 1.5rem;
+            }
+
+            .preview-actions {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .preview-content {
+                min-height: 200px;
+                padding: 1rem;
+            }
+
+            .preview-format-toggle {
+                width: 100%;
+                margin-bottom: 1rem;
+            }
+
+            .format-options {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .format-option {
+                width: 100%;
+                margin-bottom: 0.5rem;
+            }
+
+            .preview-placeholder {
+                padding: 2rem 1rem;
+            }
+
+            .preview-placeholder svg {
+                width: 36px;
+                height: 36px;
+            }
+
+            .preview-placeholder p {
+                font-size: 0.9rem;
+            }
+
+            .preview-text {
+                font-size: 0.9rem;
+                line-height: 1.5;
+            }
+
+            .preview-notification {
+                font-size: 0.8rem;
+                padding: 0.5rem 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="logo">AIDING</div>
+        <div class="nav-right">
+            <ul class="nav-links">
+                <li><a href="about.html">关于</a></li>
+                <li><a href="projects.html">项目</a></li>
+                <li><a href="publications.html">成果</a></li>
+                <li><a href="blog.html">博客</a></li>
+                <li><a href="team.html" class="active">团队</a></li>
+                <li><a href="contact.html">联系</a></li>
+            </ul>
+            <button class="theme-btn" id="theme-toggle">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="5"></circle>
+                    <line x1="12" y1="1" x2="12" y2="3"></line>
+                    <line x1="12" y1="21" x2="12" y2="23"></line>
+                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                    <line x1="1" y1="12" x2="3" y2="12"></line>
+                    <line x1="21" y1="12" x2="23" y2="12"></line>
+                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                </svg>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Header Section -->
+        <div class="header">
+            <h1>AIDING团队信息</h1>
+            <p>智核团队成员信息，方便论文投稿使用</p>
+            <div class="stats" id="statsContainer">
+                <div class="stat-item">
+                    <div class="stat-number" id="totalMembers">0</div>
+                    <div class="stat-label">团队成员</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="professorCount">0</div>
+                    <div class="stat-label">教授</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="studentCount">0</div>
+                    <div class="stat-label">学生</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Controls Section -->
+        <div class="controls">
+            <input type="text" class="search-box" id="search-box" placeholder="搜索成员姓名、研究方向或职称...">
+            <button class="filter-btn active" data-filter="all">全部</button>
+            <button class="filter-btn" data-filter="core">核心成员</button>
+            <button class="filter-btn" data-filter="research">研究成员</button>
+        </div>
+
+        <!-- Team Members Grid -->
+        <div class="team-grid" id="team-grid">
+            <!-- 团队成员卡片将通过JavaScript动态生成 -->
+        </div>
+
+        <!-- Funding Section -->
+        <div class="funding-section">
+            <div class="funding-header">
+                <h2>基金信息</h2>
+                <div class="funding-actions">
+                    <button class="action-btn" id="funding-lang-toggle" title="切换中英文">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M5 8l6 6"></path>
+                            <path d="M4 14l6-6 2-3"></path>
+                            <path d="M2 5h12"></path>
+                            <path d="M7 2h1"></path>
+                            <path d="M22 22l-5-10-5 10"></path>
+                            <path d="M14 18h6"></path>
+                        </svg>
+                    </button>
+                    <button class="action-btn" id="select-all">全选</button>
+                    <button class="action-btn" id="deselect-all">取消全选</button>
+                    <button class="action-btn primary" id="copy-funding">复制选中基金</button>
+                </div>
+            </div>
+            <div class="funding-list" id="funding-list">
+                <!-- 基金信息将通过JavaScript动态生成 -->
+            </div>
+        </div>
+
+        <!-- Preview Section -->
+        <div class="preview-section" id="preview-section">
+            <div class="preview-header">
+                <h2>内容预览</h2>
+                <div class="preview-actions">
+                    <button class="action-btn" id="preview-toggle" title="切换预览模式">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                            <circle cx="12" cy="12" r="3"></circle>
+                        </svg>
+                    </button>
+                    <button class="action-btn" id="preview-clear" title="清空预览">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="3 6 5 6 21 6"></polyline>
+                            <path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"></path>
+                        </svg>
+                    </button>
+                    <button class="action-btn primary" id="preview-copy" title="复制预览内容">复制预览</button>
+                </div>
+            </div>
+            <div class="preview-content" id="preview-content">
+                <div class="preview-format-toggle">
+                    <button class="format-option active" data-format="formatted">格式化</button>
+                    <button class="format-option" data-format="raw">原始数据</button>
+                </div>
+                <div class="preview-placeholder">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                        <polyline points="10 9 9 9 8 9"></polyline>
+                    </svg>
+                    <p>选择团队成员或基金信息后，预览内容将显示在这里</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
+
+    <!-- Preview Notification -->
+    <div class="preview-notification" id="preview-notification"></div>
+
+    <!-- 成员详情模态框 -->
+    <div class="modal" id="member-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-avatar">
+                    <div id="modal-member-avatar" class="member-avatar"></div>
+                </div>
+                <div class="modal-member-info">
+                    <h2 id="modal-member-name"></h2>
+                    <div class="modal-tags">
+                        <span id="modal-member-title" class="tag tag-title"></span>
+                        <span id="modal-member-position" class="tag tag-position"></span>
+                    </div>
+                </div>
+                <button class="modal-close" id="modal-close">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="detail-section">
+                    <h3>基本信息</h3>
+                    <div class="detail-grid">
+                        <div class="detail-item">
+                            <span class="detail-label">性别：</span>
+                            <span id="modal-gender" class="detail-value"></span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">学位：</span>
+                            <span id="modal-degree" class="detail-value"></span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">研究方向：</span>
+                            <span id="modal-research" class="detail-value"></span>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label-with-toggle">
+                                <span class="detail-label">单位：</span>
+                                <button class="lang-toggle-btn" id="lang-toggle-btn" title="切换中英文">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round">
+                                        <path d="M5 8l6 6"></path>
+                                        <path d="M4 14l6-6 2-3"></path>
+                                        <path d="M2 5h12"></path>
+                                        <path d="M7 2h1"></path>
+                                        <path d="M22 22l-5-10-5 10"></path>
+                                        <path d="M14 18h6"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                            <span id="modal-unit" class="detail-value"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="detail-section">
+                    <h3>联系方式</h3>
+                    <div class="detail-grid">
+                        <div class="detail-item">
+                            <span class="detail-label">邮箱：</span>
+                            <a id="modal-email" class="detail-value"></a>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">电话：</span>
+                            <span id="modal-phone" class="detail-value"></span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">ORCID：</span>
+                            <a id="modal-orcid" class="detail-value" target="_blank"></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 自动计算统计数据
+        function calculateStats() {
+            const totalMembers = teamMembers.length;
+            const professorCount = teamMembers.filter(member =>
+                member.title.includes('教授') || member.title.includes('副教授')
+            ).length;
+            const studentCount = teamMembers.filter(member =>
+                member.title.includes('研究生') || member.title.includes('博士') || member.title.includes('硕士')
+            ).length || 0; // 如果没有学生，显示0
+
+            // 更新DOM
+            document.getElementById('totalMembers').textContent = totalMembers;
+            document.getElementById('professorCount').textContent = professorCount;
+            document.getElementById('studentCount').textContent = studentCount;
+        }
+
+        // 初始化页面
+        document.addEventListener('DOMContentLoaded', function () {
+            // 检查并应用保存的主题
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+
+            // 初始化预览功能
+            initPreview();
+
+            // 更新复制函数以支持预览
+            updateCopyFunctionsForPreview();
+
+            // 渲染团队成员
+            renderTeamMembers(teamMembers);
+
+            // 渲染基金信息
+            renderFundingInfo(fundingData);
+
+            // 设置事件监听器
+            setupEventListeners();
+
+            // 初始化拖拽回退功能
+            setupDragUndo();
+
+            // 拖拽排序功能已在renderFundingInfo中设置，无需重复调用
+
+            // 计算统计数据
+            calculateStats();
+
+            // 延迟执行，确保DOM完全加载后再自动选择所有基金并生成预览
+            setTimeout(() => {
+                // 自动选择所有基金
+                const checkboxes = document.querySelectorAll('.funding-checkbox');
+                checkboxes.forEach(cb => cb.checked = true);
+
+                // 自动生成预览
+                updatePreview();
+                showPreviewNotification('已自动选择所有基金并生成预览');
+            }, 500);
+        });
+
+        // 设置拖拽排序功能 - 增强版本
+        function setupDragAndDrop() {
+            const fundingList = document.getElementById('funding-list');
+            if (!fundingList) return;
+
+            // 使用事件委托，避免重复绑定事件监听器
+            // 先移除现有的拖拽事件监听器（如果有的话）
+            const existingItems = fundingList.querySelectorAll('.funding-item');
+            existingItems.forEach(item => {
+                // 重置拖拽属性和类名
+                item.draggable = true;
+                item.classList.remove('dragging', 'drag-over', 'drag-over-before', 'drag-over-after');
+            });
+
+            // 为整个列表添加事件委托
+            fundingList.addEventListener('dragstart', handleDragStart, true);
+            fundingList.addEventListener('dragend', handleDragEnd, true);
+            fundingList.addEventListener('dragover', handleDragOver, true);
+            fundingList.addEventListener('dragenter', handleDragEnter, true);
+            fundingList.addEventListener('dragleave', handleDragLeave, true);
+            fundingList.addEventListener('drop', handleDrop, true);
+
+            // 添加触摸设备支持
+            if ('ontouchstart' in window) {
+                setupTouchDragSupport();
+            }
+        }
+
+        // 拖拽开始处理函数
+        function handleDragStart(e) {
+            const item = e.target.closest('.funding-item');
+            if (!item) return;
+
+            // 设置拖拽数据
+            e.dataTransfer.effectAllowed = 'move';
+            e.dataTransfer.setData('text/html', item.innerHTML);
+
+            // 添加拖拽中的视觉样式
+            item.classList.add('dragging');
+
+            // 存储被拖拽的元素
+            window.draggedElement = item;
+
+            // 添加拖拽时的视觉反馈
+            document.body.classList.add('dragging-active');
+        }
+
+        // 拖拽结束处理函数
+        function handleDragEnd(e) {
+            const item = e.target.closest('.funding-item');
+            if (!item) return;
+
+            // 移除拖拽样式
+            item.classList.remove('dragging');
+
+            // 清除所有拖拽相关的视觉状态
+            const allItems = document.querySelectorAll('.funding-item');
+            allItems.forEach(el => {
+                el.classList.remove('drag-over', 'dragging', 'drag-over-before', 'drag-over-after');
+            });
+
+            // 移除拖拽时的视觉反馈
+            document.body.classList.remove('dragging-active');
+            document.querySelector('.funding-list')?.classList.remove('dragging-active');
+
+            // 清除被拖拽元素引用
+            window.draggedElement = null;
+        }
+
+        // 拖拽经过处理函数 - 增强版本
+        function handleDragOver(e) {
+            if (e.preventDefault) {
+                e.preventDefault();
+            }
+            e.dataTransfer.dropEffect = 'move';
+
+            // 添加更精确的位置检测
+            const targetItem = e.target.closest('.funding-item');
+            if (targetItem && window.draggedElement && targetItem !== window.draggedElement) {
+                // 计算鼠标在目标元素中的相对位置
+                const rect = targetItem.getBoundingClientRect();
+                const relativeY = e.clientY - rect.top;
+                const threshold = rect.height / 3; // 分成三个区域
+
+                // 清除之前的所有状态
+                targetItem.classList.remove('drag-over-before', 'drag-over-after');
+
+                if (relativeY < threshold) {
+                    // 鼠标在上三分之一区域，插入到前面
+                    targetItem.classList.add('drag-over-before');
+                } else if (relativeY > rect.height - threshold) {
+                    // 鼠标在下三分之一区域，插入到后面
+                    targetItem.classList.add('drag-over-after');
+                } else {
+                    // 鼠标在中间区域，显示整体高亮
+                    targetItem.classList.add('drag-over');
+                }
+            }
+
+            return false;
+        }
+
+        // 拖拽进入处理函数
+        function handleDragEnter(e) {
+            const item = e.target.closest('.funding-item');
+            if (!item || !window.draggedElement) return;
+
+            // 确保不是同一个元素
+            if (item !== window.draggedElement) {
+                item.classList.add('drag-over');
+            }
+        }
+
+        // 拖拽离开处理函数
+        function handleDragLeave(e) {
+            const item = e.target.closest('.funding-item');
+            if (!item) return;
+
+            // 检查是否真的离开了元素（而不是进入子元素）
+            const rect = item.getBoundingClientRect();
+            const x = e.clientX;
+            const y = e.clientY;
+
+            if (x < rect.left || x > rect.right || y < rect.top || y > rect.bottom) {
+                item.classList.remove('drag-over');
+            }
+        }
+
+        // 放置处理函数
+        function handleDrop(e) {
+            if (e.stopPropagation) {
+                e.stopPropagation();
+            }
+
+            const targetItem = e.target.closest('.funding-item');
+            const draggedElement = window.draggedElement;
+
+            if (!targetItem || !draggedElement || targetItem === draggedElement) {
+                return false;
+            }
+
+            // 移除拖拽样式
+            targetItem.classList.remove('drag-over', 'drag-over-before', 'drag-over-after');
+            
+            // 清理所有项目的拖拽状态
+            const allItems = document.querySelectorAll('.funding-item');
+            allItems.forEach(el => {
+                el.classList.remove('drag-over', 'drag-over-before', 'drag-over-after');
+            });
+
+            try {
+                // 获取列表和所有项目
+                const fundingList = document.getElementById('funding-list');
+                const allItems = Array.from(fundingList.querySelectorAll('.funding-item'));
+                const draggedIndex = allItems.indexOf(draggedElement);
+                const targetIndex = allItems.indexOf(targetItem);
+
+                // 执行排序操作
+                if (draggedIndex < targetIndex) {
+                    targetItem.parentNode.insertBefore(draggedElement, targetItem.nextSibling);
+                } else {
+                    targetItem.parentNode.insertBefore(draggedElement, targetItem);
+                }
+
+                // 添加排序完成的视觉反馈
+                draggedElement.classList.add('drag-success');
+                setTimeout(() => {
+                    draggedElement.classList.remove('drag-success');
+                }, 300);
+
+                // 更新预览内容
+                if (previewMode === 'funding') {
+                    updatePreview();
+                    showPreviewNotification('基金顺序已更新');
+                }
+
+                // 触发自定义事件，通知其他组件
+                const event = new CustomEvent('fundingOrderChanged', {
+                    detail: {
+                        draggedIndex: draggedIndex,
+                        targetIndex: targetIndex,
+                        newOrder: getCurrentFundingOrder()
+                    }
+                });
+                document.dispatchEvent(event);
+
+            } catch (error) {
+                console.error('拖拽排序失败:', error);
+                showPreviewNotification('拖拽排序失败，请重试');
+            }
+
+            return false;
+        }
+
+        // 获取当前基金排序
+        function getCurrentFundingOrder() {
+            const fundingItems = document.querySelectorAll('.funding-item');
+            const order = [];
+
+            fundingItems.forEach(item => {
+                const fundingId = item.dataset.fundingId;
+                const funding = fundingData.find(f => f.id === fundingId);
+                if (funding) {
+                    order.push(funding);
+                }
+            });
+
+            return order;
+        }
+
+        // 设置触摸设备拖拽支持
+        function setupTouchDragSupport() {
+            const fundingList = document.getElementById('funding-list');
+            if (!fundingList) return;
+
+            let touchItem = null;
+            let touchStartY = 0;
+            let touchStartX = 0;
+            let isDragging = false;
+
+            fundingList.addEventListener('touchstart', function (e) {
+                const item = e.target.closest('.funding-item');
+                if (!item) return;
+
+                touchItem = item;
+                const touch = e.touches[0];
+                touchStartY = touch.clientY;
+                touchStartX = touch.clientX;
+                isDragging = false;
+
+                // 延迟开始拖拽，避免误触
+                setTimeout(() => {
+                    if (touchItem && !isDragging) {
+                        isDragging = true;
+                        item.classList.add('dragging');
+                        document.body.classList.add('dragging-active');
+                    }
+                }, 300);
+            });
+
+            fundingList.addEventListener('touchmove', function (e) {
+                if (!touchItem || !isDragging) return;
+
+                e.preventDefault();
+                const touch = e.touches[0];
+                const deltaY = touch.clientY - touchStartY;
+                const deltaX = touch.clientX - touchStartX;
+
+                // 如果移动距离足够大，确认是拖拽操作
+                if (Math.abs(deltaY) > 10) {
+                    clearTimeout(window.touchDragTimeout);
+                    isDragging = true;
+
+                    // 查找目标位置
+                    const elementBelow = document.elementFromPoint(touch.clientX, touch.clientY);
+                    const targetItem = elementBelow?.closest('.funding-item');
+
+                    if (targetItem && targetItem !== touchItem) {
+                        // 清除之前的所有状态
+                        document.querySelectorAll('.funding-item').forEach(item => {
+                            item.classList.remove('drag-over', 'drag-over-before', 'drag-over-after');
+                        });
+
+                        // 计算插入位置
+                        const rect = targetItem.getBoundingClientRect();
+                        const insertBefore = touch.clientY < rect.top + rect.height / 2;
+
+                        if (insertBefore) {
+                            targetItem.classList.add('drag-over-before');
+                        } else {
+                            targetItem.classList.add('drag-over-after');
+                        }
+                    }
+                }
+            });
+
+            fundingList.addEventListener('touchend', function (e) {
+                if (!touchItem || !isDragging) {
+                    touchItem = null;
+                    isDragging = false;
+                    return;
+                }
+
+                const touch = e.changedTouches[0];
+                const elementBelow = document.elementFromPoint(touch.clientX, touch.clientY);
+                const targetItem = elementBelow?.closest('.funding-item');
+
+                if (targetItem && targetItem !== touchItem) {
+                    // 执行排序操作
+                    const fundingList = document.getElementById('funding-list');
+                    const rect = targetItem.getBoundingClientRect();
+                    const insertBefore = touch.clientY < rect.top + rect.height / 2;
+
+                    if (insertBefore) {
+                        fundingList.insertBefore(touchItem, targetItem);
+                    } else {
+                        fundingList.insertBefore(touchItem, targetItem.nextSibling);
+                    }
+
+                    // 添加成功动画
+                    touchItem.classList.add('drag-success');
+                    setTimeout(() => {
+                        touchItem.classList.remove('drag-success');
+                    }, 300);
+
+                    // 更新预览内容
+                    if (previewMode === 'funding') {
+                        updatePreview();
+                        showPreviewNotification('基金顺序已更新');
+                    }
+                }
+
+                // 清理状态
+                touchItem.classList.remove('dragging');
+                document.body.classList.remove('dragging-active');
+                document.querySelectorAll('.funding-item').forEach(item => {
+                    item.classList.remove('drag-over', 'drag-over-before', 'drag-over-after');
+                });
+
+                touchItem = null;
+                isDragging = false;
+            });
+        }
+
+        // 拖拽回退功能 - 双击撤销拖拽
+        function setupDragUndo() {
+            let lastDragOrder = null;
+            let dragHistory = [];
+            const maxHistorySize = 10;
+
+            // 监听拖拽完成事件
+            document.addEventListener('fundingOrderChanged', function (e) {
+                const currentOrder = getCurrentFundingOrder();
+                if (lastDragOrder && JSON.stringify(lastDragOrder) !== JSON.stringify(currentOrder)) {
+                    dragHistory.push(JSON.parse(JSON.stringify(lastDragOrder)));
+                    if (dragHistory.length > maxHistorySize) {
+                        dragHistory.shift();
+                    }
+                }
+                lastDragOrder = currentOrder;
+            });
+
+            // 双击撤销功能
+            document.addEventListener('dblclick', function (e) {
+                if (e.target.closest('.funding-item') && dragHistory.length > 0) {
+                    e.preventDefault();
+                    const previousOrder = dragHistory.pop();
+
+                    // 恢复之前的顺序
+                    const fundingList = document.getElementById('funding-list');
+                    fundingList.innerHTML = '';
+
+                    previousOrder.forEach(funding => {
+                        const fundingItem = document.createElement('div');
+                        fundingItem.className = 'funding-item';
+                        fundingItem.dataset.fundingId = funding.id;
+                        fundingItem.draggable = true;
+
+                        fundingItem.innerHTML = `
+                            <div class="drag-handle" title="拖拽排序"></div>
+                            <input type="checkbox" class="funding-checkbox" data-funding-id="${funding.id}" checked>
+                            <div class="funding-content">
+                                <div class="funding-name" data-cn="${funding.nameCn || funding.name}" data-en="${funding.name}">${funding.nameCn || funding.name}</div>
+                                <div class="funding-grant">Grant No. ${funding.grantNo}</div>
+                            </div>
+                            <button class="funding-copy" data-funding-id="${funding.id}" title="复制基金信息">复制</button>
+                        `;
+
+                        fundingList.appendChild(fundingItem);
+                    });
+
+                    // 重新初始化拖拽功能
+                    setTimeout(() => {
+                        setupDragAndDrop();
+                        if (previewMode === 'funding') {
+                            updatePreview();
+                            showPreviewNotification('已撤销拖拽操作');
+                        }
+                    }, 100);
+                }
+            });
+        }
+
+        // 设置事件监听器
+        function setupEventListeners() {
+            // 主题切换
+            const themeToggle = document.getElementById('theme-toggle');
+            themeToggle.addEventListener('click', function () {
+                const currentTheme = document.documentElement.getAttribute('data-theme');
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                document.documentElement.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+            });
+
+            // 基金信息中英文切换
+            const fundingLangToggle = document.getElementById('funding-lang-toggle');
+            fundingLangToggle.addEventListener('click', function () {
+                // 切换按钮状态
+                this.classList.toggle('active');
+
+                // 切换基金名称显示
+                const fundingNames = document.querySelectorAll('.funding-name');
+                fundingNames.forEach(nameElement => {
+                    if (this.classList.contains('active')) {
+                        // 切换到英文
+                        nameElement.textContent = nameElement.dataset.en;
+                    } else {
+                        // 切换到中文
+                        nameElement.textContent = nameElement.dataset.cn;
+                    }
+                });
+
+                // 更新预览内容以反映语言切换
+                if (previewMode === 'funding') {
+                    updatePreview();
+                    const langText = this.classList.contains('active') ? '英文' : '中文';
+                    showPreviewNotification(`已切换至${langText}预览`);
+                }
+            });
+
+            // 搜索功能
+            const searchBox = document.getElementById('search-box');
+            searchBox.addEventListener('input', function () {
+                const searchTerm = this.value.toLowerCase();
+                const memberCards = document.querySelectorAll('.member-card');
+
+                memberCards.forEach(card => {
+                    const text = card.textContent.toLowerCase();
+                    if (text.includes(searchTerm)) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+
+            // 筛选功能
+            const filterBtns = document.querySelectorAll('.filter-btn');
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', function () {
+                    // 更新按钮状态
+                    filterBtns.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+
+                    // 筛选成员
+                    const filter = this.dataset.filter;
+                    const memberCards = document.querySelectorAll('.member-card');
+
+                    memberCards.forEach(card => {
+                        if (filter === 'all') {
+                            card.style.display = 'block';
+                        } else if (filter === 'core' && card.dataset.position === '核心成员') {
+                            card.style.display = 'block';
+                        } else if (filter === 'research' && card.dataset.position === '研究成员') {
+                            card.style.display = 'block';
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+                });
+            });
+
+            // 点击成员卡片显示详情
+            document.addEventListener('click', function (e) {
+                const memberCard = e.target.closest('.member-card');
+                if (memberCard && !e.target.closest('.copy-btn')) {
+                    const memberId = memberCard.dataset.memberId;
+                    const member = teamMembers.find(m => m.id === memberId);
+                    if (member) {
+                        showMemberDetails(member);
+                    }
+                }
+
+                // 复制成员信息
+                if (e.target.closest('.copy-btn')) {
+                    const btn = e.target.closest('.copy-btn');
+                    const memberId = btn.dataset.memberId;
+                    const member = teamMembers.find(m => m.id === memberId);
+
+                    if (member) {
+                        const memberInfo = formatMemberInfo(member);
+                        copyToClipboard(memberInfo);
+                        showToast(`已复制 ${member.name} 的信息`);
+                    }
+                }
+            });
+
+            // 复制单条基金信息
+            document.addEventListener('click', function (e) {
+                if (e.target.classList.contains('funding-copy')) {
+                    const fundingId = e.target.dataset.fundingId;
+                    const funding = fundingData.find(f => f.id === fundingId);
+
+                    if (funding) {
+                        // 检查当前语言状态
+                        const fundingLangToggle = document.getElementById('funding-lang-toggle');
+                        // 修正语言状态判断逻辑：按钮有active类表示英文模式，无active类表示中文模式
+                        const isEnglish = fundingLangToggle && fundingLangToggle.classList.contains('active');
+
+                        const fundingText = formatFundingInfo([funding], isEnglish);
+                        copyToClipboard(fundingText);
+                        showToast('已复制基金信息');
+                    }
+                }
+            });
+
+            // 全选基金
+            document.getElementById('select-all').addEventListener('click', function () {
+                const checkboxes = document.querySelectorAll('.funding-checkbox');
+                checkboxes.forEach(cb => cb.checked = true);
+                // 更新预览
+                if (previewMode === 'funding') {
+                    updatePreview();
+                    showPreviewNotification('已选择所有基金');
+                }
+            });
+
+            // 取消全选基金
+            document.getElementById('deselect-all').addEventListener('click', function () {
+                const checkboxes = document.querySelectorAll('.funding-checkbox');
+                checkboxes.forEach(cb => cb.checked = false);
+                // 更新预览
+                if (previewMode === 'funding') {
+                    updatePreview();
+                    showPreviewNotification('已取消选择所有基金');
+                }
+            });
+
+            // 复制选中的基金信息
+            document.getElementById('copy-funding').addEventListener('click', function () {
+                const checkedBoxes = document.querySelectorAll('.funding-checkbox:checked');
+                if (checkedBoxes.length === 0) {
+                    showToast('请至少选择一个基金');
+                    return;
+                }
+
+                // 获取当前基金排序
+                const currentOrder = getCurrentFundingOrder();
+
+                // 按照当前排序和选中状态获取基金信息
+                const selectedFunding = [];
+                currentOrder.forEach(funding => {
+                    const checkbox = document.querySelector(`.funding-checkbox[data-funding-id="${funding.id}"]`);
+                    if (checkbox && checkbox.checked) {
+                        selectedFunding.push(funding);
+                    }
+                });
+
+                // 检查当前语言状态
+                const fundingLangToggle = document.getElementById('funding-lang-toggle');
+                // 修正语言状态判断逻辑：按钮有active类表示英文模式，无active类表示中文模式
+                const isEnglish = fundingLangToggle && fundingLangToggle.classList.contains('active');
+
+                const fundingText = formatFundingInfo(selectedFunding, isEnglish);
+                copyToClipboard(fundingText);
+                showToast(`已复制 ${checkedBoxes.length} 个基金信息`);
+            });
+        }
+
+        // 渲染团队成员卡片
+        function renderTeamMembers(members) {
+            const teamGrid = document.getElementById('team-grid');
+            teamGrid.innerHTML = '';
+
+            members.forEach((member, index) => {
+                const memberCard = document.createElement('div');
+                memberCard.className = 'member-card';
+                memberCard.dataset.memberId = member.id;
+                memberCard.dataset.position = member.position;
+
+                // 处理头像显示
+                let avatarHtml = `<div class="member-avatar">${member.name.charAt(0)}</div>`;
+                if (member.avatar) {
+                    avatarHtml = `
+                        <div class="member-avatar">
+                            <img src="${member.avatar}" alt="${member.name}" onerror="this.style.display='none'; this.parentElement.innerHTML='${member.name.charAt(0)}';">
+                        </div>
+                    `;
+                }
+
+                // 处理邮箱和电话显示（支持多个）
+                let emailHtml = '未提供';
+                if (member.emails && member.emails.length > 0) {
+                    emailHtml = member.emails.map(email =>
+                        `<a href="mailto:${email}">${email}</a>`
+                    ).join(', ');
+                }
+
+                let phoneHtml = '未提供';
+                if (member.phones && member.phones.length > 0) {
+                    phoneHtml = member.phones.join(', ');
+                }
+
+                // 处理ORCID显示
+                const orcidHtml = member.orcid || '未提供';
+
+                memberCard.innerHTML = `
+                    <button class="copy-btn" data-member-id="${member.id}" title="复制成员信息">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                            <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"></path>
+                        </svg>
+                    </button>
+                    <div class="card-header">
+                        <div class="avatar-section">
+                            ${avatarHtml}
+                        </div>
+                        <div class="info-section">
+                            <div class="member-info">
+                                <h3>${member.name}</h3>
+                                <div class="english-name">${member.englishName || '未提供'}</div>
+                                <div class="tags-container">
+                                    <span class="tag tag-title">${member.title || '未提供'}</span>
+                                    <span class="tag tag-position">${member.position || '未提供'}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-details">
+                        <div class="member-details">
+                            <div class="detail-row">
+                                <div class="detail-label">邮箱：</div>
+                                <div class="detail-value">${emailHtml}</div>
+                            </div>
+                            <div class="detail-row">
+                                <div class="detail-label">电话：</div>
+                                <div class="detail-value">${phoneHtml}</div>
+                            </div>
+                            <div class="detail-row">
+                                <div class="detail-label">ORCID：</div>
+                                <div class="detail-value">${orcidHtml}</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                teamGrid.appendChild(memberCard);
+            });
+        }
+
+        // 渲染基金信息 - 优化版本
+        function renderFundingInfo(funding) {
+            const fundingList = document.getElementById('funding-list');
+            if (!fundingList) return;
+
+            // 保存当前的选中状态
+            const previousSelection = new Map();
+            const currentCheckboxes = fundingList.querySelectorAll('.funding-checkbox');
+            currentCheckboxes.forEach(checkbox => {
+                previousSelection.set(checkbox.dataset.fundingId, checkbox.checked);
+            });
+
+            fundingList.innerHTML = '';
+
+            funding.forEach((item, index) => {
+                const fundingItem = document.createElement('div');
+                fundingItem.className = 'funding-item';
+                fundingItem.dataset.fundingId = item.id;
+                fundingItem.draggable = true;
+
+                // 恢复之前的选中状态，如果存在的话
+                const wasSelected = previousSelection.get(item.id);
+                const isChecked = wasSelected !== undefined ? wasSelected : true;
+
+                fundingItem.innerHTML = `
+                    <div class="drag-handle" title="拖拽排序 (双击撤销)"></div>
+                    <input type="checkbox" class="funding-checkbox" data-funding-id="${item.id}" ${isChecked ? 'checked' : ''}>
+                    <div class="funding-content">
+                        <div class="funding-name" data-cn="${item.nameCn || item.name}" data-en="${item.name}">${item.nameCn || item.name}</div>
+                        <div class="funding-grant">Grant No. ${item.grantNo}</div>
+                    </div>
+                    <button class="funding-copy" data-funding-id="${item.id}" title="复制基金信息">复制</button>
+                `;
+
+                fundingList.appendChild(fundingItem);
+            });
+
+            // 为所有基金复选框添加事件监听器，状态改变时自动更新预览
+            const checkboxes = document.querySelectorAll('.funding-checkbox');
+            checkboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', function () {
+                    if (previewMode === 'funding') {
+                        updatePreview();
+                        const checkedCount = document.querySelectorAll('.funding-checkbox:checked').length;
+                        showPreviewNotification(`已选择 ${checkedCount} 个基金`);
+                    }
+                });
+            });
+
+            // 使用防抖技术延迟初始化拖拽，避免重复绑定
+            clearTimeout(window.dragDropTimeout);
+            window.dragDropTimeout = setTimeout(() => {
+                setupDragAndDrop();
+            }, 150);
+        }
+
+        // 设置事件监听器
+        function setupEventListeners() {
+            // 主题切换
+            const themeToggle = document.getElementById('theme-toggle');
+            themeToggle.addEventListener('click', function () {
+                const currentTheme = document.documentElement.getAttribute('data-theme');
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                document.documentElement.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+            });
+
+            // 基金信息中英文切换
+            const fundingLangToggle = document.getElementById('funding-lang-toggle');
+            fundingLangToggle.addEventListener('click', function () {
+                // 切换按钮状态
+                this.classList.toggle('active');
+
+                // 切换基金名称显示
+                const fundingNames = document.querySelectorAll('.funding-name');
+                fundingNames.forEach(nameElement => {
+                    if (this.classList.contains('active')) {
+                        // 切换到英文
+                        nameElement.textContent = nameElement.dataset.en;
+                    } else {
+                        // 切换到中文
+                        nameElement.textContent = nameElement.dataset.cn;
+                    }
+                });
+            });
+
+            // 搜索功能
+            const searchBox = document.getElementById('search-box');
+            searchBox.addEventListener('input', function () {
+                const searchTerm = this.value.toLowerCase();
+                const memberCards = document.querySelectorAll('.member-card');
+
+                memberCards.forEach(card => {
+                    const text = card.textContent.toLowerCase();
+                    if (text.includes(searchTerm)) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+
+            // 筛选功能
+            const filterBtns = document.querySelectorAll('.filter-btn');
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', function () {
+                    // 更新按钮状态
+                    filterBtns.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+
+                    // 筛选成员
+                    const filter = this.dataset.filter;
+                    const memberCards = document.querySelectorAll('.member-card');
+
+                    memberCards.forEach(card => {
+                        if (filter === 'all') {
+                            card.style.display = 'block';
+                        } else if (filter === 'core' && card.dataset.position === '核心成员') {
+                            card.style.display = 'block';
+                        } else if (filter === 'research' && card.dataset.position === '研究成员') {
+                            card.style.display = 'block';
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+                });
+            });
+
+            // 点击成员卡片显示详情
+            document.addEventListener('click', function (e) {
+                const memberCard = e.target.closest('.member-card');
+                if (memberCard && !e.target.closest('.copy-btn')) {
+                    const memberId = memberCard.dataset.memberId;
+                    const member = teamMembers.find(m => m.id === memberId);
+                    if (member) {
+                        showMemberDetails(member);
+                    }
+                }
+            });
+
+            // 关闭模态框
+            const modalClose = document.getElementById('modal-close');
+            const modal = document.getElementById('member-modal');
+
+            modalClose.addEventListener('click', function () {
+                modal.classList.remove('show');
+            });
+
+            // 点击模态框背景关闭
+            modal.addEventListener('click', function (e) {
+                if (e.target === modal) {
+                    modal.classList.remove('show');
+                }
+            });
+
+            // 复制成员信息
+            document.addEventListener('click', function (e) {
+                if (e.target.closest('.copy-btn')) {
+                    const btn = e.target.closest('.copy-btn');
+                    const memberId = btn.dataset.memberId;
+                    const member = teamMembers.find(m => m.id === memberId);
+
+                    if (member) {
+                        const memberInfo = formatMemberInfo(member);
+                        copyToClipboard(memberInfo);
+                        showToast(`已复制 ${member.name} 的信息`);
+                    }
+                }
+            });
+
+            // 复制单条基金信息
+            document.addEventListener('click', function (e) {
+                if (e.target.classList.contains('funding-copy')) {
+                    const fundingId = e.target.dataset.fundingId;
+                    const funding = fundingData.find(f => f.id === fundingId);
+
+                    if (funding) {
+                        // 检查当前语言状态
+                        const fundingLangToggle = document.getElementById('funding-lang-toggle');
+                        // 修正语言状态判断逻辑：按钮有active类表示英文模式，无active类表示中文模式
+                        const isEnglish = fundingLangToggle && fundingLangToggle.classList.contains('active');
+
+                        const fundingText = formatFundingInfo([funding], isEnglish);
+                        copyToClipboard(fundingText);
+                        showToast('已复制基金信息');
+                    }
+                }
+            });
+
+            // 全选基金
+            document.getElementById('select-all').addEventListener('click', function () {
+                const checkboxes = document.querySelectorAll('.funding-checkbox');
+                checkboxes.forEach(cb => cb.checked = true);
+                // 更新预览
+                if (previewMode === 'funding') {
+                    updatePreview();
+                    showPreviewNotification('已选择所有基金');
+                }
+            });
+
+            // 取消全选基金
+            document.getElementById('deselect-all').addEventListener('click', function () {
+                const checkboxes = document.querySelectorAll('.funding-checkbox');
+                checkboxes.forEach(cb => cb.checked = false);
+                // 更新预览
+                if (previewMode === 'funding') {
+                    updatePreview();
+                    showPreviewNotification('已取消选择所有基金');
+                }
+            });
+
+            // 复制选中的基金信息
+            document.getElementById('copy-funding').addEventListener('click', function () {
+                const checkedBoxes = document.querySelectorAll('.funding-checkbox:checked');
+                if (checkedBoxes.length === 0) {
+                    showToast('请至少选择一个基金');
+                    return;
+                }
+
+                // 获取当前基金排序
+                const currentOrder = getCurrentFundingOrder();
+
+                // 按照当前排序和选中状态获取基金信息
+                const selectedFunding = [];
+                currentOrder.forEach(funding => {
+                    const checkbox = document.querySelector(`.funding-checkbox[data-funding-id="${funding.id}"]`);
+                    if (checkbox && checkbox.checked) {
+                        selectedFunding.push(funding);
+                    }
+                });
+
+                // 检查当前语言状态
+                const fundingLangToggle = document.getElementById('funding-lang-toggle');
+                // 修正语言状态判断逻辑：按钮有active类表示英文模式，无active类表示中文模式
+                const isEnglish = fundingLangToggle && fundingLangToggle.classList.contains('active');
+
+                const fundingText = formatFundingInfo(selectedFunding, isEnglish);
+                copyToClipboard(fundingText);
+                showToast(`已复制 ${checkedBoxes.length} 个基金信息`);
+            });
+        }
+
+        // 显示成员详情
+        function showMemberDetails(member) {
+            const modal = document.getElementById('member-modal');
+
+            // 更新模态框内容
+            document.getElementById('modal-member-name').textContent = member.name || '未提供';
+            document.getElementById('modal-member-title').textContent = member.title || '未提供';
+            document.getElementById('modal-member-position').textContent = member.position || '未提供';
+
+            // 处理头像显示
+            const avatarElement = document.getElementById('modal-member-avatar');
+            if (member.avatar) {
+                avatarElement.innerHTML = `<img src="${member.avatar}" alt="${member.name}" onerror="this.style.display='none'; this.parentElement.innerHTML='${member.name.charAt(0)}';">`;
+            } else {
+                avatarElement.innerHTML = member.name.charAt(0);
+            }
+
+            // 基本信息
+            document.getElementById('modal-gender').textContent = member.gender || '未提供';
+            document.getElementById('modal-degree').textContent = member.degree || '未提供';
+            document.getElementById('modal-research').textContent = member.researchFields || '未提供';
+
+            // 联系方式
+            const emailElement = document.getElementById('modal-email');
+            if (member.emails && member.emails.length > 0) {
+                emailElement.textContent = member.emails[0];
+                emailElement.href = `mailto:${member.emails[0]}`;
+            } else {
+                emailElement.textContent = '未提供';
+                emailElement.href = '#';
+            }
+
+            const phoneElement = document.getElementById('modal-phone');
+            if (member.phones && member.phones.length > 0) {
+                phoneElement.textContent = member.phones.join(', ');
+            } else {
+                phoneElement.textContent = '未提供';
+            }
+
+            const orcidElement = document.getElementById('modal-orcid');
+            if (member.orcid) {
+                orcidElement.textContent = member.orcid;
+                orcidElement.href = member.orcid;
+            } else {
+                orcidElement.textContent = '未提供';
+                orcidElement.href = '#';
+            }
+
+            // 设置单位信息和中英文切换
+            const unitElement = document.getElementById('modal-unit');
+            const langToggleBtn = document.getElementById('lang-toggle-btn');
+
+            // 存储中英文单位信息
+            unitElement.dataset.cn = member.institution || '未提供';
+            unitElement.dataset.en = member.institutionEn || '未提供';
+
+            // 默认显示中文
+            unitElement.textContent = unitElement.dataset.cn;
+            langToggleBtn.classList.remove('active');
+
+            // 添加中英文切换事件
+            langToggleBtn.onclick = function () {
+                if (unitElement.textContent === unitElement.dataset.cn) {
+                    // 切换到英文
+                    unitElement.textContent = unitElement.dataset.en;
+                    langToggleBtn.classList.add('active');
+                } else {
+                    // 切换到中文
+                    unitElement.textContent = unitElement.dataset.cn;
+                    langToggleBtn.classList.remove('active');
+                }
+            };
+
+            // 显示模态框
+            modal.classList.add('show');
+        }
+
+        // 格式化成员信息
+        function formatMemberInfo(member) {
+            const emails = member.emails && member.emails.length > 0 ? member.emails.join(', ') : '未提供';
+            const phones = member.phones && member.phones.length > 0 ? member.phones.join(', ') : '未提供';
+
+            return `${member.name} (${member.englishName || '未提供'})
+职称: ${member.title || '未提供'}
+性别: ${member.gender || '未提供'}
+学位: ${member.degree || '未提供'}
+研究方向: ${member.researchFields || '未提供'}
+单位: ${member.institution || '未提供'}
+单位(En): ${member.institutionEn || '未提供'}
+邮箱: ${emails}
+电话: ${phones}
+ORCID: ${member.orcid || '未提供'}`;
+        }
+
+        // 格式化基金信息
+        function formatFundingInfo(fundingArray, isEnglish = true) {
+            if (fundingArray.length === 0) return '';
+
+            if (fundingArray.length === 1) {
+                const funding = fundingArray[0];
+                if (isEnglish) {
+                    return `This research is supported by ${funding.fullText}.`;
+                } else {
+                    // 中文模式使用更规范的格式
+                    const cnText = funding.fullTextCn || funding.fullText;
+                    return `本研究受${cnText}资助。`;
+                }
+            }
+
+            // 处理多个基金的情况
+            let result;
+            if (isEnglish) {
+                result = 'This research is supported by ';
+                fundingArray.forEach((funding, index) => {
+                    if (index === 0) {
+                        result += funding.fullText;
+                    } else if (index === fundingArray.length - 1) {
+                        result += ` and ${funding.fullText}`;
+                    } else {
+                        result += `, ${funding.fullText}`;
+                    }
+                });
+                result += '.';
+            } else {
+                // 中文模式使用更规范的格式
+                result = '本研究受';
+                fundingArray.forEach((funding, index) => {
+                    const cnText = funding.fullTextCn || funding.fullText;
+                    if (index === 0) {
+                        result += cnText;
+                    } else if (index === fundingArray.length - 1) {
+                        result += `及${cnText}`;
+                    } else {
+                        result += `、${cnText}`;
+                    }
+                });
+                result += '资助。';
+            }
+            return result;
+        }
+
+        // 复制到剪贴板
+        function copyToClipboard(text) {
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            textarea.style.position = 'fixed';
+            textarea.style.opacity = '0';
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+        }
+
+        // 显示提示消息
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // 预览功能相关变量
+        let previewMode = 'funding'; // 'funding' 或 'member'
+        let previewFormat = 'formatted'; // 'formatted' 或 'raw'
+
+        // 初始化预览功能
+        function initPreview() {
+            // 设置预览切换按钮
+            const previewToggleBtn = document.getElementById('preview-toggle');
+
+            // 设置清空预览按钮
+            const previewClearBtn = document.getElementById('preview-clear');
+
+            // 设置复制预览内容按钮
+            const previewCopyBtn = document.getElementById('preview-copy');
+
+            // 设置格式切换按钮
+            const formatOptions = document.querySelectorAll('.format-option');
+
+            // 格式切换按钮点击事件
+            formatOptions.forEach(option => {
+                option.addEventListener('click', function () {
+                    // 移除所有按钮的active类
+                    formatOptions.forEach(opt => opt.classList.remove('active'));
+                    // 添加当前按钮的active类
+                    this.classList.add('active');
+                    // 更新预览格式
+                    previewFormat = this.dataset.format;
+                    // 更新预览内容
+                    updatePreview();
+                    // 显示通知
+                    showPreviewNotification(`已切换到${previewFormat === 'formatted' ? '格式化' : '原始数据'}模式`);
+                });
+            });
+
+            // 预览切换按钮点击事件
+            if (previewToggleBtn) {
+                previewToggleBtn.addEventListener('click', function () {
+                    // 切换预览模式
+                    if (previewMode === 'funding') {
+                        previewMode = 'member';
+                        showPreviewNotification('已切换到成员预览模式');
+                    } else {
+                        previewMode = 'funding';
+                        showPreviewNotification('已切换到基金预览模式');
+                    }
+                    updatePreview();
+                });
+            }
+
+            // 清空预览按钮点击事件
+            if (previewClearBtn) {
+                previewClearBtn.addEventListener('click', function () {
+                    const previewContent = document.getElementById('preview-content');
+                    previewContent.innerHTML = `
+                        <div class="preview-format-toggle">
+                            <button class="format-option active" data-format="formatted">格式化</button>
+                            <button class="format-option" data-format="raw">原始数据</button>
+                        </div>
+                        <div class="preview-placeholder">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"></path>
+                                <polyline points="14 2 14 8 20 8"></polyline>
+                                <line x1="16" y1="13" x2="8" y2="13"></line>
+                                <line x1="16" y1="17" x2="8" y2="17"></line>
+                                <polyline points="10 9 9 9 8 9"></polyline>
+                            </svg>
+                            <p>选择团队成员或基金信息后，预览内容将显示在这里</p>
+                        </div>
+                    `;
+                    // 重新绑定格式切换按钮事件
+                    const newFormatOptions = document.querySelectorAll('.format-option');
+                    newFormatOptions.forEach(option => {
+                        option.addEventListener('click', function () {
+                            // 移除所有按钮的active类
+                            newFormatOptions.forEach(opt => opt.classList.remove('active'));
+                            // 添加当前按钮的active类
+                            this.classList.add('active');
+                            // 更新预览格式
+                            previewFormat = this.dataset.format;
+                            // 显示通知
+                            showPreviewNotification(`已切换到${previewFormat === 'formatted' ? '格式化' : '原始数据'}模式`);
+                        });
+                    });
+                    showPreviewNotification('预览已清空');
+                });
+            }
+
+            // 复制预览内容按钮点击事件
+            if (previewCopyBtn) {
+                previewCopyBtn.addEventListener('click', function () {
+                    const previewText = document.getElementById('preview-content').textContent;
+                    if (previewText && !previewText.includes('选择团队成员或基金信息后')) {
+                        copyToClipboard(previewText);
+                        showPreviewNotification('预览内容已复制到剪贴板');
+                    } else {
+                        showPreviewNotification('没有可复制的预览内容');
+                    }
+                });
+            }
+
+            // 延迟执行预览更新，确保DOM已完全加载
+            setTimeout(() => {
+                updatePreview();
+            }, 100);
+        }
+
+        // 更新预览内容
+        function updatePreview() {
+            const previewContent = document.getElementById('preview-content');
+
+            if (previewMode === 'funding') {
+                // 获取当前选中的基金
+                const checkedBoxes = document.querySelectorAll('.funding-checkbox:checked');
+                if (checkedBoxes.length === 0) {
+                    previewContent.innerHTML = `
+                        <div class="preview-format-toggle">
+                            <button class="format-option active" data-format="formatted">格式化</button>
+                            <button class="format-option" data-format="raw">原始数据</button>
+                        </div>
+                        <div class="preview-placeholder">
+                            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                <polyline points="14,2 14,8 20,8"></polyline>
+                                <line x1="16" y1="13" x2="8" y2="13"></line>
+                                <line x1="16" y1="17" x2="8" y2="17"></line>
+                                <polyline points="10,9 9,9 8,9"></polyline>
+                            </svg>
+                            <p>请选择至少一个基金以查看预览</p>
+                        </div>
+                    `;
+                    // 重新绑定格式切换按钮事件
+                    const formatOptions = document.querySelectorAll('.format-option');
+                    formatOptions.forEach(option => {
+                        option.addEventListener('click', function () {
+                            // 移除所有按钮的active类
+                            formatOptions.forEach(opt => opt.classList.remove('active'));
+                            // 添加当前按钮的active类
+                            this.classList.add('active');
+                            // 更新预览格式
+                            previewFormat = this.dataset.format;
+                            // 更新预览内容
+                            updatePreview();
+                            // 显示通知
+                            showPreviewNotification(`已切换到${previewFormat === 'formatted' ? '格式化' : '原始数据'}模式`);
+                        });
+                    });
+                    return;
+                }
+
+                // 获取当前基金排序
+                const currentOrder = getCurrentFundingOrder();
+
+                // 按照当前排序和选中状态获取基金信息
+                const selectedFunding = [];
+                currentOrder.forEach(funding => {
+                    const checkbox = document.querySelector(`.funding-checkbox[data-funding-id="${funding.id}"]`);
+                    if (checkbox && checkbox.checked) {
+                        selectedFunding.push(funding);
+                    }
+                });
+
+                // 检查当前语言状态
+                const fundingLangToggle = document.getElementById('funding-lang-toggle');
+                // 修正语言状态判断逻辑：按钮有active类表示英文模式，无active类表示中文模式
+                const isEnglish = fundingLangToggle && fundingLangToggle.classList.contains('active');
+
+                // 生成预览内容
+                let previewText;
+                if (previewFormat === 'formatted') {
+                    previewText = formatFundingInfo(selectedFunding, isEnglish);
+                } else {
+                    // 原始数据格式
+                    previewText = selectedFunding.map(funding => {
+                        return `ID: ${funding.id}\n中文: ${funding.fullTextCn || funding.fullText}\n英文: ${funding.fullText}`;
+                    }).join('\n\n');
+                }
+
+                previewContent.innerHTML = `
+                    <div class="preview-format-toggle">
+                        <button class="format-option ${previewFormat === 'formatted' ? 'active' : ''}" data-format="formatted">格式化</button>
+                        <button class="format-option ${previewFormat === 'raw' ? 'active' : ''}" data-format="raw">原始数据</button>
+                    </div>
+                    <div class="preview-text">${previewText}</div>
+                `;
+
+                // 重新绑定格式切换按钮事件
+                const formatOptions = document.querySelectorAll('.format-option');
+                formatOptions.forEach(option => {
+                    option.addEventListener('click', function () {
+                        // 移除所有按钮的active类
+                        formatOptions.forEach(opt => opt.classList.remove('active'));
+                        // 添加当前按钮的active类
+                        this.classList.add('active');
+                        // 更新预览格式
+                        previewFormat = this.dataset.format;
+                        // 更新预览内容
+                        updatePreview();
+                        // 显示通知
+                        showPreviewNotification(`已切换到${previewFormat === 'formatted' ? '格式化' : '原始数据'}模式`);
+                    });
+                });
+
+            } else if (previewMode === 'member') {
+                // 获取选中的成员
+                const selectedMembers = Array.from(document.querySelectorAll('.member-checkbox:checked'))
+                    .map(checkbox => {
+                        const memberId = checkbox.dataset.memberId;
+                        return teamMembers.find(member => member.id === memberId);
+                    })
+                    .filter(member => member !== undefined);
+
+                if (selectedMembers.length > 0) {
+                    let content = '';
+
+                    if (previewFormat === 'formatted') {
+                        // 格式化模式
+                        content = '<div class="preview-text">';
+                        content += '<h3>团队成员信息</h3>\n\n';
+                        selectedMembers.forEach((member, index) => {
+                            content += `<p><strong>${index + 1}. ${member.name}</strong></p>\n`;
+                            content += `<p>英文名: ${member.englishName || '未提供'}</p>\n`;
+                            content += `<p>职称: ${member.title || '未提供'}</p>\n`;
+                            content += `<p>性别: ${member.gender || '未提供'}</p>\n`;
+                            content += `<p>学位: ${member.degree || '未提供'}</p>\n`;
+                            content += `<p>研究方向: ${member.researchFields || '未提供'}</p>\n`;
+                            content += `<p>单位: ${member.institution || '未提供'}</p>\n`;
+                            content += `<p>单位(En): ${member.institutionEn || '未提供'}</p>\n`;
+                            content += `<p>邮箱: ${member.emails && member.emails.length > 0 ? member.emails.join(', ') : '未提供'}</p>\n`;
+                            content += `<p>电话: ${member.phones && member.phones.length > 0 ? member.phones.join(', ') : '未提供'}</p>\n`;
+                            content += `<p>ORCID: ${member.orcid || '未提供'}</p>\n\n`;
+                        });
+                        content += '</div>';
+                    } else {
+                        // 原始数据模式
+                        content = '<div class="preview-text">';
+                        content += '<h3>团队成员信息（原始数据）</h3>\n\n';
+                        content += '<pre>';
+                        content += JSON.stringify(selectedMembers, null, 2);
+                        content += '</pre>';
+                        content += '</div>';
+                    }
+
+                    previewContent.innerHTML = `
+                        <div class="preview-format-toggle">
+                            <button class="format-option ${previewFormat === 'formatted' ? 'active' : ''}" data-format="formatted">格式化</button>
+                            <button class="format-option ${previewFormat === 'raw' ? 'active' : ''}" data-format="raw">原始数据</button>
+                        </div>
+                        ${content}
+                    `;
+                } else {
+                    previewContent.innerHTML = `
+                        <div class="preview-format-toggle">
+                            <button class="format-option active" data-format="formatted">格式化</button>
+                            <button class="format-option" data-format="raw">原始数据</button>
+                        </div>
+                        <div class="preview-placeholder">
+                            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
+                            <p>请选择团队成员</p>
+                        </div>
+                    `;
+                }
+
+                // 重新绑定格式切换按钮事件
+                const formatOptions = document.querySelectorAll('.format-option');
+                formatOptions.forEach(option => {
+                    option.addEventListener('click', function () {
+                        // 移除所有按钮的active类
+                        formatOptions.forEach(opt => opt.classList.remove('active'));
+                        // 添加当前按钮的active类
+                        this.classList.add('active');
+                        // 更新预览格式
+                        previewFormat = this.dataset.format;
+                        // 更新预览内容
+                        updatePreview();
+                        // 显示通知
+                        showPreviewNotification(`已切换到${previewFormat === 'formatted' ? '格式化' : '原始数据'}模式`);
+                    });
+                });
+            }
+        }
+
+        // 显示预览通知
+        function showPreviewNotification(message) {
+            const notification = document.getElementById('preview-notification');
+            notification.textContent = message;
+            notification.classList.add('show');
+
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 2000);
+        }
+
+        // 更新复制函数以支持预览
+        function updateCopyFunctionsForPreview() {
+            // 修改成员信息复制
+            document.addEventListener('click', function (e) {
+                if (e.target.closest('.copy-btn')) {
+                    const btn = e.target.closest('.copy-btn');
+                    const memberId = btn.dataset.memberId;
+                    const member = teamMembers.find(m => m.id === memberId);
+
+                    if (member) {
+                        const memberInfo = formatMemberInfo(member);
+                        copyToClipboard(memberInfo);
+                        showToast(`已复制 ${member.name} 的信息`);
+
+                        // 更新预览
+                        if (previewMode === 'member') {
+                            const previewContent = document.getElementById('preview-content');
+                            if (previewFormat === 'formatted') {
+                                previewContent.innerHTML = `
+                                    <div class="preview-format-toggle">
+                                        <button class="format-option active" data-format="formatted">格式化</button>
+                                        <button class="format-option" data-format="raw">原始数据</button>
+                                    </div>
+                                    <div class="preview-text">${memberInfo}</div>
+                                `;
+                            } else {
+                                // 原始数据格式
+                                const rawData = `姓名: ${member.name}\n英文名: ${member.englishName || '未提供'}\n职称: ${member.title || '未提供'}\n性别: ${member.gender || '未提供'}\n学位: ${member.degree || '未提供'}\n研究方向: ${member.researchFields || '未提供'}\n单位: ${member.institution || '未提供'}\n单位(En): ${member.institutionEn || '未提供'}\n邮箱: ${member.emails && member.emails.length > 0 ? member.emails.join(', ') : '未提供'}\n电话: ${member.phones && member.phones.length > 0 ? member.phones.join(', ') : '未提供'}\nORCID: ${member.orcid || '未提供'}`;
+                                previewContent.innerHTML = `
+                                    <div class="preview-format-toggle">
+                                        <button class="format-option" data-format="formatted">格式化</button>
+                                        <button class="format-option active" data-format="raw">原始数据</button>
+                                    </div>
+                                    <div class="preview-text">${rawData}</div>
+                                `;
+                            }
+                            showPreviewNotification(`已更新 ${member.name} 的预览`);
+
+                            // 重新绑定格式切换按钮事件
+                            const formatOptions = document.querySelectorAll('.format-option');
+                            formatOptions.forEach(option => {
+                                option.addEventListener('click', function () {
+                                    // 移除所有按钮的active类
+                                    formatOptions.forEach(opt => opt.classList.remove('active'));
+                                    // 添加当前按钮的active类
+                                    this.classList.add('active');
+                                    // 更新预览格式
+                                    previewFormat = this.dataset.format;
+                                    // 更新预览内容
+                                    updatePreview();
+                                    // 显示通知
+                                    showPreviewNotification(`已切换到${previewFormat === 'formatted' ? '格式化' : '原始数据'}模式`);
+                                });
+                            });
+                        }
+                    }
+                }
+            });
+
+            // 修改基金信息复制
+            document.addEventListener('click', function (e) {
+                if (e.target.classList.contains('funding-copy')) {
+                    const fundingId = e.target.dataset.fundingId;
+                    const funding = fundingData.find(f => f.id === fundingId);
+
+                    if (funding) {
+                        // 检查当前语言状态
+                        const fundingLangToggle = document.getElementById('funding-lang-toggle');
+                        const isEnglish = fundingLangToggle && fundingLangToggle.classList.contains('active');
+
+                        const fundingText = formatFundingInfo([funding], isEnglish);
+                        copyToClipboard(fundingText);
+                        showToast('已复制基金信息');
+
+                        // 更新预览
+                        if (previewMode === 'funding') {
+                            updatePreview();
+                            showPreviewNotification('已更新基金预览');
+                        }
+                    }
+                }
+            });
+
+            // 修改复制选中基金信息
+            const copyFundingBtn = document.getElementById('copy-funding');
+            if (copyFundingBtn) {
+                // 移除旧的事件监听器
+                const newCopyFundingBtn = copyFundingBtn.cloneNode(true);
+                copyFundingBtn.parentNode.replaceChild(newCopyFundingBtn, copyFundingBtn);
+
+                // 添加新的事件监听器
+                newCopyFundingBtn.addEventListener('click', function () {
+                    const checkedBoxes = document.querySelectorAll('.funding-checkbox:checked');
+                    if (checkedBoxes.length === 0) {
+                        showToast('请至少选择一个基金');
+                        return;
+                    }
+
+                    // 获取当前基金排序
+                    const currentOrder = getCurrentFundingOrder();
+
+                    // 按照当前排序和选中状态获取基金信息
+                    const selectedFunding = [];
+                    currentOrder.forEach(funding => {
+                        const checkbox = document.querySelector(`.funding-checkbox[data-funding-id="${funding.id}"]`);
+                        if (checkbox && checkbox.checked) {
+                            selectedFunding.push(funding);
+                        }
+                    });
+
+                    // 检查当前语言状态
+                    const fundingLangToggle = document.getElementById('funding-lang-toggle');
+                    const isEnglish = fundingLangToggle && fundingLangToggle.classList.contains('active');
+
+                    const fundingText = formatFundingInfo(selectedFunding, isEnglish);
+                    copyToClipboard(fundingText);
+                    showToast(`已复制 ${checkedBoxes.length} 个基金信息`);
+
+                    // 更新预览
+                    if (previewMode === 'funding') {
+                        updatePreview();
+                        showPreviewNotification(`已更新 ${checkedBoxes.length} 个基金的预览`);
+                    }
+                });
+            }
+
+            // 修改基金选择事件
+            document.addEventListener('change', function (e) {
+                if (e.target.classList.contains('funding-checkbox')) {
+                    if (previewMode === 'funding') {
+                        updatePreview();
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>
