@@ -1119,7 +1119,7 @@
         }
 
         /* 页面内容在未验证密码时隐藏 */
-        body:not(.password-verified) > :not(.password-modal) {
+        body:not(.password-verified) > :not(.password-modal):not(nav) {
             display: none;
         }
 
@@ -1520,6 +1520,26 @@
             const passwordError = document.getElementById('passwordError');
             const passwordSubmit = document.getElementById('passwordSubmit');
             
+            // 确保应用当前主题
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            
+            // 设置主题切换功能
+            const themeToggle = document.getElementById('theme-toggle');
+            if (themeToggle) {
+                // 移除之前的事件监听器（如果有的话）
+                const newThemeToggle = themeToggle.cloneNode(true);
+                themeToggle.parentNode.replaceChild(newThemeToggle, themeToggle);
+                
+                // 添加主题切换事件监听器
+                newThemeToggle.addEventListener('click', function () {
+                    const currentTheme = document.documentElement.getAttribute('data-theme');
+                    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                    document.documentElement.setAttribute('data-theme', newTheme);
+                    localStorage.setItem('theme', newTheme);
+                });
+            }
+            
             // 显示模态框
             modal.style.display = 'flex';
             
@@ -1609,6 +1629,10 @@
         }
 
         document.addEventListener('DOMContentLoaded', function () {
+            // 确保应用当前主题
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            
             // 检查密码验证状态
             if (checkPasswordValidity()) {
                 // 已验证，添加验证类到body元素
