@@ -1200,7 +1200,6 @@
                     </button>
                     <button class="action-btn" id="select-all">全选</button>
                     <button class="action-btn" id="deselect-all">取消全选</button>
-                    <button class="action-btn primary" id="copy-funding">复制选中基金</button>
                 </div>
             </div>
             <div class="funding-list" id="funding-list">
@@ -1536,7 +1535,7 @@
 
             // 移除拖拽样式
             targetItem.classList.remove('drag-over', 'drag-over-before', 'drag-over-after');
-            
+
             // 清理所有项目的拖拽状态
             const allItems = document.querySelectorAll('.funding-item');
             allItems.forEach(el => {
@@ -1922,34 +1921,7 @@
             });
 
             // 复制选中的基金信息
-            document.getElementById('copy-funding').addEventListener('click', function () {
-                const checkedBoxes = document.querySelectorAll('.funding-checkbox:checked');
-                if (checkedBoxes.length === 0) {
-                    showToast('请至少选择一个基金');
-                    return;
-                }
-
-                // 获取当前基金排序
-                const currentOrder = getCurrentFundingOrder();
-
-                // 按照当前排序和选中状态获取基金信息
-                const selectedFunding = [];
-                currentOrder.forEach(funding => {
-                    const checkbox = document.querySelector(`.funding-checkbox[data-funding-id="${funding.id}"]`);
-                    if (checkbox && checkbox.checked) {
-                        selectedFunding.push(funding);
-                    }
-                });
-
-                // 检查当前语言状态
-                const fundingLangToggle = document.getElementById('funding-lang-toggle');
-                // 修正语言状态判断逻辑：按钮有active类表示英文模式，无active类表示中文模式
-                const isEnglish = fundingLangToggle && fundingLangToggle.classList.contains('active');
-
-                const fundingText = formatFundingInfo(selectedFunding, isEnglish);
-                copyToClipboard(fundingText);
-                showToast(`已复制 ${checkedBoxes.length} 个基金信息`);
-            });
+            // 注意：此功能已移至复制预览按钮，避免功能冗余
         }
 
         // 渲染团队成员卡片
@@ -2245,34 +2217,7 @@
             });
 
             // 复制选中的基金信息
-            document.getElementById('copy-funding').addEventListener('click', function () {
-                const checkedBoxes = document.querySelectorAll('.funding-checkbox:checked');
-                if (checkedBoxes.length === 0) {
-                    showToast('请至少选择一个基金');
-                    return;
-                }
-
-                // 获取当前基金排序
-                const currentOrder = getCurrentFundingOrder();
-
-                // 按照当前排序和选中状态获取基金信息
-                const selectedFunding = [];
-                currentOrder.forEach(funding => {
-                    const checkbox = document.querySelector(`.funding-checkbox[data-funding-id="${funding.id}"]`);
-                    if (checkbox && checkbox.checked) {
-                        selectedFunding.push(funding);
-                    }
-                });
-
-                // 检查当前语言状态
-                const fundingLangToggle = document.getElementById('funding-lang-toggle');
-                // 修正语言状态判断逻辑：按钮有active类表示英文模式，无active类表示中文模式
-                const isEnglish = fundingLangToggle && fundingLangToggle.classList.contains('active');
-
-                const fundingText = formatFundingInfo(selectedFunding, isEnglish);
-                copyToClipboard(fundingText);
-                showToast(`已复制 ${checkedBoxes.length} 个基金信息`);
-            });
+            // 注意：此功能已移至复制预览按钮，避免功能冗余
         }
 
         // 显示成员详情
@@ -2530,12 +2475,73 @@ ORCID: ${member.orcid || '未提供'}`;
             // 复制预览内容按钮点击事件
             if (previewCopyBtn) {
                 previewCopyBtn.addEventListener('click', function () {
-                    const previewText = document.getElementById('preview-content').textContent;
-                    if (previewText && !previewText.includes('选择团队成员或基金信息后')) {
-                        copyToClipboard(previewText);
-                        showPreviewNotification('预览内容已复制到剪贴板');
-                    } else {
-                        showPreviewNotification('没有可复制的预览内容');
+                    // 添加点击效果动画
+                    this.style.transform = 'scale(0.95)';
+                    this.style.opacity = '0.8';
+                    
+                    // 恢复按钮状态
+                    setTimeout(() => {
+                        this.style.transform = '';
+                        this.style.opacity = '';
+                    }, 150);
+                    
+                    // 检查当前预览模式
+                    if (previewMode === 'funding') {
+                        // 基金预览模式：复制选中的基金信息
+                        const checkedBoxes = document.querySelectorAll('.funding-checkbox:checked');
+                        if (checkedBoxes.length === 0) {
+                            showPreviewNotification('请至少选择一个基金');
+                            return;
+                        }
+
+                        // 获取当前基金排序
+                        const currentOrder = getCurrentFundingOrder();
+
+                        // 按照当前排序和选中状态获取基金信息
+                        const selectedFunding = [];
+                        currentOrder.forEach(funding => {
+                            const checkbox = document.querySelector(`.funding-checkbox[data-funding-id="${funding.id}"]`);
+                            if (checkbox && checkbox.checked) {
+                                selectedFunding.push(funding);
+                            }
+                        });
+
+                        // 检查当前语言状态
+                        const fundingLangToggle = document.getElementById('funding-lang-toggle');
+                        const isEnglish = fundingLangToggle && fundingLangToggle.classList.contains('active');
+
+                        const fundingText = formatFundingInfo(selectedFunding, isEnglish);
+                        copyToClipboard(fundingText);
+                        showPreviewNotification(`已复制 ${checkedBoxes.length} 个基金信息`);
+                        
+                        // 更新预览
+                        updatePreview();
+                    } else if (previewMode === 'member') {
+                        // 成员预览模式：复制选中的成员信息
+                        const checkedBoxes = document.querySelectorAll('.member-checkbox:checked');
+                        if (checkedBoxes.length === 0) {
+                            showPreviewNotification('请至少选择一个成员');
+                            return;
+                        }
+
+                        // 获取选中的成员
+                        const selectedMembers = Array.from(checkedBoxes)
+                            .map(checkbox => {
+                                const memberId = checkbox.dataset.memberId;
+                                return teamMembers.find(member => member.id === memberId);
+                            })
+                            .filter(member => member !== undefined);
+
+                        // 格式化成员信息
+                        const memberText = selectedMembers.map(member => {
+                            return formatMemberInfo(member);
+                        }).join('\n\n');
+
+                        copyToClipboard(memberText);
+                        showPreviewNotification(`已复制 ${checkedBoxes.length} 个成员信息`);
+                        
+                        // 更新预览
+                        updatePreview();
                     }
                 });
             }
@@ -2817,49 +2823,6 @@ ORCID: ${member.orcid || '未提供'}`;
                     }
                 }
             });
-
-            // 修改复制选中基金信息
-            const copyFundingBtn = document.getElementById('copy-funding');
-            if (copyFundingBtn) {
-                // 移除旧的事件监听器
-                const newCopyFundingBtn = copyFundingBtn.cloneNode(true);
-                copyFundingBtn.parentNode.replaceChild(newCopyFundingBtn, copyFundingBtn);
-
-                // 添加新的事件监听器
-                newCopyFundingBtn.addEventListener('click', function () {
-                    const checkedBoxes = document.querySelectorAll('.funding-checkbox:checked');
-                    if (checkedBoxes.length === 0) {
-                        showToast('请至少选择一个基金');
-                        return;
-                    }
-
-                    // 获取当前基金排序
-                    const currentOrder = getCurrentFundingOrder();
-
-                    // 按照当前排序和选中状态获取基金信息
-                    const selectedFunding = [];
-                    currentOrder.forEach(funding => {
-                        const checkbox = document.querySelector(`.funding-checkbox[data-funding-id="${funding.id}"]`);
-                        if (checkbox && checkbox.checked) {
-                            selectedFunding.push(funding);
-                        }
-                    });
-
-                    // 检查当前语言状态
-                    const fundingLangToggle = document.getElementById('funding-lang-toggle');
-                    const isEnglish = fundingLangToggle && fundingLangToggle.classList.contains('active');
-
-                    const fundingText = formatFundingInfo(selectedFunding, isEnglish);
-                    copyToClipboard(fundingText);
-                    showToast(`已复制 ${checkedBoxes.length} 个基金信息`);
-
-                    // 更新预览
-                    if (previewMode === 'funding') {
-                        updatePreview();
-                        showPreviewNotification(`已更新 ${checkedBoxes.length} 个基金的预览`);
-                    }
-                });
-            }
 
             // 修改基金选择事件
             document.addEventListener('change', function (e) {
