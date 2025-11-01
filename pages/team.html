@@ -1599,27 +1599,6 @@
         }
 
         function initializePageContent() {
-            // 调试信息：检查徐乐的数据
-            console.log('=== 团队页面初始化调试信息 ===');
-            const xuleMember = teamMembers.find(m => m.id === 'xule');
-            console.log('徐乐成员数据:', xuleMember);
-            if (xuleMember) {
-                console.log('徐乐title:', JSON.stringify(xuleMember.title));
-                console.log('徐乐degree:', JSON.stringify(xuleMember.degree));
-                
-                // 测试显示逻辑
-                let displayTitleTest;
-                if (xuleMember.title && xuleMember.title.trim() !== '') {
-                    displayTitleTest = xuleMember.title;
-                } else if (xuleMember.degree && xuleMember.degree.trim() !== '') {
-                    displayTitleTest = xuleMember.degree;
-                } else {
-                    displayTitleTest = '未提供';
-                }
-                console.log('徐乐应该显示的标题:', displayTitleTest);
-            }
-            console.log('=== 调试信息结束 ===');
-
             // 检查并应用保存的主题
             const savedTheme = localStorage.getItem('theme') || 'dark';
             document.documentElement.setAttribute('data-theme', savedTheme);
@@ -2297,7 +2276,7 @@
                                 <h3>${member.name}</h3>
                                 <div class="english-name">${member.englishName || '未提供'}</div>
                                 <div class="tags-container">
-                                    <span class="tag tag-title">${member.title || '未提供'}</span>
+                                    <span class="tag tag-title">${member.title && member.title.trim() !== '' ? member.title : (member.degree || '未提供')}</span>
                                     <span class="tag tag-position">${member.position || '未提供'}</span>
                                 </div>
                             </div>
@@ -2603,27 +2582,17 @@
         function showMemberDetails(member) {
             const modal = document.getElementById('member-modal');
 
-            // 调试信息
-            console.log('=== showMemberDetails 调试信息 ===');
-            console.log('当前成员:', member.name, 'ID:', member.id);
-            console.log('成员title:', JSON.stringify(member.title));
-            console.log('成员degree:', JSON.stringify(member.degree));
-
             // 更新模态框内容
             document.getElementById('modal-member-name').textContent = member.name || '未提供';
             // 如果title为空，使用degree数据填充title标签位置
             const titleElement = document.getElementById('modal-member-title');
             if (member.title && member.title.trim() !== '') {
                 titleElement.textContent = member.title;
-                console.log('使用title显示:', member.title);
             } else if (member.degree && member.degree.trim() !== '') {
                 titleElement.textContent = member.degree;
-                console.log('使用degree显示:', member.degree);
             } else {
                 titleElement.textContent = '未提供';
-                console.log('使用默认值: 未提供');
             }
-            console.log('=== 调试信息结束 ===');
             document.getElementById('modal-member-position').textContent = member.position || '未提供';
 
             // 处理头像显示
