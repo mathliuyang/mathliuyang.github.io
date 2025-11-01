@@ -140,8 +140,8 @@
         /* Content Grid */
         .content-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 6rem;
+            grid-template-columns: 1.3fr 1fr;
+            gap: 5rem;
             align-items: start;
         }
 
@@ -265,6 +265,7 @@
             display: flex;
             flex-direction: column;
             gap: 2rem;
+            min-width: 0; /* 防止网格项溢出 */
         }
 
         .form-title {
@@ -294,7 +295,7 @@
 
         .form-input,
         .form-textarea {
-            padding: 1rem;
+            padding: 0.9rem;
             background: transparent;
             border: 1px solid var(--border);
             color: var(--text);
@@ -303,6 +304,7 @@
             transition: border-color 0.3s ease;
             border-radius: 4px;
             width: 100%;
+            box-sizing: border-box; /* 确保padding不会增加总宽度 */
         }
 
         .form-input:focus,
