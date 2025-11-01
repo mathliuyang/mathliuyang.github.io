@@ -2226,8 +2226,20 @@
                 return avatar;
             }
             
-            // 本地路径，直接返回
-            return avatar;
+            // 本地路径处理
+            // 在GitHub Pages上，从pages目录访问assets目录需要使用../assets/路径
+            // 如果路径已经是相对路径（以../开头），直接返回
+            if (avatar.startsWith('../')) {
+                return avatar;
+            }
+            
+            // 如果路径是绝对路径（以/开头），转换为相对路径
+            if (avatar.startsWith('/')) {
+                return '..' + avatar;
+            }
+            
+            // 如果路径是相对路径（不以/或../开头），添加../前缀
+            return '../' + avatar;
         }
 
         // 渲染团队成员卡片
@@ -2247,7 +2259,7 @@
                     const avatarUrl = getAvatarUrl(member.avatar);
                     avatarHtml = `
                         <div class="member-avatar">
-                            <img src="${avatarUrl}" alt="${member.name}" onerror="this.style.display='none'; this.parentElement.innerHTML='${member.name.charAt(0)}';">
+                            <img src="${avatarUrl}" alt="${member.name}" onerror="this.style.display='none'; this.parentElement.innerHTML='${member.name.charAt(0).replace(/'/g, '\\\'')}';">
                         </div>
                     `;
                 }
@@ -2599,7 +2611,7 @@
             const avatarElement = document.getElementById('modal-member-avatar');
             if (member.avatar) {
                 const avatarUrl = getAvatarUrl(member.avatar);
-                avatarElement.innerHTML = `<img src="${avatarUrl}" alt="${member.name}" onerror="this.style.display='none'; this.parentElement.innerHTML='${member.name.charAt(0)}';">`;
+                avatarElement.innerHTML = `<img src="${avatarUrl}" alt="${member.name}" onerror="this.style.display='none'; this.parentElement.innerHTML='${member.name.charAt(0).replace(/'/g, '\\\'')}';">`;
             } else {
                 avatarElement.innerHTML = member.name.charAt(0);
             }
