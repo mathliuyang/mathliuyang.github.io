@@ -1112,6 +1112,7 @@
                 opacity: 0;
                 transform: scale(0.9);
             }
+
             to {
                 opacity: 1;
                 transform: scale(1);
@@ -1119,7 +1120,7 @@
         }
 
         /* 页面内容在未验证密码时隐藏 */
-        body:not(.password-verified) > :not(.password-modal):not(nav) {
+        body:not(.password-verified)> :not(.password-modal):not(nav) {
             display: none;
         }
 
@@ -1491,7 +1492,7 @@
             const lastVerifiedTime = localStorage.getItem('teamPagePasswordVerified');
             const currentTime = new Date().getTime();
             const twentyFourHours = 24 * 60 * 60 * 1000; // 24小时的毫秒数
-            
+
             // 如果没有验证记录或者已超过24小时，则需要重新验证
             if (!lastVerifiedTime || (currentTime - parseInt(lastVerifiedTime)) > twentyFourHours) {
                 return false;
@@ -1509,38 +1510,38 @@
             const passwordInput = document.getElementById('passwordInput');
             const passwordError = document.getElementById('passwordError');
             const passwordSubmit = document.getElementById('passwordSubmit');
-            
+
             // 确保应用当前主题
             const savedTheme = localStorage.getItem('theme') || 'dark';
             document.documentElement.setAttribute('data-theme', savedTheme);
-            
+
             // 设置主题切换功能
             const themeToggle = document.getElementById('theme-toggle');
             if (themeToggle) {
                 // 获取主题图标元素
                 const themeIcon = document.getElementById('themeIcon');
-                
+
                 // 设置初始图标状态
                 const currentTheme = document.documentElement.getAttribute('data-theme');
                 if (themeIcon) {
                     themeIcon.textContent = currentTheme === 'dark' ? '◐' : '◑';
                     themeIcon.style.color = currentTheme === 'dark' ? '#ffffff' : '#000000';
                 }
-                
+
                 // 移除之前的事件监听器（如果有的话）
                 const newThemeToggle = themeToggle.cloneNode(true);
                 themeToggle.parentNode.replaceChild(newThemeToggle, themeToggle);
-                
+
                 // 获取新元素中的图标元素
                 const newThemeIcon = document.getElementById('themeIcon');
-                
+
                 // 添加主题切换事件监听器
                 newThemeToggle.addEventListener('click', function () {
                     const currentTheme = document.documentElement.getAttribute('data-theme');
                     const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
                     document.documentElement.setAttribute('data-theme', newTheme);
                     localStorage.setItem('theme', newTheme);
-                    
+
                     // 更新图标
                     if (newThemeIcon) {
                         newThemeIcon.textContent = newTheme === 'dark' ? '◐' : '◑';
@@ -1548,37 +1549,37 @@
                     }
                 });
             }
-            
+
             // 显示模态框
             modal.style.display = 'flex';
-            
+
             // 清空输入框和错误提示
             passwordInput.value = '';
             passwordError.classList.remove('show');
-            
+
             // 聚焦到密码输入框
             setTimeout(() => {
                 passwordInput.focus();
             }, 100);
-            
+
             // 移除之前的事件监听器（如果有的话）
             const newSubmitBtn = passwordSubmit.cloneNode(true);
             passwordSubmit.parentNode.replaceChild(newSubmitBtn, passwordSubmit);
-            
+
             // 添加提交按钮点击事件
-            newSubmitBtn.addEventListener('click', function() {
+            newSubmitBtn.addEventListener('click', function () {
                 const password = passwordInput.value.trim();
-                
+
                 if (verifyPassword(password)) {
                     // 密码正确，记录验证时间
                     localStorage.setItem('teamPagePasswordVerified', new Date().getTime().toString());
-                    
+
                     // 添加验证类到body元素
                     document.body.classList.add('password-verified');
-                    
+
                     // 隐藏模态框
                     modal.style.display = 'none';
-                    
+
                     // 初始化页面内容
                     initializePageContent();
                 } else {
@@ -1588,9 +1589,9 @@
                     passwordInput.focus();
                 }
             });
-            
+
             // 添加回车键提交事件
-            passwordInput.addEventListener('keypress', function(e) {
+            passwordInput.addEventListener('keypress', function (e) {
                 if (e.key === 'Enter') {
                     newSubmitBtn.click();
                 }
@@ -1616,7 +1617,7 @@
 
             // 设置事件监听器
             setupEventListeners();
-            
+
             // 确保主题切换功能正常工作
             setupThemeToggle();
 
@@ -1644,12 +1645,12 @@
             // 确保应用当前主题
             const savedTheme = localStorage.getItem('theme') || 'dark';
             document.documentElement.setAttribute('data-theme', savedTheme);
-            
+
             // 检查密码验证状态
             if (checkPasswordValidity()) {
                 // 已验证，添加验证类到body元素
                 document.body.classList.add('password-verified');
-                
+
                 // 直接初始化页面内容
                 initializePageContent();
             } else {
@@ -2185,30 +2186,30 @@
         function setupThemeToggle() {
             const themeToggle = document.getElementById('theme-toggle');
             const themeIcon = document.getElementById('themeIcon');
-            
+
             if (!themeToggle || !themeIcon) return;
-            
+
             // 移除之前的事件监听器（如果有的话）
             const newThemeToggle = themeToggle.cloneNode(true);
             themeToggle.parentNode.replaceChild(newThemeToggle, themeToggle);
-            
+
             // 获取新元素中的图标元素
             const newThemeIcon = document.getElementById('themeIcon');
-            
+
             // 设置初始图标状态
             const currentTheme = document.documentElement.getAttribute('data-theme');
             if (newThemeIcon) {
                 newThemeIcon.textContent = currentTheme === 'dark' ? '◐' : '◑';
                 newThemeIcon.style.color = currentTheme === 'dark' ? '#ffffff' : '#000000';
             }
-            
+
             // 添加主题切换事件监听器
             newThemeToggle.addEventListener('click', function () {
                 const currentTheme = document.documentElement.getAttribute('data-theme');
                 const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
                 document.documentElement.setAttribute('data-theme', newTheme);
                 localStorage.setItem('theme', newTheme);
-                
+
                 // 更新图标
                 if (newThemeIcon) {
                     newThemeIcon.textContent = newTheme === 'dark' ? '◐' : '◑';
@@ -2217,48 +2218,9 @@
             });
         }
 
-        // 判断头像路径类型并返回正确的URL
+        // 简化头像路径处理 - 直接使用avatar字段中的路径
         function getAvatarUrl(avatar) {
-            if (!avatar) return null;
-            
-            // 如果是网络链接（以http://或https://开头）
-            if (avatar.startsWith('http://') || avatar.startsWith('https://')) {
-                return avatar;
-            }
-            
-            // 本地路径处理
-            // 判断当前是否在本地服务器环境
-            const isLocalServer = window.location.hostname === 'localhost' || 
-                                 window.location.hostname === '127.0.0.1' || 
-                                 window.location.hostname === '';
-            
-            // 在本地服务器环境下，直接使用相对于根目录的路径
-            if (isLocalServer) {
-                // 如果路径已经是绝对路径（以/开头），直接返回
-                if (avatar.startsWith('/')) {
-                    return avatar;
-                }
-                // 如果路径已经是相对路径（以../开头），转换为绝对路径
-                if (avatar.startsWith('../')) {
-                    return '/' + avatar.substring(2); // 去掉../并添加/
-                }
-                // 其他情况，添加/前缀
-                return '/' + avatar;
-            }
-            
-            // 在GitHub Pages上，从pages目录访问assets目录需要使用../assets/路径
-            // 如果路径已经是相对路径（以../开头），直接返回
-            if (avatar.startsWith('../')) {
-                return avatar;
-            }
-            
-            // 如果路径是绝对路径（以/开头），转换为相对路径
-            if (avatar.startsWith('/')) {
-                return '..' + avatar;
-            }
-            
-            // 如果路径是相对路径（不以/或../开头），添加../前缀
-            return '../' + avatar;
+            return avatar || null;
         }
 
         // 渲染团队成员卡片
@@ -2272,13 +2234,12 @@
                 memberCard.dataset.memberId = member.id;
                 memberCard.dataset.position = member.position;
 
-                // 处理头像显示
+                // 处理头像显示 - 直接使用avatar字段中的相对路径
                 let avatarHtml = `<div class="member-avatar">${member.name.charAt(0)}</div>`;
                 if (member.avatar) {
-                    const avatarUrl = getAvatarUrl(member.avatar);
                     avatarHtml = `
                         <div class="member-avatar">
-                            <img src="${avatarUrl}" alt="${member.name}" onerror="this.style.display='none'; this.parentElement.innerHTML='${member.name.charAt(0).replace(/'/g, '\\\'')}';">
+                            <img src="${member.avatar}" alt="${member.name}" onerror="this.style.display='none'; this.parentElement.innerHTML='${member.name.charAt(0).replace(/'/g, '\\\'')}';">
                         </div>
                     `;
                 }
@@ -2427,7 +2388,7 @@
                         nameElement.textContent = nameElement.dataset.cn;
                     }
                 });
-                
+
                 // 如果当前是基金预览模式且有选中的基金，立即更新预览内容
                 if (previewMode === 'funding') {
                     const checkedBoxes = document.querySelectorAll('.funding-checkbox:checked');
@@ -2489,24 +2450,24 @@
                     // 检查用户是否正在选择文本
                     const selection = window.getSelection();
                     const selectedText = selection.toString().trim();
-                    
+
                     // 如果有选中的文本，不触发跳转
                     if (selectedText.length > 0) {
                         return;
                     }
-                    
+
                     // 检查鼠标移动距离，如果移动距离较大，可能是拖拽选择文本
                     if (memberCard.dataset.mouseDownTime) {
                         const mouseDownTime = parseInt(memberCard.dataset.mouseDownTime);
                         const currentTime = new Date().getTime();
                         const timeDiff = currentTime - mouseDownTime;
-                        
+
                         // 如果按下时间超过200ms，可能是文本选择操作
                         if (timeDiff > 200) {
                             return;
                         }
                     }
-                    
+
                     const memberId = memberCard.dataset.memberId;
                     const member = teamMembers.find(m => m.id === memberId);
                     if (member) {
@@ -2514,7 +2475,7 @@
                     }
                 }
             });
-            
+
             // 添加鼠标按下事件监听，用于记录按下时间
             document.addEventListener('mousedown', function (e) {
                 const memberCard = e.target.closest('.member-card');
@@ -2522,7 +2483,7 @@
                     memberCard.dataset.mouseDownTime = new Date().getTime().toString();
                 }
             });
-            
+
             // 添加鼠标选择事件监听，用于检测文本选择
             document.addEventListener('selectstart', function (e) {
                 const memberCard = e.target.closest('.member-card');
@@ -2530,7 +2491,7 @@
                     memberCard.dataset.isSelecting = 'true';
                 }
             });
-            
+
             // 添加鼠标选择结束事件监听
             document.addEventListener('mouseup', function (e) {
                 // 延迟清除选择状态，确保点击事件处理时能获取到选择状态
@@ -2629,8 +2590,8 @@
             // 处理头像显示
             const avatarElement = document.getElementById('modal-member-avatar');
             if (member.avatar) {
-                const avatarUrl = getAvatarUrl(member.avatar);
-                avatarElement.innerHTML = `<img src="${avatarUrl}" alt="${member.name}" onerror="this.style.display='none'; this.parentElement.innerHTML='${member.name.charAt(0).replace(/'/g, '\\\'')}';">`;
+
+                avatarElement.innerHTML = `<img src="${member.avatar}" alt="${member.name}" onerror="this.style.display='none'; this.parentElement.innerHTML='${member.name.charAt(0).replace(/'/g, '\\\'')}';">`;
             } else {
                 avatarElement.innerHTML = member.name.charAt(0);
             }
@@ -2876,13 +2837,13 @@ ORCID: ${member.orcid || '未提供'}`;
                     // 添加点击效果动画
                     this.style.transform = 'scale(0.95)';
                     this.style.opacity = '0.8';
-                    
+
                     // 恢复按钮状态
                     setTimeout(() => {
                         this.style.transform = '';
                         this.style.opacity = '';
                     }, 150);
-                    
+
                     // 检查当前预览模式
                     if (previewMode === 'funding') {
                         // 基金预览模式：复制选中的基金信息
@@ -2910,10 +2871,10 @@ ORCID: ${member.orcid || '未提供'}`;
 
                         const fundingText = formatFundingInfo(selectedFunding, isEnglish);
                         copyToClipboard(fundingText);
-                        
+
                         // 显示弹窗提醒
                         showCopySuccessModal(`已成功复制 ${checkedBoxes.length} 个基金信息到剪贴板`);
-                        
+
                         // 更新预览
                         updatePreview();
                     } else if (previewMode === 'member') {
@@ -2938,10 +2899,10 @@ ORCID: ${member.orcid || '未提供'}`;
                         }).join('\n\n');
 
                         copyToClipboard(memberText);
-                        
+
                         // 显示弹窗提醒
                         showCopySuccessModal(`已成功复制 ${checkedBoxes.length} 个成员信息到剪贴板`);
-                        
+
                         // 更新预览
                         updatePreview();
                     }
@@ -3232,7 +3193,7 @@ ORCID: ${member.orcid || '未提供'}`;
 
             // 添加关闭按钮事件
             const closeBtn = modal.querySelector('.modal-close-btn');
-            closeBtn.addEventListener('click', function() {
+            closeBtn.addEventListener('click', function () {
                 modal.style.animation = 'fadeOut 0.3s ease';
                 setTimeout(() => {
                     document.body.removeChild(modal);
@@ -3241,7 +3202,7 @@ ORCID: ${member.orcid || '未提供'}`;
             });
 
             // 点击弹窗背景也可以关闭
-            modal.addEventListener('click', function(e) {
+            modal.addEventListener('click', function (e) {
                 if (e.target === modal) {
                     modal.style.animation = 'fadeOut 0.3s ease';
                     setTimeout(() => {
