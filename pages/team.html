@@ -2700,12 +2700,17 @@
                 orcidElement.style.color = '#0066cc';
                 orcidElement.style.textDecoration = 'underline';
                 orcidElement.style.cursor = 'pointer';
+                orcidElement.onclick = null; // 移除点击事件阻止
             } else {
                 orcidElement.textContent = '未提供';
-                orcidElement.href = '#';
+                orcidElement.removeAttribute('href'); // 完全移除href属性
                 orcidElement.style.color = 'inherit';
                 orcidElement.style.textDecoration = 'none';
                 orcidElement.style.cursor = 'default';
+                orcidElement.onclick = function(e) {
+                    e.preventDefault(); // 阻止任何点击行为
+                    return false;
+                };
             }
 
             // 设置单位信息和中英文切换
