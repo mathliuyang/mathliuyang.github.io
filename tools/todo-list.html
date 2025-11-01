@@ -533,7 +533,7 @@
             <div class="add-section">
                 <div class="add-form">
                     <input type="text" class="add-input" id="todoInput" placeholder="添加新任务..." />
-                    <input type="text" class="add-date" id="todoDueDate" placeholder="输入日期 (20250103 或 0921)" />
+                    <input type="date" class="add-date" id="todoDueDate" />
                     <button class="add-btn" id="addBtn">添加</button>
                     <button class="add-btn" id="saveBtn">同步</button>
                 </div>
@@ -616,43 +616,42 @@
                 saveTodosToFile();
             });
 
-            // 智能解析日期输入
-            function parseDateInput(dateString) {
-                if (!dateString || !dateString.trim()) return null;
+            // 解析日期输入，支持多种格式
+            function parseDateInput(dateStr) {
+                if (!dateStr) return null;
                 
-                const trimmed = dateString.trim();
-                const now = new Date();
-                const currentYear = now.getFullYear();
+                // 移除非数字字符，仅保留数字
+                dateStr = dateStr.replace(/\D/g, '');
                 
-                // 8位数字：20250103 -> 2025年1月3日
-                if (/^\d{8}$/.test(trimmed)) {
-                    const year = parseInt(trimmed.substring(0, 4));
-                    const month = parseInt(trimmed.substring(4, 6)) - 1; // 月份从0开始
-                    const day = parseInt(trimmed.substring(6, 8));
+                // 处理8位数字格式 (YYYYMMDD)
+                if (dateStr.length === 8) {
+                    const year = parseInt(dateStr.substring(0, 4));
+                    const month = parseInt(dateStr.substring(4, 6)) - 1; // 月份从0开始
+                    const day = parseInt(dateStr.substring(6, 8));
                     
                     const date = new Date(year, month, day);
-                    // 验证日期是否有效
+                    // 验证日期有效性
                     if (date.getFullYear() === year && date.getMonth() === month && date.getDate() === day) {
                         return date;
                     }
                 }
-                
-                // 4位数字：0921 -> 今年9月21日
-                else if (/^\d{4}$/.test(trimmed)) {
-                    const month = parseInt(trimmed.substring(0, 2)) - 1;
-                    const day = parseInt(trimmed.substring(2, 4));
+                // 处理4位数字格式 (MMDD)
+                else if (dateStr.length === 4) {
+                    const currentYear = new Date().getFullYear();
+                    const month = parseInt(dateStr.substring(0, 2)) - 1; // 月份从0开始
+                    const day = parseInt(dateStr.substring(2, 4));
                     
                     const date = new Date(currentYear, month, day);
-                    // 验证日期是否有效
-                    if (date.getMonth() === month && date.getDate() === day) {
+                    // 验证日期有效性
+                    if (date.getFullYear() === currentYear && date.getMonth() === month && date.getDate() === day) {
                         return date;
                     }
                 }
                 
-                // 尝试标准日期格式解析（作为后备）
-                const date = new Date(trimmed);
-                if (!isNaN(date.getTime())) {
-                    return date;
+                // 如果不是特殊格式或者解析失败，尝试标准日期解析
+                const standardDate = new Date(dateStr);
+                if (!isNaN(standardDate.getTime())) {
+                    return standardDate;
                 }
                 
                 return null;
@@ -664,9 +663,6 @@
                 const text = input.value.trim();
 
                 if (!text) return;
-                
-                // 智能解析日期输入
-                const parsedDate = parseDateInput(dueDateInput.value);
 
                 const todo = {
                     id: Date.now(),
@@ -674,7 +670,7 @@
                     completed: false,
                     priority: selectedPriority,
                     createdAt: new Date().toISOString(),
-                    dueDate: parsedDate ? parsedDate.toISOString() : null
+                    dueDate: dueDateInput.value ? parseDateInput(dueDateInput.value)?.toISOString() : null
                 };
 
                 addTodo(todo);
