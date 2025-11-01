@@ -710,20 +710,24 @@
 
         // 获取仓库信息
         async function getRepositoryInfo() {
-            // 从当前页面的URL提取仓库信息
+            // 对于用户站点 (username.github.io)，仓库名就是 username.github.io
+            // 对于项目站点 (username.github.io/project-name)，需要从URL中提取
             const currentUrl = window.location.href;
-            const match = currentUrl.match(/github\.io\/([^/]+)/);
             
-            if (match) {
-                // 对于GitHub Pages，通常是 username.github.io/reponame
-                const repoName = match[1];
-                // 需要手动设置用户名，或者从配置中获取
-                const owner = 'mathliuyang'; // 请替换为你的GitHub用户名
-                return { owner: owner, repo: repoName };
+            // 检查是否是用户站点
+            if (currentUrl.includes('mathliuyang.github.io') && !currentUrl.includes('/pages/')) {
+                // 用户站点
+                return { owner: 'mathliuyang', repo: 'mathliuyang.github.io' };
             } else {
-                // 本地开发环境使用默认值
-                return { owner: 'mathliuyang', repo: 'github-pages' }; // 请替换为你的仓库信息
+                // 项目站点或本地开发
+                const match = currentUrl.match(/github\.io\/([^/]+)/);
+                if (match) {
+                    return { owner: 'mathliuyang', repo: match[1] };
+                }
             }
+            
+            // 默认返回用户站点信息
+            return { owner: 'mathliuyang', repo: 'mathliuyang.github.io' };
         }
 
         // Copy functionality for WeChat and QQ
