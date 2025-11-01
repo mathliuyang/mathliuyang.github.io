@@ -2584,7 +2584,15 @@
 
             // 更新模态框内容
             document.getElementById('modal-member-name').textContent = member.name || '未提供';
-            document.getElementById('modal-member-title').textContent = member.title || '未提供';
+            // 如果title为空，使用degree数据填充title标签位置
+            const titleElement = document.getElementById('modal-member-title');
+            if (member.title && member.title.trim() !== '') {
+                titleElement.textContent = member.title;
+            } else if (member.degree && member.degree.trim() !== '') {
+                titleElement.textContent = member.degree;
+            } else {
+                titleElement.textContent = '未提供';
+            }
             document.getElementById('modal-member-position').textContent = member.position || '未提供';
 
             // 处理头像显示
@@ -2660,9 +2668,11 @@
         function formatMemberInfo(member) {
             const emails = member.emails && member.emails.length > 0 ? member.emails.join(', ') : '未提供';
             const phones = member.phones && member.phones.length > 0 ? member.phones.join(', ') : '未提供';
+            // 如果title为空，使用degree数据
+            const displayTitle = (member.title && member.title.trim() !== '') ? member.title : (member.degree || '未提供');
 
             return `${member.name} (${member.englishName || '未提供'})
-职称: ${member.title || '未提供'}
+职称: ${displayTitle}
 性别: ${member.gender || '未提供'}
 学位: ${member.degree || '未提供'}
 研究方向: ${member.researchFields || '未提供'}
@@ -3028,9 +3038,11 @@ ORCID: ${member.orcid || '未提供'}`;
                         content = '<div class="preview-text">';
                         content += '<h3>团队成员信息</h3>\n\n';
                         selectedMembers.forEach((member, index) => {
+                            // 如果title为空，使用degree数据
+                            const displayTitle = (member.title && member.title.trim() !== '') ? member.title : (member.degree || '未提供');
                             content += `<p><strong>${index + 1}. ${member.name}</strong></p>\n`;
                             content += `<p>英文名: ${member.englishName || '未提供'}</p>\n`;
-                            content += `<p>职称: ${member.title || '未提供'}</p>\n`;
+                            content += `<p>职称: ${displayTitle}</p>\n`;
                             content += `<p>性别: ${member.gender || '未提供'}</p>\n`;
                             content += `<p>学位: ${member.degree || '未提供'}</p>\n`;
                             content += `<p>研究方向: ${member.researchFields || '未提供'}</p>\n`;
