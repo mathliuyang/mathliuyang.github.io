@@ -1453,7 +1453,7 @@
                     <div class="detail-grid">
                         <div class="detail-item">
                             <span class="detail-label">邮箱：</span>
-                            <a id="modal-email" class="detail-value"></a>
+                            <div id="modal-emails" class="detail-value"></div>
                         </div>
                         <div class="detail-item">
                             <span class="detail-label">电话：</span>
@@ -2609,23 +2609,26 @@
             document.getElementById('modal-degree').textContent = member.degree || '未提供';
             document.getElementById('modal-research').textContent = member.researchFields || '未提供';
 
-            // 联系方式 - 支持多个邮箱地址
-            const emailElement = document.getElementById('modal-email');
+            // 联系方式 - 支持多个邮箱显示
+            const emailsElement = document.getElementById('modal-emails');
             if (member.emails && member.emails.length > 0) {
-                if (member.emails.length === 1) {
-                    // 单个邮箱：直接显示并添加链接
-                    emailElement.textContent = member.emails[0];
-                    emailElement.href = `mailto:${member.emails[0]}`;
-                } else {
-                    // 多个邮箱：显示所有邮箱，主邮箱添加链接
-                    emailElement.innerHTML = member.emails.map((email, index) => 
-                        index === 0 ? `<a href="mailto:${email}">${email}</a>` : email
-                    ).join(', ');
-                    emailElement.href = `mailto:${member.emails[0]}`;
-                }
+                // 清空现有内容
+                emailsElement.innerHTML = '';
+                // 为每个邮箱创建链接
+                member.emails.forEach((email, index) => {
+                    if (index > 0) {
+                        // 添加分隔符
+                        emailsElement.appendChild(document.createTextNode(', '));
+                    }
+                    const emailLink = document.createElement('a');
+                    emailLink.textContent = email;
+                    emailLink.href = `mailto:${email}`;
+                    emailLink.style.color = 'inherit';
+                    emailLink.style.textDecoration = 'underline';
+                    emailsElement.appendChild(emailLink);
+                });
             } else {
-                emailElement.textContent = '未提供';
-                emailElement.href = '#';
+                emailsElement.textContent = '未提供';
             }
 
             const phoneElement = document.getElementById('modal-phone');
