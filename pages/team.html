@@ -2764,10 +2764,11 @@
             // 如果title为空，使用degree数据
             const displayTitle = (member.title && member.title.trim() !== '') ? member.title : (member.degree || '未提供');
 
-            return `${member.name} (${member.englishName || '未提供'})
-职称: ${displayTitle}
+            return `姓名: ${member.name || '未提供'}
+英文名: ${member.englishName || '未提供'}
 性别: ${member.gender || '未提供'}
 学位: ${member.degree || '未提供'}
+职称: ${displayTitle}
 研究方向: ${member.researchFields || '未提供'}
 单位: ${member.institution || '未提供'}
 单位(En): ${member.institutionEn || '未提供'}
