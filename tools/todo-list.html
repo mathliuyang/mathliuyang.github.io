@@ -263,6 +263,8 @@
             gap: 1rem;
             margin-top: 2rem;
             justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
         }
 
         .data-btn {
@@ -284,6 +286,25 @@
         [data-theme="light"] .data-btn:hover {
             background: rgba(0, 0, 0, 0.05);
             border-color: rgba(0, 0, 0, 0.2);
+        }
+        
+        .save-status {
+            margin-left: auto;
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            transition: color 0.3s ease;
+            min-width: 120px;
+            text-align: right;
+        }
+        
+        .save-status.saved {
+            color: #4caf50;
+            font-weight: bold;
+        }
+        
+        .save-status.error {
+            color: #f44336;
+            font-weight: bold;
         }
 
         .hidden-input {
@@ -515,6 +536,8 @@
             <button id="exportBtn" class="data-btn">导出数据</button>
             <input type="file" id="importBtn" accept=".json" class="hidden-input">
             <label for="importBtn" class="data-btn import-label">导入数据</label>
+            <button id="save-to-file-btn" class="data-btn">保存到文件</button>
+            <div id="save-status" class="save-status">数据将自动保存</div>
         </div>
 
         <div class="add-section">
@@ -541,7 +564,7 @@
 
     <script type="module">
         // 导入待办事项数据管理函数
-        import { getTodos, setTodos, addTodo, toggleTodo as toggleTodoItem, deleteTodo as deleteTodoItem, getTodoStats, clearTodos, exportTodos, importTodos } from './todo-data.js';
+        import { getTodos, setTodos, addTodo, toggleTodo as toggleTodoItem, deleteTodo as deleteTodoItem, getTodoStats, clearTodos, generateDataCode } from './todo-data.js';
         
         // Theme toggle
         const themeBtn = document.getElementById('themeBtn');
@@ -655,21 +678,68 @@
         }
 
         // 为window对象添加方法，使内联onclick能调用
-        window.toggleTodo = function(id) {
-            toggleTodoItem(id);
-            renderTodos();
-        };
+          // 并在每次操作后保存到文件
+          window.toggleTodo = function(id) {
+              toggleTodoItem(id);
+              renderTodos();
+              saveTodosToFile(); // 切换后保存到文件
+          };
 
-        window.deleteTodo = function(id) {
-            deleteTodoItem(id);
-            renderTodos();
-        };
+          window.deleteTodo = function(id) {
+              deleteTodoItem(id);
+              renderTodos();
+              saveTodosToFile(); // 删除后保存到文件
+          };
 
+        // 自动保存待办事项到文件的函数
+         async function saveTodosToFile() {
+             const todosData = getTodos();
+              
+             try {
+                 // 尝试通过Node.js服务器保存数据到文件
+                 const response = await fetch('http://localhost:3000/api/save-todos', {
+                     method: 'POST',
+                     headers: {
+                         'Content-Type': 'application/json'
+                     },
+                     body: JSON.stringify({ todos: todosData })
+                 });
+                 
+                 const result = await response.json();
+                 
+                 // 更新保存状态提示
+                 const statusElement = document.getElementById('save-status');
+                 
+                 if (result.success) {
+                     console.log('数据已成功保存到文件');
+                     statusElement.textContent = `已保存：${new Date().toLocaleTimeString()}`;
+                     statusElement.classList.add('saved');
+                 } else {
+                     console.error('保存失败:', result.error);
+                     statusElement.textContent = '保存失败，请检查服务器';
+                     statusElement.classList.add('error');
+                 }
+             } catch (error) {
+                 console.error('保存到文件时发生错误:', error);
+                 const statusElement = document.getElementById('save-status');
+                 statusElement.textContent = '未保存（服务器未运行）';
+                 statusElement.classList.add('error');
+             }
+              
+             // 3秒后恢复状态文本
+             setTimeout(() => {
+                 const statusElement = document.getElementById('save-status');
+                 statusElement.classList.remove('saved', 'error');
+                 statusElement.textContent = '数据将自动保存';
+             }, 3000);
+         }
+        
         // Data management event listeners
         document.getElementById('clearAllBtn').addEventListener('click', () => {
             if (confirm('确定要清空所有任务吗？')) {
                 clearTodos();
                 renderTodos();
+                saveTodosToFile(); // 清空后保存到文件
             }
         });
 
@@ -682,6 +752,7 @@
             if (file) {
                 importTodos(file).then(() => {
                     renderTodos();
+                    saveTodosToFile(); // 导入后保存到文件
                     // Clear the input to allow importing the same file again
                     e.target.value = '';
                 }).catch(error => {
@@ -690,6 +761,21 @@
                 });
             }
         });
+        
+        // 手动保存到文件按钮
+        document.getElementById('save-to-file-btn').addEventListener('click', async () => {
+            await saveTodosToFile();
+            
+            // 显示保存成功提示
+            alert('数据已尝试保存到文件。请确保Node.js服务器正在运行。\n\n要启动服务器，请在终端中运行：\nnode tools/todo-server.js');
+        });
+        
+        // 修改添加待办事项的处理函数，添加保存功能
+          const originalHandleAddTodo = handleAddTodo;
+          window.handleAddTodo = () => {
+              originalHandleAddTodo();
+              saveTodosToFile(); // 添加后保存到文件
+          };
 
         function getPriorityText(priority) {
             const map = { low: '低', medium: '中', high: '高' };
