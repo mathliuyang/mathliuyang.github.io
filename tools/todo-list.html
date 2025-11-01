@@ -533,9 +533,9 @@
             <div class="add-section">
                 <div class="add-form">
                     <input type="text" class="add-input" id="todoInput" placeholder="添加新任务..." />
-                    <input type="date" class="add-date" id="todoDueDate" />
+                    <input type="text" class="add-date" id="todoDueDate" placeholder="输入日期 (20250103 或 0921)" />
                     <button class="add-btn" id="addBtn">添加</button>
-                    <button class="add-btn" id="saveBtn">手动保存</button>
+                    <button class="add-btn" id="saveBtn">同步</button>
                 </div>
                 <div class="priority-selector">
                     <button class="priority-btn" data-priority="low">低优先级</button>
@@ -616,12 +616,57 @@
                 saveTodosToFile();
             });
 
+            // 智能解析日期输入
+            function parseDateInput(dateString) {
+                if (!dateString || !dateString.trim()) return null;
+                
+                const trimmed = dateString.trim();
+                const now = new Date();
+                const currentYear = now.getFullYear();
+                
+                // 8位数字：20250103 -> 2025年1月3日
+                if (/^\d{8}$/.test(trimmed)) {
+                    const year = parseInt(trimmed.substring(0, 4));
+                    const month = parseInt(trimmed.substring(4, 6)) - 1; // 月份从0开始
+                    const day = parseInt(trimmed.substring(6, 8));
+                    
+                    const date = new Date(year, month, day);
+                    // 验证日期是否有效
+                    if (date.getFullYear() === year && date.getMonth() === month && date.getDate() === day) {
+                        return date;
+                    }
+                }
+                
+                // 4位数字：0921 -> 今年9月21日
+                else if (/^\d{4}$/.test(trimmed)) {
+                    const month = parseInt(trimmed.substring(0, 2)) - 1;
+                    const day = parseInt(trimmed.substring(2, 4));
+                    
+                    const date = new Date(currentYear, month, day);
+                    // 验证日期是否有效
+                    if (date.getMonth() === month && date.getDate() === day) {
+                        return date;
+                    }
+                }
+                
+                // 尝试标准日期格式解析（作为后备）
+                const date = new Date(trimmed);
+                if (!isNaN(date.getTime())) {
+                    return date;
+                }
+                
+                return null;
+            }
+            
             function handleAddTodo() {
                 const input = document.getElementById('todoInput');
                 const dueDateInput = document.getElementById('todoDueDate');
                 const text = input.value.trim();
 
                 if (!text) return;
+                
+                // 智能解析日期输入
+                const parsedDate = parseDateInput(dueDateInput.value);
 
                 const todo = {
                     id: Date.now(),
@@ -629,7 +674,7 @@
                     completed: false,
                     priority: selectedPriority,
                     createdAt: new Date().toISOString(),
-                    dueDate: dueDateInput.value ? new Date(dueDateInput.value).toISOString() : null
+                    dueDate: parsedDate ? parsedDate.toISOString() : null
                 };
 
                 addTodo(todo);
