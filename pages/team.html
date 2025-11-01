@@ -1462,7 +1462,6 @@
                         <div class="detail-item">
                             <span class="detail-label">ORCID：</span>
                             <a id="modal-orcid" class="detail-value" target="_blank"></a>
-                            <img id="modal-orcid-icon" src="../assets/icons/ORCID-iD_icon_vector.svg" alt="ORCID" style="width: 14px; height: 14px; margin-left: 6px; cursor: pointer; vertical-align: -1px; display: none; opacity: 0.8; transition: opacity 0.2s ease;">
                         </div>
                     </div>
                 </div>
@@ -2301,6 +2300,21 @@
                     orcidHtml = `<a href="${orcidUrl}" target="_blank" style="color: #0066cc; text-decoration: underline; cursor: pointer;">${member.orcid}</a>`;
                 }
 
+                // 处理ORCID图标显示（如果有ORCID号）
+                let orcidIconHtml = '';
+                if (member.orcid) {
+                    // 确保ORCID是完整的URL格式
+                    let orcidUrl = member.orcid;
+                    if (!orcidUrl.startsWith('http')) {
+                        orcidUrl = `https://orcid.org/${orcidUrl}`;
+                    }
+                    orcidIconHtml = `<img src="../assets/icons/ORCID-iD_icon_vector.svg" alt="ORCID" style="width: 14px; height: 14px; margin-left: 6px; vertical-align: -1px; opacity: 0.8; cursor: pointer; transition: opacity 0.2s;" 
+                                     onclick="window.open('${orcidUrl}', '_blank')" 
+                                     onmouseover="this.style.opacity='1'" 
+                                     onmouseout="this.style.opacity='0.8'" 
+                                     title="点击查看ORCID主页">`;
+                }
+
                 memberCard.innerHTML = `
                     <button class="copy-btn" data-member-id="${member.id}" title="复制成员信息">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -2315,7 +2329,7 @@
                         <div class="info-section">
                             <div class="member-info">
                                 <h3>${member.name}</h3>
-                                <div class="english-name">${member.englishName || '未提供'}</div>
+                                <div class="english-name">${member.englishName || '未提供'}${orcidIconHtml}</div>
                                 <div class="tags-container">
                                     <span class="tag tag-title">${member.title && member.title.trim() !== '' ? member.title : (member.degree || '未提供')}</span>
                                     <span class="tag tag-position">${member.position || '未提供'}</span>
@@ -2334,8 +2348,8 @@
                                 <div class="detail-value">${phoneHtml}</div>
                             </div>
                             <div class="detail-row">
-                                <div class="detail-label">ORCID：</div>
-                                <div class="detail-value">${orcidHtml}</div>
+                                <div class="detail-label">单位：</div>
+                                <div class="detail-value">${member.institution || '未提供'}</div>
                             </div>
                         </div>
                     </div>
@@ -2690,7 +2704,6 @@
             }
 
             const orcidElement = document.getElementById('modal-orcid');
-            const orcidIcon = document.getElementById('modal-orcid-icon');
             if (member.orcid) {
                 // 确保ORCID是完整的URL格式
                 let orcidUrl = member.orcid;
@@ -2703,21 +2716,6 @@
                 orcidElement.style.textDecoration = 'underline';
                 orcidElement.style.cursor = 'pointer';
                 orcidElement.onclick = null; // 移除点击事件阻止
-                
-                // 显示ORCID图标并设置点击跳转
-                orcidIcon.style.display = 'inline-block';
-                orcidIcon.onclick = function() {
-                    window.open(orcidUrl, '_blank');
-                };
-                orcidIcon.style.cursor = 'pointer';
-                
-                // 添加悬停效果
-                orcidIcon.onmouseover = function() {
-                    this.style.opacity = '1';
-                };
-                orcidIcon.onmouseout = function() {
-                    this.style.opacity = '0.8';
-                };
             } else {
                 orcidElement.textContent = '未提供';
                 orcidElement.removeAttribute('href'); // 完全移除href属性
@@ -2728,11 +2726,6 @@
                     e.preventDefault(); // 阻止任何点击行为
                     return false;
                 };
-                
-                // 隐藏ORCID图标并移除点击事件
-                orcidIcon.style.display = 'none';
-                orcidIcon.onclick = null;
-                orcidIcon.style.cursor = 'default';
             }
 
             // 设置单位信息和中英文切换
