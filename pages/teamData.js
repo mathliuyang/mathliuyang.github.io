@@ -53,14 +53,14 @@ const teamMembers = [
         englishName: "Le Xu",
         gender: "男",
         degree: "博士",
-        title: "讲师",
-        researchFields: "人工智能、深度学习、计算机视觉",
+        title: "",
+        researchFields: "",
         institution: "中国核动力研究院，先进核能技术国家重点实验室，中国成都 610213",
         institutionEn: "Nuclear Power Institute of China, State Key Laboratory of Advanced Nuclear Energy Technology, Chengdu 610213, China",
         emails: ["lxu_tju@outlook.com"],
         phones: ["18482129886"],
         avatar: "../assets/avatar/xule.jpg",
-        position: "研究成员"
+        position: "合作成员"
     },
     {
         id: "liuyang",
@@ -68,8 +68,8 @@ const teamMembers = [
         englishName: "Yang Liu",
         gender: "男",
         degree: "博士",
-        title: "讲师",
-        researchFields: "计算机视觉、图像处理、模式识别",
+        title: "",
+        researchFields: "智能科学计算、人工智能、分数阶PDE",
         institution: "四川大学计算机学院（软件学院、人工智能学院），中国成都 610065",
         institutionEn: "College of Computer Science (School of Software and School of Artificial Intelligence), Sichuan University, Chengdu 610065, China",
         emails: ["mathliuyang@163.com"],
@@ -81,31 +81,31 @@ const teamMembers = [
         id: "liaozhen",
         name: "廖真",
         englishName: "Zhen Liao",
-        gender: "男",
+        gender: "女",
         degree: "博士",
-        title: "讲师",
-        researchFields: "数据库系统、数据管理、信息检索",
+        title: "工程师",
+        researchFields: "高性能计算、人工智能、智能科学计算",
         institution: "中国核动力研究院，先进核能技术国家重点实验室，中国成都 610213",
         institutionEn: "Nuclear Power Institute of China, State Key Laboratory of Advanced Nuclear Energy Technology, Chengdu 610213, China",
         emails: ["npicliaozhen@163.com"],
         phones: ["19180770226"],
         avatar: "../assets/avatar/liaozhen.jpg",
-        position: "研究成员"
+        position: "核心成员"
     },
     {
         id: "jiangyong",
         name: "江勇",
         englishName: "Yong Jiang",
         gender: "男",
-        degree: "博士",
-        title: "讲师",
+        degree: "硕士",
+        title: "工程师",
         researchFields: "操作系统、内核开发、系统性能优化",
         institution: "中国核动力研究院，先进核能技术国家重点实验室，中国成都 610213",
         institutionEn: "Nuclear Power Institute of China, State Key Laboratory of Advanced Nuclear Energy Technology, Chengdu 610213, China",
         emails: ["1135228970@qq.com"],
         phones: [],
         avatar: "../assets/avatar/jiangyong.jpg",
-        position: "研究成员"
+        position: "核心成员"
     },
     {
         id: "wangjunfeng",
@@ -114,13 +114,13 @@ const teamMembers = [
         gender: "男",
         degree: "博士",
         title: "教授",
-        researchFields: "软件工程、代码优化、系统架构",
+        researchFields: "网络安全、信息安全、密码学",
         institution: "四川大学计算机学院（软件学院、人工智能学院），中国成都 610065",
         institutionEn: "College of Computer Science (School of Software and School of Artificial Intelligence), Sichuan University, Chengdu 610065, China",
         emails: ["wangjf@scu.edu.cn"],
         phones: [],
         avatar: "../assets/avatar/wangjunfeng.jpg",
-        position: "核心成员"
+        position: "合作成员"
     },
     {
         id: "luomaokang",
@@ -135,7 +135,7 @@ const teamMembers = [
         emails: ["makaluo@scu.edu.cn"],
         phones: [],
         avatar: "../assets/avatar/luomaokang.jpg",
-        position: "核心成员"
+        position: "合作成员"
     },
     {
         id: "wangfei",
@@ -143,14 +143,14 @@ const teamMembers = [
         englishName: "Fei Wang",
         gender: "男",
         degree: "博士",
-        title: "副教授",
-        researchFields: "机器学习、数据挖掘、智能算法",
+        title: "教授",
+        researchFields: "智能科学计算、人工智能、计算数学",
         institution: "西安交通大学数学与统计学院，中国西安 710049",
         institutionEn: "School of Mathematics and Statistics, Xi'an Jiaotong University, Xi'an 710049, China",
         emails: ["feiwang.xjtu@xjtu.edu.cn"],
         phones: ["13119131365"],
         avatar: "../assets/avatar/wangfei.jpg",
-        position: "核心成员"
+        position: "合作成员"
     },
     {
         id: "danghaoning",
@@ -158,14 +158,14 @@ const teamMembers = [
         englishName: "Haoning Dang",
         gender: "男",
         degree: "博士",
-        title: "讲师",
-        researchFields: "计算机图形学、可视化、人机交互",
+        title: "",
+        researchFields: "智能科学计算、有限差分、计算数学",
         institution: "西安交通大学数学与统计学院，中国西安 710049",
         institutionEn: "School of Mathematics and Statistics, Xi'an Jiaotong University, Xi'an 710049, China",
         emails: ["haoningdang.xjtu@stu.xjtu.edu.cn"],
         phones: ["18340619868"],
         avatar: "../assets/avatar/danghaoning.jpg",
-        position: "研究成员"
+        position: "合作成员"
     },
     {
         id: "wangkai",
