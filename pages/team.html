@@ -2217,6 +2217,19 @@
             });
         }
 
+        // 判断头像路径类型并返回正确的URL
+        function getAvatarUrl(avatar) {
+            if (!avatar) return null;
+            
+            // 如果是网络链接（以http://或https://开头）
+            if (avatar.startsWith('http://') || avatar.startsWith('https://')) {
+                return avatar;
+            }
+            
+            // 本地路径，直接返回
+            return avatar;
+        }
+
         // 渲染团队成员卡片
         function renderTeamMembers(members) {
             const teamGrid = document.getElementById('team-grid');
@@ -2231,9 +2244,10 @@
                 // 处理头像显示
                 let avatarHtml = `<div class="member-avatar">${member.name.charAt(0)}</div>`;
                 if (member.avatar) {
+                    const avatarUrl = getAvatarUrl(member.avatar);
                     avatarHtml = `
                         <div class="member-avatar">
-                            <img src="${member.avatar}" alt="${member.name}" onerror="this.style.display='none'; this.parentElement.innerHTML='${member.name.charAt(0)}';">
+                            <img src="${avatarUrl}" alt="${member.name}" onerror="this.style.display='none'; this.parentElement.innerHTML='${member.name.charAt(0)}';">
                         </div>
                     `;
                 }
@@ -2584,7 +2598,8 @@
             // 处理头像显示
             const avatarElement = document.getElementById('modal-member-avatar');
             if (member.avatar) {
-                avatarElement.innerHTML = `<img src="${member.avatar}" alt="${member.name}" onerror="this.style.display='none'; this.parentElement.innerHTML='${member.name.charAt(0)}';">`;
+                const avatarUrl = getAvatarUrl(member.avatar);
+                avatarElement.innerHTML = `<img src="${avatarUrl}" alt="${member.name}" onerror="this.style.display='none'; this.parentElement.innerHTML='${member.name.charAt(0)}';">`;
             } else {
                 avatarElement.innerHTML = member.name.charAt(0);
             }
