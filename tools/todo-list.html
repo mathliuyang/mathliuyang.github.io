@@ -496,7 +496,10 @@
         <div class="todo-list" id="todoList"></div>
     </div>
 
-    <script>
+    <script type="module">
+        // 导入待办事项数据管理函数
+        import { getTodos, setTodos, addTodo, toggleTodo as toggleTodoItem, deleteTodo as deleteTodoItem, getTodoStats } from './todo-data.js';
+        
         // Theme toggle
         const themeBtn = document.getElementById('themeBtn');
         const themeIcon = document.getElementById('themeIcon');
@@ -519,7 +522,6 @@
         });
 
         // Todo app
-        let todos = JSON.parse(localStorage.getItem('todos') || '[]');
         let currentFilter = 'all';
         let selectedPriority = 'medium';
 
@@ -533,12 +535,12 @@
         });
 
         // Add todo
-        document.getElementById('addBtn').addEventListener('click', addTodo);
+        document.getElementById('addBtn').addEventListener('click', handleAddTodo);
         document.getElementById('todoInput').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') addTodo();
+            if (e.key === 'Enter') handleAddTodo();
         });
 
-        function addTodo() {
+        function handleAddTodo() {
             const input = document.getElementById('todoInput');
             const text = input.value.trim();
 
@@ -552,8 +554,7 @@
                 createdAt: new Date().toISOString()
             };
 
-            todos.unshift(todo);
-            saveTodos();
+            addTodo(todo);
             input.value = '';
             renderTodos();
         }
@@ -571,6 +572,7 @@
         // Render todos
         function renderTodos() {
             const todoList = document.getElementById('todoList');
+            const todos = getTodos();
             let filteredTodos = todos;
 
             if (currentFilter === 'active') {
@@ -591,8 +593,8 @@
             } else {
                 todoList.innerHTML = filteredTodos.map(todo => `
                     <div class="todo-item ${todo.completed ? 'completed' : ''}" data-id="${todo.id}">
-                        <div class="todo-checkbox" onclick="toggleTodo(${todo.id})"></div>
-                        <div class="todo-content" onclick="toggleTodo(${todo.id})">
+                        <div class="todo-checkbox" onclick="window.toggleTodo(${todo.id})"></div>
+                        <div class="todo-content" onclick="window.toggleTodo(${todo.id})">
                             <div class="todo-text">${todo.text}</div>
                             <div class="todo-meta">
                                 <span class="priority-badge priority-${todo.priority}">${getPriorityText(todo.priority)}</span>
@@ -600,7 +602,7 @@
                             </div>
                         </div>
                         <div class="todo-actions">
-                            <button class="action-btn delete-btn" onclick="deleteTodo(${todo.id})">×</button>
+                            <button class="action-btn delete-btn" onclick="window.deleteTodo(${todo.id})">×</button>
                         </div>
                     </div>
                 `).join('');
@@ -609,20 +611,16 @@
             updateStats();
         }
 
-        function toggleTodo(id) {
-            const todo = todos.find(t => t.id === id);
-            if (todo) {
-                todo.completed = !todo.completed;
-                saveTodos();
-                renderTodos();
-            }
-        }
-
-        function deleteTodo(id) {
-            todos = todos.filter(t => t.id !== id);
-            saveTodos();
+        // 为window对象添加方法，使内联onclick能调用
+        window.toggleTodo = function(id) {
+            toggleTodoItem(id);
             renderTodos();
-        }
+        };
+
+        window.deleteTodo = function(id) {
+            deleteTodoItem(id);
+            renderTodos();
+        };
 
         function getPriorityText(priority) {
             const map = { low: '低', medium: '中', high: '高' };
@@ -642,13 +640,10 @@
         }
 
         function updateStats() {
-            document.getElementById('totalCount').textContent = todos.length;
-            document.getElementById('activeCount').textContent = todos.filter(t => !t.completed).length;
-            document.getElementById('completedCount').textContent = todos.filter(t => t.completed).length;
-        }
-
-        function saveTodos() {
-            localStorage.setItem('todos', JSON.stringify(todos));
+            const stats = getTodoStats();
+            document.getElementById('totalCount').textContent = stats.total;
+            document.getElementById('activeCount').textContent = stats.active;
+            document.getElementById('completedCount').textContent = stats.completed;
         }
 
         // Initial render
