@@ -1298,8 +1298,8 @@
                     <div class="stat-label">教授</div>
                 </div>
                 <div class="stat-item">
-                    <div class="stat-number" id="studentCount">0</div>
-                    <div class="stat-label">学生</div>
+                    <div class="stat-number" id="coreMemberCount">0</div>
+                    <div class="stat-label">核心成员</div>
                 </div>
             </div>
         </div>
@@ -1476,14 +1476,14 @@
             const professorCount = teamMembers.filter(member =>
                 member.title.includes('教授') || member.title.includes('副教授')
             ).length;
-            const studentCount = teamMembers.filter(member =>
-                member.title.includes('研究生') || member.title.includes('博士') || member.title.includes('硕士')
-            ).length || 0; // 如果没有学生，显示0
+            const coreMemberCount = teamMembers.filter(member =>
+                member.position === '核心成员'
+            ).length || 0; // 如果没有核心成员，显示0
 
             // 更新DOM
             document.getElementById('totalMembers').textContent = totalMembers;
             document.getElementById('professorCount').textContent = professorCount;
-            document.getElementById('studentCount').textContent = studentCount;
+            document.getElementById('coreMemberCount').textContent = coreMemberCount;
         }
 
         // 初始化页面
