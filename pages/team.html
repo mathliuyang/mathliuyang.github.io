@@ -377,10 +377,35 @@
         .detail-value a {
             color: var(--text);
             text-decoration: none;
+            transition: all 0.2s ease;
+            padding: 2px 4px;
+            border-radius: 3px;
+            display: inline-block;
         }
 
         .detail-value a:hover {
-            text-decoration: underline;
+            text-decoration: none;
+            background-color: var(--accent);
+            color: var(--bg);
+        }
+
+        /* 多邮箱链接特殊样式 */
+        .detail-value a[style*="display: block"] {
+            margin: 3px 0 !important;
+            padding: 4px 8px;
+            background-color: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
+            font-size: 0.85em;
+            line-height: 1.4;
+        }
+
+        .detail-value a[style*="display: block"]:hover {
+            background-color: var(--accent);
+            border-color: var(--accent);
+        }
+
+        [data-theme="light"] .detail-value a[style*="display: block"] {
+            background-color: rgba(0, 0, 0, 0.03);
         }
 
         /* 中英文切换按钮样式 */
@@ -2247,9 +2272,14 @@
                 // 处理邮箱和电话显示（支持多个）
                 let emailHtml = '未提供';
                 if (member.emails && member.emails.length > 0) {
-                    emailHtml = member.emails.map(email =>
-                        `<a href="mailto:${email}">${email}</a>`
-                    ).join(', ');
+                    if (member.emails.length === 1) {
+                        emailHtml = `<a href="mailto:${member.emails[0]}">${member.emails[0]}</a>`;
+                    } else {
+                        // 多个邮箱时显示紧凑的链接列表
+                        emailHtml = member.emails.map(email =>
+                            `<a href="mailto:${email}" style="display: block; margin: 2px 0; font-size: 0.9em;">${email}</a>`
+                        ).join('');
+                    }
                 }
 
                 let phoneHtml = '未提供';
@@ -2612,8 +2642,15 @@
             // 联系方式
             const emailElement = document.getElementById('modal-email');
             if (member.emails && member.emails.length > 0) {
-                emailElement.textContent = member.emails[0];
-                emailElement.href = `mailto:${member.emails[0]}`;
+                if (member.emails.length === 1) {
+                    emailElement.textContent = member.emails[0];
+                    emailElement.href = `mailto:${member.emails[0]}`;
+                } else {
+                    // 多个邮箱时显示美观的链接列表
+                    emailElement.innerHTML = member.emails.map(email => 
+                        `<a href="mailto:${email}" style="display: inline-block; margin: 2px 0; text-decoration: none;">${email}</a>`
+                    ).join('<br>');
+                }
             } else {
                 emailElement.textContent = '未提供';
                 emailElement.href = '#';
