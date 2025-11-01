@@ -1462,7 +1462,7 @@
                         <div class="detail-item">
                             <span class="detail-label">ORCID：</span>
                             <a id="modal-orcid" class="detail-value" target="_blank"></a>
-                            <img id="modal-orcid-icon" src="../assets/icons/ORCID-iD_icon_vector.svg" alt="ORCID" style="width: 16px; height: 16px; margin-left: 5px; cursor: pointer; vertical-align: middle; display: none;">
+                            <img id="modal-orcid-icon" src="../assets/icons/ORCID-iD_icon_vector.svg" alt="ORCID" style="width: 14px; height: 14px; margin-left: 6px; cursor: pointer; vertical-align: -1px; display: none; opacity: 0.8; transition: opacity 0.2s ease;">
                         </div>
                     </div>
                 </div>
@@ -2710,6 +2710,14 @@
                     window.open(orcidUrl, '_blank');
                 };
                 orcidIcon.style.cursor = 'pointer';
+                
+                // 添加悬停效果
+                orcidIcon.onmouseover = function() {
+                    this.style.opacity = '1';
+                };
+                orcidIcon.onmouseout = function() {
+                    this.style.opacity = '0.8';
+                };
             } else {
                 orcidElement.textContent = '未提供';
                 orcidElement.removeAttribute('href'); // 完全移除href属性
