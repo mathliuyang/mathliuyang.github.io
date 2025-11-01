@@ -1462,6 +1462,7 @@
                         <div class="detail-item">
                             <span class="detail-label">ORCID：</span>
                             <a id="modal-orcid" class="detail-value" target="_blank"></a>
+                            <img id="modal-orcid-icon" src="../assets/icons/ORCID-iD_icon_vector.svg" alt="ORCID" style="width: 16px; height: 16px; margin-left: 5px; cursor: pointer; vertical-align: middle; display: none;">
                         </div>
                     </div>
                 </div>
@@ -2689,6 +2690,7 @@
             }
 
             const orcidElement = document.getElementById('modal-orcid');
+            const orcidIcon = document.getElementById('modal-orcid-icon');
             if (member.orcid) {
                 // 确保ORCID是完整的URL格式
                 let orcidUrl = member.orcid;
@@ -2701,6 +2703,13 @@
                 orcidElement.style.textDecoration = 'underline';
                 orcidElement.style.cursor = 'pointer';
                 orcidElement.onclick = null; // 移除点击事件阻止
+                
+                // 显示ORCID图标并设置点击跳转
+                orcidIcon.style.display = 'inline-block';
+                orcidIcon.onclick = function() {
+                    window.open(orcidUrl, '_blank');
+                };
+                orcidIcon.style.cursor = 'pointer';
             } else {
                 orcidElement.textContent = '未提供';
                 orcidElement.removeAttribute('href'); // 完全移除href属性
@@ -2711,6 +2720,11 @@
                     e.preventDefault(); // 阻止任何点击行为
                     return false;
                 };
+                
+                // 隐藏ORCID图标并移除点击事件
+                orcidIcon.style.display = 'none';
+                orcidIcon.onclick = null;
+                orcidIcon.style.cursor = 'default';
             }
 
             // 设置单位信息和中英文切换
