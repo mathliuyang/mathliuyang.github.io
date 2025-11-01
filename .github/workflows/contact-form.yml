@@ -36,21 +36,7 @@ jobs:
             
             // 创建issue标题和标签
             const issueTitle = `💬 新消息: ${subject}`;
-            const issueBody = `## 📬 联系表单消息
-
-**发件人:** ${name}  
-**邮箱:** ${email}  
-**主题:** ${subject}  
-**时间:** ${new Date().toLocaleString('zh-CN')}  
-
----
-
-### 💭 消息内容
-${message}
-
----
-
-*此issue由联系表单自动创建* 🤖`;
+            const issueBody = `## 📬 联系表单消息\n\n**发件人:** ${name}  \n**邮箱:** ${email}  \n**主题:** ${subject}  \n**时间:** ${new Date().toLocaleString('zh-CN')}  \n\n---\n\n### 💭 消息内容\n${message}\n\n---\n\n*此issue由联系表单自动创建* 🤖`;
 
             // 创建issue
             const issue = await github.rest.issues.create({
