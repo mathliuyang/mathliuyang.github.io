@@ -7,18 +7,65 @@
 // 所有待办事项将直接保存在这里
 let todos = [
         {
+            "id": 1762023095274,
+            "text": "6666",
+            "completed": true,
+            "priority": "medium",
+            "createdAt": "2025-11-01T18:51:35.274Z",
+            "dueDate": null
+        },
+        {
+            "id": 1762023042492,
+            "text": "777",
+            "completed": false,
+            "priority": "medium",
+            "createdAt": "2025-11-01T18:50:42.492Z",
+            "dueDate": "2025-10-09T00:00:00.000Z"
+        },
+        {
+            "id": 1762023025295,
+            "text": "456",
+            "completed": false,
+            "priority": "medium",
+            "createdAt": "2025-11-01T18:50:25.295Z",
+            "dueDate": "2025-11-12T00:00:00.000Z"
+        },
+        {
+            "id": 1762022768951,
+            "text": "11",
+            "completed": false,
+            "priority": "medium",
+            "createdAt": "2025-11-01T18:46:08.951Z",
+            "dueDate": "2025-11-19T00:00:00.000Z"
+        },
+        {
+            "id": 1762022736927,
+            "text": "22",
+            "completed": false,
+            "priority": "medium",
+            "createdAt": "2025-11-01T18:45:36.927Z",
+            "dueDate": "2025-11-11T00:00:00.000Z"
+        },
+        {
+            "id": 1762022167043,
+            "text": "11",
+            "completed": false,
+            "priority": "medium",
+            "createdAt": "2025-11-01T18:36:07.043Z"
+        },
+        {
+            "id": 1762021748629,
+            "text": "55",
+            "completed": true,
+            "priority": "medium",
+            "createdAt": "2025-11-01T18:29:08.629Z"
+        },
+        {
             "id": 1762020130809,
             "text": "2345",
             "completed": true,
             "priority": "medium",
             "createdAt": "2025-11-01T18:02:10.809Z"
-        },
-        {
-            "id": 1762019879701,
-            "text": "11111",
-            "completed": false,
-            "priority": "medium",
-            "createdAt": "2025-11-01T17:57:59.701Z"
         },
         {
             "id": 1762018518469,
@@ -114,10 +161,16 @@ export function clearTodos() {
 export function getTodoStats() {
     // 使用扁平化后的数组计算统计信息
     const flatTodos = flattenDeep(todos);
+    const now = new Date();
+    now.setHours(0, 0, 0, 0); // 重置时间部分以正确比较日期
+    
     return {
         total: flatTodos.length,
         active: flatTodos.filter(t => !t.completed).length,
-        completed: flatTodos.filter(t => t.completed).length
+        completed: flatTodos.filter(t => t.completed).length,
+        overdue: flatTodos.filter(t => 
+            !t.completed && t.dueDate && new Date(t.dueDate) < now
+        ).length
     };
 }
 

@@ -520,6 +520,10 @@
                     <div class="stat-number" id="completedCount">0</div>
                     <div class="stat-label">已完成</div>
                 </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="overdueCount">0</div>
+                    <div class="stat-label">已逾期</div>
+                </div>
             </div>
 
             <!-- 数据管理功能 -->
@@ -789,6 +793,7 @@
                 document.getElementById('totalCount').textContent = stats.total;
                 document.getElementById('activeCount').textContent = stats.active;
                 document.getElementById('completedCount').textContent = stats.completed;
+                document.getElementById('overdueCount').textContent = stats.overdue;
             }
 
             // Initial render
