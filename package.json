@@ -1,5 +1,9 @@
 {
   "devDependencies": {
     "@playwright/test": "^1.56.0"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^5.1.0"
   }
 }
