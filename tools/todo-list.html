@@ -260,58 +260,33 @@
 
         .data-management {
             display: flex;
-            gap: 1rem;
-            margin-top: 2rem;
             justify-content: center;
+            margin-top: 2rem;
             align-items: center;
-            flex-wrap: wrap;
         }
 
-        .data-btn {
-            padding: 0.5rem 1rem;
-            border: 1px solid var(--border);
-            background: var(--card-bg);
-            color: var(--text);
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            transition: all 0.3s ease;
-        }
-
-        .data-btn:hover {
-            background: rgba(255, 255, 255, 0.05);
-            border-color: rgba(255, 255, 255, 0.2);
-        }
-
-        [data-theme="light"] .data-btn:hover {
-            background: rgba(0, 0, 0, 0.05);
-            border-color: rgba(0, 0, 0, 0.2);
-        }
-        
         .save-status {
-            margin-left: auto;
             font-size: 0.85rem;
             color: var(--text-dim);
             transition: all 0.3s ease;
-            min-width: 120px;
-            text-align: right;
+            text-align: center;
             background-color: rgba(255, 255, 255, 0.03);
             padding: 8px 12px;
             border-radius: 4px;
         }
-        
+
         .save-status.saved {
             color: white;
             background-color: #4caf50;
             font-weight: bold;
         }
-        
+
         .save-status.error {
             color: white;
             background-color: #f44336;
             font-weight: bold;
         }
-        
+
         [data-theme="light"] .save-status {
             background-color: rgba(0, 0, 0, 0.03);
         }
@@ -529,167 +504,162 @@
                 等待保存...
             </div>
             <div class="stats">
-            <div class="stat-item">
-                <div class="stat-number" id="totalCount">0</div>
-                <div class="stat-label">总任务</div>
+                <div class="stat-item">
+                    <div class="stat-number" id="totalCount">0</div>
+                    <div class="stat-label">总任务</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="activeCount">0</div>
+                    <div class="stat-label">进行中</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="completedCount">0</div>
+                    <div class="stat-label">已完成</div>
+                </div>
             </div>
-            <div class="stat-item">
-                <div class="stat-number" id="activeCount">0</div>
-                <div class="stat-label">进行中</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-number" id="completedCount">0</div>
-                <div class="stat-label">已完成</div>
-            </div>
-        </div>
-        
-        <!-- 数据管理功能 -->
-        <div class="data-management">
-            <button id="clearAllBtn" class="data-btn">清空所有</button>
-            <button id="exportBtn" class="data-btn">导出数据</button>
-            <input type="file" id="importBtn" accept=".json" class="hidden-input">
-            <label for="importBtn" class="data-btn import-label">导入数据</label>
-            <button id="save-to-file-btn" class="data-btn">保存到文件</button>
-            <div id="save-status" class="save-status">数据将自动保存</div>
-        </div>
 
-        <div class="add-section">
-            <div class="add-form">
-                <input type="text" class="add-input" id="todoInput" placeholder="添加新任务..." />
-                <button class="add-btn" id="addBtn">添加</button>
-                <button class="add-btn" id="saveBtn" style="background-color: #2196F3; color: white;">手动保存</button>
+            <!-- 数据管理功能 -->
+            <div class="data-management">
+                <div id="save-status" class="save-status">数据将自动保存</div>
             </div>
-            <div class="priority-selector">
-                <button class="priority-btn" data-priority="low">低优先级</button>
-                <button class="priority-btn active" data-priority="medium">中优先级</button>
-                <button class="priority-btn" data-priority="high">高优先级</button>
-            </div>
-        </div>
 
-        <div class="filter-bar">
-            <button class="filter-btn active" data-filter="all">全部</button>
-            <button class="filter-btn" data-filter="active">进行中</button>
-            <button class="filter-btn" data-filter="completed">已完成</button>
-            <button class="filter-btn" data-filter="high">高优先级</button>
+            <div class="add-section">
+                <div class="add-form">
+                    <input type="text" class="add-input" id="todoInput" placeholder="添加新任务..." />
+                    <button class="add-btn" id="addBtn">添加</button>
+                    <button class="add-btn" id="saveBtn" style="background-color: #2196F3; color: white;">手动保存</button>
+                </div>
+                <div class="priority-selector">
+                    <button class="priority-btn" data-priority="low">低优先级</button>
+                    <button class="priority-btn active" data-priority="medium">中优先级</button>
+                    <button class="priority-btn" data-priority="high">高优先级</button>
+                </div>
+            </div>
+
+            <div class="filter-bar">
+                <button class="filter-btn active" data-filter="all">全部</button>
+                <button class="filter-btn" data-filter="active">进行中</button>
+                <button class="filter-btn" data-filter="completed">已完成</button>
+                <button class="filter-btn" data-filter="high">高优先级</button>
+            </div>
+
+            <div class="todo-list" id="todoList"></div>
         </div>
 
-        <div class="todo-list" id="todoList"></div>
-    </div>
+        <script type="module">
+            // 导入待办事项数据管理函数
+            import { getTodos, setTodos, addTodo, toggleTodo as toggleTodoItem, deleteTodo as deleteTodoItem, getTodoStats, clearTodos, generateDataCode } from './todo-data.js';
 
-    <script type="module">
-        // 导入待办事项数据管理函数
-        import { getTodos, setTodos, addTodo, toggleTodo as toggleTodoItem, deleteTodo as deleteTodoItem, getTodoStats, clearTodos, generateDataCode } from './todo-data.js';
-        
-        // Theme toggle
-        const themeBtn = document.getElementById('themeBtn');
-        const themeIcon = document.getElementById('themeIcon');
-        const currentTheme = localStorage.getItem('theme') || 'light';
+            // Theme toggle
+            const themeBtn = document.getElementById('themeBtn');
+            const themeIcon = document.getElementById('themeIcon');
+            const currentTheme = localStorage.getItem('theme') || 'light';
 
-        document.documentElement.setAttribute('data-theme', currentTheme);
-        themeIcon.textContent = currentTheme === 'dark' ? '◐' : '◑';
+            document.documentElement.setAttribute('data-theme', currentTheme);
+            themeIcon.textContent = currentTheme === 'dark' ? '◐' : '◑';
 
-        // 添加图标颜色样式，确保在不同主题下都清晰可见
-        themeIcon.style.color = currentTheme === 'dark' ? '#ffffff' : '#000000';
+            // 添加图标颜色样式，确保在不同主题下都清晰可见
+            themeIcon.style.color = currentTheme === 'dark' ? '#ffffff' : '#000000';
 
-        themeBtn.addEventListener('click', () => {
-            const theme = document.documentElement.getAttribute('data-theme');
-            const newTheme = theme === 'dark' ? 'light' : 'dark';
+            themeBtn.addEventListener('click', () => {
+                const theme = document.documentElement.getAttribute('data-theme');
+                const newTheme = theme === 'dark' ? 'light' : 'dark';
 
-            document.documentElement.setAttribute('data-theme', newTheme);
-            localStorage.setItem('theme', newTheme);
-            themeIcon.textContent = newTheme === 'dark' ? '◐' : '◑';
-            themeIcon.style.color = newTheme === 'dark' ? '#ffffff' : '#000000';
-        });
-
-        // Todo app
-        let currentFilter = 'all';
-        let selectedPriority = 'medium';
-
-        // Priority selector
-        document.querySelectorAll('.priority-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                document.querySelectorAll('.priority-btn').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                selectedPriority = btn.dataset.priority;
+                document.documentElement.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+                themeIcon.textContent = newTheme === 'dark' ? '◐' : '◑';
+                themeIcon.style.color = newTheme === 'dark' ? '#ffffff' : '#000000';
             });
-        });
 
-        // Add todo
-        document.getElementById('addBtn').addEventListener('click', () => {
-            handleAddTodo();
-            // 确保在添加后调用保存
-            setTimeout(() => {
-                saveTodosToFile();
-            }, 100);
-        });
-        document.getElementById('todoInput').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
+            // Todo app
+            let currentFilter = 'all';
+            let selectedPriority = 'medium';
+
+            // Priority selector
+            document.querySelectorAll('.priority-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.priority-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    selectedPriority = btn.dataset.priority;
+                });
+            });
+
+            // Add todo
+            document.getElementById('addBtn').addEventListener('click', () => {
                 handleAddTodo();
                 // 确保在添加后调用保存
                 setTimeout(() => {
                     saveTodosToFile();
                 }, 100);
-            }
-        });
-        
-        // 手动保存按钮点击事件
-        document.getElementById('saveBtn').addEventListener('click', () => {
-            console.log('🔄 手动触发保存操作');
-            saveTodosToFile();
-        });
-
-        function handleAddTodo() {
-            const input = document.getElementById('todoInput');
-            const text = input.value.trim();
-
-            if (!text) return;
-
-            const todo = {
-                id: Date.now(),
-                text: text,
-                completed: false,
-                priority: selectedPriority,
-                createdAt: new Date().toISOString()
-            };
-
-            addTodo(todo);
-            input.value = '';
-            renderTodos();
-        }
-
-        // Filter buttons
-        document.querySelectorAll('.filter-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                currentFilter = btn.dataset.filter;
-                renderTodos();
             });
-        });
+            document.getElementById('todoInput').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    handleAddTodo();
+                    // 确保在添加后调用保存
+                    setTimeout(() => {
+                        saveTodosToFile();
+                    }, 100);
+                }
+            });
 
-        // Render todos
-        function renderTodos() {
-            const todoList = document.getElementById('todoList');
-            const todos = getTodos();
-            let filteredTodos = todos;
+            // 手动保存按钮点击事件
+            document.getElementById('saveBtn').addEventListener('click', () => {
+                console.log('🔄 手动触发保存操作');
+                saveTodosToFile();
+            });
 
-            if (currentFilter === 'active') {
-                filteredTodos = todos.filter(t => !t.completed);
-            } else if (currentFilter === 'completed') {
-                filteredTodos = todos.filter(t => t.completed);
-            } else if (currentFilter === 'high') {
-                filteredTodos = todos.filter(t => t.priority === 'high');
+            function handleAddTodo() {
+                const input = document.getElementById('todoInput');
+                const text = input.value.trim();
+
+                if (!text) return;
+
+                const todo = {
+                    id: Date.now(),
+                    text: text,
+                    completed: false,
+                    priority: selectedPriority,
+                    createdAt: new Date().toISOString()
+                };
+
+                addTodo(todo);
+                input.value = '';
+                renderTodos();
             }
 
-            if (filteredTodos.length === 0) {
-                todoList.innerHTML = `
+            // Filter buttons
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    currentFilter = btn.dataset.filter;
+                    renderTodos();
+                });
+            });
+
+            // Render todos
+            function renderTodos() {
+                const todoList = document.getElementById('todoList');
+                const todos = getTodos();
+                let filteredTodos = todos;
+
+                if (currentFilter === 'active') {
+                    filteredTodos = todos.filter(t => !t.completed);
+                } else if (currentFilter === 'completed') {
+                    filteredTodos = todos.filter(t => t.completed);
+                } else if (currentFilter === 'high') {
+                    filteredTodos = todos.filter(t => t.priority === 'high');
+                }
+
+                if (filteredTodos.length === 0) {
+                    todoList.innerHTML = `
                     <div class="empty-state">
                         <div class="empty-icon">✓</div>
                         <p>暂无任务</p>
                     </div>
                 `;
-            } else {
-                todoList.innerHTML = filteredTodos.map(todo => `
+                } else {
+                    todoList.innerHTML = filteredTodos.map(todo => `
                     <div class="todo-item ${todo.completed ? 'completed' : ''}" data-id="${todo.id}">
                         <div class="todo-checkbox" onclick="window.toggleTodo(${todo.id})"></div>
                         <div class="todo-content" onclick="window.toggleTodo(${todo.id})">
@@ -704,163 +674,129 @@
                         </div>
                     </div>
                 `).join('');
+                }
+
+                updateStats();
             }
 
-            updateStats();
-        }
-
-        // 为window对象添加方法，使内联onclick能调用
-          // 并在每次操作后保存到文件
-          window.toggleTodo = function(id) {
-              toggleTodoItem(id);
-              renderTodos();
-              saveTodosToFile(); // 切换后保存到文件
-          };
-
-          window.deleteTodo = function(id) {
-              deleteTodoItem(id);
-              renderTodos();
-              saveTodosToFile(); // 删除后保存到文件
-          };
-
-        // 自动保存待办事项到文件的函数，增强版带详细调试日志
-         async function saveTodosToFile() {
-             console.log('🚀 开始保存待办事项...');
-             const todosData = getTodos();
-             console.log('📝 待办事项数量:', todosData.length);
-             console.log('📋 待办事项内容:', JSON.stringify(todosData));
-              
-             try {
-                 // 尝试通过Node.js服务器保存数据到文件
-                 console.log('🔄 正在发送保存请求到服务器...');
-                 const response = await fetch('http://localhost:3000/api/save-todos', {
-                     method: 'POST',
-                     headers: {
-                         'Content-Type': 'application/json',
-                         'Accept': 'application/json'
-                     },
-                     body: JSON.stringify({ todos: todosData, file_path: 'todos.json' })
-                 });
-                 
-                 console.log('✅ 服务器响应状态:', response.status);
-                 console.log('✅ 响应状态文本:', response.statusText);
-                 
-                 // 检查响应是否有效
-                 if (!response.ok) {
-                     throw new Error(`HTTP错误，状态码: ${response.status}`);
-                 }
-                 
-                 // 尝试解析响应
-                 const result = await response.json();
-                 console.log('📊 保存结果:', result);
-                 
-                 // 更新保存状态提示
-                 const statusElement = document.getElementById('save-status');
-                 
-                 if (result && result.success) {
-                     console.log('🎉 数据已成功保存到文件');
-                     statusElement.textContent = `已保存：${new Date().toLocaleTimeString()}`;
-                     statusElement.classList.add('saved');
-                 } else {
-                     console.error('❌ 保存失败:', result?.error || '未知错误');
-                     statusElement.textContent = '保存失败，请检查服务器';
-                     statusElement.classList.add('error');
-                 }
-             } catch (error) {
-                 console.error('❌ 保存到文件时发生错误:', error.message);
-                 console.error('❓ 错误详情:', error);
-                 console.error('📡 检查服务器是否运行在 http://localhost:3000');
-                 const statusElement = document.getElementById('save-status');
-                 statusElement.textContent = '未保存（服务器未运行）';
-                 statusElement.classList.add('error');
-             }
-              
-             // 3秒后恢复状态文本
-             setTimeout(() => {
-                 const statusElement = document.getElementById('save-status');
-                 statusElement.classList.remove('saved', 'error');
-                 statusElement.textContent = '数据将自动保存';
-             }, 3000);
-         }
-        
-        // Data management event listeners
-        document.getElementById('clearAllBtn').addEventListener('click', () => {
-            if (confirm('确定要清空所有任务吗？')) {
-                clearTodos();
+            // 为window对象添加方法，使内联onclick能调用
+            // 并在每次操作后保存到文件
+            window.toggleTodo = function (id) {
+                toggleTodoItem(id);
                 renderTodos();
-                saveTodosToFile(); // 清空后保存到文件
+                saveTodosToFile(); // 切换后保存到文件
+            };
+
+            window.deleteTodo = function (id) {
+                deleteTodoItem(id);
+                renderTodos();
+                saveTodosToFile(); // 删除后保存到文件
+            };
+
+            // 自动保存待办事项到文件的函数，增强版带详细调试日志
+            async function saveTodosToFile() {
+                console.log('🚀 开始保存待办事项...');
+                const todosData = getTodos();
+                console.log('📝 待办事项数量:', todosData.length);
+                console.log('📋 待办事项内容:', JSON.stringify(todosData));
+
+                try {
+                    // 尝试通过Node.js服务器保存数据到文件
+                    console.log('🔄 正在发送保存请求到服务器...');
+                    const response = await fetch('http://localhost:3000/api/save-todos', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json'
+                        },
+                        body: JSON.stringify({ todos: todosData, file_path: 'todos.json' })
+                    });
+
+                    console.log('✅ 服务器响应状态:', response.status);
+                    console.log('✅ 响应状态文本:', response.statusText);
+
+                    // 检查响应是否有效
+                    if (!response.ok) {
+                        throw new Error(`HTTP错误，状态码: ${response.status}`);
+                    }
+
+                    // 尝试解析响应
+                    const result = await response.json();
+                    console.log('📊 保存结果:', result);
+
+                    // 更新保存状态提示
+                    const statusElement = document.getElementById('save-status');
+
+                    if (result && result.success) {
+                        console.log('🎉 数据已成功保存到文件');
+                        statusElement.textContent = `已保存：${new Date().toLocaleTimeString()}`;
+                        statusElement.classList.add('saved');
+                    } else {
+                        console.error('❌ 保存失败:', result?.error || '未知错误');
+                        statusElement.textContent = '保存失败，请检查服务器';
+                        statusElement.classList.add('error');
+                    }
+                } catch (error) {
+                    console.error('❌ 保存到文件时发生错误:', error.message);
+                    console.error('❓ 错误详情:', error);
+                    console.error('📡 检查服务器是否运行在 http://localhost:3000');
+                    const statusElement = document.getElementById('save-status');
+                    statusElement.textContent = '未保存（服务器未运行）';
+                    statusElement.classList.add('error');
+                }
+
+                // 3秒后恢复状态文本
+                setTimeout(() => {
+                    const statusElement = document.getElementById('save-status');
+                    statusElement.classList.remove('saved', 'error');
+                    statusElement.textContent = '数据将自动保存';
+                }, 3000);
             }
-        });
 
-        document.getElementById('exportBtn').addEventListener('click', () => {
-            exportTodos();
-        });
+            // 保留手动保存按钮的功能，但使用已有的saveBtn
 
-        document.getElementById('importBtn').addEventListener('change', (e) => {
-            const file = e.target.files[0];
-            if (file) {
-                importTodos(file).then(() => {
-                    renderTodos();
-                    saveTodosToFile(); // 导入后保存到文件
-                    // Clear the input to allow importing the same file again
-                    e.target.value = '';
-                }).catch(error => {
-                    alert('导入失败: ' + error.message);
-                    e.target.value = '';
-                });
+            // 修改添加待办事项的处理函数，添加保存功能
+            const originalHandleAddTodo = handleAddTodo;
+            window.handleAddTodo = () => {
+                originalHandleAddTodo();
+                saveTodosToFile(); // 添加后保存到文件
+            };
+
+            // 页面加载完成后立即渲染待办事项
+            renderTodos();
+
+            // 初始保存数据，确保文件中有内容
+            setTimeout(() => {
+                saveTodosToFile();
+            }, 1000);
+
+            function getPriorityText(priority) {
+                const map = { low: '低', medium: '中', high: '高' };
+                return map[priority] || priority;
             }
-        });
-        
-        // 手动保存到文件按钮
-        document.getElementById('save-to-file-btn').addEventListener('click', async () => {
-            await saveTodosToFile();
-            
-            // 显示保存成功提示
-            alert('数据已尝试保存到文件。请确保Node.js服务器正在运行。\n\n要启动服务器，请在终端中运行：\nnode tools/todo-server.js');
-        });
-        
-        // 修改添加待办事项的处理函数，添加保存功能
-          const originalHandleAddTodo = handleAddTodo;
-          window.handleAddTodo = () => {
-              originalHandleAddTodo();
-              saveTodosToFile(); // 添加后保存到文件
-          };
-          
-          // 页面加载完成后立即渲染待办事项
-          renderTodos();
-          
-          // 初始保存数据，确保文件中有内容
-          setTimeout(() => {
-              saveTodosToFile();
-          }, 1000);
 
-        function getPriorityText(priority) {
-            const map = { low: '低', medium: '中', high: '高' };
-            return map[priority] || priority;
-        }
+            function formatDate(dateString) {
+                const date = new Date(dateString);
+                const now = new Date();
+                const diff = now - date;
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
 
-        function formatDate(dateString) {
-            const date = new Date(dateString);
-            const now = new Date();
-            const diff = now - date;
-            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                if (days === 0) return '今天';
+                if (days === 1) return '昨天';
+                if (days < 7) return `${days}天前`;
+                return date.toLocaleDateString('zh-CN');
+            }
 
-            if (days === 0) return '今天';
-            if (days === 1) return '昨天';
-            if (days < 7) return `${days}天前`;
-            return date.toLocaleDateString('zh-CN');
-        }
+            function updateStats() {
+                const stats = getTodoStats();
+                document.getElementById('totalCount').textContent = stats.total;
+                document.getElementById('activeCount').textContent = stats.active;
+                document.getElementById('completedCount').textContent = stats.completed;
+            }
 
-        function updateStats() {
-            const stats = getTodoStats();
-            document.getElementById('totalCount').textContent = stats.total;
-            document.getElementById('activeCount').textContent = stats.active;
-            document.getElementById('completedCount').textContent = stats.completed;
-        }
-
-        // Initial render
-        renderTodos();
-    </script>
+            // Initial render
+            renderTodos();
+        </script>
 </body>
 
 </html>
