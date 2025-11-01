@@ -99,7 +99,7 @@ const teamMembers = [
         gender: "男",
         degree: "硕士",
         title: "工程师",
-        researchFields: "操作系统、内核开发、系统性能优化",
+        researchFields: "智能科学计算、人工智能",
         institution: "中国核动力研究院，先进核能技术国家重点实验室，中国成都 610213",
         institutionEn: "Nuclear Power Institute of China, State Key Laboratory of Advanced Nuclear Energy Technology, Chengdu 610213, China",
         emails: ["1135228970@qq.com"],
@@ -114,7 +114,7 @@ const teamMembers = [
         gender: "男",
         degree: "博士",
         title: "教授",
-        researchFields: "网络安全、信息安全、密码学",
+        researchFields: "网络安全",
         institution: "四川大学计算机学院（软件学院、人工智能学院），中国成都 610065",
         institutionEn: "College of Computer Science (School of Software and School of Artificial Intelligence), Sichuan University, Chengdu 610065, China",
         emails: ["wangjf@scu.edu.cn"],
@@ -129,7 +129,7 @@ const teamMembers = [
         gender: "男",
         degree: "博士",
         title: "教授",
-        researchFields: "数值分析、偏微分方程、科学计算",
+        researchFields: "",
         institution: "四川大学计算机学院（软件学院、人工智能学院），中国成都 610065",
         institutionEn: "College of Computer Science (School of Software and School of Artificial Intelligence), Sichuan University, Chengdu 610065, China",
         emails: ["makaluo@scu.edu.cn"],
@@ -173,14 +173,14 @@ const teamMembers = [
         englishName: "Kai Wang",
         gender: "男",
         degree: "博士",
-        title: "副教授",
-        researchFields: "数值模拟、计算流体力学、多物理场耦合",
+        title: "教授",
+        researchFields: "",
         institution: "浙江大学物理学院，浙江近代物理中心，中国杭州 310058",
         institutionEn: "Zhejiang Institute of Modern Physics, School of Physics, Zhejiang University, Hangzhou 310058, China",
         emails: ["wangkai1@zju.edu.cn"],
         phones: [],
         avatar: "../assets/avatar/wangkai.jpg",
-        position: "核心成员"
+        position: "合作成员"
     },
     {
         id: "liuzhouyu",
@@ -188,14 +188,14 @@ const teamMembers = [
         englishName: "Zhouyu Liu",
         gender: "男",
         degree: "博士",
-        title: "讲师",
-        researchFields: "并行计算、高性能计算、分布式系统",
+        title: "教授",
+        researchFields: "核反应堆物理、蒙特卡洛方法",
         institution: "西安交通大学能源与动力工程学院，中国西安 710049",
         institutionEn: "School of Energy and Power Engineering, Xi'an Jiaotong University, Xi'an 710049, China",
         emails: ["zhouyuliu@xjtu.edu.cn"],
         phones: ["17791978005"],
         avatar: "../assets/avatar/liuzhouyu.jpg",
-        position: "研究成员"
+        position: "合作成员"
     },
     {
         id: "zhangbin",
@@ -203,14 +203,14 @@ const teamMembers = [
         englishName: "Bin Zhang",
         gender: "男",
         degree: "博士",
-        title: "讲师",
-        researchFields: "算法设计、数据结构、优化理论",
+        title: "工程师",
+        researchFields: "智能科学计算、人工智能",
         institution: "中国核动力研究院，先进核能技术国家重点实验室，中国成都 610213",
         institutionEn: "Nuclear Power Institute of China, State Key Laboratory of Advanced Nuclear Energy Technology, Chengdu 610213, China",
         emails: ["jsszwtzb@163.com"],
         phones: ["13551191758"],
         avatar: "../assets/avatar/zhangbin.jpg",
-        position: "研究成员"
+        position: "合作成员"
     },
     {
         id: "wuchao",
@@ -218,14 +218,14 @@ const teamMembers = [
         englishName: "Chao Wu",
         gender: "男",
         degree: "博士",
-        title: "讲师",
-        researchFields: "嵌入式系统、物联网、边缘计算",
+        title: "",
+        researchFields: "智能科学计算、人工智能",
         institution: "中国核动力研究院，先进核能技术国家重点实验室，中国成都 610213",
         institutionEn: "Nuclear Power Institute of China, State Key Laboratory of Advanced Nuclear Energy Technology, Chengdu 610213, China",
         emails: ["22031110387@stu.xidian.edu.cn"],
         phones: ["18894330931"],
         avatar: "../assets/avatar/wuchao.jpg",
-        position: "研究成员"
+        position: "核心成员"
     },
     {
         id: "zhangjinchao",
@@ -233,14 +233,14 @@ const teamMembers = [
         englishName: "Jinchao Zhang",
         gender: "男",
         degree: "博士",
-        title: "讲师",
-        researchFields: "网络安全、密码学、信息安全",
+        title: "教授",
+        researchFields: "",
         institution: "哈尔滨工程大学，核安全与仿真技术国防重点学科实验室，中国哈尔滨 150001",
         institutionEn: "Fundamental Science on Nuclear Safety and Simulation Technology Laboratory, Harbin Engineering University, Harbin, 150001, China",
         emails: ["13935397912@hrbeu.edu.cn"],
         phones: ["13935397912"],
         avatar: "../assets/avatar/zhangjinchao.jpg",
-        position: "研究成员"
+        position: "合作成员"
     },
     {
         id: "chenqilong",
@@ -248,14 +248,14 @@ const teamMembers = [
         englishName: "Qilong Chen",
         gender: "男",
         degree: "博士",
-        title: "讲师",
-        researchFields: "区块链、分布式账本、智能合约",
+        title: "",
+        researchFields: "智能科学计算、人工智能",
         institution: "中国核动力研究院，先进核能技术国家重点实验室，中国成都 610213",
         institutionEn: "Nuclear Power Institute of China, State Key Laboratory of Advanced Nuclear Energy Technology, Chengdu 610213, China",
         emails: ["894860272@qq.com"],
         phones: ["19980816294"],
         avatar: "../assets/avatar/chenqilong.jpg",
-        position: "研究成员"
+        position: "核心成员"
     },
     {
         id: "zhangqian",
@@ -263,14 +263,14 @@ const teamMembers = [
         englishName: "Qian Zhang",
         gender: "男",
         degree: "博士",
-        title: "讲师",
-        researchFields: "量子计算、量子算法、量子信息",
+        title: "工程师",
+        researchFields: "",
         institution: "中国核动力研究院，先进核能技术国家重点实验室，中国成都 610213",
         institutionEn: "Nuclear Power Institute of China, State Key Laboratory of Advanced Nuclear Energy Technology, Chengdu 610213, China",
         emails: ["zhangqian0515@zju.edu.cn"],
         phones: ["17604664028"],
         avatar: "../assets/avatar/zhangqian.jpg",
-        position: "研究成员"
+        position: "合作成员"
     },
     {
         id: "hekangjun",
@@ -278,14 +278,14 @@ const teamMembers = [
         englishName: "Kangjun He",
         gender: "男",
         degree: "博士",
-        title: "讲师",
-        researchFields: "人机交互、用户体验、界面设计",
+        title: "",
+        researchFields: "智能科学计算、人工智能",
         institution: "中国核动力研究院，先进核能技术国家重点实验室，中国成都 610213",
         institutionEn: "Nuclear Power Institute of China, State Key Laboratory of Advanced Nuclear Energy Technology, Chengdu 610213, China",
         emails: ["820982892@qq.com"],
         phones: ["18382350304"],
         avatar: "../assets/avatar/hekangjun.jpg",
-        position: "研究成员"
+        position: "核心成员"
     },
     {
         id: "liuzhengu",
@@ -293,8 +293,8 @@ const teamMembers = [
         englishName: "Zhenyu Liu",
         gender: "男",
         degree: "博士",
-        title: "副教授",
-        researchFields: "机器人学、控制理论、自动化",
+        title: "工程师",
+        researchFields: "智能科学计算、人工智能、断裂力学",
         institution: "中国核动力研究院，先进核能技术国家重点实验室，中国成都 610213",
         institutionEn: "Nuclear Power Institute of China, State Key Laboratory of Advanced Nuclear Energy Technology, Chengdu 610213, China",
         emails: ["zhenyuliuchn@foxmail.com"],
@@ -308,14 +308,14 @@ const teamMembers = [
         englishName: "Chen Zhao",
         gender: "男",
         degree: "博士",
-        title: "讲师",
-        researchFields: "自然语言处理、知识图谱、信息检索",
+        title: "工程师",
+        researchFields: "",
         institution: "中国核动力研究院，先进核能技术国家重点实验室，中国成都 610213",
         institutionEn: "Nuclear Power Institute of China, State Key Laboratory of Advanced Nuclear Energy Technology, Chengdu 610213, China",
         emails: ["zhaochen@npic.ac.cn"],
         phones: ["15680832829"],
         avatar: "../assets/avatar/zhaochen.jpg",
-        position: "研究成员"
+        position: "合作成员"
     },
     {
         id: "renzhiyuan",
@@ -323,15 +323,15 @@ const teamMembers = [
         englishName: "Zhiyuan Ren",
         gender: "男",
         degree: "博士",
-        title: "讲师",
-        researchFields: "生物信息学、计算生物学、基因组学",
+        title: "",
+        researchFields: "智能科学计算、人工智能",
         institution: "中国核动力研究院，先进核能技术国家重点实验室，中国成都 610213；电子科技大学信息与软件工程学院",
         institutionEn: "Nuclear Power Institute of China, State Key Laboratory of Advanced Nuclear Energy Technology, Chengdu 610213, China; School of Information and Software Engineering, University of Electronic Science and Technology of China",
         emails: ["renzhiyuan@uestc.edu.cn"],
         phones: [],
         orcid: "0009-0005-5682-787X",
         avatar: "../assets/avatar/renzhiyuan.jpg",
-        position: "研究成员"
+        position: "核心成员"
     },
     {
         id: "fengziliang",
@@ -339,29 +339,29 @@ const teamMembers = [
         englishName: "Ziliang Feng",
         gender: "男",
         degree: "博士",
-        title: "讲师",
-        researchFields: "云计算、大数据处理、分布式存储",
+        title: "教授",
+        researchFields: "",
         institution: "四川大学计算机学院（软件学院、人工智能学院），中国成都 610065",
         institutionEn: "College of Computer Science (School of Software and School of Artificial Intelligence), Sichuan University, Chengdu 610065, China",
         emails: ["fengziliang@scu.edu.cn"],
         phones: ["13982101801"],
         avatar: "../assets/avatar/fengziliang.jpg",
-        position: "研究成员"
+        position: "合作成员"
     },
     {
         id: "zhaixiyan",
         name: "翟西岩",
         englishName: "Xiyan Zhai",
         gender: "男",
-        degree: "博士",
-        title: "讲师",
-        researchFields: "计算语言学、语音识别、自然语言理解",
+        degree: "硕士",
+        title: "",
+        researchFields: "智能科学计算、人工智能",
         institution: "中国核动力研究院，先进核能技术国家重点实验室，中国成都 610213",
         institutionEn: "Nuclear Power Institute of China, State Key Laboratory of Advanced Nuclear Energy Technology, Chengdu 610213, China",
         emails: [],
         phones: [],
         avatar: "../assets/avatar/zhaixiyan.jpg",
-        position: "研究成员"
+        position: "核心成员"
     },
     {
         id: "zhangzhenyuan",
@@ -369,14 +369,14 @@ const teamMembers = [
         englishName: "Zhenyuan Zhang",
         gender: "男",
         degree: "博士",
-        title: "讲师",
-        researchFields: "虚拟现实、增强现实、混合现实",
+        title: "",
+        researchFields: "智能科学计算、人工智能",
         institution: "中国核动力研究院，先进核能技术国家重点实验室，中国成都 610213",
         institutionEn: "Nuclear Power Institute of China, State Key Laboratory of Advanced Nuclear Energy Technology, Chengdu 610213, China",
         emails: [],
         phones: [],
         avatar: "../assets/avatar/zhangzhenyuan.jpg",
-        position: "研究成员"
+        position: "核心成员"
     },
     {
         id: "dengli",
@@ -391,7 +391,7 @@ const teamMembers = [
         emails: ["deng_li@iapcm.ac.cn"],
         phones: [],
         avatar: "../assets/avatar/dengli.jpg",
-        position: "核心成员"
+        position: "合作成员"
     },
     {
         id: "wangxueqiang",
@@ -406,7 +406,7 @@ const teamMembers = [
         emails: [],
         phones: [],
         avatar: "../assets/avatar/wangxueqiang.jpg",
-        position: "研究成员"
+        position: "核心成员"
     },
     {
         id: "yucaiyang",
@@ -414,14 +414,14 @@ const teamMembers = [
         englishName: "Caiyang Yu",
         gender: "男",
         degree: "博士",
-        title: "讲师",
+        title: "",
         researchFields: "数据科学、机器学习、人工智能",
         institution: "中国核动力研究院，先进核能技术国家重点实验室，中国成都 610213",
         institutionEn: "Nuclear Power Institute of China, State Key Laboratory of Advanced Nuclear Energy Technology, Chengdu 610213, China",
         emails: [],
         phones: [],
         avatar: "../assets/avatar/yucaiyang.jpg",
-        position: "研究成员"
+        position: "核心成员"
     }
 ];
 
