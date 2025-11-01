@@ -44,7 +44,7 @@ const teamMembers = [
         emails: ["liudong@npic.ac.cn"],
         phones: ["13980956120"],
         orcid: "0009-0002-4768-9039",
-        avatar: "/assets/avatar/liudong.jpg",
+        avatar: "../assets/avatar/liudong.jpg",
         position: "团队负责人"
     },
     {
