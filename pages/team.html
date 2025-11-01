@@ -1689,6 +1689,10 @@
 
         // 拖拽开始处理函数
         function handleDragStart(e) {
+            // 检查e.target是否存在且支持closest方法
+            if (!e.target || typeof e.target.closest !== 'function') {
+                return;
+            }
             const item = e.target.closest('.funding-item');
             if (!item) return;
 
@@ -1708,6 +1712,10 @@
 
         // 拖拽结束处理函数
         function handleDragEnd(e) {
+            // 检查e.target是否存在且支持closest方法
+            if (!e.target || typeof e.target.closest !== 'function') {
+                return;
+            }
             const item = e.target.closest('.funding-item');
             if (!item) return;
 
@@ -1735,6 +1743,10 @@
             }
             e.dataTransfer.dropEffect = 'move';
 
+            // 检查e.target是否存在且支持closest方法
+            if (!e.target || typeof e.target.closest !== 'function') {
+                return false;
+            }
             // 添加更精确的位置检测
             const targetItem = e.target.closest('.funding-item');
             if (targetItem && window.draggedElement && targetItem !== window.draggedElement) {
@@ -1763,6 +1775,10 @@
 
         // 拖拽进入处理函数
         function handleDragEnter(e) {
+            // 检查e.target是否存在且支持closest方法
+            if (!e.target || typeof e.target.closest !== 'function') {
+                return;
+            }
             const item = e.target.closest('.funding-item');
             if (!item || !window.draggedElement) return;
 
@@ -1774,6 +1790,10 @@
 
         // 拖拽离开处理函数
         function handleDragLeave(e) {
+            // 检查e.target是否存在且支持closest方法
+            if (!e.target || typeof e.target.closest !== 'function') {
+                return;
+            }
             const item = e.target.closest('.funding-item');
             if (!item) return;
 
@@ -1793,6 +1813,10 @@
                 e.stopPropagation();
             }
 
+            // 检查e.target是否存在且支持closest方法
+            if (!e.target || typeof e.target.closest !== 'function') {
+                return false;
+            }
             const targetItem = e.target.closest('.funding-item');
             const draggedElement = window.draggedElement;
 
@@ -1914,7 +1938,7 @@
 
                     // 查找目标位置
                     const elementBelow = document.elementFromPoint(touch.clientX, touch.clientY);
-                    const targetItem = elementBelow?.closest('.funding-item');
+                    const targetItem = elementBelow && typeof elementBelow.closest === 'function' ? elementBelow.closest('.funding-item') : null;
 
                     if (targetItem && targetItem !== touchItem) {
                         // 清除之前的所有状态
@@ -1944,7 +1968,7 @@
 
                 const touch = e.changedTouches[0];
                 const elementBelow = document.elementFromPoint(touch.clientX, touch.clientY);
-                const targetItem = elementBelow?.closest('.funding-item');
+                const targetItem = elementBelow && typeof elementBelow.closest === 'function' ? elementBelow.closest('.funding-item') : null;
 
                 if (targetItem && targetItem !== touchItem) {
                     // 执行排序操作
@@ -2003,6 +2027,10 @@
 
             // 双击撤销功能
             document.addEventListener('dblclick', function (e) {
+                // 检查e.target是否存在且支持closest方法
+                if (!e.target || typeof e.target.closest !== 'function') {
+                    return;
+                }
                 if (e.target.closest('.funding-item') && dragHistory.length > 0) {
                     e.preventDefault();
                     const previousOrder = dragHistory.pop();
@@ -2114,6 +2142,10 @@
 
             // 点击成员卡片显示详情
             document.addEventListener('click', function (e) {
+                // 检查e.target是否存在且支持closest方法
+                if (!e.target || typeof e.target.closest !== 'function') {
+                    return;
+                }
                 const memberCard = e.target.closest('.member-card');
                 if (memberCard && !e.target.closest('.copy-btn')) {
                     const memberId = memberCard.dataset.memberId;
@@ -2258,7 +2290,15 @@
                 }
 
                 // 处理ORCID显示
-                const orcidHtml = member.orcid || '未提供';
+                let orcidHtml = '未提供';
+                if (member.orcid) {
+                    // 确保ORCID是完整的URL格式
+                    let orcidUrl = member.orcid;
+                    if (!orcidUrl.startsWith('http')) {
+                        orcidUrl = `https://orcid.org/${orcidUrl}`;
+                    }
+                    orcidHtml = `<a href="${orcidUrl}" target="_blank" style="color: #0066cc; text-decoration: underline; cursor: pointer;">${member.orcid}</a>`;
+                }
 
                 memberCard.innerHTML = `
                     <button class="copy-btn" data-member-id="${member.id}" title="复制成员信息">
@@ -2478,17 +2518,23 @@
 
             // 添加鼠标按下事件监听，用于记录按下时间
             document.addEventListener('mousedown', function (e) {
-                const memberCard = e.target.closest('.member-card');
-                if (memberCard) {
-                    memberCard.dataset.mouseDownTime = new Date().getTime().toString();
+                // 检查e.target是否存在且支持closest方法
+                if (e.target && typeof e.target.closest === 'function') {
+                    const memberCard = e.target.closest('.member-card');
+                    if (memberCard) {
+                        memberCard.dataset.mouseDownTime = new Date().getTime().toString();
+                    }
                 }
             });
 
             // 添加鼠标选择事件监听，用于检测文本选择
             document.addEventListener('selectstart', function (e) {
-                const memberCard = e.target.closest('.member-card');
-                if (memberCard) {
-                    memberCard.dataset.isSelecting = 'true';
+                // 检查e.target是否存在且支持closest方法
+                if (e.target && typeof e.target.closest === 'function') {
+                    const memberCard = e.target.closest('.member-card');
+                    if (memberCard) {
+                        memberCard.dataset.isSelecting = 'true';
+                    }
                 }
             });
 
@@ -2520,6 +2566,10 @@
 
             // 复制成员信息
             document.addEventListener('click', function (e) {
+                // 检查e.target是否存在且支持closest方法
+                if (!e.target || typeof e.target.closest !== 'function') {
+                    return;
+                }
                 if (e.target.closest('.copy-btn')) {
                     const btn = e.target.closest('.copy-btn');
                     const memberId = btn.dataset.memberId;
@@ -2640,11 +2690,22 @@
 
             const orcidElement = document.getElementById('modal-orcid');
             if (member.orcid) {
+                // 确保ORCID是完整的URL格式
+                let orcidUrl = member.orcid;
+                if (!orcidUrl.startsWith('http')) {
+                    orcidUrl = `https://orcid.org/${orcidUrl}`;
+                }
                 orcidElement.textContent = member.orcid;
-                orcidElement.href = member.orcid;
+                orcidElement.href = orcidUrl;
+                orcidElement.style.color = '#0066cc';
+                orcidElement.style.textDecoration = 'underline';
+                orcidElement.style.cursor = 'pointer';
             } else {
                 orcidElement.textContent = '未提供';
                 orcidElement.href = '#';
+                orcidElement.style.color = 'inherit';
+                orcidElement.style.textDecoration = 'none';
+                orcidElement.style.cursor = 'default';
             }
 
             // 设置单位信息和中英文切换
@@ -3251,6 +3312,10 @@ ORCID: ${member.orcid || '未提供'}`;
         function updateCopyFunctionsForPreview() {
             // 修改成员信息复制
             document.addEventListener('click', function (e) {
+                // 检查e.target是否存在且支持closest方法
+                if (!e.target || typeof e.target.closest !== 'function') {
+                    return;
+                }
                 if (e.target.closest('.copy-btn')) {
                     const btn = e.target.closest('.copy-btn');
                     const memberId = btn.dataset.memberId;
