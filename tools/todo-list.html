@@ -683,6 +683,16 @@
                 // 继续初始化其他组件
                 initializeTodoComponents();
             }
+            
+            // 将函数赋值到全局作用域，确保在其他函数中可以访问
+            window.getTodos = getTodos;
+            window.setTodos = setTodos;
+            window.addTodo = addTodo;
+            window.toggleTodoItem = toggleTodoItem;
+            window.deleteTodoItem = deleteTodoItem;
+            window.getTodoStats = getTodoStats;
+            window.clearTodos = clearTodos;
+            window.generateDataCode = generateDataCode;
 
             // 初始化待办事项组件
             function initializeTodoComponents() {
@@ -746,7 +756,7 @@
                     dueDate: dueDateInput.value ? new Date(dueDateInput.value).toISOString() : null
                 };
 
-                addTodo(todo);
+                window.addTodo(todo);
                 input.value = '';
                 dueDateInput.value = ''; // 清空日期输入
                 renderTodos();
@@ -774,7 +784,7 @@
                 const todoList = document.getElementById('todoList');
                 
                 // 安全检查：确保getTodos函数已定义
-                if (typeof getTodos !== 'function') {
+                if (typeof window.getTodos !== 'function') {
                     console.warn('⚠️ getTodos函数尚未定义，跳过渲染');
                     todoList.innerHTML = `
                         <div class="empty-state">
@@ -785,7 +795,7 @@
                     return;
                 }
                 
-                const todos = getTodos();
+                const todos = window.getTodos();
                 let filteredTodos = todos;
 
                 if (window.currentFilter === 'active') {
@@ -832,15 +842,15 @@
             // 为window对象添加方法，使内联onclick能调用
             // 并在每次操作后保存到文件
             window.toggleTodo = function (id) {
-                toggleTodoItem(id);
+                window.toggleTodoItem(id);
                 renderTodos();
-                saveTodosToFile(); // 切换后保存到文件
+                saveTodosToFile(true); // 切换后保存到文件并显示反馈
             };
 
             window.deleteTodo = function (id) {
-                deleteTodoItem(id);
+                window.deleteTodoItem(id);
                 renderTodos();
-                saveTodosToFile(); // 删除后保存到文件
+                saveTodosToFile(true); // 删除后保存到文件并显示反馈
             };
 
             // 待办事项保存函数，支持显示状态反馈
@@ -963,7 +973,7 @@
                             headers: {
                                 'Content-Type': 'application/json'
                             },
-                            body: JSON.stringify({ todos: getTodos(), file_path: 'todos.json' }),
+                            body: JSON.stringify({ todos: window.getTodos(), file_path: 'todos.json' }),
                             signal: controller.signal
                         });
                         
@@ -1039,12 +1049,12 @@
             function initializeSyncButton() {
                 console.log('🔄 初始化同步按钮...');
                 
-                // 修改添加待办事项的处理函数，添加保存功能
-                const originalHandleAddTodo = window.handleAddTodo;
-                window.handleAddTodo = () => {
-                    originalHandleAddTodo();
-                    saveTodosToFile(); // 添加后保存到文件
-                };
+                // 添加待办事项的处理函数，添加保存功能
+            const originalHandleAddTodo = window.handleAddTodo;
+            window.handleAddTodo = () => {
+                originalHandleAddTodo();
+                window.saveTodosToFile(); // 添加后保存到文件
+            };
                 
                 // 添加同步按钮的点击事件
                 document.getElementById('syncBtn').addEventListener('click', async () => {
@@ -1120,12 +1130,12 @@
 
             function updateStats() {
                 // 安全检查：确保getTodoStats函数已定义
-                if (typeof getTodoStats !== 'function') {
+                if (typeof window.getTodoStats !== 'function') {
                     console.warn('⚠️ getTodoStats函数尚未定义，跳过统计更新');
                     return;
                 }
                 
-                const stats = getTodoStats();
+                const stats = window.getTodoStats();
                 document.getElementById('totalCount').textContent = stats.total;
                 document.getElementById('activeCount').textContent = stats.active;
                 document.getElementById('completedCount').textContent = stats.completed;
