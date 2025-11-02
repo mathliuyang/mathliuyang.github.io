@@ -680,19 +680,118 @@
                 
                 console.log('✅ 基础配置完成');
                 
+                // 将函数赋值到全局作用域，确保在其他函数中可以访问
+                window.getTodos = getTodos;
+                window.setTodos = setTodos;
+                window.addTodo = addTodo;
+                window.toggleTodoItem = toggleTodoItem;
+                window.deleteTodoItem = deleteTodoItem;
+                window.getTodoStats = getTodoStats;
+                window.clearTodos = clearTodos;
+                window.generateDataCode = generateDataCode;
+                
+                console.log('✅ 函数已赋值到全局作用域');
+                
                 // 继续初始化其他组件
                 initializeTodoComponents();
             }
-            
-            // 将函数赋值到全局作用域，确保在其他函数中可以访问
-            window.getTodos = getTodos;
-            window.setTodos = setTodos;
-            window.addTodo = addTodo;
-            window.toggleTodoItem = toggleTodoItem;
-            window.deleteTodoItem = deleteTodoItem;
-            window.getTodoStats = getTodoStats;
-            window.clearTodos = clearTodos;
-            window.generateDataCode = generateDataCode;
+
+            // 待办事项保存函数，支持显示状态反馈
+            async function saveTodosToFile(showFeedback = false) {
+                console.log('🚀 saveTodosToFile 被调用, showFeedback:', showFeedback);
+                
+                // 如果需要显示反馈，更新状态
+                if (showFeedback) {
+                    updateSyncStatus('正在同步数据到GitHub...', 'syncing');
+                }
+                
+                try {
+                    // 获取待办事项数据
+                    const todosData = window.getTodos();
+                    console.log('📋 获取到的待办事项数据:', todosData);
+                    
+                    // 直接使用GitHub API作为主要保存方案
+                    // 构建符合todo-data.js格式的数据
+                    const todosContent = JSON.stringify(todosData, null, 4);
+                    
+                    // 获取GitHub Token和仓库信息
+                    const githubToken = assembleToken();
+                    console.log('🔑 GitHub Token 已组装');
+                    
+                    const repoInfo = await getRepositoryInfo();
+                    console.log('📁 仓库信息:', repoInfo);
+                    
+                    // 步骤1: 获取文件的当前SHA（必需用于更新文件）
+                    const fileInfoResponse = await fetch(
+                        `https://api.github.com/repos/${repoInfo.owner}/${repoInfo.repo}/contents/tools/todo-data.js`,
+                        {
+                            headers: {
+                                'Accept': 'application/vnd.github.v3+json',
+                                'Authorization': `token ${githubToken}`
+                            }
+                        }
+                    );
+                    
+                    let fileSha = '';
+                    if (fileInfoResponse.ok) {
+                        const fileInfo = await fileInfoResponse.json();
+                        fileSha = fileInfo.sha;
+                        console.log('获取文件SHA成功:', fileSha);
+                    } else {
+                        console.warn('无法获取文件SHA，可能文件不存在');
+                    }
+                    
+                    // 步骤2: 直接更新文件内容
+                    const updateResponse = await fetch(
+                        `https://api.github.com/repos/${repoInfo.owner}/${repoInfo.repo}/contents/tools/todo-data.js`,
+                        {
+                            method: 'PUT',
+                            headers: {
+                                'Accept': 'application/vnd.github.v3+json',
+                                'Authorization': `token ${githubToken}`
+                            },
+                            body: JSON.stringify({
+                                message: '更新待办事项数据',
+                                content: btoa(unescape(encodeURIComponent(todosContent))),
+                                sha: fileSha
+                            })
+                        }
+                    );
+                    
+                    if (updateResponse.ok) {
+                        console.log('✅ GitHub API 更新成功');
+                        if (showFeedback) {
+                            updateSyncStatus('数据同步成功！', 'success');
+                        }
+                    } else {
+                        const errorText = await updateResponse.text();
+                        console.error('GitHub API 更新失败:', errorText);
+                        if (showFeedback) {
+                            updateSyncStatus('同步失败，尝试工作流方案...', 'error');
+                        }
+                        throw new Error('GitHub API 更新失败');
+                    }
+                } catch (error) {
+                    console.error('❌ 直接API更新失败:', error);
+                    
+                    // 备用方案：触发工作流
+                    if (showFeedback) {
+                        updateSyncStatus('正在触发工作流...', 'syncing');
+                    }
+                    
+                    try {
+                        await triggerWorkflow();
+                        if (showFeedback) {
+                            updateSyncStatus('工作流已触发！', 'success');
+                        }
+                    } catch (workflowError) {
+                        console.error('❌ 工作流触发失败:', workflowError);
+                        if (showFeedback) {
+                            updateSyncStatus('同步失败，请检查网络连接', 'error');
+                        }
+                    }
+                }
+            }
 
             // 初始化待办事项组件
             function initializeTodoComponents() {
@@ -853,143 +952,23 @@
                 saveTodosToFile(true); // 删除后保存到文件并显示反馈
             };
 
-            // 待办事项保存函数，支持显示状态反馈
-            async function saveTodosToFile(showFeedback = false) {
-                console.log('🚀 saveTodosToFile 被调用, showFeedback:', showFeedback);
+            // 更新同步状态显示
+            function updateSyncStatus(message, status) {
+                const statusElement = document.getElementById('syncStatus');
+                statusElement.textContent = message;
                 
-                // 如果需要显示反馈，更新状态
-                if (showFeedback) {
-                    updateSyncStatus('正在同步数据到GitHub...', 'syncing');
+                // 根据状态添加不同的样式
+                statusElement.className = 'sync-status';
+                if (status) {
+                    statusElement.classList.add(`sync-${status}`);
                 }
                 
-                try {
-                    // 获取待办事项数据
-                    const todosData = window.getTodos();
-                    console.log('📋 获取到的待办事项数据:', todosData);
-                    
-                    // 直接使用GitHub API作为主要保存方案
-                    // 构建符合todo-data.js格式的数据
-                    const todosContent = JSON.stringify(todosData, null, 4);
-                    
-                    // 获取GitHub Token和仓库信息
-                    const githubToken = assembleToken();
-                    console.log('🔑 GitHub Token 已组装');
-                    
-                    const repoInfo = await getRepositoryInfo();
-                    console.log('📁 仓库信息:', repoInfo);
-                    
-                    // 步骤1: 获取文件的当前SHA（必需用于更新文件）
-                    const fileInfoResponse = await fetch(
-                        `https://api.github.com/repos/${repoInfo.owner}/${repoInfo.repo}/contents/tools/todo-data.js`,
-                        {
-                            headers: {
-                                'Accept': 'application/vnd.github.v3+json',
-                                'Authorization': `token ${githubToken}`
-                            }
-                        }
-                    );
-                    
-                    let fileSha = '';
-                    if (fileInfoResponse.ok) {
-                        const fileInfo = await fileInfoResponse.json();
-                        fileSha = fileInfo.sha;
-                        console.log('获取文件SHA成功:', fileSha);
-                    } else {
-                        console.warn('无法获取文件SHA，可能文件不存在');
-                    }
-                    
-                    // 步骤2: 直接更新文件内容
-                    const updateResponse = await fetch(
-                        `https://api.github.com/repos/${repoInfo.owner}/${repoInfo.repo}/contents/tools/todo-data.js`,
-                        {
-                            method: 'PUT',
-                            headers: {
-                                'Accept': 'application/vnd.github.v3+json',
-                                'Content-Type': 'application/json',
-                                'Authorization': `token ${githubToken}`
-                            },
-                            body: JSON.stringify({
-                                message: '更新待办事项数据',
-                                content: btoa(`// 待办事项数据存储\n// 持久化存储方案：\n// 将所有待办事项数据直接存储在这个文件中\n// 当数据更改时，通过特殊机制更新此文件\n\n// 待办事项数据数组 - 这是持久化存储的核心\n// 所有待办事项将直接保存在这里\nlet todos = ${todosContent};\n`),
-                                sha: fileSha,
-                                branch: 'main'
-                            })
-                        }
-                    );
-                    
-                    if (updateResponse.ok) {
-                        const result = await updateResponse.json();
-                        console.log('GitHub文件更新成功:', result.commit.html_url);
-                        
-                        if (showFeedback) {
-                            updateSyncStatus('同步成功！数据已保存到GitHub', 'success');
-                        }
-                        return true;
-                    } else {
-                        // 如果直接更新失败，尝试使用备用方案（工作流触发）
-                        console.warn('直接更新文件失败，尝试使用GitHub Actions工作流');
-                        
-                        // 触发GitHub Actions工作流作为备用方案
-                        const workflowResponse = await fetch(
-                            `https://api.github.com/repos/${repoInfo.owner}/${repoInfo.repo}/actions/workflows/save-todos.yml/dispatches`,
-                            {
-                                method: 'POST',
-                                headers: {
-                                    'Accept': 'application/vnd.github.v3+json',
-                                    'Content-Type': 'application/json',
-                                    'Authorization': `token ${githubToken}`
-                                },
-                                body: JSON.stringify({
-                                    ref: 'main',
-                                    inputs: {
-                                        todos_data: JSON.stringify(todosData)
-                                    }
-                                })
-                            }
-                        );
-                        
-                        if (workflowResponse.ok || workflowResponse.status === 204) {
-                            if (showFeedback) {
-                                updateSyncStatus('同步请求已发送，数据将很快更新到GitHub', 'success');
-                            }
-                            return true;
-                        } else {
-                            throw new Error(`GitHub API错误: ${workflowResponse.status}`);
-                        }
-                    }
-                } catch (error) {
-                    // 记录错误并显示反馈
-                    console.error('GitHub同步失败:', error);
-                    
-                    // 尝试本地服务器作为最后的备用方案
-                    try {
-                        console.log('尝试使用本地服务器保存...');
-                        
-                        const controller = new AbortController();
-                        const timeoutId = setTimeout(() => controller.abort(), 1000);
-                        
-                        const localResponse = await fetch('http://localhost:3000/api/save-todos', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify({ todos: window.getTodos(), file_path: 'todos.json' }),
-                            signal: controller.signal
-                        });
-                        
-                        clearTimeout(timeoutId);
-                        
-                        if (localResponse.ok && showFeedback) {
-                            updateSyncStatus('GitHub同步失败，已保存到本地', 'warning');
-                        }
-                    } catch (localError) {
-                        // 所有保存方式都失败
-                        if (showFeedback) {
-                            updateSyncStatus(`同步失败: ${error.message}`, 'error');
-                        }
-                    }
-                    
-                    return false;
+                // 3秒后清除状态消息（成功或同步中的情况）
+                if (status === 'success' || status === 'syncing') {
+                    setTimeout(() => {
+                        statusElement.textContent = '';
+                        statusElement.className = 'sync-status';
+                    }, 3000);
                 }
             }
             
