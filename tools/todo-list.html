@@ -177,6 +177,40 @@
             gap: 1rem;
             align-items: center;
         }
+        
+        .sync-section {
+            text-align: center;
+            margin-top: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .sync-btn {
+            padding: 0.8rem 2rem;
+            background: var(--accent);
+            color: var(--bg);
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 120px;
+        }
+        
+        .sync-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .sync-btn:active {
+            transform: translateY(0);
+        }
+        
+        .sync-status {
+            margin-top: 0.5rem;
+            font-size: 0.85rem;
+            color: var(--text-dim);
+        }
 
         .add-date {
             padding: 1rem;
@@ -531,18 +565,24 @@
             </div>
 
             <div class="add-section">
-                <div class="add-form">
-                    <input type="text" class="add-input" id="todoInput" placeholder="添加新任务..." />
-                    <input type="date" class="add-date" id="todoDueDate" />
-                    <button class="add-btn" id="addBtn">添加</button>
-                    <button class="add-btn" id="saveBtn">同步</button>
-                </div>
-                <div class="priority-selector">
-                    <button class="priority-btn" data-priority="low">低优先级</button>
-                    <button class="priority-btn active" data-priority="medium">中优先级</button>
-                    <button class="priority-btn" data-priority="high">高优先级</button>
-                </div>
+            <div class="add-form">
+                <input type="text" class="add-input" id="todoInput" placeholder="添加新任务..." />
+                <input type="date" class="add-date" id="todoDueDate" />
+                <button class="add-btn" id="addBtn">添加</button>
+                <button class="add-btn" id="saveBtn">同步</button>
             </div>
+            <div class="priority-selector">
+                <button class="priority-btn" data-priority="low">低优先级</button>
+                <button class="priority-btn active" data-priority="medium">中优先级</button>
+                <button class="priority-btn" data-priority="high">高优先级</button>
+            </div>
+        </div>
+        
+        <!-- 同步按钮区域 -->
+        <div class="sync-section">
+            <button id="syncBtn" class="sync-btn">立即同步</button>
+            <div id="syncStatus" class="sync-status"></div>
+        </div>
 
             <div class="filter-bar">
                 <button class="filter-btn active" data-filter="all">全部</button>
@@ -709,27 +749,40 @@
                 saveTodosToFile(); // 删除后保存到文件
             };
 
-            // 自动保存待办事项到文件的函数（静默模式）
-            async function saveTodosToFile() {
+            // 待办事项保存函数，支持显示状态反馈
+            async function saveTodosToFile(showFeedback = false) {
+                // 如果需要显示反馈，更新状态
+                if (showFeedback) {
+                    updateSyncStatus('同步中...', 'syncing');
+                }
+                
                 try {
                     // 获取待办事项数据
                     const todosData = getTodos();
 
                     // 尝试通过Node.js服务器保存数据到文件（本地开发模式）
                     try {
+                        // 创建一个带超时的fetch
+                        const controller = new AbortController();
+                        const timeoutId = setTimeout(() => controller.abort(), 2000);
+                        
                         const response = await fetch('http://localhost:3000/api/save-todos', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json'
                             },
                             body: JSON.stringify({ todos: todosData, file_path: 'todos.json' }),
-                            timeout: 2000 // 设置超时，快速失败
+                            signal: controller.signal
                         });
+                        
+                        clearTimeout(timeoutId);
 
                         // 检查响应是否有效
                         if (response.ok) {
-                            // 静默保存成功，不显示任何提示
-                            return;
+                            if (showFeedback) {
+                                updateSyncStatus('同步成功（本地）', 'success');
+                            }
+                            return true;
                         }
                     } catch (localError) {
                         // 本地服务器不可用，尝试使用GitHub API作为备用方案
@@ -759,10 +812,41 @@
                         }
                     );
 
-                    // 静默保存成功，不显示任何提示
+                    if (workflowResponse.ok || workflowResponse.status === 204) {
+                        if (showFeedback) {
+                            updateSyncStatus('同步成功（GitHub）', 'success');
+                        }
+                        return true;
+                    } else {
+                        throw new Error(`GitHub API错误: ${workflowResponse.status}`);
+                    }
                 } catch (error) {
-                    // 静默处理错误，不显示任何提示
+                    // 记录错误并显示反馈（如果需要）
                     console.error('保存失败:', error);
+                    if (showFeedback) {
+                        updateSyncStatus(`同步失败: ${error.message}`, 'error');
+                    }
+                    return false;
+                }
+            }
+            
+            // 更新同步状态显示
+            function updateSyncStatus(message, status) {
+                const statusElement = document.getElementById('syncStatus');
+                statusElement.textContent = message;
+                
+                // 根据状态添加不同的样式
+                statusElement.className = 'sync-status';
+                if (status) {
+                    statusElement.classList.add(`sync-${status}`);
+                }
+                
+                // 3秒后清除状态消息（成功或同步中的情况）
+                if (status === 'success' || status === 'syncing') {
+                    setTimeout(() => {
+                        statusElement.textContent = '';
+                        statusElement.className = 'sync-status';
+                    }, 3000);
                 }
             }
 
@@ -804,6 +888,11 @@
                 originalHandleAddTodo();
                 saveTodosToFile(); // 添加后保存到文件
             };
+            
+            // 添加同步按钮的点击事件
+            document.getElementById('syncBtn').addEventListener('click', async () => {
+                await saveTodosToFile(true); // 显示反馈
+            });
 
             // 页面加载完成后立即渲染待办事项
             renderTodos();
