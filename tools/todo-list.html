@@ -752,7 +752,7 @@
                             },
                             body: JSON.stringify({
                                 message: '更新待办事项数据',
-                                content: btoa(unescape(encodeURIComponent(todosContent))),
+                                content: btoa(encodeURIComponent(todosContent).replace(/%([0-9A-F]{2})/g, (match, p1) => String.fromCharCode('0x' + p1))),
                                 sha: fileSha
                             })
                         }
