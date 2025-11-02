@@ -598,6 +598,9 @@
             // 导入待办事项数据管理函数
             console.log('📝 开始加载待办事项模块...');
             
+            // 模块加载状态标志
+            window.todoModuleLoaded = false;
+            
             // 定义函数变量
             let getTodos, setTodos, addTodo, toggleTodoItem, deleteTodoItem, getTodoStats, clearTodos, generateDataCode;
             
@@ -615,6 +618,9 @@
                     clearTodos = todoModule.clearTodos;
                     generateDataCode = todoModule.generateDataCode;
                     console.log('✅ 待办事项模块加载成功');
+                    
+                    // 设置模块加载完成标志
+                    window.todoModuleLoaded = true;
                     
                     // 模块加载成功后初始化页面
                     initializeApp();
@@ -653,6 +659,9 @@
                     window.getTodoStats = getTodoStats;
                     window.clearTodos = clearTodos;
                     window.generateDataCode = generateDataCode;
+                    
+                    // 设置模块加载完成标志（即使使用备用函数）
+                    window.todoModuleLoaded = true;
                     
                     console.log('⚠️ 使用备用函数，已赋值到全局作用域');
                     
@@ -711,6 +720,15 @@
             // 待办事项保存函数，支持显示状态反馈
             async function saveTodosToFile(showFeedback = false) {
                 console.log('🚀 saveTodosToFile 被调用, showFeedback:', showFeedback);
+                
+                // 检查模块是否加载完成
+                if (!window.todoModuleLoaded) {
+                    console.warn('⚠️ 待办事项模块尚未加载完成，跳过保存操作');
+                    if (showFeedback) {
+                        updateSyncStatus('功能加载中，请稍后再试...', 'warning');
+                    }
+                    return;
+                }
                 
                 // 如果需要显示反馈，更新状态
                 if (showFeedback) {
