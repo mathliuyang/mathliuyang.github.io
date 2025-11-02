@@ -596,7 +596,49 @@
 
         <script type="module">
             // 导入待办事项数据管理函数
-            import { getTodos, setTodos, addTodo, toggleTodo as toggleTodoItem, deleteTodo as deleteTodoItem, getTodoStats, clearTodos, generateDataCode } from './todo-data.js';
+            console.log('📝 开始加载待办事项模块...');
+            
+            // 定义函数变量
+            let getTodos, setTodos, addTodo, toggleTodoItem, deleteTodoItem, getTodoStats, clearTodos, generateDataCode;
+            
+            try {
+                // 正确的模块导入
+                const todoModule = await import('./todo-data.js');
+                getTodos = todoModule.getTodos;
+                setTodos = todoModule.setTodos;
+                addTodo = todoModule.addTodo;
+                toggleTodoItem = todoModule.toggleTodo;
+                deleteTodoItem = todoModule.deleteTodo;
+                getTodoStats = todoModule.getTodoStats;
+                clearTodos = todoModule.clearTodos;
+                generateDataCode = todoModule.generateDataCode;
+                console.log('✅ 待办事项模块加载成功');
+            } catch (error) {
+                console.error('❌ 待办事项模块加载失败:', error);
+                // 如果模块加载失败，提供一个空的数据结构
+                window.todos = [];
+                getTodos = () => window.todos || [];
+                setTodos = (newTodos) => { window.todos = newTodos; };
+                addTodo = (todo) => { window.todos.unshift(todo); };
+                toggleTodoItem = (id) => {
+                    const todo = window.todos.find(t => t.id === id);
+                    if (todo) todo.completed = !todo.completed;
+                };
+                deleteTodoItem = (id) => {
+                    window.todos = window.todos.filter(t => t.id !== id);
+                };
+                getTodoStats = () => {
+                    const todos = getTodos();
+                    return {
+                        total: todos.length,
+                        active: todos.filter(t => !t.completed).length,
+                        completed: todos.filter(t => t.completed).length,
+                        overdue: 0
+                    };
+                };
+                clearTodos = () => { window.todos = []; };
+                generateDataCode = () => '';
+            }
 
             // Theme toggle
             const themeBtn = document.getElementById('themeBtn');
@@ -751,6 +793,8 @@
 
             // 待办事项保存函数，支持显示状态反馈
             async function saveTodosToFile(showFeedback = false) {
+                console.log('🚀 saveTodosToFile 被调用, showFeedback:', showFeedback);
+                
                 // 如果需要显示反馈，更新状态
                 if (showFeedback) {
                     updateSyncStatus('正在同步数据到GitHub...', 'syncing');
@@ -759,6 +803,7 @@
                 try {
                     // 获取待办事项数据
                     const todosData = getTodos();
+                    console.log('📋 获取到的待办事项数据:', todosData);
                     
                     // 直接使用GitHub API作为主要保存方案
                     // 构建符合todo-data.js格式的数据
@@ -766,7 +811,10 @@
                     
                     // 获取GitHub Token和仓库信息
                     const githubToken = assembleToken();
+                    console.log('🔑 GitHub Token 已组装');
+                    
                     const repoInfo = await getRepositoryInfo();
+                    console.log('📁 仓库信息:', repoInfo);
                     
                     // 步骤1: 获取文件的当前SHA（必需用于更新文件）
                     const fileInfoResponse = await fetch(
@@ -944,11 +992,22 @@
             
             // 添加同步按钮的点击事件
             document.getElementById('syncBtn').addEventListener('click', async () => {
-                await saveTodosToFile(true); // 显示反馈
+                try {
+                    console.log('🔄 同步按钮被点击');
+                    await saveTodosToFile(true); // 显示反馈
+                } catch (error) {
+                    console.error('❌ 同步按钮点击失败:', error);
+                    updateSyncStatus(`同步失败: ${error.message}`, 'error');
+                }
             });
 
             // 页面加载完成后立即渲染待办事项
-            renderTodos();
+            try {
+                renderTodos();
+                console.log('✅ 待办事项渲染完成');
+            } catch (error) {
+                console.error('❌ 渲染待办事项失败:', error);
+            }
 
             // 初始保存数据，确保文件中有内容
             setTimeout(() => {
