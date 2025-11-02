@@ -725,6 +725,9 @@
                 
                 // 继续初始化其他功能
                 initializeFilters();
+                
+                // 在模块加载完成后再初始化同步按钮
+                initializeSyncButton();
             }
 
             function handleAddTodo() {
@@ -764,9 +767,6 @@
                 });
                 
                 console.log('✅ 过滤器初始化完成');
-                
-                // 继续初始化同步按钮
-                initializeSyncButton();
             }
 
             // Render todos
@@ -1068,12 +1068,9 @@
                 console.log('🎨 开始渲染待办事项...');
                 
                 // 页面加载完成后立即渲染待办事项
-                try {
-                    renderTodos();
-                    console.log('✅ 待办事项渲染完成');
-                } catch (error) {
-                    console.error('❌ 渲染待办事项失败:', error);
-                }
+                // 注意：此时getTodos等函数应该已经通过模块加载可用
+                renderTodos();
+                console.log('✅ 待办事项渲染完成');
 
                 // 初始保存数据，确保文件中有内容
                 setTimeout(() => {
