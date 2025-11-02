@@ -633,16 +633,28 @@
                         window.todos = window.todos.filter(t => t.id !== id);
                     };
                     getTodoStats = () => {
-                    const todos = window.getTodos();
-                    return {
-                        total: todos.length,
-                        active: todos.filter(t => !t.completed).length,
-                        completed: todos.filter(t => t.completed).length,
-                        overdue: 0
+                        const todos = getTodos(); // 使用局部函数而不是window.getTodos
+                        return {
+                            total: todos.length,
+                            active: todos.filter(t => !t.completed).length,
+                            completed: todos.filter(t => t.completed).length,
+                            overdue: 0
+                        };
                     };
-                };
                     clearTodos = () => { window.todos = []; };
                     generateDataCode = () => '';
+                    
+                    // 将备用函数也赋值到全局作用域
+                    window.getTodos = getTodos;
+                    window.setTodos = setTodos;
+                    window.addTodo = addTodo;
+                    window.toggleTodoItem = toggleTodoItem;
+                    window.deleteTodoItem = deleteTodoItem;
+                    window.getTodoStats = getTodoStats;
+                    window.clearTodos = clearTodos;
+                    window.generateDataCode = generateDataCode;
+                    
+                    console.log('⚠️ 使用备用函数，已赋值到全局作用域');
                     
                     // 即使模块加载失败也初始化页面
                     initializeApp();
@@ -808,7 +820,7 @@
                     
                     // 触发工作流
                     const response = await fetch(
-                        `https://api.github.com/repos/${repoInfo.owner}/${repoInfo.repo}/actions/workflows/update-todo.yml/dispatches`,
+                        `https://api.github.com/repos/${repoInfo.owner}/${repoInfo.repo}/actions/workflows/save-todos.yml/dispatches`,
                         {
                             method: 'POST',
                             headers: {
