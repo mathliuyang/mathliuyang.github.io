@@ -971,26 +971,6 @@
                     }, 3000);
                 }
             }
-            
-            // 更新同步状态显示
-            function updateSyncStatus(message, status) {
-                const statusElement = document.getElementById('syncStatus');
-                statusElement.textContent = message;
-                
-                // 根据状态添加不同的样式
-                statusElement.className = 'sync-status';
-                if (status) {
-                    statusElement.classList.add(`sync-${status}`);
-                }
-                
-                // 3秒后清除状态消息（成功或同步中的情况）
-                if (status === 'success' || status === 'syncing') {
-                    setTimeout(() => {
-                        statusElement.textContent = '';
-                        statusElement.className = 'sync-status';
-                    }, 3000);
-                }
-            }
 
             // 安全地组装GitHub Token（避免被GitHub检测）
             function assembleToken() {
