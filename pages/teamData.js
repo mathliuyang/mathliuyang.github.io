@@ -14,18 +14,18 @@ const fundingData = [
     {
         id: "basic_research",
         name: "Basic Research and Stable Support Research Project of Science and Technology Industry Bureau of China",
-        nameCn: "国防科技工业局基础研究与稳定支持科研项目",
+        nameCn: "国家基础性科研院所基础科研稳定支持专项",
         grantNo: "WDZC-2023050305",
         fullText: "the Basic Research and Stable Support Research Project of Science and Technology Industry Bureau of China (Grant No. WDZC-2023050305)",
-        fullTextCn: "国防科技工业局基础研究与稳定支持科研项目 (批准号: WDZC-2023050305)"
+        fullTextCn: "国家基础性科研院所基础科研稳定支持专项 (批准号: WDZC-2023-05-03-05)"
     },
     {
         id: "sichuan_tech",
         name: "Sichuan Science and Technology Program",
-        nameCn: "四川省科技计划项目",
+        nameCn: "四川省揭榜挂帅行业共性技术攻关项目",
         grantNo: "2023YFG0373",
         fullText: "the Supported by Sichuan Science and Technology Program (Grant Nos. 2023YFG0373)",
-        fullTextCn: "四川省科技计划项目 (批准号: 2023YFG0373)"
+        fullTextCn: "四川省揭榜挂帅行业共性技术攻关项目 (批准号: 2023YFG0373)"
     }
 ];
 
