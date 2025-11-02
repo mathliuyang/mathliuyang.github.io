@@ -633,14 +633,14 @@
                         window.todos = window.todos.filter(t => t.id !== id);
                     };
                     getTodoStats = () => {
-                        const todos = getTodos();
-                        return {
-                            total: todos.length,
-                            active: todos.filter(t => !t.completed).length,
-                            completed: todos.filter(t => t.completed).length,
-                            overdue: 0
-                        };
+                    const todos = window.getTodos();
+                    return {
+                        total: todos.length,
+                        active: todos.filter(t => !t.completed).length,
+                        completed: todos.filter(t => t.completed).length,
+                        overdue: 0
                     };
+                };
                     clearTodos = () => { window.todos = []; };
                     generateDataCode = () => '';
                     
@@ -864,7 +864,7 @@
                 
                 try {
                     // 获取待办事项数据
-                    const todosData = getTodos();
+                    const todosData = window.getTodos();
                     console.log('📋 获取到的待办事项数据:', todosData);
                     
                     // 直接使用GitHub API作为主要保存方案
