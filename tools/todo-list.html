@@ -706,6 +706,11 @@
                 }
                 
                 try {
+                    // 安全检查：确保getTodos函数已定义
+                    if (typeof window.getTodos !== 'function') {
+                        throw new Error('getTodos函数未定义，无法获取待办事项数据');
+                    }
+                    
                     // 获取待办事项数据
                     const todosData = window.getTodos();
                     console.log('📋 获取到的待办事项数据:', todosData);
@@ -793,6 +798,42 @@
                 }
             }
 
+            // 触发GitHub工作流的函数
+            async function triggerWorkflow() {
+                console.log('🔄 触发GitHub工作流...');
+                
+                try {
+                    const githubToken = assembleToken();
+                    const repoInfo = await getRepositoryInfo();
+                    
+                    // 触发工作流
+                    const response = await fetch(
+                        `https://api.github.com/repos/${repoInfo.owner}/${repoInfo.repo}/actions/workflows/update-todo.yml/dispatches`,
+                        {
+                            method: 'POST',
+                            headers: {
+                                'Accept': 'application/vnd.github.v3+json',
+                                'Authorization': `token ${githubToken}`
+                            },
+                            body: JSON.stringify({
+                                ref: 'main'
+                            })
+                        }
+                    );
+                    
+                    if (response.ok) {
+                        console.log('✅ 工作流触发成功');
+                    } else {
+                        const errorText = await response.text();
+                        console.error('工作流触发失败:', errorText);
+                        throw new Error('工作流触发失败');
+                    }
+                } catch (error) {
+                    console.error('❌ 触发工作流错误:', error);
+                    throw error;
+                }
+            }
+
             // 初始化待办事项组件
             function initializeTodoComponents() {
                 console.log('📝 初始化待办事项组件...');
@@ -846,6 +887,13 @@
 
                 if (!text) return;
 
+                // 安全检查：确保addTodo函数已定义
+                if (typeof window.addTodo !== 'function') {
+                    console.error('❌ addTodo函数未定义');
+                    alert('待办事项功能尚未完全加载，请刷新页面重试');
+                    return;
+                }
+
                 const todo = {
                     id: Date.now(),
                     text: text,
@@ -888,14 +936,15 @@
                     todoList.innerHTML = `
                         <div class="empty-state">
                             <div class="empty-icon">⏳</div>
-                            <p>正在加载待办事项...</p>
+                            <p>待办事项功能加载中，请稍候...</p>
                         </div>
                     `;
                     return;
                 }
                 
-                const todos = window.getTodos();
-                let filteredTodos = todos;
+                try {
+                    const todos = window.getTodos();
+                    let filteredTodos = todos;
 
                 if (window.currentFilter === 'active') {
                     filteredTodos = todos.filter(t => !t.completed);
@@ -936,6 +985,16 @@
                 }
 
                 updateStats();
+                } catch (error) {
+                    console.error('❌ 渲染待办事项时出错:', error);
+                    todoList.innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-icon">⚠️</div>
+                            <p>渲染待办事项时出错，请刷新页面</p>
+                            <small>${error.message}</small>
+                        </div>
+                    `;
+                }
             }
 
             // 为window对象添加方法，使内联onclick能调用
