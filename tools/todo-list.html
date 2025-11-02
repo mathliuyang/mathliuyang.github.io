@@ -601,102 +601,131 @@
             // 定义函数变量
             let getTodos, setTodos, addTodo, toggleTodoItem, deleteTodoItem, getTodoStats, clearTodos, generateDataCode;
             
-            try {
-                // 正确的模块导入
-                const todoModule = await import('./todo-data.js');
-                getTodos = todoModule.getTodos;
-                setTodos = todoModule.setTodos;
-                addTodo = todoModule.addTodo;
-                toggleTodoItem = todoModule.toggleTodo;
-                deleteTodoItem = todoModule.deleteTodo;
-                getTodoStats = todoModule.getTodoStats;
-                clearTodos = todoModule.clearTodos;
-                generateDataCode = todoModule.generateDataCode;
-                console.log('✅ 待办事项模块加载成功');
-            } catch (error) {
-                console.error('❌ 待办事项模块加载失败:', error);
-                // 如果模块加载失败，提供一个空的数据结构
-                window.todos = [];
-                getTodos = () => window.todos || [];
-                setTodos = (newTodos) => { window.todos = newTodos; };
-                addTodo = (todo) => { window.todos.unshift(todo); };
-                toggleTodoItem = (id) => {
-                    const todo = window.todos.find(t => t.id === id);
-                    if (todo) todo.completed = !todo.completed;
-                };
-                deleteTodoItem = (id) => {
-                    window.todos = window.todos.filter(t => t.id !== id);
-                };
-                getTodoStats = () => {
-                    const todos = getTodos();
-                    return {
-                        total: todos.length,
-                        active: todos.filter(t => !t.completed).length,
-                        completed: todos.filter(t => t.completed).length,
-                        overdue: 0
+            // 使用IIFE异步加载模块
+            (async () => {
+                try {
+                    // 正确的模块导入
+                    const todoModule = await import('./todo-data.js');
+                    getTodos = todoModule.getTodos;
+                    setTodos = todoModule.setTodos;
+                    addTodo = todoModule.addTodo;
+                    toggleTodoItem = todoModule.toggleTodo;
+                    deleteTodoItem = todoModule.deleteTodo;
+                    getTodoStats = todoModule.getTodoStats;
+                    clearTodos = todoModule.clearTodos;
+                    generateDataCode = todoModule.generateDataCode;
+                    console.log('✅ 待办事项模块加载成功');
+                    
+                    // 模块加载成功后初始化页面
+                    initializeApp();
+                } catch (error) {
+                    console.error('❌ 待办事项模块加载失败:', error);
+                    // 如果模块加载失败，提供一个空的数据结构
+                    window.todos = [];
+                    getTodos = () => window.todos || [];
+                    setTodos = (newTodos) => { window.todos = newTodos; };
+                    addTodo = (todo) => { window.todos.unshift(todo); };
+                    toggleTodoItem = (id) => {
+                        const todo = window.todos.find(t => t.id === id);
+                        if (todo) todo.completed = !todo.completed;
                     };
-                };
-                clearTodos = () => { window.todos = []; };
-                generateDataCode = () => '';
+                    deleteTodoItem = (id) => {
+                        window.todos = window.todos.filter(t => t.id !== id);
+                    };
+                    getTodoStats = () => {
+                        const todos = getTodos();
+                        return {
+                            total: todos.length,
+                            active: todos.filter(t => !t.completed).length,
+                            completed: todos.filter(t => t.completed).length,
+                            overdue: 0
+                        };
+                    };
+                    clearTodos = () => { window.todos = []; };
+                    generateDataCode = () => '';
+                    
+                    // 即使模块加载失败也初始化页面
+                    initializeApp();
+                }
+            })();
+
+            // 初始化应用函数
+            function initializeApp() {
+                console.log('🚀 开始初始化应用...');
+                
+                // Theme toggle
+                const themeBtn = document.getElementById('themeBtn');
+                const themeIcon = document.getElementById('themeIcon');
+                const currentTheme = localStorage.getItem('theme') || 'light';
+
+                document.documentElement.setAttribute('data-theme', currentTheme);
+                themeIcon.textContent = currentTheme === 'dark' ? '◐' : '◑';
+
+                // 添加图标颜色样式，确保在不同主题下都清晰可见
+                themeIcon.style.color = currentTheme === 'dark' ? '#ffffff' : '#000000';
+
+                themeBtn.addEventListener('click', () => {
+                    const theme = document.documentElement.getAttribute('data-theme');
+                    const newTheme = theme === 'dark' ? 'light' : 'dark';
+
+                    document.documentElement.setAttribute('data-theme', newTheme);
+                    localStorage.setItem('theme', newTheme);
+                    themeIcon.textContent = newTheme === 'dark' ? '◐' : '◑';
+                    themeIcon.style.color = newTheme === 'dark' ? '#ffffff' : '#000000';
+                });
+
+                // Todo app
+                window.currentFilter = 'all';
+                window.selectedPriority = 'medium';
+                
+                console.log('✅ 基础配置完成');
+                
+                // 继续初始化其他组件
+                initializeTodoComponents();
             }
 
-            // Theme toggle
-            const themeBtn = document.getElementById('themeBtn');
-            const themeIcon = document.getElementById('themeIcon');
-            const currentTheme = localStorage.getItem('theme') || 'light';
-
-            document.documentElement.setAttribute('data-theme', currentTheme);
-            themeIcon.textContent = currentTheme === 'dark' ? '◐' : '◑';
-
-            // 添加图标颜色样式，确保在不同主题下都清晰可见
-            themeIcon.style.color = currentTheme === 'dark' ? '#ffffff' : '#000000';
-
-            themeBtn.addEventListener('click', () => {
-                const theme = document.documentElement.getAttribute('data-theme');
-                const newTheme = theme === 'dark' ? 'light' : 'dark';
-
-                document.documentElement.setAttribute('data-theme', newTheme);
-                localStorage.setItem('theme', newTheme);
-                themeIcon.textContent = newTheme === 'dark' ? '◐' : '◑';
-                themeIcon.style.color = newTheme === 'dark' ? '#ffffff' : '#000000';
-            });
-
-            // Todo app
-            let currentFilter = 'all';
-            let selectedPriority = 'medium';
-
-            // Priority selector
-            document.querySelectorAll('.priority-btn').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    document.querySelectorAll('.priority-btn').forEach(b => b.classList.remove('active'));
-                    btn.classList.add('active');
-                    selectedPriority = btn.dataset.priority;
+            // 初始化待办事项组件
+            function initializeTodoComponents() {
+                console.log('📝 初始化待办事项组件...');
+                
+                // Priority selector
+                document.querySelectorAll('.priority-btn').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        document.querySelectorAll('.priority-btn').forEach(b => b.classList.remove('active'));
+                        btn.classList.add('active');
+                        window.selectedPriority = btn.dataset.priority;
+                    });
                 });
-            });
 
-            // Add todo
-            document.getElementById('addBtn').addEventListener('click', () => {
-                handleAddTodo();
-                // 确保在添加后调用保存
-                setTimeout(() => {
-                    saveTodosToFile();
-                }, 100);
-            });
-            document.getElementById('todoInput').addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') {
+                // Add todo
+                document.getElementById('addBtn').addEventListener('click', () => {
                     handleAddTodo();
                     // 确保在添加后调用保存
                     setTimeout(() => {
                         saveTodosToFile();
                     }, 100);
-                }
-            });
+                });
+                document.getElementById('todoInput').addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        handleAddTodo();
+                        // 确保在添加后调用保存
+                        setTimeout(() => {
+                            saveTodosToFile();
+                        }, 100);
+                    }
+                });
 
-            // 手动保存按钮点击事件
-            document.getElementById('saveBtn').addEventListener('click', () => {
-                console.log('🔄 手动触发保存操作');
-                saveTodosToFile();
-            });
+                // 手动保存按钮点击事件
+                document.getElementById('saveBtn').addEventListener('click', () => {
+                    console.log('🔄 手动触发保存操作');
+                    saveTodosToFile();
+                });
+                
+                console.log('✅ 待办事项组件初始化完成');
+                
+                // 继续初始化其他功能
+                initializeFilters();
+            }
 
             function handleAddTodo() {
                 const input = document.getElementById('todoInput');
@@ -709,7 +738,7 @@
                     id: Date.now(),
                     text: text,
                     completed: false,
-                    priority: selectedPriority,
+                    priority: window.selectedPriority,
                     createdAt: new Date().toISOString(),
                     dueDate: dueDateInput.value ? new Date(dueDateInput.value).toISOString() : null
                 };
@@ -720,15 +749,25 @@
                 renderTodos();
             }
 
-            // Filter buttons
-            document.querySelectorAll('.filter-btn').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-                    btn.classList.add('active');
-                    currentFilter = btn.dataset.filter;
-                    renderTodos();
+            // 初始化过滤器
+            function initializeFilters() {
+                console.log('🔍 初始化过滤器...');
+                
+                // Filter buttons
+                document.querySelectorAll('.filter-btn').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                        btn.classList.add('active');
+                        window.currentFilter = btn.dataset.filter;
+                        renderTodos();
+                    });
                 });
-            });
+                
+                console.log('✅ 过滤器初始化完成');
+                
+                // 继续初始化同步按钮
+                initializeSyncButton();
+            }
 
             // Render todos
             function renderTodos() {
@@ -736,11 +775,11 @@
                 const todos = getTodos();
                 let filteredTodos = todos;
 
-                if (currentFilter === 'active') {
+                if (window.currentFilter === 'active') {
                     filteredTodos = todos.filter(t => !t.completed);
-                } else if (currentFilter === 'completed') {
+                } else if (window.currentFilter === 'completed') {
                     filteredTodos = todos.filter(t => t.completed);
-                } else if (currentFilter === 'high') {
+                } else if (window.currentFilter === 'high') {
                     filteredTodos = todos.filter(t => t.priority === 'high');
                 }
 
@@ -983,36 +1022,53 @@
 
             // 保留手动保存按钮的功能，但使用已有的saveBtn
 
-            // 修改添加待办事项的处理函数，添加保存功能
-            const originalHandleAddTodo = handleAddTodo;
-            window.handleAddTodo = () => {
-                originalHandleAddTodo();
-                saveTodosToFile(); // 添加后保存到文件
-            };
-            
-            // 添加同步按钮的点击事件
-            document.getElementById('syncBtn').addEventListener('click', async () => {
-                try {
-                    console.log('🔄 同步按钮被点击');
-                    await saveTodosToFile(true); // 显示反馈
-                } catch (error) {
-                    console.error('❌ 同步按钮点击失败:', error);
-                    updateSyncStatus(`同步失败: ${error.message}`, 'error');
-                }
-            });
-
-            // 页面加载完成后立即渲染待办事项
-            try {
-                renderTodos();
-                console.log('✅ 待办事项渲染完成');
-            } catch (error) {
-                console.error('❌ 渲染待办事项失败:', error);
+            // 初始化同步按钮
+            function initializeSyncButton() {
+                console.log('🔄 初始化同步按钮...');
+                
+                // 修改添加待办事项的处理函数，添加保存功能
+                const originalHandleAddTodo = window.handleAddTodo;
+                window.handleAddTodo = () => {
+                    originalHandleAddTodo();
+                    saveTodosToFile(); // 添加后保存到文件
+                };
+                
+                // 添加同步按钮的点击事件
+                document.getElementById('syncBtn').addEventListener('click', async () => {
+                    try {
+                        console.log('🔄 同步按钮被点击');
+                        await saveTodosToFile(true); // 显示反馈
+                    } catch (error) {
+                        console.error('❌ 同步按钮点击失败:', error);
+                        updateSyncStatus(`同步失败: ${error.message}`, 'error');
+                    }
+                });
+                
+                console.log('✅ 同步按钮初始化完成');
+                
+                // 最后渲染页面
+                initializeRender();
             }
+            
+            // 初始渲染函数
+            function initializeRender() {
+                console.log('🎨 开始渲染待办事项...');
+                
+                // 页面加载完成后立即渲染待办事项
+                try {
+                    renderTodos();
+                    console.log('✅ 待办事项渲染完成');
+                } catch (error) {
+                    console.error('❌ 渲染待办事项失败:', error);
+                }
 
-            // 初始保存数据，确保文件中有内容
-            setTimeout(() => {
-                saveTodosToFile();
-            }, 1000);
+                // 初始保存数据，确保文件中有内容
+                setTimeout(() => {
+                    saveTodosToFile();
+                }, 1000);
+                
+                console.log('🎉 应用初始化完成！');
+            }
 
             function getPriorityText(priority) {
                 const map = { low: '低', medium: '中', high: '高' };
