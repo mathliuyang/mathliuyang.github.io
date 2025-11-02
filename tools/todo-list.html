@@ -772,6 +772,19 @@
             // Render todos
             function renderTodos() {
                 const todoList = document.getElementById('todoList');
+                
+                // 安全检查：确保getTodos函数已定义
+                if (typeof getTodos !== 'function') {
+                    console.warn('⚠️ getTodos函数尚未定义，跳过渲染');
+                    todoList.innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-icon">⏳</div>
+                            <p>正在加载待办事项...</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
                 const todos = getTodos();
                 let filteredTodos = todos;
 
@@ -1109,6 +1122,12 @@
             }
 
             function updateStats() {
+                // 安全检查：确保getTodoStats函数已定义
+                if (typeof getTodoStats !== 'function') {
+                    console.warn('⚠️ getTodoStats函数尚未定义，跳过统计更新');
+                    return;
+                }
+                
                 const stats = getTodoStats();
                 document.getElementById('totalCount').textContent = stats.total;
                 document.getElementById('activeCount').textContent = stats.active;
