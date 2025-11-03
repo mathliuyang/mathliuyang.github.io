@@ -1527,7 +1527,6 @@ let pinnsPapers = [
 // 页面加载完成后初始化
 let filteredPapers = [...pinnsPapers];
 let currentFilters = {
-    researchArea: '',
     paperType: '',
     year: '',
     search: ''
@@ -1554,7 +1553,6 @@ function initializePage() {
 
 function setupEventListeners() {
     // 筛选器事件监听
-    document.getElementById('researchAreaFilter').addEventListener('change', handleFilterChange);
     document.getElementById('paperTypeFilter').addEventListener('change', handleFilterChange);
     document.getElementById('yearFilter').addEventListener('change', handleFilterChange);
     document.getElementById('searchInput').addEventListener('input', debounce(handleSearch, 300));
@@ -1571,9 +1569,6 @@ function handleFilterChange(e) {
     const value = e.target.value;
 
     switch (filterId) {
-        case 'researchAreaFilter':
-            currentFilters.researchArea = value;
-            break;
         case 'paperTypeFilter':
             currentFilters.paperType = value;
             break;
@@ -1604,11 +1599,6 @@ function debounce(func, wait) {
 
 function applyFilters() {
     filteredPapers = pinnsPapers.filter(paper => {
-        // 研究领域筛选
-        if (currentFilters.researchArea && paper.meta.researchArea !== currentFilters.researchArea) {
-            return false;
-        }
-
         // 论文类型筛选
         if (currentFilters.paperType) {
             if (currentFilters.paperType === 'review') {
