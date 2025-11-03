@@ -1574,6 +1574,12 @@ document.addEventListener('DOMContentLoaded', function () {
 function initializePage() {
     // 更新统计数据
     document.getElementById('paperCount').textContent = pinnsPapers.length;
+    
+    // 计算综述论文数量
+    const reviewPapersCount = pinnsPapers.filter(paper => 
+        paper.meta.tags && paper.meta.tags.includes('综述')
+    ).length;
+    document.getElementById('reviewPapers').textContent = reviewPapersCount;
 
     // 获取最新年份
     const latestYear = Math.max(...pinnsPapers.map(paper => {
