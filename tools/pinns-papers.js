@@ -1641,9 +1641,9 @@ function applyFilters() {
                 if (!paper.meta.tags || !paper.meta.tags.includes('综述')) {
                     return false;
                 }
-            } else if (currentFilters.paperType !== 'all') {
-                // 其他类型通过type字段判断
-                if (paper.meta.type !== currentFilters.paperType) {
+            } else if (currentFilters.paperType === 'general') {
+                // 一般研究论文：非综述论文
+                if (paper.meta.tags && paper.meta.tags.includes('综述')) {
                     return false;
                 }
             }
@@ -1729,12 +1729,15 @@ function setupTitleOptionListeners() {
 }
 
 function createPaperCard(paper, index) {
-    const typeClass = paper.meta.type;
-    const typeText = {
-        'theory': '理论研究',
-        'application': '应用研究',
-        'review': '综述论文'
-    }[paper.meta.type] || '研究论文';
+    // 判断论文类型：综述论文或一般研究
+    let typeClass, typeText;
+    if (paper.meta.tags && paper.meta.tags.includes('综述')) {
+        typeClass = 'review';
+        typeText = '综述论文';
+    } else {
+        typeClass = 'general';
+        typeText = '一般研究';
+    }
 
     // 只显示前三个标签，其余的在详情页展示
     const allTags = paper.meta.tags.split(', ');
