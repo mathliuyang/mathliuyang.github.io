@@ -1442,6 +1442,83 @@ let pinnsPapers = [
             "takeaways": "① 自动微分≠唯一选择，局部离散+最小二乘同样可微且更稳；② 收敛率不是数值方法的专利，机器学习也能拥有；③ 模板复用+网络插值=一次组装、多次调用，逆问题、曲面、点云全场景通吃。",
             "discussion": "你觉得在三维湍流LES、多相流界面捕捉这类'高维+强非线性'场景，局部模板应如何设计才能兼顾精度与计算量？欢迎评论区聊聊你的脑洞！"
         }
+    },
+
+    {
+        "meta": {
+            "titleCN": "通过物理信息神经网络进行科学机器学习：现状与未来",
+            "titleEN": "Scientific Machine Learning Through Physics–Informed Neural Networks: Where we are and What's Next",
+            "authors": "Salvatore Cuomo, Vincenzo Schiano Di Cola, Fabio Giampaolo, Gianluigi Rozza, Maziar Raissi, Francesco Piccialli",
+            "unit": "意大利那不勒斯费德里科二世大学数学与应用系",
+            "venue": "Journal of Scientific Computing",
+            "date": "2022年7月",
+            "reviewScope": "2017-2022年，涵盖PINN及相关方法(如VPINN、cPINN、PCNN等)的理论、算法与应用研究",
+            "tags": "物理信息神经网络, 科学机器学习, 偏微分方程求解, 深度学习, 综述",
+            "links": {
+                "paper": "https://link.springer.com/article/10.1007/s10915-022-01939-z",
+                "download": "https://www.jianguoyun.com/p/DfByis0Q7P3jDRix6JcGIAA",
+                "cover": "https://media.springernature.com/w316/springer-static/cover-hires/journal/10915?as=webp"
+            }
+        },
+
+        "titles": {
+            "panorama": "PINN全景图鉴：从2017诞生到2022爆发的技术演进全记录",
+            "insight": "深度剖析PINN：理论基础、技术分类与五大核心挑战",
+            "guide": "PINN入门指南：物理约束如何让神经网络求解微分方程"
+        },
+
+        "intro": "2019年一篇论文引爆科学计算革命：用神经网络求解偏微分方程，既学习数据又遵守物理定律。短短三年，相关论文从零暴增至1300+篇，Raissi原文引用超11000次。但爆发式增长背后，理论收敛性缺失、高维问题训练困难等挑战同样突出。这篇来自意大利那不勒斯大学团队的62页综述，系统梳理PINN的诞生、架构、分类、应用与未解难题，为研究者绘制完整的领域地图。",
+
+        "content": {
+            "genesis": {
+                "origin": "PINN诞生于一个简单而深刻的洞察：神经网络可以拟合任意函数，为什么不直接让它学习满足物理方程的解？2017年，Brown大学Maziar Raissi团队将自动微分与物理约束结合，提出物理信息神经网络——让AI不仅从数据学习，还必须服从物理定律。这个想法并非全新，早在1990年代Dissanayake等人就有类似尝试，但受限于算力和优化技术未成气候。直到深度学习时代的到来，自动微分、GPU加速、开源框架的成熟，才让这一设想真正落地。",
+
+                "evolution": "PINN的发展可分为三个阶段：\n\n**2017-2018: 概念萌芽期**。Raissi利用高斯过程回归构建线性算子泛函表示，为后续PINN奠定基础。此时主要验证用神经网络求解Schrödinger、Burgers等经典方程的可行性。\n\n**2019-2020: 框架确立期**。2019年Raissi在JCP发表开创性论文，提出完整PINN框架：将PDE残差、边界条件和观测数据统一到损失函数中。这一年成为分水岭，DeepXDE等开源库相继发布，hp-VPINN、cPINN、DeepONet等变体涌现，从域分解、变分形式、算子学习等角度改进基础框架。\n\n**2021-2022: 应用爆发期**。PINN被应用到流体力学、固体力学、电磁学、量子力学、地球科学等十余领域。2021年单年新增论文超600篇，是2020年的两倍。NVIDIA发布Modulus工业级工具，标志着从学术原型走向工程应用。",
+
+                "scope": "本综述系统回顾2017-2022年PINN及其变体的理论、方法与应用，涵盖内容包括：\n\n① **神经网络架构**：前馈网络(80%+)、CNN、RNN、贝叶斯网络等选择与设计原则\n\n② **物理信息注入**：软约束(损失函数)vs硬约束(网络结构)、自动微分实现、损失函数设计\n\n③**优化与训练**：Adam、L-BFGS算法、学习率调度、权重平衡策略\n\n④**理论基础**：收敛性、泛化误差、逼近误差的数学分析\n\n⑤**应用领域**：常微分方程、椭圆/抛物/双曲型PDE、Navier-Stokes方程、分数阶方程等\n\n⑥**软件生态**：DeepXDE、NVIDIA Modulus、NeuralPDE等工具库对比\n\n综述不涉及纯数据驱动或无物理约束的神经网络求解器。"
+            },
+
+            "taxonomy": {
+                "classification": "PINN家族可从三个维度分类：\n\n**按约束方式**：\n① 软约束(Soft BC)：将边界/初值条件作为损失函数项，如vanilla PINN——灵活易实现，但无法保证严格满足边界条件\n② 硬约束(Hard BC)：通过网络架构直接满足条件，如PCNN——精度高、稳定性好，但复杂边界设计困难\n\n**按网络架构**：\n① 全连接前馈网络(占比>80%)：通用性强，但维度受限(通常4-9层、20-200神经元/层)\n② 卷积神经网络：适合规则域和图像数据(如PhyGeoNet)\n③ 循环神经网络：擅长时序动力系统(如Physics-informed LSTM)\n④ 其他架构：贝叶斯网络(B-PINN处理噪声数据)、GAN(PI-GAN解随机方程)\n\n**按损失函数**：\n① 配点残差最小化(标准PINN)：直接计算方程残差\n② 变分能量最小化(VPINN)：基于变分原理，降低微分算子阶数\n③ Galerkin弱形式(DGM)：乘以测试函数后积分\n\n不同分类适用于不同问题特性——如VPINN适合高阶方程，cPINN适合多尺度问题。",
+
+                "coreIdeas": "所有PINN变体共享核心思想：让神经网络输出既拟合数据，又满足物理方程。具体实现有三种范式：\n\n**① 数据+方程双驱动(标准PINN)**\n使用少量观测数据(如边界上50个点)+ 大量配点上的方程残差(如域内20000个点)联合训练。适合数据稀缺但物理模型已知的场景，如医学成像中从4D Flow MRI的1%数据重构完整血流场。\n\n**② 纯方程驱动(PCNN)**\n对于正演问题，仅用方程残差训练(无需数据)，边界/初值条件通过硬约束或软约束满足。适合高保真仿真替代，如参数化几何的热交换器设计，一个PINN模型替代数千次CFD仿真。\n\n**③ 数据为主+方程正则(Physics-guided NN)**\n数据充足时，物理约束作为正则化项防止过拟合、提升外推能力。适合数据驱动建模的物理增强，如湍流建模中用已知守恒律约束神经网络。\n\n三种范式的选择取决于数据可得性、问题复杂度和物理模型置信度。关键创新在于：通过自动微分将方程残差(需要高阶导数)无缝嵌入反向传播训练流程。",
+
+                "comparison": "**PINN vs 传统数值方法(FEM/FVM/FDM)**\n优势：① 无网格，易处理复杂几何；② 解是连续可微函数，便于后处理；③ 正反问题统一框架；④ 参数化求解，训练一次可处理参数族\n劣势：① 训练耗时(可能比传统求解器慢)；② 精度不稳定，缺乏误差估计；③ 超参数调优困难；④ 高维(>5维)、刚性、多尺度问题易失败\n\n**软约束 vs 硬约束**\nVanilla PINN(软)：灵活、通用，但需调节损失权重(ωF、ωB、ωd)，无法保证边界条件严格满足\nPCNN(硬)：边界条件精确满足、训练更稳定，但构造满足任意边界的网络架构困难(如不规则几何)\n\n**不同损失函数范式**\nPINN(配点)：实现简单，但需大量配点，对配点分布敏感\nVPINN(变分)：降低微分阶数(积分by parts)，训练更稳定，但需定义变分形式\nDGM(Galerkin)：理论基础扎实，但计算开销大\n\n**PINN vs DeepONet**\nPINN：每次求解单个具体问题(固定参数、边界)\nDeepONet：学习算子映射(PDE解到解的映射)，一次训练可处理参数化问题族，但需大量训练数据(成千上万样本)\n\n各有千秋：PINN适合数据稀缺的单次求解，DeepONet适合需要大量重复求解的场景(如优化、不确定性量化)。"
+            },
+
+            "applications": {
+                "domains": "PINN已在十余领域得到应用，展现出跨学科渗透力：\n\n**① 流体力学**(最活跃，约40%论文)：不可压/可压Navier-Stokes方程、Burgers方程、Euler方程、湍流建模。成功案例包括高速气动流(马赫数>1)、血流动力学模拟。\n\n**② 固体力学**：线弹性/弹塑性、裂纹扩展(相场法)、非局部力学(近场动力学)。\n\n**③ 热传导**：热方程、Stefan问题(自由边界)、相变、金属增材制造的温度预测。\n\n**④ 电磁学**：麦克斯韦方程、Helmholtz方程、超材料逆设计、纳米光子学。\n\n**⑤ 地球科学**：地震波传播(Eikonal方程)、地下水流动、油藏模拟(Buckley-Leverett方程)。\n\n**⑥ 量子力学**：Schrödinger方程、量子谐振子、孤子解(非线性Schrödinger方程)。\n\n**⑦ 生物医学**：心脏电生理(Eikonal方程)、动脉血流(简化Navier-Stokes)、肿瘤生长建模、病理形态动力学。\n\n**⑧ 工程应用**：轴承疲劳预测、腐蚀-疲劳、复合材料固化、润滑油降解。\n\n应用广度令人惊叹，但也暴露出PINN在不同问题上性能差异巨大的现实。",
+
+                "achievements": "几个标志性成功案例展示PINN独特价值：\n\n**① 血流重建(Raissi 2020, Science)**\n仅用4D Flow MRI的1%数据(稀疏传感器)，PINN准确重构颅内动脉瘤的完整速度场和压力场。传统CFD需要完整边界条件且计算昂贵，而PINN通过物理约束从部分观测外推全场，为无创诊断提供新工具。关键：数据稀缺但物理模型(Navier-Stokes)准确。\n\n**② 地震定位(Smith 2021, EikoNet)**\n求解3D Eikonal方程(地震波走时)，速度比传统快速扫描法快100倍，且无需网格离散化。可处理复杂地质结构(如断层、速度异常)，为实时地震监测提供可能。关键：高维问题、复杂几何、需要快速推理。\n\n**③ 热交换器参数化设计(NVIDIA Modulus)**\n将几何参数化(散热片厚度、长度、高度变化)，单个PINN模型替代数千次CFD仿真，设计空间探索速度提升50倍。训练后可在毫秒级预测任意参数下的温度场，实现实时优化。关键：参数化问题族、重复求解需求。\n\n**④ 超材料逆设计(Chen 2020)**\n从散射数据反演纳米结构的介电常数分布，解决纳米光子学中的逆问题。PINN同时优化正演(Maxwell方程)和逆问题，无需传统优化方法的迭代正演求解。关键：正反问题统一框架。\n\n这些案例的共同点：数据稀缺或计算昂贵的场景，且物理模型相对准确(守恒律、本构关系已知)。",
+
+                "limitations": "当前应用面临三大系统性限制：\n\n**① 维度灾难**\n对于高维PDE(如>5维)，需要的配点数量呈指数增长(维度诅咒)，训练变得不可行。例如辐射传输方程(7维：3D空间+时间+2D角度+频率)需要数百万配点。虽然某些问题(如Kolmogorov型、辐射传输)理论上可避免维度诅咒，但实践中仍是瓶颈。\n\n**② 刚性与多尺度问题**\n对于包含激波、间断、边界层或多时间尺度的问题，PINN训练极易失败，精度远不如传统方法。例如高雷诺数流动(Re>1000)、对流主导问题(大Peclet数)、双曲守恒律的激波捕捉。原因：损失函数高度非凸、梯度消失/爆炸、频率偏差(低频优先学习)。\n\n**③ 长时演化**\n对于时间依赖问题，vanilla PINN难以准确外推到训练区间外的长时间，误差会随时间积累。例如Lorenz系统(混沌)、Kuramoto-Sivashinsky方程(湍流域)在t>训练时间后迅速偏离真解。近期因果训练(causal training)有所改进，但仍是开放问题。\n\n这些限制本质上源于：① 优化困难(非凸损失景观)；② 神经网络的逼近特性(低频偏差)；③ 梯度流动病理(gradient pathology)。当前研究的核心挑战所在。"
+            },
+
+            "challenges": {
+                "theoretical": "理论层面的主要开放问题：\n\n**① 收敛性保证**\n什么条件下PINN能收敛到PDE的真解？目前仅对线性椭圆/抛物型方程有初步结果(Shin 2020, De Ryck 2022)，非线性、双曲型、高维问题的收敛性基本未知。需要建立：何种网络架构、何种损失函数、何种优化算法能保证收敛。\n\n**② 误差估计**\n如何量化PINN解的精度(先验/后验误差界)？传统数值方法有完善的误差分析理论(一致性、稳定性→收敛性)，PINN还处于起步阶段。Mishra等人证明了泛化误差可由训练误差和样本数界定，但依赖问题的具体性质(如Kolmogorov型PDE不受维度诅咒影响)。\n\n**③ 泛化能力**\n PINN在训练配点外的预测精度如何？与配点分布、网络架构、激活函数的关系如何？De Ryck等证明tanh网络的Sobolev范数误差界，但实际应用中仍缺乏指导。\n\n**④ 优化景观**\n为何PINN训练对初始化、学习率、权重配比极度敏感？Wang等人用神经正切核(NTK)理论揭示梯度流动病理，但如何系统解决仍是挑战。\n\n这些理论空白使PINN难以在安全关键领域(航空航天、核工程)应用，亟需数学突破。",
+
+                "practical": "工程实践中的主要困难：\n\n**① 训练不稳定**\n损失函数高度非凸(数千维参数空间)，对初始化、学习率、批量大小极度敏感。同一问题换个随机种子结果可能天差地别。训练失败率高达70%(Krishnapriyan 2021)，需要多次尝试。缺乏可靠的训练'秘方'(recipe)。\n\n**② 计算效率低**\n对于中等规模问题，PINN训练时间(可能数小时到数天)远超传统求解器(分钟级)。且难以并行化(不像数据并行的图像识别)。虽然训练后推理快(毫秒级)，但总体成本仍高。\n\n**③ 超参数调优地狱**\n需要手动调整：网络深度/宽度、激活函数、配点数量/分布、损失权重(ωF, ωB, ωd)、学习率/优化器、训练epochs等。每个问题都需要专家经验，缺乏自动化方案(AutoML for PINN)。\n\n**④ 软件成熟度不足**\n现有PINN库(DeepXDE、Modulus等)功能有限、文档不完善，对非专家用户不够友好。缺乏与传统科学计算软件(PETSc、FEniCS)的互操作性。GPU内存限制3D问题规模。\n\n**⑤ 调试困难**\n训练不收敛时难以诊断原因(网络表达力不足？优化陷入局部极小？配点分布不合理？物理模型错误？)。缺乏类似传统数值方法的收敛性监控工具。\n\n这些问题阻碍PINN从研究原型走向工业应用，需要工程化努力。",
+
+                "open_problems": "综述明确指出五个亟待突破的关键问题：\n\n**① 如何设计PINN避免维度诅咒？**\nDeepONet等算子学习方法显示潜力，但需要大量训练样本(数千个PDE解)。能否利用PDE的特殊结构(如分离变量、低秩逼近、稀疏性)设计高效架构？\n\n**② 如何处理含间断、激波的双曲方程？**\n传统方法(TVD、WENO格式)可稳定捕捉激波，但PINN在间断处振荡剧烈。cPINN域分解有帮助，但需要先验知识定位激波。能否自适应捕捉间断？\n\n**③ 如何保证长时演化稳定性？**\nCausal training(因果训练，Wang 2022)通过尊重信息传播的因果性改进，但混沌系统仍是挑战。能否结合保结构算法(辛算法、能量守恒)设计长时稳定的PINN？\n\n**④ 能否建立PINN后验误差估计？**\nHillebrecht等人对ODE给出误差上界，但PDE仍缺乏。能否像自适应有限元那样，根据误差指示器局部加密配点或增加网络容量？\n\n**⑤ 如何融合PINN与传统数值方法？**\n用PINN加速传统求解器的瓶颈环节(如非线性迭代、预条件子)，或用传统方法为PINN提供初值/粗网格解。混合方法(hybrid solver)可能结合两者优势。\n\n这些问题的解决将决定PINN能否真正成为科学计算主流工具而非小众方法。"
+            }
+        },
+
+        "future": {
+            "trends": "综述展望四个重要研究方向：\n\n**① 自适应策略**\n动态调整配点分布(如RAR残差自适应加密)、网络架构(宽度/深度)和损失权重，类似传统数值方法的自适应网格加密。Nabian等人提出重要性采样，在残差大的区域增加配点。未来可结合强化学习自动决策配点位置。\n\n**② 与传统方法融合**\n物理信息神经网络不应孤立发展，而应与成熟的数值方法协同。例如：用FEM粗网格解作为PINN初值(warm start)；用PINN替代传统求解器中的代数方程组求解器；用PINN学习传统方法难以处理的本构关系(数据驱动本构)。混合方法发挥各自优势。\n\n**③ 理论基础完善**\n建立PINN的Lax等价定理(一致性+稳定性→收敛性)；证明不同PDE类型的泛化误差界；发展后验误差估计和自适应策略的理论保证。只有理论基础扎实，PINN才能在安全关键应用中获得信任。\n\n**④ 专用硬件与软件**\n开发PINN专用的网络架构(如Fourier Neural Operator、Transformer用于长程依赖)；设计高效训练算法(如梯度归一化、自适应权重、多任务学习)；构建易用的软件工具链(自动配点生成、超参数自动调优、可视化调试)；利用GPU/TPU加速、分布式训练扩展到大规模问题。降低使用门槛，让领域专家(非ML专家)也能用。"
+            ,
+
+            "opportunities": "两个可能的突破口：\n\n**① 算子学习范式转变**\nDeepONet、FNO(Fourier Neural Operator)等算子网络学习PDE解算子(从参数/初值到解的映射)，而非每次求解单个PDE。一次训练，无限求解——例如训练一个算子网络处理所有雷诺数Re∈[100,10000]的Navier-Stokes流动，而不是每个Re训练一个PINN。代表从'神经网络求解器'到'神经网络元求解器'的升级。挑战：需要大量训练数据(数千个PDE解)，但一旦训练完成，推理极快(毫秒级)，适合实时控制、优化、不确定性量化等需要大量重复求解的场景。\n\n**② 因果结构与守恒律利用**\n最新的因果PINN(Wang 2022)通过尊重信息传播的因果性(时间依赖PDE中，未来不影响过去；双曲PDE中沿特征线传播)，显著提升训练稳定性和长时预测能力。类似地，利用守恒律(质量、动量、能量守恒)设计cPINN，确保离散域上守恒。未来可结合辛几何(Hamilton系统)、李群对称性等数学结构，设计结构保持的神经网络(structure-preserving NN)，为突破现有瓶颈提供新思路。\n\n这些方向代表从'暴力拟合'到'结构化学习'的范式转变——让网络不仅学习数值，更学习物理规律的深层结构。",
+
+            "perspective": "综述作者的展望：\n\nPINN的真正价值不在于全面替代传统数值方法(FEM/FVM已非常成熟高效)，而在于开辟新范式：**数据驱动与机理驱动深度融合，让AI既从观测学习又遵守物理定律**。\n\n最有前景的应用场景：\n① 物理模型已知但数据稀缺(如医学成像、地球物理反演)\n② 计算成本高昂需快速预测(如实时控制、参数化优化)\n③ 需同时解决正演和反演(如材料参数识别、系统辨识)\n④ 传统方法困难的高维、复杂几何、多尺度耦合问题\n\n但要实现这一愿景，需要多方协同突破：\n- 数学家：建立收敛性、稳定性、误差估计理论\n- 算法研究者：开发高效优化、自适应策略、结构保持方法\n- 软件工程师：打造易用工具链、与现有软件互操作\n- 硬件厂商：提供专用加速器、大规模并行训练支持\n- 领域专家：提供应用场景、验证案例、领域知识\n\nPINN仍处于发展初期(类似1990年代的有限元方法)，既有巨大潜力，也面临严峻挑战。未来5-10年是关键期，将决定其是昙花一现还是引领科学计算新时代。"
+        },
+
+        "closing": {
+            "summary": "PINN用物理定律约束神经网络，为数据稀缺场景的PDE求解开辟新范式，但理论基础薄弱和工程难题仍需突破。",
+
+            "takeaways": "**① PINN核心创新**：通过自动微分将PDE残差嵌入损失函数，实现数据与方程的联合驱动学习，统一处理正反问题\n\n**② 技术生态丰富但仍待整合**：软/硬约束方式、前馈/卷积/循环架构、配点/变分/Galerkin损失——方法众多但缺乏统一设计指南和性能对比基准\n\n**③ 应用广泛但表现不一**：在流体(Navier-Stokes)、电磁(Maxwell)、热传导等领域有成功案例，但高维(>5D)、刚性(激波、边界层)、长时演化问题仍力不从心\n\n**④ 理论短板亟需补强**：收敛性(仅线性椭圆/抛物有结果)、误差估计(无先验/后验界)、泛化能力(依赖问题特性)等基础理论缺失，限制安全关键应用\n\n**⑤ 未来方向聚焦融合创新**：自适应策略(动态配点/架构)、与传统方法混合(发挥各自优势)、算子学习(从单次求解到元求解器)、因果/守恒结构利用(结构保持学习)",
+
+            "discussion": "**讨论话题一**：你认为PINN最有可能率先在哪个应用领域实现工业化突破——是流体仿真(替代CFD)、材料设计(逆问题求解)、地球物理(高维问题)，还是医学成像(数据稀缺)？为什么？\n\n**讨论话题二**：PINN与传统数值方法(FEM/FVM)的关系应该是竞争替代还是互补融合？未来理想的科学计算工具链会是什么样的？"
+        }
     }
 
 
@@ -1757,7 +1834,213 @@ function openModal(paper) {
     document.body.style.overflow = 'hidden';
 }
 
+function createReviewModalContent(paper) {
+    const content = paper.content;
+    const future = paper.future;
+    const closing = paper.closing;
+
+    // 创建标题选项内容 - 综述论文使用panorama、insight、guide
+    const titleOptionsContent = paper.titles ? `
+        <div class="info-section">
+            <h3>标题创意</h3>
+            <div class="title-options-modal">
+                <div class="title-option-modal panorama">
+                    <div class="title-option-header">
+                        <span class="title-option-icon">🌍</span>
+                        <span class="title-option-type">全景式</span>
+                    </div>
+                    <p class="title-option-text">${processMarkdown(paper.titles.panorama)}</p>
+                </div>
+                <div class="title-option-modal insight">
+                    <div class="title-option-header">
+                        <span class="title-option-icon">💡</span>
+                        <span class="title-option-type">洞察式</span>
+                    </div>
+                    <p class="title-option-text">${processMarkdown(paper.titles.insight)}</p>
+                </div>
+                <div class="title-option-modal guide">
+                    <div class="title-option-header">
+                        <span class="title-option-icon">🗺️</span>
+                        <span class="title-option-type">指南式</span>
+                    </div>
+                    <p class="title-option-text">${processMarkdown(paper.titles.guide)}</p>
+                </div>
+            </div>
+        </div>
+    ` : '';
+
+    // 创建导语内容
+    const introContent = paper.intro ? `
+        <div class="info-section">
+            <h3>📖 导语</h3>
+            <div class="intro-modal">
+                <p class="intro-text-modal">${processMarkdown(paper.intro)}</p>
+            </div>
+        </div>
+    ` : '';
+
+    // 创建综述范围内容（如果有）
+    const reviewScopeContent = paper.meta.reviewScope ? `
+        <div class="info-section">
+            <h3>综述范围</h3>
+            <div class="content-section">
+                <p>${processMarkdown(paper.meta.reviewScope)}</p>
+            </div>
+        </div>
+    ` : '';
+
+    return `
+        ${titleOptionsContent}
+        ${introContent}
+
+        <div class="info-section">
+            <h3>基本信息</h3>
+            <div class="info-grid">
+                <div class="info-item">
+                    <strong>作者</strong>
+                    <span>${paper.meta.author}</span>
+                </div>
+                <div class="info-item">
+                    <strong>单位</strong>
+                    <span>${paper.meta.unit}</span>
+                </div>
+                <div class="info-item">
+                    <strong>期刊</strong>
+                    <span>${paper.meta.venue}</span>
+                </div>
+                <div class="info-item">
+                    <strong>发表时间</strong>
+                    <span>${paper.meta.date}</span>
+                </div>
+                <div class="info-item">
+                    <strong>论文类型</strong>
+                    <span>综述论文</span>
+                </div>
+            </div>
+        </div>
+
+        ${reviewScopeContent}
+
+        <div class="info-section">
+            <h3>起源与演化</h3>
+            <div class="content-section">
+                <h4>领域起源</h4>
+                <p>${processMarkdown(content.genesis.origin)}</p>
+            </div>
+            <div class="content-section">
+                <h4>发展历程</h4>
+                <p>${processMarkdown(content.genesis.evolution)}</p>
+            </div>
+            <div class="content-section">
+                <h4>综述范围</h4>
+                <p>${processMarkdown(content.genesis.scope)}</p>
+            </div>
+        </div>
+
+        <div class="info-section">
+            <h3>技术分类</h3>
+            <div class="content-section">
+                <h4>分类方法</h4>
+                <p>${processMarkdown(content.taxonomy.classification)}</p>
+            </div>
+            <div class="content-section">
+                <h4>核心思想</h4>
+                <p>${processMarkdown(content.taxonomy.coreIdeas)}</p>
+            </div>
+            <div class="content-section">
+                <h4>方法对比</h4>
+                <p>${processMarkdown(content.taxonomy.comparison)}</p>
+            </div>
+        </div>
+
+        <div class="info-section">
+            <h3>应用与成果</h3>
+            <div class="content-section">
+                <h4>应用领域</h4>
+                <p>${processMarkdown(content.applications.domains)}</p>
+            </div>
+            <div class="content-section">
+                <h4>成功案例</h4>
+                <p>${processMarkdown(content.applications.achievements)}</p>
+            </div>
+            <div class="content-section">
+                <h4>局限分析</h4>
+                <p>${processMarkdown(content.applications.limitations)}</p>
+            </div>
+        </div>
+
+        <div class="info-section">
+            <h3>挑战与问题</h3>
+            <div class="content-section">
+                <h4>理论挑战</h4>
+                <p>${processMarkdown(content.challenges.theoretical)}</p>
+            </div>
+            <div class="content-section">
+                <h4>实践挑战</h4>
+                <p>${processMarkdown(content.challenges.practical)}</p>
+            </div>
+            <div class="content-section">
+                <h4>关键问题</h4>
+                <p>${processMarkdown(content.challenges.open_problems)}</p>
+            </div>
+        </div>
+
+        <div class="info-section">
+            <h3>未来展望</h3>
+            <div class="content-section">
+                <h4>发展趋势</h4>
+                <p>${processMarkdown(future.trends)}</p>
+            </div>
+            <div class="content-section">
+                <h4>机遇与突破口</h4>
+                <p>${processMarkdown(future.opportunities)}</p>
+            </div>
+            <div class="content-section">
+                <h4>作者观点</h4>
+                <p>${processMarkdown(future.perspective)}</p>
+            </div>
+        </div>
+
+        <div class="info-section">
+            <h3>总结与互动</h3>
+            <div class="content-section">
+                <h4>一句话总结</h4>
+                <p>${processMarkdown(closing.summary)}</p>
+            </div>
+            <div class="content-section">
+                <h4>关键启示</h4>
+                <p>${processMarkdown(closing.takeaways)}</p>
+            </div>
+            <div class="content-section">
+                <h4>互动引导</h4>
+                <p>${processMarkdown(closing.discussion)}</p>
+            </div>
+        </div>
+
+        <div class="info-section">
+            <h3>论文链接</h3>
+            <div class="paper-links">
+                <a href="${paper.meta.links.paper}" class="paper-link" target="_blank">
+                    <span>📄</span> 查看论文详情
+                </a>
+                <a href="${paper.meta.links.download}" class="paper-link" target="_blank">
+                    <span>⬇️</span> 下载PDF全文
+                </a>
+            </div>
+        </div>
+    `;
+}
+
 function createModalContent(paper) {
+    // 检查是否为综述论文（通过tags包含"综述"或meta.type为"review"）
+    const isReviewPaper = paper.meta.tags && paper.meta.tags.includes('综述') || paper.meta.type === 'review';
+    
+    // 如果是综述论文，使用综述模板
+    if (isReviewPaper) {
+        return createReviewModalContent(paper);
+    }
+    
+    // 否则使用普通论文模板
     const content = paper.content;
     const extension = paper.extension;
     const closing = paper.closing;
