@@ -376,11 +376,11 @@ window.templates = {
 `
    },
 
-   'prompt-review-001': {
+   'prompt-wx-review-001': {
       "name": '公众号智创 · 综述论文解读 1 号',
       "icon": '📚',
-      "cover": 'https://example.com/review-cover.jpg',
-      "localCoverImage": './assets/prompt_cover/prompt-review-001.jpg',
+      "cover": "https://images.unsplash.com/photo-1507842217343-583bb7270b66?auto=format&fit=crop&w=1350&q=80",
+      "localCoverImage": './assets/prompt_cover/prompt-academic-003.jpg', // 本地封面路径，作为远程链接失效时的备用方案
       "desc": '将 PINN 领域综述论文转化为系统性科普推文，帮助读者建立全局认知',
       "tags": ['综述解读', '领域综述', '技术发展'],
       "category": '内容运营｜智核学术',
@@ -679,11 +679,11 @@ window.templates = {
 `
    },
 
-   'prompt-wx-review': {
+   'prompt-wx-review-002': {
       "name": '公众号智创 · 综述论文解读 2 号',
       "icon": '📚',
-      "cover": 'https://example.com/review-cover.jpg',
-      "localCoverImage": './assets/prompt_cover/prompt-review-001.jpg',
+      "cover": "https://images.unsplash.com/photo-1507842217343-583bb7270b66?auto=format&fit=crop&w=1350&q=80",
+      "localCoverImage": './assets/prompt_cover/prompt-academic-003.jpg', // 本地封面路径，作为远程链接失效时的备用方案
       "desc": '将综述性学术文章转化为系统化知识地图和领域学习指南',
       "tags": ['综述解读', '知识体系', '领域入门'],
       "category": '内容运营｜智核学术',
