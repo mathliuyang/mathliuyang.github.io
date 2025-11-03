@@ -1,14 +1,14 @@
 // 提取论文数据中的所有年份
 function extractAvailableYears() {
     const years = new Set();
-    
+
     pinnsPapers.forEach(paper => {
         const yearMatch = paper.meta.date.match(/\d{4}/);
         if (yearMatch) {
             years.add(yearMatch[0]);
         }
     });
-    
+
     // 将Set转换为数组并按年份降序排序（最新的在前）
     return Array.from(years).sort((a, b) => parseInt(b) - parseInt(a));
 }
@@ -17,10 +17,10 @@ function extractAvailableYears() {
 function populateYearFilter() {
     const yearFilter = document.getElementById('yearFilter');
     const availableYears = extractAvailableYears();
-    
+
     // 清空现有选项（保留"所有年份"选项）
     yearFilter.innerHTML = '<option value="">所有年份</option>';
-    
+
     // 添加实际存在的年份选项
     availableYears.forEach(year => {
         const option = document.createElement('option');
@@ -1551,6 +1551,82 @@ let pinnsPapers = [
 
             "discussion": "**讨论话题一**：你认为PINN最有可能率先在哪个应用领域实现工业化突破——是流体仿真(替代CFD)、材料设计(逆问题求解)、地球物理(高维问题)，还是医学成像(数据稀缺)？为什么？\n\n**讨论话题二**：PINN与传统数值方法(FEM/FVM)的关系应该是竞争替代还是互补融合？未来理想的科学计算工具链会是什么样的？"
         }
+    },
+
+    {
+        "meta": {
+            "titleCN": "偏微分方程机器学习的发展前景",
+            "titleEN": "Promising directions of machine learning for partial differential equations",
+            "authors": "Steven L. Brunton, J. Nathan Kutz",
+            "unit": "Department of Mechanical Engineering, University of Washington, Seattle, WA, USA",
+            "venue": "Nature Computational Science",
+            "date": "2024年6月",
+            "reviewScope": "涵盖近30年(1990s-2024)的PDE机器学习研究,重点关注2016-2024年间的关键进展,引用168篇文献",
+            "tags": "偏微分方程, 机器学习, 科学计算, 数据驱动建模, 算子学习",
+            "links": {
+                "paper": "https://www.nature.com/articles/s43588-024-00643-2",
+                "download": "https://www.jianguoyun.com/p/DUWWuDAQ7P3jDRj675cGIAA",
+                "cover": "https://media.springernature.com/w440/springer-static/cover-hires/journal/43588/5/10?as=webp&q=95"
+            }
+        },
+
+        "titles": {
+            "panorama": "PDE求解新纪元:机器学习如何重塑250年科学计算传统",
+            "insight": "Nature综述揭示:机器学习正在改变我们学习、表示和求解偏微分方程的三大方式",
+            "guide": "从方程发现到算子学习:这篇Nature综述为PDE研究者指明三条前沿路径"
+        },
+
+        "intro": "自d'Alembert在1752年提出波动方程以来,偏微分方程(PDE)已成为描述自然物理定律最简洁的数学语言。从建筑桥梁到飞机设计,从电子产品散热到流体力学模拟,现代工程世界的几乎每个方面都依赖PDE的预测能力。然而,面对高维、多尺度、强非线性等复杂问题,传统数值方法往往力不从心。华盛顿大学Steven Brunton团队在Nature Computational Science发表的这篇重磅综述,系统梳理了机器学习如何在三个关键方向推动PDE研究:发现新的控制方程、学习有效坐标系统、表示解算子并改进数值算法。",
+
+        "content": {
+            "genesis": {
+                "origin": "尽管机器学习应用于PDE研究可追溯到1990年代初期的神经网络近似尝试,但真正的突破始于近十年。传统PDE推导依赖控制体积法和守恒律,这一范式自18世纪以来几乎未变。随着实验和仿真技术产生海量高质量数据,数据驱动方法为PDE研究开辟了全新可能:不仅能发现全新物理系统的控制方程,还能为已知方程学习更好的表示和求解方式。",
+
+                "evolution": "本综述聚焦三个核心研究方向的演进:\n\n**① 方程发现与粗粒化闭合**(2016-): 2016年Brunton等人提出SINDy(稀疏非线性动力系统辨识)算法,2017年扩展为PDE-FIND,使得从数据中学习符号形式的PDE成为可能。随后出现基于进化算法的SGA-PDE、结合深度学习的DL-PDE等多种变体。这些方法已成功应用于湍流闭合建模、等离子体物理修正项发现等实际问题。\n\n**② 坐标系统与降阶表示**(1931-): 虽然Koopman算子理论起源于1931年,但直到近年深度学习的兴起才使其实用化。2018年Lusch等人展示了如何用神经网络学习非线性系统的线性化坐标变换。同时,基于POD的传统降阶模型也通过自编码器得到非线性流形扩展。\n\n**③ 数值解法与算子学习**(2019-): 2019年Lu等人提出的DeepONet和Kovachki等人的神经算子,开创了直接学习PDE解算子的新范式。这些方法受格林函数和特征函数展开的启发,用神经网络逼近无穷维算子的逆。2021年以来,傅里叶神经算子(FNO)在流体、等离子体、天气预报等领域展现出强大能力。",
+
+                "scope": "本综述系统回顾了机器学习在PDE三大领域的应用:发现新的控制方程和闭合模型、学习有效坐标系统和降阶模型、表示解算子和改进传统数值算法。特别强调了物理约束嵌入的重要性——这使得机器学习模型能够用更少更嘈杂的数据实现更准确的解。综述不涉及物理信息神经网络(PINN)、Deep Ritz、Neural Galerkin等方法,这些将在其他文献中讨论。作者指出,虽然机器学习改变了我们学习、表示和求解PDE的方式,但许多基本原则未变:我们仍追求可解释和可推广的控制方程表示,仍使用科学计算技术来积分模型和传播不确定性,仍使用相同的迭代优化和控制算法。"
+            },
+
+            "taxonomy": {
+                "classification": "综述按三个主要研究方向组织PDE机器学习方法:\n\n**1. 方程发现与粗粒化** - 学习符号形式的PDE表达式\n- 稀疏回归方法:PDE-FIND、Weak SINDy、Ensemble SINDy\n- 进化算法方法:SGA-PDE、遗传算法PDE发现\n- 深度学习混合:PDE-NET、DL-PDE、DLGA-PDE\n- 图神经网络符号学习\n\n**2. 坐标系统与降阶模型** - 寻找简化PDE的表示\n- Koopman算子方法:深度Koopman嵌入、DMD及其变体\n- 降阶建模:POD-Galerkin、自编码器+SINDy、Lift & Learn\n- 流形学习:非线性流形上的降阶\n\n**3. 算子学习与数值加速** - 直接学习解算子或改进求解器\n- 神经算子:FNO、多极神经算子、图核网络\n- DeepONet:分支-树干网络结构\n- 数值方法改进:超分辨率、自适应网格、激波捕捉\n\n这三个方向并非孤立,例如Koopman降阶模型既涉及坐标学习又与算子学习相关。",
+
+                "coreIdeas": "三个方向虽然方法各异,但共享一些核心思想:\n\n**物理约束的重要性**: 无论是方程发现中的守恒律、对称性约束,坐标学习中的线性化目标,还是算子学习中的物理先验,嵌入物理知识都能显著提升模型性能、减少数据需求、增强泛化能力。\n\n**稀疏性原则**: 从PDE-FIND的稀疏系数到Koopman算子的低秩特征函数,再到神经算子的紧凑表示,稀疏性是贯穿始终的指导原则——自然界的规律往往可以用少数几个关键项简洁表达。\n\n**数据与机理融合**: 最成功的应用往往不是纯数据驱动或纯机理驱动,而是两者的有机结合——在数据稀缺但物理模型相对准确的场景(如血流重建、地震定位)表现最佳。\n\n**通用逼近能力**: 神经网络的通用逼近定理为这些方法提供了理论基础,但从逼近能力到实际性能的跨越仍需大量工程努力和领域知识。",
+
+                "comparison": "三个方向的方法各有所长:\n\n**方程发现 vs 算子学习**: 前者产生可解释的符号表达式,适合科学发现和机理理解;后者是黑盒模型,但可处理更复杂系统。前者每个新问题需重新训练,后者一次训练可泛化到参数族。\n\n**Koopman vs 传统降阶**: Koopman试图找到线性化坐标,理论优雅但实际应用中常遇到高维提升、虚假特征值等问题;传统POD-Galerkin更成熟但受限于线性子空间且有稳定性问题。\n\n**神经算子 vs 传统数值方法**: 神经算子无需网格、可灵活重新采样,但训练成本高、缺乏误差估计理论;传统方法经过数十年发展极为成熟、有严格误差界,但受限于网格离散和计算成本。\n\n**不同神经算子变体**: FNO利用傅里叶核最常用,多极算子适合特定对称性,DeepONet用分支-树干结构分离输入函数和空间位置。选择取决于问题特性、数据量和计算资源。"
+            },
+
+            "applications": {
+                "domains": "机器学习PDE方法已在多个领域展现潜力:\n\n**① 流体力学**(最活跃): 湍流RANS/LES闭合建模、Navier-Stokes方程求解、血流动力学重建\n\n**② 地球科学**: 海洋中尺度涡闭合(LES)、地震波传播(Eikonal方程)、天气预报(FourCastNet)\n\n**③ 等离子体物理**: MHD方程修正项、粒子模拟降阶、聚变等离子体代理模型\n\n**④ 固体力学**: 弹塑性问题、断裂力学\n\n**⑤ 量子力学**: Schrödinger方程、孤子解\n\n**⑥ 生物医学**: 心脏电生理、肿瘤生长模型、活性物质动力学\n\n**⑦ 材料科学**: 相变问题、非牛顿流体\n\n应用广度印证了方法的通用性,但也暴露出性能在不同问题上差异巨大的问题。",
+
+                "achievements": "几个具有里程碑意义的成功案例:\n\n**① 血流重建**(Raissi 2020, Science): 仅用4D Flow MRI 1%的数据,PINN准确重构了颅内动脉瘤的完整速度场和压力场,为无创诊断开辟新路径——这是数据极度稀缺场景下物理约束发挥关键作用的典范。\n\n**② 海洋涡闭合**(Zanna 2020): 用稀疏贝叶斯方法(RVM)从高分辨率海洋模拟中学习LES闭合模型,性能媲美甚至超越深度神经网络,且产生的是可解释的解析表达式——这展示了符号回归在科学建模中的独特价值。\n\n**③ 流体加速仿真**(Kochkov 2021, PNAS): 对2D Kolmogorov流,机器学习修正使得可在比传统方法粗10倍的网格上仿真,加速86倍且保持精度——这证明了混合方法在计算密集型应用中的巨大潜力。\n\n这些案例的共性:在数据稀缺或计算昂贵的场景,且物理模型相对准确时,机器学习方法优势最明显。",
+
+                "limitations": "当前应用面临三大根本性限制:\n\n**① 维度诅咒**: 对于高维PDE(如>5维),所需配点数量和网络规模呈指数增长,训练变得不可行。现有成功案例大多局限于1D-3D问题。\n\n**② 刚性与多尺度问题**: 对于包含激波、间断或多时间尺度的问题(如双曲守恒律、刚性ODE),机器学习方法训练极易失败,精度远不如专门设计的传统数值格式。\n\n**③ 长时演化与外推**: 对于时间依赖问题,模型难以准确外推到训练时间区间外,误差随时间累积。神经算子在自回归滚动预测中'quickly loses grip',产生噪声非相干输出。\n\n这些限制本质上源于优化困难(非凸损失函数、局部极小)和神经网络逼近特性(内插优于外推),是当前研究亟需突破的核心瓶颈。"
+            },
+
+            "challenges": {
+                "theoretical": "理论层面的主要开放问题:\n\n**① 收敛性理论**: 什么条件下方法能收敛到PDE真解?目前仅对线性椭圆/抛物型方程有初步结果,非线性和双曲问题理论基本空白。\n\n**② 误差估计**: 如何量化学到的解或算子的精度?传统数值方法有完善的先验/后验误差分析,机器学习方法的误差界研究刚起步(如DeepONet、FNO的最新收敛率结果)。\n\n**③ 泛化理论**: 模型在训练配点/参数外的预测精度如何?与训练策略、网络架构、物理约束的关系如何?这些基础问题直接影响方法的可靠性和适用范围。\n\n这些理论空白使得机器学习PDE方法难以在安全关键领域(如航空航天、核工程)应用,建立严格数学基础是赢得工程界信任的前提。",
+
+                "practical": "工程实践中的主要困难:\n\n**① 训练不稳定**: 损失函数高度非凸、多项损失权重难平衡、对初始化和超参数极其敏感,导致训练失败率高。即使是经验丰富的研究者也常需多次尝试。\n\n**② 计算效率悖论**: 对于中等规模问题,训练神经算子的时间可能比传统求解器还长,且难以利用传统HPC的大规模并行能力——这违背了用机器学习加速计算的初衷。\n\n**③ 超参数调优黑洞**: 网络深度/宽度、激活函数、配点分布、学习率调度等大量超参数需要针对每个具体问题手动调整,缺乏自动化和鲁棒的调优策略,使用门槛高。\n\n**④ 软件生态不成熟**: 现有工具库(如PySINDy、DeepXDE)功能有限、文档不足、对非专家用户不够友好,阻碍了方法的广泛采用。",
+
+                "open_problems": "综述明确指出五个亟待突破的关键科学问题:\n\n**① 如何克服维度诅咒?** 是否存在针对特定PDE类别的更有效特征表示或采样策略?\n\n**② 如何处理间断和激波?** 能否设计对不连续解鲁棒的网络架构或损失函数?\n\n**③ 如何保证长时稳定性?** 对于混沌系统和长时演化,如何防止误差累积?\n\n**④ 能否建立后验误差估计?** 类似传统方法的自适应网格加密,能否为神经方法设计可靠的误差指示器?\n\n**⑤ 如何最优融合传统与机器学习方法?** 在哪些环节用机器学习替代或增强传统求解器最有效?\n\n这些问题的解决将决定机器学习PDE方法能否从研究原型走向工业应用,成为科学计算的主流工具。"
+            }
+        },
+
+        "future": {
+            "trends": "综述展望了四个重要研究方向:\n\n**① 自适应与主动学习方法**: 动态调整配点分布(如残差自适应加密RAR)、自适应网络架构、损失权重自动平衡,以提升训练效率和解的精度。这是从'手工调参'走向'智能训练'的必由之路。\n\n**② 混合方法与协同设计**: 用机器学习加速传统求解器的瓶颈环节(如预条件、非线性迭代),或用传统方法为机器学习提供初值和物理约束。发挥各自优势而非相互替代,是更现实的路径。\n\n**③ 理论基础完善**: 建立收敛性、误差估计、泛化界等严格数学理论,为实际应用提供可靠性保证。这需要应用数学、数值分析、机器学习理论的深度交叉。\n\n**④ 专用软硬件生态**: 开发针对PDE学习优化的神经网络架构、训练算法,以及更易用的软件工具链,降低使用门槛、提升计算效率,促进方法的广泛采用。",
+
+            "opportunities": "两个可能带来突破的研究方向:\n\n**① 算子学习范式转变**: 从'针对单个PDE训练单个模型'转向'学习PDE求解器本身'。DeepONet和神经算子展示了学习PDE算子映射的潜力——一次训练即可处理参数化问题族,无需每次重新训练。这代表了从求解individual PDE到meta-learning求解器的范式升级。\n\n**② 因果结构与时空先验**: 最新的因果PINN(cPINN)通过尊重信息传播的因果性,显著提升了双曲方程和长时预测性能;Transformer等注意力机制也在捕捉时空依赖关系上展现潜力。深入利用PDE的时空结构和因果性,可能是突破现有外推困难的关键。\n\n此外,将对称性、不变性等物理先验更系统地嵌入网络架构(如等变神经网络),也是值得深入探索的方向。",
+
+            "perspective": "综述作者认为,机器学习PDE方法的真正价值不在于全面替代传统数值方法(后者经过数十年打磨已极为成熟),而在于开辟了一个新的计算范式:将数据驱动与机理驱动深度融合,让AI既学习观测又遵守物理定律。\n\n最有前景的应用场景是:① 物理模型已知但数据稀缺(如医学成像、地球物理反问题);② 计算成本高昂需快速预测(如实时控制、迭代设计优化);③ 需要同时解决正演和反演问题(如参数识别、数据同化)。\n\n但要实现这一愿景,仍需理论、算法、软件、硬件的协同突破。作者坦言,尽管进展迅速,该领域仍处于发展初期,既有巨大潜力也面临严峻挑战——甚至连不可压Navier-Stokes方程解的有界性这样的基本问题都未解决,这正是'千禧年大奖难题'之一。科学计算的革命才刚刚开始。"
+        },
+
+        "closing": {
+            "summary": "机器学习正在三个方向重塑PDE研究:从数据发现方程、学习简化坐标、直接表示解算子,但理论缺失和工程挑战仍需突破",
+
+            "takeaways": "**① 范式转变**: 机器学习为PDE研究开辟了新范式——不仅求解已知方程,还能发现新方程、学习有效表示、加速数值计算,实现数据驱动与机理驱动的深度融合\n\n**② 方法多样**: 从稀疏回归(PDE-FIND)到进化算法(SGA-PDE),从Koopman算子到神经算子(FNO、DeepONet),不同方法各有所长,需根据问题特性(数据量、维度、刚性等)合理选择\n\n**③ 物理约束关键**: 嵌入守恒律、对称性、因果性等物理先验,能显著提升模型精度、减少数据需求、增强泛化能力,是成功应用的共同特征\n\n**④ 核心挑战**: 维度诅咒、间断问题、长时外推三大瓶颈,加上理论基础薄弱(收敛性、误差估计)和工程困难(训练不稳定、超参数敏感),是当前亟需突破的关键\n\n**⑤ 未来方向**: 自适应训练、混合方法、算子学习范式、因果时空先验,以及专用软硬件生态建设,是最有希望的突破口",
+
+            "discussion": "**讨论1**: 你认为三个研究方向(方程发现、坐标学习、算子学习)中,哪个最有可能率先在工业界大规模应用?是医学影像中的血流重建、制造业中的快速仿真优化,还是其他场景?\n\n**讨论2**: 对于机器学习PDE方法缺乏误差估计理论这一根本性问题,你觉得应该优先发展严格的数学理论,还是先通过大量实证研究建立经验指南?两条路径如何平衡?"
+        }
     }
 
 
@@ -1574,9 +1650,9 @@ document.addEventListener('DOMContentLoaded', function () {
 function initializePage() {
     // 更新统计数据
     document.getElementById('paperCount').textContent = pinnsPapers.length;
-    
+
     // 计算综述论文数量
-    const reviewPapersCount = pinnsPapers.filter(paper => 
+    const reviewPapersCount = pinnsPapers.filter(paper =>
         paper.meta.tags && paper.meta.tags.includes('综述')
     ).length;
     document.getElementById('reviewPapers').textContent = reviewPapersCount;
@@ -1587,7 +1663,7 @@ function initializePage() {
         return year ? parseInt(year[0]) : 2019;
     }));
     document.getElementById('updateTime').textContent = latestYear;
-    
+
     // 动态填充年份筛选选项
     populateYearFilter();
 }
@@ -1969,15 +2045,15 @@ function createReviewModalContent(paper) {
             <h3>起源与演化</h3>
             <div class="content-section">
                 <h4>领域起源</h4>
-                <p>${processMarkdown(content.genesis.origin)}</p>
+                <p>${processMarkdown(content.genesis?.origin || '未提供')}</p>
             </div>
             <div class="content-section">
                 <h4>发展历程</h4>
-                <p>${processMarkdown(content.genesis.evolution)}</p>
+                <p>${processMarkdown(content.genesis?.evolution || '未提供')}</p>
             </div>
             <div class="content-section">
                 <h4>综述范围</h4>
-                <p>${processMarkdown(content.genesis.scope)}</p>
+                <p>${processMarkdown(content.genesis?.scope || '未提供')}</p>
             </div>
         </div>
 
@@ -1985,15 +2061,15 @@ function createReviewModalContent(paper) {
             <h3>技术分类</h3>
             <div class="content-section">
                 <h4>分类方法</h4>
-                <p>${processMarkdown(content.taxonomy.classification)}</p>
+                <p>${processMarkdown(content.taxonomy?.classification || '未提供')}</p>
             </div>
             <div class="content-section">
                 <h4>核心思想</h4>
-                <p>${processMarkdown(content.taxonomy.coreIdeas)}</p>
+                <p>${processMarkdown(content.taxonomy?.coreIdeas || '未提供')}</p>
             </div>
             <div class="content-section">
                 <h4>方法对比</h4>
-                <p>${processMarkdown(content.taxonomy.comparison)}</p>
+                <p>${processMarkdown(content.taxonomy?.comparison || '未提供')}</p>
             </div>
         </div>
 
@@ -2001,15 +2077,15 @@ function createReviewModalContent(paper) {
             <h3>应用与成果</h3>
             <div class="content-section">
                 <h4>应用领域</h4>
-                <p>${processMarkdown(content.applications.domains)}</p>
+                <p>${processMarkdown(content.applications?.domains || '未提供')}</p>
             </div>
             <div class="content-section">
                 <h4>成功案例</h4>
-                <p>${processMarkdown(content.applications.achievements)}</p>
+                <p>${processMarkdown(content.applications?.achievements || '未提供')}</p>
             </div>
             <div class="content-section">
                 <h4>局限分析</h4>
-                <p>${processMarkdown(content.applications.limitations)}</p>
+                <p>${processMarkdown(content.applications?.limitations || '未提供')}</p>
             </div>
         </div>
 
@@ -2017,15 +2093,15 @@ function createReviewModalContent(paper) {
             <h3>挑战与问题</h3>
             <div class="content-section">
                 <h4>理论挑战</h4>
-                <p>${processMarkdown(content.challenges.theoretical)}</p>
+                <p>${processMarkdown(content.challenges?.theoretical || '未提供')}</p>
             </div>
             <div class="content-section">
                 <h4>实践挑战</h4>
-                <p>${processMarkdown(content.challenges.practical)}</p>
+                <p>${processMarkdown(content.challenges?.practical || '未提供')}</p>
             </div>
             <div class="content-section">
                 <h4>关键问题</h4>
-                <p>${processMarkdown(content.challenges.open_problems)}</p>
+                <p>${processMarkdown(content.challenges?.open_problems || '未提供')}</p>
             </div>
         </div>
 
@@ -2033,15 +2109,15 @@ function createReviewModalContent(paper) {
             <h3>未来展望</h3>
             <div class="content-section">
                 <h4>发展趋势</h4>
-                <p>${processMarkdown(future.trends)}</p>
+                <p>${processMarkdown(future?.trends || '未提供')}</p>
             </div>
             <div class="content-section">
                 <h4>机遇与突破口</h4>
-                <p>${processMarkdown(future.opportunities)}</p>
+                <p>${processMarkdown(future?.opportunities || '未提供')}</p>
             </div>
             <div class="content-section">
                 <h4>作者观点</h4>
-                <p>${processMarkdown(future.perspective)}</p>
+                <p>${processMarkdown(future?.perspective || '未提供')}</p>
             </div>
         </div>
 
@@ -2049,15 +2125,15 @@ function createReviewModalContent(paper) {
             <h3>总结与互动</h3>
             <div class="content-section">
                 <h4>一句话总结</h4>
-                <p>${processMarkdown(closing.summary)}</p>
+                <p>${processMarkdown(closing?.summary || '未提供')}</p>
             </div>
             <div class="content-section">
                 <h4>关键启示</h4>
-                <p>${processMarkdown(closing.takeaways)}</p>
+                <p>${processMarkdown(closing?.takeaways || '未提供')}</p>
             </div>
             <div class="content-section">
                 <h4>互动引导</h4>
-                <p>${processMarkdown(closing.discussion)}</p>
+                <p>${processMarkdown(closing?.discussion || '未提供')}</p>
             </div>
         </div>
 
@@ -2078,12 +2154,12 @@ function createReviewModalContent(paper) {
 function createModalContent(paper) {
     // 检查是否为综述论文（通过tags包含"综述"或meta.type为"review"）
     const isReviewPaper = paper.meta.tags && paper.meta.tags.includes('综述') || paper.meta.type === 'review';
-    
+
     // 如果是综述论文，使用综述模板
     if (isReviewPaper) {
         return createReviewModalContent(paper);
     }
-    
+
     // 否则使用普通论文模板
     const content = paper.content;
     const extension = paper.extension;
@@ -2167,15 +2243,15 @@ function createModalContent(paper) {
             <h3>研究背景</h3>
             <div class="content-section">
                 <h4>研究领域</h4>
-                <p>${processMarkdown(content.background.field)}</p>
+                <p>${processMarkdown(content.background?.field || '未指定')}</p>
             </div>
             <div class="content-section">
                 <h4>研究背景</h4>
-                <p>${processMarkdown(content.background.context)}</p>
+                <p>${processMarkdown(content.background?.context || '未提供')}</p>
             </div>
             <div class="content-section">
                 <h4>核心问题</h4>
-                <p>${processMarkdown(content.background.problem)}</p>
+                <p>${processMarkdown(content.background?.problem || '未提供')}</p>
             </div>
         </div>
 
@@ -2183,15 +2259,15 @@ function createModalContent(paper) {
             <h3>主要贡献</h3>
             <div class="content-section">
                 <h4>研究意义</h4>
-                <p>${processMarkdown(content.contribution.significance)}</p>
+                <p>${processMarkdown(content.contribution?.significance || '未提供')}</p>
             </div>
             <div class="content-section">
                 <h4>研究方法</h4>
-                <p>${processMarkdown(content.contribution.method)}</p>
+                <p>${processMarkdown(content.contribution?.method || '未提供')}</p>
             </div>
             <div class="content-section">
                 <h4>创新点</h4>
-                <p>${processMarkdown(content.contribution.innovation)}</p>
+                <p>${processMarkdown(content.contribution?.innovation || '未提供')}</p>
             </div>
         </div>
 
@@ -2199,11 +2275,11 @@ function createModalContent(paper) {
             <h3>实验验证</h3>
             <div class="content-section">
                 <h4>实验结果</h4>
-                <p>${processMarkdown(content.validation.experiments)}</p>
+                <p>${processMarkdown(content.validation?.experiments || '未提供')}</p>
             </div>
             <div class="content-section">
                 <h4>研究结论</h4>
-                <p>${processMarkdown(content.validation.conclusion)}</p>
+                <p>${processMarkdown(content.validation?.conclusion || '未提供')}</p>
             </div>
         </div>
 
@@ -2211,18 +2287,18 @@ function createModalContent(paper) {
             <h3>影响评估</h3>
             <div class="content-section">
                 <h4>学术影响</h4>
-                <p>${processMarkdown(content.evaluation.impact)}</p>
+                <p>${processMarkdown(content.evaluation?.impact || '未提供')}</p>
             </div>
             <div class="content-section">
                 <h4>局限性</h4>
-                <p>${processMarkdown(content.evaluation.limitations)}</p>
+                <p>${processMarkdown(content.evaluation?.limitations || '未提供')}</p>
             </div>
         </div>
 
         <div class="info-section">
             <h3>未来展望</h3>
             <div class="content-section">
-                <p>${processMarkdown(extension.future)}</p>
+                <p>${processMarkdown(extension?.future || '未提供')}</p>
             </div>
         </div>
 
@@ -2230,15 +2306,15 @@ function createModalContent(paper) {
             <h3>总结讨论</h3>
             <div class="content-section">
                 <h4>核心总结</h4>
-                <p>${processMarkdown(closing.summary)}</p>
+                <p>${processMarkdown(closing?.summary || '未提供')}</p>
             </div>
             <div class="content-section">
                 <h4>关键收获</h4>
-                <p>${processMarkdown(closing.takeaways)}</p>
+                <p>${processMarkdown(closing?.takeaways || '未提供')}</p>
             </div>
             <div class="content-section">
                 <h4>互动讨论</h4>
-                <p>${processMarkdown(closing.discussion)}</p>
+                <p>${processMarkdown(closing?.discussion || '未提供')}</p>
             </div>
         </div>
 
