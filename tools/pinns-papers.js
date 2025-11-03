@@ -1610,8 +1610,18 @@ function applyFilters() {
         }
 
         // 论文类型筛选
-        if (currentFilters.paperType && paper.meta.type !== currentFilters.paperType) {
-            return false;
+        if (currentFilters.paperType) {
+            if (currentFilters.paperType === 'review') {
+                // 综述论文通过tags字段判断
+                if (!paper.meta.tags || !paper.meta.tags.includes('综述')) {
+                    return false;
+                }
+            } else if (currentFilters.paperType !== 'all') {
+                // 其他类型通过type字段判断
+                if (paper.meta.type !== currentFilters.paperType) {
+                    return false;
+                }
+            }
         }
 
         // 年份筛选
