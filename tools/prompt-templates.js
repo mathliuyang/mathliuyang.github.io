@@ -1469,8 +1469,8 @@ window.templates = {
    "prompt-id-20251102": {
       "name": "Cover Letter 生成器",
       "icon": "📨",
-      "cover": "https://images.unsplash.com/photo-1455849318743-b2233052fcff?auto=format&fit=crop&w=1350&q=80",
-      "localCoverImage": "./assets/prompt_cover/prompt-id-20251102.jpg",
+      "cover": "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=1350&q=80",
+      "localCoverImage": './assets/prompt_cover/prompt-academic-005.jpg', // 本地封面路径，作为远程链接失效时的备用方案
       "desc": "智能生成符合SCI期刊标准的投稿信模板。",
       "tags": ["SCI投稿", "Cover Letter", "期刊沟通"],
       "category": "科研邪修｜写作",
