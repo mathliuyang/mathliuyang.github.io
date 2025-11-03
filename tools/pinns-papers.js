@@ -1,3 +1,35 @@
+// 提取论文数据中的所有年份
+function extractAvailableYears() {
+    const years = new Set();
+    
+    pinnsPapers.forEach(paper => {
+        const yearMatch = paper.meta.date.match(/\d{4}/);
+        if (yearMatch) {
+            years.add(yearMatch[0]);
+        }
+    });
+    
+    // 将Set转换为数组并按年份降序排序（最新的在前）
+    return Array.from(years).sort((a, b) => parseInt(b) - parseInt(a));
+}
+
+// 动态填充年份筛选选项
+function populateYearFilter() {
+    const yearFilter = document.getElementById('yearFilter');
+    const availableYears = extractAvailableYears();
+    
+    // 清空现有选项（保留"所有年份"选项）
+    yearFilter.innerHTML = '<option value="">所有年份</option>';
+    
+    // 添加实际存在的年份选项
+    availableYears.forEach(year => {
+        const option = document.createElement('option');
+        option.value = year;
+        option.textContent = year;
+        yearFilter.appendChild(option);
+    });
+}
+
 // Markdown格式处理函数 - 将Markdown格式转换为HTML格式
 function processMarkdown(text) {
     if (!text) return '';
@@ -1549,6 +1581,9 @@ function initializePage() {
         return year ? parseInt(year[0]) : 2019;
     }));
     document.getElementById('updateTime').textContent = latestYear;
+    
+    // 动态填充年份筛选选项
+    populateYearFilter();
 }
 
 function setupEventListeners() {
