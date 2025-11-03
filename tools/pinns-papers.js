@@ -1562,7 +1562,7 @@ let pinnsPapers = [
             "venue": "Nature Computational Science",
             "date": "2024年6月",
             "reviewScope": "涵盖近30年(1990s-2024)的PDE机器学习研究,重点关注2016-2024年间的关键进展,引用168篇文献",
-            "tags": "偏微分方程, 机器学习, 科学计算, 数据驱动建模, 算子学习",
+            "tags": "偏微分方程, 机器学习, 科学计算, 数据驱动建模, 算子学习, 综述",
             "links": {
                 "paper": "https://www.nature.com/articles/s43588-024-00643-2",
                 "download": "https://www.jianguoyun.com/p/DUWWuDAQ7P3jDRj675cGIAA",
