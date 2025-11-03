@@ -421,12 +421,12 @@ window.templates = {
   "meta": {
     "titleCN": "",              // 中文标题
     "titleEN": "",              // 英文原标题
-    "authors": "",              // 主要作者
+    "author": "",              // 主要作者
     "unit": "",                 // 第一作者/通讯作者单位
     "venue": "",                // 期刊全称
     "date": "",                 // YYYY年MM月
     "reviewScope": "",          // 综述范围（如：2017-2022，涵盖500+篇文献，自动从参考文献列表中提取）
-    "tags": "",                 // 领域标签
+    "tags": "",                 // 领域标签（必须包含：综述）
     "links": {
       "paper": "",              // 论文链接
       "download": "",           // 下载链接
@@ -573,6 +573,13 @@ window.templates = {
 - 发展脉络清晰
 - 未来展望有依据
 
+**学术规范**
+- 保持客观中立
+- 严禁杜撰数据或实验结果
+- 局限性客观呈现
+- 引用准确(如有)
+- 避免过度简化失真
+
 **传播有效性**
 - 标题体现综述价值
 - 导语抓住核心痛点
@@ -594,22 +601,24 @@ window.templates = {
 
 请根据以上要求，基于我提供的 PINN 综述论文信息，创作一份高质量的科普推文。
 
-## 【参考示例】
-
+## 【参考示例】以下仅为格式示范，请勿与待处理的综述论文信息混淆
+  //【参考示例】以下仅为格式示范，请勿与待处理的综述论文信息混淆
+  //【参考示例】以下仅为格式示范，请勿与待处理的综述论文信息混淆
+  //【参考示例】以下仅为格式示范，请勿与待处理的综述论文信息混淆
 \`\`\`javascript
 {
   // ===== 元信息 =====
   "meta": {
     "titleCN": "物理信息神经网络研究进展: 现状与未来",
     "titleEN": "Scientific Machine Learning Through Physics-Informed Neural Networks: Where we are and What's Next",
-    "authors": "Salvatore Cuomo, Vincenzo Schiano Di Cola, Fabio Giampaolo等",
+    "author": "Salvatore Cuomo, Vincenzo Schiano Di Cola, Fabio Giampaolo等",
     "unit": "意大利那不勒斯大学数学系",
     "venue": "Journal of Scientific Computing",
     "date": "2022年7月",
     "reviewScope": "2017-2022年，涵盖PINN及相关方法的500+篇文献",
     "tags": "物理信息神经网络, 科学机器学习, 微分方程求解, 综述",
     "links": {
-      "paper": "https://doi.org/10.1007/s10915-022-01939-z",
+      "paper": "提供的论文链接",
       "download": "提供的下载链接",
       "cover": "提供的封面URL"
     }
