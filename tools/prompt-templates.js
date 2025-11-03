@@ -376,8 +376,311 @@ window.templates = {
 `
    },
 
+   'prompt-review-001': {
+      "name": '公众号智创 · 综述论文解读 1 号',
+      "icon": '📚',
+      "cover": 'https://example.com/review-cover.jpg',
+      "localCoverImage": './assets/prompt_cover/prompt-review-001.jpg',
+      "desc": '将 PINN 领域综述论文转化为系统性科普推文，帮助读者建立全局认知',
+      "tags": ['综述解读', '领域综述', '技术发展'],
+      "category": '内容运营｜智核学术',
+      "content": `请扮演一位兼具学术洞察力和传播能力的领域分析专家，根据我提供的 PINN 综述论文信息，创作一份系统全面且引人入胜的科普推文。
+
+## 【系统定位】
+你是一位兼具学术深度和传播能力的领域分析专家:
+- **学术能力**: 准确把握领域发展脉络、技术分类逻辑和研究前沿
+- **传播能力**: 将复杂的技术体系转化为清晰的知识地图
+- **批判思维**: 客观评价方法优劣、识别开放问题和未来方向
+
+## 【目标读者】(按优先级)
+1. **希望入门 PINN 的研究者** - 需要领域全景和发展脉络
+2. **已有基础的从业者** - 关注技术分类、方法对比、应用现状
+3. **跨领域研究者** - 需要与其他方法的关联和适用场景
+
+## 请根据以下我提供的综述论文信息，创作一份系统全面的中文科普推文（用指定格式输出）
+
+\`\`\`
+论文英文标题: [英文标题]
+论文中文标题: [中文标题]
+主要作者: [作者列表，注明通讯作者]
+第一单位: [第一作者或通讯作者单位]
+发表信息: [期刊全称]
+发表时间: [发表时间:YYYY年MM月]
+论文链接: [论文URL]
+下载链接: [下载URL]
+封面图片URL: [封面图片URL]
+
+综述范围: [综述涵盖的时间范围、文献数量等]
+核心内容摘要: [综述的核心内容描述]
+\`\`\`
+
+## 【输出格式】⭐ 核心要求
+
+\`\`\`javascript
+{
+  // ===== 元信息 =====
+  "meta": {
+    "titleCN": "",              // 中文标题
+    "titleEN": "",              // 英文原标题
+    "authors": "",              // 主要作者（3-5位，含通讯作者标注）
+    "unit": "",                 // 第一作者/通讯作者单位
+    "venue": "",                // 期刊全称
+    "date": "",                 // YYYY年MM月
+    "reviewScope": "",          // 综述范围（如：2017-2022，涵盖500+篇文献）
+    "tags": "",                 // 领域标签
+    "links": {
+      "paper": "",              // 论文链接
+      "download": "",           // 下载链接
+      "cover": ""               // 封面图片URL
+    }
+  },
+
+  // ===== 3个爆款标题(各20-30字) =====
+  "titles": {
+    "panorama": "",             // 全景式: 强调领域全貌和系统性
+    "insight": "",              // 洞察式: 突出核心认知和关键问题
+    "guide": ""                 // 指南式: 体现实用价值和方向指引
+  },
+
+  // ===== 导语(80-120字) =====
+  "intro": "", // 钩子→价值→预告三段式，需点明综述性质
+
+  // ===== 核心内容 =====
+  "content": {
+    "genesis": {
+      "origin": "",             // 领域起源(80-100字): PINN诞生的背景和动机
+      "evolution": "",          // 发展历程(150-180字): 关键时间节点和里程碑工作
+      "scope": ""               // 综述范围(60-80字): 本综述涵盖的内容边界
+    },
+    
+    "taxonomy": {
+      "classification": "",     // 技术分类(180-220字): 主要技术流派和分类逻辑
+      "coreIdeas": "",          // 核心思想(120-150字): 各流派的基本原理和特点
+      "comparison": ""          // 方法对比(150-180字): 不同方法的优劣势对比
+    },
+    
+    "applications": {
+      "domains": "",            // 应用领域(120-150字): 主要应用方向和代表性工作
+      "achievements": "",       // 成功案例(150-180字): 典型应用场景和效果
+      "limitations": ""         // 局限分析(100-120字): 当前应用中的主要限制
+    },
+    
+    "challenges": {
+      "theoretical": "",        // 理论挑战(100-120字): 理论层面的开放问题
+      "practical": "",          // 实践挑战(100-120字): 工程应用中的难点
+      "open_problems": ""       // 关键问题(80-100字): 3-5个亟待解决的问题
+    }
+  },
+  
+  // ===== 未来展望 =====
+  "future": {
+    "trends": "",               // 发展趋势(120-150字): 3-4个重要研究方向
+    "opportunities": "",        // 机遇与突破口(100-120字): 可能的创新点
+    "perspective": ""           // 作者观点(80-100字): 综述作者对领域的展望
+  },
+  
+  // ===== 总结与互动 =====
+  "closing": {
+    "summary": "",              // 一句话总结(30-50字): 综述的核心价值
+    "takeaways": "",            // 关键启示(分点，3-4条): 读者应该记住什么
+    "discussion": ""            // 互动引导: 1-2个开放性讨论问题
+  }
+}
+\`\`\`
+
+## 【内容创作指南】
+
+### 📌 标题设计技巧
+- **全景式**: "PINN完整图鉴: 从诞生到爆发的5年全记录"
+- **洞察式**: "500+篇文献揭示: PINN成功的3个关键和2个陷阱"
+- **指南式**: "想用PINN? 这份2022最新综述帮你避开90%的坑"
+- ✅ 体现综述性质和系统性 | ❌ 避免像单篇论文标题
+
+### 📌 导语三段论(80-120字总计)
+1. **钩子**(20-30字): 用数据或趋势吸引注意
+   - 例: "从2019到2022，PINN相关论文暴增20倍，但成功率不足30%"
+2. **价值**(30-40字): 说明综述的必要性
+   - 例: "面对海量文献，如何建立系统认知、避免重复踩坑?"
+3. **预告**(30-40字): 点明综述的独特价值
+   - 例: "意大利那不勒斯大学团队的这篇500+引用综述，为你梳理清晰脉络"
+
+### 📌 综述特有的写作要点
+
+**领域发展历程**:
+- 按时间线梳理关键节点
+- 突出里程碑工作(如Raissi 2019)
+- 说明技术演进的内在逻辑
+
+**技术分类与对比**:
+- 给出清晰的分类框架(如按网络结构、损失函数、应用场景)
+- 用表格或对比列表呈现异同
+- 避免罗列，要有分析和洞察
+
+**应用现状分析**:
+- 分领域介绍(流体、材料、生物等)
+- 突出成功案例和失败教训
+- 说明适用条件和边界
+
+**开放问题讨论**:
+- 理论层面: 收敛性、泛化能力等
+- 工程层面: 高维问题、长时预测等
+- 给出可能的研究方向
+
+### 📌 专业术语处理
+- 首次出现: 给出**中英对照**和**通俗解释**
+- 核心概念: 用类比或可视化辅助理解
+- 分类体系: 用层次结构清晰呈现
+
+### 📌 文献引用处理
+- 综述中大量引用，**选择性提及**最重要的3-5篇
+- 用"Raissi等人(2019)"格式，保持简洁
+- 对开创性工作给予足够重视
+
+## 【写作风格规范】
+
+### ✅ 推荐表达
+- 宏观视角: "纵观领域发展"、"从全局来看"、"技术演进路径"
+- 批判思维: "值得注意的是"、"一个常见误区"、"尚未解决的问题"
+- 引导分析: "这背后的原因是"、"对比来看"、"进一步分析"
+- 系统总结: "归纳而言"、"可以看出"、"综合考虑"
+
+### ❌ 禁止表达
+- 单篇论文口吻: "我们提出"、"本文方法"（应该是"综述指出"、"文献表明"）
+- 过度细节: 具体参数、完整公式（综述应聚焦思想）
+- 绝对判断: "最好的方法"、"完美解决"（应保持客观）
+
+### 📐 格式要求
+- 段落: 每段≤120字，善用小标题分隔
+- 层次: 用①②③或「」等标记关键分类
+- 引用: 重要文献用"Raissi et al. (2019)"格式
+- 可视化: 适当描述"技术路线图"、"分类体系"等
+
+## 【质量检查清单】✓
+
+**综述特性体现**
+- 是否体现系统性和全局视角
+- 是否给出清晰的技术分类
+- 是否包含方法对比和批判分析
+- 是否指出开放问题和未来方向
+
+**格式完整性**
+- JSON语法正确
+- 所有字段均已填充
+- 总字数控制在2000-2500字
+
+**内容准确性**
+- 综述理解无偏差
+- 技术分类合理
+- 发展脉络清晰
+- 未来展望有依据
+
+**传播有效性**
+- 标题体现综述价值
+- 导语抓住核心痛点
+- 内容层次分明、易理解
+- 对不同层次读者都有价值
+
+## 【核心差异化】
+与普通论文解读的区别:
+1. **不是介绍一个方法** → 是构建知识地图和技术体系
+2. **不是讲具体实验** → 是对比分析和趋势洞察
+3. **不是单向科普** → 是批判性思考和方向指引
+4. **不只是总结过去** → 更要启发未来研究
+
+## 【最后提醒】
+- 综述的价值在于**系统性和洞察力**，不要只是罗列
+- 保持**批判性思维**，指出优势也要说明局限
+- 关注**未来方向**，这是综述最有价值的部分
+- 让**不同背景的读者**都能获得相应层次的收获
+
+请根据以上要求，基于我提供的 PINN 综述论文信息，创作一份高质量的科普推文。
+
+## 【参考示例】
+
+\`\`\`javascript
+{
+  // ===== 元信息 =====
+  "meta": {
+    "titleCN": "物理信息神经网络研究进展: 现状与未来",
+    "titleEN": "Scientific Machine Learning Through Physics-Informed Neural Networks: Where we are and What's Next",
+    "authors": "Salvatore Cuomo, Vincenzo Schiano Di Cola, Fabio Giampaolo等",
+    "unit": "意大利那不勒斯大学数学系",
+    "venue": "Journal of Scientific Computing",
+    "date": "2022年7月",
+    "reviewScope": "2017-2022年，涵盖PINN及相关方法的500+篇文献",
+    "tags": "物理信息神经网络, 科学机器学习, 微分方程求解, 综述",
+    "links": {
+      "paper": "https://doi.org/10.1007/s10915-022-01939-z",
+      "download": "提供的下载链接",
+      "cover": "提供的封面URL"
+    }
+  },
+
+  "titles": {
+    "panorama": "PINN五年全记录: 从一篇论文到改变科学计算的革命性技术",
+    "insight": "500+篇文献揭示: PINN爆火背后的3个关键创新和5个未解难题",
+    "guide": "想用PINN求解PDE? 这份综述帮你理清技术路线和避坑指南"
+  },
+
+  "intro": "2019年Raissi一篇论文引爆PINN研究，短短3年相关文献暴增20倍、引用超万次。但成功案例背后，失败率高达70%、理论基础薄弱等问题同样突出。面对海量文献和纷繁技术路线，如何建立系统认知？意大利那不勒斯大学团队历时2年完成的这篇综述，系统梳理PINN的诞生、演化、分类、应用与挑战，为研究者提供一份完整的领域地图。",
+
+  "content": {
+    "genesis": {
+      "origin": "PINN诞生于一个简单而深刻的洞察: 既然神经网络可以拟合任意函数，为什么不直接让它学习满足物理方程的解？2017年，Brown大学的Maziar Raissi等人将自动微分技术与物理约束结合，提出了物理信息神经网络，让AI不仅从数据学习，还要服从物理定律。这个想法并非全新——早在1990年代就有类似尝试，但受限于算力和优化技术，一直未成气候。",
+      
+      "evolution": "PINN的真正爆发始于2019年Raissi在JCP上发表的开创性论文，该文提出了完整的PINN框架和训练策略。\\n\\n① **2017-2019: 概念验证期**。Raissi团队证明PINN能求解Schrödinger、Navier-Stokes等经典方程，引起关注。\\n\\n② **2019-2020: 方法拓展期**。hp-VPINN、cPINN、DeepONet等变体涌现，从硬约束、域分解、算子学习等角度改进基础框架。\\n\\n③ **2020-2022: 应用爆发期**。PINN被应用到流体力学、材料科学、生物医学等十余个领域，论文数量呈指数增长。\\n\\n截至2021年，Raissi原文引用已超11000次，PINN成为科学机器学习最热门的研究方向之一。",
+      
+      "scope": "本综述系统回顾了2017-2022年间PINN及其变体(如VPINN、cPINN、DeepONet等)的理论、方法与应用。涵盖内容包括: ① 神经网络架构选择，② 物理信息注入方式，③ 优化与训练策略，④ 理论收敛性分析，⑤ 在不同类型PDE上的应用，⑥ 软件工具生态。综述不涉及纯数据驱动方法或不含物理约束的神经网络求解器。"
+    },
+    
+    "taxonomy": {
+      "classification": "PINN家族可以从三个维度分类:\\n\\n**按约束方式**: ① 软约束(Soft BC) - 将边界/初始条件作为损失函数的一部分，如vanilla PINN；② 硬约束(Hard BC) - 通过神经网络架构直接满足条件，如PCNN。\\n\\n**按网络架构**: ① 全连接前馈网络(最常用，占比>80%)，② 卷积神经网络(用于规则域和图像数据)，③ 循环神经网络(用于时序动力系统)，④ 其他(如贝叶斯网络、GAN变体)。\\n\\n**按损失函数**: ① 基于配点的残差最小化(标准PINN)，② 基于变分原理的能量最小化(VPINN)，③ 基于Galerkin方法的弱形式(DGM)。不同分类适用于不同问题特性。",
+      
+      "coreIdeas": "所有PINN变体共享一个核心思想: **让神经网络的输出既拟合数据，又满足物理方程**。具体实现有三种范式:\\n\\n① **数据+方程双驱动**: 标准PINN用少量观测数据+大量配点上的方程残差联合训练，适合数据稀缺场景。\\n\\n② **纯方程驱动**: 对于正演问题，可以仅用方程残差训练(无需数据)，边界/初始条件通过硬约束或软约束满足。\\n\\n③ **数据为主+方程正则**: 当数据充足时，物理约束可作为正则化项，防止过拟合、提升外推能力。\\n\\n三种范式的选择取决于数据可得性、问题复杂度和物理模型置信度。",
+      
+      "comparison": "**PINN vs 传统数值方法**: 优势在于无需网格、自动可微、易处理高维和复杂几何；劣势是训练耗时、精度不稳定、缺乏误差估计理论。\\n\\n**软约束 vs 硬约束**: 软约束灵活、易实现，但无法保证严格满足边界条件；硬约束精度高、稳定性好，但对复杂边界设计困难。\\n\\n**不同网络架构**: 全连接网络通用性强但维度受限；CNN适合规则域但难处理非结构网格；RNN擅长时序建模但训练复杂。\\n\\n**PINN vs DeepONet**: PINN每次求解一个特定问题；DeepONet学习算子映射，一次训练可处理参数化问题族，但需要大量训练数据。各有千秋，需根据应用场景选择。"
+    },
+    
+    "applications": {
+      "domains": "PINN已在十余个领域得到应用:\\n\\n① **流体力学**(最活跃): Navier-Stokes方程、湍流建模、血流动力学\\n\\n② **固体力学**: 弹性、塑性、断裂问题\\n\\n③ **热传导**: Stefan问题、相变、传热优化\\n\\n④ **电磁学**: 麦克斯韦方程、光学逆散射\\n\\n⑤ **地球科学**: 地震波传播(Eikonal方程)、地下水流动\\n\\n⑥ **量子力学**: Schrödinger方程、孤子解\\n\\n⑦ **生物医学**: 心脏电生理、肿瘤生长建模\\n\\n应用广度令人惊叹，但也暴露出PINN在不同问题上性能差异大的问题。",
+      
+      "achievements": "几个标志性成功案例:\\n\\n① **血流重建**(Raissi 2020, Science): 仅用4D Flow MRI的1%数据，PINN准确重构了颅内动脉瘤的完整速度场和压力场，为无创诊断提供新工具。\\n\\n② **地震定位**(Smith 2021): EikoNet求解3D Eikonal方程，速度比传统快速扫描法快100倍，且无需网格离散化。\\n\\n③ **热交换器设计**(NVIDIA Modulus): 将几何参数化，一个PINN模型替代数千次CFD仿真，设计迭代速度提升50倍。\\n\\n这些案例的共同点: 数据稀缺或计算昂贵的场景，且物理模型相对准确。",
+      
+      "limitations": "当前应用面临三大限制:\\n\\n① **维度灾难**: 对于高维PDE(如>5维)，需要的配点数量和网络规模呈指数增长，训练变得不可行。\\n\\n② **刚性与多尺度问题**: 对于包含激波、间断或多时间尺度的问题，PINN训练极易失败，精度远不如传统方法。\\n\\n③ **长时演化**: 对于时间依赖问题，PINN难以准确外推到训练区间外的长时间，误差会随时间积累。\\n\\n这些限制本质上源于优化困难和神经网络的逼近特性，是当前研究的核心挑战。"
+    },
+    
+    "challenges": {
+      "theoretical": "理论层面的主要开放问题:\\n\\n① **收敛性保证**: 什么条件下PINN能收敛到PDE的真解？目前仅对线性椭圆/抛物型方程有初步结果。\\n\\n② **误差估计**: 如何量化PINN解的精度？传统数值方法有完善的误差分析理论，PINN还处于起步阶段。\\n\\n③ **泛化能力**: PINN在训练配点外的预测精度如何？与训练点分布、网络架构的关系尚不清楚。\\n\\n这些理论空白使得PINN难以在安全关键领域(如航空航天)应用，亟需数学家深入研究。",
+      
+      "practical": "工程实践中的主要困难:\\n\\n① **优化不稳定**: 损失函数高度非凸，对初始化、学习率、权重配比极其敏感，训练失败率高。\\n\\n② **计算效率**: 对于中等规模问题，PINN训练时间可能比传统求解器还长，且难以并行化。\\n\\n③ **超参数调优**: 网络深度/宽度、激活函数、配点分布等超参数需要针对每个问题手动调整，缺乏自动化方案。\\n\\n④ **软件成熟度**: 现有PINN库功能有限、文档不足，对非专家用户不够友好。\\n\\n这些问题阻碍了PINN从研究原型走向工业应用。",
+      
+      "open_problems": "综述指出五个亟待突破的关键问题:\\n\\n① 如何设计PINN使其不受维度诅咒影响？\\n\\n② 如何处理含间断、激波的双曲方程？\\n\\n③ 如何保证PINN在长时间演化中的稳定性？\\n\\n④ 能否建立PINN的后验误差估计理论？\\n\\n⑤ 如何将PINN与传统数值方法有效融合？\\n\\n这些问题的解决将决定PINN能否真正成为科学计算的主流工具。"
+    }
+  },
+  
+  "future": {
+    "trends": "综述展望了四个重要研究方向:\\n\\n① **自适应方法**: 动态调整配点分布、网络架构和损失权重，提升训练效率和精度。已有RAR(残差自适应加密)等初步尝试。\\n\\n② **与传统方法融合**: 用PINN加速传统求解器的瓶颈环节(如非线性迭代、高维积分)，或用传统方法为PINN提供初值，发挥各自优势。\\n\\n③ **理论基础完善**: 建立收敛性、误差估计、泛化界等严格数学理论，为实际应用提供可靠性保证。\\n\\n④ **专用硬件与软件**: 开发PINN专用的神经网络架构和训练算法，以及更易用的软件工具链，降低使用门槛。",
+    
+    "opportunities": "两个可能的突破口:\\n\\n① **算子学习**: DeepONet等算子网络展示了学习PDE算子映射的潜力，一次训练、多次求解，有望解决PINN的重复训练问题。\\n\\n② **因果结构利用**: 最新的因果PINN(Wang 2022)通过尊重信息传播的因果性，显著提升了双曲方程和长时预测的性能，为突破现有瓶颈提供了新思路。\\n\\n这些方向代表了从"用神经网络求解单个PDE"到"学习PDE求解器本身"的范式转变。",
+    
+    "perspective": "综述作者认为，PINN的真正价值不在于替代传统数值方法，而在于开辟了一个新的计算范式: **将数据驱动与机理驱动深度融合，让AI既学习观测又遵守物理**。未来最有前景的应用场景是: ① 物理模型已知但数据稀缺，② 计算成本高昂需快速预测，③ 需要同时解决正演和反演问题。但要实现这一愿景，还需要理论、算法、软件、硬件的协同突破。PINN仍处于发展初期，既有巨大潜力，也面临严峻挑战。"
+  },
+  
+  "closing": {
+    "summary": "PINN用物理定律约束神经网络，为数据稀缺场景下的PDE求解开辟新路径，但理论基础薄弱和工程实践困难仍需突破。",
+    
+    "takeaways": "① PINN本质是让神经网络在学习数据的同时满足物理方程，适合数据少、计算贵的场景\\n\\n② 方法已有丰富变体(软/硬约束、不同网络、变分形式等)，但尚无统一的架构设计指南\\n\\n③ 成功应用集中在流体、结构、电磁等领域，但对高维、刚性、长时问题仍力不从心\\n\\n④ 理论收敛性、误差估计、泛化能力等基础问题亟需数学突破\\n\\n⑤ 未来方向聚焦于自适应策略、与传统方法融合、算子学习等范式创新",
+    
+    "discussion": "你认为PINN最有可能在哪个应用领域率先突破并实现工业化？是流体仿真、材料设计、地球物理，还是其他？欢迎在评论区分享你的观点和理由！"
+  }
+}
+\`\`\`
+
+`
+   },
+
    'prompt-wx-review': {
-      "name": '公众号智创 · 学术综述深度解读',
+      "name": '公众号智创 · 综述论文解读 2 号',
       "icon": '📚',
       "cover": 'https://example.com/review-cover.jpg',
       "localCoverImage": './assets/prompt_cover/prompt-review-001.jpg',
@@ -1106,6 +1409,29 @@ window.templates = {
       "content": "【Step 1 确定主题并生成关键词】\n我正在写一篇关于“[主题]”的文献综述。请帮助我生成5–10个可用于Google Scholar、PubMed等数据库检索的中英文对应的关键词及其同义词，仅需给出词表，无需解释。\n\n【Step 2 文献检索】\n请基于上述生成的关键词词表为我检索[检索年份，xxxx 年以后发表]年以后发表、相关度最高的[检索论文的数量]篇真实学术文献，按APA格式列出，并给出每篇的DOI或PubMed链接（确保真实有效匹配）。\n\n【Step 3 生成文献综述初步大纲】\n请根据主题及上述文献，撰写一份详细的文献综述大纲，包含：\n1. 引言（研究背景与重要性）；\n2. 理论背景（核心概念与理论框架）；\n3. 研究现状（按主题或时间顺序归纳主要成果）；\n4. 研究挑战与争议（不足与分歧）；\n5. 结论（总结发现、研究空白及未来方向）。\n确保逻辑清晰、层次分明，可直接用于Nature、Science 等高质量期刊的科研论文写作。"
    },
 
+
+   "prompt-academic-010": {
+      "name": "摘要无损压缩大师",
+      "icon": "🗜️",
+      "cover": "https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?auto=format&fit=crop&w=1350&q=80",
+      "localCoverImage": './assets/prompt_cover/prompt-academic-010.jpg', // 本地封面路径，作为远程链接失效时的备用方案
+      "desc": "信息分级后逐句删除冗余保留核心在目标字数内保持逻辑流畅。",
+      "tags": ["字数压缩", "无损精炼", "摘要瘦身"],
+      "category": "科研邪修｜写作",
+      "content": "请扮演一名惜字如金的“文字压缩”专家。我当前的摘要草稿有[原始摘要字数]字，但我需要将其压缩到严格的[目标摘要字数]字以内，同时不能损失任何核心信息。我将提供摘要草稿全文：‘[摘要草稿全文]’。首先，请对摘要进行“信息分级”，标记出哪些是“必须保留”的核心信息（问题、方法、核心发现、贡献），哪些是“可以简化”的背景描述，哪些是“可以删除”的次要细节。其次，请逐句进行精炼。找出并删除所有冗余词汇、空洞短语和不必要的修饰语。最后，请在达到字数要求的基础上，对全文进行一次流畅性润色，确保压缩后的摘要依然逻辑清晰、阅读顺畅。"
+   },
+
+   "prompt-academic-016": {
+      "name": "一句话 · 同核异声",
+      "icon": "📊",
+      "cover": "https://images.unsplash.com/photo-1505832018823-50331d70d237?auto=format&fit=crop&w=1350&q=80",
+      "localCoverImage": './assets/prompt_cover/prompt-academic-016.jpg', // 本地封面路径，作为远程链接失效时的备用方案
+      "desc": "为同行学生公众分别撰写一句话解释性版本和情感共鸣版本的差异化核心信息。",
+      "tags": ["读者分层", "核心信息", "公众传播"],
+      "category": "科研邪修｜写作",
+      "content": "我需要将我论文最想传达的“核心信息”，以不同的方式，呈现给不同的读者。我将提供我的论文的核心结论：'[论文的核心结论]'。请基于此，为我完成以下任务：第一个任务是撰写“同行版”核心信息。请为同行专家，撰写一句话版本的核心信息。该版本应使用最精确的专业术语，旨在进行高效的学术交流。第二个任务是撰写“学生版”核心信息。请为非本专业的学生，撰写一个更长、更具解释性的版本。该版本应包含一个生动的类比，以帮助他们直观地理解。第三个任务是撰写“公众版”核心信息。请为普通公众，撰写一个极度简化的、旨在引发情感共鸣或现实思考的版本。注意：要同时用中英文双语呈现结果。"
+   },
+
    "prompt-academic-004": {
       "name": "文献反向植入器",
       "icon": "📚",
@@ -1116,6 +1442,53 @@ window.templates = {
       "category": "科研邪修｜写作",
       "content": "你是一位学术文献检索与引用专家,擅长为论文精准匹配高质量参考文献并规范插入。请根据以下要求完成任务:\n\n## 📄 用户提供的论文内容\n[请粘贴需要添加参考文献的论文段落或全文]\n\n## 🔍 检索要求\n- 检索年份:[填写检索起始年份,如2020]年之后发表的文献\n- 检索数量:[填写所需添加的参考文献数量,如10]篇高相关度文献\n- 优选期刊(可选):[填写偏好期刊,如Nature, Science, Cell等,留空则不限]\n\n## ✅ 任务执行标准\n\n### 第一步:文献检索与呈现\n为每篇检索到的文献提供:\n\n**文献序号**  \n📌 **英文标题**  \n🇨🇳 **中文标题**  \n👥 作者 | 📅 年份 | 📖 期刊(影响因子)  \n🔗 DOI: 可点击链接 | PubMed ID: 如适用  \n📝 **内容概要**(50字):简述核心发现与本文的关联点  \n⭐ **相关度评分**:★★★★★ (五星制,说明匹配理由)\n\n---\n\n### 第二步:插入位置标注\n分析论文结构,为每篇文献标注最佳插入位置:\n\n**建议插入点**  \n📍 **位置**:第'X'段第'Y'句之后  \n💡 **原文片段**:\"...'原文引用前20字'...\"  \n✏️ **插入示例**:\"...'原文'...**'作者, 年份'**发现...'衔接文字'...\"  \n🎯 **插入理由**:支撑论点/提供对比/补充证据\n\n---\n\n### 第三步:完整修改文本输出\n\n#### 修改后正文(标注版)\n[输出完整论文文本,在插入处用**加粗\\[序号\\]**标记,如:\n\n\"...研究表明该机制具有普遍性**\\[1,3\\]**。进一步分析发现**\\[2\\]**...\"\n\n#### 参考文献列表(APA格式)\n\n\\[1\\] Author, A. A., & Author, B. B. (Year). Title of article. *Journal Name*, volume(issue), pages. https://doi.org/xxx  \n\\[2\\] ...\n\n---\n\n## ⚠️ 质量保证承诺\n1. ✓ 所有文献均为真实存在,DOI/PubMed链接经过验证  \n2. ✓ 引用位置符合学术逻辑,避免生硬插入  \n3. ✓ 优先选择高影响因子期刊(IF>5)  \n4. ✓ 确保文献与论文主题高度相关(相关度≥4星)\n\n## 📊 输出格式说明\n- 使用emoji图标提升可读性  \n- 关键信息加粗突出  \n- 分隔线清晰划分模块  \n- 超链接可直接点击验证\n\n现在请开始执行任务,先进行文献检索与呈现,待我确认后再进行插入操作。"
    },
+
+   "prompt-academic-025": {
+      "name": "文献格式校对器",
+      "icon": "📋",
+      "cover": "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=1350&q=80",
+      "localCoverImage": './assets/prompt_cover/prompt-academic-025.jpg', // 本地封面路径，作为远程链接失效时的备用方案
+      "desc": "逐条核对字体缩写标点页码DOI等合规性，标出近5年更新版本，给出可直接替换文本。",
+      "tags": ["参考文献", "合规检查", "格式核对"],
+      "category": "科研邪修｜写作",
+      "content": "你是一位拥有10年学术出版经验、熟悉[期刊名称]期刊参考文献格式规范的专业编辑。请对以下参考文献列表进行全面检查：\n1) 格式：逐条核对字体、缩写、标点、作者名缩写方式、年份位置、期刊名斜体/缩写、页码范围、DOI等是否符合[期刊名称]最新作者指南；\n2) 时效性：标出每篇文献的出版年，若引用版本早于近5年且已有更新版本，请给出最新文献信息；\n3) 完整性：检查有无漏项（卷号、期号、DOI、出版地等）；\n4) 排序：确认是否与正文引用顺序或字母顺序一致（按期刊要求）；\n5) 输出格式：\n   ① 原条目（标号）→ ② 问题类别 → ③ 具体不合规描述 → ④ 可执行修改建议（直接给出替换文本）。\n\n请按上述顺序逐条输出，避免遗漏。待检查参考文献列表如下：\n[粘贴参考文献列表]\n目标期刊作者指南:\m'[作者指南]'\n 同期刊其他论文参考文献格式示例：\n'[参考文献格式示例]'"
+   },
+   "prompt-academic-026": {
+      "name": "文献格式重排器",
+      "icon": "🔄",
+      "cover": "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=1350&q=80",
+      "localCoverImage": './assets/prompt_cover/prompt-academic-026.jpg', // 本地封面路径，作为远程链接失效时的备用方案
+      "desc": "按APA/MLA/Chicago/Harvard指定格式重排，统一字体样式，标注缺失项并给出合并删除建议。",
+      "tags": ["格式重排", "引用风格", "缺失补全"],
+      "category": "科研邪修｜写作",
+      "content": "你是一位精通APA、MLA、Chicago、Harvard等主流引用风格的学术排版专家，也是一位拥有10年学术出版经验、熟悉[期刊名称]期刊参考文献格式规范的专业编辑。请对以下参考文献列表进行转换与整理：\n1) 按以下给的作者指南（若有）或同期刊其他论文参考文献格式示例逐条重排，确保作者、年份、标题、期刊、卷期、页码、DOI等字段顺序与标点完全符合官方手册；\n2) 统一字体样式（期刊名斜体、卷号粗体、页码范围缩写、DOI前缀https://doi.org/ ）；\n3) 检查信息完整性，缺失项用【待补】标注并给出查找建议；\n4) 识别重复或无效条目，给出合并或删除建议；\n5) 输出格式：\n   ① 原始编号→② 转换后排版结果→③ 如需合并/删除，给出理由与操作提示。\n\n待整理参考文献列表：\n[粘贴参考文献列表]\n目标期刊作者指南(若有):\m'[作者指南]'\n 同期刊其他论文参考文献格式示例：\n'[参考文献格式示例]'"
+   },
+
+
+
+   "prompt-id-20251102": {
+      "name": "Cover Letter 生成器",
+      "icon": "📨",
+      "cover": "https://images.unsplash.com/photo-1455849318743-b2233052fcff?auto=format&fit=crop&w=1350&q=80",
+      "localCoverImage": "./assets/prompt_cover/prompt-id-20251102.jpg",
+      "desc": "智能生成符合SCI期刊标准的投稿信模板。",
+      "tags": ["SCI投稿", "Cover Letter", "期刊沟通"],
+      "category": "科研邪修｜写作",
+      "content": "你是一位熟悉国际SCI/SSCI期刊投稿流程的资深研究顾问，擅长撰写高质量的英文投稿信（cover letter）。你的任务是根据以下信息，为研究者生成一封正式、流畅、符合国际期刊标准的投稿信。\n\n---\n### 输入信息：\n- 目标期刊名称：[期刊名称]\n- 期刊Aims & Scope：[期刊Aims & Scope]\n- 论文标题：[论文标题]\n- 论文全文内容：[论文正文或摘要]\n- 作者信息（若未提供则默认使用示例模板）：[作者姓名、单位、地址、邮箱、日期]\n\n---\n### 输出要求：\n1. 使用正式英文撰写，符合SCI/SSCI期刊投稿信标准。\n2. 包含以下结构：\n   - 作者抬头（姓名、单位、地址、邮箱、日期）\n   - 收信人称呼（例如：Editor of [期刊名称]）\n   - 正文：\n     - 简明介绍研究主题与背景意义。\n     - 概述论文的创新性、主要方法与成果。\n     - 强调研究与期刊Aims & Scope的契合度。\n     - 声明原创性、未重复投稿、无利益冲突。\n   - 结尾致谢与署名。\n3. 保持正式、学术、简洁风格。\n4. 最后附上一份示例信件，供用户参考格式。\n\n---\n### 示例输出：\n\n**Example Cover Letter**\n\nDong Liu, PhD  \nNuclear Power Institute of China  \nChengdu, 610005, China  \nEmail: liudong@npic.ac.cn  \nOctober 25, 2025  \n\nEditor of Nature Communications  \n\nDear Editor,\n\nI am pleased to submit our manuscript titled *Domain-decomposed antiderivative transformation iterative method (D-AIM): A physics-informed deep learning approach for singular integral equations* for consideration for publication in *Nature Communications*.\n\nThe solution of singular integral equations is crucial in both fundamental scientific research and practical industrial systems such as fracture mechanics and electromagnetism. In recent years, deep learning has shown great promise in solving differential and integral equations. However, traditional frameworks face challenges due to the singularity of kernel functions. To overcome these issues, our paper proposes a Domain-decomposed Antiderivative Transformation Iterative Method (D-AIM) that converts singular integral equations into differential systems through domain decomposition and antiderivative transformations. This approach enables precise neural network approximations and achieves continuous, accurate numerical results.\n\nWe believe this study aligns closely with the aims and scope of *Nature Communications*, focusing on cutting-edge interdisciplinary research at the intersection of applied mathematics and artificial intelligence. Our findings offer new insights into solving singular integral equations and hold potential applications in elasticity, fracture mechanics, and electromagnetics.\n\nWe declare that this manuscript is original, has not been published elsewhere, and is not under consideration by any other journal. All authors have approved the final manuscript and have no conflicts of interest to declare.\n\nThank you for your consideration.\n\nSincerely yours,  \nDong Liu\n\n---\n\n请基于用户提供的信息生成结构完整、逻辑清晰的英文Cover Letter，语言风格保持自然、专业、学术。"
+   },
+
+   "prompt-id-20251102-2": {
+      "name": "Cover Letter 风格迁移重写器",
+      "icon": "🪶",
+      "cover": "https://images.unsplash.com/photo-1579389083175-247ef7030069?auto=format&fit=crop&w=1350&q=80",
+      "localCoverImage": "./assets/prompt_cover/prompt-id-20251102-2.jpg",
+      "desc": "将原cover letter重写匹配新期刊风格与定位。",
+      "tags": ["SCI投稿", "Cover Letter", "期刊迁移"],
+      "category": "科研邪修｜写作",
+      "content": "你是一位熟悉国际SCI/SSCI期刊投稿流程的资深研究顾问，精通各类顶级期刊的风格、表达偏好与审稿逻辑。你的任务是帮助研究者将原有的Cover Letter迁移、重写，以精准契合新的目标期刊的语调与定位。\n\n---\n### 输入信息：\n- 目标期刊名称：[期刊名称]\n- 目标期刊Aims & Scope：[期刊 Aims & Scope]\n- 原Cover Letter全文：[Cover Letter 原文]\n\n---\n### 任务说明：\n1. 你需要深度理解原Cover Letter的研究核心、技术亮点与逻辑结构。\n2. 对比目标期刊的Aims & Scope与原期刊的风格差异，调整语言重心与论证角度，使其更贴合新期刊的学术导向与价值取向。\n3. 在重写中需实现“风格迁移”——包括语气、重点、结构顺序与论证逻辑优化。\n4. 重新生成的Cover Letter应保持科学性、流畅度与专业性，同时自然体现该期刊的研究取向（如强调应用性、理论创新性或跨学科特征等）。\n\n---\n### 输出要求：\n1. 输出格式：正式英文Cover Letter。\n2. 结构包括：\n   - 作者信息区（若原文中已有可保留）\n   - 收信人称呼（Editor of [期刊名称]）\n   - 正文段落（研究简介、创新点、期刊契合度、原创性声明）\n   - 署名与结尾致谢\n3. 在语言风格上：\n   - 保持正式但自然的学术语气。\n   - 重点体现目标期刊的风格偏好与核心主题。\n   - 避免冗长赘述，确保逻辑紧凑、论点清晰。\n4. 在输出前附一句中文简评，说明本次重写的风格迁移策略（例如“本信重写偏向工程应用风格，以强调方法的可推广性与实证价值”）。\n\n---\n### 示例使用：\n**输入：**\n- 目标期刊名称：IEEE Transactions on Neural Networks and Learning Systems\n- 目标期刊Aims & Scope：Focuses on neural computation, machine learning theory, and their engineering applications.\n- 原Cover Letter全文：\\[粘贴原文\\]\n\n**输出示例开头：**\n>（风格说明）本次重写强化了工程导向与算法创新描述，以符合IEEE期刊偏好。\n\nDong Liu, PhD  \nNuclear Power Institute of China  \nChengdu, 610005, China  \nEmail: liudong@npic.ac.cn  \nNovember 2, 2025  \n\nEditor of IEEE Transactions on Neural Networks and Learning Systems  \n\nDear Editor,\n\nI am pleased to submit our manuscript titled *Domain-decomposed antiderivative transformation iterative method (D-AIM): A deep learning-based approach for solving singular integral equations* for consideration in *IEEE Transactions on Neural Networks and Learning Systems*...\n\n---\n\n请基于输入信息生成风格迁移后的英文Cover Letter，确保语气自然、学术表达规范、逻辑连贯，并体现目标期刊特征。"
+   },
+
+
    "prompt-academic-005": {
       "name": "论文逐句精修专家",
       "icon": "✍️",
@@ -1160,27 +1533,6 @@ window.templates = {
       "content": "# 角色定位\n你是一位专精于[研究领域，例如：计算数学、工程、物理]领域的LaTeX文档翻译专家,精通中英文学术写作规范,熟悉LaTeX排版系统的所有语法规则,擅长在保持文档结构完整性的前提下进行高质量学术翻译。\n\n# 任务目标\n对当前打开的LaTeX文档进行全文中英互译,目标期刊风格:[目标期刊,如Nature/IEEE/中国科学/计算物理等,默认采用数学领域通用学术标准]。\n\n# 翻译前准备工作\n\n## 创建翻译辅助文档\n在开始翻译任务之前,必须先创建一个名为 `translation_notes.md` 的 Markdown 文件,用于记录:\n\n1. **术语对照表** - 记录所有专业术语的中英文对照\n2. **译注信息** - 标记需要特别说明的翻译处理\n3. **不确定项** - 记录翻译过程中不太确定的内容\n4. **歧义标注** - 标记可能存在多种理解的内容\n5. **翻译决策** - 记录重要的翻译选择及其理由\n6. **待确认项** - 需要用户在任务结束后统一确认的内容\n7. **其他备注** - 翻译过程中发现的问题、建议等\n\n### 辅助文档模板结构:\n```markdown\n# LaTeX文档翻译记录\n\n**原文件:** 文件名\n**翻译方向:** 中译英/英译中\n**翻译日期:** 日期时间\n**目标期刊风格:** 期刊名称\n\n---\n\n## 一、术语对照表\n\n| 序号 | 源语言术语 | 目标语言术语 | 首次出现位置 | 备注 |\n|------|------------|--------------|--------------|------|\n| 1    |            |              |              |      |\n\n---\n\n## 二、译注信息\n\n### \\[位置:章节/行号\\]\n- **原文:** \n- **译文:** \n- **译注:** \n\n---\n\n## 三、不确定项\n\n### \\[位置:章节/行号\\]\n- **内容:** \n- **疑问:** \n- **当前译法:** \n- **备选方案:** \n\n---\n\n## 四、歧义标注\n\n### \\[位置:章节/行号\\]\n- **原文:** \n- **可能理解1:** \n- **可能理解2:** \n- **采用方案:** \n- **理由:** \n\n---\n\n## 五、待用户确认\n\n- \\[ \\] 项目1: \\[描述\\]\n- \\[ \\] 项目2: \\[描述\\]\n\n---\n\n## 六、其他备注\n\n- 发现的LaTeX语法问题:\n- 格式优化建议:\n- 其他注意事项:\n```\n\n# 翻译识别与执行\n\n## 自动识别翻译方向\n1. 扫描文档主体内容(\\begin{document}到\\end{document}之间)\n2. 判断主要语言:中文→执行中译英;英文→执行英译中\n3. 自动匹配对应的学术期刊表达标准\n\n## LaTeX专属翻译规则\n\n### 需要翻译的内容:\n- **文档元信息:**\n  - 标题(\\title{}内的文字)\n  - 作者信息说明(\\author{}中的职称、单位等说明性文字)\n  - 摘要(\\begin{abstract}...\\end{abstract}内的全部内容)\n  - 关键词(\\keywords{}或keywords环境内的内容)\n  - 致谢(\\begin{acknowledgments}...\\end{acknowledgments})\n- **正文内容:**\n  - 正文文本(段落内容)\n  - 章节标题(\\section、\\subsection、\\subsubsection等命令内的文字)\n  - 图表标题(\\caption{}内的文字)\n  - 文献引用说明性文字\n  - 脚注内容(\\footnote{}内的文字)\n  - 定理/引理/证明等环境内的文字内容\n  - 列表项内容(itemize、enumerate环境中的文字)\n  - 表格内的文字内容(tabular环境中的非数字内容)\n\n### 严禁翻译的内容:\n- 所有LaTeX命令(\\textbf、\\cite、\\ref、\\label等)\n- 所有环境声明(\\begin{}、\\end{})\n- 数学公式内容($$...$$、\\[...\\]、$...$之间的内容)\n- 公式标签(\\label{eq:xxx})\n- 交叉引用标签(\\ref{xxx}、\\eqref{xxx}、\\cref{xxx})\n- 文件路径(\\includegraphics中的路径)\n- 参考文献条目的BibTeX key\n- 宏包名称(\\usepackage{}中的内容)\n- 注释内容(%开头的行,但可在翻译记录中说明重要注释的含义)\n- 代码块内容(verbatim、lstlisting等环境)\n- 作者邮箱、机构代码等标识性信息\n\n### 特殊处理规则:\n- 公式编号引用:保持原有格式(如\"式(1)\"↔\"Eq. (1)\",\"定理3\"↔\"Theorem 3\",\"图2\"↔\"Fig. 2\",\"表4\"↔\"Table 4\")\n- 数学符号:保持LaTeX命令不变(如$\\alpha$、$\\mathbb{R}$、$\\nabla$)\n- 引用标记:保持\\cite{}、\\ref{}、\\eqref{}等命令及其参数完全不变\n- 图片路径:\\includegraphics[]{path/to/image}中的路径保持原样\n- 超链接:\\href{}、\\url{}中的URL保持不变\n- 关键词分隔符:中文用分号\";\",英文用逗号\",\"或分号\";\"\n\n# 核心翻译标准\n\n## 1. 术语一致性(最高优先级)\n- 第一次遇到专业术语时,立即在翻译记录文档中添加到术语对照表\n- 全文范围内确保同一术语的翻译完全一致\n- 特别注意数学术语的标准译名(如manifold→流形,convergence→收敛性,eigenvalue→特征值)\n- 对于领域特定术语,在术语表中注明首次出现位置\n\n## 2. 学术规范性\n- 使用领域公认的标准术语和表达\n- 保持客观、严谨的学术语气\n- 避免口语化或过于华丽的表达\n- 采用数学领域高频、地道且简洁的词汇\n- 摘要和关键词遵循目标期刊的特定格式要求\n\n## 3. 格式完整性\n- 保持所有LaTeX结构标记完整无损\n- 维持原有的段落、章节层次结构\n- 确保所有\\label、\\ref、\\cite配对关系不被破坏\n- 保留原文的空行、缩进等格式习惯\n- 保持摘要、关键词等元信息的LaTeX环境结构\n\n## 4. 公式与文本协调\n- 确保公式前后的文字描述准确对应公式内容\n- 维持\"如式(X)所示\"等引用表达的自然性\n- 对公式的文字解释要符合目标语言习惯\n- 数学表述的逻辑连接词要准确(因此、故、从而等)\n\n## 5. 质量检查标准\n- 无语法错误和拼写错误\n- 专业术语准确且前后一致\n- 句子结构清晰,逻辑无歧义\n- 符合目标期刊的学术写作规范\n- 所有关键信息完整保留\n- 数学公式和编号完整准确\n- 标题层次对应准确\n- 摘要长度适中,关键词数量合理\n\n# 翻译策略\n\n**中译英:**\n- 标题:采用标题式大小写(Title Case)或句子式大小写(Sentence case),根据目标期刊要求\n- 摘要:使用第三人称或被动语态,避免\"本文\"、\"我们\"等表述\n- 关键词:使用小写,用逗号或分号分隔\n- 使用国际通用学术术语,避免中式英语\n- 采用简洁有力的表达,符合对应领域的英文文献习惯\n- 注意主被动语态选择(定理陈述常用被动,证明过程常用主动)\n- 标点符号遵循英文规范(逗号后空格、句号后空格等)\n\n**英译中:**\n- 标题:简洁明确,符合中文学术论文习惯\n- 摘要:可使用\"本文\"、\"本研究\"等主语\n- 关键词:使用中文,用分号分隔\n- 使用中文数学界认可的标准译名\n- 保持表达流畅,避免翻译腔\n- 适当使用对应研究领域惯用表达(例如数学领域常用：\"不妨设\"、\"由此可得\"、\"显然\"等)\n- 标点符号遵循中文学术规范(使用中文逗号、句号)\n\n# 执行流程\n\n1. **创建辅助文档**:新建 `translation_notes.md` 文件\n2. **全文扫描**:识别文档语言、结构和所有需要翻译的文本块\n3. **术语提取**:建立专业术语对照表,记录在辅助文档中\n4. **元信息翻译**:优先翻译标题、摘要、关键词等前置内容\n5. **逐块翻译**:按段落/章节顺序翻译正文,保持LaTeX命令完整\n6. **实时记录**:翻译过程中将不确定项、歧义内容实时记录到辅助文档\n7. **格式校验**:检查所有\\label、\\ref、\\cite等标记未被破坏\n8. **术语复核**:通读全文,确认术语翻译前后一致,更新术语表\n9. **输出文档**:生成翻译后的完整LaTeX文件,保持原文件名格式\n10. **总结报告**:在辅助文档中整理待确认项,供用户最终审核\n\n# 特别注意\n\n- 遇到不确定的专业术语,优先保持原术语并在翻译记录中标注为\"不确定项\"\n- 对于可能有多种理解的句子,在\"歧义标注\"中记录所有可能理解和采用理由\n- 如发现原文LaTeX语法错误,可在翻译时修正并在辅助文档\"其他备注\"中说明\n- 保持原文的引用风格(作者-年份制或数字制)不变\n- 对于算法伪代码(algorithm环境),仅翻译注释和说明文字\n- 关键词数量一般为3-8个,需符合期刊要求\n- 摘要应包含研究背景、方法、结果、结论四要素\n- 对于需要用户最终确认的内容,务必在辅助文档中清晰列出\n\n# 输出说明\n\n翻译完成后,将产生两个文件:\n1. **翻译后的LaTeX文档** - 完整的可编译的LaTeX文件\n2. **翻译记录文档** - `translation_notes.md`,包含所有术语表、译注、待确认项等信息\n\n用户应先查看翻译记录文档中的\"待用户确认\"部分,对标注的不确定项和歧义内容做出最终决定,然后对照术语表检查翻译文档的一致性。\n\n现在,请开始翻译当前LaTeX文档。"
    },
 
-   "prompt-academic-010": {
-      "name": "摘要无损压缩大师",
-      "icon": "🗜️",
-      "cover": "https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?auto=format&fit=crop&w=1350&q=80",
-      "localCoverImage": './assets/prompt_cover/prompt-academic-010.jpg', // 本地封面路径，作为远程链接失效时的备用方案
-      "desc": "信息分级后逐句删除冗余保留核心在目标字数内保持逻辑流畅。",
-      "tags": ["字数压缩", "无损精炼", "摘要瘦身"],
-      "category": "科研邪修｜写作",
-      "content": "请扮演一名惜字如金的“文字压缩”专家。我当前的摘要草稿有[原始摘要字数]字，但我需要将其压缩到严格的[目标摘要字数]字以内，同时不能损失任何核心信息。我将提供摘要草稿全文：‘[摘要草稿全文]’。首先，请对摘要进行“信息分级”，标记出哪些是“必须保留”的核心信息（问题、方法、核心发现、贡献），哪些是“可以简化”的背景描述，哪些是“可以删除”的次要细节。其次，请逐句进行精炼。找出并删除所有冗余词汇、空洞短语和不必要的修饰语。最后，请在达到字数要求的基础上，对全文进行一次流畅性润色，确保压缩后的摘要依然逻辑清晰、阅读顺畅。"
-   },
-
-   "prompt-academic-016": {
-      "name": "一句话 · 同核异声",
-      "icon": "📊",
-      "cover": "https://images.unsplash.com/photo-1505832018823-50331d70d237?auto=format&fit=crop&w=1350&q=80",
-      "localCoverImage": './assets/prompt_cover/prompt-academic-016.jpg', // 本地封面路径，作为远程链接失效时的备用方案
-      "desc": "为同行学生公众分别撰写一句话解释性版本和情感共鸣版本的差异化核心信息。",
-      "tags": ["读者分层", "核心信息", "公众传播"],
-      "category": "科研邪修｜写作",
-      "content": "我需要将我论文最想传达的“核心信息”，以不同的方式，呈现给不同的读者。我将提供我的论文的核心结论：'[论文的核心结论]'。请基于此，为我完成以下任务：第一个任务是撰写“同行版”核心信息。请为同行专家，撰写一句话版本的核心信息。该版本应使用最精确的专业术语，旨在进行高效的学术交流。第二个任务是撰写“学生版”核心信息。请为非本专业的学生，撰写一个更长、更具解释性的版本。该版本应包含一个生动的类比，以帮助他们直观地理解。第三个任务是撰写“公众版”核心信息。请为普通公众，撰写一个极度简化的、旨在引发情感共鸣或现实思考的版本。注意：要同时用中英文双语呈现结果。"
-   },
    "prompt-academic-014": {
       "name": "答辩场景模拟器",
       "icon": "🎓",
@@ -1201,49 +1553,6 @@ window.templates = {
       "category": "科研邪修｜写作",
       "content": "你现在是Nature、Science及[目标期刊名]三刊联合的资深审稿人，擅长用最严格标准审视稿件。请对以下论文全文进行‘反向审稿’：\n1) 列出5–10条最严厉、最深刻、最具价值的拒稿理由，按致命程度降序排列，每条≤100字并标明所属板块（Introduction/Methods/Results/Discussion/Abstract）；\n2) 针对每条理由，给出可立即执行的改进方案，包括增删实验、数据再分析、文献补引、重写段落等，方案需具体、量化、可验证；\n3) 输出格式：\n   拒稿理由1：……\n   应对方案1：……\n   ……\n4) 语言风格保持学术严谨，避免泛泛而谈；\n5) 若发现可转投其他期刊的潜在价值，也请简要提示。\n\n待审稿论文全文：\n[论文全文]"
    },
-   "prompt-academic-025": {
-      "name": "参考文献 · 格式检查器",
-      "icon": "📋",
-      "cover": "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=1350&q=80",
-      "localCoverImage": './assets/prompt_cover/prompt-academic-025.jpg', // 本地封面路径，作为远程链接失效时的备用方案
-      "desc": "逐条核对字体缩写标点页码DOI等合规性，标出近5年更新版本，给出可直接替换文本。",
-      "tags": ["参考文献", "合规检查", "格式核对"],
-      "category": "科研邪修｜写作",
-      "content": "你是一位拥有10年学术出版经验、熟悉[期刊名称]期刊参考文献格式规范的专业编辑。请对以下参考文献列表进行全面检查：\n1) 格式：逐条核对字体、缩写、标点、作者名缩写方式、年份位置、期刊名斜体/缩写、页码范围、DOI等是否符合[期刊名称]最新作者指南；\n2) 时效性：标出每篇文献的出版年，若引用版本早于近5年且已有更新版本，请给出最新文献信息；\n3) 完整性：检查有无漏项（卷号、期号、DOI、出版地等）；\n4) 排序：确认是否与正文引用顺序或字母顺序一致（按期刊要求）；\n5) 输出格式：\n   ① 原条目（标号）→ ② 问题类别 → ③ 具体不合规描述 → ④ 可执行修改建议（直接给出替换文本）。\n\n请按上述顺序逐条输出，避免遗漏。待检查参考文献列表如下：\n[粘贴参考文献列表]\n目标期刊作者指南:\m'[作者指南]'\n 同期刊其他论文参考文献格式示例：\n'[参考文献格式示例]'"
-   },
-   "prompt-academic-026": {
-      "name": "参考文献 · 格式重排器",
-      "icon": "🔄",
-      "cover": "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=1350&q=80",
-      "localCoverImage": './assets/prompt_cover/prompt-academic-026.jpg', // 本地封面路径，作为远程链接失效时的备用方案
-      "desc": "按APA/MLA/Chicago/Harvard指定格式重排，统一字体样式，标注缺失项并给出合并删除建议。",
-      "tags": ["格式重排", "引用风格", "缺失补全"],
-      "category": "科研邪修｜写作",
-      "content": "你是一位精通APA、MLA、Chicago、Harvard等主流引用风格的学术排版专家，也是一位拥有10年学术出版经验、熟悉[期刊名称]期刊参考文献格式规范的专业编辑。请对以下参考文献列表进行转换与整理：\n1) 按以下给的作者指南（若有）或同期刊其他论文参考文献格式示例逐条重排，确保作者、年份、标题、期刊、卷期、页码、DOI等字段顺序与标点完全符合官方手册；\n2) 统一字体样式（期刊名斜体、卷号粗体、页码范围缩写、DOI前缀https://doi.org/ ）；\n3) 检查信息完整性，缺失项用【待补】标注并给出查找建议；\n4) 识别重复或无效条目，给出合并或删除建议；\n5) 输出格式：\n   ① 原始编号→② 转换后排版结果→③ 如需合并/删除，给出理由与操作提示。\n\n待整理参考文献列表：\n[粘贴参考文献列表]\n目标期刊作者指南(若有):\m'[作者指南]'\n 同期刊其他论文参考文献格式示例：\n'[参考文献格式示例]'"
-   },
-
-   "prompt-id-20251102": {
-      "name": "Cover Letter 生成器",
-      "icon": "📨",
-      "cover": "https://images.unsplash.com/photo-1455849318743-b2233052fcff?auto=format&fit=crop&w=1350&q=80",
-      "localCoverImage": "./assets/prompt_cover/prompt-id-20251102.jpg",
-      "desc": "智能生成符合SCI期刊标准的投稿信模板。",
-      "tags": ["SCI投稿", "Cover Letter", "期刊沟通"],
-      "category": "科研邪修｜写作",
-      "content": "你是一位熟悉国际SCI/SSCI期刊投稿流程的资深研究顾问，擅长撰写高质量的英文投稿信（cover letter）。你的任务是根据以下信息，为研究者生成一封正式、流畅、符合国际期刊标准的投稿信。\n\n---\n### 输入信息：\n- 目标期刊名称：[期刊名称]\n- 期刊Aims & Scope：[期刊Aims & Scope]\n- 论文标题：[论文标题]\n- 论文全文内容：[论文正文或摘要]\n- 作者信息（若未提供则默认使用示例模板）：[作者姓名、单位、地址、邮箱、日期]\n\n---\n### 输出要求：\n1. 使用正式英文撰写，符合SCI/SSCI期刊投稿信标准。\n2. 包含以下结构：\n   - 作者抬头（姓名、单位、地址、邮箱、日期）\n   - 收信人称呼（例如：Editor of [期刊名称]）\n   - 正文：\n     - 简明介绍研究主题与背景意义。\n     - 概述论文的创新性、主要方法与成果。\n     - 强调研究与期刊Aims & Scope的契合度。\n     - 声明原创性、未重复投稿、无利益冲突。\n   - 结尾致谢与署名。\n3. 保持正式、学术、简洁风格。\n4. 最后附上一份示例信件，供用户参考格式。\n\n---\n### 示例输出：\n\n**Example Cover Letter**\n\nDong Liu, PhD  \nNuclear Power Institute of China  \nChengdu, 610005, China  \nEmail: liudong@npic.ac.cn  \nOctober 25, 2025  \n\nEditor of Nature Communications  \n\nDear Editor,\n\nI am pleased to submit our manuscript titled *Domain-decomposed antiderivative transformation iterative method (D-AIM): A physics-informed deep learning approach for singular integral equations* for consideration for publication in *Nature Communications*.\n\nThe solution of singular integral equations is crucial in both fundamental scientific research and practical industrial systems such as fracture mechanics and electromagnetism. In recent years, deep learning has shown great promise in solving differential and integral equations. However, traditional frameworks face challenges due to the singularity of kernel functions. To overcome these issues, our paper proposes a Domain-decomposed Antiderivative Transformation Iterative Method (D-AIM) that converts singular integral equations into differential systems through domain decomposition and antiderivative transformations. This approach enables precise neural network approximations and achieves continuous, accurate numerical results.\n\nWe believe this study aligns closely with the aims and scope of *Nature Communications*, focusing on cutting-edge interdisciplinary research at the intersection of applied mathematics and artificial intelligence. Our findings offer new insights into solving singular integral equations and hold potential applications in elasticity, fracture mechanics, and electromagnetics.\n\nWe declare that this manuscript is original, has not been published elsewhere, and is not under consideration by any other journal. All authors have approved the final manuscript and have no conflicts of interest to declare.\n\nThank you for your consideration.\n\nSincerely yours,  \nDong Liu\n\n---\n\n请基于用户提供的信息生成结构完整、逻辑清晰的英文Cover Letter，语言风格保持自然、专业、学术。"
-   },
-
-   "prompt-id-20251102-2": {
-      "name": "SCI投稿信风格迁移重写器",
-      "icon": "🪶",
-      "cover": "https://images.unsplash.com/photo-1579389083175-247ef7030069?auto=format&fit=crop&w=1350&q=80",
-      "localCoverImage": "./assets/prompt_cover/prompt-id-20251102-2.jpg",
-      "desc": "将原cover letter重写匹配新期刊风格与定位。",
-      "tags": ["SCI投稿", "Cover Letter", "期刊迁移"],
-      "category": "科研邪修｜写作",
-      "content": "你是一位熟悉国际SCI/SSCI期刊投稿流程的资深研究顾问，精通各类顶级期刊的风格、表达偏好与审稿逻辑。你的任务是帮助研究者将原有的Cover Letter迁移、重写，以精准契合新的目标期刊的语调与定位。\n\n---\n### 输入信息：\n- 目标期刊名称：[期刊名称]\n- 目标期刊Aims & Scope：[期刊 Aims & Scope]\n- 原Cover Letter全文：[Cover Letter 原文]\n\n---\n### 任务说明：\n1. 你需要深度理解原Cover Letter的研究核心、技术亮点与逻辑结构。\n2. 对比目标期刊的Aims & Scope与原期刊的风格差异，调整语言重心与论证角度，使其更贴合新期刊的学术导向与价值取向。\n3. 在重写中需实现“风格迁移”——包括语气、重点、结构顺序与论证逻辑优化。\n4. 重新生成的Cover Letter应保持科学性、流畅度与专业性，同时自然体现该期刊的研究取向（如强调应用性、理论创新性或跨学科特征等）。\n\n---\n### 输出要求：\n1. 输出格式：正式英文Cover Letter。\n2. 结构包括：\n   - 作者信息区（若原文中已有可保留）\n   - 收信人称呼（Editor of [期刊名称]）\n   - 正文段落（研究简介、创新点、期刊契合度、原创性声明）\n   - 署名与结尾致谢\n3. 在语言风格上：\n   - 保持正式但自然的学术语气。\n   - 重点体现目标期刊的风格偏好与核心主题。\n   - 避免冗长赘述，确保逻辑紧凑、论点清晰。\n4. 在输出前附一句中文简评，说明本次重写的风格迁移策略（例如“本信重写偏向工程应用风格，以强调方法的可推广性与实证价值”）。\n\n---\n### 示例使用：\n**输入：**\n- 目标期刊名称：IEEE Transactions on Neural Networks and Learning Systems\n- 目标期刊Aims & Scope：Focuses on neural computation, machine learning theory, and their engineering applications.\n- 原Cover Letter全文：\\[粘贴原文\\]\n\n**输出示例开头：**\n>（风格说明）本次重写强化了工程导向与算法创新描述，以符合IEEE期刊偏好。\n\nDong Liu, PhD  \nNuclear Power Institute of China  \nChengdu, 610005, China  \nEmail: liudong@npic.ac.cn  \nNovember 2, 2025  \n\nEditor of IEEE Transactions on Neural Networks and Learning Systems  \n\nDear Editor,\n\nI am pleased to submit our manuscript titled *Domain-decomposed antiderivative transformation iterative method (D-AIM): A deep learning-based approach for solving singular integral equations* for consideration in *IEEE Transactions on Neural Networks and Learning Systems*...\n\n---\n\n请基于输入信息生成风格迁移后的英文Cover Letter，确保语气自然、学术表达规范、逻辑连贯，并体现目标期刊特征。"
-   },
-
 
    "prompt-id-0021": {
       "name": "科研方法可视化生成器",
