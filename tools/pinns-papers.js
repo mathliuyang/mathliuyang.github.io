@@ -1763,7 +1763,178 @@ let pinnsPapers = [
             "takeaways": "① 物理引导DL不是单一方法，而是包含残差模型、可训练算子、等变学习和解耦表示的四层技术生态② 领域正从加速模拟走向新物理发现，应用边界不断扩展③ 泛化性、稳定性和可解释性是当前核心挑战④ 几何深度学习、因果推理和自动化发现是未来重点方向",
             "discussion": "在您的研究领域中，物理知识与数据驱动方法应该如何平衡？面对高维混沌系统，哪种物理引导策略最有可能突破长时预测的瓶颈？"
         }
+    },
+
+    {
+        "meta": {
+            "titleCN": "AI for PDEs在固体力学领域的研究进展",
+            "titleEN": "AI for PDEs in solid mechanics: A review",
+            "author": "王一铮，庄晓莹，Timon Rabczcuk，刘应华",
+            "unit": "清华大学航天航空学院",
+            "venue": "力学进展",
+            "date": "2024年9月",
+            "reviewScope": "2017-2024年，涵盖PINNs、算子学习、物理神经算子等主流方法，在固体力学正反问题中的系统应用",
+            "tags": "综述,AI4Science,计算力学,固体力学,物理信息神经网络",
+            "links": {
+                "paper": "https://doi.org/10.6052/1000-0992-24-016",
+                "download": "https://lxjz.cstam.org.cn/cn/article/doi/10.6052/1000-0992-24111",
+                "cover": "https://lxjz.cstam.org.cn/fileLXJZ/journal/img/cover/b7c68757-756d-40e2-b6da-f4229445ea21.jpg"
+            }
+        },
+
+        "opening": {
+            "hook": "当深度学习遇上偏微分方程，一场科学计算的革命正在悄然发生。传统的有限元方法统治计算力学半个世纪后，AI4PDEs正以数万倍的速度优势向我们展示着科学计算的未来图景。这不仅仅是算法的革新，更是科学研究范式的根本转变。",
+            "preview": "这篇综述将带你走进AI求解偏微分方程的世界，从物理信息神经网络到算子学习，从线弹性力学到断裂模拟，全面展示人工智能如何重塑固体力学的计算方法。"
+        },
+
+        "mainContent": [
+            {
+                "chapter": "AI遇上PDEs：科学计算的新范式",
+                "intro": "在深度学习无所不在的今天，AI与传统科学的结合正在催生科研范式的变革。其中，利用人工智能求解偏微分方程成为计算力学研究的新焦点。",
+
+                "sections": [
+                    {
+                        "subtitle": "从数据驱动到物理融合",
+                        "content": "早期的AI4Science主要依赖纯数据驱动方法，利用神经网络构建替代模型。虽然这种方法在计算效率和精度上表现不错，但它完全依赖于已有数据，面临着数据需求大、可解释性差等挑战。真正的突破发生在物理规律被引入神经网络的那一刻——这就是AI4PDEs的核心思想。",
+                        "keyPoints": [
+                            "纯数据驱动：依赖高质量数据，可解释性差",
+                            "物理信息引入：降低数据需求，提高可解释性",
+                            "核心优势：计算效率提升数万倍"
+                        ]
+                    },
+                    {
+                        "subtitle": "AI4PDEs的三驾马车",
+                        "content": "经过几年的发展，AI4PDEs形成了三个主要方向：基于物理信息神经网络、算子学习，以及两者的结合——基于物理神经算子。PINNs将物理方程编码为损失函数，算子学习专注于学习PDEs族的映射关系，而PINO则巧妙地将两者优势结合，既保持了物理一致性，又获得了计算效率。"
+                    }
+                ],
+
+                "transition": "理解了AI4PDEs的基本理念后，让我们深入探索这些方法的具体实现。"
+            },
+            {
+                "chapter": "方法演进：从PINNs到神经算子",
+                "intro": "AI4PDEs的方法论经历了从简单到复杂、从单一到融合的演进过程，每一种方法都在解决特定问题上展现出独特优势。",
+
+                "sections": [
+                    {
+                        "subtitle": "物理信息神经网络：将物理定律编码为损失函数",
+                        "content": "PINNs的故事始于2019年Raissi等人的开创性工作，但其思想渊源可追溯到上世纪90年代。PINNs的核心很简单：用神经网络代替传统数值方法中的近似函数，将物理方程作为约束条件融入损失函数中。这种方法分为强形式和能量形式两种主流路线。强形式直接求解偏微分方程，通用性强但超参数多；能量形式基于变分原理，超参数少但适用性受限。",
+                        "keyPoints": [
+                            "强形式：直接求解PDE，通用性强",
+                            "能量形式：基于变分原理，效率更高",
+                            "DEM：PINNs在计算力学中的首个重要总结"
+                        ]
+                    },
+                    {
+                        "subtitle": "算子学习：学习PDEs族的隐式映射",
+                        "content": "如果说PINNs是针对单个问题的求解器，那么算子学习就是针对一类问题的通用求解器。DeepONet和FNO是算子学习的两个代表性算法。DeepONet基于1995年的算子近似理论，通过分支网络和主干网络学习输入函数到输出函数的映射；FNO则利用傅里叶变换在频域中学习算子，具备离散不变性的优势。",
+                        "keyPoints": [
+                            "DeepONet：基于分支-主干网络结构",
+                            "FNO：利用傅里叶变换，离散不变",
+                            "核心优势：一次训练，多场景应用"
+                        ]
+                    },
+                    {
+                        "subtitle": "物理神经算子：融合数据与物理的最佳平衡",
+                        "content": "PINO代表了AI4PDEs的最新发展方向，它巧妙地将算子学习的速度优势与物理方程的精度保证结合起来。其核心思想很简单：先用大数据训练算子学习得到一个不错的初始解，然后依靠物理方程进行微调。这种'预训练+微调'的模式，既避免了纯数据驱动的黑箱问题，又克服了纯物理方法计算效率低的缺点。"
+                    }
+                ],
+
+                "transition": "方法虽多，但真正检验其价值的是在实际问题中的应用表现。"
+            },
+            {
+                "chapter": "固体力学正问题：从线弹性到断裂",
+                "intro": "AI4PDEs在固体力学正问题上的应用覆盖了从简单的线弹性到复杂的断裂力学等多个领域，展现出处理复杂非线性问题的潜力。",
+
+                "sections": [
+                    {
+                        "subtitle": "线弹性力学：传统领域的革新",
+                        "content": "在线弹性力学中，AI4PDEs不仅能够求解经典的平衡问题，还在板壳力学、动力学等复杂场景中展现出优势。Rao等人利用PINNs强形式成功求解了线弹性动力学问题，而LiW等人则系统比较了强形式和能量形式在Kirchhoff板壳问题中的表现。更有趣的是，Sun等人将PINNs与边界元方法结合，开辟了新的求解路径。",
+                        "keyPoints": [
+                            "动力学问题：PINNs强形式的成功应用",
+                            "板壳力学：强形式与能量形式的对比验证",
+                            "边界元结合：新的数值方法融合"
+                        ]
+                    },
+                    {
+                        "subtitle": "非线性问题的突破",
+                        "content": "在弹塑性和超弹性这类非线性问题中，AI4PDEs展现出独特优势。Abueidda等人利用PINNs强形式成功模拟了包含J2流动理论的弹塑性问题，其求解步骤与传统有限元类似，但近似函数从形函数变成了神经网络。在超弹性问题中，Nguyen-Thanh等人首次将PINNs能量原理应用到大变形问题，为几何非线性问题提供了新的解决方案。"
+                    },
+                    {
+                        "subtitle": "断裂力学：多场耦合的挑战",
+                        "content": "相场法模拟裂纹扩展是断裂力学中的重要方法，Goswami等人最早将PINNs能量法应用于相场断裂模拟。由于裂纹扩展的不可逆性，他们采用了迁移学习的思想来加速模拟过程。随后，他们又将算子学习与PINNs能量形式结合，进一步提高了计算效率和精度。"
+                    }
+                ],
+
+                "transition": "正问题的成功只是故事的一半，反问题中的表现同样精彩。"
+            },
+            {
+                "chapter": "固体力学反问题：从参数识别到拓扑优化",
+                "intro": "如果说正问题考验的是计算方法，那么反问题考验的则是方法的灵活性和适应性。AI4PDEs在反问题中展现出独特的编程简单性和框架通用性。",
+
+                "sections": [
+                    {
+                        "subtitle": "材料参数识别",
+                        "content": "Haghighat等人最早系统地将PINNs应用于固体力学反问题，成功识别了弹性问题和弹塑性问题中的材料参数。在弹性问题中，他们通过位移场和应力场数据反推拉梅常数；在塑性问题中，他们甚至将J2流动理论的KKT条件融入损失函数。对于非均匀材料，Chen等人提出了识别弹性模量场的新方法，建立了坐标到弹性模量的神经网络映射。",
+                        "keyPoints": [
+                            "均匀材料：识别弹性模量、泊松比",
+                            "弹塑性材料：包含屈服应力识别",
+                            "非均匀材料：建立弹性模量场映射"
+                        ]
+                    },
+                    {
+                        "subtitle": "本构方程发现",
+                        "content": "本构方程识别一直是固体力学的核心难题。Li等人提出用神经网络直接代替本构方程，通过试验数据学习应力和应变的关系。这种方法分为参数模型和非参数模型两种路线：参数模型基于已知的本构形式拟合参数，非参数模型完全由数据驱动发现本构关系。",
+                        "keyPoints": [
+                            "神经网络本构：应变到应力的直接映射",
+                            "参数模型：基于物理先验",
+                            "非参数模型：完全数据驱动"
+                        ]
+                    },
+                    {
+                        "subtitle": "拓扑优化与缺陷识别",
+                        "content": "在拓扑优化这个经典反问题中，AI4PDEs提供了新的求解思路。He等人将DEM方法引入拓扑优化，用神经网络优化取代传统的有限元计算。在缺陷识别方面，Zhang等人利用PINNs通过边界位移数据反推内部缺陷的位置和形状，甚至能够同时识别缺陷的材料参数。"
+                    }
+                ],
+
+                "transition": "应用前景广阔，但理论基础同样需要夯实。"
+            },
+            {
+                "chapter": "理论基石：从误差分析到收敛证明",
+                "intro": "任何一个成熟的数值方法都需要坚实的理论基础支撑，AI4PDEs也不例外。近年来，这个领域的理论研究取得了显著进展。",
+
+                "sections": [
+                    {
+                        "content": "PINNs的误差主要来自三个方面：近似误差、优化误差和泛化误差。近似误差源于神经网络解空间与真实解空间的差异；优化误差来自神经网络高度非凸性导致的局部最优问题；泛化误差则衡量方法在新问题上的表现。与有限元方法相比，PINNs拥有更大的近似函数空间，但也面临着优化困难等新挑战。",
+                        "keyPoints": [
+                            "近似误差：神经网络结构决定",
+                            "优化误差：非凸性导致",
+                            "泛化误差：新问题上的表现"
+                        ]
+                    },
+                    {
+                        "subtitle": "权重选取与收敛性证明",
+                        "content": "损失函数权重的选取对PINNs的性能至关重要。Wang等人提出了基于梯度统计的自适应权重方法，Liu等人则利用对抗训练的思想优化权重分配。在收敛性方面，多个研究团队从数学上证明了神经网络近似任意连续函数和连续算子的能力，为AI4PDEs提供了坚实的理论保障。"
+                    }
+                ],
+
+                "transition": "理论基础日益坚实，应用边界不断拓展，这个领域的未来充满想象空间。"
+            }
+        ],
+
+        "conclusion": {
+            "synthesis": "AI4PDEs代表了一种全新的科学模拟范式，它通过融合数据与物理方程，在保持物理一致性的同时大幅提升计算效率。从PINNs到算子学习，再到物理神经算子，这个领域的方法不断演进，应用范围持续扩展。虽然目前在精度上与传统方法仍有差距，但其在非线性问题、反问题等方面的独特优势已充分显现。",
+            "insights": [
+                "AI4PDEs不是要取代传统数值方法，而是提供了一种互补的新范式",
+                "物理方程与数据的融合是提高可解释性和降低数据需求的关键",
+                "算子学习有望成为计算力学的基础模型，实现'一次训练、多次使用'",
+                "自学习和越算越快的特性让AI4PDEs具有持续进化的能力",
+                "跨学科合作是推动这个领域发展的关键动力"
+            ],
+            "outlook": "未来，AI4PDEs将在非线性问题、复杂现象模拟、本构方程发现等领域发挥更大作用。固体力学大模型的出现将成为可能，它将集成算子学习的速度优势和物理方程的精度保证，形成新一代的计算力学框架。同时，AI for X和X for AI的双向赋能将继续推动这个领域的深度发展。",
+            "engagement": "当AI能够自主发现物理规律时，科学家角色将如何演变？传统数值方法与AI4PDEs最终会走向融合还是分化？"
+        }
     }
+
 
 ];
 
@@ -1963,12 +2134,27 @@ function createPaperCard(paper, index) {
         `<span class="tag ${tag.includes('PINN') ? 'pinn' : 'highlight'}">${tag}</span>`
     ).join('');
 
-    // 创建摘要信息
-    const summary = paper.closing && paper.closing.summary ? `
-        <div class="paper-summary">
-            <p class="summary-text">${processMarkdown(paper.closing.summary)}</p>
-        </div>
-    ` : '';
+    // 创建摘要信息 - 根据论文格式选择显示内容
+    let summary = '';
+    
+    // 检查是否为新格式的综述论文（有mainContent字段）
+    const isNewFormat = paper.mainContent && Array.isArray(paper.mainContent);
+    
+    if (isNewFormat && paper.opening && paper.opening.preview) {
+        // 新格式论文显示全文预览
+        summary = `
+            <div class="paper-summary">
+                <p class="summary-text">${processMarkdown(paper.opening.preview)}</p>
+            </div>
+        `;
+    } else if (paper.closing && paper.closing.summary) {
+        // 旧格式论文显示一句话总结
+        summary = `
+            <div class="paper-summary">
+                <p class="summary-text">${processMarkdown(paper.closing.summary)}</p>
+            </div>
+        `;
+    }
 
     // 提取年份用于显示
     const year = paper.meta.date.match(/\d{4}/) ? paper.meta.date.match(/\d{4}/)[0] : '';
@@ -2090,6 +2276,14 @@ function openModal(paper) {
 }
 
 function createReviewModalContent(paper) {
+    // 检查是否为新格式的综述论文（有mainContent字段）
+    const isNewFormat = paper.mainContent && Array.isArray(paper.mainContent);
+    
+    if (isNewFormat) {
+        return createNewFormatReviewModalContent(paper);
+    }
+    
+    // 原有代码保持不变，处理旧格式
     const content = paper.content;
     const future = paper.future;
     const closing = paper.closing;
@@ -2271,6 +2465,228 @@ function createReviewModalContent(paper) {
                 <p>${processMarkdown(closing?.discussion || '未提供')}</p>
             </div>
         </div>
+
+        <div class="info-section">
+            <h3>论文链接</h3>
+            <div class="paper-links">
+                <a href="${paper.meta.links.paper}" class="paper-link" target="_blank">
+                    <span>📄</span> 查看论文详情
+                </a>
+                <a href="${paper.meta.links.download}" class="paper-link" target="_blank">
+                    <span>⬇️</span> 下载PDF全文
+                </a>
+            </div>
+        </div>
+    `;
+}
+
+// 处理新格式综述论文的模态框内容
+function createNewFormatReviewModalContent(paper) {
+    // 创建标题选项内容 - 新格式综述论文使用panorama、insight、guide
+    const titleOptionsContent = paper.titles ? `
+        <div class="info-section">
+            <h3>标题创意</h3>
+            <div class="title-options-modal">
+                <div class="title-option-modal panorama">
+                    <div class="title-option-header">
+                        <span class="title-option-icon">🌍</span>
+                        <span class="title-option-type">全景式</span>
+                    </div>
+                    <p class="title-option-text">${processMarkdown(paper.titles.panorama)}</p>
+                </div>
+                <div class="title-option-modal insight">
+                    <div class="title-option-header">
+                        <span class="title-option-icon">💡</span>
+                        <span class="title-option-type">洞察式</span>
+                    </div>
+                    <p class="title-option-text">${processMarkdown(paper.titles.insight)}</p>
+                </div>
+                <div class="title-option-modal guide">
+                    <div class="title-option-header">
+                        <span class="title-option-icon">🗺️</span>
+                        <span class="title-option-type">指南式</span>
+                    </div>
+                    <p class="title-option-text">${processMarkdown(paper.titles.guide)}</p>
+                </div>
+            </div>
+        </div>
+    ` : '';
+
+    // 创建开篇引入内容
+    const openingContent = paper.opening ? `
+        <div class="info-section">
+            <h3>开篇引入</h3>
+            <div class="content-section">
+                <h4>开场钩子</h4>
+                <p>${processMarkdown(paper.opening.hook || '未提供')}</p>
+            </div>
+            <div class="content-section">
+                <h4>全文预览</h4>
+                <p>${processMarkdown(paper.opening.preview || '未提供')}</p>
+            </div>
+        </div>
+    ` : '';
+
+    // 创建综述范围内容（如果有）
+    const reviewScopeContent = paper.meta.reviewScope ? `
+        <div class="info-section">
+            <h3>综述范围</h3>
+            <div class="content-section">
+                <p>${processMarkdown(paper.meta.reviewScope)}</p>
+            </div>
+        </div>
+    ` : '';
+
+    // 创建主体内容
+    let mainContentHTML = '';
+    if (paper.mainContent && Array.isArray(paper.mainContent)) {
+        mainContentHTML = paper.mainContent.map((chapter, index) => {
+            // 创建章节内容
+            let chapterHTML = `
+                <div class="content-section">
+                    <h4>${chapter.chapter || `第${index + 1}章`}</h4>
+            `;
+            
+            // 添加章节引入（如果有）
+            if (chapter.intro) {
+                chapterHTML += `
+                    <div class="chapter-intro">
+                        <p>${processMarkdown(chapter.intro)}</p>
+                    </div>
+                `;
+            }
+            
+            // 添加子章节（如果有）
+            if (chapter.sections && Array.isArray(chapter.sections)) {
+                chapter.sections.forEach(section => {
+                    chapterHTML += '<div class="sub-section">';
+                    
+                    // 添加子章节标题（如果有）
+                    if (section.subtitle) {
+                        chapterHTML += `<h5>${section.subtitle}</h5>`;
+                    }
+                    
+                    // 添加子章节内容
+                    if (section.content) {
+                        chapterHTML += `<p>${processMarkdown(section.content)}</p>`;
+                    }
+                    
+                    // 添加核心要点（如果有）
+                    if (section.keyPoints && Array.isArray(section.keyPoints)) {
+                        chapterHTML += '<ul class="key-points">';
+                        section.keyPoints.forEach(point => {
+                            chapterHTML += `<li>${processMarkdown(point)}</li>`;
+                        });
+                        chapterHTML += '</ul>';
+                    }
+                    
+                    chapterHTML += '</div>';
+                });
+            }
+            
+            // 添加过渡语（如果有）
+            if (chapter.transition) {
+                chapterHTML += `
+                    <div class="chapter-transition">
+                        <p><em>${processMarkdown(chapter.transition)}</em></p>
+                    </div>
+                `;
+            }
+            
+            chapterHTML += '</div>';
+            return chapterHTML;
+        }).join('');
+    }
+
+    // 创建结论内容
+    let conclusionHTML = '';
+    if (paper.conclusion) {
+        conclusionHTML = `
+            <div class="info-section">
+                <h3>收尾总结</h3>
+                <div class="content-section">
+                    <h4>综合总结</h4>
+                    <p>${processMarkdown(paper.conclusion.synthesis || '未提供')}</p>
+                </div>
+        `;
+        
+        // 添加关键洞察（如果有）
+        if (paper.conclusion.insights && Array.isArray(paper.conclusion.insights)) {
+            conclusionHTML += `
+                <div class="content-section">
+                    <h4>关键洞察</h4>
+                    <ul class="insights-list">
+            `;
+            paper.conclusion.insights.forEach(insight => {
+                conclusionHTML += `<li>${processMarkdown(insight)}</li>`;
+            });
+            conclusionHTML += `
+                    </ul>
+                </div>
+            `;
+        }
+        
+        // 添加未来展望（如果有）
+        if (paper.conclusion.outlook) {
+            conclusionHTML += `
+                <div class="content-section">
+                    <h4>未来展望</h4>
+                    <p>${processMarkdown(paper.conclusion.outlook)}</p>
+                </div>
+            `;
+        }
+        
+        // 添加互动引导（如果有）
+        if (paper.conclusion.engagement) {
+            conclusionHTML += `
+                <div class="content-section">
+                    <h4>互动引导</h4>
+                    <p>${processMarkdown(paper.conclusion.engagement)}</p>
+                </div>
+            `;
+        }
+        
+        conclusionHTML += '</div>';
+    }
+
+    return `
+        ${titleOptionsContent}
+        ${openingContent}
+
+        <div class="info-section">
+            <h3>基本信息</h3>
+            <div class="info-grid">
+                <div class="info-item">
+                    <strong>作者</strong>
+                    <span>${paper.meta.author}</span>
+                </div>
+                <div class="info-item">
+                    <strong>单位</strong>
+                    <span>${paper.meta.unit}</span>
+                </div>
+                <div class="info-item">
+                    <strong>期刊</strong>
+                    <span>${paper.meta.venue}</span>
+                </div>
+                <div class="info-item">
+                    <strong>发表时间</strong>
+                    <span>${paper.meta.date}</span>
+                </div>
+                <div class="info-item">
+                    <strong>论文类型</strong>
+                    <span>综述论文</span>
+                </div>
+            </div>
+        </div>
+
+        ${reviewScopeContent}
+
+        <div class="info-section">
+            <h3>主体内容</h3>
+            ${mainContentHTML}
+        </div>
+
+        ${conclusionHTML}
 
         <div class="info-section">
             <h3>论文链接</h3>
