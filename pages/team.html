@@ -1463,6 +1463,19 @@
                             <span class="detail-label">ORCID：</span>
                             <a id="modal-orcid" class="detail-value" target="_blank"></a>
                         </div>
+                        <div class="detail-item">
+                            <div class="detail-label-with-toggle">
+                                <span class="detail-label">地址：</span>
+                                <button id="address-lang-toggle" class="lang-toggle-btn">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M12 2L2 7L12 12L22 7L12 2Z"></path>
+                                        <path d="M2 17L12 22L22 17"></path>
+                                        <path d="M2 12L12 17L22 12"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                            <div id="modal-address" class="detail-value"></div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -2753,6 +2766,31 @@
                 }
             };
 
+            // 设置地址信息和中英文切换
+            const addressElement = document.getElementById('modal-address');
+            const addressLangToggleBtn = document.getElementById('address-lang-toggle');
+
+            // 存储中英文地址信息
+            addressElement.dataset.cn = member.address || '未提供';
+            addressElement.dataset.en = member.addressEn || '未提供';
+
+            // 默认显示中文
+            addressElement.textContent = addressElement.dataset.cn;
+            addressLangToggleBtn.classList.remove('active');
+
+            // 添加地址中英文切换事件
+            addressLangToggleBtn.onclick = function () {
+                if (addressElement.textContent === addressElement.dataset.cn) {
+                    // 切换到英文
+                    addressElement.textContent = addressElement.dataset.en;
+                    addressLangToggleBtn.classList.add('active');
+                } else {
+                    // 切换到中文
+                    addressElement.textContent = addressElement.dataset.cn;
+                    addressLangToggleBtn.classList.remove('active');
+                }
+            };
+
             // 显示模态框
             modal.classList.add('show');
         }
@@ -2772,6 +2810,8 @@
 研究方向: ${member.researchFields || '未提供'}
 单位: ${member.institution || '未提供'}
 单位(En): ${member.institutionEn || '未提供'}
+地址: ${member.address || '未提供'}
+地址(En): ${member.addressEn || '未提供'}
 邮箱: ${emails}
 电话: ${phones}
 ORCID: ${member.orcid || '未提供'}`;
