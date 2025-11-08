@@ -319,7 +319,18 @@
         imagePath: '../assets/cover/Science/002/002.png',
         category: 'Science',
         colors: []
+      },
+      {
+        id: 'Science-003',
+        title: '《Science》封面故事：海洋保护区的双刃剑',
+        subtitle: '保护生态需法规与执行并重',
+        description: '加拉帕戈斯群岛湛蓝海域中，海狮追逐沙丁鱼的景象象征着生态平衡的力量。海洋保护区（MPA）被寄予厚望，用以维持鱼类种群与健康生态系统。然而，本期《科学》两篇研究揭示，若缺乏有效的监管与执法，再完善的保护区制度也难以抵御非法捕捞的威胁。科学家强调，只有当制度化的限制被严格执行，海洋保护区才能真正成为生态修复与物种保育的屏障。',
+        date: '2025年7月24日刊',
+        imagePath: '../assets/cover/Science/003/003.png',
+        category: 'Science',
+        colors: []
       }
+
 
 
     ],
