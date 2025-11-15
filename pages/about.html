@@ -991,7 +991,7 @@
             </div>
 
             <div class="media-coverage">
-                <h3>官媒报道（仅用于个人存档）</h3>
+                <h3>成长记录</h3>
                 <div class="media-list">
                     <a href="https://mp.weixin.qq.com/s/c7ySxLEgMUh6L6eJNh35Gg" class="media-item" target="_blank">
                         <div class="media-image">
@@ -1667,21 +1667,21 @@
             let avatarClickCount = 0;
             let avatarClickTimer = null;
             const avatarImg = document.getElementById('avatarImg');
-            
+
             if (avatarImg) {
-                avatarImg.addEventListener('click', function() {
+                avatarImg.addEventListener('click', function () {
                     avatarClickCount++;
-                    
+
                     // 清除之前的定时器
                     if (avatarClickTimer) {
                         clearTimeout(avatarClickTimer);
                     }
-                    
+
                     // 设置新的定时器，2秒后重置计数
                     avatarClickTimer = setTimeout(() => {
                         avatarClickCount = 0;
                     }, 2000);
-                    
+
                     // 如果点击次数达到5次，跳转到team.html
                     if (avatarClickCount >= 5) {
                         window.location.href = 'team.html';
