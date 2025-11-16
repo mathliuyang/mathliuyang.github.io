@@ -443,7 +443,79 @@
         imagePath: '../assets/cover/Cell/004/004.png',
         category: 'Cell',
         colors: []
+      },
+
+      {
+        id: 'Cell-005',
+        title: '《Cell》50周年：代谢全景拼图',
+        subtitle: '三刊连动勾勒多尺度代谢研究版图',
+        description: '为庆祝《Cell》创刊50周年，本期将目光集中于代谢研究领域的最新进展。本期《Cell》与《Cell Metabolism》及《Trends in Endocrinology & Metabolism》三本期刊的封面并排呈现时连成一幅整体画面，象征跨刊物的代谢主题呼应与交织。封面呼应多篇“Leading Edge”文章，涵盖心代谢健康、组织与个体间代谢异质性、肿瘤代谢、营养与膳食干预、糖尿病及肥胖等关键议题，体现从基础机制到临床挑战的整体视角。封面艺术由Sonhita Chakraborty创作。',
+        date: '2024年7月25日刊',
+        imagePath: '../assets/cover/Cell/005/005.png',
+        category: 'Cell',
+        colors: []
+      },
+
+      {
+        id: 'Cell-006',
+        title: '《Cell》封面故事：叶绿体转录复合体',
+        subtitle: '揭示PEP-PAP原核-真核混源结构',
+        description: '本期《Cell》中，Wu等人聚焦正在工作的叶绿体转录装置PEP-PAP复合体，展示其在叶绿体基因转录中的关键作用。结构解析表明，源自原核生物的催化核心PEP位于复合体中央，以灰色示意；源自真核生物的PEP伴随蛋白（PAPs）则以彩色分布于外围，像“外壳”般包裹核心，从而精细调控转录活性。该工作为理解叶绿体如何在进化过程中整合原核与真核模块、完成光合作用相关基因的精确表达提供了结构基础。封面图像由吴晓娴与张宇创作。',
+        date: '2024年2月29日刊',
+        imagePath: '../assets/cover/Cell/006/006.png',
+        category: 'Cell',
+        colors: []
+      },
+
+      {
+        id: 'Cell-007',
+        title: '《Cell》封面故事（五十周年）：五十周年启程',
+        subtitle: '一年庆典开启，致敬生命科学发现',
+        description: '本期《Cell》封面拉开创刊50周年系列庆祝活动的序幕，并配有同期社论进行展望。画面从生物学与生物医学的丰富图景中汲取灵感，将细胞、组织、器官与模型生物等意象交织在一起，象征半个世纪以来生命科学边界不断被拓展的历程。缤纷元素不仅呈现研究前沿的多样主题，也凝聚了研究者在探索未知时的好奇、喜悦与惊叹，呼应编辑部与全球科学家共同见证突破性成果的初心。封面艺术与设计由Julie Sung完成。',
+        date: '2024年1月4日刊',
+        imagePath: '../assets/cover/Cell/007/007.png',
+        category: 'Cell',
+        colors: []
+      },
+
+      {
+        id: 'Cell-008',
+        title: '《Cell》封面故事：合成真核基因组Sc2.0',
+        subtitle: '从进化产物走向按需设计基因组',
+        description: '当今生物体的基因组由漫长进化塑造而成，人类已掌握其编码区和部分结构要素，但大部分功能逻辑仍扑朔迷离。如果能够按需设计、构建并重写完整基因组，将为理解基因组生物学甚至重置进化路径打开全新窗口。本期《Cell》封面呈现一项里程碑式合作：来自全球的科学家携手推进世界首个合成真核基因组Sc2.0的构建工程。画面象征跨国团队在共同蓝图下拼接、优化和重构酵母基因组。封面构思由Daniel Schindler、Roy Walker、Jef Boeke和Yizhi Cai提出，艺术创作由Ehmad Chehrghani Bozcheloe完成。',
+        date: '2023年11月22日刊',
+        imagePath: '../assets/cover/Cell/008/008.png',
+        category: 'Cell',
+        colors: []
+      },
+
+      {
+        id: 'Cell-009',
+        title: '《Cell》封面故事：非洲基因多样之树',
+        subtitle: '高深度全基因组重绘人类演化谱系',
+        description: '本期《Cell》中，Fan等人对来自12个非洲本土人群的180名个体开展高覆盖度全基因组测序，系统描绘功能变异图谱，为理解人类起源与演化历史提供关键线索。封面以身着各自传统服饰的人物代表参与研究的多样人群，一棵分枝繁茂的“谱系树”其根系延伸至点状标记，指向博茨瓦纳、喀麦隆、埃塞俄比亚和坦桑尼亚四国。点的颜色对应四大语言家族：尼日尔-刚果语系（红）、科伊桑语系（黄）、亚非语系（紫）和尼罗-撒哈拉语系（绿）。背景中鲜明的彩色条纹源自论文数据，可视化展示了非洲大陆丰富而层次分明的基因组多样性。图像由Stacie L. Bumgarner创作。',
+        date: '2023年3月2日刊',
+        imagePath: '../assets/cover/Cell/009/009.png',
+        category: 'Cell',
+        colors: []
+      },
+
+      {
+        id: 'Cell-010',
+        title: '《Cell》封面故事：噬菌体靶向克雷伯菌',
+        subtitle: '五噬菌体组合精准消减IBD相关Kp并缓解炎症',
+        description: '本期《Cell》中，Federici等人鉴定出一支与人类炎症性肠病（IBD）高度相关、且在不同地区均与病情加重紧密相连的肺炎克雷伯菌（Kp）谱系。研究团队通过迭代筛选，构建出针对该谱系中成员具有高度特异性的五噬菌体组合，在小鼠模型中显著减轻肠道炎症和疾病严重程度。进一步在人类受试者中的试验表明，这一Kp噬菌体组合在健康人群中安全可耐受，噬菌体在远端胃肠道内保持活性并大量富集。封面借用经典“太空侵略者”游戏意象，展示噬菌体对特定肠道菌群成员的精准打击。图像由Yael Leibovitch与Simone Dell’Ariccia创作。',
+        date: '2022年8月4日刊',
+        imagePath: '../assets/cover/Cell/010/010.png',
+        category: 'Cell',
+        colors: []
       }
+
+
+
+
+
+
 
 
 
