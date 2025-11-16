@@ -410,7 +410,19 @@
         imagePath: '../assets/cover/Cell/001/001.png',
         category: 'Cell',
         colors: []
+      },
+
+      {
+        id: 'Cell-002',
+        title: '《Cell》封面故事：脑干回路掌管梦境睡眠',
+        subtitle: '揭示诱导REM睡眠的关键脑干开关回路',
+        description: '本期《Cell》中，Kashiwagi等人锁定了一条位于脑干的神经环路，作为启动快速眼动（REM）睡眠的“开关”。该回路向调控前脑活动的多个区域发出信号，从而在REM期驱动人类梦境的产生。当这一回路功能受损时，会出现REM睡眠行为障碍——患者在睡梦中挥拳踢腿，将梦境情节在现实中“上演”，这是帕金森病的早期前驱信号之一。封面以日本画风格呈现：一只处于REM睡眠的小鼠梦见自己抓着葡萄，现实中却握着形似人脑的核桃，象征小鼠模型中解析的REM睡眠机制如何加深对人类脑部疾病的认识。图像由Otama-shimai创作。',
+        date: '2024年10月31日刊',
+        imagePath: '../assets/cover/Cell/002/002.png',
+        category: 'Cell',
+        colors: []
       }
+
 
 
 
