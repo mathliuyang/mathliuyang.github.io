@@ -1,0 +1,2369 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OS Master - 沉浸式终端训练</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Ubuntu+Mono:wght@400;700&display=swap');
+
+        body {
+            margin: 0;
+            overflow: hidden;
+            background: #000;
+        }
+
+        .font-win {
+            font-family: 'Consolas', 'Microsoft YaHei', sans-serif;
+        }
+
+        .font-mac {
+            font-family: -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
+        }
+
+        .font-linux {
+            font-family: 'Ubuntu', 'Ubuntu Mono', sans-serif;
+        }
+
+        .mono-win {
+            font-family: 'Consolas', monospace;
+        }
+
+        .mono-mac {
+            font-family: 'JetBrains Mono', 'Menlo', monospace;
+        }
+
+        .mono-linux {
+            font-family: 'Ubuntu Mono', 'Fira Code', monospace;
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        @keyframes blink {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0;
+            }
+        }
+
+        .animate-blink {
+            animation: blink 1s step-end infinite;
+        }
+
+        @keyframes fade-in {
+            from {
+                opacity: 0;
+                transform: translateY(5px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fade-in {
+            animation: fade-in 0.3s ease-out forwards;
+        }
+
+        @keyframes slide-in-left {
+            from {
+                opacity: 0;
+                transform: translateX(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .animate-slide-in {
+            animation: slide-in-left 0.3s ease-out forwards;
+        }
+
+        .glass-mac {
+            background: rgba(40, 40, 40, 0.75);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .glass-win {
+            background: rgba(32, 32, 32, 0.85);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-right: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        /* Navigation styles to match other tools */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1.5rem 4rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .logo {
+            font-size: 1rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            cursor: pointer;
+            color: #ffffff;
+        }
+
+        .nav-right {
+            display: flex;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #666666;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            letter-spacing: 0.02em;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: #ffffff;
+        }
+
+        .theme-btn {
+            width: 36px;
+            height: 36px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: transparent;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            color: #ffffff;
+        }
+
+        .theme-btn:hover {
+            border-color: #ffffff;
+            transform: scale(1.1);
+        }
+
+        /* Responsive navigation */
+        @media (max-width: 768px) {
+            nav {
+                padding: 1rem 2rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-gray-950 text-gray-100 h-screen flex flex-col">
+
+    <!-- Navigation -->
+    <nav>
+        <div class="logo" onclick="location.href='../index.html'">图灵的猫 X 智核学术</div>
+        <div class="nav-right">
+            <ul class="nav-links">
+                <li><a href="../index.html">首页</a></li>
+                <li><a href="../pages/about.html">关于我</a></li>
+                <li><a href="../pages/blog.html">博客</a></li>
+                <li><a href="../pages/projects.html">项目</a></li>
+                <li><a href="../pages/publications.html">学术成果</a></li>
+                <li><a href="../pages/tools.html" class="active">工具箱</a></li>
+                <li><a href="../pages/contact.html">联系我</a></li>
+            </ul>
+            <button class="theme-btn" id="themeBtn">
+                <span id="themeIcon">◐</span>
+            </button>
+        </div>
+    </nav>
+
+    <div id="app" class="flex-1 flex flex-col h-full relative overflow-hidden" style="padding-top: 80px;"></div>
+
+    <script>
+        // --- 图标资源 (SVG) ---
+        const ICONS = {
+            // 修复：Windows 11 风格田字格图标
+            winLogo: `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 4h7v7H4V4zm0 9h7v7H4v-7zm9-9h7v7h-7V4zm0 9h7v7h-7v-7z"/></svg>`,
+            appleLogo: `<svg viewBox="0 0 384 512" fill="currentColor"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 52.3-11.4 69.5-34.3z"/></svg>`,
+            linuxLogo: `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.47 12.7c-.13-.37-1.61-2.19-3.41-1.87-1.16.19-2.47 1.34-2.84 2.16-.38.81.44 2.78.34 3.03-.09.25-1.06 1-2.59.84-1.53-.16-1.34-1.19-1.34-1.59 0-.41-.53-1.25-1-1.81-.47-.56-1.63-1.72-2.25-1.06-.62.65.66 3.37.66 4.31 0 .94-1.69 1.47-1.25 4.69.26 1.92 2.44 1.59 2.44 1.59s1.37-2.62 4.4-1.25c3.03 1.37 3.38 2.62 5.09 1.13 1.72-1.5 1.53-2.62 2.19-6.44.66-3.81-.31-3.37-.44-3.73M5.15 15.68c-.29-.68-.82-2.63.47-4.13 1.28-1.5 3.47-1.59 4.37-1.09.91.5 1.47 1.16 1.28.16-.19-1.22-.84-4.81 2.31-7.13 3.16-2.31 5.91-.72 6.13 1.09.22 1.81-1.56 5.34-2.22 6.5-.66 1.16.03 1.97.03 1.97s1.44-1.09 2.53-.25c1.09.84 1.81 3.97 1.03 5.44-.78 1.47-2.03.78-2.03.78s.72 2.84-2.22 3.06c-2.94.22-1.94-3.12-1.94-3.12s-1.84 3.47-5.59 2.34c-3.75-1.12-1.97-4.22-1.97-4.22s-2.09.22-2.18-1.4z"/></svg>`,
+            folder: `<svg viewBox="0 0 24 24" fill="currentColor" class="text-yellow-400"><path d="M20 6h-8l-2-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm0 12H4V8h16v10z"/></svg>`,
+            file: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>`,
+            home: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>`,
+            server: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"/><rect x="2" y="14" width="20" height="8" rx="2" ry="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>`,
+            chevronRight: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>`
+        };
+
+        // --- 智能自动补全系统 ---
+        const AutoComplete = {
+            // 获取所有可用命令
+            getAllCommands() {
+                const os = state.os;
+                const commands = new Set();
+
+                // 基础命令
+                Object.keys(os.commands).forEach(cmd => {
+                    commands.add(cmd);
+                    // 添加命令映射（如 dir -> ls）
+                    if (typeof os.commands[cmd] === 'string') {
+                        commands.add(os.commands[cmd]);
+                    }
+                });
+
+                // 通用命令
+                const universalCommands = [
+                    'git', 'make', 'gcc', 'g++', 'gdb', 'valgrind', 'strace', 'ltrace',
+                    'htop', 'vim', 'nano', 'emacs', 'less', 'more', 'head', 'tail',
+                    'tar', 'gzip', 'gunzip', 'zip', 'unzip', 'curl', 'wget',
+                    'docker', 'kubectl', 'npm', 'yarn', 'pnpm', 'pip', 'pip3',
+                    'node', 'python', 'python3', 'ruby', 'go', 'rust', 'cargo',
+                    'terraform', 'ansible', 'vagrant', 'packer'
+                ];
+                universalCommands.forEach(cmd => commands.add(cmd));
+
+                return Array.from(commands).sort();
+            },
+
+            // 获取文件类型图标
+            getFileIcon(filename, isDir = false) {
+                if (isDir) return '📁';
+
+                const ext = filename.split('.').pop().toLowerCase();
+                const fileIcons = {
+                    'js': '📄', 'ts': '📘', 'jsx': '⚛️', 'tsx': '⚛️', 'py': '🐍', 'java': '☕',
+                    'cpp': '⚙️', 'c': '⚙️', 'h': '📋', 'hpp': '📋', 'cs': '🔷', 'php': '🐘',
+                    'rb': '💎', 'go': '🐹', 'rs': '🦀', 'swift': '🦉', 'kt': '🟣', 'scala': '🔴',
+                    'json': '📋', 'xml': '📋', 'yaml': '📋', 'yml': '📋', 'toml': '📋', 'ini': '📋',
+                    'conf': '⚙️', 'config': '⚙️', 'env': '🔐', 'properties': '⚙️',
+                    'md': '📝', 'txt': '📝', 'pdf': '📕', 'doc': '📘', 'docx': '📘', 'ppt': '📗',
+                    'html': '🌐', 'css': '🎨', 'scss': '🎨', 'sass': '🎨', 'less': '🎨',
+                    'csv': '📊', 'xls': '📊', 'xlsx': '📊', 'sql': '🗄️', 'db': '🗄️',
+                    'zip': '📦', 'tar': '📦', 'gz': '📦', 'bz2': '📦', 'xz': '📦', '7z': '📦', 'rar': '📦',
+                    'jpg': '🖼️', 'jpeg': '🖼️', 'png': '🖼️', 'gif': '🖼️', 'svg': '🖼️', 'ico': '🖼️',
+                    'sh': '🐚', 'bash': '🐚', 'zsh': '🐚', 'fish': '🐚', 'ps1': '🔵',
+                    'gitignore': '🚫', 'dockerfile': '🐳', 'makefile': '🔨'
+                };
+
+                return fileIcons[ext] || '📄';
+            },
+
+            // 获取文件和目录补全
+            getFileCompletions(partial) {
+                const completions = [];
+
+                // 解析路径 - 支持相对路径和绝对路径
+                const pathParts = partial.split(/[/\\]/).filter(p => p);
+                const filePart = pathParts.length > 0 ? pathParts[pathParts.length - 1] : '';
+                const dirPath = pathParts.slice(0, -1);
+
+                // 确定要搜索的目录
+                let searchDir = state.currNode;
+                let isAbsolute = false;
+
+                // 处理绝对路径
+                if (partial.startsWith('/') || partial.startsWith('\\')) {
+                    isAbsolute = true;
+                    searchDir = state.fs;
+                    dirPath.shift(); // 移除空的第一部分
+                }
+
+                // 导航到目标目录
+                if (dirPath.length > 0) {
+                    const targetPath = isAbsolute ? dirPath : resolvePath(state.path, dirPath.join('/'), '/');
+                    searchDir = getNode(state.fs, targetPath);
+                }
+
+                if (!searchDir || !searchDir.children) return completions;
+
+                const items = Object.keys(searchDir.children);
+                const isHidden = filePart.startsWith('.') || filePart === '';
+
+                // 特殊处理：如果输入的是路径分隔符，显示目录内容
+                if (partial.endsWith('/') || partial.endsWith('\\')) {
+                    items.forEach(item => {
+                        const shouldShow = isHidden || !item.startsWith('.');
+                        if (shouldShow) {
+                            const node = searchDir.children[item];
+                            const suffix = node.type === 'dir' ? '/' : '';
+                            completions.push(item + suffix);
+                        }
+                    });
+                } else {
+                    // 正常文件名补全
+                    items.forEach(item => {
+                        const shouldShow = isHidden || !item.startsWith('.');
+                        if (shouldShow && item.startsWith(filePart)) {
+                            const node = searchDir.children[item];
+                            const suffix = node.type === 'dir' ? '/' : '';
+
+                            // 构建完整路径
+                            let fullPath = item + suffix;
+                            if (dirPath.length > 0) {
+                                const separator = partial.includes('\\') ? '\\' : '/';
+                                fullPath = dirPath.join(separator) + separator + fullPath;
+                            }
+
+                            completions.push(fullPath);
+                        }
+                    });
+                }
+
+                // 添加父目录导航选项
+                if (filePart === '' || '..'.startsWith(filePart)) {
+                    completions.push('..');
+                }
+
+                return completions.sort();
+            },
+
+            // 获取Git命令补全
+            getGitCompletions(partial, subcommand) {
+                const gitCommands = [
+                    'init', 'clone', 'add', 'commit', 'push', 'pull', 'fetch',
+                    'status', 'log', 'branch', 'checkout', 'merge', 'rebase',
+                    'reset', 'revert', 'diff', 'show', 'tag', 'stash',
+                    'remote', 'config', 'help', 'version'
+                ];
+
+                const gitOptions = {
+                    'add': ['-A', '--all', '-u', '--update', '-p', '--patch'],
+                    'commit': ['-m', '--message', '-a', '--all', '--amend'],
+                    'push': ['--force', '--tags', '--set-upstream', '-u'],
+                    'pull': ['--rebase', '--no-rebase', '--all'],
+                    'branch': ['-a', '--all', '-r', '--remote', '-d', '--delete'],
+                    'checkout': ['-b', '--branch', '-B', '--force'],
+                    'log': ['--oneline', '--graph', '--all', '--pretty', '-n'],
+                    'diff': ['--cached', '--staged', '--name-only', '--stat'],
+                    'status': ['--short', '--branch', '--porcelain'],
+                    'merge': ['--no-ff', '--squash', '--abort'],
+                    'rebase': ['--interactive', '--continue', '--abort', '--skip']
+                };
+
+                if (!subcommand) {
+                    return gitCommands.filter(cmd => cmd.startsWith(partial));
+                } else if (gitOptions[subcommand]) {
+                    return gitOptions[subcommand].filter(opt => opt.startsWith(partial));
+                }
+
+                return [];
+            },
+
+            // 获取包管理器命令补全
+            getPackageCompletions(manager, partial, subcommand) {
+                const packageCommands = {
+                    'brew': ['install', 'uninstall', 'update', 'upgrade', 'search', 'info', 'list', 'cleanup'],
+                    'apt': ['update', 'upgrade', 'install', 'remove', 'search', 'show', 'list', 'autoremove'],
+                    'apt-get': ['update', 'upgrade', 'install', 'remove', 'purge', 'autoremove', 'clean'],
+                    'snap': ['install', 'remove', 'refresh', 'list', 'info', 'search', 'classic'],
+                    'choco': ['install', 'uninstall', 'upgrade', 'search', 'list', 'info', 'outdated'],
+                    'scoop': ['install', 'uninstall', 'update', 'search', 'list', 'info', 'status'],
+                    'winget': ['install', 'uninstall', 'upgrade', 'search', 'show', 'list', 'export'],
+                    'npm': ['install', 'uninstall', 'update', 'search', 'list', 'info', 'outdated', 'audit'],
+                    'yarn': ['add', 'remove', 'upgrade', 'search', 'list', 'info', 'outdated'],
+                    'pip': ['install', 'uninstall', 'list', 'show', 'search', 'freeze', 'check']
+                };
+
+                const managerCommands = packageCommands[manager] || [];
+                if (!subcommand) {
+                    return managerCommands.filter(cmd => cmd.startsWith(partial));
+                }
+
+                // 常用选项
+                const commonOptions = ['--help', '--version', '--verbose', '--quiet'];
+                return commonOptions.filter(opt => opt.startsWith(partial));
+            },
+
+            // 获取命令参数补全
+            getCommandArgs(command, partial) {
+                const commandArgs = {
+                    'ls': ['-la', '-l', '-a', '-h', '--help'],
+                    'dir': ['/w', '/p', '/s', '/b'],
+                    'cat': ['-n', '-b', '-s', '-E'],
+                    'type': [],
+                    'rm': ['-rf', '-r', '-f', '-i'],
+                    'del': ['/p', '/f', '/s', '/q'],
+                    'cp': ['-r', '-f', '-i', '-v'],
+                    'copy': [],
+                    'mv': ['-f', '-i', '-n', '-v'],
+                    'move': [],
+                    'grep': ['-i', '-v', '-n', '-r', '-l'],
+                    'findstr': ['/i', '/v', '/n', '/r', '/l'],
+                    'tar': ['-xvf', '-cvf', '-xzvf', '-czvf'],
+                    'curl': ['-O', '-L', '-s', '-v'],
+                    'wget': ['-O', '-q', '-c', '-r'],
+                    'docker': ['run', 'ps', 'images', 'build', 'exec', 'logs'],
+                    'kubectl': ['get', 'describe', 'logs', 'exec', 'apply', 'delete'],
+                    'npm': ['install', 'run', 'test', 'build', 'start'],
+                    'yarn': ['add', 'remove', 'run', 'build', 'start'],
+                    'pip': ['install', 'uninstall', 'list', 'show', 'freeze']
+                };
+
+                const args = commandArgs[command] || [];
+                return args.filter(arg => arg.startsWith(partial));
+            },
+
+            // 智能补全分析
+            analyzeContext(input) {
+                const parts = input.trim().split(/\s+/);
+                if (parts.length === 0) return { context: 'command', partial: '', command: null };
+
+                const command = parts[0];
+                const lastPart = parts[parts.length - 1] || '';
+
+                // Git 命令上下文
+                if (command === 'git' && parts.length > 1) {
+                    const gitSubcommand = parts[1];
+                    if (parts.length === 2) {
+                        return { context: 'git', partial: lastPart, command: null, subcommand: null };
+                    } else if (parts.length > 2) {
+                        return { context: 'git-flag', partial: lastPart, command: 'git', subcommand: gitSubcommand };
+                    }
+                }
+
+                // 包管理器上下文
+                const packageManagers = ['brew', 'apt', 'apt-get', 'snap', 'choco', 'scoop', 'winget', 'npm', 'yarn', 'pip'];
+                if (packageManagers.includes(command) && parts.length > 1) {
+                    const subcommand = parts[1];
+                    if (parts.length === 2) {
+                        return { context: 'package', partial: lastPart, command: command, subcommand: null };
+                    } else {
+                        return { context: 'package-flag', partial: lastPart, command: command, subcommand: subcommand };
+                    }
+                }
+
+                // 文件路径补全（检测特定命令）
+                const fileCommands = [
+                    // 查看文件内容
+                    'cat', 'type', 'less', 'more', 'head', 'tail', 'vim', 'nano', 'emacs', 'code', 'subl',
+                    // 文件操作
+                    'rm', 'del', 'cp', 'copy', 'mv', 'move', 'rename', 'touch', 'mkdir', 'rmdir', 'rd',
+                    // 搜索和过滤
+                    'grep', 'findstr', 'find', 'awk', 'sed', 'sort', 'uniq', 'wc',
+                    // 压缩和归档
+                    'tar', 'zip', 'unzip', 'gzip', 'gunzip', 'bzip2', 'bunzip2', 'xz', 'unxz',
+                    // 下载工具
+                    'curl', 'wget', 'aria2c',
+                    // 版本控制
+                    'git', 'svn', 'hg',
+                    // 系统工具
+                    'chmod', 'chown', 'chgrp', 'lsattr', 'chattr',
+                    // 开发工具
+                    'node', 'python', 'python3', 'ruby', 'perl', 'php', 'go', 'rustc', 'gcc', 'g++', 'make',
+                    // 其他
+                    'file', 'which', 'whereis', 'locate', 'updatedb'
+                ];
+
+                if (fileCommands.includes(command) && parts.length > 1) {
+                    // 检查最后一个参数是否像文件路径（不是选项）
+                    if (lastPart && !lastPart.startsWith('-') && !lastPart.startsWith('--')) {
+                        return { context: 'file', partial: lastPart, command: command };
+                    }
+                }
+
+                // 特殊处理：cd 命令也支持路径补全
+                if (command === 'cd' && parts.length > 1) {
+                    return { context: 'file', partial: lastPart, command: command };
+                }
+
+                // 命令参数补全
+                if (parts.length > 1) {
+                    return { context: 'flag', partial: lastPart, command: command };
+                }
+
+                // 默认命令补全
+                return { context: 'command', partial: lastPart, command: null };
+            },
+
+            // 获取补全建议
+            getCompletions(input) {
+                const { context, partial, command, subcommand } = this.analyzeContext(input);
+                let completions = [];
+
+                switch (context) {
+                    case 'command':
+                        completions = this.getAllCommands();
+                        break;
+                    case 'git':
+                        completions = this.getGitCompletions(partial);
+                        break;
+                    case 'git-flag':
+                        completions = this.getGitCompletions(partial, subcommand);
+                        break;
+                    case 'package':
+                        completions = this.getPackageCompletions(command, partial);
+                        break;
+                    case 'package-flag':
+                        completions = this.getPackageCompletions(command, partial, subcommand);
+                        break;
+                    case 'file':
+                        completions = this.getFileCompletions(partial);
+                        break;
+                    case 'flag':
+                        completions = this.getCommandArgs(command, partial);
+                        break;
+                    default:
+                        completions = [];
+                }
+
+                // 过滤和排序
+                return completions
+                    .filter(item => item.toLowerCase().startsWith(partial.toLowerCase()))
+                    .sort((a, b) => {
+                        // 优先显示完全匹配前缀的
+                        const aStarts = a.toLowerCase().startsWith(partial.toLowerCase());
+                        const bStarts = b.toLowerCase().startsWith(partial.toLowerCase());
+                        if (aStarts && !bStarts) return -1;
+                        if (!aStarts && bStarts) return 1;
+                        return a.localeCompare(b);
+                    });
+            },
+
+            // 应用补全 - 修复字符重复问题
+            applyCompletion(input, completion) {
+                // 处理空输入
+                if (!input || input.trim() === '') {
+                    return completion;
+                }
+
+                // 保留原始输入的尾部空格
+                const trailingSpace = input.endsWith(' ') ? ' ' : '';
+                const parts = input.trim().split(/\s+/);
+
+                if (parts.length === 0) {
+                    return completion + trailingSpace;
+                }
+
+                const lastPart = parts[parts.length - 1];
+
+                // 防止重复补全：检查补全是否已经存在于输入中
+                if (lastPart === completion) {
+                    return input; // 避免重复
+                }
+
+                // 计算基础输入（移除最后一个部分）
+                const lastPartStart = input.lastIndexOf(lastPart);
+                const baseInput = input.slice(0, lastPartStart);
+
+                // 智能处理空格
+                const needsSpace = !completion.startsWith('-') &&
+                    parts.length > 1 &&
+                    !trailingSpace &&
+                    !completion.endsWith('/'); // 目录补全不需要额外空格
+
+                return baseInput + completion + (needsSpace ? ' ' : '') + trailingSpace;
+            }
+        };
+
+        const deepClone = (obj) => JSON.parse(JSON.stringify(obj));
+
+        // --- 操作系统配置 ---
+        const OS_CONFIG = {
+            windows: {
+                id: 'windows',
+                name: 'Windows 11',
+                prompt: (path) => `${path.join('\\')}>`,
+                sep: '\\',
+                root: 'C:',
+                home: ['Users', 'Guest'],
+                commands: {
+                    // 基础命令
+                    ls: 'dir', clear: 'cls', cat: 'type', rm: 'del', mv: 'move', cp: 'copy',
+                    pwd: 'cd', tree: 'tree', ver: 'ver', grep: 'findstr', man: 'help',
+                    whoami: 'whoami', date: 'date', echo: 'echo',
+
+                    // 文件系统
+                    mkdir: 'mkdir', rmdir: 'rmdir', del: 'del', ren: 'ren',
+
+                    // 网络相关
+                    ip: 'ipconfig', ping: 'ping', netstat: 'netstat', nslookup: 'nslookup',
+
+                    // 系统信息
+                    systeminfo: 'systeminfo', tasklist: 'tasklist', taskkill: 'taskkill',
+
+                    // 开发工具
+                    choco: 'choco', scoop: 'scoop', winget: 'winget',
+
+                    // PowerShell
+                    powershell: 'powershell', pwsh: 'pwsh'
+                },
+                style: {
+                    fontUI: 'font-win',
+                    fontMono: 'mono-win',
+                    bg: 'bg-[#202020]',
+                    sidebar: 'glass-win',
+                    header: 'bg-[#1a1a1a] h-10',
+                    term: 'bg-[#0c0c0c] text-gray-200',
+                    accent: 'text-blue-400',
+                    windowControls: 'win',
+                    iconColor: 'text-blue-400'
+                }
+            },
+            macos: {
+                id: 'macos',
+                name: 'macOS Sequoia',
+                prompt: (path) => `guest@MacBook %`,
+                sep: '/',
+                root: '/',
+                home: ['Users', 'guest'],
+                commands: {
+                    // 基础命令
+                    ls: 'ls', clear: 'clear', cat: 'cat', rm: 'rm', mv: 'mv', cp: 'cp',
+                    pwd: 'pwd', tree: 'tree', ver: 'sw_vers', grep: 'grep', man: 'man',
+                    whoami: 'whoami', date: 'date', echo: 'echo',
+
+                    // 文件系统
+                    mkdir: 'mkdir', rmdir: 'rmdir', chmod: 'chmod', chown: 'chown',
+                    ln: 'ln', find: 'find', locate: 'locate',
+
+                    // 网络相关
+                    ip: 'ifconfig', ping: 'ping', netstat: 'netstat', nslookup: 'nslookup',
+                    curl: 'curl', wget: 'wget', ssh: 'ssh', scp: 'scp',
+
+                    // 系统信息
+                    ps: 'ps', top: 'top', htop: 'htop', kill: 'kill', killall: 'killall',
+                    sysinfo: 'system_profiler', uptime: 'uptime',
+
+                    // 包管理
+                    brew: 'brew', port: 'port',
+
+                    // 开发工具
+                    xcodebuild: 'xcodebuild', codesign: 'codesign'
+                },
+                style: {
+                    fontUI: 'font-mac',
+                    fontMono: 'mono-mac',
+                    bg: 'bg-[#1e1e1e]',
+                    sidebar: 'glass-mac',
+                    header: 'bg-[#2d2d2d] border-b border-[#444] h-11',
+                    term: 'bg-[#1e1e1e] text-gray-100',
+                    accent: 'text-blue-500',
+                    windowControls: 'mac',
+                    iconColor: 'text-blue-500'
+                }
+            },
+            linux: {
+                id: 'linux',
+                name: 'Ubuntu 24.04',
+                prompt: (path) => `<span class="text-green-400 font-bold">guest@ubuntu</span>:<span class="text-blue-400 font-bold">~${path.length > 2 ? '/' + path.slice(2).join('/') : ''}</span>$`,
+                sep: '/',
+                root: '/',
+                home: ['home', 'guest'],
+                commands: {
+                    // 基础命令
+                    ls: 'ls', clear: 'clear', cat: 'cat', rm: 'rm', mv: 'mv', cp: 'cp',
+                    pwd: 'pwd', tree: 'tree', ver: 'uname -a', grep: 'grep', man: 'man',
+                    whoami: 'whoami', date: 'date', echo: 'echo',
+
+                    // 文件系统
+                    mkdir: 'mkdir', rmdir: 'rmdir', chmod: 'chmod', chown: 'chown',
+                    ln: 'ln', find: 'find', locate: 'locate', which: 'which', whereis: 'whereis',
+
+                    // 网络相关
+                    ip: 'ip a', ping: 'ping', netstat: 'netstat', ss: 'ss',
+                    nslookup: 'nslookup', dig: 'dig', curl: 'curl', wget: 'wget',
+                    ssh: 'ssh', scp: 'scp', ftp: 'ftp', sftp: 'sftp',
+
+                    // 系统信息
+                    ps: 'ps', top: 'top', htop: 'htop', kill: 'kill', killall: 'killall',
+                    systemctl: 'systemctl', service: 'service', journalctl: 'journalctl',
+                    uptime: 'uptime', free: 'free', df: 'df', du: 'du',
+
+                    // 包管理
+                    apt: 'apt', aptget: 'apt-get', snap: 'snap', dpkg: 'dpkg',
+                    yum: 'yum', dnf: 'dnf', pacman: 'pacman',
+
+                    // 开发工具
+                    make: 'make', gcc: 'gcc', gpp: 'g++', gdb: 'gdb',
+                    valgrind: 'valgrind', strace: 'strace', ltrace: 'ltrace'
+                },
+                style: {
+                    fontUI: 'font-linux',
+                    fontMono: 'mono-linux',
+                    bg: 'bg-[#2c001e]',
+                    sidebar: 'bg-[#1a1a1a] border-r border-[#333]',
+                    header: 'bg-[#333] border-b border-[#444] h-10',
+                    term: 'bg-[#300a24] text-white',
+                    accent: 'text-orange-500',
+                    windowControls: 'linux',
+                    iconColor: 'text-orange-500'
+                }
+            }
+        };
+
+        // --- 文件系统数据 ---
+        const fsData = {
+            windows: {
+                name: 'C:', type: 'dir', children: {
+                    'Users': {
+                        type: 'dir', children: {
+                            'Guest': {
+                                type: 'dir', children: {
+                                    'Documents': {
+                                        type: 'dir',
+                                        children: {
+                                            'Project.docx': { type: 'file', size: '14KB', content: 'Confidential Project Plan' },
+                                            'Budget.xlsx': { type: 'file', size: '22KB' },
+                                            'config.json': { type: 'file', size: '2KB', content: '{\n  "name": "my-project",\n  "version": "1.0.0",\n  "dependencies": {}\n}' },
+                                            'README.md': { type: 'file', size: '1KB', content: '# My Project\n\nThis is a sample project.' }
+                                        }
+                                    },
+                                    'Downloads': {
+                                        type: 'dir',
+                                        children: {
+                                            'setup.exe': { type: 'file', size: '45MB' },
+                                            'node-v18.msi': { type: 'file', size: '25MB' },
+                                            'python-3.11.exe': { type: 'file', size: '28MB' }
+                                        }
+                                    },
+                                    'Desktop': {
+                                        type: 'dir',
+                                        children: {
+                                            'Chrome.lnk': { type: 'file', size: '1KB' },
+                                            'TODO.txt': { type: 'file', content: '1. Fix bugs\n2. Drink coffee\n3. Git commit\n4. Deploy' },
+                                            'package.json': { type: 'file', size: '1KB', content: '{\n  "scripts": {\n    "start": "node server.js",\n    "test": "jest"\n  }\n}' }
+                                        }
+                                    },
+                                    'Projects': {
+                                        type: 'dir',
+                                        children: {
+                                            'web-app': {
+                                                type: 'dir',
+                                                children: {
+                                                    'src': { type: 'dir', children: { 'index.js': { type: 'file', content: 'console.log("Hello World");' } } },
+                                                    'package.json': { type: 'file', size: '1KB', content: '{"name":"web-app","version":"1.0.0"}' },
+                                                    'node_modules': { type: 'dir', children: {} }
+                                                }
+                                            },
+                                            'api-server': {
+                                                type: 'dir',
+                                                children: {
+                                                    'server.js': { type: 'file', content: 'const express = require("express");' },
+                                                    '.env': { type: 'file', content: 'PORT=3000\nDB_HOST=localhost' }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    'Windows': { type: 'dir', children: { 'System32': { type: 'dir', children: { 'cmd.exe': { type: 'file', size: '300KB' }, 'drivers': { type: 'dir' } } } } },
+                    'Program Files': {
+                        type: 'dir',
+                        children: {
+                            'nodejs': { type: 'dir', children: { 'node.exe': { type: 'file', size: '15MB' } } },
+                            'Python311': { type: 'dir', children: { 'python.exe': { type: 'file', size: '12MB' } } }
+                        }
+                    }
+                }
+            },
+            macos: {
+                name: '/', type: 'dir', children: {
+                    'Users': {
+                        type: 'dir', children: {
+                            'guest': {
+                                type: 'dir', children: {
+                                    'Documents': {
+                                        type: 'dir',
+                                        children: {
+                                            'Design.sketch': { type: 'file', size: '12MB' },
+                                            'API_Documentation.md': { type: 'file', size: '5KB', content: '# API Documentation\n\n## Endpoints\n- GET /users\n- POST /users' },
+                                            'docker-compose.yml': { type: 'file', size: '1KB', content: 'version: "3.8"\nservices:\n  web:\n    build: .\n    ports:\n      - "3000:3000"' }
+                                        }
+                                    },
+                                    'Downloads': {
+                                        type: 'dir',
+                                        children: {
+                                            'installer.dmg': { type: 'file', size: '120MB' },
+                                            'vscode.zip': { type: 'file', size: '85MB' },
+                                            'iterm2.zip': { type: 'file', size: '15MB' }
+                                        }
+                                    },
+                                    'Desktop': {
+                                        type: 'dir',
+                                        children: {
+                                            'Screenshot.png': { type: 'file', size: '2MB' },
+                                            'notes.md': { type: 'file', content: '# Ideas\n- App 2.0\n- Fix bugs\n- Implement OAuth' },
+                                            '.gitignore': { type: 'file', content: 'node_modules/\n.env\n*.log' }
+                                        }
+                                    },
+                                    'Code': {
+                                        type: 'dir',
+                                        children: {
+                                            'app.js': { type: 'file', content: 'console.log("Hello Mac");' },
+                                            'package.json': { type: 'file', size: '1KB', content: '{"name":"my-app","dependencies":{"express":"^4.18.0"}}' },
+                                            '.env.local': { type: 'file', content: 'API_KEY=sk_test_123\nDATABASE_URL=postgres://localhost' }
+                                        }
+                                    },
+                                    'Development': {
+                                        type: 'dir',
+                                        children: {
+                                            'iOS': {
+                                                type: 'dir',
+                                                children: {
+                                                    'MyApp.xcodeproj': { type: 'file', size: '10KB' },
+                                                    'Podfile': { type: 'file', content: 'platform :ios, "14.0"\nuse_frameworks!' }
+                                                }
+                                            },
+                                            'Web': {
+                                                type: 'dir',
+                                                children: {
+                                                    'react-app': {
+                                                        type: 'dir',
+                                                        children: {
+                                                            'src': { type: 'dir', children: { 'App.js': { type: 'file', content: 'import React from "react";' } } },
+                                                            'public': { type: 'dir', children: { 'index.html': { type: 'file', content: '<!DOCTYPE html><html><head><title>React App</title></head></html>' } } },
+                                                            'package.json': { type: 'file', content: '{"name":"react-app","dependencies":{"react":"^18.0.0"}}' }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    'Applications': { type: 'dir', children: { 'Safari.app': { type: 'dir' }, 'Xcode.app': { type: 'dir' }, 'Visual Studio Code.app': { type: 'dir' } } },
+                    'usr': {
+                        type: 'dir',
+                        children: {
+                            'local': {
+                                type: 'dir',
+                                children: {
+                                    'bin': { type: 'dir', children: { 'node': { type: 'file', size: '25MB' } } }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            linux: {
+                name: '/', type: 'dir', children: {
+                    'home': {
+                        type: 'dir', children: {
+                            'guest': {
+                                type: 'dir', children: {
+                                    'projects': {
+                                        type: 'dir',
+                                        children: {
+                                            'main.py': { type: 'file', size: '2KB', content: 'print("Hello Linux")' },
+                                            'venv': { type: 'dir' },
+                                            'requirements.txt': { type: 'file', content: 'flask==2.3.0\nrequests==2.28.0\nsqlalchemy==1.4.0' },
+                                            'Dockerfile': { type: 'file', content: 'FROM python:3.11\nWORKDIR /app\nCOPY requirements.txt .\nRUN pip install -r requirements.txt' }
+                                        }
+                                    },
+                                    '.config': {
+                                        type: 'dir',
+                                        children: {
+                                            'git': { type: 'dir', children: { 'config': { type: 'file', content: '[user]\nname = Guest User\nemail = guest@example.com' } } },
+                                            'nvim': { type: 'dir', children: { 'init.vim': { type: 'file', content: 'set number\nset tabstop=2' } } }
+                                        }
+                                    },
+                                    '.bashrc': { type: 'file', size: '4KB', content: 'export PATH=$PATH:/usr/bin\nalias ll="ls -la"\nalias gs="git status"' },
+                                    '.ssh': {
+                                        type: 'dir',
+                                        children: {
+                                            'id_rsa': { type: 'file', content: '-----BEGIN OPENSSH PRIVATE KEY-----\n...' },
+                                            'id_rsa.pub': { type: 'file', content: 'ssh-rsa AAAAB3... guest@ubuntu' },
+                                            'config': { type: 'file', content: 'Host github.com\n  HostName github.com\n  User git' }
+                                        }
+                                    },
+                                    'server.log': { type: 'file', content: '[INFO] Server started\n[WARN] High memory usage\n[ERROR] Connection timeout\n[INFO] Request served' },
+                                    'workspace': {
+                                        type: 'dir',
+                                        children: {
+                                            'backend': {
+                                                type: 'dir',
+                                                children: {
+                                                    'api': { type: 'dir', children: { 'routes.py': { type: 'file', content: 'from flask import Flask\napp = Flask(__name__)\n\n@app.route("/")\ndef hello():\n    return "Hello World"' } } },
+                                                    'tests': { type: 'dir', children: { 'test_api.py': { type: 'file', content: 'import unittest\n\nclass TestAPI(unittest.TestCase):\n    pass' } } },
+                                                    '.env': { type: 'file', content: 'FLASK_ENV=development\nSECRET_KEY=dev-secret-key' }
+                                                }
+                                            },
+                                            'frontend': {
+                                                type: 'dir',
+                                                children: {
+                                                    'src': { type: 'dir', children: { 'index.html': { type: 'file', content: '<!DOCTYPE html><html><head><title>My App</title></head></html>' } } },
+                                                    'package.json': { type: 'file', content: '{"name":"frontend","scripts":{"dev":"vite","build":"vite build"}}' }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    'etc': {
+                        type: 'dir',
+                        children: {
+                            'nginx': { type: 'dir', children: { 'nginx.conf': { type: 'file', content: 'server {\n    listen 80;\n    server_name localhost;\n}' } } },
+                            'hostname': { type: 'file', content: 'ubuntu-server' },
+                            'hosts': { type: 'file', content: '127.0.0.1 localhost\n192.168.1.100 dev-server' }
+                        }
+                    },
+                    'var': {
+                        type: 'dir',
+                        children: {
+                            'www': {
+                                type: 'dir',
+                                children: {
+                                    'html': {
+                                        type: 'dir',
+                                        children: {
+                                            'index.html': { type: 'file', content: '<html><body><h1>It works!</h1></body></html>' },
+                                            'api': { type: 'dir', children: { 'data.json': { type: 'file', content: '{"users":[],"status":"ok"}' } } }
+                                        }
+                                    }
+                                }
+                            },
+                            'log': {
+                                type: 'dir',
+                                children: {
+                                    'syslog': { type: 'file', content: 'System initialized' },
+                                    'nginx': { type: 'dir', children: { 'access.log': { type: 'file', content: '192.168.1.1 - - [01/Dec/2023:10:00:00 +0000] "GET / HTTP/1.1" 200 612' } } },
+                                    'mysql': { type: 'dir', children: { 'error.log': { type: 'file', content: '2023-12-01T10:00:00.123456Z 0 [Note] mysqld: ready for connections.' } } }
+                                }
+                            }
+                        }
+                    },
+                    'usr': {
+                        type: 'dir',
+                        children: {
+                            'bin': {
+                                type: 'dir',
+                                children: {
+                                    'python3': { type: 'file', size: '5MB' },
+                                    'node': { type: 'file', size: '20MB' },
+                                    'git': { type: 'file', size: '3MB' },
+                                    'docker': { type: 'file', size: '30MB' }
+                                }
+                            },
+                            'share': {
+                                type: 'dir',
+                                children: {
+                                    'man': { type: 'dir', children: { 'man1': { type: 'dir' } } }
+                                }
+                            }
+                        }
+                    },
+                    'opt': {
+                        type: 'dir',
+                        children: {
+                            'docker': { type: 'dir', children: {} },
+                            'google': { type: 'dir', children: { 'chrome': { type: 'dir' } } }
+                        }
+                    }
+                }
+            }
+        };
+
+        // --- 关卡配置 ---
+        const scenarios = [
+            {
+                id: 'basics', title: '基础命令', desc: '学习如何查看文件和切换目录。',
+                levels: [
+                    { id: 1, title: '列出文件', task: (os) => os.commands.ls, desc: (os) => `查看当前目录下的内容 (使用 ${os.commands.ls})`, validate: (s) => s.lastCmd === s.os.commands.ls },
+                    { id: 2, title: '查看树状图', task: 'tree', desc: () => '查看目录的树状结构', validate: (s) => s.lastCmd === 'tree' },
+                    { id: 3, title: '当前路径', task: (os) => os.commands.pwd, desc: () => '显示当前工作目录的完整路径', validate: (s) => s.lastCmd === s.os.commands.pwd },
+                    { id: 4, title: '切换目录', task: 'cd Documents', desc: () => '进入 Documents 文件夹', validate: (s) => s.path[s.path.length - 1] === 'Documents' }
+                ]
+            },
+            {
+                id: 'files', title: '文件操作', desc: '创建、删除、复制、移动文件。',
+                levels: [
+                    { id: 1, title: '创建目录', task: 'mkdir work', desc: () => '创建一个名为 work 的文件夹', validate: (s) => s.currNode.children['work'] },
+                    { id: 2, title: '创建文件', task: 'touch test.txt', desc: (os) => os.id === 'windows' ? 'echo > test.txt' : 'touch test.txt', validate: (s) => s.currNode.children['test.txt'] },
+                    { id: 3, title: '复制文件', task: (os) => `${os.commands.cp} test.txt copy.txt`, desc: () => '复制 test.txt 为 copy.txt', validate: (s) => s.currNode.children['copy.txt'] },
+                    { id: 4, title: '移动/重命名', task: (os) => `${os.commands.mv} copy.txt final.txt`, desc: () => '将 copy.txt 重命名为 final.txt', validate: (s) => s.currNode.children['final.txt'] && !s.currNode.children['copy.txt'] }
+                ]
+            },
+            {
+                id: 'text', title: '文本处理', desc: '搜索、查看与管道操作。',
+                levels: [
+                    { id: 1, title: '查看内容', task: (os) => `${os.commands.cat} *.txt`, desc: (os) => `查看文本文件内容 (${os.commands.cat})`, validate: (s) => s.lastCmd.startsWith(s.os.commands.cat) },
+                    { id: 2, title: '搜索内容', task: (os) => `${os.commands.grep} "TODO" TODO.txt`, desc: (os) => `搜索包含 "TODO" 的行`, validate: (s) => s.lastCmd.includes(s.os.commands.grep) || s.lastCmd.includes('findstr') },
+                    { id: 3, title: '查看头部', task: 'head -n 2 *.txt', desc: (os) => `只查看文件的前两行 (head)`, validate: (s) => s.lastCmd.startsWith('head') },
+                    { id: 4, title: '字数统计', task: 'wc *.txt', desc: (os) => `统计文件的行数、单词数 (wc)`, validate: (s) => s.lastCmd.startsWith('wc') }
+                ]
+            }
+        ];
+
+        // --- 状态管理 ---
+        const state = {
+            view: 'menu',
+            osId: 'windows',
+            get os() { return OS_CONFIG[this.osId] },
+            fs: null,
+            path: [],
+            get currNode() { return getNode(this.fs, this.path) },
+            scenarioId: null,
+            levelIndex: 0,
+            history: [],
+            inputHistory: [],
+            historyIdx: -1,
+            lastCmd: '',
+            isRemote: false,
+            repl: null, // 'node', 'python', null
+            // 自动补全状态
+            completion: {
+                suggestions: [],
+                selectedIndex: 0,
+                isActive: false,
+                lastInput: '',
+                context: null // 'command', 'file', 'git', 'package', 'flag'
+            }
+        };
+
+        // --- 核心工具 ---
+        function getNode(root, pathArr) {
+            let curr = root;
+            for (const p of pathArr) {
+                if (curr?.children?.[p]) curr = curr.children[p];
+                else return null;
+            }
+            return curr;
+        }
+
+        function resolvePath(currPath, targetStr, separator) {
+            if (!targetStr) return currPath;
+            if (targetStr.startsWith(separator)) return targetStr.split(separator).filter(p => p);
+            let parts = targetStr.split(/[/\\]/).filter(p => p);
+            let newPath = [...currPath];
+            for (const p of parts) {
+                if (p === '.') continue;
+                if (p === '..') { if (newPath.length > 0) newPath.pop(); }
+                else newPath.push(p);
+            }
+            return newPath;
+        }
+
+        function generateTree(node, prefix = '') {
+            let output = '';
+            const keys = Object.keys(node.children || {}).sort();
+            keys.forEach((k, i) => {
+                const isLast = i === keys.length - 1;
+                const connector = isLast ? '└── ' : '├── ';
+                const item = node.children[k];
+                output += `${prefix}${connector}${k}${item.type === 'dir' ? '/' : ''}\n`;
+                if (item.type === 'dir') {
+                    output += generateTree(item, prefix + (isLast ? '    ' : '│   '));
+                }
+            });
+            return output || '(empty)';
+        }
+
+        // --- 渲染逻辑 ---
+        const app = document.getElementById('app');
+
+        function render() {
+            if (state.view === 'menu') renderMenu();
+            else if (state.view === 'game') renderGame();
+        }
+
+        function renderMenu() {
+            app.innerHTML = `
+                <div class="flex flex-col items-center justify-center h-full bg-gray-950 text-white animate-fade-in">
+                    <div class="mb-12 text-center">
+                        <h1 class="text-6xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400">OS Master</h1>
+                        <p class="text-gray-400 text-lg">选择你的操作系统，开始命令行训练</p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl w-full px-8">
+                        ${Object.values(OS_CONFIG).map(os => `
+                            <div onclick="selectOS('${os.id}')" class="bg-gray-900/50 border border-gray-800 rounded-2xl p-8 hover:bg-gray-800 hover:border-gray-600 cursor-pointer transition-all transform hover:-translate-y-2 group">
+                                <div class="w-16 h-16 mb-6 ${os.iconColor || 'text-white'} group-hover:scale-110 transition-transform">
+                                    ${os.id === 'windows' ? ICONS.winLogo : os.id === 'macos' ? ICONS.appleLogo : ICONS.linuxLogo}
+                                </div>
+                                <h2 class="text-2xl font-bold mb-2">${os.name}</h2>
+                                <p class="text-gray-500 text-sm font-mono mb-4">Prompt: ${os.id === 'linux' ? '$' : os.id === 'macos' ? '%' : '>'}</p>
+                                <div class="text-xs text-gray-400 flex flex-wrap gap-2">
+                                    ${Object.keys(os.commands).slice(0, 3).map(k => `<span class="bg-gray-800 px-2 py-1 rounded border border-gray-700">${os.commands[k]}</span>`).join('')}
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderGame() {
+            const os = state.os;
+            const style = os.style;
+
+            // 构建基本框架
+            let controls = '';
+            if (style.windowControls === 'mac') {
+                controls = `<div class="flex gap-2"><div class="w-3 h-3 rounded-full bg-[#ff5f56] border border-[#e0443e]"></div><div class="w-3 h-3 rounded-full bg-[#ffbd2e] border border-[#dea123]"></div><div class="w-3 h-3 rounded-full bg-[#27c93f] border border-[#1aab29]"></div></div>`;
+            } else if (style.windowControls === 'win') {
+                controls = `<div class="flex h-full"><div class="w-10 h-full flex items-center justify-center hover:bg-white/10"><div class="w-2.5 h-[1px] bg-white"></div></div><div class="w-10 h-full flex items-center justify-center hover:bg-white/10"><div class="w-2.5 h-2.5 border border-white"></div></div><div class="w-10 h-full flex items-center justify-center hover:bg-red-600"><div class="text-sm">×</div></div></div>`;
+            } else {
+                controls = `<div class="flex gap-2"><div class="w-3 h-3 rounded-full bg-orange-700"></div></div>`;
+            }
+
+            app.innerHTML = `
+                <div class="flex h-full ${style.bg} ${style.fontUI} overflow-hidden">
+                    <!-- 左侧边栏 -->
+                    <div class="w-72 flex-shrink-0 flex flex-col ${style.sidebar} transition-all border-r border-white/5 relative z-20">
+                        <div class="h-12 flex items-center px-4 border-b border-white/5 bg-white/5">
+                            <button onclick="state.view='menu';render()" class="text-xs text-gray-400 hover:text-white flex items-center gap-1">
+                                ${ICONS.home} <span class="uppercase tracking-widest font-bold">Home</span>
+                            </button>
+                        </div>
+
+                        <!-- 任务区域 (局部更新容器) -->
+                        <div id="task-section" class="p-4 border-b border-white/5">
+                            <!-- JS 填充内容 -->
+                        </div>
+
+                        <div class="flex-1 overflow-y-auto p-2">
+                            <div class="text-[10px] uppercase text-gray-500 font-bold px-2 mb-2 tracking-wider">
+                                ${state.isRemote ? 'Remote Server' : 'Local Disk'}
+                            </div>
+                            <div id="file-list" class="space-y-0.5"></div>
+                        </div>
+                    </div>
+
+                    <!-- 右侧终端 -->
+                    <div class="flex-1 flex flex-col relative z-10 min-w-0">
+                        <div class="${style.header} flex items-center justify-between px-3 select-none">
+                            ${style.windowControls === 'mac' ? controls : '<div class="w-10"></div>'}
+                            <div class="text-xs font-medium opacity-80 flex items-center gap-2">
+                                <div class="w-3 h-3">${os.id === 'windows' ? ICONS.winLogo : os.id === 'macos' ? ICONS.appleLogo : ICONS.linuxLogo}</div>
+                                ${state.isRemote ? 'ssh root@server' : os.id === 'windows' ? 'Administrator: Command Prompt' : 'Terminal'}
+                            </div>
+                            ${style.windowControls === 'win' ? controls : '<div class="w-10"></div>'}
+                        </div>
+
+                        <div id="terminal" class="flex-1 ${style.term} ${style.fontMono} p-4 overflow-y-auto text-sm cursor-text" onclick="document.getElementById('input').focus()">
+                            <div id="output" class="mb-2"></div>
+                            
+                            <div class="flex">
+                                <span class="mr-2 whitespace-nowrap" id="prompt-span"></span>
+                                <div class="relative flex-1">
+                                    <input id="input" type="text" class="w-full bg-transparent border-none outline-none text-transparent caret-transparent absolute top-0 left-0" autocomplete="off" spellcheck="false" onkeydown="handleInput(event)" oninput="renderInput()">
+                                    <div id="input-render" class="absolute top-0 left-0 pointer-events-none break-all whitespace-pre-wrap"></div>
+                                    <span id="cursor" class="absolute top-0 w-0.5 h-5 bg-gray-300 opacity-90 animate-blink pointer-events-none"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // 初始化内容
+            renderTaskSection();
+            updateUI();
+
+            if (state.history.length === 0) {
+                const welcome = os.id === 'windows' ? 'Microsoft Windows [Version 10.0.22631.3296]\n(c) Microsoft Corporation. All rights reserved.'
+                    : os.id === 'macos' ? `Last login: ${new Date().toDateString()} on ttys000`
+                        : `Welcome to Ubuntu 24.04 LTS (GNU/Linux 5.15.0-91-generic x86_64)`;
+                appendLog(welcome, 'text-gray-500');
+            }
+        }
+
+        // --- 独立的任务渲染函数 (局部更新核心) ---
+        function renderTaskSection() {
+            const container = document.getElementById('task-section');
+            if (!container) return;
+
+            const scenario = scenarios.find(s => s.id === state.scenarioId);
+            const level = scenario ? scenario.levels[state.levelIndex] : null;
+            const os = state.os;
+            const style = os.style;
+
+            if (!scenario) {
+                container.innerHTML = `
+                    <div class="text-center p-4 border border-dashed border-gray-600 rounded-lg animate-fade-in">
+                        <div class="text-xs text-gray-400 mb-2">自由模式</div>
+                        <div class="flex flex-wrap gap-2 justify-center">
+                            ${scenarios.map(s => `<button onclick="setScenario('${s.id}')" class="text-xs bg-white/10 hover:bg-white/20 px-2 py-1 rounded text-white transition-colors">${s.title}</button>`).join('')}
+                        </div>
+                    </div>
+                `;
+            } else {
+                container.innerHTML = `
+                    <div class="bg-white/5 border border-white/10 rounded-lg p-4 animate-slide-in relative overflow-hidden group">
+                        ${state.levelIndex >= scenario.levels.length ? `
+                            <div class="text-center text-green-400 animate-fade-in">
+                                <div class="text-xl font-bold mb-1">🎉 任务完成</div>
+                                <button onclick="setScenario(null)" class="text-xs underline hover:text-white">返回</button>
+                            </div>
+                        ` : `
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-[10px] bg-blue-500/20 text-blue-300 px-1.5 py-0.5 rounded uppercase font-bold tracking-wider">L${state.levelIndex + 1}</span>
+                                <span class="text-xs text-gray-400">${level.title}</span>
+                            </div>
+                            <div class="text-sm text-gray-200 mb-3 font-medium leading-relaxed">${level.desc(os)}</div>
+                            <div class="bg-black/30 p-2 rounded text-xs font-mono text-gray-400 border border-white/5 flex gap-2">
+                                <span class="${style.accent}">$</span> ${typeof level.task === 'function' ? level.task(os) : level.task}
+                            </div>
+                        `}
+                    </div>
+                `;
+            }
+        }
+
+        function selectOS(id) {
+            state.osId = id;
+            state.fs = deepClone(fsData[id]);
+            state.path = [...state.os.home];
+            state.scenarioId = null;
+            state.levelIndex = 0;
+            state.history = [];
+            state.view = 'game';
+            state.repl = null;
+            render();
+        }
+
+        function setScenario(id) {
+            state.scenarioId = id;
+            state.levelIndex = 0;
+            // 切换场景时重置渲染
+            renderGame();
+        }
+
+        function updateUI() {
+            const os = state.os;
+
+            let promptStr;
+            if (state.repl === 'node') promptStr = `<span class="text-green-500">></span>`;
+            else if (state.repl === 'python') promptStr = `<span class="text-blue-500">>>></span>`;
+            else promptStr = state.isRemote
+                ? `<span class="text-green-400">root@server</span>:<span class="text-blue-400">/${state.remotePath.slice(1).join('/')}</span>#`
+                : os.prompt(state.path);
+
+            document.getElementById('prompt-span').innerHTML = promptStr;
+
+            const listEl = document.getElementById('file-list');
+            if (listEl) {
+                const node = state.currNode;
+                const children = Object.keys(node.children || {}).sort();
+
+                const pathStr = (state.isRemote ? '/' : '') + state.path.join(os.sep);
+
+                let html = `
+                    <div class="px-2 py-1 mb-2 flex items-center gap-1 text-[10px] text-gray-500 border-b border-white/5">
+                         ${ICONS.folder.replace('class="text-yellow-400"', 'class="w-3 h-3 text-gray-500"')}
+                         <span class="truncate">${pathStr}</span>
+                    </div>
+                `;
+
+                if (state.path.length > (state.isRemote ? 1 : os.home.length)) {
+                    html += `
+                        <div class="flex items-center gap-2 px-2 py-1.5 rounded hover:bg-white/10 text-xs text-gray-400 select-none">
+                            <div class="w-4 flex justify-center">⤴</div>
+                            <span>..</span>
+                        </div>
+                     `;
+                }
+
+                if (children.length === 0) {
+                    html += `<div class="px-8 py-4 text-xs text-gray-600 italic">Empty Folder</div>`;
+                } else {
+                    html += children.map(name => {
+                        const item = node.children[name];
+                        const isDir = item.type === 'dir';
+                        const icon = isDir ? ICONS.folder : ICONS.file;
+                        const meta = isDir ? 'Folder' : (item.size || '1KB');
+
+                        return `
+                            <div class="flex items-center gap-2 px-2 py-1.5 rounded hover:bg-white/10 group cursor-default transition-colors">
+                                <div class="w-4 h-4 flex-shrink-0 ${isDir ? '' : 'opacity-70'}">${icon}</div>
+                                <div class="flex-1 min-w-0">
+                                    <div class="text-xs text-gray-300 truncate group-hover:text-white font-medium">${name}</div>
+                                </div>
+                                <div class="text-[10px] text-gray-600 group-hover:text-gray-500 tabular-nums">${meta}</div>
+                            </div>
+                        `;
+                    }).join('');
+                }
+                listEl.innerHTML = html;
+            }
+        }
+
+        function handleInput(e) {
+            const input = e.target;
+
+            // Tab 键补全 - 支持连续切换
+            if (e.key === 'Tab') {
+                e.preventDefault();
+                playKeySound(); // 按键音效
+                addTerminalEffect(); // 视觉反馈
+
+                const currentInput = input.value;
+
+                // 如果补全菜单已激活，切换到下一个建议
+                if (state.completion.isActive && state.completion.suggestions.length > 0) {
+                    navigateCompletions(e.shiftKey ? -1 : 1); // Shift+Tab 向上切换
+                    return;
+                }
+
+                // 获取新的补全建议
+                const completions = AutoComplete.getCompletions(currentInput);
+
+                if (completions.length === 0) {
+                    // 没有补全建议 - 添加轻微震动效果表示无结果
+                    input.style.transform = 'translateX(2px)';
+                    setTimeout(() => {
+                        input.style.transform = 'translateX(0)';
+                    }, 100);
+                    return;
+                } else if (completions.length === 1) {
+                    // 只有一个补全建议，直接应用
+                    const completed = AutoComplete.applyCompletion(currentInput, completions[0]);
+                    input.value = completed;
+                    renderInput();
+                    hideCompletions();
+                } else {
+                    // 多个补全建议，显示补全列表并选择第一个
+                    showCompletions(completions, currentInput);
+                    state.completion.selectedIndex = 0;
+                    highlightCompletionItem();
+                }
+                return;
+            }
+
+            // 方向键导航补全列表
+            if (state.completion.isActive) {
+                if (e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    navigateCompletions(1);
+                    return;
+                } else if (e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    navigateCompletions(-1);
+                    return;
+                } else if (e.key === 'Enter') {
+                    e.preventDefault();
+                    applySelectedCompletion();
+                    return;
+                } else if (e.key === 'Escape') {
+                    hideCompletions();
+                    return;
+                }
+            }
+
+            // 其他键隐藏补全列表
+            if (e.key !== 'Tab' && state.completion.isActive) {
+                hideCompletions();
+            }
+
+            // 历史命令导航 (只有在没有补全菜单时才启用)
+            if (!state.completion.isActive) {
+                if (e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    navigateHistory(1);
+                    return;
+                } else if (e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    navigateHistory(-1);
+                    return;
+                }
+            }
+
+            // Ctrl 组合键处理
+            if (e.ctrlKey) {
+                switch (e.key) {
+                    case 'c':
+                        e.preventDefault();
+                        // Ctrl+C 中断当前操作 - 使用更强烈的音效
+                        try {
+                            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                            const oscillator = audioContext.createOscillator();
+                            const gainNode = audioContext.createGain();
+
+                            oscillator.connect(gainNode);
+                            gainNode.connect(audioContext.destination);
+
+                            oscillator.frequency.setValueAtTime(1200, audioContext.currentTime);
+                            oscillator.frequency.exponentialRampToValueAtTime(600, audioContext.currentTime + 0.15);
+
+                            gainNode.gain.setValueAtTime(0.15, audioContext.currentTime);
+                            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.15);
+
+                            oscillator.start(audioContext.currentTime);
+                            oscillator.stop(audioContext.currentTime + 0.15);
+                        } catch (e) {
+                            // 静默处理音频错误
+                        }
+
+                        // 视觉反馈 - 屏幕闪烁效果
+                        const terminal = document.getElementById('terminal');
+                        terminal.style.backgroundColor = 'rgba(255, 100, 100, 0.1)';
+                        setTimeout(() => {
+                            terminal.style.backgroundColor = '';
+                        }, 150);
+
+                        if (input.value || state.repl) {
+                            appendLog('^C', 'text-gray-400');
+                            input.value = '';
+                            renderInput();
+                            if (state.repl) {
+                                state.repl = null;
+                                appendLog('REPL interrupted', 'text-yellow-400');
+                            }
+                        } else {
+                            appendLog('^C', 'text-gray-400');
+                        }
+                        return;
+
+                    case 'd':
+                        e.preventDefault();
+                        // Ctrl+D 退出 (EOF)
+                        if (!input.value) {
+                            appendLog('logout', 'text-gray-400');
+                            appendLog('[Process completed]', 'text-gray-500');
+                            // 模拟退出，可以在这里添加重新启动逻辑
+                            setTimeout(() => {
+                                document.getElementById('output').innerHTML = '';
+                                const os = state.os;
+                                const welcome = os.id === 'windows' ? 'Microsoft Windows [Version 10.0.22631.3296]\n(c) Microsoft Corporation. All rights reserved.'
+                                    : os.id === 'macos' ? `Last login: ${new Date().toDateString()} on ttys000`
+                                        : `Welcome to Ubuntu 24.04 LTS (GNU/Linux 5.15.0-91-generic x86_64)`;
+                                appendLog(welcome, 'text-gray-500');
+                            }, 1500);
+                        }
+                        return;
+
+                    case 'l':
+                        e.preventDefault();
+                        // Ctrl+L 清屏
+                        document.getElementById('output').innerHTML = '';
+                        return;
+
+                    case 'a':
+                        e.preventDefault();
+                        // Ctrl+A 移动到行首
+                        input.setSelectionRange(0, 0);
+                        return;
+
+                    case 'e':
+                        e.preventDefault();
+                        // Ctrl+E 移动到行尾
+                        input.setSelectionRange(input.value.length, input.value.length);
+                        return;
+
+                    case 'u':
+                        e.preventDefault();
+                        // Ctrl+U 清除到行首
+                        input.value = input.value.substring(input.selectionStart);
+                        renderInput();
+                        return;
+
+                    case 'k':
+                        e.preventDefault();
+                        // Ctrl+K 清除到行尾
+                        input.value = input.value.substring(0, input.selectionStart);
+                        renderInput();
+                        return;
+
+                    case 'w':
+                        e.preventDefault();
+                        // Ctrl+W 删除前一个单词
+                        const beforeCursor = input.value.substring(0, input.selectionStart);
+                        const afterCursor = input.value.substring(input.selectionStart);
+                        const words = beforeCursor.trim().split(/\s+/);
+                        if (words.length > 0) {
+                            words.pop();
+                            const newBefore = words.join(' ') + (words.length > 0 ? ' ' : '');
+                            input.value = newBefore + afterCursor;
+                            input.setSelectionRange(newBefore.length, newBefore.length);
+                            renderInput();
+                        }
+                        return;
+                }
+            }
+
+            // 原有的 Enter 处理
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                playKeySound(); // 按键音效
+                addTerminalEffect(); // 视觉反馈
+
+                const cmd = e.target.value;
+                if (cmd.trim()) {
+                    // 将非空命令添加到历史记录
+                    state.inputHistory.unshift(cmd);
+                    // 限制历史记录数量
+                    if (state.inputHistory.length > 100) {
+                        state.inputHistory.pop();
+                    }
+                }
+                // 重置历史索引
+                state.historyIdx = -1;
+
+                // 显示执行的命令
+                const prompt = getPrompt();
+                appendLog(prompt + cmd, 'text-gray-300');
+
+                // Allow empty enters
+                execute(cmd);
+                e.target.value = '';
+                renderInput();
+                hideCompletions();
+            }
+        }
+
+        // 获取当前提示符
+        function getPrompt() {
+            const os = state.os;
+            const path = state.path.join(os.sep);
+            const fullPath = (os.id === 'windows' ? 'C:\\' : '/') + path;
+
+            if (os.id === 'windows') {
+                return `C:\\${path}> `;
+            } else if (os.id === 'macos') {
+                const user = 'guest';
+                const host = 'MacBook';
+                const shortPath = state.path.length > 0 ? state.path[state.path.length - 1] : '~';
+                return `${user}@${host}:${shortPath}$ `;
+            } else {
+                const user = 'guest';
+                const host = 'ubuntu';
+                const shortPath = state.path.length > 0 ? state.path[state.path.length - 1] : '~';
+                return `${user}@${host}:${shortPath}$ `;
+            }
+        }
+
+        // 历史命令导航函数
+        function navigateHistory(direction) {
+            const input = document.getElementById('input');
+
+            if (state.inputHistory.length === 0) return;
+
+            // 向上导航 (更早的历史命令)
+            if (direction > 0) {
+                if (state.historyIdx < state.inputHistory.length - 1) {
+                    state.historyIdx++;
+                    input.value = state.inputHistory[state.historyIdx];
+                    renderInput();
+                }
+            }
+            // 向下导航 (更新的历史命令)
+            else if (direction < 0) {
+                if (state.historyIdx > 0) {
+                    state.historyIdx--;
+                    input.value = state.inputHistory[state.historyIdx];
+                    renderInput();
+                } else if (state.historyIdx === 0) {
+                    // 回到当前输入
+                    state.historyIdx = -1;
+                    input.value = '';
+                    renderInput();
+                }
+            }
+        }
+
+        function renderInput() {
+            const input = document.getElementById('input');
+            const renderer = document.getElementById('input-render');
+            const cursor = document.getElementById('cursor');
+            renderer.textContent = input.value;
+            const chWidth = 8.4;
+            const width = input.value.length * chWidth;
+            cursor.style.transform = `translateX(${width}px)`;
+
+            // 输入时更新补全建议
+            if (state.completion.isActive && input.value !== state.completion.lastInput) {
+                updateCompletions(input.value);
+            }
+        }
+
+        // --- 补全UI功能 ---
+        function showCompletions(completions, currentInput) {
+            state.completion.suggestions = completions;
+            state.completion.selectedIndex = 0;
+            state.completion.isActive = true;
+            state.completion.lastInput = currentInput;
+
+            const terminal = document.getElementById('terminal');
+            let completionDiv = document.getElementById('completion-menu');
+
+            // 移除旧的补全菜单
+            if (completionDiv) {
+                completionDiv.remove();
+            }
+
+            // 创建新的补全菜单
+            completionDiv = document.createElement('div');
+            completionDiv.id = 'completion-menu';
+            completionDiv.className = 'absolute z-50 bg-gray-900 border border-gray-700 rounded-lg shadow-xl max-h-64 overflow-y-auto backdrop-blur-sm';
+            completionDiv.style.cssText = 'top: 100%; left: 0; min-width: 250px; margin-top: 8px; font-family: inherit;';
+
+            // 计算位置（在输入行下方）
+            const inputLine = document.querySelector('#terminal > div.flex');
+            if (inputLine) {
+                const rect = inputLine.getBoundingClientRect();
+                const terminalRect = terminal.getBoundingClientRect();
+                completionDiv.style.top = (rect.bottom - terminalRect.top) + 'px';
+                completionDiv.style.left = (rect.left - terminalRect.left) + 'px';
+            }
+
+            // 渲染补全项
+            renderCompletionItems(completionDiv, completions);
+
+            terminal.appendChild(completionDiv);
+        }
+
+        function renderCompletionItems(container, completions) {
+            container.innerHTML = '';
+            completions.forEach((completion, index) => {
+                const item = document.createElement('div');
+                item.className = 'px-3 py-2 text-sm cursor-pointer hover:bg-blue-600 transition-colors duration-150 flex items-center';
+
+                // 添加图标和文本
+                const icon = document.createElement('span');
+                icon.className = 'mr-2 opacity-70';
+                icon.textContent = this.getFileIcon ? this.getFileIcon(completion) : '📄';
+
+                const text = document.createElement('span');
+                text.textContent = completion;
+
+                item.appendChild(icon);
+                item.appendChild(text);
+
+                if (index === state.completion.selectedIndex) {
+                    item.classList.add('bg-blue-600', 'text-white');
+                    item.classList.remove('hover:bg-blue-600');
+                }
+
+                item.addEventListener('click', () => {
+                    applyCompletion(completion);
+                });
+
+                item.addEventListener('mouseenter', () => {
+                    state.completion.selectedIndex = index;
+                    highlightCompletionItem();
+                });
+
+                container.appendChild(item);
+            });
+        }
+
+        function navigateCompletions(direction) {
+            const maxIndex = state.completion.suggestions.length - 1;
+            state.completion.selectedIndex += direction;
+
+            if (state.completion.selectedIndex < 0) {
+                state.completion.selectedIndex = maxIndex;
+            } else if (state.completion.selectedIndex > maxIndex) {
+                state.completion.selectedIndex = 0;
+            }
+
+            highlightCompletionItem();
+        }
+
+        function highlightCompletionItem() {
+            const items = document.querySelectorAll('#completion-menu > div');
+            items.forEach((item, index) => {
+                if (index === state.completion.selectedIndex) {
+                    item.classList.add('bg-blue-600');
+                } else {
+                    item.classList.remove('bg-blue-600');
+                }
+            });
+        }
+
+        function applySelectedCompletion() {
+            if (state.completion.suggestions.length > 0) {
+                const selected = state.completion.suggestions[state.completion.selectedIndex];
+                applyCompletion(selected);
+            }
+        }
+
+        function applyCompletion(completion) {
+            const input = document.getElementById('input');
+            const currentInput = input.value;
+            const completed = AutoComplete.applyCompletion(currentInput, completion);
+
+            input.value = completed;
+            renderInput();
+
+            // 延迟隐藏补全菜单，允许用户继续Tab切换
+            setTimeout(() => {
+                hideCompletions();
+            }, 500);
+
+            // 重新触发补全以显示下一个可能的补全
+            setTimeout(() => {
+                const newCompletions = AutoComplete.getCompletions(input.value);
+                if (newCompletions.length > 0) {
+                    showCompletions(newCompletions, input.value);
+                }
+            }, 100);
+        }
+
+        function updateCompletions(currentInput) {
+            const completions = AutoComplete.getCompletions(currentInput);
+
+            if (completions.length === 0) {
+                hideCompletions();
+            } else {
+                showCompletions(completions, currentInput);
+            }
+        }
+
+        function hideCompletions() {
+            state.completion.isActive = false;
+            state.completion.suggestions = [];
+            state.completion.selectedIndex = 0;
+
+            const completionDiv = document.getElementById('completion-menu');
+            if (completionDiv) {
+                completionDiv.remove();
+            }
+        }
+
+        async function execute(rawCmd) {
+            const args = rawCmd.trim().split(/\s+/);
+            const cmd = args[0].toLowerCase();
+            const params = args.slice(1);
+            const os = state.os;
+
+            // Handle REPL Mode
+            if (state.repl) {
+                const promptStr = state.repl === 'node' ? `>` : `>>>`;
+                appendLog(`${promptStr} ${rawCmd}`, state.repl === 'node' ? 'text-green-500' : 'text-blue-500');
+
+                if (['exit', 'quit', '.exit', 'exit()'].includes(rawCmd.trim())) {
+                    state.repl = null;
+                    appendLog(state.repl === 'python' ? '' : '(To exit, press Ctrl+C again or .exit)', 'text-gray-500');
+                } else if (rawCmd.trim()) {
+                    try {
+                        if (rawCmd.startsWith('print') || rawCmd.startsWith('console.log')) {
+                            const match = rawCmd.match(/["'](.+)["']/);
+                            if (match) appendLog(match[1]);
+                        } else if (['1+1', '2+2'].includes(rawCmd.replace(/\s/g, ''))) {
+                            appendLog(eval(rawCmd));
+                        } else {
+                            appendLog(state.repl === 'node' ? 'undefined' : '');
+                        }
+                    } catch {
+                        appendLog('Error', 'text-red-400');
+                    }
+                }
+                updateUI();
+                return;
+            }
+
+            // Normal Shell Mode
+            const promptStr = state.isRemote ? `root@server#` : (os.id === 'windows' ? `${state.path.join('\\')}>` : `${os.id === 'macos' ? '%' : '$'}`);
+            appendLog(`${promptStr} ${rawCmd}`, 'text-white font-bold');
+
+            // 修复：使用 trim 后的命令进行校验
+            state.lastCmd = rawCmd.trim();
+
+            if (!rawCmd.trim()) return;
+
+            let output = '';
+
+            // Check cross-platform command mismatch hints
+            if (!state.isRemote) {
+                if (os.id === 'windows' && ['ls', 'clear', 'rm', 'cp', 'mv'].includes(cmd))
+                    output = `'${cmd}' is not recognized. Did you mean '${os.commands[cmd] || 'dir'}'?`;
+                else if (os.id !== 'windows' && ['dir', 'cls', 'del', 'copy', 'move'].includes(cmd))
+                    output = `command not found: ${cmd}. Try '${os.commands[cmd] || 'ls'}'`;
+            }
+
+            if (!output) {
+                switch (cmd) {
+                    case 'cls': case 'clear':
+                        document.getElementById('output').innerHTML = '';
+                        return;
+                    case 'dir': case 'ls': case 'll':
+                        const list = Object.keys(state.currNode.children || {});
+                        if (os.id === 'windows' && !state.isRemote && cmd === 'dir') {
+                            output = list.map(k => {
+                                const type = state.currNode.children[k].type === 'dir' ? '<DIR>' : '     ';
+                                return `05/20/2025  12:00 PM    ${type}    ${k}`;
+                            }).join('\n') || 'File Not Found';
+                        } else {
+                            output = list.join('  ');
+                        }
+                        break;
+                    case 'cd':
+                        if (!params[0]) { /* go home */ } else {
+                            const newPath = resolvePath(state.path, params[0], os.sep);
+                            if (getNode(state.fs, newPath)?.type === 'dir') state.path = newPath;
+                            else output = `cd: no such file or directory: ${params[0]}`;
+                        }
+                        break;
+                    case 'mkdir':
+                        if (params[0]) state.currNode.children[params[0]] = { type: 'dir', children: {} };
+                        break;
+                    case 'touch': case 'echo':
+                        const fName = cmd === 'touch' ? params[0] : rawCmd.split('>')[1]?.trim();
+                        if (fName) state.currNode.children[fName] = { type: 'file', size: '0KB', content: args.slice(1).join(' ').split('>')[0].trim() };
+                        break;
+                    case 'rm': case 'del':
+                        if (state.currNode.children[params[0]]) delete state.currNode.children[params[0]];
+                        else output = 'File not found';
+                        break;
+                    case 'mv': case 'move':
+                        if (state.currNode.children[params[0]]) {
+                            const content = state.currNode.children[params[0]];
+                            delete state.currNode.children[params[0]];
+                            state.currNode.children[params[1]] = content;
+                        } else output = 'File not found';
+                        break;
+                    case 'cp': case 'copy':
+                        if (state.currNode.children[params[0]]) {
+                            state.currNode.children[params[1]] = deepClone(state.currNode.children[params[0]]);
+                        } else output = 'File not found';
+                        break;
+                    case 'cat': case 'type':
+                        const f = state.currNode.children[params[0]];
+                        output = f?.type === 'file' ? (f.content || '(empty)') : 'File not found';
+                        break;
+                    case 'tree':
+                        output = generateTree(state.currNode);
+                        break;
+                    case 'pwd':
+                        output = (state.isRemote ? '/' : '') + state.path.join(os.sep);
+                        break;
+                    case 'whoami':
+                        output = state.isRemote ? 'root' : (os.id === 'windows' ? 'Administrator' : 'guest');
+                        break;
+                    case 'date':
+                        output = new Date().toString();
+                        break;
+                    case 'history':
+                        output = state.inputHistory.join('\n');
+                        break;
+                    case 'ping':
+                        if (!params[0]) output = 'Usage: ping <host>';
+                        else output = `PING ${params[0]} (127.0.0.1): 56 data bytes\n64 bytes from 127.0.0.1: icmp_seq=0 ttl=64 time=0.045 ms\n64 bytes from 127.0.0.1: icmp_seq=1 ttl=64 time=0.082 ms\n--- ${params[0]} ping statistics ---\n2 packets transmitted, 2 packets received, 0.0% packet loss`;
+                        break;
+                    case 'curl':
+                    case 'wget':
+                        output = `HTTP/1.1 200 OK\nContent-Type: text/html\n\n<html><body>Mock Response</body></html>`;
+                        break;
+                    case 'ps': case 'tasklist':
+                        output = `PID   USER     TIME   COMMAND\n1     root     0:00   init\n123   guest    0:12   bash\n456   guest    0:01   ${cmd}`;
+                        break;
+                    case 'top':
+                        output = `Tasks: 12 total, 1 running, 11 sleeping\n%Cpu(s):  0.3 us,  0.1 sy,  0.0 ni, 99.6 id\nPID USER      PR  NI    VIRT    RES    SHR S  %CPU %MEM     TIME+ COMMAND\n  1 root      20   0   22524   1840   1400 S   0.0  0.0   0:00.08 init`;
+                        break;
+                    case 'uname': case 'ver':
+                        output = os.id === 'windows' ? 'Microsoft Windows [Version 10.0.22631.3296]' : 'Linux ubuntu 5.15.0-91-generic';
+                        break;
+                    case 'neofetch':
+                        output = `OS: ${os.name}\nHost: Web Terminal\nKernel: 5.0.0\nUptime: 10 mins\nShell: ${state.isRemote ? 'bash' : os.id === 'windows' ? 'cmd' : 'zsh'}`;
+                        break;
+                    case 'help': case 'man':
+                        output = `Available commands for ${os.name}:\n` + Object.values(os.commands).join(', ') + `, tree, date, whoami, history, ping, curl, ps, top, grep, head, tail, wc, du, df, node, python, git, npm, sudo`;
+                        break;
+                    case 'grep': case 'findstr':
+                        if (params.length < 2) output = "Usage: grep <pattern> <file>";
+                        else {
+                            const tFile = state.currNode.children[params[1]];
+                            if (tFile && tFile.type === 'file' && tFile.content) {
+                                output = tFile.content.split('\n').filter(line => line.includes(params[0])).join('\n');
+                            }
+                        }
+                        break;
+                    case 'head':
+                        if (!params[0]) output = "Usage: head <file>";
+                        else {
+                            const hFile = state.currNode.children[params[0]];
+                            if (hFile) output = (hFile.content || '').split('\n').slice(0, 5).join('\n');
+                        }
+                        break;
+                    case 'tail':
+                        if (!params[0]) output = "Usage: tail <file>";
+                        else {
+                            const tlFile = state.currNode.children[params[0]];
+                            if (tlFile) output = (tlFile.content || '').split('\n').slice(-5).join('\n');
+                        }
+                        break;
+                    case 'wc':
+                        if (!params[0]) output = "Usage: wc <file>";
+                        else {
+                            const wFile = state.currNode.children[params[0]];
+                            if (wFile) {
+                                const c = wFile.content || '';
+                                output = `${c.split('\n').length}  ${c.split(/\s+/).length}  ${c.length} ${params[0]}`;
+                            }
+                        }
+                        break;
+                    case 'du':
+                        output = "4.0K    .";
+                        break;
+                    case 'df':
+                        output = "Filesystem     1K-blocks    Used Available Use% Mounted on\n/dev/sda1        1024000  500000    524000  49% /";
+                        break;
+                    case 'sudo':
+                        if (params.length === 0) output = "usage: sudo command";
+                        else execute(params.join(' ')); // Recursive call without sudo
+                        return; // return to avoid double log
+                    case 'node':
+                        state.repl = 'node';
+                        output = `Welcome to Node.js v18.16.0.\nType ".help" for more information.`;
+                        break;
+                    case 'python': case 'python3':
+                        state.repl = 'python';
+                        output = `Python 3.10.12 (main, Nov 20 2023, 15:14:05) [GCC 11.4.0] on linux\nType "help", "copyright", "credits" or "license" for more information.`;
+                        break;
+                    case 'npm':
+                        if (params[0] === 'install' || params[0] === 'i') {
+                            appendLog(`\n[..................] / idealTree:lib: sill idealTree buildDeps`, 'text-gray-500');
+                            await new Promise(r => setTimeout(r, 1000));
+                            output = `\nadded 1 package, and audited 2 packages in 1s\n\nfound 0 vulnerabilities`;
+                        } else {
+                            output = `Usage: npm install <package>`;
+                        }
+                        break;
+                    case 'git':
+                        const sub = params[0];
+                        if (sub === 'init') output = "Initialized empty Git repository in .git/";
+                        else if (sub === 'status') output = "On branch master\nNo commits yet\n\nUntracked files:\n  (use \"git add <file>...\" to include in what will be committed)\n\t.";
+                        else if (sub === 'log') output = "fatal: your current branch 'master' does not have any commits yet";
+                        else if (sub === 'branch') output = "* master";
+                        else if (sub === 'checkout') output = `Switched to branch '${params[1] || 'master'}'`;
+                        else if (sub === 'add') output = params[0] === '.' ? 'Added all files' : `Added ${params[0]}`;
+                        else if (sub === 'commit') output = `[master (root-commit) a1b2c3d] Initial commit\n 1 file changed, 1 insertion(+)`;
+                        else if (sub === 'push') output = `Enumerating objects: 3, done.\nWriting objects: 100% (3/3), 220 bytes | 220.00 KiB/s, done.\nTo github.com:user/repo.git\n * [new branch]      master -> master`;
+                        else if (sub === 'pull') output = `Already up to date.`;
+                        else if (sub === 'clone') output = `Cloning into '${params[1] || 'repo'}'...\nremote: Enumerating objects: 100, done.\nReceiving objects: 100% (100/100), done.`;
+                        else if (sub === 'diff') output = `diff --git a/file.txt b/file.txt\nindex 1234567..abcdefg 100644\n--- a/file.txt\n+++ b/file.txt\n@@ -1 +1 @@\n-old line\n+new line`;
+                        else output = "git: usage: git init, status, log, branch, checkout, add, commit, push, pull, clone, diff";
+                        break;
+
+                    // 增强的文件系统命令
+                    case 'mkdir':
+                        if (!params[0]) output = "mkdir: missing operand";
+                        else {
+                            const dirName = params[0];
+                            if (state.currNode.children[dirName]) {
+                                output = `mkdir: cannot create directory '${dirName}': File exists`;
+                            } else {
+                                state.currNode.children[dirName] = { type: 'dir', children: {} };
+                                output = '';
+                            }
+                        }
+                        break;
+
+                    case 'rmdir':
+                        if (!params[0]) output = "rmdir: missing operand";
+                        else {
+                            const dirName = params[0];
+                            if (!state.currNode.children[dirName]) {
+                                output = `rmdir: failed to remove '${dirName}': No such file or directory`;
+                            } else if (state.currNode.children[dirName].type !== 'dir') {
+                                output = `rmdir: failed to remove '${dirName}': Not a directory`;
+                            } else if (Object.keys(state.currNode.children[dirName].children || {}).length > 0) {
+                                output = `rmdir: failed to remove '${dirName}': Directory not empty`;
+                            } else {
+                                delete state.currNode.children[dirName];
+                                output = '';
+                            }
+                        }
+                        break;
+
+                    case 'chmod':
+                        if (!params[0] || !params[1]) output = "chmod: missing operand";
+                        else output = `Changed permissions of '${params[1]}' to ${params[0]}`;
+                        break;
+
+                    case 'chown':
+                        if (!params[0] || !params[1]) output = "chown: missing operand";
+                        else output = `Changed ownership of '${params[1]}' to ${params[0]}`;
+                        break;
+
+                    case 'ln':
+                        if (params[0] === '-s' && params[1] && params[2]) {
+                            output = `Created symbolic link '${params[2]}' -> '${params[1]}'`;
+                        } else if (params[0] && params[1]) {
+                            output = `Created hard link '${params[1]}' -> '${params[0]}'`;
+                        } else {
+                            output = "ln: missing operand";
+                        }
+                        break;
+
+                    case 'find':
+                        if (!params[0]) output = "find: missing operand";
+                        else output = `./${params[0]}\n./subdir/${params[0]}\n./backup/${params[0]}`;
+                        break;
+
+                    case 'which':
+                        if (!params[0]) output = "which: missing operand";
+                        else output = `/usr/bin/${params[0]}`;
+                        break;
+
+                    case 'whereis':
+                        if (!params[0]) output = "whereis: missing operand";
+                        else output = `${params[0]}: /usr/bin/${params[0]} /usr/share/man/man1/${params[0]}.1.gz`;
+                        break;
+
+                    // 网络相关命令
+                    case 'netstat':
+                        output = `Active Internet connections (w/o servers)\nProto Recv-Q Send-Q Local Address           Foreign Address         State\ntcp        0      0 192.168.1.5:22          192.168.1.100:54321     ESTABLISHED\ntcp        0      0 127.0.0.1:3000          127.0.0.1:54321         ESTABLISHED`;
+                        break;
+
+                    case 'ss':
+                        output = `State    Recv-Q   Send-Q     Local Address:Port      Peer Address:Port   Process\nESTAB    0        0          192.168.1.5:22           192.168.1.100:54321\nESTAB    0        0          127.0.0.1:3000           127.0.0.1:54321`;
+                        break;
+
+                    case 'nslookup':
+                        if (!params[0]) output = "nslookup: missing operand";
+                        else output = `Server:\t\t8.8.8.8\nAddress:\t8.8.8.8#53\n\nNon-authoritative answer:\nName:\t${params[0]}\nAddress: 93.184.216.34`;
+                        break;
+
+                    case 'dig':
+                        if (!params[0]) output = "dig: missing operand";
+                        else output = `; <<>> DiG 9.16.1-Ubuntu <<>> ${params[0]}\n;; global options: +cmd\n;; Got answer:\n;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 12345\n;; flags: qr rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 1\n\n;; ANSWER SECTION:\n${params[0]}.\t\t300\tIN\tA\t93.184.216.34`;
+                        break;
+
+                    case 'ssh':
+                        if (!params[0]) output = "usage: ssh [user@]hostname [command]";
+                        else output = `The authenticity of host '${params[0]}' can't be established.\nECDSA key fingerprint is SHA256:abcdef1234567890.\nAre you sure you want to continue connecting (yes/no)?`;
+                        break;
+
+                    case 'scp':
+                        if (params.length < 2) output = "usage: scp [options] source target";
+                        else output = `${params[0]} -> ${params[1]}\n100%   10KB   1.0MB/s   00:00`;
+                        break;
+
+                    // 系统信息命令
+                    case 'systeminfo':
+                        output = `Host Name:                 DESKTOP-ABC123\nOS Name:                   Microsoft Windows 11 Pro\nOS Version:                10.0.22631 N/A Build 22631\nOS Manufacturer:           Microsoft Corporation\nOS Configuration:          Standalone Workstation\nOS Build Type:             Multiprocessor Free\nRegistered Owner:          User\nProduct ID:                00331-10000-00001-AA123`;
+                        break;
+
+                    case 'tasklist':
+                        output = `Image Name                     PID Session Name        Session#    Mem Usage\n========================= ======== ================ =========== ============\nSystem Idle Process              0 Services                   0          8 K\nSystem                           4 Services                   0      1,432 K\nRegistry                       124 Services                   0     66,468 K\nsmss.exe                       488 Services                   0        964 K\ncssrs.exe                      708 Services                   0      4,812 K`;
+                        break;
+
+                    case 'taskkill':
+                        if (!params[0]) output = "ERROR: The process ID or name is required.";
+                        else output = `SUCCESS: The process with PID ${params[0]} has been terminated.`;
+                        break;
+
+                    case 'htop':
+                        output = `  PID USER      PRI  NI  VIRT   RES   SHR S CPU% MEM%   TIME+  Command\n 1234 guest      20   0  256M  128M  4096 S  5.0  2.5  0:12.34 node server.js\n 5678 root       20   0  512M  256M  8192 R  3.0  5.0  1:23.45 python manage.py\n 9012 mysql      20   0 1024M  512M 16384 S  1.0 10.0  2:34.56 mysqld`;
+                        break;
+
+                    case 'kill':
+                        if (!params[0]) output = "kill: usage: kill [-s sigspec | -n signum | -sigspec] pid | jobspec ...";
+                        else output = `Sent termination signal to process ${params[0]}`;
+                        break;
+
+                    case 'killall':
+                        if (!params[0]) output = "killall: usage: killall [-Z pattern] [-u user] [-y time] [-signal] name ...";
+                        else output = `Killed all processes named '${params[0]}'`;
+                        break;
+
+                    case 'systemctl':
+                        if (!params[0]) output = "systemctl: missing operand";
+                        else if (params[0] === 'status') output = `● nginx.service - A high performance web server\n   Loaded: loaded (/lib/systemd/system/nginx.service; enabled; vendor preset: enabled)\n   Active: active (running) since Mon 2023-12-01 10:00:00 UTC; 1h ago`;
+                        else output = `${params[0]}: command completed successfully`;
+                        break;
+
+                    case 'service':
+                        if (!params[0] || !params[1]) output = "Usage: service < option > | --status-all | [ service_name [ command | --full-restart ] ]";
+                        else output = `${params[0]} ${params[1]}: OK`;
+                        break;
+
+                    case 'journalctl':
+                        output = `-- Logs begin at Mon 2023-12-01 10:00:00 UTC, end at Mon 2023-12-01 11:00:00 UTC. --\nDec 01 10:00:00 ubuntu systemd[1]: Started Session 1 of user guest.\nDec 01 10:00:01 ubuntu systemd[1]: Starting Daily apt download activities...`;
+                        break;
+
+                    case 'uptime':
+                        output = ` 10:00:00 up 1 day,  2:30,  1 user,  load average: 0.12, 0.08, 0.01`;
+                        break;
+
+                    case 'free':
+                        output = `              total        used        free      shared  buff/cache   available\nMem:        8192000     2048000     4096000      102400     2048000     5898240\nSwap:       2097152           0     2097152`;
+                        break;
+
+                    case 'df':
+                        output = `Filesystem     1K-blocks    Used Available Use% Mounted on\n/dev/sda1        1024000  500000    524000  49% /\ntmpfs             204800       0    204800   0% /dev/shm`;
+                        break;
+
+                    case 'du':
+                        if (!params[0]) output = "4.0K    .";
+                        else output = `12K    ${params[0]}`;
+                        break;
+
+                    // 包管理命令
+                    case 'brew':
+                        if (!params[0]) output = "Example usage:\n  brew search [text]\n  brew info [formula]\n  brew install formula [--options...]\n  brew update\n  brew upgrade [formula]\n  brew uninstall formula";
+                        else if (params[0] === 'install') output = `==> Downloading ${params[1]}\n==> Installing ${params[1]}\n🍺  ${params[1]} was successfully installed!`;
+                        else if (params[0] === 'update') output = `Updated 1 tap (homebrew/core).\n==> New Formulae\nnew-package`;
+                        else output = `Unknown brew command: ${params[0]}`;
+                        break;
+
+                    case 'apt':
+                        if (!params[0]) output = "apt 2.4.8 (amd64)\nUsage: apt [options] command";
+                        else if (params[0] === 'update') output = `Hit:1 http://archive.ubuntu.com/ubuntu jammy InRelease\nReading package lists... Done\nBuilding dependency tree... Done`;
+                        else if (params[0] === 'install') output = `Reading package lists... Done\nBuilding dependency tree... Done\nThe following NEW packages will be installed:\n  ${params[1]}\n0 upgraded, 1 newly installed, 0 to remove and 0 not upgraded.\nNeed to get 1,024 kB of archives.\nAfter this operation, 2,048 kB of additional disk space will be used.\nDo you want to continue? [Y/n]`;
+                        else output = `Unknown apt command: ${params[0]}`;
+                        break;
+
+                    case 'apt-get':
+                        if (!params[0]) output = "apt-get 2.4.8 (amd64)\nUsage: apt-get [options] command";
+                        else if (params[0] === 'update') output = `Hit:1 http://archive.ubuntu.com/ubuntu jammy InRelease\nReading package lists... Done`;
+                        else output = `Unknown apt-get command: ${params[0]}`;
+                        break;
+
+                    case 'snap':
+                        if (!params[0]) output = "Usage: snap <command> [--option]";
+                        else if (params[0] === 'install') output = `${params[1]} 1.0 from Snapcrafters installed`;
+                        else output = `Unknown snap command: ${params[0]}`;
+                        break;
+
+                    case 'choco':
+                        if (!params[0]) output = "Please run 'choco -?' or 'choco <command> -?' for help menu.";
+                        else if (params[0] === 'install') output = `Chocolatey v1.4.0\nInstalling the following packages:\n${params[1]}\nBy installing, you accept licenses for the packages.\n\n${params[1]} v1.0.0 [Approved]`;
+                        else output = `Unknown choco command: ${params[0]}`;
+                        break;
+
+                    case 'scoop':
+                        if (!params[0]) output = "Usage: scoop <command> [<args>]";
+                        else if (params[0] === 'install') output = `Installing '${params[1]}' (1.0) [64bit]\nLoading ${params[1]}-1.0-win64.zip from cache\nChecking hash of ${params[1]}-1.0-win64.zip ... ok.\nExtracting ${params[1]}-1.0-win64.zip ... done.\nLinking ~\\scoop\\apps\\${params[1]}\\current => ~\\scoop\\apps\\${params[1]}\\1.0\nCreating shortcut for ${params[1]}\n'${params[1]}' (1.0) was installed successfully!`;
+                        else output = `Unknown scoop command: ${params[0]}`;
+                        break;
+
+                    case 'winget':
+                        if (!params[0]) output = "Windows Package Manager v1.5\nCopyright (c) Microsoft Corporation. All rights reserved.";
+                        else if (params[0] === 'install') output = `Found ${params[1]} [Publisher]\nThis application is licensed to you by its owner.\nMicrosoft is not responsible for, nor does it grant any licenses to, third-party packages.\nDownloading https://example.com/${params[1]}.msi\n  ██████████████████████████████  10.0 MB / 10.0 MB\nSuccessfully verified installer hash\nStarting package install...\nSuccessfully installed`;
+                        else output = `Unknown winget command: ${params[0]}`;
+                        break;
+
+                    // 开发工具命令
+                    case 'make':
+                        if (!params[0]) output = "make: *** No targets specified and no makefile found.  Stop.";
+                        else output = `make: '${params[0]}' is up to date.`;
+                        break;
+
+                    case 'gcc':
+                        if (!params[0]) output = "gcc: fatal error: no input files\ncompilation terminated.";
+                        else output = `Compilation of ${params[0]} successful. Output: a.out`;
+                        break;
+
+                    case 'g++':
+                        if (!params[0]) output = "g++: fatal error: no input files\ncompilation terminated.";
+                        else output = `Compilation of ${params[0]} successful. Output: a.out`;
+                        break;
+
+                    case 'gdb':
+                        if (!params[0]) output = "Usage: gdb [options] [executable-file [core-file or process-id]]";
+                        else output = `GNU gdb (Ubuntu 12.1-0ubuntu1~22.04) 12.1\nReading symbols from ${params[0]}...\n(gdb) `;
+                        break;
+
+                    case 'valgrind':
+                        if (!params[0]) output = "valgrind: no program specified";
+                        else output = `==12345== Memcheck, a memory error detector\n==12345== Command: ${params[0]}\n==12345== \n==12345== HEAP SUMMARY:\n==12345==     in use at exit: 0 bytes in 0 blocks\n==12345==   total heap usage: 1 allocs, 1 frees, 1,024 bytes allocated\n==12345== \n==12345== All heap blocks were freed -- no leaks are possible`;
+                        break;
+
+                    case 'strace':
+                        if (!params[0]) output = "strace: must have PROG [ARGS] or -p PID";
+                        else output = `execve("${params[0]}", ["${params[0]}"], [/* 50 vars */]) = 0\nbrk(NULL)                               = 0x55c3a1b2c000\narch_prctl(0x3001 /* ARCH_??? */, 0x7ffeefbff7f0) = -1 EINVAL (Invalid argument)\nmmap(NULL, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7f8c3b2a0000`;
+                        break;
+
+                    case 'ltrace':
+                        if (!params[0]) output = "ltrace: cannot execute `': No such file or directory";
+                        else output = `__libc_start_main(0x400526, 1, 0x7ffeefbff7f8, 0x400540 <unfinished ...>\n+++ exited (status 0) +++`;
+                        break;
+
+                    case 'xcodebuild':
+                        if (!params[0]) output = "Usage: xcodebuild [-project <projectname>] [-scheme <schemeName>]...";
+                        else if (params[0] === '-version') output = `Xcode 15.0\nBuild version 15A240d`;
+                        else output = `=== BUILD TARGET MyApp OF PROJECT MyApp WITH CONFIGURATION Debug ===\nCheck dependencies\nWrite auxiliary files\nCompile Swift source files\nLink MyApp\nGenerateDSYMFile MyApp.app.dSYM\nTouch MyApp.app\n** BUILD SUCCEEDED **`;
+                        break;
+
+                    case 'codesign':
+                        if (!params[0]) output = "Usage: codesign -s identity [-fv*] [-o flags] [-r reqs] [-i ident] path ...";
+                        else output = `signed app: ${params.join(' ')}`;
+                        break;
+
+                    case 'powershell':
+                        output = `Windows PowerShell\nCopyright (C) Microsoft Corporation. All rights reserved.\n\nPS C:\\Users\\Guest> `;
+                        break;
+
+                    case 'pwsh':
+                        output = `PowerShell 7.4.0\nCopyright (c) Microsoft Corporation.\n\nhttps://aka.ms/powershell\nType 'help' to get help.\n\nPS C:\\Users\\Guest> `;
+                        break;
+
+                    // 增强echo命令
+                    case 'echo':
+                        output = args.slice(1).join(' ') || '';
+                        break;
+
+                    default:
+                        // 允许特定 OS 命令通过 (ipconfig, ifconfig 等)
+                        if (cmd === os.commands.ip) {
+                            output = os.id === 'windows' ? 'IPv4 Address. . . . . . . . . . . : 192.168.1.5' : 'eth0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500\ninet 192.168.1.5';
+                        } else if (cmd === os.commands.ping) {
+                            const target = params[0] || 'localhost';
+                            output = `PING ${target} (93.184.216.34): 56 data bytes\n64 bytes from 93.184.216.34: icmp_seq=0 ttl=56 time=11.632 ms\n64 bytes from 93.184.216.34: icmp_seq=1 ttl=56 time=12.134 ms\n64 bytes from 93.184.216.34: icmp_seq=2 ttl=56 time=11.987 ms\n64 bytes from 93.184.216.34: icmp_seq=3 ttl=56 time=12.001 ms\n\n--- ${target} ping statistics ---\n4 packets transmitted, 4 packets received, 0.0% packet loss\nround-trip min/avg/max/stddev = 11.632/11.939/12.134/0.189 ms`;
+                        } else if (cmd === os.commands.tree) {
+                            output = `.\n├── README.md\n├── src\n│   ├── main.js\n│   └── utils.js\n├── package.json\n└── node_modules\n    └── (dependencies)`;
+                        } else if (cmd === os.commands.ver) {
+                            output = os.id === 'windows' ? 'Microsoft Windows [Version 10.0.22631.3296]' : 'Ubuntu 24.04 LTS';
+                        } else if (cmd === os.commands.whoami) {
+                            output = os.id === 'windows' ? 'desktop-abc123\\guest' : 'guest';
+                        } else if (cmd === os.commands.date) {
+                            output = new Date().toString();
+                        } else if (cmd === os.commands.grep) {
+                            if (!params[0]) output = 'grep: missing operand';
+                            else output = `Found pattern '${params[0]}' in multiple files`;
+                        } else if (cmd === os.commands.man) {
+                            if (!params[0]) output = 'What manual page do you want?';
+                            else output = `${params[0]}(1)                   User Commands                  ${params[0]}(1)\n\nNAME\n       ${params[0]} - command description\n\nSYNOPSIS\n       ${params[0]} [OPTION]... [FILE]...\n\nDESCRIPTION\n       This is a simulated manual page for ${params[0]}.\n\nOPTIONS\n       --help     display this help and exit\n       --version  output version information and exit`;
+                        } else if (cmd === 'cls' && os.id === 'windows') {
+                            document.getElementById('output').innerHTML = '';
+                            output = '';
+                        } else if (cmd === 'clear' && os.id !== 'windows') {
+                            document.getElementById('output').innerHTML = '';
+                            output = '';
+                        } else {
+                            output = `command not found: ${cmd}`;
+                        }
+                }
+            }
+
+            if (output) appendLog(output, 'text-gray-400');
+            updateUI();
+
+            // 修复：局部更新机制
+            if (state.scenarioId) {
+                const s = scenarios.find(i => i.id === state.scenarioId);
+                const l = s.levels[state.levelIndex];
+                if (l && l.validate(state)) {
+                    // 1. 终端提示成功
+                    appendLog(`✓ Task Completed: ${l.title}`, 'text-green-400 font-bold');
+
+                    // 2. 更新数据
+                    state.levelIndex++;
+
+                    // 3. 检查是否通关整个场景
+                    if (state.levelIndex >= s.levels.length) {
+                        appendLog(`🎉 Scenario Complete!`, 'text-yellow-400 font-bold');
+                    }
+
+                    // 4. 只刷新侧边栏任务区域，保留终端历史
+                    renderTaskSection();
+                }
+            }
+        }
+
+        function appendLog(text, className = 'text-gray-300') {
+            const out = document.getElementById('output');
+            const div = document.createElement('div');
+            div.className = `whitespace-pre-wrap mb-1 ${className}`;
+            div.textContent = text;
+            out.appendChild(div);
+            document.getElementById('terminal').scrollTop = document.getElementById('terminal').scrollHeight;
+        }
+
+        // 添加音效反馈功能
+        function playKeySound() {
+            // 创建简单的按键音效
+            try {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+
+                oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
+                oscillator.frequency.exponentialRampToValueAtTime(400, audioContext.currentTime + 0.1);
+
+                gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
+
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + 0.1);
+            } catch (e) {
+                // 如果音频API不支持，静默处理
+            }
+        }
+
+        // 添加视觉反馈效果
+        function addTerminalEffect() {
+            const terminal = document.getElementById('terminal');
+            terminal.style.filter = 'brightness(1.1)';
+            setTimeout(() => {
+                terminal.style.filter = 'brightness(1)';
+            }, 50);
+        }
+
+        // 启动
+        render();
+
+        // 主题切换功能
+        const themeBtn = document.getElementById('themeBtn');
+        const themeIcon = document.getElementById('themeIcon');
+
+        // 设置初始主题
+        const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        if (currentTheme === 'light') {
+            document.documentElement.setAttribute('data-theme', 'light');
+            themeIcon.textContent = '◑';
+            themeIcon.style.color = '#000000';
+        } else {
+            themeIcon.textContent = '◐';
+            themeIcon.style.color = '#ffffff';
+        }
+
+        // 主题切换事件
+        themeBtn.addEventListener('click', () => {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+
+            themeIcon.textContent = newTheme === 'dark' ? '◐' : '◑';
+            themeIcon.style.color = newTheme === 'dark' ? '#ffffff' : '#000000';
+        });
+
+    </script>
+</body>
+
+</html>
