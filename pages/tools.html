@@ -218,6 +218,10 @@
             animation-delay: 0.5s;
         }
 
+        .tool-card:nth-child(10) {
+            animation-delay: 0.55s;
+        }
+
         .tool-card::before {
             content: '';
             position: absolute;
@@ -494,6 +498,21 @@
                 <div class="tool-tags">
                     <span class="tag">AI</span>
                     <span class="tag">分析</span>
+                </div>
+                <div class="tool-status">
+                    <span class="status-dot"></span>
+                    <span>在线可用</span>
+                </div>
+            </div>
+
+            <div class="tool-card" data-category="productivity" onclick="location.href='../tools/cmd.html'">
+                <span class="tool-icon">💻</span>
+                <h3 class="tool-title">OS Master 终端训练</h3>
+                <p class="tool-desc">沉浸式命令行模拟器，支持多操作系统和智能代码补全</p>
+                <div class="tool-tags">
+                    <span class="tag">开发</span>
+                    <span class="tag">终端</span>
+                    <span class="tag">生产力</span>
                 </div>
                 <div class="tool-status">
                     <span class="status-dot"></span>
