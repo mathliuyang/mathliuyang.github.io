@@ -2280,7 +2280,7 @@
             filterAndSort(); // 确保按影响因子排序后渲染
 
             // 密码验证功能
-            const CORRECT_PASSWORD = 'AI';
+            const CORRECT_PASSWORD = 'AICoreScholar';
             const PASSWORD_KEY = 'journalPageAuthenticated';
             const PASSWORD_EXPIRY = 24 * 60 * 60 * 1000; // 24小时有效期
 
@@ -2400,11 +2400,11 @@
             window.checkPassword = checkPassword;
 
             // 处理封面加载错误的函数
-            window.handleCoverError = function(img, localCoverPath) {
+            window.handleCoverError = function (img, localCoverPath) {
                 // 防止无限循环
                 if (img.dataset.errorHandled === 'true') return;
                 img.dataset.errorHandled = 'true';
-                
+
                 // 如果有本地封面路径，先检查文件是否存在
                 if (localCoverPath && localCoverPath.trim() !== '') {
                     // 使用fetch检查文件是否存在
@@ -2427,7 +2427,7 @@
                     showCoverPlaceholder(img);
                 }
             };
-            
+
             // 显示封面占位符
             function showCoverPlaceholder(img) {
                 // 检查img元素和其父元素是否存在
@@ -2435,12 +2435,12 @@
                     console.error('无法显示封面占位符：元素不存在');
                     return;
                 }
-                
+
                 // 创建占位符元素
                 const placeholder = document.createElement('div');
                 placeholder.className = 'journal-cover-placeholder';
                 placeholder.innerHTML = '<div class="placeholder-icon">📚</div><div>封面<br>暂缺</div>';
-                
+
                 // 替换img元素为占位符
                 img.parentElement.replaceChild(placeholder, img);
             }
