@@ -464,6 +464,24 @@ const teamMembers = [
         position: "合作成员"
     },
     {
+        id: "duanzhouhang",
+        name: "段州航",
+        englishName: "Zhouhang Duan",
+        gender: "男",
+        degree: "博士",
+        title: "",
+        researchFields: "",
+        institution: "中国核动力研究院，先进核能技术国家重点实验室，中国成都 610213",
+        institutionEn: "Nuclear Power Institute of China, State Key Laboratory of Advanced Nuclear Energy Technology, Chengdu 610213, China",
+        address: "四川省成都市双流区长顺大道一段328号",
+        addressEn: "No. 328, Section 1, Changshun Avenue, Shuangliu District, Chengdu, Sichuan Province, China",
+        emails: [],
+        phones: [],
+        orcid: "",
+        avatar: "../assets/avatar/duanzhouhang.jpg",
+        position: "核心成员"
+    },
+    {
         id: "wangxueqiang",
         name: "王雪强",
         englishName: "Xueqiang Wang",
