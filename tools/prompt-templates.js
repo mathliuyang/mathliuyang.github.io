@@ -147,7 +147,7 @@ window.templates = {
   "meta": {
     "titleCN": "",              // 中文标题
     "titleEN": "",              // 英文原标题
-    "author": "",               // 作者信息，按顺序列出所有作者，并用✉标识通讯作者（参考Francisco Sahli Costabal  ✉, Simone Pezzuto ✉, Paris Perdikaris ✉）
+    "author": "",               // 作者信息，按顺序列出所有作者，并用✉标识所有通讯作者（参考Francisco Sahli Costabal  ✉, Simone Pezzuto ✉, Paris Perdikaris ✉）
     "unit": "",                 // 第一单位
     "venue": "",                // 期刊全称
     "date": "",                 // YYYY年MM月
@@ -266,6 +266,7 @@ window.templates = {
 - 编号：若需要用到编号，请使用①、②、③等
 - 引号：正文中若需要用到引号，请一律使用「」符号代替引号
 - 如非必要，尽量不要出现公式或复杂的数学符号
+- 严禁出现[cite_start]、[cite: 2, 4]等引用标记，避免破坏排版；Gemini 易误生成此类符号，务必剔除。
 
 ## 【质量检查清单】✓
 
@@ -273,6 +274,7 @@ window.templates = {
 - JSON语法正确(引号、逗号、括号)
 - 所有字段均已填充
 - 总字数≤2000字
+- 严禁出现[cite_start]、[cite: 2, 4]等引用标记
 
 **内容准确性**
 - 论文理解无偏差
