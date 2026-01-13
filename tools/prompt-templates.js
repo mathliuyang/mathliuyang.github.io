@@ -147,7 +147,7 @@ window.templates = {
   "meta": {
     "titleCN": "",              // 中文标题
     "titleEN": "",              // 英文原标题
-    "author": "",               // 第一作者｜通讯作者
+    "author": "",               // 作者信息，按顺序列出所有作者，并用✉标识通讯作者（参考Francisco Sahli Costabal  ✉, Simone Pezzuto ✉, Paris Perdikaris ✉）
     "unit": "",                 // 第一单位
     "venue": "",                // 期刊全称
     "date": "",                 // YYYY年MM月
@@ -314,7 +314,7 @@ window.templates = {
   "meta": {
     "titleCN": "物理信息神经网络：解决涉及非线性偏微分方程的正向和逆向问题的深度学习框架",
     "titleEN": "Physics-informed neural networks: A deep learning framework for solving forward and inverse problems involving nonlinear partial differential equations",
-    "author": "M. Raissi",
+    "author": "Francisco Sahli Costabal ✉, Simone Pezzuto ✉, Paris Perdikaris ✉",
     "unit": "美国布朗大学应用数学系",
     "venue": "Journal of Computational Physics",
     "date": "2019年2月",
