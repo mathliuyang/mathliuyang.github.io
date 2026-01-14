@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🏃‍♀️ PERFORMANCE · 小宇运动激励系统</title>
+    <!-- 引入 Tailwind CSS 提升开发效率和样式专业度 -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 引入 Canvas Confetti 库用于庆祝特效 -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <!-- 引入高级运动感字体 -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@1,900&family=Space+Grotesk:wght@300;500;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --brand-orange: #FF4D00;
+        }
+
+        body {
+            background-color: #050505;
+            color: #fff;
+            font-family: 'Space Grotesk', sans-serif;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            overflow: hidden;
+            /* 保持网页模式的沉浸感 */
+        }
+
+        /* 动态背景氛围 */
+        .ambient-glow {
+            position: fixed;
+            inset: 0;
+            background:
+                radial-gradient(circle at 15% 15%, rgba(255, 77, 0, 0.12) 0%, transparent 40%),
+                radial-gradient(circle at 85% 85%, rgba(255, 77, 0, 0.05) 0%, transparent 40%);
+            z-index: -1;
+        }
+
+        .grid-pattern {
+            position: fixed;
+            inset: 0;
+            background-image: linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+            background-size: 60px 60px;
+            z-index: -1;
+            mask-image: radial-gradient(circle at center, black, transparent 90%);
+        }
+
+        /* 响应式巨型数字 */
+        .hero-amount {
+            font-family: 'Inter', sans-serif;
+            font-style: italic;
+            font-weight: 900;
+            letter-spacing: -0.06em;
+            line-height: 0.8;
+            background: linear-gradient(180deg, #FFFFFF 50%, #333 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: clamp(4rem, 12vw, 18rem);
+            filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.6));
+        }
+
+        /* 移动端优化 */
+        @media (max-width: 768px) {
+            .hero-amount {
+                font-size: clamp(3rem, 10vw, 8rem);
+                letter-spacing: -0.04em;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-amount {
+                font-size: clamp(2.5rem, 8vw, 6rem);
+                letter-spacing: -0.02em;
+            }
+        }
+
+        /* 磨砂玻璃面板 */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 3rem;
+        }
+
+        /* 滑块控件美化 */
+        input[type=range] {
+            -webkit-appearance: none;
+            width: 100%;
+            background: transparent;
+            cursor: pointer;
+        }
+
+        input[type=range]::-webkit-slider-runnable-track {
+            height: 2px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 32px;
+            width: 2px;
+            background: var(--brand-orange);
+            margin-top: -15px;
+            box-shadow: 0 0 15px var(--brand-orange);
+        }
+
+        /* 快捷按钮 */
+        .tier-btn {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .tier-btn:hover {
+            background: var(--brand-orange);
+            color: #000;
+            transform: translateY(-2px);
+        }
+
+        .tier-btn.active {
+            background: var(--brand-orange);
+            color: #000;
+            border-color: var(--brand-orange);
+            box-shadow: 0 0 20px rgba(255, 77, 0, 0.3);
+        }
+
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+        }
+
+        /* 进场动画 */
+        .reveal {
+            animation: revealUp 1s ease-out forwards;
+            opacity: 0;
+        }
+
+        @keyframes revealUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 移动端触摸优化 */
+        @media (max-width: 768px) {
+            body {
+                overflow-y: auto;
+                min-height: 100vh;
+            }
+
+            .tier-btn {
+                min-height: 44px;
+                /* 触摸目标最小尺寸 */
+                font-size: 14px;
+            }
+
+            input[type="number"] {
+                font-size: 16px;
+                /* 防止iOS缩放 */
+            }
+
+            input[type="range"]::-webkit-slider-thumb {
+                height: 40px;
+                width: 4px;
+            }
+        }
+
+        /* 小屏幕优化 */
+        @media (max-width: 390px) {
+            .hero-amount {
+                font-size: clamp(2rem, 6vw, 4rem);
+            }
+
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            .tier-btn {
+                padding: 8px 4px;
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+
+<body class="flex flex-col lg:flex-row p-4 sm:p-6 lg:p-12 gap-4 sm:gap-6 lg:gap-8">
+    <div class="ambient-glow"></div>
+    <div class="grid-pattern"></div>
+
+    <!-- 左侧：核心视觉区域 -->
+    <section class="w-full lg:w-3/5 flex flex-col justify-between reveal p-2 sm:p-4">
+        <header>
+            <div class="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4 mb-3 sm:mb-4">
+                <span
+                    class="px-3 sm:px-4 py-1 bg-white/5 border border-white/10 rounded-full text-[9px] sm:text-[10px] font-bold tracking-[0.3em] text-gray-500 uppercase">Elite
+                    Performance Dashboard</span>
+                <span id="live-indicator"
+                    class="flex items-center gap-2 text-[9px] sm:text-[10px] font-bold text-[#FF4D00]">
+                    <span class="w-2 h-2 rounded-full bg-[#FF4D00] animate-ping"></span> LOGGING ENABLED
+                </span>
+            </div>
+            <h1 class="text-3xl sm:text-4xl lg:text-7xl font-black italic tracking-tighter uppercase leading-none">
+                小宇专属 <br> <span class="text-white/20">Motivation</span>
+            </h1>
+        </header>
+
+        <!-- 主展示：奖励金额 -->
+        <div class="py-12">
+            <p class="text-[10px] text-gray-600 font-bold tracking-[0.6em] uppercase mb-4">Unlocked Achievement Reward
+            </p>
+            <div id="reward-display" class="hero-amount">¥0</div>
+
+            <div class="flex items-end gap-6 sm:gap-12 mt-6 sm:mt-8">
+                <div class="flex flex-col">
+                    <span class="text-[10px] text-gray-500 font-bold uppercase tracking-widest mb-1">Current Tier</span>
+                    <div class="text-4xl sm:text-6xl lg:text-8xl font-black italic leading-none">
+                        <span id="km-level">0</span>
+                        <small class="text-base sm:text-lg text-gray-600 uppercase font-normal italic">KM</small>
+                    </div>
+                </div>
+                <div class="h-24 w-[1px] bg-white/10 hidden lg:block"></div>
+                <div class="pb-2 hidden lg:block">
+                    <div id="status-text" class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Status:
+                        Ready</div>
+                    <div id="algo-hint" class="text-[10px] font-mono text-gray-700 uppercase tracking-tighter">
+                        Algorithm: Σ(i=1 → Level-1)</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 动态寄语 -->
+        <div class="max-w-md border-l-2 border-[#FF4D00] pl-4 sm:pl-6 py-3 sm:py-4">
+            <p id="quote-display" class="text-gray-400 text-xs sm:text-sm italic font-light leading-relaxed">
+                "5.0 和 5.1 都是 5公里的胜利。每一段路程都在为更高一级的荣誉积攒能量。"
+            </p>
+        </div>
+    </section>
+
+    <!-- 右侧：控制与面板 -->
+    <aside class="w-full lg:w-2/5 flex flex-col gap-4 sm:gap-6 reveal" style="animation-delay: 0.15s">
+        <div class="glass-panel p-6 sm:p-8 lg:p-10 flex-grow flex flex-col justify-between">
+            <div class="space-y-8 sm:space-y-12">
+                <div class="flex justify-between items-center">
+                    <h3 class="text-xs font-bold text-gray-500 uppercase tracking-[0.3em]">Control Center</h3>
+                    <span class="text-[10px] text-gray-800 font-mono tracking-widest">LIMIT_15.0KM</span>
+                </div>
+
+                <!-- 快速选择档位 -->
+                <div class="space-y-4">
+                    <label class="text-[10px] font-bold text-gray-600 uppercase tracking-widest">Quick Tiers /
+                        快速选择</label>
+                    <div class="grid grid-cols-4 gap-2 sm:gap-3">
+                        <button class="tier-btn py-3 sm:py-4 rounded-xl sm:rounded-2xl text-xs font-bold"
+                            onclick="syncInput(3)">3K</button>
+                        <button class="tier-btn py-3 sm:py-4 rounded-xl sm:rounded-2xl text-xs font-bold"
+                            onclick="syncInput(5)">5K</button>
+                        <button class="tier-btn py-3 sm:py-4 rounded-xl sm:rounded-2xl text-xs font-bold"
+                            onclick="syncUpdate(10)">10K</button>
+                        <button class="tier-btn py-3 sm:py-4 rounded-xl sm:rounded-2xl text-xs font-bold"
+                            onclick="syncInput(15)">15K</button>
+                    </div>
+                </div>
+
+                <!-- 滑块控制 -->
+                <div class="space-y-6">
+                    <div class="flex justify-between items-end">
+                        <label class="text-[10px] font-bold text-gray-600 uppercase tracking-widest">Fine Control /
+                            里程微调</label>
+                        <span class="text-3xl font-black text-[#FF4D00] italic" id="val-hint">0.0 KM</span>
+                    </div>
+                    <input type="range" id="main-range" min="0" max="15" step="0.01" value="0">
+                </div>
+
+                <!-- 精确输入框 -->
+                <div class="space-y-4 pt-4 border-t border-white/5">
+                    <label class="text-[10px] font-bold text-gray-600 uppercase tracking-widest">Manual Input /
+                        手动输入</label>
+                    <div class="relative group">
+                        <input type="number" id="main-input" placeholder="0.00" step="0.01"
+                            class="w-full bg-white/5 border-b-2 border-white/5 py-4 sm:py-6 text-3xl sm:text-5xl font-light text-center focus:outline-none focus:border-[#FF4D00] transition-all">
+                        <span
+                            class="absolute right-0 bottom-4 sm:bottom-6 text-[10px] font-bold text-gray-700 italic tracking-widest uppercase">KM
+                            Unit</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 下一级里程碑进度 -->
+            <div class="mt-12 space-y-5">
+                <div class="flex justify-between items-end text-[10px] font-bold tracking-widest">
+                    <span class="text-gray-500 uppercase">Next Milestone Progress</span>
+                    <span id="next-tier-label" class="text-white">5 KM</span>
+                </div>
+                <div class="h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
+                    <div id="tier-bar"
+                        class="h-full bg-gradient-to-r from-[#FF4D00] to-orange-500 transition-all duration-700"
+                        style="width: 0%"></div>
+                </div>
+                <button onclick="saveLog()"
+                    class="w-full mt-4 sm:mt-6 py-4 sm:py-5 bg-white text-black text-[11px] sm:text-[12px] font-black uppercase tracking-[0.3em] sm:tracking-[0.4em] rounded-xl sm:rounded-2xl hover:bg-[#FF4D00] hover:text-white transition-all active:scale-95 shadow-2xl">
+                    Log Achievements
+                </button>
+            </div>
+        </div>
+
+        <!-- 专属档案卡片 -->
+        <div class="glass-panel p-6 flex items-center justify-between border-l-4 border-[#FF4D00]">
+            <div class="flex items-center gap-5">
+                <div
+                    class="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#222] to-black border border-white/10 flex items-center justify-center font-black italic text-[#FF4D00] text-2xl">
+                    XY</div>
+                <div>
+                    <div class="text-[12px] font-bold uppercase tracking-widest text-white">Athlete: Xiao Yu</div>
+                    <div id="footer-status" class="text-[10px] text-gray-600 uppercase font-mono tracking-tighter">
+                        Status: Active Ready</div>
+                </div>
+            </div>
+            <div class="text-right hidden md:block">
+                <span class="text-[11px] font-bold text-gray-600 uppercase tracking-widest">Performance · 2024</span>
+            </div>
+        </div>
+    </aside>
+
+    <script>
+        const rangeEl = document.getElementById('main-range');
+        const inputEl = document.getElementById('main-input');
+        const rewardDisp = document.getElementById('reward-display');
+        const kmLevelDisp = document.getElementById('km-level');
+        const valHint = document.getElementById('val-hint');
+        const tierBar = document.getElementById('tier-bar');
+        const nextTierLabel = document.getElementById('next-tier-label');
+        const statusText = document.getElementById('status-text');
+        const quoteDisp = document.getElementById('quote-display');
+        const footerStatus = document.getElementById('footer-status');
+
+        const MAX_KM = 15;
+        const MILESTONES = [5, 10, 15];
+        const QUOTES = {
+            0: "“每一次踏出的步伐，都是对平庸生活的绝佳反击。”",
+            1: "“起跑的那一刻，你就已经赢过了昨天的自己。”",
+            3: "“3公里是身体的唤醒，5公里是意志的洗礼。”",
+            5: "“5公里达成。小宇，你现在正处于精英跑者的节奏中。”",
+            10: "“双位数的突破！你的毅力让这份奖励实至名归。”",
+            14: "“极致的燃烧！终点就在眼前，最后的极限距离。”",
+            15: "“15KM 巅峰达成！今日之战，小宇封神。”"
+        };
+
+        /**
+         * 核心算法：正确的数学公式
+         * 当跑步距离为n公里时（n≥2），获得的钱数是1到n-1的累加和
+         * 数学公式：总钱数 = (n-1) × n / 2
+         * 例如：5KM = 1+2+3+4 = 10元
+         */
+        function calculateIncentive(n) {
+            const distance = parseFloat(n);
+            if (distance < 2) return 0;
+            // 使用正确的公式：从1到n-1的累加和
+            const n_minus_1 = Math.floor(distance - 1);
+            return (n_minus_1 * (n_minus_1 + 1)) / 2;
+        }
+
+        let displayValue = 0;
+        function animateReward(target) {
+            const start = displayValue;
+            const duration = 500;
+            let startT = null;
+            function step(now) {
+                if (!startT) startT = now;
+                const progress = Math.min((now - startT) / duration, 1);
+                // EaseOutExpo 动画效果，更高级
+                const ease = 1 - Math.pow(2, -10 * progress);
+                const val = Math.floor(start + (target - start) * ease);
+                rewardDisp.innerText = `¥${val}`;
+                if (progress < 1) requestAnimationFrame(step);
+                else displayValue = target;
+            }
+            requestAnimationFrame(step);
+        }
+
+        /**
+         * 全局刷新 UI
+         */
+        function globalUpdate(raw) {
+            // 鲁棒性过滤：规范化数值解析，支持小数点后两位
+            let val = parseFloat(Number(raw).toFixed(2));
+            if (isNaN(val) || val < 0) val = 0;
+            if (val > MAX_KM) val = MAX_KM;
+
+            // 使用正确的计算逻辑
+            const fixedVal = val;
+            const reward = calculateIncentive(fixedVal);
+
+            // 1. 动画更新奖励金额
+            animateReward(reward);
+
+            // 2. 更新显示信息
+            const displayLevel = Math.floor(fixedVal);
+            kmLevelDisp.innerText = displayLevel;
+            valHint.innerText = `${fixedVal.toFixed(2)} KM`;
+
+            // 3. 更新进度条逻辑
+            const next = MILESTONES.find(m => m > fixedVal) || 15;
+            const prev = [...MILESTONES].reverse().find(m => m <= fixedVal) || 0;
+            const p = ((fixedVal - prev) / (next - prev)) * 100;
+            tierBar.style.width = `${Math.max(5, p)}%`;
+            nextTierLabel.innerText = `${next} KM`;
+
+            // 4. 更新寄语与状态
+            const keys = Object.keys(QUOTES).map(Number).sort((a, b) => b - a);
+            quoteDisp.innerText = QUOTES[keys.find(k => fixedVal >= k)];
+            statusText.innerText = `Level: ${displayLevel} KM Completed`;
+            footerStatus.innerText = fixedVal >= 15 ? "Status: Peak Performance" : (fixedVal > 0 ? "Status: Logging..." : "Status: Ready");
+
+            // 5. 同步档位按钮的高亮状态
+            document.querySelectorAll('.tier-btn').forEach(btn => {
+                const btnVal = parseInt(btn.innerText);
+                // 只有当公里数恰好落在该整点时高亮
+                btn.classList.toggle('active', btnVal === fixedVal);
+            });
+        }
+
+        function syncInput(v) {
+            rangeEl.value = v;
+            inputEl.value = v === 0 ? "" : v.toFixed(2);
+            globalUpdate(v);
+        }
+
+        function saveLog() {
+            const v = parseFloat(rangeEl.value);
+            if (v <= 0) return;
+
+            // 触发庆祝礼花
+            confetti({
+                particleCount: 150,
+                spread: 100,
+                origin: { x: 0.3, y: 0.75 },
+                colors: ['#FF4D00', '#FFFFFF', '#666666']
+            });
+
+            // 模拟反馈效果
+            const btn = event.target;
+            const originalText = btn.innerText;
+            btn.innerText = "RECORD SAVED SUCCESSFULLY";
+            btn.style.backgroundColor = "#22C55E";
+            btn.style.color = "#fff";
+            setTimeout(() => {
+                btn.innerText = originalText;
+                btn.style.backgroundColor = "";
+                btn.style.color = "";
+            }, 2000);
+        }
+
+        // 联动事件
+        rangeEl.addEventListener('input', (e) => {
+            const value = parseFloat(e.target.value);
+            inputEl.value = value === 0 ? "" : value.toFixed(2);
+            globalUpdate(value);
+        });
+
+        // 滑块释放时触发保存（可选功能）
+        rangeEl.addEventListener('change', (e) => {
+            const value = parseFloat(e.target.value);
+            if (value > 0) {
+                // 可以在这里添加自动保存逻辑
+                console.log(`滑块释放，距离：${value}公里`);
+            }
+        });
+
+        // 输入框失去焦点时格式化，输入时不格式化以提供更好的用户体验
+        inputEl.addEventListener('blur', (e) => {
+            let rawValue = e.target.value.trim();
+            if (rawValue === '') {
+                inputEl.value = '0.00';
+                rangeEl.value = 0;
+                globalUpdate(0);
+                return;
+            }
+
+            let v = parseFloat(rawValue);
+            if (isNaN(v)) v = 0;
+            if (v > MAX_KM) v = MAX_KM;
+
+            // 失去焦点时格式化为两位小数
+            inputEl.value = v.toFixed(2);
+            rangeEl.value = v;
+            globalUpdate(v);
+        });
+
+        // 输入时实时更新，但不格式化，让用户自由输入
+        inputEl.addEventListener('input', (e) => {
+            let rawValue = e.target.value.trim();
+            if (rawValue === '') {
+                globalUpdate(0);
+                return;
+            }
+
+            let v = parseFloat(rawValue);
+            if (isNaN(v)) {
+                // 如果输入的不是有效数字，显示0但不跳转
+                globalUpdate(0);
+                return;
+            }
+            if (v > MAX_KM) v = MAX_KM;
+
+            rangeEl.value = v;
+            globalUpdate(v);
+        });
+
+        // 添加回车键确认功能
+        inputEl.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                let rawValue = e.target.value.trim();
+                if (rawValue === '') {
+                    inputEl.value = '0.00';
+                    rangeEl.value = 0;
+                    globalUpdate(0);
+                    return;
+                }
+
+                let v = parseFloat(rawValue);
+                if (isNaN(v)) v = 0;
+                if (v > MAX_KM) v = MAX_KM;
+
+                // 回车时格式化为两位小数
+                inputEl.value = v.toFixed(2);
+                rangeEl.value = v;
+                globalUpdate(v);
+
+                // 添加视觉反馈
+                inputEl.style.transform = 'scale(0.98)';
+                setTimeout(() => {
+                    inputEl.style.transform = 'scale(1)';
+                }, 100);
+
+                // 触发保存功能
+                if (v > 0) {
+                    saveLog();
+                }
+            }
+        });
+
+        // 页面启动加载
+        window.onload = () => setTimeout(() => globalUpdate(0), 400);
+    </script>
+</body>
+
+</html>

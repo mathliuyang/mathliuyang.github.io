@@ -609,7 +609,8 @@
     <!-- Hero Section -->
     <section class="hero">
         <div class="hero-content">
-            <h1>探索<strong>计算数学</strong><br>的<strong>无限可能</strong></h1>
+            <h1 id="hero-title" style="cursor: pointer; user-select: none;">
+                探索<strong>计算数学</strong><br>的<strong>无限可能</strong></h1>
             <p class="hero-subtitle">
                 一位被偏微分方程带偏了的人工智能算法开发者
             </p>
@@ -987,6 +988,51 @@
                 this.style.cursor = 'pointer';
                 this.title = '点击复制';
             });
+        });
+
+        // 连续点击10次跳转功能
+        let clickCount = 0;
+        let clickTimer = null;
+        const heroTitle = document.getElementById('hero-title');
+
+        heroTitle.addEventListener('click', function () {
+            clickCount++;
+
+            // 清除之前的定时器
+            if (clickTimer) {
+                clearTimeout(clickTimer);
+            }
+
+            // 显示点击计数（可选，用于调试）
+            console.log(`点击次数: ${clickCount}`);
+
+            // 如果达到10次，跳转到运动激励系统
+            if (clickCount >= 10) {
+                window.location.href = 'tools/XiaoYuSportsIncentivePlan.html';
+                return;
+            }
+
+            // 3秒后重置计数器
+            clickTimer = setTimeout(() => {
+                clickCount = 0;
+                console.log('点击计数器已重置');
+            }, 3000);
+
+            // 添加视觉反馈
+            this.style.transform = 'scale(0.98)';
+            setTimeout(() => {
+                this.style.transform = 'scale(1)';
+            }, 100);
+        });
+
+        // 添加鼠标悬停效果
+        heroTitle.addEventListener('mouseenter', function () {
+            this.style.opacity = '0.8';
+            this.style.transition = 'opacity 0.3s ease';
+        });
+
+        heroTitle.addEventListener('mouseleave', function () {
+            this.style.opacity = '1';
         });
     </script>
 </body>
