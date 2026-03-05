@@ -302,6 +302,24 @@ const teamMembers = [
         position: "合作成员"
     },
     {
+        id: "maoyu",
+        name: "马宇",
+        englishName: "Yu Ma",
+        gender: "男",
+        degree: "博士",
+        title: "教授",
+        researchFields: "数值计算、工业软件",
+        institution: "中山大学，中法核工程与技术学院，中国广东 519082",
+        institutionEn: " Sino-French Institute of Nuclear Engineering and Technology, Sun Yat-sen University, Guangdong 519082, China",
+        address: "广东省珠海市香洲区唐家湾中山大学珠海校区瀚林3号",
+        addressEn: "No. 3, Hanninglin Road, Zhaiguan District, Zhiguan City, Guangdong Province, China",
+        emails: ["mayu9@mail.sysu.edu.cn"],
+        phones: ["13620469568"],
+        orcid: "",
+        avatar: "../assets/avatar/maoyu.jpg",
+        position: "合作成员"
+    },
+    {
         id: "chenqilong",
         name: "陈奇隆",
         englishName: "Qilong Chen",
