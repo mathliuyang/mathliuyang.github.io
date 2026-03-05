@@ -284,6 +284,24 @@ const teamMembers = [
         position: "合作成员"
     },
     {
+        id: "liuqingkai",
+        name: "刘青凯",
+        englishName: "Qingkai Liu",
+        gender: "男",
+        degree: "博士",
+        title: "教授",
+        researchFields: "计算机科学与技术",
+        institution: "北京应用物理与计算数学研究所，中国北京  100094",
+        institutionEn: " Institute of Applied Physics and Computational Mathematics, Beijing 100094, China",
+        address: "北京市海淀区丰豪东路2号",
+        addressEn: "No. 2, Fenghao East Road, Haidian District, Beijing, Beijing, China",
+        emails: ["liuqk@iapcm.ac.cn"],
+        phones: ["13621058267"],
+        orcid: "",
+        avatar: "../assets/avatar/liuqingkai.jpg",
+        position: "合作成员"
+    },
+    {
         id: "chenqilong",
         name: "陈奇隆",
         englishName: "Qilong Chen",
