@@ -316,7 +316,7 @@ const teamMembers = [
         emails: ["mayu9@mail.sysu.edu.cn"],
         phones: ["13620469568"],
         orcid: "",
-        avatar: "../assets/avatar/maoyu.jpg",
+        avatar: "../assets/avatar/mayu.jpg",
         position: "合作成员"
     },
     {
