@@ -99,7 +99,7 @@ const teamMembers = [
         addressEn: "No. 328, Section 1, Changshun Avenue, Shuangliu District, Chengdu, Sichuan Province, China",
         emails: ["npicliaozhen@163.com"],
         phones: ["19180770226"],
-        orcid: "",
+        orcid: "0009-0007-5856-0229",
         avatar: "../assets/avatar/liaozhen.jpg",
         position: "核心成员"
     },
