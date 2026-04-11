@@ -7,7 +7,7 @@ window.templates = {
       "name": '提示词生成专家',
       "icon": '🧠',
       "cover": 'https://i0.hdslb.com/bfs/archive/550d9cba840dae53b9c45738bb9bba2c3b56bc9e.jpg?w=400&h=300&fit=crop&crop=center',
-      "localCoverImage": './assets/prompt_cover/prompt-opt-001.jpg', // 本地封面路径，作为远程链接失效时的备用方案
+      "localCoverImage": '../assets/prompt_cover/prompt-opt-001.jpg', // 本地封面路径，作为远程链接失效时的备用方案
       "desc": '将任何需求转化为结构化、可复用的高质量提示词模板',
       "tags": ['提示词设计', '模板生成', '多场景适配'],
       "category": '常用工具',
@@ -29,7 +29,7 @@ window.templates = {
     "name": "提示词名称（简洁有力）",
     "icon": "相关emoji（单个）",
     "cover": "unsplash高质量配图URL",
-      "localCoverImage": './assets/prompt_cover/prompt-id.jpg', // 本地封面路径，作为远程链接失效时的备用方案
+      "localCoverImage": '../assets/prompt_cover/prompt-id.jpg', // 本地封面路径，作为远程链接失效时的备用方案
     "desc": "一句话说明用途（30字内）",
     "tags": \\["标签1", "标签2", "标签3"\\],
     "category": "所属类别",
@@ -50,7 +50,7 @@ window.templates = {
       "name": "学术画像·天命叙事",
       "icon": "🎭",
       "cover": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=1350&q=80",
-      "localCoverImage": './assets/prompt_cover/prompt-id-001.jpg', // 本地封面路径，作为远程链接失效时的备用方案
+      "localCoverImage": '../assets/prompt_cover/prompt-id-001.jpg', // 本地封面路径，作为远程链接失效时的备用方案
       "desc": "将零散成果串成成长故事线把本次课题定位为逻辑必然的下一站。",
       "tags": \\["学术画像", "成长故事", "逻辑延续"\\],
       "category": "国自科申报｜策略",
@@ -67,7 +67,7 @@ window.templates = {
       "name": '提示词格式优化工具',
       "icon": '🛠️',
       "cover": 'https://i-blog.csdnimg.cn/direct/90db42b98f4d4357ae6b3826d4fc151f.png?auto=format&fit=crop&w=1350&q=80',
-      "localCoverImage": './assets/prompt_cover/prompt-opt-002.jpg', // 本地封面路径，作为远程链接失效时的备用方案
+      "localCoverImage": '../assets/prompt_cover/prompt-opt-002.jpg', // 本地封面路径，作为远程链接失效时的备用方案
       "desc": '将用户提供的提示词描述自动格式化并补全缺失字段。',
       "tags": ['提示词优化', '格式化工具', '自动化'],
       "category": '常用工具',
@@ -85,7 +85,7 @@ window.templates = {
    "name": "任务名称（根据粗略的标题描述和提示词描述，生成一个符合要求的任务名称，言简意骇）",
    "icon": "与提示词描述相关的贴切的emoji",
    "cover": "与提示词描述相关的贴切的封面图片url（确保链接有效）",
-      "localCoverImage": './assets/prompt_cover/prompt-001.jpg', // 本地封面路径，作为远程链接失效时的备用方案
+      "localCoverImage": '../assets/prompt_cover/prompt-001.jpg', // 本地封面路径，作为远程链接失效时的备用方案
    "desc": "一句话描述提示词用途（从content字段中截取，一读就知道功能的那种，言简意骇，不要发散）",
    "tags": "标签1", "标签2", "标签3",（3个标签，添加用中括号括起来）
    "category": "主题分类",
@@ -97,7 +97,7 @@ window.templates = {
       "name": "通知回复 · 邮件生成器",
       "icon": "📤",
       "cover": "https://gd-hbimg.huaban.com/ca6329d97d74a54f5fbbc6bfdfc04d45acc4b3c01d040-ziqtoA_fw1200webp?auto=format&fit=crop&w=1350&q=80",
-      "localCoverImage": './assets/prompt_cover/prompt-opt-003.jpg', // 本地封面路径，作为远程链接失效时的备用方案
+      "localCoverImage": '../assets/prompt_cover/prompt-opt-003.jpg', // 本地封面路径，作为远程链接失效时的备用方案
       "desc": "基于通知内容自动生成规范、专业的回复或提交邮件，支持附件确认和自定义细节，直接复制使用，提高邮件处理效率。",
       "tags": ["通知回复", "提交邮件", "场景通用"],
       "category": "常用工具",
@@ -108,7 +108,7 @@ window.templates = {
       "name": '公众号智创 · 学术论文推荐',
       "icon": '📱',
       "cover": 'https://gd-hbimg.huaban.com/77c1c31d06c9d3517940cca67fd8232a20ad762187f161-dcHLWH_fw1200webp?w=400&h=300&fit=crop&crop=center',
-      "localCoverImage": './assets/prompt_cover/prompt-wx-001.jpg', // 本地封面路径，作为远程链接失效时的备用方案
+      "localCoverImage": '../assets/prompt_cover/prompt-wx-001.jpg', // 本地封面路径，作为远程链接失效时的备用方案
       "desc": '将复杂科研论文转化为引人入胜的科普推文（计算数学 & AI for Science方向）',
       "tags": ['科普写作', '学术传播', '社交媒体'],
       "category": '内容运营｜智核学术',
@@ -422,7 +422,7 @@ window.templates = {
       "name": '公众号智创 · 综述论文解读',
       "icon": '📚',
       "cover": "https://images.unsplash.com/photo-1507842217343-583bb7270b66?auto=format&fit=crop&w=1350&q=80",
-      "localCoverImage": './assets/prompt_cover/prompt-academic-003.jpg', // 本地封面路径，作为远程链接失效时的备用方案
+      "localCoverImage": '../assets/prompt_cover/prompt-academic-003.jpg', // 本地封面路径，作为远程链接失效时的备用方案
       "desc": '将 PINN 领域综述论文转化为系统性科普推文，帮助读者建立全局认知',
       "tags": ['综述解读', '领域综述', '技术发展'],
       "category": '内容运营｜智核学术',
@@ -649,7 +649,7 @@ window.templates = {
       "name": '公众号智创 · 综述论文解读（叙事版）',
       "icon": '📖',
       "cover": "https://images.unsplash.com/photo-1507842217343-583bb7270b66?auto=format&fit=crop&w=1350&q=80",
-      "localCoverImage": './assets/prompt_cover/prompt-academic-003.jpg',
+      "localCoverImage": '../assets/prompt_cover/prompt-academic-003.jpg',
       "desc": '顺着综述原文的逻辑，用流畅的叙事将领域故事娓娓道来',
       "tags": ['综述解读', '故事叙事', '深度科普'],
       "category": '内容运营｜智核学术',
@@ -999,7 +999,7 @@ window.templates = {
       "name": '公众号智创 · 精选期刊推荐',
       "icon": '📚',
       "cover": 'https://gd-hbimg.huaban.com/fa7a9af5d35fa7d0fd04f10a565813d81a52f24c12e5f3-CyFbpQ_fw1200webp?w=400&h=300&fit=crop&crop=center',
-      "localCoverImage": './assets/prompt_cover/prompt-wx-002.jpg', // 本地封面路径，作为远程链接失效时的备用方案
+      "localCoverImage": '../assets/prompt_cover/prompt-wx-002.jpg', // 本地封面路径，作为远程链接失效时的备用方案
       "desc": '将原始期刊数据标准化为结构化JSON格式，服务于学术期刊数据库建设与投稿决策支持系统',
       "tags": ['信息标准化', '投稿决策', '期刊数据库'],
       "category": '内容运营｜智核学术',
@@ -1211,7 +1211,7 @@ window.templates = {
       "icon": '🔧',
       "cover": 'https://gd-hbimg.huaban.com/5eae6b33b73eba64e7f28883c1a78ba4dc0a7ef1804f3-1BTwBk_fw1200webp?w=400&h=300&fit=crop&crop=center',
 
-      "localCoverImage": './assets/prompt_cover/prompt-wx-003.jpg', // 本地封面路径，作为远程链接失效时的备用方案
+      "localCoverImage": '../assets/prompt_cover/prompt-wx-003.jpg', // 本地封面路径，作为远程链接失效时的备用方案
       "desc": '生成专业的科研工具推荐文章，格式规范，内容详实',
       "tags": ['科研工具', '推荐文章', '学术写作'],
       "category": '内容运营｜智核学术',
@@ -1354,17 +1354,17 @@ window.templates = {
       "name": "顶刊封面故事生成器",
       "icon": "📰",
       "cover": "https://images.unsplash.com/photo-1457369804613-52c61a468e7d?auto=format&fit=crop&w=1350&q=80",
-      "localCoverImage": "./assets/prompt_cover/prompt-wx-004.png",
+      "localCoverImage": "../assets/prompt_cover/prompt-wx-004.png",
       "desc": "输入期刊封面与故事，自动输出标准JS格式的封面故事条目",
       "tags": ["顶刊", "封面故事", "结构化输出"],
       "category": "内容运营｜智核学术",
-      "content": "你是一名《Nature》《Science》《Cell》资深科学编辑，擅长将英文封面故事改写为符合对应期刊中文风格、中文的封面故事原文则修改为无查重风险且保留原意的优化描述。请严格按以下JS字段输出，仅返回合法JSON，不添加额外解释：\n\n{\n  id: ' 期刊名-数字ID,例如 Science-001',\n  title: '《期刊名》封面故事：中文标题，不超过20字',\n  subtitle: '中文副标题，一句话概括研究亮点',\n  description: '中文改写后的封面故事，保持原意但避免查重，语言风格与期刊中文官网一致，300字以内',\n  date: 'YYYY年MM月DD日刊',\n  imagePath: '../assets/cover/期刊名/id/id.png',\n  category: 'Nature|Science|Cell',\n  colors: []\n}\n\n处理规则：\n1. 若原文为英文，直接用对应期刊的表达风格翻译成中文，放在description字段；\n2. 若原文为中文，请用对应期刊风格改写优化，避免查重但坚决不变原意；\n3. 禁止出现“翻译”“改写”等字样，直接呈现期刊化叙事，不改变原意，遵循科研事实，不要夸张或贬低，不伪造数据，实事求是，科学严谨。\n\n输入：\n id: '[id]'\n期刊名 = [期刊名Science/Nature/Cell]\n封面故事原文 = [封面故事原文]\n 日期date: '[YYYY年MM月DD日刊]'\n\n请直接输出标准JS对象，字段顺序与示例一致，无需多余文字。\n\n参考示例（输入→输出）：\n输入：id: '042'\n\n期刊名= 'Nature'\n封面故事原文 = \"A new spatial-immune scoring system predicts liver cancer recurrence by mapping natural killer cell neighborhoods.\"\n 日期date: '2025年10月30日刊'\n\n输出：\n{\n  id: 'Nature-042',\n  title: '《Nature》封面故事：NK细胞地图预警肝癌复发',\n  subtitle: '空间免疫评分系统提前锁定术后高危人群',\n  description: '肝细胞癌术后复发率高达70%，如何精准预警一直是临床难题。本期《自然》中，研究团队利用AI解析肿瘤微环境中自然杀伤细胞的空间“邻里关系”，开发出TIMES评分系统。只需五基因定位+影像切片，即可在手术前预判复发风险，为术后干预争取宝贵时间窗。',\n  date: '2025年10月30日刊',\n  imagePath: '../assets/cover/Nature/042/042.png',\n  category: 'Nature',\n  colors: []\n}"
+      "content": "你是一名《Nature》《Science》《Cell》资深科学编辑，擅长将英文封面故事改写为符合对应期刊中文风格、中文的封面故事原文则修改为无查重风险且保留原意的优化描述。请严格按以下JS字段输出，仅返回合法JSON，不添加额外解释：\n\n{\n  id: ' 期刊名-数字ID,例如 Science-001',\n  title: '《期刊名》封面故事：中文标题，不超过20字',\n  subtitle: '中文副标题，一句话概括研究亮点',\n  description: '中文改写后的封面故事，保持原意但避免查重，语言风格与期刊中文官网一致，300字以内',\n  date: 'YYYY年MM月DD日刊',\n  imagePath: '.../assets/cover/期刊名/id/id.png',\n  category: 'Nature|Science|Cell',\n  colors: []\n}\n\n处理规则：\n1. 若原文为英文，直接用对应期刊的表达风格翻译成中文，放在description字段；\n2. 若原文为中文，请用对应期刊风格改写优化，避免查重但坚决不变原意；\n3. 禁止出现“翻译”“改写”等字样，直接呈现期刊化叙事，不改变原意，遵循科研事实，不要夸张或贬低，不伪造数据，实事求是，科学严谨。\n\n输入：\n id: '[id]'\n期刊名 = [期刊名Science/Nature/Cell]\n封面故事原文 = [封面故事原文]\n 日期date: '[YYYY年MM月DD日刊]'\n\n请直接输出标准JS对象，字段顺序与示例一致，无需多余文字。\n\n参考示例（输入→输出）：\n输入：id: '042'\n\n期刊名= 'Nature'\n封面故事原文 = \"A new spatial-immune scoring system predicts liver cancer recurrence by mapping natural killer cell neighborhoods.\"\n 日期date: '2025年10月30日刊'\n\n输出：\n{\n  id: 'Nature-042',\n  title: '《Nature》封面故事：NK细胞地图预警肝癌复发',\n  subtitle: '空间免疫评分系统提前锁定术后高危人群',\n  description: '肝细胞癌术后复发率高达70%，如何精准预警一直是临床难题。本期《自然》中，研究团队利用AI解析肿瘤微环境中自然杀伤细胞的空间“邻里关系”，开发出TIMES评分系统。只需五基因定位+影像切片，即可在手术前预判复发风险，为术后干预争取宝贵时间窗。',\n  date: '2025年10月30日刊',\n  imagePath: '.../assets/cover/Nature/042/042.png',\n  category: 'Nature',\n  colors: []\n}"
    },
    "prompt-xhs-001": {
       "name": "小红书爆款改写机",
       "icon": "🔥",
       "cover": "https://pic2.zhimg.com/v2-7a21432c9d31fb98ddd631c877c70757_r.jpg?auto=format&fit=crop&w=1350&q=80",
-      "localCoverImage": './assets/prompt_cover/prompt-xhs-001.jpg', // 本地封面路径，作为远程链接失效时的备用方案
+      "localCoverImage": '../assets/prompt_cover/prompt-xhs-001.jpg', // 本地封面路径，作为远程链接失效时的备用方案
       "desc": "一键把普通文案变身高赞小红书爆款笔记。",
       "tags": ["小红书", "爆款文案", "改写"],
       "category": "内容运营｜智核学术",
@@ -1376,7 +1376,7 @@ window.templates = {
       "name": "顶刊标题重构器",
       "icon": "✨",
       "cover": "https://gd-hbimg.huaban.com/b902aa26817dc220e3224ebb1ee9e2c1dc05be8d90e20-gqCqfa_fw1200webp?auto=format&fit=crop&w=1350&q=80",
-      "localCoverImage": './assets/prompt_cover/prompt-academic-001.jpg', // 本地封面路径，作为远程链接失效时的备用方案
+      "localCoverImage": '../assets/prompt_cover/prompt-academic-001.jpg', // 本地封面路径，作为远程链接失效时的备用方案
       "desc": "将平淡论文标题升级为Nature/Science级别的精准表达",
       "tags": ["学术写作", "标题优化", "顶刊投稿"],
       "category": "科研邪修｜写作",
@@ -1387,7 +1387,7 @@ window.templates = {
       "name": "方法命名与缩写设计大师",
       "icon": "🔤",
       "cover": "https://gd-hbimg.huaban.com/e1100d827735548252c9c4b9a1b7fc0d7020130a3a7ef-2PROHM_fw1200webp?auto=format&fit=crop&w=1350&q=80",
-      "localCoverImage": './assets/prompt_cover/prompt-academic-002.jpg', // 本地封面路径，作为远程链接失效时的备用方案
+      "localCoverImage": '../assets/prompt_cover/prompt-academic-002.jpg', // 本地封面路径，作为远程链接失效时的备用方案
       "desc": "为研究方法设计专业易记的学术缩写，必要时反向优化标题",
       "tags": ["方法命名", "缩写设计", "标题优化"],
       "category": "科研邪修｜写作",
@@ -1399,7 +1399,7 @@ window.templates = {
       "name": "关键词生成引擎",
       "icon": "🔍",
       "cover": "https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&w=1350&q=80",
-      "localCoverImage": './assets/prompt_cover/prompt-academic-009.jpg', // 本地封面路径，作为远程链接失效时的备用方案
+      "localCoverImage": '../assets/prompt_cover/prompt-academic-009.jpg', // 本地封面路径，作为远程链接失效时的备用方案
       "desc": "基于摘要提取核心术语并补充上位概念按重要性排序最大化数据库可发现性。",
       "tags": ["关键词优化", "检索SEO", "摘要提炼"],
       "category": "科研邪修｜写作",
@@ -1410,7 +1410,7 @@ window.templates = {
       "name": "文献检索词及综述生成器",
       "icon": "🔍",
       "cover": "https://images.unsplash.com/photo-1507842217343-583bb7270b66?auto=format&fit=crop&w=1350&q=80",
-      "localCoverImage": './assets/prompt_cover/prompt-academic-003.jpg', // 本地封面路径，作为远程链接失效时的备用方案
+      "localCoverImage": '../assets/prompt_cover/prompt-academic-003.jpg', // 本地封面路径，作为远程链接失效时的备用方案
       "desc": "从确定主题、生成关键词到检索真实文献并输出综述大纲，全流程辅助完成文献综述初稿。",
       "tags": ["文献综述", "关键词生成", "真实文献检索"],
       "category": "科研邪修｜写作",
@@ -1422,7 +1422,7 @@ window.templates = {
       "name": "摘要无损压缩大师",
       "icon": "🗜️",
       "cover": "https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?auto=format&fit=crop&w=1350&q=80",
-      "localCoverImage": './assets/prompt_cover/prompt-academic-010.jpg', // 本地封面路径，作为远程链接失效时的备用方案
+      "localCoverImage": '../assets/prompt_cover/prompt-academic-010.jpg', // 本地封面路径，作为远程链接失效时的备用方案
       "desc": "信息分级后逐句删除冗余保留核心在目标字数内保持逻辑流畅。",
       "tags": ["字数压缩", "无损精炼", "摘要瘦身"],
       "category": "科研邪修｜写作",
@@ -1433,7 +1433,7 @@ window.templates = {
       "name": "一句话 · 同核异声",
       "icon": "📊",
       "cover": "https://images.unsplash.com/photo-1505832018823-50331d70d237?auto=format&fit=crop&w=1350&q=80",
-      "localCoverImage": './assets/prompt_cover/prompt-academic-016.jpg', // 本地封面路径，作为远程链接失效时的备用方案
+      "localCoverImage": '../assets/prompt_cover/prompt-academic-016.jpg', // 本地封面路径，作为远程链接失效时的备用方案
       "desc": "为同行学生公众分别撰写一句话解释性版本和情感共鸣版本的差异化核心信息。",
       "tags": ["读者分层", "核心信息", "公众传播"],
       "category": "科研邪修｜写作",
@@ -1444,7 +1444,7 @@ window.templates = {
       "name": "文献反向植入器",
       "icon": "📚",
       "cover": "https://gd-hbimg.huaban.com/38e4839361bb0b383244e94edac640e0728497a2120833-tuBS1b_fw1200webp?auto=format&fit=crop&w=1350&q=80",
-      "localCoverImage": './assets/prompt_cover/prompt-academic-004.jpg', // 本地封面路径，作为远程链接失效时的备用方案
+      "localCoverImage": '../assets/prompt_cover/prompt-academic-004.jpg', // 本地封面路径，作为远程链接失效时的备用方案
       "desc": "为已有论文智能匹配并插入高质量真实文献引用",
       "tags": ["文献检索", "引用插入", "学术规范"],
       "category": "科研邪修｜写作",
@@ -1455,7 +1455,7 @@ window.templates = {
       "name": "文献格式校对器",
       "icon": "📋",
       "cover": "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=1350&q=80",
-      "localCoverImage": './assets/prompt_cover/prompt-academic-025.jpg', // 本地封面路径，作为远程链接失效时的备用方案
+      "localCoverImage": '../assets/prompt_cover/prompt-academic-025.jpg', // 本地封面路径，作为远程链接失效时的备用方案
       "desc": "逐条核对字体缩写标点页码DOI等合规性，标出近5年更新版本，给出可直接替换文本。",
       "tags": ["参考文献", "合规检查", "格式核对"],
       "category": "科研邪修｜写作",
@@ -1465,7 +1465,7 @@ window.templates = {
       "name": "文献格式重排器",
       "icon": "🔄",
       "cover": "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=1350&q=80",
-      "localCoverImage": './assets/prompt_cover/prompt-academic-026.jpg', // 本地封面路径，作为远程链接失效时的备用方案
+      "localCoverImage": '../assets/prompt_cover/prompt-academic-026.jpg', // 本地封面路径，作为远程链接失效时的备用方案
       "desc": "按APA/MLA/Chicago/Harvard指定格式重排，统一字体样式，标注缺失项并给出合并删除建议。",
       "tags": ["格式重排", "引用风格", "缺失补全"],
       "category": "科研邪修｜写作",
@@ -1478,7 +1478,7 @@ window.templates = {
       "name": "Cover Letter 生成器",
       "icon": "📨",
       "cover": "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=1350&q=80",
-      "localCoverImage": './assets/prompt_cover/prompt-academic-005.jpg', // 本地封面路径，作为远程链接失效时的备用方案
+      "localCoverImage": '../assets/prompt_cover/prompt-academic-005.jpg', // 本地封面路径，作为远程链接失效时的备用方案
       "desc": "智能生成符合SCI期刊标准的投稿信模板。",
       "tags": ["SCI投稿", "Cover Letter", "期刊沟通"],
       "category": "科研邪修｜写作",
@@ -1489,7 +1489,7 @@ window.templates = {
       "name": "Cover Letter 风格迁移重写器",
       "icon": "🪶",
       "cover": "https://images.unsplash.com/photo-1579389083175-247ef7030069?auto=format&fit=crop&w=1350&q=80",
-      "localCoverImage": "./assets/prompt_cover/prompt-id-20251102-2.jpg",
+      "localCoverImage": "../assets/prompt_cover/prompt-id-20251102-2.jpg",
       "desc": "将原cover letter重写匹配新期刊风格与定位。",
       "tags": ["SCI投稿", "Cover Letter", "期刊迁移"],
       "category": "科研邪修｜写作",
@@ -1501,7 +1501,7 @@ window.templates = {
       "name": "论文逐句精修专家",
       "icon": "✍️",
       "cover": "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=1350&q=80",
-      "localCoverImage": './assets/prompt_cover/prompt-academic-005.jpg', // 本地封面路径，作为远程链接失效时的备用方案
+      "localCoverImage": '../assets/prompt_cover/prompt-academic-005.jpg', // 本地封面路径，作为远程链接失效时的备用方案
       "desc": "自动判断中英文，逐句精修至顶级期刊发表水准，附彩色问题标签与改进报告。",
       "tags": ["学术润色", "中英文通用", "逐句精修"],
       "category": "科研邪修｜写作",
@@ -1512,7 +1512,7 @@ window.templates = {
       "name": "论文全文纠错润色师",
       "icon": "🖊️",
       "cover": "https://gd-hbimg.huaban.com/2c28ddf4c9beee9760c45d6905074ee12cc2ffb118eb2-4Wc5tZ_fw1200webp?auto=format&fit=crop&w=1350&q=80",
-      "localCoverImage": './assets/prompt_cover/prompt-academic-006.jpg', // 本地封面路径，作为远程链接失效时的备用方案
+      "localCoverImage": '../assets/prompt_cover/prompt-academic-006.jpg', // 本地封面路径，作为远程链接失效时的备用方案
       "desc": "自动识别论文语言，中英双语一键扫描全文语法、术语、逻辑、格式并给出对照修改方案。",
       "tags": ["双语润色", "语法逻辑", "格式审查"],
       "category": "科研邪修｜写作",
@@ -1523,7 +1523,7 @@ window.templates = {
       "name": "智译｜段落翻译",
       "icon": "🔬",
       "cover": "https://www.scipaperpub.com/wp-content/uploads/2019/11/ss7.jpg?auto=format&fit=crop&w=1350&q=80",
-      "localCoverImage": './assets/prompt_cover/prompt-academic-007.jpg', // 本地封面路径，作为远程链接失效时的备用方案
+      "localCoverImage": '../assets/prompt_cover/prompt-academic-007.jpg', // 本地封面路径，作为远程链接失效时的备用方案
       "desc": "专业译者，对标顶刊标准，确保译文直接可投稿。",
       "tags": ["学术翻译", "期刊投稿", "双语润色"],
       "category": "科研邪修｜写作",
@@ -1534,7 +1534,7 @@ window.templates = {
       "name": "智译TeX｜全文翻译",
       "icon": "📝",
       "cover": "https://images.unsplash.com/photo-1516116216624-53e697fedbea?auto=format&fit=crop&w=1350&q=80",
-      "localCoverImage": './assets/prompt_cover/prompt-academic-008.jpg', // 本地封面路径，作为远程链接失效时的备用方案
+      "localCoverImage": '../assets/prompt_cover/prompt-academic-008.jpg', // 本地封面路径，作为远程链接失效时的备用方案
       "desc": "适配IDE的LaTeX全文翻译引擎,保留格式与命令,术语前后一致。",
       "tags": ["LaTeX全文翻译", "IDE自动化", "Trae"],
       "category": "科研邪修｜写作",
@@ -1545,7 +1545,7 @@ window.templates = {
       "name": "答辩场景模拟器",
       "icon": "🎓",
       "cover": "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=1350&q=80",
-      "localCoverImage": './assets/prompt_cover/prompt-academic-014.jpg', // 本地封面路径，作为远程链接失效时的备用方案
+      "localCoverImage": '../assets/prompt_cover/prompt-academic-014.jpg', // 本地封面路径，作为远程链接失效时的备用方案
       "desc": "以外部评审专家身份提出3-5个直击要害的最尖锐问题模拟首次阅读反应。",
       "tags": ["答辩质询", "模拟阅读", "尖锐提问"],
       "category": "科研邪修｜写作",
@@ -1555,7 +1555,7 @@ window.templates = {
       "name": "超级审稿人",
       "icon": "🕵️‍♂️",
       "cover": "https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&w=1350&q=80",
-      "localCoverImage": './assets/prompt_cover/prompt-academic-023.jpg', // 本地封面路径，作为远程链接失效时的备用方案
+      "localCoverImage": '../assets/prompt_cover/prompt-academic-023.jpg', // 本地封面路径，作为远程链接失效时的备用方案
       "desc": "按致命程度降序列出5–10条最严厉拒稿理由并给出可量化验证的改进方案。",
       "tags": ["反向审稿", "拒稿预判", "改进方案"],
       "category": "科研邪修｜写作",
@@ -1566,7 +1566,7 @@ window.templates = {
       "name": "论文配图提示词生成器",
       "icon": "🎨",
       "cover": "https://images.unsplash.com/photo-1633613286991-611fe299c4be?auto=format&fit=crop&w=1350&q=80",
-      "localCoverImage": "./assets/prompt_cover/academic-figure-prompt-generator.jpg",
+      "localCoverImage": "../assets/prompt_cover/academic-figure-prompt-generator.jpg",
       "desc": "将论文内容转化为专业AI绘图提示词，支持多种图表类型，输出中英双语版本",
       "tags": ["学术绘图", "提示词生成", "双语输出"],
       "category": "科研邪修｜写作",
@@ -1579,7 +1579,7 @@ window.templates = {
       "name": "审稿意见·总体回应",
       "icon": "🧠",
       "cover": "https://images.unsplash.com/photo-1501504905252-473c47e087f8?auto=format&fit=crop&w=1350&q=80",
-      "localCoverImage": './assets/prompt_cover/prompt-2-001.jpg', // 本地封面路径，作为远程链接失效时的备用方案
+      "localCoverImage": '../assets/prompt_cover/prompt-2-001.jpg', // 本地封面路径，作为远程链接失效时的备用方案
       "desc": "输入完整审稿意见，自动聚类、分级并制定总体回应策略与基调。",
       "tags": ["审稿回应", "学术写作", "策略生成"],
       "category": "审稿回信｜指南",
@@ -1589,7 +1589,7 @@ window.templates = {
       "name": "回复信开篇·修订总览",
       "icon": "🙏",
       "cover": "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=400&h=300&fit=crop&crop=center",
-      "localCoverImage": './assets/prompt_cover/prompt-2-002.jpg', // 本地封面路径，作为远程链接失效时的备用方案
+      "localCoverImage": '../assets/prompt_cover/prompt-2-002.jpg', // 本地封面路径，作为远程链接失效时的备用方案
       "desc": "一键生成谦逊专业的回复信开篇及“主要修订概述”段落，营造建设性对话氛围。",
       "tags": ["审稿回信", "学术礼仪", "修订概述"],
       "category": "审稿回信｜指南",
@@ -1599,7 +1599,7 @@ window.templates = {
       "name": "补充实验·回应策略",
       "icon": "🧪",
       "cover": "https://images.unsplash.com/photo-1579952363873-27f3bade9f55?auto=format&fit=crop&w=1350&q=80",
-      "localCoverImage": './assets/prompt_cover/prompt-2-003.jpg', // 本地封面路径，作为远程链接失效时的备用方案
+      "localCoverImage": '../assets/prompt_cover/prompt-2-003.jpg', // 本地封面路径，作为远程链接失效时的备用方案
       "desc": "针对“补充实验或数据”要求，自动生成完全执行、部分执行与合理论辩三种策略回应方案。",
       "tags": ["补充实验", "审稿策略", "数据回应"],
       "category": "审稿回信｜指南",
@@ -1609,7 +1609,7 @@ window.templates = {
       "name": "理论质疑·重构回应",
       "icon": "🧩",
       "cover": "https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?auto=format&fit=crop&w=1350&q=80",
-      "localCoverImage": './assets/prompt_cover/prompt-2-004.jpg', // 本地封面路径，作为远程链接失效时的备用方案
+      "localCoverImage": '../assets/prompt_cover/prompt-2-004.jpg', // 本地封面路径，作为远程链接失效时的备用方案
       "desc": "重写被质疑理论段落并在回复信中展示如何根本性强化学术论证。",
       "tags": ["理论框架", "研究动机", "重构论证"],
       "category": "审稿回信｜指南",
@@ -1619,7 +1619,7 @@ window.templates = {
       "name": "方法质疑·分析回应",
       "icon": "🔬",
       "cover": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=1350&q=80",
-      "localCoverImage": './assets/prompt_cover/prompt-2-005.jpg', // 本地封面路径，作为远程链接失效时的备用方案
+      "localCoverImage": '../assets/prompt_cover/prompt-2-005.jpg', // 本地封面路径，作为远程链接失效时的备用方案
       "desc": "按审稿人要求补充分析并报告结果，或引用方法论文献论证原方法更优。",
       "tags": ["方法论", "数据分析", "稳健性检验"],
       "category": "审稿回信｜指南",
@@ -1629,7 +1629,7 @@ window.templates = {
       "name": "矛盾意见·协调回应",
       "icon": "⚖️",
       "cover": "https://images.unsplash.com/photo-1589994965851-a8f479c573a9?auto=format&fit=crop&w=1350&q=80",
-      "localCoverImage": './assets/prompt_cover/prompt-2-006.jpg', // 本地封面路径，作为远程链接失效时的备用方案
+      "localCoverImage": '../assets/prompt_cover/prompt-2-006.jpg', // 本地封面路径，作为远程链接失效时的备用方案
       "desc": "对两位审稿人完全相反的建议进行学术裁决并分别撰写策略性回复。",
       "tags": ["意见冲突", "学术协调", "策略回复"],
       "category": "审稿回信｜指南",
@@ -1639,7 +1639,7 @@ window.templates = {
       "name": "误读澄清·礼貌回应",
       "icon": "🕊️",
       "cover": "https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?auto=format&fit=crop&w=1350&q=80",
-      "localCoverImage": './assets/prompt_cover/prompt-2-007.jpg', // 本地封面路径，作为远程链接失效时的备用方案
+      "localCoverImage": '../assets/prompt_cover/prompt-2-007.jpg', // 本地封面路径，作为远程链接失效时的备用方案
       "desc": "以主动承担责任的外交辞令澄清审稿人对论文内容的明显误读并展示修改位置。",
       "tags": ["澄清误读", "外交辞令", "主动担责"],
       "category": "审稿回信｜指南",
@@ -1649,7 +1649,7 @@ window.templates = {
       "name": "模糊意见·系统回应",
       "icon": "🔍",
       "cover": "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1350&q=80",
-      "localCoverImage": './assets/prompt_cover/prompt-2-008.jpg', // 本地封面路径，作为远程链接失效时的备用方案
+      "localCoverImage": '../assets/prompt_cover/prompt-2-008.jpg', // 本地封面路径，作为远程链接失效时的备用方案
       "desc": "推断笼统负面意见的真实指向并制定宁多勿少的系统性修改方案。",
       "tags": ["模糊意见", "系统修改", "理论深度"],
       "category": "审稿回信｜指南",
@@ -1659,7 +1659,7 @@ window.templates = {
       "name": "不可行建议·建设回应",
       "icon": "🚀",
       "cover": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1350&q=80",
-      "localCoverImage": './assets/prompt_cover/prompt-2-009.jpg', // 本地封面路径，作为远程链接失效时的备用方案
+      "localCoverImage": '../assets/prompt_cover/prompt-2-009.jpg', // 本地封面路径，作为远程链接失效时的备用方案
       "desc": "将客观无法完成的建议转化为未来研究方向并写入局限性部分以示尊重。",
       "tags": ["不可行建议", "未来研究", "局限性转化"],
       "category": "审稿回信｜指南",
@@ -1669,7 +1669,7 @@ window.templates = {
       "name": "错误建议·学术论辩",
       "icon": "⚔️",
       "cover": "https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&w=1350&q=80",
-      "localCoverImage": './assets/prompt_cover/prompt-2-010.jpg', // 本地封面路径，作为远程链接失效时的备用方案
+      "localCoverImage": '../assets/prompt_cover/prompt-2-010.jpg', // 本地封面路径，作为远程链接失效时的备用方案
       "desc": "以冷静专业的方式引用权威文献对学术上错误的修改建议进行有理有据的论辩。",
       "tags": ["学术论辩", "拒绝修改", "权威证据"],
       "category": "审稿回信｜指南",
@@ -1679,7 +1679,7 @@ window.templates = {
       "name": "修改可视化·对比呈现",
       "icon": "📊",
       "cover": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1350&q=80",
-      "localCoverImage": './assets/prompt_cover/prompt-2-011.jpg', // 本地封面路径，作为远程链接失效时的备用方案
+      "localCoverImage": '../assets/prompt_cover/prompt-2-011.jpg', // 本地封面路径，作为远程链接失效时的备用方案
       "desc": "在回复信中以颜色区分和并排方式清晰展示修改前后对比降低审稿人审查成本。",
       "tags": ["可视化对比", "修改标记", "高效沟通"],
       "category": "审稿回信｜指南",
@@ -1689,7 +1689,7 @@ window.templates = {
       "name": "大修重投·Cover Letter",
       "icon": "📈",
       "cover": "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=1350&q=80",
-      "localCoverImage": './assets/prompt_cover/prompt-2-012.jpg', // 本地封面路径，作为远程链接失效时的备用方案
+      "localCoverImage": '../assets/prompt_cover/prompt-2-012.jpg', // 本地封面路径，作为远程链接失效时的备用方案
       "desc": "为大修后重投撰写简洁有力的封面信突出核心改进并附文件清单。",
       "tags": ["大修重投", "封面信", "改进亮点"],
       "category": "审稿回信｜指南",
@@ -1699,7 +1699,7 @@ window.templates = {
       "name": "拒后重投·重构路线",
       "icon": "🛠️",
       "cover": "https://images.unsplash.com/photo-1505832018823-50331d70d237?auto=format&fit=crop&w=1350&q=80",
-      "localCoverImage": './assets/prompt_cover/prompt-2-013.jpg', // 本地封面路径，作为远程链接失效时的备用方案
+      "localCoverImage": '../assets/prompt_cover/prompt-2-013.jpg', // 本地封面路径，作为远程链接失效时的备用方案
       "desc": "整合审稿意见制定论文重构路线图并撰写重投封面信核心论述。",
       "tags": ["拒后重投", "重构路线", "封面信"],
       "category": "审稿回信｜指南",
@@ -1709,7 +1709,7 @@ window.templates = {
       "name": "次要修改·快速清单",
       "icon": "✅",
       "cover": "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=1350&q=80",
-      "localCoverImage": './assets/prompt_cover/prompt-2-014.jpg', // 本地封面路径，作为远程链接失效时的备用方案
+      "localCoverImage": '../assets/prompt_cover/prompt-2-014.jpg', // 本地封面路径，作为远程链接失效时的备用方案
       "desc": "以清单式表格快速回应格式拼写图表清晰度等次要修改意见。",
       "tags": ["次要修改", "清单回应", "高效处理"],
       "category": "审稿回信｜指南",
@@ -1719,7 +1719,7 @@ window.templates = {
       "name": "补充文献·有机整合",
       "icon": "📚",
       "cover": "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?auto=format&fit=crop&w=1350&q=80",
-      "localCoverImage": './assets/prompt_cover/prompt-2-015.jpg', // 本地封面路径，作为远程链接失效时的备用方案
+      "localCoverImage": '../assets/prompt_cover/prompt-2-015.jpg', // 本地封面路径，作为远程链接失效时的备用方案
       "desc": "将审稿人推荐的文献有机整合到论文相关部分并在回复信中说明融入方式。",
       "tags": ["补充文献", "有机引用", "文献整合"],
       "category": "审稿回信｜指南",
@@ -1729,7 +1729,7 @@ window.templates = {
       "name": "修订追踪·清单表格",
       "icon": "📋",
       "cover": "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=1350&q=80",
-      "localCoverImage": './assets/prompt_cover/prompt-2-016.jpg', // 本地封面路径，作为远程链接失效时的备用方案
+      "localCoverImage": '../assets/prompt_cover/prompt-2-016.jpg', // 本地封面路径，作为远程链接失效时的备用方案
       "desc": "生成Markdown格式修订追踪表格系统管理所有修改条目的完成状态。",
       "tags": ["修订追踪", "清单管理", "进度控制"],
       "category": "审稿回信｜指南",
@@ -1739,7 +1739,7 @@ window.templates = {
       "name": "语言润色·示范回应",
       "icon": "✍️",
       "cover": "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=1350&q=80",
-      "localCoverImage": './assets/prompt_cover/prompt-2-017.jpg', // 本地封面路径，作为远程链接失效时的备用方案
+      "localCoverImage": '../assets/prompt_cover/prompt-2-017.jpg', // 本地封面路径，作为远程链接失效时的备用方案
       "desc": "提供语言润色示范性修改并在回复信中声明已邀请专家进行全文润色。",
       "tags": ["语言润色", "示范修改", "专业回应"],
       "category": "审稿回信｜指南",
@@ -1749,7 +1749,7 @@ window.templates = {
       "name": "回复结尾·良好印象",
       "icon": "🙌",
       "cover": "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=1350&q=80",
-      "localCoverImage": './assets/prompt_cover/prompt-2-018.jpg', // 本地封面路径，作为远程链接失效时的备用方案
+      "localCoverImage": '../assets/prompt_cover/prompt-2-018.jpg', // 本地封面路径，作为远程链接失效时的备用方案
       "desc": "撰写专业得体的回复信结尾段落再次感谢并表达期待发表的愿望。",
       "tags": ["回复结尾", "感谢致辞", "专业礼仪"],
       "category": "审稿回信｜指南",
@@ -1759,7 +1759,7 @@ window.templates = {
       "name": "修改标示·最佳实践",
       "icon": "🎯",
       "cover": "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1350&q=80",
-      "localCoverImage": './assets/prompt_cover/prompt-2-019.jpg', // 本地封面路径，作为远程链接失效时的备用方案
+      "localCoverImage": '../assets/prompt_cover/prompt-2-019.jpg', // 本地封面路径，作为远程链接失效时的备用方案
       "desc": "比较修订模式高亮字体边注等标示方法优缺点并推荐黄金组合方案。",
       "tags": ["修改标示", "最佳实践", "编辑规范"],
       "category": "审稿回信｜指南",
@@ -1769,7 +1769,7 @@ window.templates = {
       "name": "提交前·终极自查",
       "icon": "🔍",
       "cover": "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=1350&q=80",
-      "localCoverImage": './assets/prompt_cover/prompt-2-020.jpg', // 本地封面路径，作为远程链接失效时的备用方案
+      "localCoverImage": '../assets/prompt_cover/prompt-2-020.jpg', // 本地封面路径，作为远程链接失效时的备用方案
       "desc": "提供提交修改稿前的终极自查清单覆盖文件命名系统信息同步等易忽略细节。",
       "tags": ["终极自查", "提交检查", "细节核对"],
       "category": "审稿回信｜指南",
@@ -1781,7 +1781,7 @@ window.templates = {
       "name": "生态位·竞争分析",
       "icon": "🕵️‍♂️",
       "cover": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1350&q=80",
-      "localCoverImage": './assets/prompt_cover/prompt-3-001.jpg', // 本地封面路径，作为远程链接失效时的备用方案
+      "localCoverImage": '../assets/prompt_cover/prompt-3-001.jpg', // 本地封面路径，作为远程链接失效时的备用方案
       "desc": "基于顶尖学者近5年成果识别理论内核与技术壁垒找出差异化竞争切入点。",
       "tags": ["竞争生态位", "差异化定位", "顶尖对手"],
       "category": "国自科申报｜策略",
@@ -1791,7 +1791,7 @@ window.templates = {
       "name": "学术画像·天命叙事",
       "icon": "🎭",
       "cover": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=1350&q=80",
-      "localCoverImage": './assets/prompt_cover/prompt-3-002.jpg', // 本地封面路径，作为远程链接失效时的备用方案
+      "localCoverImage": '../assets/prompt_cover/prompt-3-002.jpg', // 本地封面路径，作为远程链接失效时的备用方案
       "desc": "将零散成果串成成长故事线把本次课题定位为逻辑必然的下一站。",
       "tags": ["学术画像", "成长故事", "逻辑延续"],
       "category": "国自科申报｜策略",
@@ -1801,7 +1801,7 @@ window.templates = {
       "name": "团队梯队·协同优势",
       "icon": "👥",
       "cover": "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1350&q=80",
-      "localCoverImage": './assets/prompt_cover/prompt-3-003.jpg', // 本地封面路径，作为远程链接失效时的备用方案
+      "localCoverImage": '../assets/prompt_cover/prompt-3-003.jpg', // 本地封面路径，作为远程链接失效时的备用方案
       "desc": "绘制梯队结构图突出成员间协同优势并体现青年人才培养合理性。",
       "tags": ["梯队结构", "协同优势", "角色互补"],
       "category": "国自科申报｜策略",
@@ -1811,7 +1811,7 @@ window.templates = {
       "name": "预算ROI·投资视角",
       "icon": "💰",
       "cover": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1350&q=80",
-      "localCoverImage": './assets/prompt_cover/prompt-3-004.jpg', // 本地封面路径，作为远程链接失效时的备用方案
+      "localCoverImage": '../assets/prompt_cover/prompt-3-004.jpg', // 本地封面路径，作为远程链接失效时的备用方案
       "desc": "以科学投资回报率视角将预算重构为战略投资模块并论证其必要性效率。",
       "tags": ["预算ROI", "投资模块", "效率论证"],
       "category": "国自科申报｜策略",
@@ -1821,7 +1821,7 @@ window.templates = {
       "name": "风险矩阵·应对预案",
       "icon": "⚠️",
       "cover": "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&w=1350&q=80",
-      "localCoverImage": './assets/prompt_cover/prompt-3-005.jpg', // 本地封面路径，作为远程链接失效时的备用方案
+      "localCoverImage": '../assets/prompt_cover/prompt-3-005.jpg', // 本地封面路径，作为远程链接失效时的备用方案
       "desc": "构建技术进度数据三维风险矩阵为高风险高影响条目设计具体可操作预案。",
       "tags": ["风险矩阵", "应对预案", "可行性"],
       "category": "国自科申报｜策略",
@@ -1831,7 +1831,7 @@ window.templates = {
       "name": "创新定位·修辞策略",
       "icon": "💡",
       "cover": "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1350&q=80",
-      "localCoverImage": './assets/prompt_cover/prompt-3-006.jpg', // 本地封面路径，作为远程链接失效时的备用方案
+      "localCoverImage": '../assets/prompt_cover/prompt-3-006.jpg', // 本地封面路径，作为远程链接失效时的备用方案
       "desc": "判断范式突破或渐进式创新并选择开创性类比或精细对比的修辞策略。",
       "tags": ["创新定位", "修辞策略", "突破渐进"],
       "category": "国自科申报｜策略",
@@ -1841,7 +1841,7 @@ window.templates = {
       "name": "摘要 elevator pitch",
       "icon": "🛗",
       "cover": "https://images.unsplash.com/photo-1589994965851-a8f479c573a9?auto=format&fit=crop&w=1350&q=80",
-      "localCoverImage": './assets/prompt_cover/prompt-3-007.jpg', // 本地封面路径，作为远程链接失效时的备用方案
+      "localCoverImage": '../assets/prompt_cover/prompt-3-007.jpg', // 本地封面路径，作为远程链接失效时的备用方案
       "desc": "60秒内抓住核心问题创新武器解决方案并留下强记忆点的电梯演讲式摘要。",
       "tags": ["elevator pitch", "筛选友好", "核心记忆"],
       "category": "国自科申报｜策略",
@@ -1851,7 +1851,7 @@ window.templates = {
       "name": "质疑预判·先发制人",
       "icon": "🛡️",
       "cover": "https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?auto=format&fit=crop&w=1350&q=80",
-      "localCoverImage": './assets/prompt_cover/prompt-3-008.jpg', // 本地封面路径，作为远程链接失效时的备用方案
+      "localCoverImage": '../assets/prompt_cover/prompt-3-008.jpg', // 本地封面路径，作为远程链接失效时的备用方案
       "desc": "从创新可行基础价值四维度提出最尖锐问题并将回应提前植入申请书。",
       "tags": ["质疑预判", "先发制人", "压力测试"],
       "category": "国自科申报｜策略",
@@ -1861,7 +1861,7 @@ window.templates = {
       "name": "技术路线·信息图",
       "icon": "🗺️",
       "cover": "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1350&q=80",
-      "localCoverImage": './assets/prompt_cover/prompt-3-009.jpg', // 本地封面路径，作为远程链接失效时的备用方案
+      "localCoverImage": '../assets/prompt_cover/prompt-3-009.jpg', // 本地封面路径，作为远程链接失效时的备用方案
       "desc": "设计线性循环或多线并进视觉逻辑用图标关键词和连接线绘制一图胜千言流程图。",
       "tags": ["技术路线图", "信息图", "可视化"],
       "category": "国自科申报｜策略",
@@ -1871,7 +1871,7 @@ window.templates = {
       "name": "数据管理·DMP",
       "icon": "🗃️",
       "cover": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1350&q=80",
-      "localCoverImage": './assets/prompt_cover/prompt-3-010.jpg', // 本地封面路径，作为远程链接失效时的备用方案
+      "localCoverImage": '../assets/prompt_cover/prompt-3-010.jpg', // 本地封面路径，作为远程链接失效时的备用方案
       "desc": "撰写含采集存储共享知识产权及责任人的开放科学规范数据管理计划。",
       "tags": ["数据管理计划", "开放科学", "共享存储"],
       "category": "国自科申报｜策略",
@@ -1881,7 +1881,7 @@ window.templates = {
       "name": "国际合作·互补论证",
       "icon": "🌐",
       "cover": "https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&w=1350&q=80",
-      "localCoverImage": './assets/prompt_cover/prompt-3-011.jpg', // 本地封面路径，作为远程链接失效时的备用方案
+      "localCoverImage": '../assets/prompt_cover/prompt-3-011.jpg', // 本地封面路径，作为远程链接失效时的备用方案
       "desc": "论证外方独特资源不可替代性及我方优势形成强强联合而非单方面求助。",
       "tags": ["国际合作", "资源互补", "强强联合"],
       "category": "国自科申报｜策略",
@@ -1891,7 +1891,7 @@ window.templates = {
       "name": "青年基金·创新可行",
       "icon": "🌱",
       "cover": "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=1350&q=80",
-      "localCoverImage": './assets/prompt_cover/prompt-3-012.jpg', // 本地封面路径，作为远程链接失效时的备用方案
+      "localCoverImage": '../assets/prompt_cover/prompt-3-012.jpg', // 本地封面路径，作为远程链接失效时的备用方案
       "desc": "在彰显大胆创新同时确保方案可行让评审既看到冲劲又放心独立完成能力。",
       "tags": ["青年基金", "创新平衡", "可行性"],
       "category": "国自科申报｜策略",
@@ -1901,7 +1901,7 @@ window.templates = {
       "name": "落选解读·归因分析",
       "icon": "📉",
       "cover": "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&w=1350&q=80",
-      "localCoverImage": './assets/prompt_cover/prompt-3-013.jpg', // 本地封面路径，作为远程链接失效时的备用方案
+      "localCoverImage": '../assets/prompt_cover/prompt-3-013.jpg', // 本地封面路径，作为远程链接失效时的备用方案
       "desc": "分类正负面意见并归因科学问题方案基础或表述确定致命硬伤和主攻方向。",
       "tags": ["落选解读", "归因分析", "主攻方向"],
       "category": "国自科申报｜策略",
@@ -1911,7 +1911,7 @@ window.templates = {
       "name": "二次申报·修改说明",
       "icon": "🔄",
       "cover": "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=1350&q=80",
-      "localCoverImage": './assets/prompt_cover/prompt-3-014.jpg', // 本地封面路径，作为远程链接失效时的备用方案
+      "localCoverImage": '../assets/prompt_cover/prompt-3-014.jpg', // 本地封面路径，作为远程链接失效时的备用方案
       "desc": "采用感谢回应提升叙事策略撰写强有力的项目修改说明用于二次申报。",
       "tags": ["二次申报", "修改说明", "感谢回应"],
       "category": "国自科申报｜策略",
@@ -1921,7 +1921,7 @@ window.templates = {
       "name": "成果传播·影响力规划",
       "icon": "📡",
       "cover": "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1350&q=80",
-      "localCoverImage": './assets/prompt_cover/prompt-3-015.jpg', // 本地封面路径，作为远程链接失效时的备用方案
+      "localCoverImage": '../assets/prompt_cover/prompt-3-015.jpg', // 本地封面路径，作为远程链接失效时的备用方案
       "desc": "构建多元成果发布矩阵并规划政策报告科普等社会影响力传播方案。",
       "tags": ["成果传播", "社会影响力", "发布矩阵"],
       "category": "国自科申报｜策略",
@@ -1931,7 +1931,7 @@ window.templates = {
       "name": "科学问题·电梯演讲",
       "icon": "🛗",
       "cover": "https://images.unsplash.com/photo-1589994965851-a8f479c573a9?auto=format&fit=crop&w=1350&q=80",
-      "localCoverImage": './assets/prompt_cover/prompt-3-016.jpg', // 本地封面路径，作为远程链接失效时的备用方案
+      "localCoverImage": '../assets/prompt_cover/prompt-3-016.jpg', // 本地封面路径，作为远程链接失效时的备用方案
       "desc": "30字内凝练包含HowWhy或机制疑问并融入核心矛盾的电梯演讲式科学问题。",
       "tags": ["电梯演讲", "科学问题", "核心矛盾"],
       "category": "国自科申报｜策略",
@@ -1941,7 +1941,7 @@ window.templates = {
       "name": "复审申请·误判申诉",
       "icon": "⚖️",
       "cover": "https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&w=1350&q=80",
-      "localCoverImage": './assets/prompt_cover/prompt-3-017.jpg', // 本地封面路径，作为远程链接失效时的备用方案
+      "localCoverImage": '../assets/prompt_cover/prompt-3-017.jpg', // 本地封面路径，作为远程链接失效时的备用方案
       "desc": "以克制专业语气引用不可辩驳证据对评审中重大事实或科学误判进行申诉。",
       "tags": ["复审申请", "事实误判", "专业申诉"],
       "category": "国自科申报｜策略",
@@ -1951,7 +1951,7 @@ window.templates = {
       "name": "交叉学科·去术语化",
       "icon": "🌐",
       "cover": "https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?auto=format&fit=crop&w=1350&q=80",
-      "localCoverImage": './assets/prompt_cover/prompt-3-018.jpg', // 本地封面路径，作为远程链接失效时的备用方案
+      "localCoverImage": '../assets/prompt_cover/prompt-3-018.jpg', // 本地封面路径，作为远程链接失效时的备用方案
       "desc": "用通俗语言替换行话并与更广阔科学社会问题关联使非本领域专家也能理解价值。",
       "tags": ["去术语化", "交叉学科", "普适价值"],
       "category": "国自科申报｜策略",
@@ -1961,7 +1961,7 @@ window.templates = {
       "name": "朗读审查·流畅度优化",
       "icon": "🎙️",
       "cover": "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=1350&q=80",
-      "localCoverImage": './assets/prompt_cover/prompt-3-019.jpg', // 本地封面路径，作为远程链接失效时的备用方案
+      "localCoverImage": '../assets/prompt_cover/prompt-3-019.jpg', // 本地封面路径，作为远程链接失效时的备用方案
       "desc": "从音韵节奏流畅度出发找出拗口长难句并改写为更符合中文口语书面语节奏版本。",
       "tags": ["朗读审查", "语言节奏", "流畅度"],
       "category": "国自科申报｜策略",
@@ -1971,7 +1971,7 @@ window.templates = {
       "name": "角色差异化·定位",
       "icon": "🎭",
       "cover": "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1350&q=80",
-      "localCoverImage": './assets/prompt_cover/prompt-3-020.jpg', // 本地封面路径，作为远程链接失效时的备用方案
+      "localCoverImage": '../assets/prompt_cover/prompt-3-020.jpg', // 本地封面路径，作为远程链接失效时的备用方案
       "desc": "区分申请人设计者领导者定位与参与者执行者攻坚者定位突显团队结构合理性。",
       "tags": ["角色差异", "团队定位", "结构合理"],
       "category": "国自科申报｜策略",
