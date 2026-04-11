@@ -13,21 +13,92 @@ function extractAvailableYears() {
     return Array.from(years).sort((a, b) => parseInt(b) - parseInt(a));
 }
 
+// 初始化自定义下拉组件
+function initCustomSelects() {
+    const customSelects = document.querySelectorAll('.custom-select');
+
+    customSelects.forEach(select => {
+        const trigger = select.querySelector('.custom-select-trigger');
+
+        // 点击触发器
+        trigger.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const isOpen = select.classList.contains('open');
+            closeAllSelects();
+            if (!isOpen) {
+                select.classList.add('open');
+            }
+        });
+    });
+
+    // 点击其他区域关闭所有下拉
+    document.addEventListener('click', closeAllSelects);
+}
+
+function closeAllSelects() {
+    document.querySelectorAll('.custom-select.open').forEach(select => {
+        select.classList.remove('open');
+    });
+}
+
+// 绑定下拉选项点击事件
+function bindSelectOptions(select) {
+    const trigger = select.querySelector('.custom-select-trigger');
+    const options = select.querySelectorAll('.custom-select-option');
+
+    options.forEach(option => {
+        option.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const value = option.dataset.value;
+            const text = option.textContent;
+
+            // 更新选中状态
+            options.forEach(opt => opt.classList.remove('selected'));
+            option.classList.add('selected');
+
+            // 更新触发器文本
+            trigger.textContent = text;
+
+            // 关闭下拉
+            select.classList.remove('open');
+
+            // 触发筛选变化
+            select.dispatchEvent(new CustomEvent('selectChange', {
+                detail: { value: value, id: select.id }
+            }));
+        });
+    });
+}
+
 // 动态填充年份筛选选项
 function populateYearFilter() {
-    const yearFilter = document.getElementById('yearFilter');
-    const availableYears = extractAvailableYears();
+    const yearSelect = document.getElementById('yearSelect');
+    if (!yearSelect) return;
 
-    // 清空现有选项（保留"所有年份"选项）
-    yearFilter.innerHTML = '<option value="">所有年份</option>';
+    const availableYears = extractAvailableYears();
+    const optionsContainer = yearSelect.querySelector('.custom-select-options');
+
+    // 清空现有选项
+    optionsContainer.innerHTML = '';
+
+    // 添加"所有年份"选项
+    const allOption = document.createElement('div');
+    allOption.className = 'custom-select-option selected';
+    allOption.dataset.value = '';
+    allOption.textContent = '所有年份';
+    optionsContainer.appendChild(allOption);
 
     // 添加实际存在的年份选项
     availableYears.forEach(year => {
-        const option = document.createElement('option');
-        option.value = year;
-        option.textContent = year;
-        yearFilter.appendChild(option);
+        const optionDiv = document.createElement('div');
+        optionDiv.className = 'custom-select-option';
+        optionDiv.dataset.value = year;
+        optionDiv.textContent = year;
+        optionsContainer.appendChild(optionDiv);
     });
+
+    // 绑定年份选项点击事件
+    bindSelectOptions(yearSelect);
 }
 
 // Markdown格式处理函数 - 将Markdown格式转换为HTML格式
@@ -6455,15 +6526,24 @@ function initializePage() {
         return year ? parseInt(year[0]) : 2019;
     }));
     document.getElementById('updateTime').textContent = latestYear;
-
-    // 动态填充年份筛选选项
-    populateYearFilter();
 }
 
 function setupEventListeners() {
-    // 筛选器事件监听
-    document.getElementById('paperTypeFilter').addEventListener('change', handleFilterChange);
-    document.getElementById('yearFilter').addEventListener('change', handleFilterChange);
+    // 初始化自定义下拉组件
+    initCustomSelects();
+
+    // 为 paperTypeSelect 绑定选项点击事件
+    const paperTypeSelect = document.getElementById('paperTypeSelect');
+    if (paperTypeSelect) {
+        bindSelectOptions(paperTypeSelect);
+    }
+
+    // 动态填充年份筛选选项（这个会重新创建选项，需要单独处理事件）
+    populateYearFilter();
+
+    // 自定义下拉组件事件监听
+    document.getElementById('paperTypeSelect').addEventListener('selectChange', handleCustomFilterChange);
+    document.getElementById('yearSelect').addEventListener('selectChange', handleCustomFilterChange);
     document.getElementById('searchInput').addEventListener('input', debounce(handleSearch, 300));
 
     // 模态框事件监听
@@ -6473,15 +6553,14 @@ function setupEventListeners() {
     });
 }
 
-function handleFilterChange(e) {
-    const filterId = e.target.id;
-    const value = e.target.value;
+function handleCustomFilterChange(e) {
+    const { value, id } = e.detail;
 
-    switch (filterId) {
-        case 'paperTypeFilter':
+    switch (id) {
+        case 'paperTypeSelect':
             currentFilters.paperType = value;
             break;
-        case 'yearFilter':
+        case 'yearSelect':
             currentFilters.year = value;
             break;
     }

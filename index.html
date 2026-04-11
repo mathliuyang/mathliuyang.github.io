@@ -1,1040 +1,1585 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>个人网站</title>
+    <title>智核学术 - The Nucleus of AI4Science</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-
-        :root {
-            --bg: #000000;
-            --text: #ffffff;
-            --text-dim: #666666;
-            --accent: #ffffff;
-            --border: rgba(255, 255, 255, 0.08);
+        
+        /* Remove focus outline from video elements */
+        video:focus,
+        video:active,
+        video:focus-visible,
+        video:focus-within,
+        video::-moz-focus-inner,
+        video::-webkit-media-controls {
+            outline: none !important;
+            border: none !important;
+            box-shadow: none !important;
         }
 
-        [data-theme="light"] {
-            --bg: #ffffff;
-            --text: #000000;
-            --text-dim: #999999;
-            --accent: #000000;
-            --border: rgba(0, 0, 0, 0.08);
+        /* Additional rule to prevent any outline on video during focus transition */
+        video {
+            outline: none !important;
+            -webkit-tap-highlight-color: transparent;
         }
-
+        
+        /* Hide video poster/placeholder */
+        video::-webkit-media-controls-panel,
+        video::-webkit-media-controls-play-button,
+        video::-webkit-media-controls-start-playback-button {
+            display: none !important;
+            -webkit-appearance: none !important;
+        }
+        
+        /* Remove focus from all elements in video container */
+        .ide-window *:focus {
+            outline: none !important;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            line-height: 1.8;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: #000000;
+            color: #ffffff;
             overflow-x: hidden;
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            letter-spacing: -0.02em;
+        }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0a0a0a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #333;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #00FF88;
         }
 
-        #canvas {
+        /* Hide scrollbar for internal typing windows but keep functionality */
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+                filter: blur(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+                filter: blur(0);
+            }
+        }
+        
+        @keyframes scanLine {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+        
+        @keyframes glitch {
+            0% { transform: translate(0); }
+            20% { transform: translate(-2px, 2px); }
+            40% { transform: translate(-2px, -2px); }
+            60% { transform: translate(2px, 2px); }
+            80% { transform: translate(2px, -2px); }
+            100% { transform: translate(0); }
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 0.4; }
+            50% { opacity: 1; }
+        }
+        
+        .animate-fade-in-up {
+            animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        
+        .animate-delay-100 { animation-delay: 0.1s; }
+        .animate-delay-200 { animation-delay: 0.2s; }
+        .animate-delay-300 { animation-delay: 0.3s; }
+        .animate-delay-400 { animation-delay: 0.4s; }
+        .animate-delay-500 { animation-delay: 0.5s; }
+        
+        /* Particle Canvas */
+        #particle-canvas {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             z-index: 0;
+            pointer-events: none;
         }
-
-        /* 导航 */
-        nav {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            padding: 2rem 4rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            z-index: 100;
-            backdrop-filter: blur(10px);
-            transition: padding 0.3s ease;
-        }
-
-        nav.scrolled {
-            padding: 1.5rem 4rem;
-            background: rgba(0, 0, 0, 0.5);
-            border-bottom: 1px solid var(--border);
-        }
-
-        [data-theme="light"] nav.scrolled {
-            background: rgba(255, 255, 255, 0.8);
-        }
-
-        .logo {
-            font-size: 1rem;
-            font-weight: 600;
-            letter-spacing: 0.05em;
-            opacity: 0;
-            animation: fadeIn 1s ease 0.2s forwards;
-        }
-
-        .nav-right {
-            display: flex;
-            gap: 3rem;
-            align-items: center;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 2.5rem;
-            list-style: none;
-            opacity: 0;
-            animation: fadeIn 1s ease 0.4s forwards;
-        }
-
-        .nav-links a {
-            color: var(--text-dim);
-            text-decoration: none;
-            font-size: 0.9rem;
-            font-weight: 500;
-            letter-spacing: 0.02em;
-            transition: color 0.3s ease;
-        }
-
-        .nav-links a:hover {
-            color: var(--text);
-        }
-
-        .theme-btn {
-            width: 36px;
-            height: 36px;
-            border: 1px solid var(--border);
-            background: transparent;
-            border-radius: 50%;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-            opacity: 0;
-            animation: fadeIn 1s ease 0.6s forwards;
-        }
-
-        .theme-btn:hover {
-            border-color: var(--text);
-            transform: scale(1.1);
-        }
-
-        /* Hero */
-        .hero {
-            position: relative;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            padding: 0 4rem;
-            z-index: 1;
-        }
-
-        .hero-content {
-            max-width: 900px;
-        }
-
-        .hero h1 {
-            font-size: clamp(3rem, 8vw, 7rem);
-            font-weight: 300;
-            line-height: 1.1;
-            margin-bottom: 2rem;
-            opacity: 0;
-            animation: slideUp 1s ease 0.3s forwards;
-        }
-
-        .hero h1 strong {
-            font-weight: 600;
-        }
-
-        .hero-subtitle {
-            font-size: clamp(1rem, 2vw, 1.5rem);
-            color: var(--text-dim);
-            margin-bottom: 3rem;
-            opacity: 0;
-            animation: slideUp 1s ease 0.5s forwards;
-        }
-
-        .hero-meta {
-            display: flex;
-            gap: 4rem;
-            opacity: 0;
-            animation: slideUp 1s ease 0.7s forwards;
-        }
-
-        .meta-row {
-            display: flex;
-            gap: 4rem;
-            margin-bottom: 2rem;
-            justify-content: flex-start;
-        }
-
-        .meta-row:last-child {
-            margin-bottom: 0;
-        }
-
-        .meta-row .meta-item {
-            flex: 0 0 auto;
-            min-width: 120px;
-        }
-
-        .meta-row {
-            display: flex;
-            gap: 4rem;
-            margin-bottom: 2rem;
-            justify-content: flex-start;
-        }
-
-        .meta-row:last-child {
-            margin-bottom: 0;
-        }
-
-        .meta-row .meta-item {
-            flex: 0 0 auto;
-            min-width: 120px;
-        }
-
-        .visitor-row {
-            display: flex;
-            justify-content: flex-start;
-            align-items: center;
-            margin-top: 0.5rem;
-        }
-
-        .meta-item {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-        }
-
-        .meta-number {
-            font-size: 2.5rem;
-            font-weight: 300;
-            letter-spacing: -0.03em;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .meta-number:hover {
-            transform: scale(1.05);
-            color: var(--accent);
-        }
-
-        /* 访问量计数器样式 */
-        #visitorCount {
-            position: relative;
-            display: inline-block;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        #visitorCount:hover {
-            transform: scale(1.05);
-            color: var(--accent);
-        }
-
-        /* 加载状态样式 */
-        #visitorCount.loading {
-            opacity: 0.7;
-            animation: pulse 1.5s ease-in-out infinite;
-        }
-
-        @keyframes pulse {
-
-            0%,
-            100% {
-                opacity: 0.7;
-            }
-
-            50% {
-                opacity: 1;
-            }
-        }
-
-        .meta-label {
-            font-size: 0.85rem;
-            color: var(--text-dim);
-            letter-spacing: 0.05em;
-            text-transform: uppercase;
-        }
-
-        /* 访问统计计数器样式 */
-        .visitor-counter-wrapper {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0.4rem 0.8rem;
-            background: linear-gradient(135deg, rgba(46, 158, 247, 0.1) 0%, rgba(46, 158, 247, 0.05) 100%);
-            border-radius: 12px;
-            border: 1px solid rgba(46, 158, 247, 0.15);
-            backdrop-filter: blur(10px);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        
+        /* Scan Logo Effect */
+        .scan-logo-container {
             position: relative;
             overflow: hidden;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-            min-height: 48px;
-            margin-top: 1rem;
+            background: #00FF88;
         }
-
-        .visitor-counter-wrapper::before {
-            content: '';
+        
+        .scan-logo-text {
+            font-size: clamp(120px, 20vw, 280px);
+            font-weight: 900;
+            color: #000;
+            line-height: 0.9;
+            letter-spacing: -0.02em;
+            position: relative;
+        }
+        
+        .scan-line {
             position: absolute;
             top: 0;
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-            transition: left 0.8s ease;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                rgba(255,255,255,0) 40%,
+                rgba(255,255,255,0.8) 50%,
+                rgba(0,0,0,0.1) 50.5%,
+                rgba(255,255,255,0) 51%,
+                transparent 100%
+            );
+            animation: scanLine 3s linear infinite;
+            pointer-events: none;
         }
-
-        .visitor-counter-wrapper:hover::before {
-            left: 100%;
-        }
-
-        .visitor-counter-wrapper:hover {
-            transform: translateY(-3px) scale(1.02);
-            box-shadow: 0 8px 30px rgba(46, 158, 247, 0.25);
-            border-color: rgba(46, 158, 247, 0.3);
-        }
-
-        [data-theme="light"] .visitor-counter-wrapper {
-            background: linear-gradient(135deg, rgba(46, 158, 247, 0.08) 0%, rgba(46, 158, 247, 0.03) 100%);
-            border-color: rgba(46, 158, 247, 0.1);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-        }
-
-        .visitor-counter-wrapper img {
-            height: 32px;
-            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
-            transition: all 0.3s ease;
-            border-radius: 4px;
-        }
-
-        .visitor-counter-wrapper:hover img {
-            filter: drop-shadow(0 4px 8px rgba(46, 158, 247, 0.3));
-            transform: scale(1.08);
-        }
-
-        .scroll-hint {
-            position: absolute;
-            bottom: 4rem;
-            left: 4rem;
-            font-size: 0.85rem;
-            color: var(--text-dim);
-            letter-spacing: 0.05em;
-            opacity: 0;
-            animation: fadeIn 1s ease 1.5s forwards, float 2s ease-in-out 2s infinite;
-        }
-
-        /* Cards Section */
-        .cards-section {
-            position: relative;
-            padding: 8rem 4rem;
-            z-index: 1;
-        }
-
-        .section-title {
-            font-size: clamp(2rem, 4vw, 3rem);
-            font-weight: 300;
-            margin-bottom: 4rem;
-            letter-spacing: -0.02em;
-        }
-
-        .cards-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 2rem;
-        }
-
-        .card {
-            border: 1px solid var(--border);
-            padding: 3rem;
-            background: transparent;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .card::before {
-            content: '';
+        
+        .glitch-layer {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
-            height: 1px;
-            background: var(--accent);
-            transform: scaleX(0);
-            transform-origin: left;
-            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .card:hover::before {
-            transform: scaleX(1);
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-            border-color: var(--accent);
-        }
-
-        .card-number {
-            font-size: 0.85rem;
-            color: var(--text-dim);
-            margin-bottom: 2rem;
-            letter-spacing: 0.05em;
-        }
-
-        .card-title {
-            font-size: 1.5rem;
-            font-weight: 400;
-            margin-bottom: 1rem;
-            letter-spacing: -0.01em;
-        }
-
-        .card-desc {
-            font-size: 0.95rem;
-            color: var(--text-dim);
-            line-height: 1.6;
-        }
-
-        .card-arrow {
-            position: absolute;
-            bottom: 3rem;
-            right: 3rem;
-            font-size: 1.5rem;
+            height: 100%;
             opacity: 0;
-            transform: translateX(-10px);
-            transition: all 0.4s ease;
+            animation: glitch 0.3s ease-in-out infinite;
         }
-
-        .card:hover .card-arrow {
-            opacity: 1;
-            transform: translateX(0);
-        }
-
-        /* Footer */
-        footer {
-            position: relative;
-            padding: 4rem;
-            border-top: 1px solid var(--border);
-            display: flex;
-            justify-content: space-between;
+        
+        /* Button Styles */
+        .btn-primary {
+            background: #00FF88;
+            color: #000;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+            display: inline-flex;
             align-items: center;
-            z-index: 1;
+            gap: 8px;
         }
-
-        .footer-content {
-            display: flex;
-            align-items: center;
-            gap: 2rem;
+        
+        .btn-primary:hover {
+            filter: brightness(1.1);
+            transform: scale(1.02);
         }
-
-        .footer-text {
-            font-size: 0.85rem;
-            color: var(--text-dim);
-            letter-spacing: 0.05em;
+        
+        .btn-primary:active {
+            transform: scale(0.98);
         }
-
-        footer .visitor-counter-wrapper {
-            margin: 0;
-            padding: 0;
-            min-height: auto;
+        
+        .btn-secondary {
             background: transparent;
-            border: none;
-            backdrop-filter: none;
-            text-decoration: none;
-            display: flex;
+            color: #fff;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            border: 1px solid rgba(255,255,255,0.2);
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+            display: inline-flex;
             align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(255,255,255,0.1);
+            border-color: rgba(255,255,255,0.4);
+        }
+        
+        /* Feature Card */
+        .feature-card {
+            background: #0A0A0A;
+            border: 1px solid #1A1A1A;
+            border-radius: 12px;
+            padding: 32px;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        
+        .feature-card:hover {
+            border-color: #00FF88;
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0,255,136,0.1);
         }
 
-        footer .visitor-counter-wrapper:hover {
-            background: transparent;
-            transform: none;
-            box-shadow: none;
+        /* Scroll Carousel */
+        .scroll-carousel {
+            height: 100%;
+            overflow: hidden;
         }
 
-        footer .visitor-counter-wrapper img {
-            height: 20px;
-            filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
-            transition: filter 0.3s ease;
-        }
-
-        footer .visitor-counter-wrapper:hover img {
-            filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.2));
-        }
-
-        .social-links {
+        .scroll-carousel-content {
             display: flex;
-            gap: 2rem;
+            flex-direction: column;
+            animation: scrollUp 120s linear infinite;
         }
 
-        .social-links a {
-            color: var(--text-dim);
-            text-decoration: none;
-            font-size: 0.85rem;
-            letter-spacing: 0.05em;
-            transition: color 0.3s ease;
+        .scroll-carousel:hover .scroll-carousel-content {
+            animation-play-state: paused;
         }
 
-        .social-links a:hover {
-            color: var(--text);
+        .scroll-carousel-content img {
+            flex-shrink: 0;
+            height: 100%;
         }
 
-        /* Animations */
-        @keyframes fadeIn {
-            to {
-                opacity: 1;
-            }
-        }
-
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-
-            to {
-                opacity: 1;
+        @keyframes scrollUp {
+            0% {
                 transform: translateY(0);
             }
-        }
-
-        @keyframes float {
-
-            0%,
             100% {
-                transform: translateY(0);
-            }
-
-            50% {
-                transform: translateY(-5px);
+                transform: translateY(-50%);
             }
         }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            nav {
-                padding: 1.5rem 2rem;
-            }
-
-            nav.scrolled {
-                padding: 1rem 2rem;
-            }
-
-            .nav-links {
-                display: none;
-            }
-
-            .hero {
-                padding: 0 2rem;
-            }
-
-            .hero-meta {
-                display: grid;
-                grid-template-columns: repeat(2, 1fr);
-                gap: 2rem;
-                max-width: 400px;
-                margin: 0 auto;
-            }
-
-            .meta-row {
-                flex-direction: column;
-                gap: 2rem;
-                margin-bottom: 1.5rem;
-            }
-
-            .meta-row:last-child {
-                margin-bottom: 0;
-            }
-
-            .visitor-row {
-                margin-top: 0.5rem;
-            }
-
-            .scroll-hint {
-                left: 2rem;
-            }
-
-            .cards-section {
-                padding: 4rem 2rem;
-            }
-
-            .cards-grid {
-                grid-template-columns: 1fr;
-            }
-
-            footer {
-                padding: 3rem 2rem;
-                flex-direction: column;
-                gap: 2rem;
-                text-align: center;
-            }
-
-            .footer-content {
-                flex-direction: column;
-                gap: 1rem;
-                align-items: center;
-            }
+        
+        /* IDE Preview */
+        .ide-window {
+            background: #0A0A0A;
+            border-radius: 12px;
+            border: 1px solid #1A1A1A;
+            overflow: hidden;
+        }
+        
+        .ide-header {
+            background: #1A1A1A;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .ide-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        
+        /* Text Gradient */
+        .text-gradient {
+            background: linear-gradient(135deg, #00FF88 0%, #00CC6A 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        /* Section Reveal */
+        .section-reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        
+        .section-reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Navigation */
+        #navbar {
+            border-bottom: none;
+        }
+        .nav-scrolled {
+            background: rgba(0,0,0,0.9);
+            backdrop-filter: blur(10px);
+            border-bottom: none;
+        }
+        
+        /* Glitch text effect for title */
+        .glitch-text {
+            position: relative;
+        }
+        
+        .glitch-text::before,
+        .glitch-text::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .glitch-text::before {
+            animation: glitch 2s infinite linear alternate-reverse;
+            color: #00FF88;
+            z-index: -1;
+        }
+        
+        .glitch-text::after {
+            animation: glitch 3s infinite linear alternate-reverse;
+            color: #ff0080;
+            z-index: -2;
         }
     </style>
 </head>
-
 <body>
-    <canvas id="canvas"></canvas>
-
+    <!-- Particle Canvas -->
+    <canvas id="particle-canvas"></canvas>
+    
     <!-- Navigation -->
-    <nav id="nav">
-        <div class="logo">图灵的猫 X 智核学术</div>
-        <div class="nav-right">
-            <ul class="nav-links">
-                <li><a href="pages/about.html">关于我</a></li>
-                <li><a href="pages/blog.html">博客</a></li>
-                <li><a href="pages/projects.html">项目</a></li>
-                <li><a href="pages/publications.html">学术成果</a></li>
-                <li><a href="pages/tools.html">工具箱</a></li>
-                <li><a href="pages/contact.html">联系我</a></li>
-            </ul>
-            <button class="theme-btn" id="themeBtn">
-                <span id="themeIcon">◐</span>
-            </button>
-        </div>
-    </nav>
-
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="hero-content">
-            <h1 id="hero-title" style="cursor: pointer; user-select: none;">
-                探索<strong>计算数学</strong><br>的<strong>无限可能</strong></h1>
-            <p class="hero-subtitle">
-                一位被偏微分方程带偏了的人工智能算法开发者
-            </p>
-            <div class="hero-meta">
-                <div class="meta-row">
-                    <div class="meta-item">
-                        <div class="meta-number" data-target="9">00</div>
-                        <div class="meta-label">学术论文</div>
+    <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-6 lg:px-12">
+            <div class="flex items-center justify-between h-16">
+                <!-- Logo -->
+                <div class="flex items-center gap-8">
+                    <a href="index.html" class="text-xl font-bold tracking-tight">
+                        <span class="text-white">AICore</span><span class="text-[#00FF88]">Scholar</span>
+                    </a>
+                    <div class="hidden md:flex items-center gap-6 text-sm text-gray-400">
+                        <a href="./tools/pinns-research.html" class="hover:text-white transition-colors">AI4PDEs 论文</a>
+                        <a href="./tools/prompt-generator.html" class="hover:text-white transition-colors">智核提示词</a>
+                        <a href="./tools/journal_html_page.html" class="hover:text-white transition-colors">期刊指南</a>
+                        <a href="./tools/color-picker.html" class="hover:text-white transition-colors">封面故事</a>
+                        <a href="./tools.html" class="hover:text-white transition-colors">更多工具</a>
+                        <a href="./pages/contact.html" class="hover:text-white transition-colors">联系我们</a>
                     </div>
-                    <div class="meta-item">
-                        <div class="meta-number" data-target="15">00</div>
-                        <div class="meta-label">科研项目</div>
-                    </div>
-                    <div class="meta-item">
-                        <div class="meta-number" data-target="10">00</div>
-                        <div class="meta-label">实用工具</div>
-                    </div>
+                </div>
+                
+                <!-- Right Side -->
+                <div class="flex items-center gap-4">
+                    <a href="./pages/team.html" class="btn-primary text-sm px-3 py-1.5">
+                        AIDING
+                    </a>
+                    <a href="./pages/about.html">
+                        <img src="./assets/avatar/liuyang.jpg" alt="头像" class="w-8 h-8 rounded-full object-cover cursor-pointer hover:ring-2 hover:ring-[#00FF88] transition-all">
+                    </a>
                 </div>
             </div>
         </div>
-        <div class="scroll-hint">SCROLL TO EXPLORE</div>
+    </nav>
+    
+    <!-- Hero Section -->
+    <section class="relative min-h-screen flex items-center z-10 pt-16">
+        <div class="max-w-7xl mx-auto px-6 lg:px-12 w-full">
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <!-- Left Content -->
+                <div class="space-y-8">
+                    <div class="space-y-4">
+                        <h1 class="text-5xl md:text-6xl lg:text-7xl font-bold leading-tight opacity-0 animate-fade-in-up">
+                            The Nucleus of<br>AI4Science
+                        </h1>
+                        <div class="text-4xl md:text-5xl lg:text-6xl font-bold opacity-0 animate-fade-in-up animate-delay-100" style="animation-delay: 0.1s;">
+                            <span class="text-white">智核</span> <span class="text-gray-500">学 术</span>
+                        </div>
+                        <p class="text-xl md:text-2xl text-gray-400 font-light opacity-0 animate-fade-in-up" style="animation-delay: 0.2s;">
+                            智能无限，科研无间
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- Right Content -->
+                <div class="space-y-6 opacity-0 animate-fade-in-up" style="animation-delay: 0.3s;">
+                    <p class="text-gray-400 text-sm leading-relaxed max-w-md">
+                        智核学术，专注于智能科学计算 (AI for Science) 领域，用心打磨每一篇文章，提供深度技术干货与硬核代码复现，分享前沿动态、期刊指南及优质学术资源。
+                    </p>
+                    
+                    <div class="flex flex-col sm:flex-row gap-3">
+                        <a href="https://mp.weixin.qq.com/mp/appmsgalbum?__biz=MzkyOTMzMDU2Nw==&action=getalbum&album_id=4211555103498715138&scene=126&sessionid=1775840128932#wechat_redirect" target="_blank" class="btn-primary w-full sm:w-auto justify-center">
+                            <span>AI4PDEs · 论文精选</span>
+                            <span class="text-xs opacity-70">公众号专辑</span>
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                            </svg>
+                        </a>
+                    </div>
+                    
+                    <button id="rssCopyBtn" class="btn-secondary w-full sm:w-auto justify-center border-gray-600 hover:border-[#00FF88] transition-all relative">
+                        <span class="flex items-center gap-2 transition-opacity duration-200" id="rssBtnText">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                            </svg>
+                            <span>复制 RSS 订阅链接</span>
+                        </span>
+                        <span class="absolute inset-0 flex items-center justify-center gap-2 opacity-0 transition-opacity duration-200 text-[#00FF88] pointer-events-none" id="rssBtnSuccess">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            <span>已复制</span>
+                        </span>
+                    </button>
+                    <script>
+                        document.getElementById('rssCopyBtn').addEventListener('click', function() {
+                            navigator.clipboard.writeText('https://wechatrss.waytomaster.com/api/rss/all?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1MDgiLCJ0eXBlIjoicnNzIn0.N82BvpSE6hXCECEqdro1iLCIYLY_IiypCGJJE6RpxBs').then(() => {
+                                const text = document.getElementById('rssBtnText');
+                                const success = document.getElementById('rssBtnSuccess');
+                                const btn = document.getElementById('rssCopyBtn');
+                                btn.classList.add('border-[#00FF88]');
+                                text.style.opacity = '0';
+                                success.style.opacity = '1';
+                                setTimeout(() => {
+                                    text.style.opacity = '1';
+                                    success.style.opacity = '0';
+                                    btn.classList.remove('border-[#00FF88]');
+                                }, 1500);
+                            });
+                        });
+                    </script>
+                    
+                    <p class="text-xs text-gray-600">
+                        微信号：AICoreScholar ↓
+                    </p>
+                </div>
+            </div>
+        </div>
     </section>
+    
+    <!-- Solo Section -->
+    <section class="relative z-10 py-20">
+        <div class="max-w-7xl mx-auto px-6 lg:px-12">
+            <div class="text-center mb-12 section-reveal">
+                <div class="flex items-center justify-center gap-3 mb-4">
+                    <span class="text-3xl md:text-4xl font-bold">Paper→Code</span>
+                    <span class="text-3xl md:text-4xl font-bold text-[#00FF88]">REPRO</span>
+                    <span class="px-2 py-1 text-xs border border-[#00FF88] text-[#00FF88] rounded">Notebook 笔记</span>
+                </div>
+                <p class="text-gray-400 text-sm mb-6">论文复现与学术见解深度整合</p>
+                <a href="https://github.com/mathliuyang/" target="_blank" class="btn-primary">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                    </svg>
+                    访问 GitHub
+                </a>
+            </div>
+            
+            <!-- IDE Preview Window -->
+            <div class="section-reveal">
+                <div class="ide-window max-w-5xl mx-auto">
+                    <div class="ide-header">
+                        <div class="ide-dot bg-red-500"></div>
+                        <div class="ide-dot bg-yellow-500"></div>
+                        <div class="ide-dot bg-green-500"></div>
+                        <div class="flex-1 text-center text-xs text-gray-400">AICORE-scholar-repro</div>
+                        <div class="flex gap-4 text-xs text-gray-500">
+                            <span>数学推导</span>
+                            <span>模型实现</span>
+                            <span>训练日志</span>
+                            <span>可视化</span>
+                            <span>BibTeX</span>
+                        </div>
+                    </div>
+                    <div class="relative h-72 md:h-[28rem] bg-[#0d0d0d] font-mono text-xs md:text-sm">
+                        <!-- 左侧：公式推导区域 -->
+                        <div id="math-scroll-box" class="absolute left-0 top-0 w-1/2 h-full p-5 overflow-y-hidden hide-scrollbar scroll-smooth pointer-events-none">
+                            <div class="text-gray-500 mb-4 pb-2 border-b border-[#333]"># Transport Equation Physics Logic</div>
+                            <div id="formula-container" class="space-y-1"></div>
+                        </div>
+                        
+                        <!-- 右侧：代码编写区域 -->
+                        <div id="code-scroll-box" class="absolute right-0 top-0 w-1/2 h-full p-5 overflow-y-hidden hide-scrollbar scroll-smooth border-l border-[#1A1A1A] pointer-events-none">
+                            <div class="flex items-center gap-2 mb-4 pb-2 border-b border-[#333]">
+                                <span class="text-[#00FF88]">●</span>
+                                <span class="text-gray-400">transport_pinn_solver.py</span>
+                            </div>
+                            <div id="code-container" class="space-y-1"></div>
+                        </div>
+                    </div>
+                    
+                    <script src="./js/typewriter-pinn.js"></script>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Features Section -->
+    <section class="relative z-10 py-20">
+        <div class="max-w-7xl mx-auto px-6 lg:px-12">
+            <h2 class="text-3xl md:text-4xl font-bold mb-12 section-reveal">
+                智核学术 为你解锁<br>科研新范式
+            </h2>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Feature 1 -->
+                <a href="pages/tools/pinns-research.html" class="block feature-card section-reveal">
+                    <div class="text-[#00FF88] text-xs font-mono mb-2">[01]</div>
+                    <h3 class="font-semibold mb-3 text-sm">AI4PDEs｜论文 · 精选</h3>
+                    <div class="bg-[#1A1A1A] rounded-lg p-4 mt-4 space-y-3">
+                        <div class="flex items-center gap-2 text-xs text-gray-400">
+                            <span class="w-2 h-2 bg-[#00FF88] rounded-full"></span>
+                            PINNs/Operator Learning
+                        </div>
+                        <div class="relative h-48 overflow-hidden rounded-lg border border-[#333]">
+                            <div class="scroll-carousel">
+                                <div class="scroll-carousel-content">
+                                    <img src="assets/AICoreScholar/PINN2PIKNN.png" alt="PINN2PIKNN" class="w-full object-contain rounded">
+                                    <img src="assets/AICoreScholar/PINN2PIKNN.png" alt="PINN2PIKNN" class="w-full object-contain rounded">
+                                </div>
+                            </div>
+                            <div class="absolute inset-x-0 top-0 h-8 bg-gradient-to-b from-[#1A1A1A] to-transparent pointer-events-none"></div>
+                            <div class="absolute inset-x-0 bottom-0 h-8 bg-gradient-to-t from-[#1A1A1A] to-transparent pointer-events-none"></div>
+                        </div>
+                        <div class="text-[10px] text-gray-500 font-mono">
+                            不搬运，只重构。将冰冷的 PINNs 符号转化为深刻的物理洞见，构建静水深流的思维导图，亮起"吾将往之"的科研星火。
+                        </div>
+                    </div>
+                </a>
+                
+                <!-- Feature 2 -->
+                <a href="https://github.com/mathliuyang/" target="_blank" class="block feature-card section-reveal">
+                    <div class="text-[#00FF88] text-xs font-mono mb-2">[02]</div>
+                    <h3 class="font-semibold mb-3 text-sm">Paper→Code｜复现 · 笔记</h3>
+                    <div class="bg-[#1A1A1A] rounded-lg p-4 mt-4 space-y-3">
+                        <div class="flex items-center gap-2 mb-2">
+                            <div class="w-6 h-6 rounded bg-gray-700 flex items-center justify-center text-xs">💻</div>
+                            <span class="text-xs text-gray-400">Researcher</span>
+                        </div>
+                        <div class="text-xs text-gray-300 bg-[#0A0A0A] p-2 rounded border border-[#333]">
+                            求解复杂偏微分方程
+                        </div>
+                        <div class="bg-[#0A0A0A] rounded border border-[#00FF88]/30 p-3">
+                            <div class="flex items-center gap-2 mb-2">
+                                <div class="w-5 h-5 rounded bg-[#00FF88]/20 flex items-center justify-center">
+                                    <div class="w-3 h-3 bg-[#00FF88] rounded-sm"></div>
+                                </div>
+                                <span class="text-xs text-[#00FF88]">AICORE Reproducer</span>
+                            </div>
+                            <div class="text-[10px] text-gray-400 font-mono space-y-1">
+                                <div>公式推导与代码实现的精确映射</div>
+                                <div class="text-gray-600">~/AICoreScholar/Repro</div>
+                                <div class="bg-[#1A1A1A] p-1 rounded text-[#00FF88]">torch.grad(u, x, create_graph=True)</div>
+                                <div class="flex items-center gap-2 text-[10px]">
+                                    <span class="text-gray-500">./Network/PINN_Solver.py</span>
+                                    <span class="text-[#00FF88]">DONE</span>
+                                </div>
+                                <div class="flex items-center gap-2 text-[10px]">
+                                    <span class="text-red-400">DEBUGGING</span>
+                                    <span class="text-[#00FF88]">查看笔记</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-[10px] text-gray-500">
+                            每一行代码都是与论文深度对话后的理解。记录复现中的细节与避坑指南，助你少走弯路，把科研想法打磨得更好。
+                        </div>
+                    </div>
+                </a>
+                
+                <!-- Feature 3: Journal Showcase -->
+                <div class="feature-card section-reveal md:col-span-2 lg:col-span-1 cursor-pointer" data-href="pages/tools/journal_html_page.html">
+                    <div class="text-[#00FF88] text-xs font-mono mb-2">[03]</div>
+                    <h3 class="font-semibold mb-3 text-sm">计算数学｜期刊 · 精选</h3>
+                    <div class="journal-showcase relative overflow-hidden rounded-lg bg-[#1A1A1A] h-[340px]" id="journalShowcase">
+                        <div class="journal-track flex transition-transform duration-700 ease-out h-full" id="journalTrack">
+                            <!-- Journal 1: Nature Computational Science -->
+                            <div class="journal-slide min-w-full h-full flex flex-col p-4">
+                                <div class="flex gap-4 mb-3">
+                                    <div class="w-24 h-32 shrink-0 rounded overflow-hidden shadow-lg">
+                                        <img src="https://media.springernature.com/w440/springer-static/cover-hires/journal/43588/5/10?as=webp&q=95" alt="Nature Computational Science Cover" class="w-full h-full object-cover">
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <div class="flex items-center gap-2 mb-1">
+                                            <span class="px-1.5 py-0.5 bg-red-500/20 text-red-400 text-[9px] font-bold rounded">1区</span>
+                                            <span class="px-1.5 py-0.5 bg-blue-500/20 text-blue-400 text-[9px] rounded">Q1</span>
+                                            <span class="px-1.5 py-0.5 bg-purple-500/20 text-purple-400 text-[9px] rounded">CNS</span>
+                                        </div>
+                                        <h4 class="text-xs font-bold text-white leading-tight mb-1 line-clamp-2">Nature Computational Science</h4>
+                                        <p class="text-[10px] text-gray-400 mb-1">自然计算科学</p>
+                                        <div class="flex items-center gap-3 text-[10px]">
+                                            <span class="text-[#00FF88] font-bold">IF: 12.0</span>
+                                            <span class="text-gray-500">约稿</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex-1 overflow-y-auto hide-scrollbar">
+                                    <p class="text-[10px] text-gray-500 leading-relaxed">Nature旗下顶级计算科学期刊，多学科交叉，专注计算技术和数学模型的开发与应用。对PINN、Neural Operators等深度学习方法持高度友好态度，是该领域最理想的顶级发表平台之一。</p>
+                                </div>
+                                <div class="flex gap-2 mt-3 pt-3 border-t border-[#333]">
+                                    <a href="https://www.nature.com/natcomputsci/" target="_blank" onclick="event.stopPropagation()" class="flex-1 py-1.5 bg-[#00FF88]/10 border border-[#00FF88]/30 rounded text-[10px] text-[#00FF88] text-center hover:bg-[#00FF88]/20 transition-colors">期刊官网</a>
+                                    <a href="https://mts-natcomputsci.nature.com/" target="_blank" onclick="event.stopPropagation()" class="flex-1 py-1.5 bg-[#1A1A1A] border border-[#333] rounded text-[10px] text-gray-400 text-center hover:border-[#00FF88]/50 hover:text-white transition-colors">投稿入口</a>
+                                </div>
+                            </div>
+                            <!-- Journal 2: CMAME -->
+                            <div class="journal-slide min-w-full h-full flex flex-col p-4">
+                                <div class="flex gap-4 mb-3">
+                                    <div class="w-24 h-32 shrink-0 rounded overflow-hidden shadow-lg">
+                                        <img src="./assets/cover/AI4SCI/04_COMPUT_METHOD_APPL_M.jpg" alt="CMAME Cover" class="w-full h-full object-cover">
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <div class="flex items-center gap-2 mb-1">
+                                            <span class="px-1.5 py-0.5 bg-red-500/20 text-red-400 text-[9px] font-bold rounded">1区</span>
+                                            <span class="px-1.5 py-0.5 bg-blue-500/20 text-blue-400 text-[9px] rounded">Q1</span>
+                                        </div>
+                                        <h4 class="text-xs font-bold text-white leading-tight mb-1 line-clamp-2">Computer Methods in Applied Mechanics and Engineering</h4>
+                                        <p class="text-[10px] text-gray-400 mb-1">应用力学与工程中的计算机方法</p>
+                                        <div class="flex items-center gap-3 text-[10px]">
+                                            <span class="text-[#00FF88] font-bold">IF: 6.9</span>
+                                            <span class="text-gray-500">审稿: 3个月</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex-1 overflow-y-auto hide-scrollbar">
+                                    <p class="text-[10px] text-gray-500 leading-relaxed">1区顶刊，工程应用优先。特别适合PINN在结构力学和流体力学中的应用、深度学习加速有限元分析、神经网络本构模型等研究。审稿速度快但要求高，必须与传统FEM/FVM方法详细对比。</p>
+                                </div>
+                                <div class="flex gap-2 mt-3 pt-3 border-t border-[#333]">
+                                    <a href="https://www.sciencedirect.com/journal/computer-methods-in-applied-mechanics-and-engineering" target="_blank" onclick="event.stopPropagation()" class="flex-1 py-1.5 bg-[#00FF88]/10 border border-[#00FF88]/30 rounded text-[10px] text-[#00FF88] text-center hover:bg-[#00FF88]/20 transition-colors">期刊官网</a>
+                                    <a href="https://www.editorialmanager.com/CMAME" target="_blank" onclick="event.stopPropagation()" class="flex-1 py-1.5 bg-[#1A1A1A] border border-[#333] rounded text-[10px] text-gray-400 text-center hover:border-[#00FF88]/50 hover:text-white transition-colors">投稿入口</a>
+                                </div>
+                            </div>
+                            <!-- Journal 3: Journal of Computational Physics -->
+                            <div class="journal-slide min-w-full h-full flex flex-col p-4">
+                                <div class="flex gap-4 mb-3">
+                                    <div class="w-24 h-32 shrink-0 rounded overflow-hidden shadow-lg">
+                                        <img src="./assets/cover/AI4SCI/12_J_COMPUT_PHYS.jpg" alt="JCP Cover" class="w-full h-full object-cover">
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <div class="flex items-center gap-2 mb-1">
+                                            <span class="px-1.5 py-0.5 bg-red-500/20 text-red-400 text-[9px] font-bold rounded">1区</span>
+                                            <span class="px-1.5 py-0.5 bg-blue-500/20 text-blue-400 text-[9px] rounded">Q1</span>
+                                        </div>
+                                        <h4 class="text-xs font-bold text-white leading-tight mb-1 line-clamp-2">Journal of Computational Physics</h4>
+                                        <p class="text-[10px] text-gray-400 mb-1">计算物理杂志</p>
+                                        <div class="flex items-center gap-3 text-[10px]">
+                                            <span class="text-[#00FF88] font-bold">IF: 3.8</span>
+                                            <span class="text-gray-500">审稿: 6.5个月</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex-1 overflow-y-auto hide-scrollbar">
+                                    <p class="text-[10px] text-gray-500 leading-relaxed">计算物理领域顶级期刊，创刊近60年。鼓励预测模拟与机器学习交叉领域研究，PINN、Neural Operators等方法的奠基性论文多发表于此。必须提供完整代码和数据以保证可重复性。</p>
+                                </div>
+                                <div class="flex gap-2 mt-3 pt-3 border-t border-[#333]">
+                                    <a href="https://www.sciencedirect.com/journal/journal-of-computational-physics" target="_blank" onclick="event.stopPropagation()" class="flex-1 py-1.5 bg-[#00FF88]/10 border border-[#00FF88]/30 rounded text-[10px] text-[#00FF88] text-center hover:bg-[#00FF88]/20 transition-colors">期刊官网</a>
+                                    <a href="https://www.editorialmanager.com/JCOMP" target="_blank" onclick="event.stopPropagation()" class="flex-1 py-1.5 bg-[#1A1A1A] border border-[#333] rounded text-[10px] text-gray-400 text-center hover:border-[#00FF88]/50 hover:text-white transition-colors">投稿入口</a>
+                                </div>
+                            </div>
+                            <!-- Journal 4: SIAM Journal on Scientific Computing -->
+                            <div class="journal-slide min-w-full h-full flex flex-col p-4">
+                                <div class="flex gap-4 mb-3">
+                                    <div class="w-24 h-32 shrink-0 rounded overflow-hidden shadow-lg">
+                                        <img src="./assets/cover/AI4SCI/30_SIAM_J_SCI_COMPUT.jpg" alt="SISC Cover" class="w-full h-full object-cover">
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <div class="flex items-center gap-2 mb-1">
+                                            <span class="px-1.5 py-0.5 bg-red-500/20 text-red-400 text-[9px] font-bold rounded">1区</span>
+                                            <span class="px-1.5 py-0.5 bg-blue-500/20 text-blue-400 text-[9px] rounded">Q1</span>
+                                        </div>
+                                        <h4 class="text-xs font-bold text-white leading-tight mb-1 line-clamp-2">SIAM Journal on Scientific Computing</h4>
+                                        <p class="text-[10px] text-gray-400 mb-1">SIAM科学计算杂志</p>
+                                        <div class="flex items-center gap-3 text-[10px]">
+                                            <span class="text-[#00FF88] font-bold">IF: 3.0</span>
+                                            <span class="text-gray-500">审稿: 6个月</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex-1 overflow-y-auto hide-scrollbar">
+                                    <p class="text-[10px] text-gray-500 leading-relaxed">科学计算领域顶级期刊，SIAM旗下核心刊物。积极接纳机器学习与科学计算结合的创新研究，已发表多篇PINN、Neural Operators奠基性工作。要求提供严格的数学分析和计算验证。</p>
+                                </div>
+                                <div class="flex gap-2 mt-3 pt-3 border-t border-[#333]">
+                                    <a href="https://epubs.siam.org/journal/sjoce3" target="_blank" onclick="event.stopPropagation()" class="flex-1 py-1.5 bg-[#00FF88]/10 border border-[#00FF88]/30 rounded text-[10px] text-[#00FF88] text-center hover:bg-[#00FF88]/20 transition-colors">期刊官网</a>
+                                    <a href="https://sisc.siam.org/cgi-bin/main.plex" target="_blank" onclick="event.stopPropagation()" class="flex-1 py-1.5 bg-[#1A1A1A] border border-[#333] rounded text-[10px] text-gray-400 text-center hover:border-[#00FF88]/50 hover:text-white transition-colors">投稿入口</a>
+                                </div>
+                            </div>
+                            <!-- Journal 5: SIAM Review -->
+                            <div class="journal-slide min-w-full h-full flex flex-col p-4">
+                                <div class="flex gap-4 mb-3">
+                                    <div class="w-24 h-32 shrink-0 rounded overflow-hidden shadow-lg">
+                                        <img src="./assets/cover/AI4SCI/31_SIAM_REV.jpg" alt="SIAM Review Cover" class="w-full h-full object-cover">
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <div class="flex items-center gap-2 mb-1">
+                                            <span class="px-1.5 py-0.5 bg-red-500/20 text-red-400 text-[9px] font-bold rounded">1区</span>
+                                            <span class="px-1.5 py-0.5 bg-blue-500/20 text-blue-400 text-[9px] rounded">Q1</span>
+                                        </div>
+                                        <h4 class="text-xs font-bold text-white leading-tight mb-1 line-clamp-2">SIAM Review</h4>
+                                        <p class="text-[10px] text-gray-400 mb-1">SIAM评论</p>
+                                        <div class="flex items-center gap-3 text-[10px]">
+                                            <span class="text-[#00FF88] font-bold">IF: 10.8</span>
+                                            <span class="text-gray-500">约稿</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex-1 overflow-y-auto hide-scrollbar">
+                                    <p class="text-[10px] text-gray-500 leading-relaxed">仅推荐给领域内资深专家！年发文量极少(28篇)，多为约稿形式。分为综述、研究亮点、SIGEST等五个部分。适合全面系统的PINN/AI for Science综述，是该领域权威参考文献。</p>
+                                </div>
+                                <div class="flex gap-2 mt-3 pt-3 border-t border-[#333]">
+                                    <a href="https://epubs.siam.org/journal/siread" target="_blank" onclick="event.stopPropagation()" class="flex-1 py-1.5 bg-[#00FF88]/10 border border-[#00FF88]/30 rounded text-[10px] text-[#00FF88] text-center hover:bg-[#00FF88]/20 transition-colors">期刊官网</a>
+                                    <a href="https://sirev.siam.org/cgi-bin/main.plex" target="_blank" onclick="event.stopPropagation()" class="flex-1 py-1.5 bg-[#1A1A1A] border border-[#333] rounded text-[10px] text-gray-400 text-center hover:border-[#00FF88]/50 hover:text-white transition-colors">投稿入口</a>
+                                </div>
+                            </div>
+                            <!-- Journal 6: Engineering Applications of Artificial Intelligence -->
+                            <div class="journal-slide min-w-full h-full flex flex-col p-4">
+                                <div class="flex gap-4 mb-3">
+                                    <div class="w-24 h-32 shrink-0 rounded overflow-hidden shadow-lg">
+                                        <img src="./assets/cover/AI4SCI/25_ENG_APPL_ARTIF_INTEL.jpg" alt="EAAI Cover" class="w-full h-full object-cover">
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <div class="flex items-center gap-2 mb-1">
+                                            <span class="px-1.5 py-0.5 bg-red-500/20 text-red-400 text-[9px] font-bold rounded">1区</span>
+                                            <span class="px-1.5 py-0.5 bg-blue-500/20 text-blue-400 text-[9px] rounded">Q1</span>
+                                        </div>
+                                        <h4 class="text-xs font-bold text-white leading-tight mb-1 line-clamp-2">Engineering Applications of Artificial Intelligence</h4>
+                                        <p class="text-[10px] text-gray-400 mb-1">人工智能工程应用</p>
+                                        <div class="flex items-center gap-3 text-[10px]">
+                                            <span class="text-[#00FF88] font-bold">IF: 8.0</span>
+                                            <span class="text-gray-500">审稿: 9个月</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex-1 overflow-y-auto hide-scrollbar">
+                                    <p class="text-[10px] text-gray-500 leading-relaxed">IFAC旗下AI工程应用旗舰期刊，中科院1区Top。强调AI方法的实际工程应用，要求展示真实世界工程问题求解。适合PINN在结构优化、流体控制、故障诊断等工程场景的应用研究。</p>
+                                </div>
+                                <div class="flex gap-2 mt-3 pt-3 border-t border-[#333]">
+                                    <a href="https://www.sciencedirect.com/journal/engineering-applications-of-artificial-intelligence" target="_blank" onclick="event.stopPropagation()" class="flex-1 py-1.5 bg-[#00FF88]/10 border border-[#00FF88]/30 rounded text-[10px] text-[#00FF88] text-center hover:bg-[#00FF88]/20 transition-colors">期刊官网</a>
+                                    <a href="https://www.editorialmanager.com/eaai/default.aspx" target="_blank" onclick="event.stopPropagation()" class="flex-1 py-1.5 bg-[#1A1A1A] border border-[#333] rounded text-[10px] text-gray-400 text-center hover:border-[#00FF88]/50 hover:text-white transition-colors">投稿入口</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <script>
+                        (function() {
+                            const track = document.getElementById('journalTrack');
+                            const originalSlides = document.querySelectorAll('.journal-slide');
+                            let currentIndex = 0;
+                            let autoPlayTimer;
+                            const originalCount = originalSlides.length;
+                            
+                            // Clone all slides and append for infinite scroll effect
+                            originalSlides.forEach((slide, index) => {
+                                const clone = slide.cloneNode(true);
+                                clone.classList.add('clone');
+                                clone.dataset.cloneIndex = index;
+                                track.appendChild(clone);
+                            });
+                            
+                            // Clone all slides again for smoother infinite feel (3 sets total)
+                            originalSlides.forEach((slide, index) => {
+                                const clone = slide.cloneNode(true);
+                                clone.classList.add('clone-second');
+                                clone.dataset.cloneIndex = index;
+                                track.appendChild(clone);
+                            });
+                            
+                            const totalSlides = originalCount * 3;
+                            
+                            function nextSlide() {
+                                currentIndex++;
+                                track.style.transition = 'transform 700ms ease-out';
+                                track.style.transform = `translateX(-${currentIndex * 100}%)`;
+                                
+                                // When reaching end of second set, instantly jump back to first set
+                                // This creates the illusion of infinite scrolling
+                                if (currentIndex >= originalCount * 2) {
+                                    setTimeout(() => {
+                                        track.style.transition = 'none';
+                                        currentIndex = currentIndex - originalCount;
+                                        track.style.transform = `translateX(-${currentIndex * 100}%)`;
+                                    }, 700);
+                                }
+                            }
+                            
+                            function startAutoPlay() {
+                                autoPlayTimer = setInterval(nextSlide, 5000);
+                            }
+                            
+                            function stopAutoPlay() {
+                                clearInterval(autoPlayTimer);
+                            }
+                            
+                            const showcase = document.getElementById('journalShowcase');
+                            showcase.addEventListener('mouseenter', stopAutoPlay);
+                            showcase.addEventListener('mouseleave', startAutoPlay);
+                            
+                            startAutoPlay();
+                        })();
+                    </script>
+                </div>
+                
+                <!-- Feature 4: Cover Story Carousel -->
+                <div class="feature-card section-reveal md:col-span-2 lg:col-span-1 cursor-pointer" data-href="pages/tools/color-picker.html">
+                    <div class="text-[#00FF88] text-xs font-mono mb-2">[04]</div>
+                    <h3 class="font-semibold mb-3 text-sm">封面故事｜言色 · 研色</h3>
+                    <div class="cover-carousel relative overflow-hidden rounded-lg bg-[#1A1A1A] h-[340px]" id="coverCarousel">
+                        <div class="carousel-track flex transition-transform duration-700 ease-out h-full" id="carouselTrack">
+                            <!-- Cover 1: Nature AI -->
+                            <div class="carousel-slide min-w-full h-full flex flex-col">
+                                <div class="relative h-[140px] shrink-0">
+                                    <img src="./assets/cover/Nature/001/001.png" alt="Nature Cover" class="w-full h-full object-cover">
+                                    <div class="absolute inset-0 bg-gradient-to-t from-[#1A1A1A] via-transparent to-transparent"></div>
+                                    <div class="absolute top-3 left-3">
+                                        <span class="px-2 py-1 bg-[#00FF88]/20 text-[#00FF88] text-[10px] font-mono rounded">Nature</span>
+                                    </div>
+                                    <div class="absolute bottom-3 left-3 right-3">
+                                        <span class="text-[10px] text-gray-400 font-mono">2023 年 9 月 28 日刊</span>
+                                    </div>
+                                </div>
+                                <div class="flex-1 p-4 overflow-y-auto hide-scrollbar">
+                                    <h4 class="text-base font-bold text-white mb-2">科研智能</h4>
+                                    <p class="text-[11px] text-gray-400 leading-relaxed mb-3">人工智能如何改变科研？</p>
+                                    <p class="text-[10px] text-gray-500 leading-relaxed">从数据蒸馏到蛋白质结构解析，人工智能（AI）正在快速触及科研的方方面面。本期《自然》将关注为何研究人员对这项快速发展的技术兴奋不已——并探讨AI生成虚假信息的风险。</p>
+                                </div>
+                            </div>
+                            <!-- Cover 2: Nature SDGs -->
+                            <div class="carousel-slide min-w-full h-full flex flex-col">
+                                <div class="relative h-[180px] shrink-0">
+                                    <img src="./assets/cover/Nature/002/002.png" alt="Nature Cover" class="w-full h-full object-cover">
+                                    <div class="absolute inset-0 bg-gradient-to-t from-[#1A1A1A] via-transparent to-transparent"></div>
+                                    <div class="absolute top-3 left-3">
+                                        <span class="px-2 py-1 bg-[#00FF88]/20 text-[#00FF88] text-[10px] font-mono rounded">Nature</span>
+                                    </div>
+                                    <div class="absolute bottom-3 left-3 right-3">
+                                        <span class="text-[10px] text-gray-400 font-mono">2023 年 9 月 14 日刊</span>
+                                    </div>
+                                </div>
+                                <div class="flex-1 p-4 overflow-y-auto hide-scrollbar">
+                                    <h4 class="text-base font-bold text-white mb-2">偏离目标</h4>
+                                    <p class="text-[11px] text-gray-400 leading-relaxed mb-3">如何在2030年之前实现SDGs？</p>
+                                    <p class="text-[10px] text-gray-500 leading-relaxed">2015年9月，193个国家共同承诺将努力实现17项旨在改善世界人民生活的目标。从消除贫困到减少饥饿，再到应对全球变暖和保护生物多样性，可持续发展目标（Sustainable Development Goals）自此在企业计划和政府政策中占有一席之地。但如今，距离2030年实现这些宏伟目标的时限已经过半，而要做的还有很多。在本期特刊中，《自然》回顾了我们已经取得的进展，并探讨了我们离这些全球目标还有多远。</p>
+                                </div>
+                            </div>
+                            <!-- Cover 3: Nature Cancer -->
+                            <div class="carousel-slide min-w-full h-full flex flex-col">
+                                <div class="relative h-[180px] shrink-0">
+                                    <img src="./assets/cover/Nature/003/003.png" alt="Nature Cover" class="w-full h-full object-cover">
+                                    <div class="absolute inset-0 bg-gradient-to-t from-[#1A1A1A] via-transparent to-transparent"></div>
+                                    <div class="absolute top-3 left-3">
+                                        <span class="px-2 py-1 bg-[#00FF88]/20 text-[#00FF88] text-[10px] font-mono rounded">Nature</span>
+                                    </div>
+                                    <div class="absolute bottom-3 left-3 right-3">
+                                        <span class="text-[10px] text-gray-400 font-mono">2025 年 10 月 16 日刊</span>
+                                    </div>
+                                </div>
+                                <div class="flex-1 p-4 overflow-y-auto hide-scrollbar">
+                                    <h4 class="text-base font-bold text-white mb-2">饿死肿瘤</h4>
+                                    <p class="text-[11px] text-gray-400 leading-relaxed mb-3">饮食强化的多胺耗竭可重编程神经母细胞瘤</p>
+                                    <p class="text-[10px] text-gray-500 leading-relaxed">神经母细胞瘤是一种高度致命的儿童肿瘤，起源于外周神经系统，肿瘤生长依赖多胺的生物合成。一种名为二氟甲基鸟氨酸的药物于2023年末获批，可通过抑制多胺生物合成来帮助治疗神经母细胞瘤。在本期《自然》中，研究者深入探究了这一药物的作用。研究发现，无脯氨酸与精氨酸的饮食能减少多胺合成所需的前体鸟氨酸的数量。这进一步增强了二氟甲基鸟氨酸耗竭多胺的效果，重编程肿瘤生长，并改善了小鼠生存率。</p>
+                                </div>
+                            </div>
+                            <!-- Cover 4: DeepSeek-R1 -->
+                            <div class="carousel-slide min-w-full h-full flex flex-col">
+                                <div class="relative h-[180px] shrink-0">
+                                    <img src="./assets/cover/Nature/004/004.png" alt="Nature Cover" class="w-full h-full object-cover">
+                                    <div class="absolute inset-0 bg-gradient-to-t from-[#1A1A1A] via-transparent to-transparent"></div>
+                                    <div class="absolute top-3 left-3">
+                                        <span class="px-2 py-1 bg-[#00FF88]/20 text-[#00FF88] text-[10px] font-mono rounded">Nature</span>
+                                    </div>
+                                    <div class="absolute bottom-3 left-3 right-3">
+                                        <span class="text-[10px] text-gray-400 font-mono">2025 年 9 月 18 日刊</span>
+                                    </div>
+                                </div>
+                                <div class="flex-1 p-4 overflow-y-auto hide-scrollbar">
+                                    <h4 class="text-base font-bold text-white mb-2">DeepSeek-R1的科学</h4>
+                                    <p class="text-[11px] text-gray-400 leading-relaxed mb-3">DeepSeek-R1通过强化学习激励大语言模型进行推理</p>
+                                    <p class="text-[10px] text-gray-500 leading-relaxed">大语言模型如果能被训练成在解答过程中设定步骤，就能更好地解决问题。这种"推理"过程类似于人类解决复杂问题的方法，但对人工智能非常困难，需要人类干预来添加标签和注释。在本期《自然》中，DeepSeek 的研究者揭示了他们如何训练模型不仅能以这种方式推理，而且尽量减少人为干预。DeepSeek-R1模型通过强化学习进行训练，当其成功解决数学题时会获得高分奖励，而出错则会受到惩罚。由此，它逐渐学会了推理的重要性——通过分步分析和展示思考过程，更容易得到正确答案。这一机制使DeepSeek-R1具备自我检验与反思的能力，能在输出最终结果前评估自身推理，从而显著提升其在编程任务及研究生层次科学问题中的表现。</p>
+                                </div>
+                            </div>
+                            <!-- Cover 5: 超粘水凝胶 -->
+                            <div class="carousel-slide min-w-full h-full flex flex-col">
+                                <div class="relative h-[180px] shrink-0">
+                                    <img src="./assets/cover/Nature/005/005.png" alt="Nature Cover" class="w-full h-full object-cover">
+                                    <div class="absolute inset-0 bg-gradient-to-t from-[#1A1A1A] via-transparent to-transparent"></div>
+                                    <div class="absolute top-3 left-3">
+                                        <span class="px-2 py-1 bg-[#00FF88]/20 text-[#00FF88] text-[10px] font-mono rounded">Nature</span>
+                                    </div>
+                                    <div class="absolute bottom-3 left-3 right-3">
+                                        <span class="text-[10px] text-gray-400 font-mono">2025 年 8 月 7 日刊</span>
+                                    </div>
+                                </div>
+                                <div class="flex-1 p-4 overflow-y-auto hide-scrollbar">
+                                    <h4 class="text-base font-bold text-white mb-2">超粘水凝胶</h4>
+                                    <p class="text-[11px] text-gray-400 leading-relaxed mb-3">数据驱动的全新超粘水凝胶设计</p>
+                                    <p class="text-[10px] text-gray-500 leading-relaxed">在本期《自然》中，龚剑萍和同事从自然界汲取灵感，开发了一个数据驱动的系统来分析黏附蛋白序列，然后用AI创造出防水的超粘合材料。研究者用一个包含24707种天然黏附蛋白的数据集挖掘数据，指导设计了180种水凝胶。他们利用迭代机器学习框架优化了粘合性能，筛选出一组有潜力的超粘合水凝胶。其中一种命名为R1-max的水凝胶在合成后能将橡皮鸭粘在海洋中的岩石上（封面所示），很好地经受住了海浪和潮汐的冲击。</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <script>
+                        (function() {
+                            const track = document.getElementById('carouselTrack');
+                            const originalSlides = document.querySelectorAll('.carousel-slide');
+                            let currentIndex = 0;
+                            let autoPlayTimer;
+                            const originalCount = originalSlides.length;
+                            
+                            // Clone all slides and append for infinite scroll effect
+                            originalSlides.forEach((slide, index) => {
+                                const clone = slide.cloneNode(true);
+                                clone.classList.add('clone');
+                                clone.dataset.cloneIndex = index;
+                                track.appendChild(clone);
+                            });
+                            
+                            // Clone all slides again for smoother infinite feel (3 sets total)
+                            originalSlides.forEach((slide, index) => {
+                                const clone = slide.cloneNode(true);
+                                clone.classList.add('clone-second');
+                                clone.dataset.cloneIndex = index;
+                                track.appendChild(clone);
+                            });
+                            
+                            const totalSlides = originalCount * 3;
+                            
+                            function nextSlide() {
+                                currentIndex++;
+                                track.style.transition = 'transform 700ms ease-out';
+                                track.style.transform = `translateX(-${currentIndex * 100}%)`;
+                                
+                                // When reaching end of second set, instantly jump back to first set
+                                // This creates the illusion of infinite scrolling
+                                if (currentIndex >= originalCount * 2) {
+                                    setTimeout(() => {
+                                        track.style.transition = 'none';
+                                        currentIndex = currentIndex - originalCount;
+                                        track.style.transform = `translateX(-${currentIndex * 100}%)`;
+                                    }, 700);
+                                }
+                            }
+                            
+                            function startAutoPlay() {
+                                autoPlayTimer = setInterval(nextSlide, 6000);
+                            }
+                            
+                            function stopAutoPlay() {
+                                clearInterval(autoPlayTimer);
+                            }
+                            
+                            const carousel = document.getElementById('coverCarousel');
+                            carousel.addEventListener('mouseenter', stopAutoPlay);
+                            carousel.addEventListener('mouseleave', startAutoPlay);
+                            
+                            startAutoPlay();
+                        })();
+                    </script>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- IDE Section -->
+    <section class="relative z-10 py-20">
+        <div class="max-w-7xl mx-auto px-6 lg:px-12">
+            <div class="text-center mb-12 section-reveal">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">科研工具｜网站 · 精选</h2>
+                <p class="text-gray-400 text-sm max-w-2xl mx-auto">
+                    智核学术为你甄选优质、高效、实用的科研工具。亲测每款资源，确保可靠与高效，助力科研工作量质双升。
+                </p>
+            </div>
+            
+            <div class="section-reveal">
+                <div class="ide-window max-w-5xl mx-auto">
+                    <div class="ide-header">
+                        <div class="ide-dot bg-red-500"></div>
+                        <div class="ide-dot bg-yellow-500"></div>
+                        <div class="ide-dot bg-green-500"></div>
+                        <div class="flex-1"></div>
+                    </div>
+                    <div class="grid md:grid-cols-3 h-[28rem]">
+                        <!-- 左侧：视频展示 -->
+                        <div class="col-span-2 bg-black border-r border-[#1A1A1A] relative overflow-hidden">
+                            <video id="toolVideo" class="w-full h-full object-cover outline-none focus:outline-none bg-black" autoplay muted playsinline style="outline: none; background: black;">
+                                <source src="./assets/SciToolkit/01_Area.mp4" type="video/mp4">
+                            </video>
+                            <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4">
+                                <h3 id="toolTitle" class="text-lg font-bold text-white">科研工具精选01 | 让抠图像"洗衣服"一样简单</h3>
+                                <p id="toolName" class="text-sm text-[#00FF88] mt-1">Dverso</p>
+                            </div>
+                        </div>
+                        <!-- 右侧：工具列表 -->
+                        <div class="bg-[#0d0d0d] p-4 overflow-y-auto">
+                            <div class="text-xs text-gray-500 mb-3">科研工具精选 (7款)</div>
+                            <div class="space-y-2" id="toolList">
+                                <div class="tool-item selected cursor-pointer flex items-center gap-2 p-2 bg-[#00FF88]/10 border border-[#00FF88]/30 rounded transition-all duration-300" data-index="0" data-video="./assets/SciToolkit/01_Area.mp4" data-title="科研工具精选01 | 让抠图像&quot;洗衣服&quot;一样简单" data-name="Dverso" data-link="https://tools.dverso.io/bgremove/">
+                                    <div class="w-6 h-6 bg-[#00FF88]/20 rounded flex items-center justify-center text-[10px] text-[#00FF88] font-bold">1</div>
+                                    <div class="flex-1 min-w-0">
+                                        <div class="text-xs font-medium truncate">让抠图像"洗衣服"一样简单</div>
+                                        <div class="text-[10px] text-gray-500">Dverso</div>
+                                    </div>
+                                    <a href="https://tools.dverso.io/bgremove/" target="_blank" class="w-6 h-6 flex items-center justify-center rounded hover:bg-[#00FF88]/20 transition-colors" onclick="event.stopPropagation();">
+                                        <svg class="w-3.5 h-3.5 text-gray-400 hover:text-[#00FF88]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                                        </svg>
+                                    </a>
+                                </div>
+                                <div class="tool-item cursor-pointer flex items-center gap-2 p-2 bg-[#1A1A1A] border border-transparent rounded hover:bg-[#252525] transition-all duration-300" data-index="1" data-video="./assets/SciToolkit/02_Area.mp4" data-title="科研工具精选02 | 让图片、视频&quot;无水印&quot;下载变得如此简单" data-name="KuKuTool" data-link="https://dy.kukutool.com/zh-Hans-SG">
+                                    <div class="w-6 h-6 bg-blue-500/20 rounded flex items-center justify-center text-[10px] text-blue-400 font-bold">2</div>
+                                    <div class="flex-1 min-w-0">
+                                        <div class="text-xs font-medium truncate">图片视频无水印下载</div>
+                                        <div class="text-[10px] text-gray-500">KuKuTool</div>
+                                    </div>
+                                    <a href="https://dy.kukutool.com/zh-Hans-SG" target="_blank" class="w-6 h-6 flex items-center justify-center rounded hover:bg-blue-500/20 transition-colors" onclick="event.stopPropagation();">
+                                        <svg class="w-3.5 h-3.5 text-gray-400 hover:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                                        </svg>
+                                    </a>
+                                </div>
+                                <div class="tool-item cursor-pointer flex items-center gap-2 p-2 bg-[#1A1A1A] border border-transparent rounded hover:bg-[#252525] transition-all duration-300" data-index="2" data-video="./assets/SciToolkit/03_Area.mp4" data-title="科研工具精选03 | 10GB文件拖进去就能传" data-name="Wormhole" data-link="https://wormhole.app/">
+                                    <div class="w-6 h-6 bg-purple-500/20 rounded flex items-center justify-center text-[10px] text-purple-400 font-bold">3</div>
+                                    <div class="flex-1 min-w-0">
+                                        <div class="text-xs font-medium truncate">10GB文件瞬移传输</div>
+                                        <div class="text-[10px] text-gray-500">Wormhole</div>
+                                    </div>
+                                    <a href="https://wormhole.app/" target="_blank" class="w-6 h-6 flex items-center justify-center rounded hover:bg-purple-500/20 transition-colors" onclick="event.stopPropagation();">
+                                        <svg class="w-3.5 h-3.5 text-gray-400 hover:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                                        </svg>
+                                    </a>
+                                </div>
+                                <div class="tool-item cursor-pointer flex items-center gap-2 p-2 bg-[#1A1A1A] border border-transparent rounded hover:bg-[#252525] transition-all duration-300" data-index="3" data-video="./assets/SciToolkit/04_Area.mp4" data-title="科研工具精选04 | 帮你把单词记到肌肉里" data-name="Qwerty Learner" data-link="https://qwerty.kaiyi.cool/">
+                                    <div class="w-6 h-6 bg-orange-500/20 rounded flex items-center justify-center text-[10px] text-orange-400 font-bold">4</div>
+                                    <div class="flex-1 min-w-0">
+                                        <div class="text-xs font-medium truncate">把单词记到肌肉里</div>
+                                        <div class="text-[10px] text-gray-500">Qwerty Learner</div>
+                                    </div>
+                                    <a href="https://qwerty.kaiyi.cool/" target="_blank" class="w-6 h-6 flex items-center justify-center rounded hover:bg-orange-500/20 transition-colors" onclick="event.stopPropagation();">
+                                        <svg class="w-3.5 h-3.5 text-gray-400 hover:text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                                        </svg>
+                                    </a>
+                                </div>
+                                <div class="tool-item cursor-pointer flex items-center gap-2 p-2 bg-[#1A1A1A] border border-transparent rounded hover:bg-[#252525] transition-all duration-300" data-index="4" data-video="./assets/SciToolkit/05_Area.mp4" data-title="科研工具精选05 | 十几种图片处理功能,3秒抠图" data-name="Remove.photos" data-link="https://remove.photos/zh-cn/">
+                                    <div class="w-6 h-6 bg-pink-500/20 rounded flex items-center justify-center text-[10px] text-pink-400 font-bold">5</div>
+                                    <div class="flex-1 min-w-0">
+                                        <div class="text-xs font-medium truncate">3秒抠图精确到毛发</div>
+                                        <div class="text-[10px] text-gray-500">Remove.photos</div>
+                                    </div>
+                                    <a href="https://remove.photos/zh-cn/" target="_blank" class="w-6 h-6 flex items-center justify-center rounded hover:bg-pink-500/20 transition-colors" onclick="event.stopPropagation();">
+                                        <svg class="w-3.5 h-3.5 text-gray-400 hover:text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                                        </svg>
+                                    </a>
+                                </div>
+                                <div class="tool-item cursor-pointer flex items-center gap-2 p-2 bg-[#1A1A1A] border border-transparent rounded hover:bg-[#252525] transition-all duration-300" data-index="5" data-video="./assets/SciToolkit/06_Area.mp4" data-title="科研工具精选06 | PDF转LaTeX、Word、Markdown" data-name="Doc2x" data-link="https://doc2x.noedgeai.com">
+                                    <div class="w-6 h-6 bg-cyan-500/20 rounded flex items-center justify-center text-[10px] text-cyan-400 font-bold">6</div>
+                                    <div class="flex-1 min-w-0">
+                                        <div class="text-xs font-medium truncate">PDF转任意格式</div>
+                                        <div class="text-[10px] text-gray-500">Doc2x</div>
+                                    </div>
+                                    <a href="https://doc2x.noedgeai.com" target="_blank" class="w-6 h-6 flex items-center justify-center rounded hover:bg-cyan-500/20 transition-colors" onclick="event.stopPropagation();">
+                                        <svg class="w-3.5 h-3.5 text-gray-400 hover:text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                                        </svg>
+                                    </a>
+                                </div>
+                                <div class="tool-item cursor-pointer flex items-center gap-2 p-2 bg-[#1A1A1A] border border-transparent rounded hover:bg-[#252525] transition-all duration-300" data-index="6" data-video="./assets/SciToolkit/07_Area.mp4" data-title="科研工具精选07 | 不用装包、不用配环境，打开浏览器就能写的 LaTeX 在线编辑器" data-name="Overleaf" data-link="https://cn.overleaf.com/">
+                                    <div class="w-6 h-6 bg-green-600/20 rounded flex items-center justify-center text-[10px] text-green-500 font-bold">7</div>
+                                    <div class="flex-1 min-w-0">
+                                        <div class="text-xs font-medium truncate">浏览器就能写的 LaTeX 编辑器</div>
+                                        <div class="text-[10px] text-gray-500">Overleaf</div>
+                                    </div>
+                                    <a href="https://cn.overleaf.com/" target="_blank" class="w-6 h-6 flex items-center justify-center rounded hover:bg-green-600/20 transition-colors" onclick="event.stopPropagation();">
+                                        <svg class="w-3.5 h-3.5 text-gray-400 hover:text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                                        </svg>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <script>
+                (function() {
+                    const video = document.getElementById('toolVideo');
+                    const title = document.getElementById('toolTitle');
+                    const name = document.getElementById('toolName');
+                    const toolItems = document.querySelectorAll('.tool-item');
+                    let currentIndex = 0;
+                    let safetyTimer;
+                    const toolsData = Array.from(toolItems).map(item => ({
+                        video: item.dataset.video,
+                        title: item.dataset.title,
+                        name: item.dataset.name,
+                        element: item
+                    }));
+                    
+                    function switchToTool(index) {
+                        const tool = toolsData[index];
+                        currentIndex = index;
+                        
+                        // 更新视频
+                        video.src = tool.video;
+                        video.play();
+                        
+                        // 更新标题
+                        title.textContent = tool.title;
+                        name.textContent = tool.name;
+                        
+                        // 更新选中状态 - 先移除所有选中状态，再添加新的
+                        const prevSelected = document.querySelector('.tool-item.selected');
+                        const newSelected = toolItems[index];
+                        const newNumber = newSelected.querySelector('div:first-child');
+                        
+                        if (prevSelected && prevSelected !== newSelected) {
+                            // 先移除之前的选中状态
+                            prevSelected.classList.remove('selected', 'bg-[#00FF88]/10', 'border-[#00FF88]/30');
+                            prevSelected.classList.add('bg-[#1A1A1A]', 'border-transparent');
+                            prevSelected.querySelector('div:first-child').classList.remove('text-[#00FF88]', 'bg-[#00FF88]/20');
+                        }
+                        
+                        // 添加新的选中状态
+                        newSelected.classList.remove('bg-[#1A1A1A]', 'border-transparent');
+                        newSelected.classList.add('selected', 'bg-[#00FF88]/10', 'border-[#00FF88]/30');
+                        newNumber.classList.add('text-[#00FF88]', 'bg-[#00FF88]/20');
+                    }
+                    
+                    function nextTool() {
+                        const nextIndex = (currentIndex + 1) % toolsData.length;
+                        switchToTool(nextIndex);
+                    }
+                    
+                    function startSafetyTimer() {
+                        clearTimeout(safetyTimer);
+                        safetyTimer = setTimeout(nextTool, 10000);
+                    }
+                    
+                    function stopSafetyTimer() {
+                        clearTimeout(safetyTimer);
+                    }
+                    
+                    // 点击切换
+                    toolItems.forEach((item, index) => {
+                        item.addEventListener('click', function() {
+                            stopSafetyTimer();
+                            switchToTool(index);
+                            startSafetyTimer();
+                        });
+                    });
+                    
+                    // 视频结束时切换下一个
+                    video.addEventListener('ended', function() {
+                        stopSafetyTimer();
+                        nextTool();
+                    });
+                    
+                    // 鼠标悬停时暂停计时
+                    const toolSection = document.querySelector('.ide-window');
+                    toolSection.addEventListener('mouseenter', stopSafetyTimer);
+                    toolSection.addEventListener('mouseleave', startSafetyTimer);
+                    
+                    // 启动自动播放
+                    startSafetyTimer();
+                })();
+            </script>
 
-    <!-- Cards Section -->
-    <section class="cards-section">
-        <h2 class="section-title">探索我的作品</h2>
-        <div class="cards-grid">
-            <div class="card" onclick="location.href='pages/about.html'">
-                <div class="card-number">01</div>
-                <h3 class="card-title">关于我</h3>
-                <p class="card-desc">教育背景、研究方向与学术经历</p>
-                <div class="card-arrow">→</div>
+        </div>
+    </section>
+    
+    <!-- Privacy Section -->
+    <section class="relative z-10 py-20">
+        <div class="max-w-7xl mx-auto px-6 lg:px-12">
+            <div class="text-center mb-12 section-reveal">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">学术严谨与共享</h2>
+                <p class="text-gray-400 text-sm">
+                    我们坚持严谨、客观、稳重的交流风格，尊重知识产权，致力于构建开放共赢的 AI4Science 社区。
+                </p>
             </div>
-            <div class="card" onclick="location.href='pages/blog.html'">
-                <div class="card-number">02</div>
-                <h3 class="card-title">博客</h3>
-                <p class="card-desc">研究心得与学术思考分享</p>
-                <div class="card-arrow">→</div>
-            </div>
-            <div class="card" onclick="location.href='pages/projects.html'">
-                <div class="card-number">03</div>
-                <h3 class="card-title">项目作品</h3>
-                <p class="card-desc">开源项目和实战案例展示</p>
-                <div class="card-arrow">→</div>
-            </div>
-            <div class="card" onclick="location.href='pages/publications.html'">
-                <div class="card-number">04</div>
-                <h3 class="card-title">论文专著</h3>
-                <p class="card-desc">发表的学术论文与研究成果</p>
-                <div class="card-arrow">→</div>
-            </div>
-            <div class="card" onclick="location.href='pages/tools.html'">
-                <div class="card-number">05</div>
-                <h3 class="card-title">工具箱</h3>
-                <p class="card-desc">数值计算与科学计算工具箱</p>
-                <div class="card-arrow">→</div>
-            </div>
-            <div class="card" onclick="location.href='pages/contact.html'">
-                <div class="card-number">06</div>
-                <h3 class="card-title">学术交流</h3>
-                <p class="card-desc">学术合作与联系方式</p>
-                <div class="card-arrow">→</div>
+            
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="feature-card text-center section-reveal">
+                    <div class="w-12 h-12 mx-auto mb-4 rounded-full bg-[#1A1A1A] flex items-center justify-center">
+                        <svg class="w-6 h-6 text-[#00FF88]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="font-semibold mb-2">学术诚信保护</h3>
+                    <p class="text-xs text-gray-500 leading-relaxed">
+                        坚持原创深度内容，引用资料遵循学术规范。为用户提供可靠的代码复现支撑，确保每一个技术点经得起实验推敲。
+                    </p>
+                </div>
+                
+                <div class="feature-card text-center section-reveal">
+                    <div class="w-12 h-12 mx-auto mb-4 rounded-full bg-[#1A1A1A] flex items-center justify-center">
+                        <svg class="w-6 h-6 text-[#00FF88]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="font-semibold mb-2">资源安全访问</h3>
+                    <p class="text-xs text-gray-500 leading-relaxed">
+                        通过结构化索引和分类管理，确保学术资源的高效访问与知识留存。保护社区用户数据隐私。
+                    </p>
+                </div>
+                
+                <div class="feature-card text-center section-reveal">
+                    <div class="w-12 h-12 mx-auto mb-4 rounded-full bg-[#1A1A1A] flex items-center justify-center">
+                        <svg class="w-6 h-6 text-[#00FF88]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path>
+                        </svg>
+                    </div>
+                    <h3 class="font-semibold mb-2">全球视野同步</h3>
+                    <p class="text-gray-400 text-xs">前沿动态实时更新，跨越语言门槛。聚焦中子输运、PINNs 等物理核心领域，连接顶刊学术成果。</p>
+                </div>
             </div>
         </div>
     </section>
 
+    
     <!-- Footer -->
-    <footer>
-        <div class="footer-content">
-            <div class="footer-text">© 2025 图灵的猫 ｜ 智核学术</div>
-            <a href="https://github.com/mathliuyang/" target="_blank" class="visitor-counter-wrapper">
-                <img src="https://komarev.com/ghpvc/?username=mathliuyang&color=2E9EF7&style=flat-square&label=Profile+Views"
-                    alt="访问量统计" />
-            </a>
-        </div>
-        <div class="social-links">
-            <a href="mailto:mathliuyang@163.com">学术邮箱</a>
-            <a href="https://github.com/mathliuyang/" target="_blank">GitHub</a>
-            <a href="#" class="copy-wechat" data-copy="TuringsCat">微信</a>
-            <a href="#" class="copy-qq" data-copy="TuringsCat">QQ</a>
+    <footer class="relative z-10 py-12 border-t border-[#1A1A1A]">
+        <div class="max-w-7xl mx-auto px-6 lg:px-12">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-6">
+                <div class="text-xs text-gray-600 space-y-1 text-center md:text-left">
+                    <p>© 2025 智核学术 AICoreScholar 版权所有</p>
+                    <p>专注智能科学计算 (AI for Science) 的学术传播平台</p>
+                    <p>Powered by AICORE Community</p>
+                </div>
+                <div class="text-xl font-bold text-center">
+                    <span class="text-white">图灵的猫 x </span><span class="text-[#00FF88]">智核学术</span>
+                    <p class="text-gray-400 text-sm">重构知识，看见未来</p>
+                </div>
+                <div class="flex flex-col items-center md:items-end gap-2">
+                    <div class="w-20 h-20 rounded-lg overflow-hidden flex items-center justify-center">
+                        <img src="./assets/AICoreScholar/qrcode.jpg" alt="智核学术公众号" class="w-full h-full object-cover">
+                    </div>
+                    <span class="text-[10px] text-gray-500">关注智核学术公众号</span>
+                </div>
+            </div>
+            
+            <div class="flex justify-center pt-6 border-t border-[#1A1A1A]">
+                <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="text-xs text-gray-500 hover:text-white transition-colors flex items-center gap-1">
+                    回到顶部
+                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path>
+                    </svg>
+                </button>
+            </div>
         </div>
     </footer>
-
+    
+    <!-- Scan Logo Section -->
+    <div class="scan-logo-container relative h-48 md:h-64 flex items-center justify-center overflow-hidden">
+        <div class="scan-line"></div>
+        <h2 class="scan-logo-text select-none" id="glitchText">AICORE</h2>
+        <!-- Glitch layers for scan effect -->
+        <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+            <h2 class="scan-logo-text absolute opacity-0" id="glitchLayer1" style="color: #00FF88; transform: translateX(-2px);">AICORE</h2>
+        </div>
+    </div>
+    
     <script>
-        // Canvas Setup
-        const canvas = document.getElementById('canvas');
-        const ctx = canvas.getContext('2d');
-        let particles = [];
-        let mouse = { x: null, y: null, radius: 150 };
+        // ==========================================
+        // Particle System (Three.js) - Updated
+        // ==========================================
+        const initParticles = () => {
+            const container = document.getElementById('particle-canvas');
+            const scene = new THREE.Scene();
+            
+            const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 300);
+            camera.position.z = 45; 
+            
+            const renderer = new THREE.WebGLRenderer({ canvas: container, alpha: true, antialias: false });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            const pixelRatio = Math.min(window.devicePixelRatio, 2);
+            renderer.setPixelRatio(pixelRatio);
 
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
-        resizeCanvas();
-        window.addEventListener('resize', resizeCanvas);
+            const spacing = 0.45; 
+            const width = 280;  
+            const height = 140;  
+            const cols = Math.floor(width / spacing);
+            const rows = Math.floor(height / spacing);
+            const particleCount = cols * rows;
 
-        // Mouse tracking
-        window.addEventListener('mousemove', (e) => {
-            mouse.x = e.x;
-            mouse.y = e.y;
-        });
+            const geometry = new THREE.BufferGeometry();
+            const positions = new Float32Array(particleCount * 3);
+            const randoms = new Float32Array(particleCount);
 
-        window.addEventListener('mouseout', () => {
-            mouse.x = null;
-            mouse.y = null;
-        });
-
-        // Particle class
-        class Particle {
-            constructor() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.size = Math.random() * 2 + 0.5;
-                this.baseX = this.x;
-                this.baseY = this.y;
-                this.density = Math.random() * 30 + 1;
-                this.vx = (Math.random() - 0.5) * 0.3;
-                this.vy = (Math.random() - 0.5) * 0.3;
-            }
-
-            draw() {
-                const theme = document.documentElement.getAttribute('data-theme');
-                ctx.fillStyle = theme === 'light' ? 'rgba(0, 0, 0, 0.3)' : 'rgba(255, 255, 255, 0.3)';
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fill();
-            }
-
-            update() {
-                // Mouse interaction
-                if (mouse.x != null && mouse.y != null) {
-                    let dx = mouse.x - this.x;
-                    let dy = mouse.y - this.y;
-                    let distance = Math.sqrt(dx * dx + dy * dy);
-                    let forceDirectionX = dx / distance;
-                    let forceDirectionY = dy / distance;
-                    let maxDistance = mouse.radius;
-                    let force = (maxDistance - distance) / maxDistance;
-                    let directionX = forceDirectionX * force * this.density * 0.6;
-                    let directionY = forceDirectionY * force * this.density * 0.6;
-
-                    if (distance < mouse.radius) {
-                        this.x -= directionX;
-                        this.y -= directionY;
-                    } else {
-                        if (this.x !== this.baseX) {
-                            let dx = this.x - this.baseX;
-                            this.x -= dx / 10;
-                        }
-                        if (this.y !== this.baseY) {
-                            let dy = this.y - this.baseY;
-                            this.y -= dy / 10;
-                        }
-                    }
-                } else {
-                    // Natural drift
-                    this.x += this.vx;
-                    this.y += this.vy;
-
-                    // Bounce back to base position
-                    if (Math.abs(this.x - this.baseX) > 50) {
-                        this.vx *= -1;
-                    }
-                    if (Math.abs(this.y - this.baseY) > 50) {
-                        this.vy *= -1;
-                    }
-                }
-
-                this.draw();
-            }
-        }
-
-        // Initialize particles
-        function init() {
-            particles = [];
-            const numberOfParticles = Math.floor((canvas.width * canvas.height) / 9000);
-            for (let i = 0; i < numberOfParticles; i++) {
-                particles.push(new Particle());
-            }
-        }
-
-        // Animation loop
-        function animate() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-            // Update particles
-            particles.forEach(particle => particle.update());
-
-            // Connect particles
-            connectParticles();
-
-            requestAnimationFrame(animate);
-        }
-
-        // Connect nearby particles
-        function connectParticles() {
-            const theme = document.documentElement.getAttribute('data-theme');
-            for (let i = 0; i < particles.length; i++) {
-                for (let j = i + 1; j < particles.length; j++) {
-                    let dx = particles[i].x - particles[j].x;
-                    let dy = particles[i].y - particles[j].y;
-                    let distance = Math.sqrt(dx * dx + dy * dy);
-
-                    if (distance < 100) {
-                        ctx.strokeStyle = theme === 'light'
-                            ? `rgba(0, 0, 0, ${0.2 - distance / 500})`
-                            : `rgba(255, 255, 255, ${0.2 - distance / 500})`;
-                        ctx.lineWidth = 0.5;
-                        ctx.beginPath();
-                        ctx.moveTo(particles[i].x, particles[i].y);
-                        ctx.lineTo(particles[j].x, particles[j].y);
-                        ctx.stroke();
-                    }
+            for (let i = 0; i < cols; i++) {
+                for (let j = 0; j < rows; j++) {
+                    const idx = (i * rows + j);
+                    positions[idx * 3] = (i - cols / 2) * spacing;
+                    positions[idx * 3 + 1] = (j - rows / 2) * spacing;
+                    positions[idx * 3 + 2] = 0.0;
+                    randoms[idx] = Math.random(); 
                 }
             }
-        }
 
-        init();
-        animate();
+            geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+            geometry.setAttribute('aRandom', new THREE.BufferAttribute(randoms, 1));
 
-        // Reinitialize on resize
-        window.addEventListener('resize', () => {
-            init();
-        });
+            const material = new THREE.ShaderMaterial({
+                uniforms: {
+                    uTime: { value: 0.0 },
+                    uMousePos: { value: new THREE.Vector2(-999, -999) },
+                    uMouseForce: { value: 0.0 },
+                    uPixelRatio: { value: pixelRatio }
+                },
+                vertexShader: `
+                    uniform float uTime;
+                    uniform vec2 uMousePos;
+                    uniform float uMouseForce;
+                    uniform float uPixelRatio;
+                    
+                    attribute float aRandom;
+                    
+                    varying vec3 vColor;
+                    varying float vAlpha;
 
-        // Number animation（排除访问量统计）
-        const numbers = document.querySelectorAll('.meta-number:not(#visitorCount)');
-        let hasAnimated = false;
+                    vec3 mod289(vec3 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
+                    vec4 mod289(vec4 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
+                    vec4 permute(vec4 x) { return mod289(((x*34.0)+1.0)*x); }
+                    vec4 taylorInvSqrt(vec4 r) { return 1.79284291400159 - 0.85373472095314 * r; }
 
-        function animateNumbers() {
-            if (hasAnimated) return;
-            hasAnimated = true;
-
-            numbers.forEach(num => {
-                const target = parseInt(num.getAttribute('data-target'));
-                const duration = 2000;
-                const step = target / (duration / 16);
-                let current = 0;
-
-                const timer = setInterval(() => {
-                    current += step;
-                    if (current >= target) {
-                        num.textContent = target.toString().padStart(2, '0');
-                        clearInterval(timer);
-                    } else {
-                        num.textContent = Math.floor(current).toString().padStart(2, '0');
+                    float snoise(vec3 v) {
+                        const vec2 C = vec2(1.0/6.0, 1.0/3.0);
+                        const vec4 D = vec4(0.0, 0.5, 1.0, 2.0);
+                        vec3 i  = floor(v + dot(v, C.yyy));
+                        vec3 x0 = v - i + dot(i, C.xxx);
+                        vec3 g = step(x0.yzx, x0.xyz);
+                        vec3 l = 1.0 - g;
+                        vec3 i1 = min(g.xyz, l.zxy);
+                        vec3 i2 = max(g.xyz, l.zxy);
+                        vec3 x1 = x0 - i1 + C.xxx;
+                        vec3 x2 = x0 - i2 + C.yyy;
+                        vec3 x3 = x0 - D.yyy;
+                        i = mod289(i);
+                        vec4 p = permute(permute(permute(i.z + vec4(0.0, i1.z, i2.z, 1.0)) + i.y + vec4(0.0, i1.y, i2.y, 1.0)) + i.x + vec4(0.0, i1.x, i2.x, 1.0));
+                        float n_ = 0.142857142857;
+                        vec3 ns = n_ * D.wyz - D.xzx;
+                        vec4 j = p - 49.0 * floor(p * ns.z * ns.z);
+                        vec4 x_ = floor(j * ns.z);
+                        vec4 y_ = floor(j - 7.0 * x_);
+                        vec4 x = x_ *ns.x + ns.yyyy;
+                        vec4 y = y_ *ns.x + ns.yyyy;
+                        vec4 h = 1.0 - abs(x) - abs(y);
+                        vec4 b0 = vec4(x.xy, y.xy);
+                        vec4 b1 = vec4(x.zw, y.zw);
+                        vec4 s0 = floor(b0)*2.0 + 1.0;
+                        vec4 s1 = floor(b1)*2.0 + 1.0;
+                        vec4 sh = -step(h, vec4(0.0));
+                        vec4 a0 = b0.xzyw + s0.xzyw*sh.xxyy;
+                        vec4 a1 = b1.xzyw + s1.xzyw*sh.zzww;
+                        vec3 p0 = vec3(a0.xy,h.x);
+                        vec3 p1 = vec3(a0.zw,h.y);
+                        vec3 p2 = vec3(a1.xy,h.z);
+                        vec3 p3 = vec3(a1.zw,h.w);
+                        vec4 norm = taylorInvSqrt(vec4(dot(p0,p0), dot(p1,p1), dot(p2, p2), dot(p3,p3)));
+                        p0 *= norm.x; p1 *= norm.y; p2 *= norm.z; p3 *= norm.w;
+                        vec4 m = max(0.5 - vec4(dot(x0,x0), dot(x1,x1), dot(x2,x2), dot(x3,x3)), 0.0);
+                        m = m * m;
+                        return 42.0 * dot(m*m, vec4(dot(p0,x0), dot(p1,x1), dot(p2,x2), dot(p3,x3)));
                     }
-                }, 16);
+
+                    void main() {
+                        vec3 pos = position;
+                        float waveSpeed = 0.15;
+                        float waveFreq = 0.008;
+                        float waveX = pos.x * waveFreq - uTime * waveSpeed;
+                        float waveY = pos.y * waveFreq * 0.5;
+
+                        float mainWave = sin(waveX + snoise(vec3(waveY, 0.0, uTime * 0.02)) * 2.0);
+                        float subWave = sin(waveX * 2.5 + uTime * 0.3) * 0.5 + 0.5;
+                        float verticalWave = sin(pos.y * 0.01 + uTime * 0.2) * 0.3;
+                        float combinedWave = mainWave * 0.6 + subWave * 0.3 + verticalWave * 0.1;
+
+                        float noise = snoise(vec3(pos.x * 0.005, pos.y * 0.005, uTime * 0.03));
+                        combinedWave += noise * 0.2;
+
+                        float travelWave = sin(waveX * 3.0 + noise * 2.0);
+                        float visibilityThreshold = 0.2 + travelWave * 0.3;
+                        float particlePhase = sin(waveX * 5.0 + pos.y * 0.01 + uTime * 0.5 + aRandom * 3.14);
+                        float isVisible = step(visibilityThreshold, particlePhase);
+
+                        float dist = distance(pos.xy, uMousePos);
+                        float glowForce = exp(-(dist * dist) / 80.0) * uMouseForce;
+                        glowForce *= 0.8 + 0.2 * sin(uTime * 4.0 - dist * 0.1);
+
+                        float colorPhase = sin(waveX + uTime * 0.1);
+                        float isGreen = step(0.0, colorPhase + (aRandom - 0.5) * 0.6);
+
+                        vec3 cGray = vec3(0.2, 0.2, 0.22);
+                        vec3 cDarkGreen = vec3(0.0, 0.5, 0.28);
+                        vec3 cBrightGreen = vec3(0.0, 0.75, 0.42);
+
+                        vec3 baseColor = mix(cGray, cDarkGreen, isGreen);
+                        float waveFront = smoothstep(0.3, 0.7, particlePhase - visibilityThreshold);
+                        baseColor = mix(baseColor, cBrightGreen, waveFront * 0.4);
+
+                        vec3 cHighlight = vec3(0.0, 0.9, 0.5);
+                        vColor = mix(baseColor, cHighlight, glowForce * 0.6);
+
+                        float fadeInOut = sin(waveX * 2.0 + uTime * 0.3) * 0.5 + 0.5;
+                        float baseAlpha = 0.4 + fadeInOut * 0.4;
+                        float breathe = 0.7 + 0.3 * sin(uTime * 3.0 + aRandom * 6.28);
+
+                        vAlpha = isVisible * baseAlpha * breathe;
+
+                        vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
+                        gl_PointSize = uPixelRatio * 4.0 * (45.0 / -mvPosition.z);
+                        gl_Position = projectionMatrix * mvPosition;
+                    }
+                `,
+                fragmentShader: `
+                    varying vec3 vColor;
+                    varying float vAlpha;
+                    
+                    void main() {
+                        if (vAlpha < 0.05) discard;
+                        gl_FragColor = vec4(vColor, vAlpha);
+                    }
+                `,
+                transparent: true,
+                depthWrite: false,
+                depthTest: false
             });
-        }
 
-        // komarev GitHub Profile Views Counter - 简单有效的第三方统计服务
+            const points = new THREE.Points(geometry, material);
+            scene.add(points);
 
-        // Trigger number animation
-        setTimeout(animateNumbers, 1000);
+            const mouse = new THREE.Vector2();
+            const raycaster = new THREE.Raycaster();
+            const targetPlane = new THREE.Plane(new THREE.Vector3(0, 0, 1), 0);
 
-        // Nav scroll effect
-        const nav = document.getElementById('nav');
-        let lastScroll = 0;
+            const targetWorldMouse = new THREE.Vector3(0, 0, 0);
+            const currentWorldMouse = new THREE.Vector3(0, 0, 0);
 
+            let targetForce = 0.0;
+            let currentForce = 0.0;
+            let interactionTimeout;
+            let isFirstMove = true;
+
+            window.addEventListener('mousemove', (event) => {
+                mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+                mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+                raycaster.setFromCamera(mouse, camera);
+                raycaster.ray.intersectPlane(targetPlane, targetWorldMouse);
+
+                if (isFirstMove) {
+                    currentWorldMouse.copy(targetWorldMouse);
+                    isFirstMove = false;
+                }
+                targetForce = 1.0;
+                clearTimeout(interactionTimeout);
+                interactionTimeout = setTimeout(() => {
+                    targetForce = 0.0;
+                }, 500);
+            });
+
+            window.addEventListener('mouseout', () => {
+                targetForce = 0.0;
+            });
+
+            const clock = new THREE.Clock();
+
+            function animate() {
+                requestAnimationFrame(animate);
+                currentWorldMouse.lerp(targetWorldMouse, 0.15);
+                currentForce += (targetForce - currentForce) * 0.05;
+                material.uniforms.uTime.value = clock.getElapsedTime();
+                material.uniforms.uMousePos.value.set(currentWorldMouse.x, currentWorldMouse.y);
+                material.uniforms.uMouseForce.value = currentForce;
+                renderer.render(scene, camera);
+            }
+
+            animate();
+
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+        };
+
+        initParticles();
+        
+        // ==========================================
+        // Scroll & Reveal Effects
+        // ==========================================
+        const navbar = document.getElementById('navbar');
         window.addEventListener('scroll', () => {
-            const currentScroll = window.pageYOffset;
-
-            if (currentScroll > 100) {
-                nav.classList.add('scrolled');
+            if (window.pageYOffset > 50) {
+                navbar.classList.add('nav-scrolled');
             } else {
-                nav.classList.remove('scrolled');
+                navbar.classList.remove('nav-scrolled');
             }
-
-            lastScroll = currentScroll;
         });
-
-        // Theme toggle
-        const themeBtn = document.getElementById('themeBtn');
-        const themeIcon = document.getElementById('themeIcon');
-        const currentTheme = localStorage.getItem('theme') || 'light';
-
-        document.documentElement.setAttribute('data-theme', currentTheme);
-        themeIcon.textContent = currentTheme === 'dark' ? '◐' : '◑';
-
-        // 移除超链接预览 - 阻止浏览器显示链接地址
-        document.addEventListener('DOMContentLoaded', function () {
-            // 为所有超链接添加事件监听
-            document.querySelectorAll('a[href]').forEach(link => {
-                link.addEventListener('mouseenter', function (e) {
-                    // 临时移除href属性
-                    this.dataset.originalHref = this.href;
-                    this.removeAttribute('href');
-                });
-
-                link.addEventListener('mouseleave', function (e) {
-                    // 恢复href属性
-                    if (this.dataset.originalHref) {
-                        this.href = this.dataset.originalHref;
-                        delete this.dataset.originalHref;
-                    }
-                });
-
-                // 确保点击功能正常
-                link.addEventListener('click', function (e) {
-                    if (this.dataset.originalHref) {
-                        e.preventDefault();
-                        window.location.href = this.dataset.originalHref;
-                    }
-                });
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
             });
+        }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+        
+        document.querySelectorAll('.section-reveal').forEach(el => {
+            observer.observe(el);
         });
-
-        // 添加图标颜色样式，确保在不同主题下都清晰可见
-        themeIcon.style.color = currentTheme === 'dark' ? '#ffffff' : '#000000';
-
-        themeBtn.addEventListener('click', () => {
-            const theme = document.documentElement.getAttribute('data-theme');
-            const newTheme = theme === 'dark' ? 'light' : 'dark';
-
-            document.documentElement.setAttribute('data-theme', newTheme);
-            localStorage.setItem('theme', newTheme);
-            themeIcon.textContent = newTheme === 'dark' ? '◐' : '◑';
-            themeIcon.style.color = newTheme === 'dark' ? '#ffffff' : '#000000';
-        });
-
-        // Smooth scroll
+        
+        // ==========================================
+        // Glitch & Parallax
+        // ==========================================
+        const glitchText = document.getElementById('glitchText');
+        const glitchLayer1 = document.getElementById('glitchLayer1');
+        let glitchIntensity = 0;
+        
+        setInterval(() => {
+            if (Math.random() > 0.7) {
+                glitchIntensity = 1;
+                setTimeout(() => { glitchIntensity = 0; }, 200);
+            }
+        }, 2000);
+        
+        function updateGlitch() {
+            if (glitchIntensity > 0) {
+                const offsetX = (Math.random() - 0.5) * 10;
+                const offsetY = (Math.random() - 0.5) * 4;
+                glitchText.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
+                glitchLayer1.style.opacity = 0.5;
+                glitchLayer1.style.transform = `translate(${-offsetX}px, ${-offsetY}px)`;
+            } else {
+                glitchText.style.transform = 'translate(0, 0)';
+                glitchLayer1.style.opacity = 0;
+            }
+            requestAnimationFrame(updateGlitch);
+        }
+        updateGlitch();
+        
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
                 const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({ behavior: 'smooth' });
-                }
+                if (target) { target.scrollIntoView({ behavior: 'smooth' }); }
             });
         });
 
-        // 复制功能
-        function copyToClipboard(text) {
-            navigator.clipboard.writeText(text).then(() => {
-                // 创建提示元素
-                const toast = document.createElement('div');
-                toast.textContent = '已复制到剪贴板';
-                toast.style.cssText = `
-                    position: fixed;
-                    top: 50%;
-                    left: 50%;
-                    transform: translate(-50%, -50%);
-                    background: var(--card-bg, #2a2a2a);
-                    color: var(--text-primary, #ffffff);
-                    padding: 12px 24px;
-                    border-radius: 8px;
-                    font-size: 14px;
-                    z-index: 10000;
-                    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-                    border: 1px solid var(--border-color, #333);
-                `;
-                document.body.appendChild(toast);
-
-                // 2秒后移除提示
-                setTimeout(() => {
-                    document.body.removeChild(toast);
-                }, 2000);
-            }).catch(err => {
-                console.error('复制失败:', err);
-            });
-        }
-
-        // 为微信和QQ添加点击复制功能
-        document.querySelectorAll('.copy-wechat, .copy-qq').forEach(element => {
-            element.addEventListener('click', function (e) {
-                e.preventDefault();
-                const textToCopy = this.getAttribute('data-copy') || this.textContent;
-                copyToClipboard(textToCopy);
-            });
-
-            // 添加鼠标悬停提示
-            element.addEventListener('mouseenter', function () {
-                this.style.cursor = 'pointer';
-                this.title = '点击复制';
-            });
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const parallax = document.querySelector('section:first-of-type');
+            if (parallax) { parallax.style.transform = `translateY(${scrolled * 0.3}px)`; }
         });
 
-        // 连续点击10次跳转功能
-        let clickCount = 0;
-        let clickTimer = null;
-        const heroTitle = document.getElementById('hero-title');
-
-        heroTitle.addEventListener('click', function () {
-            clickCount++;
-
-            // 清除之前的定时器
-            if (clickTimer) {
-                clearTimeout(clickTimer);
-            }
-
-            // 显示点击计数（可选，用于调试）
-            console.log(`点击次数: ${clickCount}`);
-
-            // 如果达到10次，跳转到运动激励系统
-            if (clickCount >= 10) {
-                window.location.href = 'tools/XiaoYuSportsIncentivePlan.html';
-                return;
-            }
-
-            // 3秒后重置计数器
-            clickTimer = setTimeout(() => {
-                clickCount = 0;
-                console.log('点击计数器已重置');
-            }, 3000);
-
-            // 添加视觉反馈
-            this.style.transform = 'scale(0.98)';
-            setTimeout(() => {
-                this.style.transform = 'scale(1)';
-            }, 100);
-        });
-
-        // 添加鼠标悬停效果
-        heroTitle.addEventListener('mouseenter', function () {
-            this.style.opacity = '0.8';
-            this.style.transition = 'opacity 0.3s ease';
-        });
-
-        heroTitle.addEventListener('mouseleave', function () {
-            this.style.opacity = '1';
+        document.querySelectorAll('[data-href]').forEach(function(el) {
+            el.addEventListener('click', function(e) {
+                const href = el.getAttribute('data-href');
+                if (href) { window.location.href = href; }
+            });
         });
     </script>
 </body>
-
 </html>

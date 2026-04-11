@@ -7,6 +7,7 @@
     <title>智能科学计算·PINNs 系列论文研究进展 | 物理信息神经网络最新研究</title>
     <script src="pinns-papers.js"></script>
     <script src="script.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -17,19 +18,10 @@
         :root {
             --bg: #000000;
             --text: #ffffff;
-            --text-dim: #666666;
-            --accent: #ffffff;
-            --border: rgba(255, 255, 255, 0.08);
-            --card-bg: rgba(255, 255, 255, 0.02);
-        }
-
-        [data-theme="light"] {
-            --bg: #ffffff;
-            --text: #000000;
-            --text-dim: #999999;
-            --accent: #000000;
-            --border: rgba(0, 0, 0, 0.08);
-            --card-bg: rgba(0, 0, 0, 0.02);
+            --text-dim: #9ca3af;
+            --accent: #00FF88;
+            --border: #1A1A1A;
+            --card-bg: #0A0A0A;
         }
 
         body {
@@ -42,13 +34,14 @@
             letter-spacing: -0.02em;
         }
 
-        #canvas {
+        #particle-canvas {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             z-index: 0;
+            pointer-events: none;
         }
 
         /* 密码验证模态框样式 */
@@ -174,13 +167,7 @@
             background: rgba(0, 0, 0, 0.8);
         }
 
-        [data-theme="light"] nav.scrolled {
-            background: rgba(255, 255, 255, 0.95);
-        }
 
-        [data-theme="light"] nav {
-            background: rgba(255, 255, 255, 0.8);
-        }
 
         .logo {
             font-size: 1rem;
@@ -226,27 +213,12 @@
             transition: color 0.3s ease;
         }
 
-        .nav-links a:hover,
-        .nav-links a.active {
+        .nav-links a:hover {
             color: var(--text);
         }
 
-        .theme-btn {
-            width: 36px;
-            height: 36px;
-            border: 1px solid var(--border);
-            background: transparent;
-            border-radius: 50%;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-        }
-
-        .theme-btn:hover {
-            border-color: var(--text);
-            transform: scale(1.1);
+        .nav-links a.active {
+            color: var(--accent);
         }
 
         /* 移动端菜单按钮 */
@@ -285,26 +257,15 @@
             background: rgba(255, 255, 255, 0.1);
         }
 
-        /* 深色模式下的菜单按钮样式 */
-        [data-theme="dark"] .mobile-menu-btn {
+        /* 菜单按钮样式 */
+        .mobile-menu-btn {
             background: rgba(255, 255, 255, 0.05);
             border-color: rgba(255, 255, 255, 0.2);
         }
 
-        [data-theme="dark"] .mobile-menu-btn:hover {
+        .mobile-menu-btn:hover {
             background: rgba(255, 255, 255, 0.1);
             border-color: rgba(255, 255, 255, 0.4);
-        }
-
-        /* 浅色模式下的菜单按钮样式 */
-        [data-theme="light"] .mobile-menu-btn {
-            background: rgba(0, 0, 0, 0.05);
-            border-color: rgba(0, 0, 0, 0.2);
-        }
-
-        [data-theme="light"] .mobile-menu-btn:hover {
-            background: rgba(0, 0, 0, 0.1);
-            border-color: rgba(0, 0, 0, 0.4);
         }
 
         .mobile-menu-btn.active span:nth-child(1) {
@@ -366,8 +327,9 @@
 
         .stat-number {
             font-size: 2.5rem;
-            font-weight: 300;
+            font-weight: 600;
             letter-spacing: -0.03em;
+            color: var(--accent);
         }
 
         .stat-label {
@@ -381,42 +343,163 @@
         .controls {
             position: relative;
             padding: 2rem 4rem;
-            z-index: 1;
+            z-index: 100;
             display: flex;
             gap: 1rem;
             flex-wrap: wrap;
+            overflow: visible;
         }
 
         .control-group {
             flex: 1;
             min-width: 200px;
             position: relative;
+            z-index: 101;
         }
 
         .control-group input,
         .control-group select {
             width: 100%;
             padding: 1rem;
+            padding-right: 2.5rem;
             background: var(--card-bg);
             border: 1px solid var(--border);
             color: var(--text);
             font-size: 0.9rem;
             font-family: inherit;
-            transition: all 0.3s ease;
             cursor: pointer;
             border-radius: 8px;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%239ca3af' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
         }
 
         .control-group select:hover {
             border-color: var(--accent);
-            background: var(--card-bg);
         }
 
         .control-group input:focus,
         .control-group select:focus {
             outline: none;
             border-color: var(--accent);
+        }
+
+        .control-group select:focus {
             box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1);
+        }
+
+        .control-group select option {
+            background: var(--card-bg);
+            color: var(--text);
+            padding: 0.5rem;
+        }
+
+        /* Custom Dropdown */
+        .custom-select {
+            position: relative;
+            width: 100%;
+        }
+
+        .custom-select-trigger {
+            width: 100%;
+            padding: 1rem;
+            padding-right: 2.5rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            color: var(--text);
+            font-size: 0.9rem;
+            font-family: inherit;
+            cursor: pointer;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            user-select: none;
+            transition: border-color 0.2s ease;
+        }
+
+        .custom-select-trigger:hover {
+            border-color: var(--accent);
+        }
+
+        .custom-select-trigger::after {
+            content: '';
+            width: 10px;
+            height: 10px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%239ca3af' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: center;
+            transition: transform 0.2s ease;
+        }
+
+        .custom-select.open .custom-select-trigger::after {
+            transform: rotate(180deg);
+        }
+
+        .custom-select.open .custom-select-trigger {
+            border-color: var(--accent);
+            border-radius: 8px 8px 0 0;
+        }
+
+        .custom-select-options {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: var(--card-bg);
+            border: 1px solid var(--accent);
+            border-top: none;
+            border-radius: 0 0 8px 8px;
+            overflow: hidden;
+            z-index: 9999;
+            max-height: 0;
+            opacity: 0;
+            transition: max-height 0.3s ease, opacity 0.2s ease;
+            pointer-events: none;
+        }
+
+        .custom-select.open .custom-select-options {
+            max-height: 300px;
+            opacity: 1;
+            overflow-y: auto;
+            pointer-events: auto;
+        }
+
+        .custom-select-options::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .custom-select-options::-webkit-scrollbar-track {
+            background: var(--card-bg);
+        }
+
+        .custom-select-options::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 3px;
+        }
+
+        .custom-select-options::-webkit-scrollbar-thumb:hover {
+            background: var(--text-dim);
+        }
+
+        .custom-select-option {
+            padding: 0.8rem 1rem;
+            cursor: pointer;
+            transition: background 0.15s ease;
+            color: var(--text-dim);
+        }
+
+        .custom-select-option:hover {
+            background: rgba(0, 255, 136, 0.1);
+            color: var(--text);
+        }
+
+        .custom-select-option.selected {
+            color: var(--accent);
+            background: rgba(0, 255, 136, 0.15);
         }
 
         .control-group input::placeholder {
@@ -428,6 +511,7 @@
             position: relative;
             padding: 2rem 4rem 4rem;
             z-index: 1;
+            overflow: visible;
         }
 
         .section-title {
@@ -440,10 +524,11 @@
 
         .papers-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 2rem;
-            max-width: 1200px;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            max-width: 1600px;
             margin: 0 auto;
+            padding: 0 2rem;
         }
 
         .paper-card {
@@ -456,26 +541,24 @@
             display: flex;
             flex-direction: column;
             gap: 0;
-            height: 580px;
+            height: 480px;
             /* 固定卡片高度，确保所有卡片尺寸一致 */
             animation: fadeInUp 0.6s ease forwards;
             opacity: 0;
             transform: translateY(20px);
             width: 100%;
-            max-width: 400px;
-            justify-self: center;
             backdrop-filter: blur(10px);
         }
 
         /* 论文卡片上栏 - 固定高度区域 */
         .paper-upper {
-            padding: 1.5rem 1.5rem 1rem;
+            padding: 1rem 1rem 0.8rem;
             display: flex;
-            gap: 1.2rem;
+            gap: 1rem;
             align-items: flex-start;
             position: relative;
             z-index: 2;
-            height: 200px;
+            height: 160px;
             /* 固定上栏高度 */
             flex-shrink: 0;
             overflow: hidden;
@@ -483,28 +566,28 @@
 
         /* 论文卡片中栏 - 弹性内容区域 */
         .paper-middle {
-            padding: 0 1.5rem 1rem;
+            padding: 0 1rem 0.8rem;
             flex: 1;
             display: flex;
             flex-direction: column;
-            gap: 1rem;
+            gap: 0.5rem;
             position: relative;
             z-index: 2;
-            min-height: 200px;
+            min-height: 160px;
             /* 确保中栏有最小高度 */
             overflow: hidden;
         }
 
         /* 论文卡片下栏 - 固定底部区域 */
         .paper-lower {
-            padding: 1rem 1.5rem 1.5rem;
+            padding: 0.8rem 1rem 1rem;
             display: flex;
             flex-direction: column;
-            gap: 1rem;
+            gap: 0.5rem;
             position: relative;
             z-index: 2;
             border-top: 1px solid var(--border);
-            height: 120px;
+            height: 100px;
             /* 固定下栏高度 */
             flex-shrink: 0;
             overflow: hidden;
@@ -595,17 +678,17 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 0.5rem;
+            gap: 0.3rem;
             flex-shrink: 0;
-            width: 90px;
+            width: 75px;
             /* 固定宽度防止扩展 */
         }
 
         /* 论文封面 - 书籍样式 - 优化尺寸适应新布局 */
         .paper-cover {
             flex-shrink: 0;
-            width: 90px;
-            height: 126px;
+            width: 75px;
+            height: 105px;
             overflow: hidden;
             background: var(--card-bg);
             border: 1px solid var(--border);
@@ -640,16 +723,16 @@
 
         /* 封面下方期刊信息样式 */
         .cover-journal-info {
-            margin-top: 0.5rem;
-            padding: 0.4rem 0.6rem;
+            margin-top: 0.3rem;
+            padding: 0.3rem 0.4rem;
             background: var(--card-bg);
             border-radius: 4px;
             border: 1px solid var(--border);
             text-align: center;
             width: 100%;
             box-sizing: border-box;
-            min-height: 8rem;
-            /* 进一步增加高度，确保期刊名称完整显示 */
+            min-height: 2.5rem;
+            /* 适应4列布局的紧凑高度 */
         }
 
         .journal-name {
@@ -796,10 +879,6 @@
             }
         }
 
-        [data-theme="light"] .paper-cover {
-            box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.15);
-        }
-
         .paper-card:hover .paper-cover {
             transform: translateY(-3px);
             box-shadow: 3px 4px 12px rgba(0, 0, 0, 0.4);
@@ -850,14 +929,14 @@
         }
 
         .paper-title {
-            font-size: 1.05rem;
+            font-size: 0.95rem;
             font-weight: 600;
-            margin-bottom: 0.25rem;
+            margin-bottom: 0.2rem;
             letter-spacing: -0.01em;
-            line-height: 1.35;
+            line-height: 1.3;
             color: var(--text);
-            height: 4.05rem;
-            /* 3行高度：1.35 * 3 = 4.05rem */
+            height: 3.9rem;
+            /* 3行高度：1.3 * 3 = 3.9rem */
             display: -webkit-box;
             -webkit-line-clamp: 3;
             -webkit-box-orient: vertical;
@@ -1243,10 +1322,6 @@
             border-radius: 3px;
         }
 
-        [data-theme="light"] .modal-cover {
-            box-shadow: 4px 4px 16px rgba(0, 0, 0, 0.15);
-        }
-
         .modal-cover img {
             width: 100%;
             height: 100%;
@@ -1448,10 +1523,6 @@
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
 
-        [data-theme="light"] .paper-link:hover {
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-        }
-
         .paper-link:active {
             transform: translateY(0);
         }
@@ -1480,11 +1551,7 @@
             border-color: var(--border);
         }
 
-        [data-theme="light"] .title-option-modal:hover {
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-        }
-
-        .title-option-header {
+        .title-option-modal.suspense {
             display: flex;
             align-items: center;
             gap: 0.5rem;
@@ -1541,6 +1608,13 @@
         }
 
         /* 响应式设计 - 增强多设备适配 */
+        @media (max-width: 1400px) {
+            .papers-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 1.5rem;
+            }
+        }
+
         @media (max-width: 1200px) {
             .controls {
                 padding: 1.5rem 2rem;
@@ -1552,8 +1626,8 @@
             }
 
             .papers-grid {
-                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-                gap: 1.8rem;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1.5rem;
             }
         }
 
@@ -1679,10 +1753,6 @@
                 transform: translateY(0);
                 opacity: 1;
                 visibility: visible;
-            }
-
-            [data-theme="light"] .nav-links {
-                background: rgba(255, 255, 255, 0.95);
             }
 
             .hero {
@@ -2003,11 +2073,11 @@
 
     <!-- 主要内容容器 -->
     <div id="mainContent" class="main-content">
-        <canvas id="canvas"></canvas>
+        <canvas id="particle-canvas"></canvas>
 
         <!-- Navigation -->
         <nav id="nav">
-            <div class="logo" onclick="location.href='../index.html'">图灵的猫 X 智核学术</div>
+            <div class="logo" onclick="location.href='../index.html'"><span style="color:#fff">AICore</span><span style="color:#00FF88">Scholar</span></div>
             <div class="nav-right">
                 <button class="mobile-menu-btn" id="mobileMenuBtn">
                     <span></span>
@@ -2016,23 +2086,20 @@
                 </button>
                 <ul class="nav-links" id="navLinks">
                     <li><a href="../index.html">首页</a></li>
-                    <li><a href="../pages/about.html">关于我</a></li>
-                    <li><a href="../pages/blog.html">博客</a></li>
-                    <li><a href="../pages/projects.html">项目</a></li>
-                    <li><a href="../pages/publications.html">学术成果</a></li>
-                    <li><a href="../pages/tools.html" class="active">工具箱</a></li>
-                    <li><a href="../pages/contact.html">联系我</a></li>
+                    <li><a href="./pinns-research.html" class="active">AI4PDEs 论文</a></li>
+                    <li><a href="./prompt-generator.html">智核提示词</a></li>
+                    <li><a href="./journal_html_page.html">期刊指南</a></li>
+                    <li><a href="./color-picker.html">封面故事</a></li>
+                    <li><a href="../pages/tools.html">更多工具</a></li>
+                    <li><a href="../pages/contact.html">联系我们</a></li>
                 </ul>
-                <button class="theme-btn" id="themeBtn">
-                    <span id="themeIcon">◐</span>
-                </button>
             </div>
         </nav>
 
         <!-- Hero Section -->
         <section class="hero">
-            <h1>智能科学计算·<strong>PINNs</strong></h1>
-            <p class="hero-subtitle">物理信息神经网络最新研究进展 - 探索AI与科学计算的完美融合</p>
+            <h1>智能科学计算·<strong style="color: var(--accent);">PINNs</strong></h1>
+            <p class="hero-subtitle">物理信息神经网络最新研究进展 - 探索AI与<span style="color: var(--accent);">科学计算</span>的完美融合</p>
             <div class="stats">
                 <div class="stat-item">
                     <div class="stat-number" id="paperCount">0</div>
@@ -2052,17 +2119,22 @@
         <!-- Controls -->
         <section class="controls">
             <div class="control-group">
-                <select id="paperTypeFilter">
-                    <option value="">所有论文类型</option>
-                    <option value="general">一般研究</option>
-                    <option value="review">综述论文</option>
-                </select>
+                <div class="custom-select" id="paperTypeSelect">
+                    <div class="custom-select-trigger">所有论文类型</div>
+                    <div class="custom-select-options">
+                        <div class="custom-select-option" data-value="">所有论文类型</div>
+                        <div class="custom-select-option" data-value="general">一般研究</div>
+                        <div class="custom-select-option" data-value="review">综述论文</div>
+                    </div>
+                </div>
             </div>
             <div class="control-group">
-                <select id="yearFilter">
-                    <option value="">所有年份</option>
-                    <!-- 年份选项将通过JavaScript动态生成 -->
-                </select>
+                <div class="custom-select" id="yearSelect">
+                    <div class="custom-select-trigger">所有年份</div>
+                    <div class="custom-select-options">
+                        <div class="custom-select-option" data-value="">所有年份</div>
+                    </div>
+                </div>
             </div>
             <div class="control-group">
                 <input type="text" id="searchInput" placeholder="搜索论文标题、作者或关键词...">
@@ -2101,104 +2173,229 @@
         </div>
 
         <script>
-            // Theme toggle
-            const themeBtn = document.getElementById('themeBtn');
-            const themeIcon = document.getElementById('themeIcon');
-            const currentTheme = localStorage.getItem('theme') || 'light';
+            // ==========================================
+            // Particle System (Three.js) - Updated
+            // ==========================================
+            const initParticles = () => {
+                const container = document.getElementById('particle-canvas');
+                const scene = new THREE.Scene();
+                
+                const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 300);
+                camera.position.z = 45; 
+                
+                const renderer = new THREE.WebGLRenderer({ canvas: container, alpha: true, antialias: false });
+                renderer.setSize(window.innerWidth, window.innerHeight);
+                const pixelRatio = Math.min(window.devicePixelRatio, 2);
+                renderer.setPixelRatio(pixelRatio);
 
-            document.documentElement.setAttribute('data-theme', currentTheme);
-            themeIcon.textContent = currentTheme === 'dark' ? '◐' : '◑';
+                const spacing = 0.45; 
+                const width = 280;  
+                const height = 140;  
+                const cols = Math.floor(width / spacing);
+                const rows = Math.floor(height / spacing);
+                const particleCount = cols * rows;
 
-            // 添加图标颜色样式，确保在不同主题下都清晰可见
-            themeIcon.style.color = currentTheme === 'dark' ? '#ffffff' : '#000000';
+                const geometry = new THREE.BufferGeometry();
+                const positions = new Float32Array(particleCount * 3);
+                const randoms = new Float32Array(particleCount);
 
-            themeBtn.addEventListener('click', () => {
-                const theme = document.documentElement.getAttribute('data-theme');
-                const newTheme = theme === 'dark' ? 'light' : 'dark';
-
-                document.documentElement.setAttribute('data-theme', newTheme);
-                localStorage.setItem('theme', newTheme);
-                themeIcon.textContent = newTheme === 'dark' ? '◐' : '◑';
-                themeIcon.style.color = newTheme === 'dark' ? '#ffffff' : '#000000';
-            });
-
-            // 简化的粒子动画背景
-            const canvas = document.getElementById('canvas');
-            const ctx = canvas.getContext('2d');
-
-            function resizeCanvas() {
-                canvas.width = window.innerWidth;
-                canvas.height = window.innerHeight;
-            }
-
-            resizeCanvas();
-            window.addEventListener('resize', resizeCanvas);
-
-            // 粒子系统
-            const particles = [];
-            const particleCount = 50;
-
-            class Particle {
-                constructor() {
-                    this.x = Math.random() * canvas.width;
-                    this.y = Math.random() * canvas.height;
-                    this.vx = (Math.random() - 0.5) * 0.5;
-                    this.vy = (Math.random() - 0.5) * 0.5;
-                    this.radius = Math.random() * 2 + 1;
-                    this.opacity = Math.random() * 0.5 + 0.1;
+                for (let i = 0; i < cols; i++) {
+                    for (let j = 0; j < rows; j++) {
+                        const idx = (i * rows + j);
+                        positions[idx * 3] = (i - cols / 2) * spacing;
+                        positions[idx * 3 + 1] = (j - rows / 2) * spacing;
+                        positions[idx * 3 + 2] = 0.0;
+                        randoms[idx] = Math.random(); 
+                    }
                 }
 
-                update() {
-                    this.x += this.vx;
-                    this.y += this.vy;
+                geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+                geometry.setAttribute('aRandom', new THREE.BufferAttribute(randoms, 1));
 
-                    if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
-                    if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
-                }
+                const material = new THREE.ShaderMaterial({
+                    uniforms: {
+                        uTime: { value: 0.0 },
+                        uMousePos: { value: new THREE.Vector2(-999, -999) },
+                        uMouseForce: { value: 0.0 },
+                        uPixelRatio: { value: pixelRatio }
+                    },
+                    vertexShader: `
+                        uniform float uTime;
+                        uniform vec2 uMousePos;
+                        uniform float uMouseForce;
+                        uniform float uPixelRatio;
+                        
+                        attribute float aRandom;
+                        
+                        varying vec3 vColor;
+                        varying float vAlpha;
 
-                draw() {
-                    ctx.beginPath();
-                    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-                    ctx.fillStyle = `rgba(0, 212, 255, ${this.opacity})`;
-                    ctx.fill();
-                }
-            }
+                        vec3 mod289(vec3 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
+                        vec4 mod289(vec4 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
+                        vec4 permute(vec4 x) { return mod289(((x*34.0)+1.0)*x); }
+                        vec4 taylorInvSqrt(vec4 r) { return 1.79284291400159 - 0.85373472095314 * r; }
 
-            // 初始化粒子
-            for (let i = 0; i < particleCount; i++) {
-                particles.push(new Particle());
-            }
-
-            function animate() {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-                particles.forEach(particle => {
-                    particle.update();
-                    particle.draw();
-                });
-
-                // 绘制连线
-                particles.forEach((particle, i) => {
-                    particles.slice(i + 1).forEach(otherParticle => {
-                        const dx = particle.x - otherParticle.x;
-                        const dy = particle.y - otherParticle.y;
-                        const distance = Math.sqrt(dx * dx + dy * dy);
-
-                        if (distance < 100) {
-                            ctx.beginPath();
-                            ctx.moveTo(particle.x, particle.y);
-                            ctx.lineTo(otherParticle.x, otherParticle.y);
-                            ctx.strokeStyle = `rgba(0, 212, 255, ${0.1 * (1 - distance / 100)})`;
-                            ctx.lineWidth = 1;
-                            ctx.stroke();
+                        float snoise(vec3 v) {
+                            const vec2 C = vec2(1.0/6.0, 1.0/3.0);
+                            const vec4 D = vec4(0.0, 0.5, 1.0, 2.0);
+                            vec3 i  = floor(v + dot(v, C.yyy));
+                            vec3 x0 = v - i + dot(i, C.xxx);
+                            vec3 g = step(x0.yzx, x0.xyz);
+                            vec3 l = 1.0 - g;
+                            vec3 i1 = min(g.xyz, l.zxy);
+                            vec3 i2 = max(g.xyz, l.zxy);
+                            vec3 x1 = x0 - i1 + C.xxx;
+                            vec3 x2 = x0 - i2 + C.yyy;
+                            vec3 x3 = x0 - D.yyy;
+                            i = mod289(i);
+                            vec4 p = permute(permute(permute(i.z + vec4(0.0, i1.z, i2.z, 1.0)) + i.y + vec4(0.0, i1.y, i2.y, 1.0)) + i.x + vec4(0.0, i1.x, i2.x, 1.0));
+                            float n_ = 0.142857142857;
+                            vec3 ns = n_ * D.wyz - D.xzx;
+                            vec4 j = p - 49.0 * floor(p * ns.z * ns.z);
+                            vec4 x_ = floor(j * ns.z);
+                            vec4 y_ = floor(j - 7.0 * x_);
+                            vec4 x = x_ *ns.x + ns.yyyy;
+                            vec4 y = y_ *ns.x + ns.yyyy;
+                            vec4 h = 1.0 - abs(x) - abs(y);
+                            vec4 b0 = vec4(x.xy, y.xy);
+                            vec4 b1 = vec4(x.zw, y.zw);
+                            vec4 s0 = floor(b0)*2.0 + 1.0;
+                            vec4 s1 = floor(b1)*2.0 + 1.0;
+                            vec4 sh = -step(h, vec4(0.0));
+                            vec4 a0 = b0.xzyw + s0.xzyw*sh.xxyy;
+                            vec4 a1 = b1.xzyw + s1.xzyw*sh.zzww;
+                            vec3 p0 = vec3(a0.xy,h.x);
+                            vec3 p1 = vec3(a0.zw,h.y);
+                            vec3 p2 = vec3(a1.xy,h.z);
+                            vec3 p3 = vec3(a1.zw,h.w);
+                            vec4 norm = taylorInvSqrt(vec4(dot(p0,p0), dot(p1,p1), dot(p2, p2), dot(p3,p3)));
+                            p0 *= norm.x; p1 *= norm.y; p2 *= norm.z; p3 *= norm.w;
+                            vec4 m = max(0.5 - vec4(dot(x0,x0), dot(x1,x1), dot(x2,x2), dot(x3,x3)), 0.0);
+                            m = m * m;
+                            return 42.0 * dot(m*m, vec4(dot(p0,x0), dot(p1,x1), dot(p2,x2), dot(p3,x3)));
                         }
-                    });
+
+                        void main() {
+                            vec3 pos = position;
+                            float waveSpeed = 0.15;
+                            float waveFreq = 0.008;
+                            float waveX = pos.x * waveFreq - uTime * waveSpeed;
+                            float waveY = pos.y * waveFreq * 0.5;
+
+                            float mainWave = sin(waveX + snoise(vec3(waveY, 0.0, uTime * 0.02)) * 2.0);
+                            float subWave = sin(waveX * 2.5 + uTime * 0.3) * 0.5 + 0.5;
+                            float verticalWave = sin(pos.y * 0.01 + uTime * 0.2) * 0.3;
+                            float combinedWave = mainWave * 0.6 + subWave * 0.3 + verticalWave * 0.1;
+
+                            float noise = snoise(vec3(pos.x * 0.005, pos.y * 0.005, uTime * 0.03));
+                            combinedWave += noise * 0.2;
+
+                            float travelWave = sin(waveX * 3.0 + noise * 2.0);
+                            float visibilityThreshold = 0.2 + travelWave * 0.3;
+                            float particlePhase = sin(waveX * 5.0 + pos.y * 0.01 + uTime * 0.5 + aRandom * 3.14);
+                            float isVisible = step(visibilityThreshold, particlePhase);
+
+                            float dist = distance(pos.xy, uMousePos);
+                            float glowForce = exp(-(dist * dist) / 80.0) * uMouseForce;
+                            glowForce *= 0.8 + 0.2 * sin(uTime * 4.0 - dist * 0.1);
+
+                            float colorPhase = sin(waveX + uTime * 0.1);
+                            float isGreen = step(0.0, colorPhase + (aRandom - 0.5) * 0.6);
+
+                            vec3 cGray = vec3(0.2, 0.2, 0.22);
+                            vec3 cDarkGreen = vec3(0.0, 0.5, 0.28);
+                            vec3 cBrightGreen = vec3(0.0, 0.75, 0.42);
+
+                            vec3 baseColor = mix(cGray, cDarkGreen, isGreen);
+                            float waveFront = smoothstep(0.3, 0.7, particlePhase - visibilityThreshold);
+                            baseColor = mix(baseColor, cBrightGreen, waveFront * 0.4);
+
+                            vec3 cHighlight = vec3(0.0, 0.9, 0.5);
+                            vColor = mix(baseColor, cHighlight, glowForce * 0.6);
+
+                            float fadeInOut = sin(waveX * 2.0 + uTime * 0.3) * 0.5 + 0.5;
+                            float baseAlpha = 0.4 + fadeInOut * 0.4;
+                            float breathe = 0.7 + 0.3 * sin(uTime * 3.0 + aRandom * 6.28);
+
+                            vAlpha = isVisible * baseAlpha * breathe;
+
+                            vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
+                            gl_PointSize = uPixelRatio * 4.0 * (45.0 / -mvPosition.z);
+                            gl_Position = projectionMatrix * mvPosition;
+                        }
+                    `,
+                    fragmentShader: `
+                        varying vec3 vColor;
+                        varying float vAlpha;
+                        
+                        void main() {
+                            if (vAlpha < 0.05) discard;
+                            gl_FragColor = vec4(vColor, vAlpha);
+                        }
+                    `,
+                    transparent: true,
+                    depthWrite: false,
+                    depthTest: false
                 });
 
-                requestAnimationFrame(animate);
-            }
+                const points = new THREE.Points(geometry, material);
+                scene.add(points);
 
-            animate();
+                const mouse = new THREE.Vector2();
+                const raycaster = new THREE.Raycaster();
+                const targetPlane = new THREE.Plane(new THREE.Vector3(0, 0, 1), 0);
+
+                const targetWorldMouse = new THREE.Vector3(0, 0, 0);
+                const currentWorldMouse = new THREE.Vector3(0, 0, 0);
+
+                let targetForce = 0.0;
+                let currentForce = 0.0;
+                let interactionTimeout;
+                let isFirstMove = true;
+
+                window.addEventListener('mousemove', (event) => {
+                    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+                    mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+                    raycaster.setFromCamera(mouse, camera);
+                    raycaster.ray.intersectPlane(targetPlane, targetWorldMouse);
+
+                    if (isFirstMove) {
+                        currentWorldMouse.copy(targetWorldMouse);
+                        isFirstMove = false;
+                    }
+                    targetForce = 1.0;
+                    clearTimeout(interactionTimeout);
+                    interactionTimeout = setTimeout(() => {
+                        targetForce = 0.0;
+                    }, 500);
+                });
+
+                window.addEventListener('mouseout', () => {
+                    targetForce = 0.0;
+                });
+
+                const clock = new THREE.Clock();
+
+                function animate() {
+                    requestAnimationFrame(animate);
+                    currentWorldMouse.lerp(targetWorldMouse, 0.15);
+                    currentForce += (targetForce - currentForce) * 0.05;
+                    material.uniforms.uTime.value = clock.getElapsedTime();
+                    material.uniforms.uMousePos.value.set(currentWorldMouse.x, currentWorldMouse.y);
+                    material.uniforms.uMouseForce.value = currentForce;
+                    renderer.render(scene, camera);
+                }
+
+                animate();
+
+                window.addEventListener('resize', () => {
+                    camera.aspect = window.innerWidth / window.innerHeight;
+                    camera.updateProjectionMatrix();
+                    renderer.setSize(window.innerWidth, window.innerHeight);
+                });
+            };
+
+            initParticles();
 
             // 论文数据加载和渲染功能将在pinns-papers.js中实现
             console.log('PINNs Research Page Loaded');

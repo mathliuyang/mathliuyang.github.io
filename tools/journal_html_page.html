@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>AI for Science 期刊导航 | 深度学习求解PDE期刊推荐</title>
     <script src="journals.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -16,20 +17,13 @@
         :root {
             --bg: #000000;
             --text: #ffffff;
-            --text-dim: #666666;
-            --accent: #ffffff;
-            --border: rgba(255, 255, 255, 0.08);
-            --card-bg: rgba(255, 255, 255, 0.02);
+            --text-dim: #9ca3af;
+            --accent: #00FF88;
+            --border: #1A1A1A;
+            --card-bg: #0A0A0A;
         }
 
-        [data-theme="light"] {
-            --bg: #ffffff;
-            --text: #000000;
-            --text-dim: #999999;
-            --accent: #000000;
-            --border: rgba(0, 0, 0, 0.08);
-            --card-bg: rgba(0, 0, 0, 0.02);
-        }
+
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
@@ -41,13 +35,14 @@
             letter-spacing: -0.02em;
         }
 
-        #canvas {
+        #particle-canvas {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             z-index: 0;
+            pointer-events: none;
         }
 
         /* 密码验证模态框样式 */
@@ -146,6 +141,8 @@
         /* 主要内容初始隐藏 */
         .main-content {
             display: none;
+            position: relative;
+            z-index: 10;
         }
 
         .main-content.authenticated {
@@ -168,9 +165,7 @@
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        [data-theme="light"] nav {
-            background: rgba(255, 255, 255, 0.8);
-        }
+
 
         .logo {
             font-size: 1rem;
@@ -189,6 +184,30 @@
             display: flex;
             gap: 2.5rem;
             list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .nav-links li {
+            list-style: none;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .mobile-menu-btn span {
+            display: block;
+            width: 24px;
+            height: 2px;
+            background: var(--text);
+            transition: all 0.3s ease;
         }
 
         .nav-links a {
@@ -200,36 +219,16 @@
             transition: color 0.3s ease;
         }
 
-        .nav-links a:hover,
-        .nav-links a.active {
+        .nav-links a:hover {
             color: var(--text);
         }
 
-        .theme-btn {
-            width: 36px;
-            height: 36px;
-            border: 1px solid var(--border);
-            background: transparent;
-            border-radius: 50%;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-        }
-
-        .theme-btn:hover {
-            border-color: var(--text);
-            transform: scale(1.1);
+        .nav-links a.active {
+            color: var(--accent) !important;
         }
 
         /* 移动端触摸优化 */
         @media (hover: none) and (pointer: coarse) {
-            .theme-btn:active {
-                border-color: var(--text);
-                transform: scale(1.05);
-            }
-
             .nav-links a:active {
                 color: var(--text);
             }
@@ -290,8 +289,9 @@
 
         .stat-number {
             font-size: 2.5rem;
-            font-weight: 300;
+            font-weight: 600;
             letter-spacing: -0.03em;
+            color: var(--accent);
         }
 
         .stat-label {
@@ -305,35 +305,163 @@
         .controls {
             position: relative;
             padding: 2rem 4rem;
-            z-index: 1;
+            z-index: 100;
             display: flex;
             gap: 1rem;
             flex-wrap: wrap;
+            overflow: visible;
         }
 
         .control-group {
             flex: 1;
             min-width: 200px;
             position: relative;
+            z-index: 101;
         }
 
         .control-group input,
         .control-group select {
             width: 100%;
             padding: 1rem;
+            padding-right: 2.5rem;
             background: var(--card-bg);
             border: 1px solid var(--border);
             color: var(--text);
             font-size: 0.9rem;
             font-family: inherit;
-            transition: all 0.3s ease;
             cursor: pointer;
             border-radius: 8px;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%239ca3af' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
         }
 
         .control-group select:hover {
             border-color: var(--accent);
-            background: var(--surface-hover);
+        }
+
+        .control-group input:focus,
+        .control-group select:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        .control-group select:focus {
+            box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1);
+        }
+
+        .control-group select option {
+            background: var(--card-bg);
+            color: var(--text);
+            padding: 0.5rem;
+        }
+
+        /* Custom Dropdown */
+        .custom-select {
+            position: relative;
+            width: 100%;
+        }
+
+        .custom-select-trigger {
+            width: 100%;
+            padding: 1rem;
+            padding-right: 2.5rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            color: var(--text);
+            font-size: 0.9rem;
+            font-family: inherit;
+            cursor: pointer;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            user-select: none;
+            transition: border-color 0.2s ease;
+        }
+
+        .custom-select-trigger:hover {
+            border-color: var(--accent);
+        }
+
+        .custom-select-trigger::after {
+            content: '';
+            width: 10px;
+            height: 10px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%239ca3af' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: center;
+            transition: transform 0.2s ease;
+        }
+
+        .custom-select.open .custom-select-trigger::after {
+            transform: rotate(180deg);
+        }
+
+        .custom-select.open .custom-select-trigger {
+            border-color: var(--accent);
+            border-radius: 8px 8px 0 0;
+        }
+
+        .custom-select-options {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: var(--card-bg);
+            border: 1px solid var(--accent);
+            border-top: none;
+            border-radius: 0 0 8px 8px;
+            overflow: hidden;
+            z-index: 9999;
+            max-height: 0;
+            opacity: 0;
+            transition: max-height 0.3s ease, opacity 0.2s ease;
+            pointer-events: none;
+        }
+
+        .custom-select.open .custom-select-options {
+            max-height: 300px;
+            opacity: 1;
+            overflow-y: auto;
+            pointer-events: auto;
+        }
+
+        .custom-select-options::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .custom-select-options::-webkit-scrollbar-track {
+            background: var(--card-bg);
+        }
+
+        .custom-select-options::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 3px;
+        }
+
+        .custom-select-options::-webkit-scrollbar-thumb:hover {
+            background: var(--text-dim);
+        }
+
+        .custom-select-option {
+            padding: 0.8rem 1rem;
+            cursor: pointer;
+            transition: background 0.15s ease;
+            color: var(--text-dim);
+        }
+
+        .custom-select-option:hover {
+            background: rgba(0, 255, 136, 0.1);
+            color: var(--text);
+        }
+
+        .custom-select-option.selected {
+            color: var(--accent);
+            background: rgba(0, 255, 136, 0.15);
         }
 
         /* 响应式布局 */
@@ -377,6 +505,7 @@
             position: relative;
             padding: 2rem 4rem 4rem;
             z-index: 1;
+            overflow: visible;
         }
 
         .journals-grid {
@@ -444,10 +573,6 @@
             border-color: rgba(255, 255, 255, 0.2);
         }
 
-        [data-theme="light"] .journal-card:hover .journal-link {
-            border-color: rgba(0, 0, 0, 0.2);
-        }
-
         /* 期刊封面 - 书籍样式 */
         .journal-cover {
             flex-shrink: 0;
@@ -485,17 +610,9 @@
             align-items: flex-end;
         }
 
-        [data-theme="light"] .journal-cover {
-            box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.15);
-        }
-
         .journal-card:hover .journal-cover {
             transform: translateY(-3px);
             box-shadow: 3px 4px 12px rgba(0, 0, 0, 0.4);
-        }
-
-        [data-theme="light"] .journal-card:hover .journal-cover {
-            box-shadow: 3px 4px 12px rgba(0, 0, 0, 0.2);
         }
 
         .journal-cover img {
@@ -517,7 +634,7 @@
             text-align: center;
             padding: 0.5rem;
             line-height: 1.4;
-            background: rgba(255, 255, 255, 0.05);
+            background: var(--card-bg);
             border-radius: 2px;
         }
 
@@ -632,7 +749,8 @@
 
         .zone-metric-value {
             font-size: 0.85rem;
-            font-weight: 400;
+            font-weight: 600;
+            color: var(--accent);
         }
 
         .zone-metric-label {
@@ -652,7 +770,8 @@
 
         .metric-value {
             font-size: 0.85rem;
-            font-weight: 400;
+            font-weight: 600;
+            color: var(--accent);
         }
 
         .metric-label {
@@ -711,7 +830,7 @@
             align-items: center;
             justify-content: center;
             gap: 0.4rem;
-            background: rgba(255, 255, 255, 0.02);
+            background: var(--card-bg);
             position: relative;
             overflow: hidden;
             border-radius: 6px;
@@ -739,10 +858,6 @@
             border-color: var(--accent);
             transform: translateY(-1px);
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-        }
-
-        [data-theme="light"] .journal-link:hover {
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
 
         .journal-link:hover::before {
@@ -829,10 +944,6 @@
             display: flex;
             align-items: center;
             justify-content: center;
-        }
-
-        [data-theme="light"] .modal-cover {
-            box-shadow: 4px 4px 16px rgba(0, 0, 0, 0.15);
         }
 
         .modal-cover img {
@@ -1200,6 +1311,10 @@
                 align-items: center;
             }
 
+            .mobile-menu-btn {
+                display: flex;
+            }
+
             .nav-links {
                 gap: 1.5rem;
                 flex-wrap: wrap;
@@ -1208,12 +1323,6 @@
 
             .nav-links a {
                 font-size: 0.8rem;
-            }
-
-            .theme-btn {
-                width: 32px;
-                height: 32px;
-                font-size: 0.9rem;
             }
 
             .hero {
@@ -1431,33 +1540,35 @@
 
     <!-- 主要内容容器 -->
     <div id="mainContent" class="main-content">
-        <canvas id="canvas"></canvas>
+        <canvas id="particle-canvas"></canvas>
 
         <!-- Navigation -->
-        <nav>
-            <div class="logo" onclick="location.href='../index.html'">图灵的猫 X 智核学术</div>
+        <nav id="nav">
+            <div class="logo" onclick="location.href='../index.html'"><span style="color:#fff">AICore</span><span style="color:#00FF88">Scholar</span></div>
             <div class="nav-right">
-                <ul class="nav-links">
-                    <li><a href="../index.html">首页</a></li>
-                    <li><a href="../pages/about.html">关于我</a></li>
-                    <li><a href="../pages/blog.html">博客</a></li>
-                    <li><a href="../pages/projects.html">项目</a></li>
-                    <li><a href="../pages/publications.html">学术成果</a></li>
-                    <li><a href="../pages/tools.html" class="active">工具箱</a></li>
-                    <li><a href="../pages/contact.html">联系我</a></li>
-                </ul>
-                <button class="theme-btn" id="themeBtn">
-                    <span id="themeIcon">◐</span>
+                <button class="mobile-menu-btn" id="mobileMenuBtn">
+                    <span></span>
+                    <span></span>
+                    <span></span>
                 </button>
+                <ul class="nav-links" id="navLinks">
+                    <li><a href="../index.html">首页</a></li>
+                    <li><a href="./pinns-research.html">AI4PDEs 论文</a></li>
+                    <li><a href="./prompt-generator.html">智核提示词</a></li>
+                    <li><a href="./journal_html_page.html" class="active">期刊指南</a></li>
+                    <li><a href="./color-picker.html">封面故事</a></li>
+                    <li><a href="../pages/tools.html">更多工具</a></li>
+                    <li><a href="../pages/contact.html">联系我们</a></li>
+                </ul>
             </div>
         </nav>
 
         <!-- Hero Section -->
         <section class="hero">
-            <h1>AI for Science 期刊导航</h1>
+            <h1>AI for Science <span style="color: var(--accent);">期刊导航</span></h1>
             <p class="hero-subtitle">
                 深度学习求解偏微分方程 (PDE) 与科学计算领域顶级期刊精选数据库<br>
-                专为AI4Science研究者打造的专业投稿指南
+                专为<span style="color: var(--accent);">AI4Science</span>研究者打造的专业投稿指南
             </p>
             <div class="stats" id="statsContainer">
                 <div class="stat-item">
@@ -1481,28 +1592,44 @@
                 <input type="text" id="searchInput" placeholder="搜索期刊名称、缩写或AI4Science关键词（如PINN、深度学习、物理信息神经网络）...">
             </div>
             <div class="control-group">
-                <select id="filterZone">
-                    <option value="all">所有分区</option>
-                </select>
+                <div class="custom-select" id="filterZoneSelect">
+                    <div class="custom-select-trigger">所有分区</div>
+                    <div class="custom-select-options">
+                        <div class="custom-select-option selected" data-value="all">所有分区</div>
+                    </div>
+                </div>
             </div>
             <div class="control-group">
-                <select id="filterRegion">
-                    <option value="all">所有地区</option>
-                </select>
+                <div class="custom-select" id="filterRegionSelect">
+                    <div class="custom-select-trigger">所有地区</div>
+                    <div class="custom-select-options">
+                        <div class="custom-select-option selected" data-value="all">所有地区</div>
+                    </div>
+                </div>
             </div>
             <div class="control-group">
-                <select id="filterPublisher">
-                    <option value="all">所有出版社</option>
-                </select>
+                <div class="custom-select" id="filterPublisherSelect">
+                    <div class="custom-select-trigger">所有出版社</div>
+                    <div class="custom-select-options">
+                        <div class="custom-select-option selected" data-value="all">所有出版社</div>
+                    </div>
+                </div>
             </div>
 
             <div class="control-group">
-                <select id="sortBy">
-                    <option value="impact" selected>按影响因子排序</option>
-                    <option value="zone">按分区排序</option>
-                    <option value="name">按名称排序</option>
-                </select>
+                <div class="custom-select" id="sortBySelect">
+                    <div class="custom-select-trigger">按影响因子排序</div>
+                    <div class="custom-select-options">
+                        <div class="custom-select-option selected" data-value="impact">按影响因子排序</div>
+                        <div class="custom-select-option" data-value="zone">按分区排序</div>
+                        <div class="custom-select-option" data-value="name">按名称排序</div>
+                    </div>
+                </div>
             </div>
+            <input type="hidden" id="filterZone" value="all">
+            <input type="hidden" id="filterRegion" value="all">
+            <input type="hidden" id="filterPublisher" value="all">
+            <input type="hidden" id="sortBy" value="impact">
         </section>
 
         <!-- Journals Section -->
@@ -1521,7 +1648,7 @@
                     <div class="modal-cover" id="modalCover"></div>
                     <div class="modal-header-text">
                         <h2 id="modalTitle"
-                            style="font-size: 1.8rem; font-weight: 500; margin-bottom: 0.5rem; line-height: 1.3; word-wrap: break-word;">
+                            style="font-size: 1.8rem; font-weight: 600; margin-bottom: 0.5rem; line-height: 1.3; word-wrap: break-word; color: var(--accent);">
                         </h2>
                         <p id="modalAbbr" style="color: var(--text-dim); font-size: 0.95rem;"></p>
                     </div>
@@ -1532,137 +1659,233 @@
 
         <!-- Footer -->
         <footer>
-            <div class="footer-text">© 2025 学术期刊数据库 | 数据更新时间: 2025 年 10 月 | 投稿前请核实最新信息</div>
+            <div class="footer-text">© 2025 学术期刊数据库 | 数据更新时间: 2025 年 10 月 | <span style="color: var(--accent);"></span>投稿前请核实最新信息</span></div>
         </footer>
 
         <script>
-            // Canvas Setup (same as original)
-            const canvas = document.getElementById('canvas');
-            const ctx = canvas.getContext('2d');
-            let particles = [];
-            let mouse = { x: null, y: null, radius: 150 };
+            // ==========================================
+            // Particle System (Three.js) - Updated
+            // ==========================================
+            const initParticles = () => {
+                const container = document.getElementById('particle-canvas');
+                const scene = new THREE.Scene();
+                
+                const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 300);
+                camera.position.z = 45; 
+                
+                const renderer = new THREE.WebGLRenderer({ canvas: container, alpha: true, antialias: false });
+                renderer.setSize(window.innerWidth, window.innerHeight);
+                const pixelRatio = Math.min(window.devicePixelRatio, 2);
+                renderer.setPixelRatio(pixelRatio);
 
-            function resizeCanvas() {
-                canvas.width = window.innerWidth;
-                canvas.height = window.innerHeight;
-            }
-            resizeCanvas();
-            window.addEventListener('resize', resizeCanvas);
+                const spacing = 0.45; 
+                const width = 280;  
+                const height = 140;  
+                const cols = Math.floor(width / spacing);
+                const rows = Math.floor(height / spacing);
+                const particleCount = cols * rows;
 
-            window.addEventListener('mousemove', (e) => {
-                mouse.x = e.x;
-                mouse.y = e.y;
-            });
+                const geometry = new THREE.BufferGeometry();
+                const positions = new Float32Array(particleCount * 3);
+                const randoms = new Float32Array(particleCount);
 
-            window.addEventListener('mouseout', () => {
-                mouse.x = null;
-                mouse.y = null;
-            });
-
-            class Particle {
-                constructor() {
-                    this.x = Math.random() * canvas.width;
-                    this.y = Math.random() * canvas.height;
-                    this.size = Math.random() * 2 + 0.5;
-                    this.baseX = this.x;
-                    this.baseY = this.y;
-                    this.density = Math.random() * 30 + 1;
-                    this.vx = (Math.random() - 0.5) * 0.3;
-                    this.vy = (Math.random() - 0.5) * 0.3;
-                }
-
-                draw() {
-                    const theme = document.documentElement.getAttribute('data-theme');
-                    ctx.fillStyle = theme === 'light' ? 'rgba(0, 0, 0, 0.3)' : 'rgba(255, 255, 255, 0.3)';
-                    ctx.beginPath();
-                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                    ctx.fill();
-                }
-
-                update() {
-                    if (mouse.x != null && mouse.y != null) {
-                        let dx = mouse.x - this.x;
-                        let dy = mouse.y - this.y;
-                        let distance = Math.sqrt(dx * dx + dy * dy);
-                        let forceDirectionX = dx / distance;
-                        let forceDirectionY = dy / distance;
-                        let maxDistance = mouse.radius;
-                        let force = (maxDistance - distance) / maxDistance;
-                        let directionX = forceDirectionX * force * this.density * 0.6;
-                        let directionY = forceDirectionY * force * this.density * 0.6;
-
-                        if (distance < mouse.radius) {
-                            this.x -= directionX;
-                            this.y -= directionY;
-                        } else {
-                            if (this.x !== this.baseX) {
-                                let dx = this.x - this.baseX;
-                                this.x -= dx / 10;
-                            }
-                            if (this.y !== this.baseY) {
-                                let dy = this.y - this.baseY;
-                                this.y -= dy / 10;
-                            }
-                        }
-                    } else {
-                        this.x += this.vx;
-                        this.y += this.vy;
-
-                        if (Math.abs(this.x - this.baseX) > 50) {
-                            this.vx *= -1;
-                        }
-                        if (Math.abs(this.y - this.baseY) > 50) {
-                            this.vy *= -1;
-                        }
-                    }
-
-                    this.draw();
-                }
-            }
-
-            function init() {
-                particles = [];
-                const numberOfParticles = Math.floor((canvas.width * canvas.height) / 9000);
-                for (let i = 0; i < numberOfParticles; i++) {
-                    particles.push(new Particle());
-                }
-            }
-
-            function animate() {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                particles.forEach(particle => particle.update());
-                connectParticles();
-                requestAnimationFrame(animate);
-            }
-
-            function connectParticles() {
-                const theme = document.documentElement.getAttribute('data-theme');
-                for (let i = 0; i < particles.length; i++) {
-                    for (let j = i + 1; j < particles.length; j++) {
-                        let dx = particles[i].x - particles[j].x;
-                        let dy = particles[i].y - particles[j].y;
-                        let distance = Math.sqrt(dx * dx + dy * dy);
-
-                        if (distance < 100) {
-                            ctx.strokeStyle = theme === 'light'
-                                ? `rgba(0, 0, 0, ${0.2 - distance / 500})`
-                                : `rgba(255, 255, 255, ${0.2 - distance / 500})`;
-                            ctx.lineWidth = 0.5;
-                            ctx.beginPath();
-                            ctx.moveTo(particles[i].x, particles[i].y);
-                            ctx.lineTo(particles[j].x, particles[j].y);
-                            ctx.stroke();
-                        }
+                for (let i = 0; i < cols; i++) {
+                    for (let j = 0; j < rows; j++) {
+                        const idx = (i * rows + j);
+                        positions[idx * 3] = (i - cols / 2) * spacing;
+                        positions[idx * 3 + 1] = (j - rows / 2) * spacing;
+                        positions[idx * 3 + 2] = 0.0;
+                        randoms[idx] = Math.random(); 
                     }
                 }
-            }
 
-            init();
-            animate();
+                geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+                geometry.setAttribute('aRandom', new THREE.BufferAttribute(randoms, 1));
 
-            window.addEventListener('resize', () => {
-                init();
-            });
+                const material = new THREE.ShaderMaterial({
+                    uniforms: {
+                        uTime: { value: 0.0 },
+                        uMousePos: { value: new THREE.Vector2(-999, -999) },
+                        uMouseForce: { value: 0.0 },
+                        uPixelRatio: { value: pixelRatio }
+                    },
+                    vertexShader: `
+                        uniform float uTime;
+                        uniform vec2 uMousePos;
+                        uniform float uMouseForce;
+                        uniform float uPixelRatio;
+                        
+                        attribute float aRandom;
+                        
+                        varying vec3 vColor;
+                        varying float vAlpha;
+
+                        vec3 mod289(vec3 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
+                        vec4 mod289(vec4 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
+                        vec4 permute(vec4 x) { return mod289(((x*34.0)+1.0)*x); }
+                        vec4 taylorInvSqrt(vec4 r) { return 1.79284291400159 - 0.85373472095314 * r; }
+
+                        float snoise(vec3 v) {
+                            const vec2 C = vec2(1.0/6.0, 1.0/3.0);
+                            const vec4 D = vec4(0.0, 0.5, 1.0, 2.0);
+                            vec3 i  = floor(v + dot(v, C.yyy));
+                            vec3 x0 = v - i + dot(i, C.xxx);
+                            vec3 g = step(x0.yzx, x0.xyz);
+                            vec3 l = 1.0 - g;
+                            vec3 i1 = min(g.xyz, l.zxy);
+                            vec3 i2 = max(g.xyz, l.zxy);
+                            vec3 x1 = x0 - i1 + C.xxx;
+                            vec3 x2 = x0 - i2 + C.yyy;
+                            vec3 x3 = x0 - D.yyy;
+                            i = mod289(i);
+                            vec4 p = permute(permute(permute(i.z + vec4(0.0, i1.z, i2.z, 1.0)) + i.y + vec4(0.0, i1.y, i2.y, 1.0)) + i.x + vec4(0.0, i1.x, i2.x, 1.0));
+                            float n_ = 0.142857142857;
+                            vec3 ns = n_ * D.wyz - D.xzx;
+                            vec4 j = p - 49.0 * floor(p * ns.z * ns.z);
+                            vec4 x_ = floor(j * ns.z);
+                            vec4 y_ = floor(j - 7.0 * x_);
+                            vec4 x = x_ *ns.x + ns.yyyy;
+                            vec4 y = y_ *ns.x + ns.yyyy;
+                            vec4 h = 1.0 - abs(x) - abs(y);
+                            vec4 b0 = vec4(x.xy, y.xy);
+                            vec4 b1 = vec4(x.zw, y.zw);
+                            vec4 s0 = floor(b0)*2.0 + 1.0;
+                            vec4 s1 = floor(b1)*2.0 + 1.0;
+                            vec4 sh = -step(h, vec4(0.0));
+                            vec4 a0 = b0.xzyw + s0.xzyw*sh.xxyy;
+                            vec4 a1 = b1.xzyw + s1.xzyw*sh.zzww;
+                            vec3 p0 = vec3(a0.xy,h.x);
+                            vec3 p1 = vec3(a0.zw,h.y);
+                            vec3 p2 = vec3(a1.xy,h.z);
+                            vec3 p3 = vec3(a1.zw,h.w);
+                            vec4 norm = taylorInvSqrt(vec4(dot(p0,p0), dot(p1,p1), dot(p2, p2), dot(p3,p3)));
+                            p0 *= norm.x; p1 *= norm.y; p2 *= norm.z; p3 *= norm.w;
+                            vec4 m = max(0.5 - vec4(dot(x0,x0), dot(x1,x1), dot(x2,x2), dot(x3,x3)), 0.0);
+                            m = m * m;
+                            return 42.0 * dot(m*m, vec4(dot(p0,x0), dot(p1,x1), dot(p2,x2), dot(p3,x3)));
+                        }
+
+                        void main() {
+                            vec3 pos = position;
+                            float waveSpeed = 0.15;
+                            float waveFreq = 0.008;
+                            float waveX = pos.x * waveFreq - uTime * waveSpeed;
+                            float waveY = pos.y * waveFreq * 0.5;
+
+                            float mainWave = sin(waveX + snoise(vec3(waveY, 0.0, uTime * 0.02)) * 2.0);
+                            float subWave = sin(waveX * 2.5 + uTime * 0.3) * 0.5 + 0.5;
+                            float verticalWave = sin(pos.y * 0.01 + uTime * 0.2) * 0.3;
+                            float combinedWave = mainWave * 0.6 + subWave * 0.3 + verticalWave * 0.1;
+
+                            float noise = snoise(vec3(pos.x * 0.005, pos.y * 0.005, uTime * 0.03));
+                            combinedWave += noise * 0.2;
+
+                            float travelWave = sin(waveX * 3.0 + noise * 2.0);
+                            float visibilityThreshold = 0.2 + travelWave * 0.3;
+                            float particlePhase = sin(waveX * 5.0 + pos.y * 0.01 + uTime * 0.5 + aRandom * 3.14);
+                            float isVisible = step(visibilityThreshold, particlePhase);
+
+                            float dist = distance(pos.xy, uMousePos);
+                            float glowForce = exp(-(dist * dist) / 80.0) * uMouseForce;
+                            glowForce *= 0.8 + 0.2 * sin(uTime * 4.0 - dist * 0.1);
+
+                            float colorPhase = sin(waveX + uTime * 0.1);
+                            float isGreen = step(0.0, colorPhase + (aRandom - 0.5) * 0.6);
+
+                            vec3 cGray = vec3(0.2, 0.2, 0.22);
+                            vec3 cDarkGreen = vec3(0.0, 0.5, 0.28);
+                            vec3 cBrightGreen = vec3(0.0, 0.75, 0.42);
+
+                            vec3 baseColor = mix(cGray, cDarkGreen, isGreen);
+                            float waveFront = smoothstep(0.3, 0.7, particlePhase - visibilityThreshold);
+                            baseColor = mix(baseColor, cBrightGreen, waveFront * 0.4);
+
+                            vec3 cHighlight = vec3(0.0, 0.9, 0.5);
+                            vColor = mix(baseColor, cHighlight, glowForce * 0.6);
+
+                            float fadeInOut = sin(waveX * 2.0 + uTime * 0.3) * 0.5 + 0.5;
+                            float baseAlpha = 0.4 + fadeInOut * 0.4;
+                            float breathe = 0.7 + 0.3 * sin(uTime * 3.0 + aRandom * 6.28);
+
+                            vAlpha = isVisible * baseAlpha * breathe;
+
+                            vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
+                            gl_PointSize = uPixelRatio * 4.0 * (45.0 / -mvPosition.z);
+                            gl_Position = projectionMatrix * mvPosition;
+                        }
+                    `,
+                    fragmentShader: `
+                        varying vec3 vColor;
+                        varying float vAlpha;
+                        
+                        void main() {
+                            if (vAlpha < 0.05) discard;
+                            gl_FragColor = vec4(vColor, vAlpha);
+                        }
+                    `,
+                    transparent: true,
+                    depthWrite: false,
+                    depthTest: false
+                });
+
+                const points = new THREE.Points(geometry, material);
+                scene.add(points);
+
+                const mouse = new THREE.Vector2();
+                const raycaster = new THREE.Raycaster();
+                const targetPlane = new THREE.Plane(new THREE.Vector3(0, 0, 1), 0);
+
+                const targetWorldMouse = new THREE.Vector3(0, 0, 0);
+                const currentWorldMouse = new THREE.Vector3(0, 0, 0);
+
+                let targetForce = 0.0;
+                let currentForce = 0.0;
+                let interactionTimeout;
+                let isFirstMove = true;
+
+                window.addEventListener('mousemove', (event) => {
+                    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+                    mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+                    raycaster.setFromCamera(mouse, camera);
+                    raycaster.ray.intersectPlane(targetPlane, targetWorldMouse);
+
+                    if (isFirstMove) {
+                        currentWorldMouse.copy(targetWorldMouse);
+                        isFirstMove = false;
+                    }
+                    targetForce = 1.0;
+                    clearTimeout(interactionTimeout);
+                    interactionTimeout = setTimeout(() => {
+                        targetForce = 0.0;
+                    }, 500);
+                });
+
+                window.addEventListener('mouseout', () => {
+                    targetForce = 0.0;
+                });
+
+                const clock = new THREE.Clock();
+
+                function animate() {
+                    requestAnimationFrame(animate);
+                    currentWorldMouse.lerp(targetWorldMouse, 0.15);
+                    currentForce += (targetForce - currentForce) * 0.05;
+                    material.uniforms.uTime.value = clock.getElapsedTime();
+                    material.uniforms.uMousePos.value.set(currentWorldMouse.x, currentWorldMouse.y);
+                    material.uniforms.uMouseForce.value = currentForce;
+                    renderer.render(scene, camera);
+                }
+
+                animate();
+
+                window.addEventListener('resize', () => {
+                    camera.aspect = window.innerWidth / window.innerHeight;
+                    camera.updateProjectionMatrix();
+                    renderer.setSize(window.innerWidth, window.innerHeight);
+                });
+            };
+
+            initParticles();
 
             // Nav scroll effect
             const nav = document.querySelector('nav'); // 修正选择器
@@ -1768,24 +1991,6 @@
                     e.preventDefault();
                 }
             }, { passive: false });
-
-            // Theme toggle
-            const themeBtn = document.getElementById('themeBtn');
-            const themeIcon = document.getElementById('themeIcon');
-            const currentTheme = localStorage.getItem('theme') || 'light';
-
-            document.documentElement.setAttribute('data-theme', currentTheme);
-            themeIcon.textContent = currentTheme === 'dark' ? '◐' : '◑';
-            themeIcon.style.color = currentTheme === 'dark' ? '#ffffff' : '#000000';
-
-            themeBtn.addEventListener('click', () => {
-                const theme = document.documentElement.getAttribute('data-theme');
-                const newTheme = theme === 'dark' ? 'light' : 'dark';
-                document.documentElement.setAttribute('data-theme', newTheme);
-                localStorage.setItem('theme', newTheme);
-                themeIcon.textContent = newTheme === 'dark' ? '◐' : '◑';
-                themeIcon.style.color = newTheme === 'dark' ? '#ffffff' : '#000000';
-            });
 
             // Journal Data - 引用外部JavaScript文件
 
@@ -2231,10 +2436,14 @@
 
             // Event listeners
             document.getElementById('searchInput').addEventListener('input', filterAndSort);
-            document.getElementById('filterZone').addEventListener('change', filterAndSort);
-            document.getElementById('filterRegion').addEventListener('change', filterAndSort);
-            document.getElementById('filterPublisher').addEventListener('change', filterAndSort);
-            document.getElementById('sortBy').addEventListener('change', filterAndSort);
+
+            // 自定义下拉组件初始化和事件
+            initCustomSelects();
+
+            // 为所有自定义下拉绑定选项点击事件
+            document.querySelectorAll('.custom-select').forEach(select => {
+                bindSelectOptions(select);
+            });
 
             // 动态生成筛选选项
             function populateFilterOptions() {
@@ -2244,33 +2453,144 @@
                 const publishers = [...new Set(journals.map(j => j.publisher).filter(Boolean))].sort();
 
                 // 生成分区筛选选项
-                const filterZone = document.getElementById('filterZone');
-                filterZone.innerHTML = '<option value="all">所有分区</option>';
+                const filterZoneSelect = document.getElementById('filterZoneSelect');
+                const filterZoneOptions = filterZoneSelect.querySelector('.custom-select-options');
+                filterZoneOptions.innerHTML = '';
+                const allZoneOption = document.createElement('div');
+                allZoneOption.className = 'custom-select-option selected';
+                allZoneOption.dataset.value = 'all';
+                allZoneOption.textContent = '所有分区';
+                filterZoneOptions.appendChild(allZoneOption);
                 casZones.forEach(zone => {
-                    const option = document.createElement('option');
-                    option.value = zone;
-                    option.textContent = `中科院${zone}`;
-                    filterZone.appendChild(option);
+                    const optionDiv = document.createElement('div');
+                    optionDiv.className = 'custom-select-option';
+                    optionDiv.dataset.value = zone;
+                    optionDiv.textContent = `中科院${zone}`;
+                    filterZoneOptions.appendChild(optionDiv);
                 });
+
+                // 重新绑定分区下拉事件
+                bindSelectOptions(filterZoneSelect);
 
                 // 生成地区筛选选项
-                const filterRegion = document.getElementById('filterRegion');
-                filterRegion.innerHTML = '<option value="all">所有地区</option>';
+                const filterRegionSelect = document.getElementById('filterRegionSelect');
+                const filterRegionOptions = filterRegionSelect.querySelector('.custom-select-options');
+                filterRegionOptions.innerHTML = '';
+                const allRegionOption = document.createElement('div');
+                allRegionOption.className = 'custom-select-option selected';
+                allRegionOption.dataset.value = 'all';
+                allRegionOption.textContent = '所有地区';
+                filterRegionOptions.appendChild(allRegionOption);
                 regions.forEach(region => {
-                    const option = document.createElement('option');
-                    option.value = region;
-                    option.textContent = region;
-                    filterRegion.appendChild(option);
+                    const optionDiv = document.createElement('div');
+                    optionDiv.className = 'custom-select-option';
+                    optionDiv.dataset.value = region;
+                    optionDiv.textContent = region;
+                    filterRegionOptions.appendChild(optionDiv);
                 });
 
+                // 重新绑定地区下拉事件
+                bindSelectOptions(filterRegionSelect);
+
                 // 生成出版社筛选选项
-                const filterPublisher = document.getElementById('filterPublisher');
-                filterPublisher.innerHTML = '<option value="all">所有出版社</option>';
+                const filterPublisherSelect = document.getElementById('filterPublisherSelect');
+                const filterPublisherOptions = filterPublisherSelect.querySelector('.custom-select-options');
+                filterPublisherOptions.innerHTML = '';
+                const allPublisherOption = document.createElement('div');
+                allPublisherOption.className = 'custom-select-option selected';
+                allPublisherOption.dataset.value = 'all';
+                allPublisherOption.textContent = '所有出版社';
+                filterPublisherOptions.appendChild(allPublisherOption);
                 publishers.forEach(publisher => {
-                    const option = document.createElement('option');
-                    option.value = publisher;
-                    option.textContent = publisher;
-                    filterPublisher.appendChild(option);
+                    const optionDiv = document.createElement('div');
+                    optionDiv.className = 'custom-select-option';
+                    optionDiv.dataset.value = publisher;
+                    optionDiv.textContent = publisher;
+                    filterPublisherOptions.appendChild(optionDiv);
+                });
+
+                // 重新绑定出版社下拉事件
+                bindSelectOptions(filterPublisherSelect);
+            }
+
+            // 自定义下拉选择变化处理
+            function handleCustomFilterChange(e) {
+                const { value, id } = e.detail;
+                let filterType = '';
+
+                switch (id) {
+                    case 'filterZoneSelect':
+                        filterType = 'filterZone';
+                        break;
+                    case 'filterRegionSelect':
+                        filterType = 'filterRegion';
+                        break;
+                    case 'filterPublisherSelect':
+                        filterType = 'filterPublisher';
+                        break;
+                    case 'sortBySelect':
+                        filterType = 'sortBy';
+                        break;
+                }
+
+                if (filterType) {
+                    document.getElementById(filterType).value = value;
+                    filterAndSort();
+                }
+            }
+
+            // 为所有自定义下拉添加 selectChange 事件监听
+            document.getElementById('filterZoneSelect').addEventListener('selectChange', handleCustomFilterChange);
+            document.getElementById('filterRegionSelect').addEventListener('selectChange', handleCustomFilterChange);
+            document.getElementById('filterPublisherSelect').addEventListener('selectChange', handleCustomFilterChange);
+            document.getElementById('sortBySelect').addEventListener('selectChange', handleCustomFilterChange);
+
+            // 初始化自定义下拉组件
+            function initCustomSelects() {
+                const customSelects = document.querySelectorAll('.custom-select');
+
+                customSelects.forEach(select => {
+                    const trigger = select.querySelector('.custom-select-trigger');
+
+                    trigger.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        const isOpen = select.classList.contains('open');
+                        closeAllSelects();
+                        if (!isOpen) {
+                            select.classList.add('open');
+                        }
+                    });
+                });
+
+                document.addEventListener('click', closeAllSelects);
+            }
+
+            function closeAllSelects() {
+                document.querySelectorAll('.custom-select.open').forEach(select => {
+                    select.classList.remove('open');
+                });
+            }
+
+            // 绑定下拉选项点击事件
+            function bindSelectOptions(select) {
+                const trigger = select.querySelector('.custom-select-trigger');
+                const options = select.querySelectorAll('.custom-select-option');
+
+                options.forEach(option => {
+                    option.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        const value = option.dataset.value;
+                        const text = option.textContent;
+
+                        options.forEach(opt => opt.classList.remove('selected'));
+                        option.classList.add('selected');
+                        trigger.textContent = text;
+                        select.classList.remove('open');
+
+                        select.dispatchEvent(new CustomEvent('selectChange', {
+                            detail: { value: value, id: select.id }
+                        }));
+                    });
                 });
             }
 

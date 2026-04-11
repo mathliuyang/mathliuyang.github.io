@@ -15,9 +15,9 @@
         :root {
             --bg: #000000;
             --text: #ffffff;
-            --text-dim: #666666;
-            --accent: #ffffff;
-            --border: rgba(255, 255, 255, 0.08);
+            --text-dim: #9ca3af;
+            --accent: #00FF88;
+            --border: #333;
             --text-rgb: 255, 255, 255;
             --primary: var(--text);
             --primary-hover: rgba(255, 255, 255, 0.9);
@@ -30,7 +30,7 @@
             --text: #000000;
             --text-dim: #999999;
             --accent: #000000;
-            --border: rgba(0, 0, 0, 0.08);
+            --border: #e5e7eb;
             --text-rgb: 0, 0, 0;
             --primary: var(--text);
             --primary-hover: rgba(0, 0, 0, 0.9);
@@ -163,10 +163,6 @@
             border-bottom: 1px solid var(--border);
         }
 
-        [data-theme="light"] nav {
-            background: rgba(255, 255, 255, 0.8);
-        }
-
         .logo {
             font-size: 1rem;
             font-weight: 600;
@@ -184,6 +180,30 @@
             display: flex;
             gap: 2.5rem;
             list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .nav-links li {
+            list-style: none;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .mobile-menu-btn span {
+            display: block;
+            width: 24px;
+            height: 2px;
+            background: var(--text);
+            transition: all 0.3s ease;
         }
 
         .nav-links a {
@@ -195,27 +215,12 @@
             transition: color 0.3s ease;
         }
 
-        .nav-links a:hover,
-        .nav-links a.active {
+        .nav-links a:hover {
             color: var(--text);
         }
 
-        .theme-btn {
-            width: 36px;
-            height: 36px;
-            border: 1px solid var(--border);
-            background: transparent;
-            border-radius: 50%;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-        }
-
-        .theme-btn:hover {
-            border-color: var(--text);
-            transform: scale(1.1);
+        .nav-links a.active {
+            color: var(--accent) !important;
         }
 
         .container {
@@ -303,31 +308,6 @@
             color: #e2e8f0;
         }
 
-        .chart-controls {
-            background: #f8f9fa;
-            border: 1px solid #dee2e6;
-            border-radius: 6px;
-            padding: 15px;
-            margin-bottom: 20px;
-        }
-
-        .chart-select {
-            font-family: 'Arial', sans-serif;
-            font-size: 14px;
-            padding: 8px 12px;
-            border: 1px solid #ced4da;
-            border-radius: 4px;
-            background: #ffffff;
-            color: #495057;
-            transition: all 0.2s ease;
-        }
-
-        .chart-select:focus {
-            outline: none;
-            border-color: #007bff;
-            box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
-        }
-
         .chart-btn {
             font-family: 'Arial', sans-serif;
             font-size: 14px;
@@ -404,8 +384,8 @@
 
         /* 深色模式下的科研界面样式 */
         [data-theme="dark"] .research-interface {
-            background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
-            border: 1px solid #4a5568;
+            background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%);
+            border: 1px solid #333;
         }
 
         .research-interface::after {
@@ -463,44 +443,31 @@
 
         .scheme-select {
             padding: 0.6rem 1.5rem;
-            background: transparent;
-            border: 1px solid var(--border);
-            color: var(--text);
+            background: #1a1a1a;
+            border: 1px solid #333;
+            color: #ffffff;
             font-size: 0.85rem;
             cursor: pointer;
             transition: all 0.3s ease;
             position: relative;
         }
 
-        /* 深色模式下的scheme-select样式 */
-        [data-theme="dark"] .scheme-select {
-            background: #2d3748;
-            border: 1px solid #4a5568;
-            color: #e2e8f0;
-        }
-
         /* 为select元素添加自定义悬停提示样式 */
         .scheme-select option:hover {
-            background: var(--text);
-            color: var(--bg);
+            background: #ffffff;
+            color: #000000;
         }
 
-        /* 深色模式下的option样式 */
-        [data-theme="dark"] .scheme-select option {
-            background: #2d3748;
-            color: #e2e8f0;
+        /* option样式 */
+        .scheme-select option {
+            background: #1a1a1a;
+            color: #ffffff;
         }
 
         .scheme-select:hover,
         .scheme-select:focus {
             outline: none;
-            border-color: var(--text);
-        }
-
-        /* 深色模式下的scheme-select悬停和焦点样式 */
-        [data-theme="dark"] .scheme-select:hover,
-        [data-theme="dark"] .scheme-select:focus {
-            border-color: #63b3ed;
+            border-color: #00FF88;
         }
 
         .action-buttons {
@@ -510,9 +477,9 @@
 
         .action-btn {
             padding: 0.6rem 1.5rem;
-            border: 1px solid var(--border);
+            border: 1px solid #333;
             background: transparent;
-            color: var(--text);
+            color: #ffffff;
             font-size: 0.85rem;
             letter-spacing: 0.05em;
             cursor: pointer;
@@ -544,40 +511,41 @@
         }
 
         .action-btn:hover {
-            background: var(--text);
-            color: var(--bg);
-            border-color: var(--text);
+            background: #ffffff;
+            color: #000000;
+            border-color: #ffffff;
         }
 
         /* 深色模式下的action-btn悬停样式 */
         [data-theme="dark"] .action-btn:hover {
             background: #4a5568;
             color: #e2e8f0;
-            border-color: #63b3ed;
+            border-color: #00FF88;
         }
 
         .action-btn.primary {
-            background: var(--text);
-            color: var(--bg);
+            background: #00FF88;
+            color: #000000;
+            border-color: #00FF88;
         }
 
         /* 深色模式下的primary按钮样式 */
         [data-theme="dark"] .action-btn.primary {
-            background: #3182ce;
-            color: #ffffff;
-            border-color: #3182ce;
+            background: #00FF88;
+            color: #000000;
+            border-color: #00FF88;
         }
 
         .action-btn.primary:hover {
             background: transparent;
-            color: var(--text);
+            color: #00FF88;
         }
 
         /* 深色模式下的primary按钮悬停样式 */
         [data-theme="dark"] .action-btn.primary:hover {
-            background: #2c5282;
-            color: #ffffff;
-            border-color: #2c5282;
+            background: transparent;
+            color: #00FF88;
+            border-color: #00FF88;
         }
 
         .palette-display {
@@ -687,10 +655,10 @@
             right: 0.5rem;
             width: 14px;
             height: 14px;
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.15);
+            background: #1A1A1A;
+            border: 1px solid #333;
             border-radius: 50%;
-            color: rgba(255, 255, 255, 0.6);
+            color: #9ca3af;
             cursor: pointer;
             display: flex;
             align-items: center;
@@ -707,9 +675,9 @@
         }
 
         .remove-btn:hover {
-            background: rgba(255, 255, 255, 0.12);
-            border-color: rgba(255, 255, 255, 0.25);
-            color: rgba(255, 255, 255, 0.8);
+            background: #333;
+            border-color: #4a5568;
+            color: #ffffff;
             transform: scale(1.03);
         }
 
@@ -965,7 +933,7 @@
         }
 
         .cover-info .color-values {
-            color: rgba(255, 255, 255, 0.9);
+            color: #e2e8f0;
             font-size: 0.85rem;
             font-weight: 500;
         }
@@ -973,9 +941,9 @@
         .cover-story-preview {
             margin-top: 8px;
             padding-top: 8px;
-            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            border-top: 1px solid #333;
             font-size: 0.8rem;
-            color: rgba(255, 255, 255, 0.8);
+            color: #9ca3af;
         }
 
         .cover-actions {
@@ -989,9 +957,9 @@
         .action-btn {
             flex: 1;
             padding: 8px 12px;
-            border: 1px solid var(--border);
+            border: 1px solid #333;
             background: transparent;
-            color: var(--text);
+            color: #ffffff;
             font-size: 0.85rem;
             font-weight: 500;
             border-radius: 6px;
@@ -1001,27 +969,28 @@
         }
 
         .action-btn.primary {
-            background: var(--text);
-            color: var(--bg);
-            border-color: var(--text);
+            background: #00FF88;
+            color: #000000;
+            border-color: #00FF88;
         }
 
         .action-btn.primary:hover {
-            background: var(--text-secondary);
-            border-color: var(--text-secondary);
+            background: transparent;
+            border-color: #00FF88;
+            color: #00FF88;
             transform: translateY(-1px);
         }
 
         .action-btn.secondary {
             background: transparent;
-            border-color: var(--border);
-            color: var(--text-dim);
+            border-color: #333;
+            color: #9ca3af;
         }
 
         .action-btn.secondary:hover {
-            background: var(--bg-secondary);
-            border-color: var(--text);
-            color: var(--text);
+            background: #1A1A1A;
+            border-color: #00FF88;
+            color: #ffffff;
             transform: translateY(-1px);
         }
 
@@ -1481,29 +1450,52 @@
             gap: 0.8rem;
             align-items: center;
             flex-wrap: wrap;
+            background: #0a0a0a;
+            border: 1px solid #333;
+            padding: 15px;
+            border-radius: 6px;
         }
 
-        /* 深色模式下的chart-controls样式 */
-        [data-theme="dark"] .chart-controls {
-            gap: 0.8rem;
+        /* chart-controls内的按钮样式 */
+        .chart-controls .action-btn {
+            border: 1px solid #4a5568;
+            background: #1a1a1a;
+            color: #ffffff;
+        }
+
+        .chart-controls .action-btn:hover {
+            border: 1px solid #00FF88;
+            background: #00FF88;
+            color: #000000;
+        }
+
+        .chart-controls .action-btn.primary {
+            border: 1px solid #00FF88;
+            background: #00FF88;
+            color: #000000;
+        }
+
+        .chart-controls .action-btn.primary:hover {
+            border: 1px solid #00FF88;
+            background: transparent;
+            color: #00FF88;
         }
 
         .chart-select {
             padding: 0.6rem 1rem;
-            border: 1px solid var(--border);
-            background: var(--bg);
-            color: var(--text);
+            border: 1px solid #333;
+            background: #1a1a1a;
+            color: #ffffff;
             font-size: 0.9rem;
             cursor: pointer;
             transition: all 0.3s ease;
             min-width: 120px;
         }
 
-        /* 深色模式下的图表选择器样式 */
-        [data-theme="dark"] .chart-select {
-            background: #2d3748;
-            border: 1px solid #4a5568;
-            color: #e2e8f0;
+        .chart-select:hover,
+        .chart-select:focus {
+            border-color: #00FF88;
+            outline: none;
         }
 
         /* 深色模式下的图表选择器option样式 */
@@ -1682,6 +1674,20 @@
                 padding: 1rem 2rem;
             }
 
+            .mobile-menu-btn {
+                display: flex;
+            }
+
+            .nav-links {
+                gap: 1.5rem;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .nav-links a {
+                font-size: 0.8rem;
+            }
+
             .container {
                 padding: 100px 2rem 2rem;
             }
@@ -1760,21 +1766,23 @@
 
     <!-- 主要内容 -->
     <div class="main-content">
-        <nav>
-            <div class="logo" onclick="location.href='../index.html'">图灵的猫 X 智核学术</div>
+        <nav id="nav">
+            <div class="logo" onclick="location.href='../index.html'"><span style="color:#fff">AICore</span><span style="color:#00FF88">Scholar</span></div>
             <div class="nav-right">
-                <ul class="nav-links">
-                    <li><a href="../index.html">首页</a></li>
-                    <li><a href="../pages/about.html">关于我</a></li>
-                    <li><a href="../pages/blog.html">博客</a></li>
-                    <li><a href="../pages/projects.html">项目</a></li>
-                    <li><a href="../pages/publications.html">学术成果</a></li>
-                    <li><a href="../pages/tools.html" class="active">工具箱</a></li>
-                    <li><a href="../pages/contact.html">联系我</a></li>
-                </ul>
-                <button class="theme-btn" id="themeBtn">
-                    <span id="themeIcon">◐</span>
+                <button class="mobile-menu-btn" id="mobileMenuBtn">
+                    <span></span>
+                    <span></span>
+                    <span></span>
                 </button>
+                <ul class="nav-links" id="navLinks">
+                    <li><a href="../index.html">首页</a></li>
+                    <li><a href="./pinns-research.html">AI4PDEs 论文</a></li>
+                    <li><a href="./prompt-generator.html">智核提示词</a></li>
+                    <li><a href="./journal_html_page.html">期刊指南</a></li>
+                    <li><a href="./color-picker.html" class="active">封面故事</a></li>
+                    <li><a href="../pages/tools.html">更多工具</a></li>
+                    <li><a href="../pages/contact.html">联系我们</a></li>
+                </ul>
             </div>
         </nav>
 
@@ -1979,26 +1987,15 @@
         <script src="preset-palettes.js"></script>
 
         <script>
-            // Theme toggle
-            const themeBtn = document.getElementById('themeBtn');
-            const themeIcon = document.getElementById('themeIcon');
-            const currentTheme = localStorage.getItem('theme') || 'light';
+            // Mobile menu toggle
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const navLinks = document.getElementById('navLinks');
 
-            document.documentElement.setAttribute('data-theme', currentTheme);
-            themeIcon.textContent = currentTheme === 'dark' ? '◐' : '◑';
-
-            // 添加图标颜色样式，确保在不同主题下都清晰可见
-            themeIcon.style.color = currentTheme === 'dark' ? '#ffffff' : '#000000';
-
-            themeBtn.addEventListener('click', () => {
-                const theme = document.documentElement.getAttribute('data-theme');
-                const newTheme = theme === 'dark' ? 'light' : 'dark';
-
-                document.documentElement.setAttribute('data-theme', newTheme);
-                localStorage.setItem('theme', newTheme);
-                themeIcon.textContent = newTheme === 'dark' ? '◐' : '◑';
-                themeIcon.style.color = newTheme === 'dark' ? '#ffffff' : '#000000';
-            });
+            if (mobileMenuBtn && navLinks) {
+                mobileMenuBtn.addEventListener('click', () => {
+                    navLinks.classList.toggle('active');
+                });
+            }
 
             let currentPalette = [];
             let lockedColors = new Set();
