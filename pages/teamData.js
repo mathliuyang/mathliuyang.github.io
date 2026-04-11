@@ -43,7 +43,7 @@ const teamMembers = [
         institutionEn: "Nuclear Power Institute of China, State Key Laboratory of Advanced Nuclear Energy Technology, Chengdu 610213, China",
         address: "四川省成都市双流区长顺大道一段328号",
         addressEn: "No. 328, Section 1, Changshun Avenue, Shuangliu District, Chengdu, Sichuan Province, China",
-        emails: ["liudong@npic.ac.cn", "liudong@uestc.edu.cn"],
+        emails: ["liudong@npic.ac.cn", "liudong@uestc.edu.cn", "493159139@qq.com"],
         phones: ["13980956120"],
         orcid: "0009-0002-4768-9039",
         avatar: "../assets/avatar/liudong.jpg",
