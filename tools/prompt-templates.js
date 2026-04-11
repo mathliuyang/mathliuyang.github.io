@@ -1488,7 +1488,7 @@ window.templates = {
    "prompt-id-20251102-2": {
       "name": "Cover Letter 风格迁移重写器",
       "icon": "🪶",
-      "cover": "https://images.unsplash.com/photo-1579389083175-247ef7030069?auto=format&fit=crop&w=1350&q=80",
+      "cover": "https://www.kaolawenku.com/img/wk52951.jpg",
       "localCoverImage": "../assets/prompt_cover/prompt-id-20251102-2.jpg",
       "desc": "将原cover letter重写匹配新期刊风格与定位。",
       "tags": ["SCI投稿", "Cover Letter", "期刊迁移"],
