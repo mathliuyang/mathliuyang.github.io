@@ -586,20 +586,29 @@
             
             section:nth-of-type(5) .ide-window .col-span-2 {
                 width: 100% !important;
-                height: 200px !important;
+                height: auto !important;
+                min-height: 180px;
                 border-right: none !important;
                 border-bottom: 1px solid #1A1A1A;
+                position: relative !important;
             }
             
             section:nth-of-type(5) .ide-window .col-span-2 video {
                 width: 100% !important;
-                height: 100% !important;
+                height: 180px !important;
                 object-fit: cover !important;
+                display: block;
+            }
+            
+            section:nth-of-type(5) .ide-window .col-span-2 .absolute {
+                position: relative !important;
+                background: linear-gradient(to top, rgba(0,0,0,0.9), rgba(0,0,0,0.7));
+                padding: 0.75rem 1rem !important;
             }
             
             section:nth-of-type(5) .ide-window .bg-\[\#0d0d0d\] {
                 width: 100% !important;
-                max-height: 250px;
+                max-height: 300px;
                 padding: 0.75rem !important;
             }
             
