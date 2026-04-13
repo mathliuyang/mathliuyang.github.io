@@ -354,8 +354,14 @@
         /* Mobile Responsive Styles */
         @media screen and (max-width: 768px) {
             /* Global reset for mobile */
-            body {
+            * {
+                box-sizing: border-box;
+            }
+            
+            html, body {
                 overflow-x: hidden;
+                width: 100%;
+                max-width: 100vw;
             }
             
             /* Navigation */
@@ -365,161 +371,212 @@
                 left: 0;
                 right: 0;
                 z-index: 50;
+                width: 100%;
             }
             
-            #navbar > div {
+            #navbar .max-w-7xl {
                 padding-left: 1rem;
                 padding-right: 1rem;
+                max-width: 100%;
             }
             
-            /* Hero Section */
-            .relative.min-h-screen {
-                min-height: auto;
-                padding-top: 4rem;
-                padding-bottom: 2rem;
+            /* Hero Section - 第一个section */
+            body > section:first-of-type {
+                min-height: auto !important;
+                padding-top: 5rem !important;
+                padding-bottom: 2rem !important;
+                width: 100% !important;
             }
             
-            .relative.min-h-screen .grid {
-                grid-template-columns: 1fr !important;
-                gap: 1.5rem;
+            body > section:first-of-type .max-w-7xl {
+                padding-left: 1rem !important;
+                padding-right: 1rem !important;
             }
             
-            .relative.min-h-screen h1 {
-                font-size: 2.25rem !important;
+            body > section:first-of-type .grid {
+                display: flex !important;
+                flex-direction: column !important;
+                gap: 1.5rem !important;
+            }
+            
+            body > section:first-of-type h1 {
+                font-size: 2rem !important;
                 line-height: 1.2 !important;
+                word-wrap: break-word;
             }
             
-            .relative.min-h-screen .text-4xl {
+            body > section:first-of-type .text-4xl {
                 font-size: 1.5rem !important;
             }
             
-            .relative.min-h-screen .text-xl {
+            body > section:first-of-type .text-xl {
                 font-size: 1rem !important;
             }
             
-            /* IDE Window */
+            body > section:first-of-type p.text-gray-400 {
+                max-width: 100% !important;
+            }
+            
+            /* IDE Window Section */
             .ide-window {
-                margin: 0;
+                width: 100% !important;
+                max-width: 100% !important;
+                margin: 0 !important;
                 border-radius: 8px;
-                overflow: hidden;
             }
             
-            .ide-header {
-                padding: 8px 12px;
-                flex-wrap: wrap;
-                gap: 4px;
+            .ide-window .ide-header {
+                padding: 0.5rem 0.75rem;
             }
             
-            .ide-header > div:first-child {
-                display: none;
+            .ide-window .ide-header .flex.gap-4 {
+                display: none !important;
             }
             
-            .ide-window .relative {
+            /* IDE内容区域 - 关键修复 */
+            .ide-window > .relative {
+                position: relative !important;
                 height: auto !important;
-                min-height: 300px;
+                min-height: 400px;
+                display: flex !important;
+                flex-direction: column !important;
             }
             
-            #math-scroll-box,
+            #math-scroll-box {
+                position: relative !important;
+                width: 100% !important;
+                height: 200px !important;
+                left: 0 !important;
+                top: 0 !important;
+                border-right: none !important;
+                border-bottom: 1px solid #1A1A1A;
+            }
+            
             #code-scroll-box {
                 position: relative !important;
                 width: 100% !important;
-                height: 50% !important;
+                height: 200px !important;
+                left: 0 !important;
+                top: 0 !important;
                 border-left: none !important;
-                border-bottom: 1px solid #1A1A1A !important;
-            }
-            
-            #code-scroll-box {
-                border-bottom: none !important;
             }
             
             /* Solo Section */
-            .text-3xl,
-            section .text-3xl {
+            section:nth-of-type(2) .text-center {
+                padding: 0 0.5rem;
+            }
+            
+            section:nth-of-type(2) .text-3xl,
+            section:nth-of-type(2) .text-4xl {
                 font-size: 1.5rem !important;
             }
             
-            /* Feature Cards */
-            .grid {
-                grid-template-columns: 1fr !important;
+            section:nth-of-type(2) .flex.items-center.justify-center {
+                flex-wrap: wrap;
+                gap: 0.5rem;
             }
             
-            .feature-card {
-                padding: 1rem;
-                margin-bottom: 1rem;
+            /* Feature Cards Section */
+            section:nth-of-type(3) .grid {
+                display: flex !important;
+                flex-direction: column !important;
+                gap: 1rem !important;
+            }
+            
+            section:nth-of-type(3) .feature-card {
+                width: 100% !important;
+                padding: 1rem !important;
             }
             
             /* Journal Showcase */
             .journal-showcase {
+                width: 100% !important;
                 height: auto !important;
-                min-height: 350px;
+                min-height: 300px;
+            }
+            
+            .journal-track {
+                width: 100% !important;
             }
             
             .journal-slide {
-                padding: 1rem;
+                width: 100% !important;
+                min-width: 100% !important;
+                padding: 0.75rem !important;
             }
             
-            .journal-slide > .flex {
+            .journal-slide > div:first-child {
                 flex-direction: column !important;
-                gap: 0.5rem !important;
+                gap: 0.75rem !important;
             }
             
             .journal-slide .w-24 {
                 width: 100% !important;
-                height: 150px !important;
+                height: 180px !important;
             }
             
             /* Buttons */
             .btn-primary,
             .btn-secondary {
-                padding: 8px 16px;
-                font-size: 13px;
-                width: 100%;
+                width: 100% !important;
+                padding: 0.625rem 1rem;
+                font-size: 0.875rem;
                 justify-content: center;
             }
             
-            /* Sections */
+            /* All Sections */
             section {
+                width: 100% !important;
                 padding-top: 2rem !important;
                 padding-bottom: 2rem !important;
             }
             
             section > div {
+                width: 100% !important;
+                max-width: 100% !important;
                 padding-left: 1rem !important;
                 padding-right: 1rem !important;
             }
             
             /* Scroll Carousel */
             .scroll-carousel {
-                height: 150px !important;
+                height: 180px !important;
             }
             
-            /* Images */
-            img {
-                max-width: 100%;
-                height: auto;
+            /* Images and Videos */
+            img, video {
+                max-width: 100% !important;
+                height: auto !important;
+            }
+            
+            /* Ensure no horizontal scroll */
+            .max-w-7xl, .max-w-5xl, .max-w-md {
+                max-width: 100% !important;
             }
         }
         
         /* Extra small devices */
         @media screen and (max-width: 480px) {
-            .relative.min-h-screen h1 {
-                font-size: 1.875rem !important;
+            body > section:first-of-type h1 {
+                font-size: 1.75rem !important;
             }
             
-            .relative.min-h-screen .text-4xl {
+            body > section:first-of-type .text-4xl {
                 font-size: 1.25rem !important;
             }
             
-            .ide-window .relative {
-                min-height: 250px !important;
-            }
-            
-            .feature-card {
-                padding: 0.75rem;
+            #math-scroll-box,
+            #code-scroll-box {
+                height: 180px !important;
+                font-size: 0.75rem;
             }
             
             .journal-slide .w-24 {
-                height: 120px !important;
+                height: 150px !important;
+            }
+            
+            .scroll-carousel {
+                height: 150px !important;
             }
         }
     </style>
