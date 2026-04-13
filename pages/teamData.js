@@ -421,8 +421,8 @@ const teamMembers = [
         institutionEn: "College of Computer Science (School of Software and School of Artificial Intelligence), Sichuan University, Chengdu 610065, China",
         address: "四川省成都市武侯区一环路南一段24号",
         addressEn: "No. 24, Section 1, South 1st Ring Road, Wuhou District, Chengdu, Sichuan Province, China",
-        emails: [""],
-        phones: [""],
+        emails: [],
+        phones: [],
         orcid: "",
         avatar: "../assets/avatar/zhujiajie.jpg",
         position: "核心成员"
