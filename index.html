@@ -587,28 +587,29 @@
             section:nth-of-type(5) .ide-window .col-span-2 {
                 width: 100% !important;
                 height: auto !important;
-                min-height: 180px;
                 border-right: none !important;
                 border-bottom: 1px solid #1A1A1A;
                 position: relative !important;
+                overflow: visible !important;
             }
             
             section:nth-of-type(5) .ide-window .col-span-2 video {
                 width: 100% !important;
-                height: 180px !important;
+                height: 200px !important;
                 object-fit: cover !important;
                 display: block;
             }
             
-            section:nth-of-type(5) .ide-window .col-span-2 .absolute {
-                position: relative !important;
-                background: linear-gradient(to top, rgba(0,0,0,0.9), rgba(0,0,0,0.7));
+            section:nth-of-type(5) .ide-window .col-span-2 > .absolute {
+                position: static !important;
+                background: linear-gradient(to bottom, rgba(0,0,0,0.8), rgba(0,0,0,0.95)) !important;
                 padding: 0.75rem 1rem !important;
+                width: 100% !important;
             }
             
             section:nth-of-type(5) .ide-window .bg-\[\#0d0d0d\] {
                 width: 100% !important;
-                max-height: 300px;
+                max-height: 280px;
                 padding: 0.75rem !important;
             }
             
