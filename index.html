@@ -555,6 +555,71 @@
             }
         }
         
+        /* Cover Story Carousel Mobile Fix */
+        @media screen and (max-width: 768px) {
+            .cover-carousel {
+                height: auto !important;
+                min-height: 280px;
+            }
+            
+            .carousel-slide {
+                min-width: 100% !important;
+            }
+            
+            .carousel-slide .relative.h-\[140px\],
+            .carousel-slide .relative.h-\[180px\] {
+                height: 160px !important;
+            }
+            
+            .carousel-slide img {
+                width: 100% !important;
+                height: 100% !important;
+                object-fit: cover !important;
+            }
+            
+            /* 科研工具板块移动端优化 */
+            section:nth-of-type(5) .ide-window .grid {
+                display: flex !important;
+                flex-direction: column !important;
+                height: auto !important;
+            }
+            
+            section:nth-of-type(5) .ide-window .col-span-2 {
+                width: 100% !important;
+                height: 200px !important;
+                border-right: none !important;
+                border-bottom: 1px solid #1A1A1A;
+            }
+            
+            section:nth-of-type(5) .ide-window .col-span-2 video {
+                width: 100% !important;
+                height: 100% !important;
+                object-fit: cover !important;
+            }
+            
+            section:nth-of-type(5) .ide-window .bg-\[\#0d0d0d\] {
+                width: 100% !important;
+                max-height: 250px;
+                padding: 0.75rem !important;
+            }
+            
+            section:nth-of-type(5) .tool-item {
+                padding: 0.5rem !important;
+            }
+            
+            section:nth-of-type(5) .tool-item .text-xs {
+                font-size: 0.75rem !important;
+            }
+            
+            section:nth-of-type(5) #toolTitle {
+                font-size: 0.875rem !important;
+            }
+            
+            section:nth-of-type(5) #toolName {
+                font-size: 0.75rem !important;
+            }
+        }
+        
         /* Extra small devices */
         @media screen and (max-width: 480px) {
             body > section:first-of-type h1 {
@@ -577,6 +642,19 @@
             
             .scroll-carousel {
                 height: 150px !important;
+            }
+            
+            .cover-carousel {
+                min-height: 260px;
+            }
+            
+            .carousel-slide .relative.h-\[140px\],
+            .carousel-slide .relative.h-\[180px\] {
+                height: 140px !important;
+            }
+            
+            section:nth-of-type(5) .ide-window .col-span-2 {
+                height: 180px !important;
             }
         }
     </style>
