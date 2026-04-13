@@ -581,23 +581,6 @@
 
     <!-- 头部导航 -->
     <header class="fixed w-full top-0 z-50 backdrop-blur-md bg-dark/80 border-b border-primary/20">
-        <!-- 课件信息栏 -->
-        <div class="bg-gradient-to-r from-primary/10 to-secondary/10 border-b border-primary/30">
-            <div class="container mx-auto px-4 py-2">
-                <div class="flex flex-col md:flex-row justify-between items-center text-sm">
-                    <div class="flex items-center space-x-4 mb-2 md:mb-0">
-                        <span class="text-primary font-semibold">🏫 四川大学</span>
-                        <span class="text-secondary">📚 计算机学院</span>
-                        <span class="text-accent">👨‍🏫 作者：图灵的猫 X 智核学术</span>
-                    </div>
-                    <div class="flex items-center space-x-4">
-                        <span class="text-gray-300">📅 2025年10月</span>
-                        <span class="text-yellow-400">🏆 课件</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <div class="container mx-auto px-4 py-3 flex items-center justify-between">
             <div class="flex items-center space-x-2">
                 <i class="fa fa-cubes text-primary text-2xl animate-pulse"></i>
@@ -648,7 +631,7 @@
                 <div class="card-3d hologram rounded-2xl p-8 md:p-12 shadow-2xl max-w-5xl">
                     <div class="mb-8">
                         <h2 class="text-4xl md:text-6xl font-bold mb-6 font-space text-shadow-glow animate-glow">
-                            第二十一章 一元二次方程
+                            多维探究：一元二次方程
                         </h2>
                         <div class="w-24 h-1 bg-gradient-to-r from-primary to-accent mx-auto mb-8 rounded-full"></div>
                     </div>
@@ -1847,6 +1830,37 @@
             });
         }
 
+        // 游戏背景音乐播放函数
+        let gameMusic = null;
+
+        function playGameMusic() {
+            // 如果音乐已经在播放，先停止
+            if (gameMusic) {
+                gameMusic.pause();
+                gameMusic.currentTime = 0;
+            }
+            // 创建新的音频对象
+            gameMusic = new Audio('Infinite - Valence.mp3');
+            gameMusic.loop = true;
+            gameMusic.volume = 0.5;
+            // 播放音乐（处理浏览器自动播放限制）
+            const playPromise = gameMusic.play();
+            if (playPromise !== undefined) {
+                playPromise.catch(error => {
+                    console.log('音乐自动播放被阻止，需要用户交互后才能播放');
+                });
+            }
+        }
+
+        // 停止游戏背景音乐
+        function stopGameMusic() {
+            if (gameMusic) {
+                gameMusic.pause();
+                gameMusic.currentTime = 0;
+                gameMusic = null;
+            }
+        }
+
         // 初始化动画效果
         function initAnimations() {
             // 开始游戏按钮动画
@@ -1934,6 +1948,8 @@
 
                 // 绑定事件
                 document.getElementById('startMissionBtn').addEventListener('click', function () {
+                    // 启动背景音乐
+                    playGameMusic();
                     // 启动游戏逻辑
                     launchSpaceGame();
                     closeModal();
@@ -1953,69 +1969,212 @@
                 }
             }
 
-            // 启动太空游戏
+            // 启动太空游戏 - 高级版
             function launchSpaceGame() {
                 // 创建游戏界面
                 const gameContainer = document.createElement('div');
                 gameContainer.id = 'spaceGameContainer';
-                gameContainer.className = 'fixed inset-0 bg-gradient-to-b from-indigo-900 via-purple-900 to-black z-40 overflow-hidden';
+                gameContainer.className = 'fixed inset-0 bg-black z-50 overflow-hidden';
 
                 gameContainer.innerHTML = `
                 <div class="relative w-full h-full">
-                    <!-- 游戏画布 -->
+                    <!-- 游戏画布 - 使用多层渲染 -->
+                    <canvas id="bgCanvas" class="absolute inset-0 w-full h-full"></canvas>
                     <canvas id="gameCanvas" class="absolute inset-0 w-full h-full"></canvas>
+                    <canvas id="uiCanvas" class="absolute inset-0 w-full h-full pointer-events-none"></canvas>
                     
                     <!-- 游戏UI覆盖层 -->
                     <div class="absolute inset-0 pointer-events-none">
-                        <!-- 顶部状态栏 -->
-                        <div class="flex justify-between items-center p-4 glass-effect m-4 rounded-xl pointer-events-auto">
-                            <div class="flex items-center space-x-6">
-                                <div class="flex items-center">
-                                    <i class="fa fa-heart text-red-500 mr-2"></i>
-                                    <span id="gameHealth" class="font-space text-xl">100</span>
+                        <!-- 顶部状态栏 - 高级HUD -->
+                        <div class="flex justify-between items-start p-4 m-4 pointer-events-auto">
+                            <!-- 左侧：生命值和护盾 -->
+                            <div class="flex flex-col space-y-2">
+                                <div class="glass-effect rounded-xl p-3 min-w-[200px]">
+                                    <div class="flex items-center justify-between mb-1">
+                                        <span class="text-red-400 font-space text-sm"><i class="fa fa-heart mr-1"></i>生命值</span>
+                                        <span id="gameHealth" class="font-space text-lg font-bold">100/100</span>
+                                    </div>
+                                    <div class="w-full bg-gray-800 rounded-full h-3 overflow-hidden">
+                                        <div id="healthBar" class="bg-gradient-to-r from-red-600 to-red-400 h-full rounded-full transition-all duration-300" style="width: 100%"></div>
+                                    </div>
                                 </div>
-                                <div class="flex items-center">
-                                    <i class="fa fa-star text-yellow-500 mr-2"></i>
-                                    <span id="gameScore" class="font-space text-xl">0</span>
-                                </div>
-                                <div class="flex items-center">
-                                    <i class="fa fa-clock text-blue-500 mr-2"></i>
-                                    <span id="gameTime" class="font-space text-xl">05:00</span>
-                                </div>
-                                <div class="flex items-center">
-                                    <i class="fa fa-layer-group text-green-500 mr-2"></i>
-                                    <span id="gameLevel" class="font-space text-xl">1</span>
+                                <div class="glass-effect rounded-xl p-3 min-w-[200px]">
+                                    <div class="flex items-center justify-between mb-1">
+                                        <span class="text-cyan-400 font-space text-sm"><i class="fa fa-shield mr-1"></i>护盾</span>
+                                        <span id="gameShield" class="font-space text-lg font-bold">0%</span>
+                                    </div>
+                                    <div class="w-full bg-gray-800 rounded-full h-3 overflow-hidden">
+                                        <div id="shieldBar" class="bg-gradient-to-r from-cyan-600 to-cyan-400 h-full rounded-full transition-all duration-300" style="width: 0%"></div>
+                                    </div>
                                 </div>
                             </div>
-                            <button id="exitGameBtn" class="bg-red-600 hover:bg-red-700 px-4 py-2 rounded-full font-space transition-colors pointer-events-auto">
-                                <i class="fa fa-times mr-2"></i>退出
-                            </button>
+                            
+                            <!-- 中间：分数和连击 -->
+                            <div class="flex flex-col items-center">
+                                <div class="glass-effect rounded-xl px-6 py-3 mb-2">
+                                    <div class="text-center">
+                                        <div class="text-yellow-400 font-space text-xs mb-1">SCORE</div>
+                                        <div id="gameScore" class="font-space text-3xl font-bold text-white">0</div>
+                                    </div>
+                                </div>
+                                <div id="comboDisplay" class="glass-effect rounded-full px-4 py-1 opacity-0 transition-opacity duration-300">
+                                    <span class="text-orange-400 font-space text-sm font-bold">
+                                        <i class="fa fa-fire mr-1"></i>连击 x<span id="comboCount">0</span>
+                                    </span>
+                                </div>
+                            </div>
+                            
+                            <!-- 右侧：时间和等级 -->
+                            <div class="flex flex-col space-y-2 items-end">
+                                <div class="glass-effect rounded-xl p-3">
+                                    <div class="flex items-center space-x-4">
+                                        <div class="text-center">
+                                            <div class="text-blue-400 font-space text-xs">TIME</div>
+                                            <div id="gameTime" class="font-space text-xl font-bold">05:00</div>
+                                        </div>
+                                        <div class="text-center">
+                                            <div class="text-green-400 font-space text-xs">LEVEL</div>
+                                            <div id="gameLevel" class="font-space text-xl font-bold">1</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="glass-effect rounded-xl p-2">
+                                    <div class="flex items-center space-x-2">
+                                        <div class="text-center px-2">
+                                            <div class="text-purple-400 font-space text-xs">武器</div>
+                                            <div id="weaponLevel" class="font-space text-lg font-bold text-purple-300">Lv.1</div>
+                                        </div>
+                                        <div class="text-center px-2">
+                                            <div class="text-orange-400 font-space text-xs">经验</div>
+                                            <div id="expLevel" class="font-space text-lg font-bold text-orange-300">0%</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         
-                        <!-- 题目显示区域 -->
-                        <div id="questionPanel" class="absolute bottom-4 left-4 right-4 glass-effect p-6 rounded-xl pointer-events-auto transform translate-y-full transition-transform duration-500">
-                            <h3 class="text-xl font-bold mb-4 font-space text-primary">数学挑战</h3>
-                            <div id="gameQuestion" class="text-lg mb-4 font-space text-center">
-                                准备接受挑战...
+                        <!-- 武器状态栏 - 5个武器槽 -->
+                        <div class="absolute bottom-24 left-4 right-4 flex justify-center space-x-4 pointer-events-auto">
+                            <div id="weaponSlots" class="flex space-x-3">
+                                <div class="weapon-slot glass-effect rounded-lg p-3 opacity-100 relative" data-weapon="normal">
+                                    <i class="fa fa-crosshairs text-blue-400 text-xl"></i>
+                                </div>
+                                <div class="weapon-slot glass-effect rounded-lg p-3 opacity-50 relative" data-weapon="laser">
+                                    <i class="fa fa-bolt text-yellow-400 text-xl"></i>
+                                </div>
+                                <div class="weapon-slot glass-effect rounded-lg p-3 opacity-50 relative" data-weapon="spread">
+                                    <i class="fa fa-arrows-alt text-green-400 text-xl"></i>
+                                </div>
+                                <div class="weapon-slot glass-effect rounded-lg p-3 opacity-50 relative" data-weapon="missile">
+                                    <i class="fa fa-rocket text-red-400 text-xl"></i>
+                                </div>
+                                <div class="weapon-slot glass-effect rounded-lg p-3 opacity-50 relative" data-weapon="rapid">
+                                    <i class="fa fa-flash text-purple-400 text-xl"></i>
+                                </div>
                             </div>
-                            <div id="answerOptions" class="grid grid-cols-2 gap-3">
+                        </div>
+                        
+                        <!-- 题目侧边栏 - 不影响游戏 -->
+                        <div id="questionSidebar" class="absolute right-4 top-24 w-80 glass-effect rounded-xl p-4 transform translate-x-full opacity-0 transition-all duration-500 pointer-events-auto">
+                            <div class="flex items-center justify-between mb-3">
+                                <div class="flex items-center space-x-2">
+                                    <i class="fa fa-brain text-primary"></i>
+                                    <span class="font-space text-sm font-bold">数学挑战</span>
+                                </div>
+                                <span id="sidebarTimer" class="text-yellow-400 font-space font-bold">20s</span>
+                            </div>
+                            <div class="mb-4">
+                                <p id="sidebarQuestion" class="text-white font-space text-sm leading-relaxed">
+                                    准备接受挑战...
+                                </p>
+                            </div>
+                            <div id="sidebarOptions" class="space-y-2">
                                 <!-- 答案选项将动态生成 -->
                             </div>
-                            <div id="questionTimer" class="mt-4 text-center">
-                                <div class="w-full bg-gray-700 rounded-full h-2">
-                                    <div id="timerBar" class="bg-gradient-to-r from-green-500 to-red-500 h-2 rounded-full transition-all duration-1000" style="width: 100%"></div>
+                            <div class="mt-3 text-xs text-gray-400 text-center">
+                                答对自动升级装备！
+                            </div>
+                        </div>
+                        
+                        <!-- 题目显示区域 - 全屏覆盖 -->
+                        <div id="questionOverlay" class="absolute inset-0 bg-black/80 flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300">
+                            <div id="questionPanel" class="glass-effect rounded-2xl p-8 max-w-2xl w-full mx-4 transform scale-95 transition-transform duration-300">
+                                <div class="text-center mb-6">
+                                    <div class="inline-block px-4 py-1 rounded-full bg-gradient-to-r from-primary to-secondary text-sm font-space mb-4">
+                                        <i class="fa fa-brain mr-2"></i>数学挑战
+                                    </div>
+                                    <h3 id="gameQuestion" class="text-2xl font-bold font-space text-white leading-relaxed">
+                                        准备接受挑战...
+                                    </h3>
                                 </div>
-                                <span class="text-sm text-gray-300 mt-1 block">剩余时间</span>
+                                <div id="answerOptions" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <!-- 答案选项将动态生成 -->
+                                </div>
+                                <div class="mt-6">
+                                    <div class="flex justify-between text-sm text-gray-400 mb-2">
+                                        <span>剩余时间</span>
+                                        <span id="timerText">15s</span>
+                                    </div>
+                                    <div class="w-full bg-gray-800 rounded-full h-3 overflow-hidden">
+                                        <div id="timerBar" class="bg-gradient-to-r from-green-500 via-yellow-500 to-red-500 h-full rounded-full transition-all duration-1000" style="width: 100%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Boss战提示 -->
+                        <div id="bossWarning" class="absolute top-1/3 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center opacity-0 pointer-events-none transition-opacity duration-500">
+                            <div class="text-6xl mb-4 animate-pulse">⚠️</div>
+                            <div class="text-4xl font-space font-bold text-red-500 text-shadow-glow">WARNING</div>
+                            <div class="text-2xl font-space text-white mt-2">BOSS APPROACHING</div>
+                        </div>
+                        
+                        <!-- 成就提示 -->
+                        <div id="achievementToast" class="absolute top-20 right-4 glass-effect rounded-xl p-4 transform translate-x-full transition-transform duration-500">
+                            <div class="flex items-center space-x-3">
+                                <div class="text-3xl">🏆</div>
+                                <div>
+                                    <div class="text-yellow-400 font-space text-sm font-bold">成就解锁</div>
+                                    <div id="achievementText" class="text-white font-space">初出茅庐</div>
+                                </div>
                             </div>
                         </div>
                         
                         <!-- 游戏提示 -->
                         <div id="gameHints" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center pointer-events-none">
-                            <div class="text-2xl font-space text-white opacity-80 animate-pulse">
-                                使用鼠标控制飞船移动
+                            <div class="glass-effect rounded-2xl p-8">
+                                <div class="text-6xl mb-4 animate-bounce">🚀</div>
+                                <div class="text-3xl font-space text-white font-bold mb-4">太空任务开始</div>
+                                <div class="text-lg font-space text-gray-300 space-y-2">
+                                    <p><span class="text-primary">WASD / 方向键</span> 移动飞船</p>
+                                    <p><span class="text-primary">自动射击</span> 无需瞄准</p>
+                                    <p><span class="text-primary">空格键</span> 释放全屏炸弹</p>
+                                    <p class="text-yellow-400 mt-4">答对题目自动升级装备和僚机！</p>
+                                </div>
                             </div>
-                            <div class="text-lg font-space text-gray-300 mt-2">
-                                正确答题获得强力武器！
+                        </div>
+                        
+                        <!-- 暂停菜单 -->
+                        <div id="pauseMenu" class="absolute inset-0 bg-black/70 flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300">
+                            <div class="glass-effect rounded-2xl p-8 text-center">
+                                <h2 class="text-4xl font-space font-bold text-white mb-8">游戏暂停</h2>
+                                <div class="space-y-4">
+                                    <button id="resumeBtn" class="w-full bg-gradient-to-r from-primary to-secondary px-8 py-3 rounded-full font-space font-bold hover:scale-105 transition-transform">
+                                        <i class="fa fa-play mr-2"></i>继续游戏
+                                    </button>
+                                    <button id="exitGameBtn" class="w-full bg-red-600 hover:bg-red-700 px-8 py-3 rounded-full font-space font-bold transition-colors">
+                                        <i class="fa fa-times mr-2"></i>退出游戏
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 控制提示 -->
+                        <div class="absolute bottom-4 left-4 glass-effect rounded-lg p-3 text-xs font-space text-gray-400">
+                            <div class="flex items-center space-x-4">
+                                <span><kbd class="bg-gray-700 px-2 py-1 rounded">WASD</kbd> 移动</span>
+                                <span><kbd class="bg-gray-700 px-2 py-1 rounded">SPACE</kbd> 全屏炸弹</span>
+                                <span><kbd class="bg-gray-700 px-2 py-1 rounded">ESC</kbd> 暂停</span>
                             </div>
                         </div>
                     </div>
@@ -2024,1710 +2183,56 @@
 
                 document.body.appendChild(gameContainer);
 
-                // 初始化游戏
-                initThunderFighterGame();
+                // 初始化高级游戏引擎
+                initAdvancedSpaceGame();
             }
 
-            // 初始化太空游戏
-            // 雷霆战机风格的太空游戏引擎
-            function initThunderFighterGame() {
-                const canvas = document.getElementById('gameCanvas');
-                const ctx = canvas.getContext('2d');
-
-                // 设置canvas尺寸
-                canvas.width = window.innerWidth;
-                canvas.height = window.innerHeight;
-
-                // 游戏状态
-                const gameState = {
-                    player: { x: canvas.width / 2, y: canvas.height - 100, width: 60, height: 60, health: 100 },
-                    enemies: [],
-                    bullets: [],
-                    enemyBullets: [], // 敌机子弹
-                    particles: [],
-                    powerUps: [],
-                    score: 0,
-                    level: 1,
-                    gameTime: 300, // 5分钟
-                    isRunning: true,
-                    currentQuestion: null,
-                    questionActive: false,
-                    questionTimer: 15,
-                    mouseX: canvas.width / 2,
-                    mouseY: canvas.height - 100,
-                    keys: {},
-                    lastShot: 0,
-                    shootCooldown: 200,
-                    enemySpawnRate: 2000,
-                    lastEnemySpawn: 0,
-                    shieldActive: false, // 护盾状态
-                    shieldTime: 0, // 护盾剩余时间
-                    // 持续道具系统
-                    persistentItems: {
-                        weaponLevel: 1, // 武器等级 1-5
-                        shieldLevel: 0, // 护盾等级 0-3
-                        speedLevel: 0, // 速度等级 0-3
-                        healthLevel: 0, // 生命等级 0-3
-                        fireRateLevel: 0, // 射速等级 0-3
-                        multiShotLevel: 0, // 多重射击等级 0-3
-                        laserLevel: 0, // 激光等级 0-3
-                        bombLevel: 0 // 炸弹等级 0-3
-                    },
-                    // 自动驾驶状态
-                    autopilot: {
-                        active: false,
-                        targetX: canvas.width / 2,
-                        lastDirectionChange: 0,
-                        avoidanceMode: false
-                    }
-                };
-
-                // 完整的数学题目库
-                const mathQuestions = [
-                    // 一般形式转换题目 - 练习题
-                    {
-                        type: 'standard_form',
-                        question: '将方程 5x² - 1 = 4x 化为一般形式，并写出二次项系数',
-                        options: ['5x² - 4x - 1 = 0，二次项系数为5', '5x² + 4x - 1 = 0，二次项系数为5', '5x² - 4x + 1 = 0，二次项系数为5', 'x² - 4x - 1 = 0，二次项系数为1'],
-                        correct: 0,
-                        difficulty: 1,
-                        battleMode: 'rapid_fire'
-                    },
-                    {
-                        type: 'standard_form',
-                        question: '将方程 4x² = 81 化为一般形式，并写出常数项',
-                        options: ['4x² - 81 = 0，常数项为-81', '4x² + 81 = 0，常数项为81', 'x² - 81 = 0，常数项为-81', '4x² = 81，无常数项'],
-                        correct: 0,
-                        difficulty: 1,
-                        battleMode: 'rapid_fire'
-                    },
-                    {
-                        type: 'standard_form',
-                        question: '将方程 4x(x+2) = 25 化为一般形式',
-                        options: ['4x² + 8x - 25 = 0', '4x² + 8x + 25 = 0', '4x² - 8x - 25 = 0', 'x² + 2x - 25 = 0'],
-                        correct: 0,
-                        difficulty: 2,
-                        battleMode: 'rapid_fire'
-                    },
-                    {
-                        type: 'standard_form',
-                        question: '将方程 (3x-2)(x+1) = 8x-3 化为一般形式',
-                        options: ['3x² - 7x + 1 = 0', '3x² + 7x - 1 = 0', '3x² - 7x - 1 = 0', '3x² + x - 1 = 0'],
-                        correct: 0,
-                        difficulty: 3,
-                        battleMode: 'rapid_fire'
-                    },
-
-                    // 习题21.1 - 一般形式转换
-                    {
-                        type: 'standard_form',
-                        question: '将方程 3x² + 1 = 6x 化为一般形式，并写出一次项系数',
-                        options: ['3x² - 6x + 1 = 0，一次项系数为-6', '3x² + 6x + 1 = 0，一次项系数为6', '3x² - 6x - 1 = 0，一次项系数为-6', 'x² - 2x + 1 = 0，一次项系数为-2'],
-                        correct: 0,
-                        difficulty: 2,
-                        battleMode: 'rapid_fire'
-                    },
-                    {
-                        type: 'standard_form',
-                        question: '将方程 4x² + 5x = 81 化为一般形式',
-                        options: ['4x² + 5x - 81 = 0', '4x² + 5x + 81 = 0', '4x² - 5x - 81 = 0', 'x² + 5x - 81 = 0'],
-                        correct: 0,
-                        difficulty: 1,
-                        battleMode: 'rapid_fire'
-                    },
-                    {
-                        type: 'standard_form',
-                        question: '将方程 x(x+5) = 0 化为一般形式',
-                        options: ['x² + 5x = 0', 'x² - 5x = 0', 'x² + 5x + 0 = 0', 'x + 5 = 0'],
-                        correct: 0,
-                        difficulty: 1,
-                        battleMode: 'rapid_fire'
-                    },
-                    {
-                        type: 'standard_form',
-                        question: '将方程 (2x-2)(x-1) = 0 化为一般形式',
-                        options: ['2x² - 4x + 2 = 0', '2x² + 4x - 2 = 0', '2x² - 4x - 2 = 0', 'x² - 2x + 1 = 0'],
-                        correct: 0,
-                        difficulty: 2,
-                        battleMode: 'rapid_fire'
-                    },
-                    {
-                        type: 'standard_form',
-                        question: '将方程 x(x+5) = 5x-10 化为一般形式',
-                        options: ['x² - 10 = 0', 'x² + 5x - 10 = 0', 'x² - 5x + 10 = 0', 'x² + 10 = 0'],
-                        correct: 0,
-                        difficulty: 3,
-                        battleMode: 'rapid_fire'
-                    },
-                    {
-                        type: 'standard_form',
-                        question: '将方程 (3x-2)(x+1) = x(2x-1) 化为一般形式',
-                        options: ['x² - x - 2 = 0', 'x² + x + 2 = 0', 'x² - x + 2 = 0', 'x² + x - 2 = 0'],
-                        correct: 0,
-                        difficulty: 3,
-                        battleMode: 'rapid_fire'
-                    },
-
-                    // 应用题 - 练习题
-                    {
-                        type: 'application',
-                        question: '4个完全相同的正方形面积之和是25，求正方形边长x的方程',
-                        options: ['4x² = 25', 'x² = 25', '4x = 25', '2x² = 25'],
-                        correct: 0,
-                        difficulty: 2,
-                        battleMode: 'shield_mode'
-                    },
-                    {
-                        type: 'application',
-                        question: '矩形长比宽多2，面积是100，求矩形长x的方程',
-                        options: ['x(x-2) = 100', 'x(x+2) = 100', '2x² = 100', 'x² + 2x = 100'],
-                        correct: 0,
-                        difficulty: 3,
-                        battleMode: 'shield_mode'
-                    },
-                    {
-                        type: 'application',
-                        question: '把长为1的木条分成两段，使较短一段的长与全长的积等于较长一段的长的平方，求较短一段的长x',
-                        options: ['x·1 = (1-x)²', 'x² = 1-x', 'x(1-x) = x²', 'x·1 = (1-x)²'],
-                        correct: 0,
-                        difficulty: 4,
-                        battleMode: 'shield_mode'
-                    },
-
-                    // 应用题 - 习题21.1
-                    {
-                        type: 'application',
-                        question: '一个圆的面积是2π m²，求半径r的方程',
-                        options: ['πr² = 2π', '2πr = 2π', 'πr² = 2', 'r² = 2π'],
-                        correct: 0,
-                        difficulty: 2,
-                        battleMode: 'shield_mode'
-                    },
-                    {
-                        type: 'application',
-                        question: '直角三角形两条直角边相差3cm，面积是9cm²，求较长直角边x的方程',
-                        options: ['x(x-3) = 18', '½x(x-3) = 9', 'x(x+3) = 18', '½x(x+3) = 9'],
-                        correct: 1,
-                        difficulty: 3,
-                        battleMode: 'shield_mode'
-                    },
-                    {
-                        type: 'application',
-                        question: '矩形长比宽多1cm，面积是132cm²，求长x的方程',
-                        options: ['x(x-1) = 132', 'x(x+1) = 132', 'x² + x = 132', 'x² - x = 132'],
-                        correct: 0,
-                        difficulty: 3,
-                        battleMode: 'shield_mode'
-                    },
-                    {
-                        type: 'application',
-                        question: '用1m长的铁丝围成面积为0.06m²的矩形，设长为x，求方程',
-                        options: ['x(0.5-x) = 0.06', 'x(1-x) = 0.06', '2x(0.5-x) = 0.06', 'x(0.25-x) = 0.06'],
-                        correct: 0,
-                        difficulty: 4,
-                        battleMode: 'shield_mode'
-                    },
-                    {
-                        type: 'application',
-                        question: '聚会中每两人都握一次手，共握手10次，求参加人数x的方程',
-                        options: ['x(x-1)/2 = 10', 'x(x+1)/2 = 10', 'x² = 10', '2x = 10'],
-                        correct: 0,
-                        difficulty: 4,
-                        battleMode: 'shield_mode'
-                    },
-
-                    // 根的判断题
-                    {
-                        type: 'roots',
-                        question: '下列哪个数是方程 x² + x - 12 = 0 的根？',
-                        options: ['3', '4', '2', '1'],
-                        correct: 0,
-                        difficulty: 2,
-                        battleMode: 'boss_fight'
-                    },
-                    {
-                        type: 'roots',
-                        question: '在数字 -4, -3, -2, -1, 0, 1, 2, 3, 4 中，哪个是方程 x² + x - 12 = 0 的根？',
-                        options: ['-4', '-3', '0', '4'],
-                        correct: 0,
-                        difficulty: 2,
-                        battleMode: 'boss_fight'
-                    },
-                    {
-                        type: 'roots',
-                        question: '如果2是方程 x² - c = 0 的一个根，那么常数c是多少？',
-                        options: ['4', '2', '-2', '-4'],
-                        correct: 0,
-                        difficulty: 3,
-                        battleMode: 'boss_fight'
-                    },
-                    {
-                        type: 'roots',
-                        question: '方程 x² - 4 = 0 的根是什么？',
-                        options: ['x = ±2', 'x = ±4', 'x = 2', 'x = 4'],
-                        correct: 0,
-                        difficulty: 2,
-                        battleMode: 'boss_fight'
-                    }
-                ];
-
-                // 鼠标控制
-                canvas.addEventListener('mousemove', (e) => {
-                    const rect = canvas.getBoundingClientRect();
-                    gameState.mouseX = e.clientX - rect.left;
-                    gameState.mouseY = e.clientY - rect.top;
+            // 高级太空游戏引擎 - 使用外部模块
+            function initAdvancedSpaceGame() {
+                // 创建游戏实例
+                const game = new AdvancedSpaceGame();
+                
+                // 播放背景音乐
+                playGameMusic();
+                
+                // 初始化游戏
+                game.init();
+                
+                // 绑定暂停按钮
+                document.getElementById('resumeBtn')?.addEventListener('click', () => {
+                    game.pause();
                 });
-
-                // 键盘控制
-                document.addEventListener('keydown', (e) => {
-                    gameState.keys[e.key] = true;
-                });
-
-                document.addEventListener('keyup', (e) => {
-                    gameState.keys[e.key] = false;
-                });
-
-                // 创建星空背景
-                const stars = [];
-                for (let i = 0; i < 300; i++) {
-                    stars.push({
-                        x: Math.random() * canvas.width,
-                        y: Math.random() * canvas.height,
-                        size: Math.random() * 2 + 0.5,
-                        speed: Math.random() * 2 + 0.5,
-                        opacity: Math.random() * 0.8 + 0.2
-                    });
-                }
-
-                // 绘制星空
-                function drawStars() {
-                    stars.forEach(star => {
-                        ctx.save();
-                        ctx.globalAlpha = star.opacity;
-                        ctx.fillStyle = '#ffffff';
-                        ctx.beginPath();
-                        ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
-                        ctx.fill();
-                        ctx.restore();
-
-                        star.y += star.speed;
-                        if (star.y > canvas.height) {
-                            star.y = -10;
-                            star.x = Math.random() * canvas.width;
-                        }
-                    });
-                }
-
-                // 绘制玩家飞船
-                function drawPlayer() {
-                    const player = gameState.player;
-
-                    // 平滑移动到鼠标位置
-                    const dx = gameState.mouseX - player.x;
-                    const dy = gameState.mouseY - player.y;
-                    player.x += dx * 0.1;
-                    player.y += dy * 0.1;
-
-                    // 限制边界
-                    player.x = Math.max(30, Math.min(canvas.width - 30, player.x));
-                    player.y = Math.max(30, Math.min(canvas.height - 30, player.y));
-
-                    // 绘制护盾效果
-                    if (gameState.shieldActive) {
-                        ctx.save();
-                        ctx.globalAlpha = 0.3 + Math.sin(Date.now() * 0.01) * 0.2;
-                        ctx.strokeStyle = '#00ffff';
-                        ctx.lineWidth = 3;
-                        ctx.beginPath();
-                        ctx.arc(player.x, player.y, 50, 0, Math.PI * 2);
-                        ctx.stroke();
-
-                        // 护盾粒子效果
-                        ctx.globalAlpha = 0.6;
-                        for (let i = 0; i < 8; i++) {
-                            const angle = (Date.now() * 0.005 + i * Math.PI / 4) % (Math.PI * 2);
-                            const x = player.x + Math.cos(angle) * 45;
-                            const y = player.y + Math.sin(angle) * 45;
-                            ctx.fillStyle = '#00ffff';
-                            ctx.beginPath();
-                            ctx.arc(x, y, 3, 0, Math.PI * 2);
-                            ctx.fill();
-                        }
-                        ctx.restore();
-                    }
-
-                    // 绘制飞船尾焰粒子效果
-                    for (let i = 0; i < 5; i++) {
-                        const offsetX = (Math.random() - 0.5) * 20;
-                        const offsetY = 15 + Math.random() * 20;
-                        const size = Math.random() * 4 + 2;
-
-                        ctx.save();
-                        ctx.globalAlpha = 0.7 - i * 0.1;
-                        ctx.fillStyle = i % 2 === 0 ? '#ff6600' : '#ffaa00';
-                        ctx.beginPath();
-                        ctx.arc(player.x + offsetX, player.y + offsetY, size, 0, Math.PI * 2);
-                        ctx.fill();
-                        ctx.restore();
-                    }
-
-                    // 绘制飞船
-                    ctx.save();
-                    ctx.translate(player.x, player.y);
-
-                    // 添加发光效果
-                    ctx.shadowColor = '#00ffff';
-                    ctx.shadowBlur = 15;
-
-                    // 飞船主体 - 更华丽的设计
-                    const gradient = ctx.createLinearGradient(0, -25, 0, 15);
-                    gradient.addColorStop(0, '#00ffff');
-                    gradient.addColorStop(0.5, '#0088ff');
-                    gradient.addColorStop(1, '#004488');
-                    ctx.fillStyle = gradient;
-
-                    // 主体形状
-                    ctx.beginPath();
-                    ctx.moveTo(0, -25);
-                    ctx.lineTo(-15, 15);
-                    ctx.lineTo(-8, 10);
-                    ctx.lineTo(0, -5);
-                    ctx.lineTo(8, 10);
-                    ctx.lineTo(15, 15);
-                    ctx.closePath();
-                    ctx.fill();
-
-                    // 飞船装饰线条
-                    ctx.strokeStyle = '#ffffff';
-                    ctx.lineWidth = 2;
-                    ctx.beginPath();
-                    ctx.moveTo(-10, 0);
-                    ctx.lineTo(10, 0);
-                    ctx.moveTo(-8, -10);
-                    ctx.lineTo(8, -10);
-                    ctx.stroke();
-
-                    // 驾驶舱
-                    ctx.fillStyle = '#ffffff';
-                    ctx.beginPath();
-                    ctx.arc(0, -10, 6, 0, Math.PI * 2);
-                    ctx.fill();
-
-                    // 驾驶舱内部
-                    ctx.fillStyle = '#0066ff';
-                    ctx.beginPath();
-                    ctx.arc(0, -10, 4, 0, Math.PI * 2);
-                    ctx.fill();
-
-                    // 武器挂载点
-                    ctx.fillStyle = '#ff0000';
-                    ctx.fillRect(-12, 5, 4, 8);
-                    ctx.fillRect(8, 5, 4, 8);
-
-                    // 飞船引擎光效 - 更华丽
-                    const engineGradient = ctx.createLinearGradient(0, 10, 0, 25);
-                    engineGradient.addColorStop(0, '#ff6600');
-                    engineGradient.addColorStop(0.5, '#ffaa00');
-                    engineGradient.addColorStop(1, '#ffff00');
-                    ctx.fillStyle = engineGradient;
-
-                    ctx.beginPath();
-                    ctx.moveTo(-8, 10);
-                    ctx.lineTo(-4, 25 + Math.sin(Date.now() * 0.01) * 3);
-                    ctx.lineTo(0, 20 + Math.sin(Date.now() * 0.015) * 2);
-                    ctx.lineTo(4, 25 + Math.sin(Date.now() * 0.01) * 3);
-                    ctx.lineTo(8, 10);
-                    ctx.closePath();
-                    ctx.fill();
-
-                    // 侧翼引擎
-                    ctx.fillStyle = '#ff3300';
-                    ctx.fillRect(-15, 12, 3, 8 + Math.sin(Date.now() * 0.02) * 2);
-                    ctx.fillRect(12, 12, 3, 8 + Math.sin(Date.now() * 0.02) * 2);
-
-                    // 能量核心发光效果
-                    ctx.save();
-                    ctx.globalAlpha = 0.8 + Math.sin(Date.now() * 0.008) * 0.2;
-                    ctx.fillStyle = '#00ffff';
-                    ctx.beginPath();
-                    ctx.arc(0, 0, 3, 0, Math.PI * 2);
-                    ctx.fill();
-                    ctx.restore();
-
-                    ctx.restore();
-                }
-
-                // 创建子弹
-                function createBullet(x, y, type = 'normal') {
-                    const items = gameState.persistentItems;
-
-                    // 基础子弹
-                    let bullet = {
-                        x: x,
-                        y: y,
-                        width: 4,
-                        height: 15,
-                        speed: 8,
-                        type: type,
-                        damage: 1 + items.weaponLevel
-                    };
-
-                    // 根据子弹类型设置不同属性
-                    switch (type) {
-                        case 'rapid':
-                            bullet.speed = 12 + items.fireRateLevel * 2;
-                            bullet.width = 3;
-                            bullet.height = 10;
-                            bullet.color = '#ffff00';
-                            break;
-                        case 'laser':
-                            bullet.speed = 15 + items.laserLevel * 3;
-                            bullet.width = 6 + items.laserLevel * 2;
-                            bullet.height = 20 + items.laserLevel * 5;
-                            bullet.damage = 3 + items.laserLevel * 2;
-                            bullet.color = '#ff0000';
-                            break;
-                        case 'super':
-                            bullet.speed = 10;
-                            bullet.width = 8 + items.weaponLevel;
-                            bullet.height = 25 + items.weaponLevel * 2;
-                            bullet.damage = 5 + items.weaponLevel * 2;
-                            bullet.color = '#ff00ff';
-                            break;
-                        default:
-                            bullet.color = '#00ff00';
-                    }
-
-                    gameState.bullets.push(bullet);
-
-                    // 多重射击
-                    if (items.multiShotLevel > 0) {
-                        for (let i = 1; i <= items.multiShotLevel; i++) {
-                            const sideBullet1 = { ...bullet };
-                            const sideBullet2 = { ...bullet };
-                            sideBullet1.x = x - i * 15;
-                            sideBullet2.x = x + i * 15;
-                            gameState.bullets.push(sideBullet1, sideBullet2);
-                        }
-                    }
-                }
-
-                // 绘制子弹
-                function drawBullets() {
-                    gameState.bullets.forEach((bullet, index) => {
-                        bullet.y -= bullet.speed;
-
-                        // 根据子弹类型设置颜色和效果
-                        ctx.save();
-
-                        if (bullet.type === 'laser') {
-                            ctx.fillStyle = bullet.color || '#ff0080';
-                            ctx.shadowColor = bullet.color || '#ff0080';
-                            ctx.shadowBlur = 15;
-                        } else if (bullet.type === 'super') {
-                            ctx.fillStyle = bullet.color || '#ff00ff';
-                            ctx.shadowColor = bullet.color || '#ff00ff';
-                            ctx.shadowBlur = 20;
-                            // 添加粒子尾迹
-                            for (let i = 0; i < 2; i++) {
-                                gameState.particles.push({
-                                    x: bullet.x + Math.random() * bullet.width,
-                                    y: bullet.y + bullet.height,
-                                    vx: (Math.random() - 0.5) * 3,
-                                    vy: Math.random() * 2 + 1,
-                                    life: 15,
-                                    maxLife: 15,
-                                    size: 2,
-                                    color: bullet.color || '#ff00ff',
-                                    type: 'trail'
-                                });
-                            }
-                        } else if (bullet.type === 'rapid') {
-                            ctx.fillStyle = bullet.color || '#ffff00';
-                            ctx.shadowColor = bullet.color || '#ffff00';
-                            ctx.shadowBlur = 8;
-                        } else {
-                            ctx.fillStyle = bullet.color || '#00ff00';
-                            ctx.shadowColor = bullet.color || '#00ff00';
-                            ctx.shadowBlur = 5;
-                        }
-
-                        ctx.fillRect(bullet.x - bullet.width / 2, bullet.y, bullet.width, bullet.height);
-                        ctx.restore();
-
-                        // 移除超出屏幕的子弹
-                        if (bullet.y < -20) {
-                            gameState.bullets.splice(index, 1);
-                        }
-                    });
-                }
-
-                // 创建敌机
-                function createEnemy(type = 'normal') {
-                    let enemy;
-
-                    switch (type) {
-                        case 'scout':
-                            enemy = {
-                                x: Math.random() * (canvas.width - 40) + 20,
-                                y: -30,
-                                width: 25,
-                                height: 25,
-                                speed: Math.random() * 3 + 3, // 快速
-                                health: 1,
-                                maxHealth: 1,
-                                type: type,
-                                lastShot: 0,
-                                shootCooldown: 2000,
-                                color: '#00ff88',
-                                pattern: 'zigzag', // 之字形移动
-                                patternTimer: 0
-                            };
-                            break;
-                        case 'heavy':
-                            enemy = {
-                                x: Math.random() * (canvas.width - 80) + 40,
-                                y: -60,
-                                width: 60,
-                                height: 60,
-                                speed: Math.random() * 1 + 0.5, // 缓慢
-                                health: 5,
-                                maxHealth: 5,
-                                type: type,
-                                lastShot: 0,
-                                shootCooldown: 800,
-                                color: '#8800ff',
-                                pattern: 'straight', // 直线移动
-                                armor: true // 有装甲
-                            };
-                            break;
-                        case 'sniper':
-                            enemy = {
-                                x: Math.random() * (canvas.width - 50) + 25,
-                                y: -40,
-                                width: 35,
-                                height: 35,
-                                speed: Math.random() * 1.5 + 1,
-                                health: 2,
-                                maxHealth: 2,
-                                type: type,
-                                lastShot: 0,
-                                shootCooldown: 1200,
-                                color: '#ff0088',
-                                pattern: 'hover', // 悬停射击
-                                targetLocked: false
-                            };
-                            break;
-                        case 'bomber':
-                            enemy = {
-                                x: Math.random() * (canvas.width - 70) + 35,
-                                y: -50,
-                                width: 50,
-                                height: 50,
-                                speed: Math.random() * 2 + 1.5,
-                                health: 3,
-                                maxHealth: 3,
-                                type: type,
-                                lastShot: 0,
-                                shootCooldown: 1000,
-                                color: '#ffaa00',
-                                pattern: 'dive', // 俯冲攻击
-                                bombLoad: 3
-                            };
-                            break;
-                        case 'boss':
-                            enemy = {
-                                x: canvas.width / 2,
-                                y: -80,
-                                width: 80,
-                                height: 80,
-                                speed: Math.random() * 1 + 0.8,
-                                health: 15,
-                                maxHealth: 15,
-                                type: type,
-                                lastShot: 0,
-                                shootCooldown: 300,
-                                color: '#ff0000',
-                                pattern: 'boss_pattern',
-                                phase: 1,
-                                specialAttackTimer: 0
-                            };
-                            break;
-                        case 'strong':
-                            enemy = {
-                                x: Math.random() * (canvas.width - 60) + 30,
-                                y: -50,
-                                width: 45,
-                                height: 45,
-                                speed: Math.random() * 2 + 1.5,
-                                health: 3,
-                                maxHealth: 3,
-                                type: type,
-                                lastShot: 0,
-                                shootCooldown: 1000,
-                                color: '#ff8800',
-                                pattern: 'aggressive'
-                            };
-                            break;
-                        default: // normal
-                            enemy = {
-                                x: Math.random() * (canvas.width - 60) + 30,
-                                y: -50,
-                                width: 40,
-                                height: 40,
-                                speed: Math.random() * 2 + 1,
-                                health: 1,
-                                maxHealth: 1,
-                                type: type,
-                                lastShot: 0,
-                                shootCooldown: 1500,
-                                color: '#ff4444',
-                                pattern: 'straight'
-                            };
-                    }
-
-                    gameState.enemies.push(enemy);
-                }
-
-                // 更新敌机移动模式
-                function updateEnemyMovement(enemy) {
-                    if (!enemy.moveTimer) enemy.moveTimer = 0;
-                    enemy.moveTimer++;
-
-                    switch (enemy.pattern) {
-                        case 'zigzag':
-                            enemy.x += Math.sin(enemy.moveTimer * 0.1) * 3;
-                            break;
-                        case 'straight':
-                            // 直线移动，无额外操作
-                            break;
-                        case 'hover':
-                            enemy.y += Math.sin(enemy.moveTimer * 0.05) * 2;
-                            enemy.x += Math.cos(enemy.moveTimer * 0.03) * 1.5;
-                            break;
-                        case 'dive':
-                            if (enemy.moveTimer % 120 === 0) {
-                                enemy.speed = enemy.speed === enemy.originalSpeed ? enemy.originalSpeed * 3 : enemy.originalSpeed;
-                            }
-                            break;
-                        case 'boss_pattern':
-                            if (enemy.moveTimer % 180 === 0) {
-                                enemy.targetX = Math.random() * (canvas.width - 60) + 30;
-                            }
-                            if (enemy.targetX) {
-                                const dx = enemy.targetX - enemy.x;
-                                enemy.x += dx * 0.02;
-                            }
-                            break;
-                        case 'aggressive':
-                            const playerDx = gameState.player.x - enemy.x;
-                            enemy.x += Math.sign(playerDx) * 1.5;
-                            break;
-                    }
-
-                    // 边界检查
-                    if (enemy.x < 0) enemy.x = 0;
-                    if (enemy.x > canvas.width) enemy.x = canvas.width;
-                }
-
-                // 绘制敌机
-                function drawEnemies() {
-                    gameState.enemies.forEach((enemy, index) => {
-                        // 更新敌机移动模式
-                        updateEnemyMovement(enemy);
-
-                        enemy.y += enemy.speed;
-
-                        // 敌机颜色根据类型
-                        ctx.fillStyle = enemy.color || '#ff4444';
-
-                        // 绘制不同形状的敌机
-                        ctx.save();
-                        ctx.translate(enemy.x, enemy.y);
-
-                        // 添加发光效果
-                        ctx.shadowColor = enemy.color || '#ff4444';
-                        ctx.shadowBlur = 10;
-
-                        switch (enemy.type) {
-                            case 'scout':
-                                // 小型三角形
-                                ctx.beginPath();
-                                ctx.moveTo(0, 10);
-                                ctx.lineTo(-8, -8);
-                                ctx.lineTo(8, -8);
-                                ctx.closePath();
-                                ctx.fill();
-                                break;
-                            case 'heavy':
-                                // 大型六边形
-                                ctx.beginPath();
-                                for (let i = 0; i < 6; i++) {
-                                    const angle = (i * Math.PI) / 3;
-                                    const x = Math.cos(angle) * 20;
-                                    const y = Math.sin(angle) * 20;
-                                    if (i === 0) ctx.moveTo(x, y);
-                                    else ctx.lineTo(x, y);
-                                }
-                                ctx.closePath();
-                                ctx.fill();
-                                // 装甲效果
-                                if (enemy.armor) {
-                                    ctx.strokeStyle = '#ffffff';
-                                    ctx.lineWidth = 2;
-                                    ctx.stroke();
-                                }
-                                break;
-                            case 'sniper':
-                                // 细长形状
-                                ctx.fillRect(-5, -15, 10, 30);
-                                ctx.fillRect(-15, -5, 30, 10);
-                                // 瞄准线
-                                if (enemy.targetLocked) {
-                                    ctx.strokeStyle = '#ff0088';
-                                    ctx.lineWidth = 2;
-                                    ctx.beginPath();
-                                    ctx.moveTo(0, 15);
-                                    ctx.lineTo(gameState.player.x - enemy.x, gameState.player.y - enemy.y);
-                                    ctx.stroke();
-                                }
-                                break;
-                            case 'bomber':
-                                // 宽大形状
-                                ctx.beginPath();
-                                ctx.ellipse(0, 0, 25, 15, 0, 0, 2 * Math.PI);
-                                ctx.fill();
-                                // 炸弹指示器
-                                for (let i = 0; i < enemy.bombLoad; i++) {
-                                    ctx.fillStyle = '#ff0000';
-                                    ctx.fillRect(-20 + i * 15, 10, 8, 8);
-                                }
-                                break;
-                            case 'boss':
-                                // 复杂Boss形状
-                                ctx.beginPath();
-                                ctx.moveTo(0, 25);
-                                ctx.lineTo(-30, -15);
-                                ctx.lineTo(-15, -25);
-                                ctx.lineTo(0, -10);
-                                ctx.lineTo(15, -25);
-                                ctx.lineTo(30, -15);
-                                ctx.closePath();
-                                ctx.fill();
-
-                                // Boss特效
-                                ctx.strokeStyle = '#ffff00';
-                                ctx.lineWidth = 3;
-                                ctx.stroke();
-
-                                // 相位指示器
-                                for (let i = 0; i < enemy.phase; i++) {
-                                    ctx.fillStyle = '#ffff00';
-                                    ctx.fillRect(-35 + i * 15, -35, 10, 5);
-                                }
-                                break;
-                            default:
-                                // 标准敌机形状
-                                ctx.beginPath();
-                                ctx.moveTo(0, 15);
-                                ctx.lineTo(-12, -10);
-                                ctx.lineTo(-6, -15);
-                                ctx.lineTo(0, -5);
-                                ctx.lineTo(6, -15);
-                                ctx.lineTo(12, -10);
-                                ctx.closePath();
-                                ctx.fill();
-                        }
-
-                        ctx.restore();
-
-                        // 血条
-                        if (enemy.health < enemy.maxHealth) {
-                            const barWidth = enemy.width;
-                            const barHeight = 4;
-                            const healthPercent = enemy.health / enemy.maxHealth;
-
-                            ctx.fillStyle = '#333';
-                            ctx.fillRect(enemy.x - barWidth / 2, enemy.y - 25, barWidth, barHeight);
-                            ctx.fillStyle = healthPercent > 0.5 ? '#00ff00' : (healthPercent > 0.2 ? '#ffff00' : '#ff0000');
-                            ctx.fillRect(enemy.x - barWidth / 2, enemy.y - 25, barWidth * healthPercent, barHeight);
-                        }
-
-                        // 敌机射击
-                        const now = Date.now();
-                        if (now - enemy.lastShot > enemy.shootCooldown) {
-                            createEnemyBullet(enemy.x, enemy.y + 20);
-                            enemy.lastShot = now;
-                        }
-
-                        // 移除超出屏幕的敌机
-                        if (enemy.y > canvas.height + 50) {
-                            gameState.enemies.splice(index, 1);
-                        }
-                    });
-                }
-
-                // 创建敌机子弹
-                function createEnemyBullet(x, y) {
-                    const bullet = {
-                        x: x,
-                        y: y,
-                        width: 3,
-                        height: 10,
-                        speed: 4,
-                        isEnemy: true
-                    };
-                    gameState.bullets.push(bullet);
-                }
-
-                // 碰撞检测
-                function checkCollisions() {
-                    // 玩家子弹与敌机碰撞
-                    gameState.bullets.forEach((bullet, bulletIndex) => {
-                        if (bullet.isEnemy) return;
-
-                        gameState.enemies.forEach((enemy, enemyIndex) => {
-                            if (bullet.x > enemy.x - enemy.width / 2 &&
-                                bullet.x < enemy.x + enemy.width / 2 &&
-                                bullet.y > enemy.y - enemy.height / 2 &&
-                                bullet.y < enemy.y + enemy.height / 2) {
-
-                                // 根据敌机类型创建不同大小的爆炸
-                                const explosionSize = enemy.type === 'boss' ? 'large' :
-                                    enemy.type === 'strong' ? 'normal' : 'small';
-                                createExplosion(enemy.x, enemy.y, explosionSize);
-
-                                // 减少敌机血量
-                                enemy.health -= bullet.damage;
-                                gameState.bullets.splice(bulletIndex, 1);
-
-                                if (enemy.health <= 0) {
-                                    gameState.score += enemy.type === 'boss' ? 50 : (enemy.type === 'strong' ? 20 : 10);
-                                    gameState.enemies.splice(enemyIndex, 1);
-                                    updateUI();
-                                }
-                            }
-                        });
-                    });
-
-                    // 敌机子弹与玩家碰撞
-                    gameState.bullets.forEach((bullet, bulletIndex) => {
-                        if (!bullet.isEnemy) return;
-
-                        const player = gameState.player;
-                        if (bullet.x > player.x - player.width / 2 &&
-                            bullet.x < player.x + player.width / 2 &&
-                            bullet.y > player.y - player.height / 2 &&
-                            bullet.y < player.y + player.height / 2) {
-
-                            // 如果有护盾，减少伤害
-                            const damage = gameState.shieldActive ? 5 : 10;
-                            player.health -= damage;
-                            gameState.bullets.splice(bulletIndex, 1);
-                            createExplosion(player.x, player.y, 'small');
-                            updateUI();
-
-                            if (player.health <= 0) {
-                                endGame();
-                            }
-                        }
-                    });
-
-                    // 敌机与玩家碰撞
-                    gameState.enemies.forEach((enemy, enemyIndex) => {
-                        const player = gameState.player;
-                        if (Math.abs(enemy.x - player.x) < 30 && Math.abs(enemy.y - player.y) < 30) {
-                            // 如果有护盾，减少伤害
-                            const damage = gameState.shieldActive ? 10 : 20;
-                            player.health -= damage;
-                            gameState.enemies.splice(enemyIndex, 1);
-                            createExplosion(enemy.x, enemy.y, 'normal');
-                            updateUI();
-
-                            if (player.health <= 0) {
-                                endGame();
-                            }
-                        }
-                    });
-                }
-
-                // 滚动背景
-                let backgroundOffset = 0;
-                function drawScrollingBackground() {
-                    // 清空画布
-                    ctx.fillStyle = 'rgba(0, 0, 20, 0.1)';
-                    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-                    // 绘制网格背景
-                    ctx.strokeStyle = 'rgba(14, 165, 233, 0.1)';
-                    ctx.lineWidth = 1;
-
-                    const gridSize = 40;
-                    backgroundOffset += 0.5; // 滚动速度
-                    if (backgroundOffset >= gridSize) backgroundOffset = 0;
-
-                    // 垂直线
-                    for (let x = -backgroundOffset; x < canvas.width + gridSize; x += gridSize) {
-                        ctx.beginPath();
-                        ctx.moveTo(x, 0);
-                        ctx.lineTo(x, canvas.height);
-                        ctx.stroke();
-                    }
-
-                    // 水平线
-                    for (let y = -backgroundOffset; y < canvas.height + gridSize; y += gridSize) {
-                        ctx.beginPath();
-                        ctx.moveTo(0, y);
-                        ctx.lineTo(canvas.width, y);
-                        ctx.stroke();
-                    }
-
-                    // 添加一些动态光点
-                    ctx.fillStyle = 'rgba(14, 165, 233, 0.3)';
-                    for (let i = 0; i < 5; i++) {
-                        const x = (Date.now() * 0.01 + i * 200) % (canvas.width + 100) - 50;
-                        const y = (Date.now() * 0.005 + i * 150) % (canvas.height + 100) - 50;
-                        ctx.beginPath();
-                        ctx.arc(x, y, 2, 0, Math.PI * 2);
-                        ctx.fill();
-                    }
-                }
-
-                // 更新护盾状态
-                function updateShield() {
-                    if (gameState.shieldActive) {
-                        gameState.shieldTime -= 16; // 假设60fps，每帧约16ms
-                        if (gameState.shieldTime <= 0) {
-                            gameState.shieldActive = false;
-                            gameState.shieldTime = 0;
-                        }
-                    }
-                }
-
-                // 自动驾驶系统
-                function updateAutopilot() {
-                    const now = Date.now();
-                    const player = gameState.player;
-
-                    // 智能躲避敌机和子弹
-                    let dangerX = null;
-                    let minDistance = Infinity;
-
-                    // 检测最近的威胁
-                    [...gameState.enemies, ...gameState.bullets.filter(b => b.isEnemy)].forEach(threat => {
-                        const distance = Math.sqrt(
-                            Math.pow(threat.x - player.x, 2) +
-                            Math.pow(threat.y - player.y, 2)
-                        );
-
-                        if (distance < minDistance && threat.y > player.y - 150) {
-                            minDistance = distance;
-                            dangerX = threat.x;
-                        }
-                    });
-
-                    // 智能移动逻辑
-                    if (dangerX !== null && minDistance < 100) {
-                        // 有威胁时躲避
-                        gameState.autopilot.avoidanceMode = true;
-                        if (dangerX < player.x) {
-                            gameState.autopilot.targetX = Math.min(canvas.width - 50, player.x + 80);
-                        } else {
-                            gameState.autopilot.targetX = Math.max(50, player.x - 80);
-                        }
-                    } else {
-                        // 无威胁时巡逻
-                        gameState.autopilot.avoidanceMode = false;
-                        if (now - gameState.autopilot.lastDirectionChange > 2000) {
-                            gameState.autopilot.targetX = 100 + Math.random() * (canvas.width - 200);
-                            gameState.autopilot.lastDirectionChange = now;
-                        }
-                    }
-
-                    // 平滑移动到目标位置
-                    const dx = gameState.autopilot.targetX - player.x;
-                    const moveSpeed = gameState.autopilot.avoidanceMode ? 8 : 4;
-
-                    if (Math.abs(dx) > 5) {
-                        player.x += Math.sign(dx) * moveSpeed;
-                        player.x = Math.max(30, Math.min(canvas.width - 30, player.x));
-                    }
-                }
-
-                // 创建爆炸效果
-                function createExplosion(x, y, size = 'normal') {
-                    let particleCount, particleSize, colors;
-
-                    switch (size) {
-                        case 'small':
-                            particleCount = 15;
-                            particleSize = 3;
-                            colors = ['#ff6600', '#ffaa00', '#ffdd00'];
-                            break;
-                        case 'large':
-                            particleCount = 40;
-                            particleSize = 6;
-                            colors = ['#ff0000', '#ff6600', '#ffaa00', '#ffffff'];
-                            break;
-                        default: // normal
-                            particleCount = 25;
-                            particleSize = 4;
-                            colors = ['#ff3300', '#ff6600', '#ffaa00'];
-                    }
-
-                    for (let i = 0; i < particleCount; i++) {
-                        const angle = (Math.PI * 2 * i) / particleCount + Math.random() * 0.5;
-                        const speed = Math.random() * 8 + 3;
-                        const color = colors[Math.floor(Math.random() * colors.length)];
-
-                        gameState.particles.push({
-                            x: x,
-                            y: y,
-                            vx: Math.cos(angle) * speed,
-                            vy: Math.sin(angle) * speed,
-                            life: 40 + Math.random() * 20,
-                            maxLife: 60,
-                            size: particleSize + Math.random() * 2,
-                            color: color,
-                            type: 'explosion'
-                        });
-                    }
-                }
-
-                // 绘制粒子效果
-                function drawParticles() {
-                    gameState.particles.forEach((particle, index) => {
-                        particle.life--;
-                        particle.x += particle.vx;
-                        particle.y += particle.vy;
-
-                        // 根据粒子类型应用不同效果
-                        if (particle.type === 'explosion') {
-                            particle.vx *= 0.98; // 阻力
-                            particle.vy *= 0.98;
-                            particle.size *= 0.95; // 缩小
-                        } else if (particle.type === 'shield') {
-                            // 护盾粒子围绕玩家旋转
-                            const angle = Math.atan2(particle.y - gameState.player.y, particle.x - gameState.player.x);
-                            particle.x = gameState.player.x + Math.cos(angle + 0.05) * 45;
-                            particle.y = gameState.player.y + Math.sin(angle + 0.05) * 45;
-                        } else if (particle.type === 'trail') {
-                            particle.vy += 0.2; // 重力
-                            particle.size *= 0.9;
-                        }
-
-                        // 计算透明度
-                        const alpha = particle.life / particle.maxLife;
-
-                        ctx.save();
-                        ctx.globalAlpha = alpha;
-                        ctx.fillStyle = particle.color;
-
-                        // 根据粒子类型绘制不同形状
-                        if (particle.type === 'explosion') {
-                            ctx.shadowColor = particle.color;
-                            ctx.shadowBlur = 10;
-                            ctx.beginPath();
-                            ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
-                            ctx.fill();
-                        } else if (particle.type === 'shield') {
-                            ctx.shadowColor = particle.color;
-                            ctx.shadowBlur = 8;
-                            ctx.beginPath();
-                            ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
-                            ctx.fill();
-                        } else if (particle.type === 'success') {
-                            // 成功粒子 - 星形
-                            ctx.shadowColor = particle.color;
-                            ctx.shadowBlur = 15;
-                            drawStar(particle.x, particle.y, particle.size);
-                        } else if (particle.type === 'error') {
-                            // 错误粒子 - 十字形
-                            ctx.lineWidth = 2;
-                            ctx.strokeStyle = particle.color;
-                            ctx.shadowColor = particle.color;
-                            ctx.shadowBlur = 8;
-                            ctx.beginPath();
-                            ctx.moveTo(particle.x - particle.size, particle.y);
-                            ctx.lineTo(particle.x + particle.size, particle.y);
-                            ctx.moveTo(particle.x, particle.y - particle.size);
-                            ctx.lineTo(particle.x, particle.y + particle.size);
-                            ctx.stroke();
-                        } else {
-                            // 默认圆形粒子
-                            ctx.beginPath();
-                            ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
-                            ctx.fill();
-                        }
-
-                        ctx.restore();
-
-                        // 移除生命周期结束的粒子
-                        if (particle.life <= 0) {
-                            gameState.particles.splice(index, 1);
-                        }
-                    });
-                }
-
-                // 绘制星形
-                function drawStar(x, y, size) {
-                    ctx.beginPath();
-                    for (let i = 0; i < 5; i++) {
-                        const angle = (i * 4 * Math.PI) / 5;
-                        const x1 = x + Math.cos(angle) * size;
-                        const y1 = y + Math.sin(angle) * size;
-                        if (i === 0) ctx.moveTo(x1, y1);
-                        else ctx.lineTo(x1, y1);
-                    }
-                    ctx.closePath();
-                    ctx.fill();
-                }
-
-                // 显示题目
-                function showQuestion() {
-                    if (gameState.questionActive) return;
-
-                    const question = mathQuestions[Math.floor(Math.random() * mathQuestions.length)];
-                    gameState.currentQuestion = question;
-                    gameState.questionActive = true;
-                    gameState.questionTimer = 15;
-
-                    // 启动自动驾驶
-                    gameState.autopilot.active = true;
-                    gameState.autopilot.targetX = canvas.width / 2;
-
-                    // 显示题目面板
-                    const panel = document.getElementById('questionPanel');
-                    const questionDiv = document.getElementById('gameQuestion');
-                    const optionsDiv = document.getElementById('answerOptions');
-
-                    questionDiv.textContent = question.question;
-                    optionsDiv.innerHTML = '';
-
-                    question.options.forEach((option, index) => {
-                        const button = document.createElement('button');
-                        button.className = 'bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg font-space transition-colors text-sm';
-                        button.textContent = option;
-                        button.onclick = () => answerQuestion(index);
-                        optionsDiv.appendChild(button);
-                    });
-
-                    panel.style.transform = 'translateY(0)';
-
-                    // 开始计时
-                    const timerInterval = setInterval(() => {
-                        gameState.questionTimer--;
-                        const timerBar = document.getElementById('timerBar');
-                        timerBar.style.width = `${(gameState.questionTimer / 15) * 100}%`;
-
-                        if (gameState.questionTimer <= 0) {
-                            clearInterval(timerInterval);
-                            answerQuestion(-1); // 超时
-                        }
-                    }, 1000);
-                }
-
-                // 回答问题
-                function answerQuestion(selectedIndex) {
-                    if (!gameState.questionActive) return;
-
-                    gameState.questionActive = false;
-                    // 关闭自动驾驶
-                    gameState.autopilot.active = false;
-
-                    const panel = document.getElementById('questionPanel');
-                    panel.style.transform = 'translateY(100%)';
-
-                    if (selectedIndex === gameState.currentQuestion.correct) {
-                        // 答对了
-                        gameState.score += 100;
-                        gameState.player.health = Math.min(100, gameState.player.health + 20);
-
-                        // 随机装备升级奖励
-                        const upgradeChance = Math.random();
-                        if (upgradeChance < 0.3) { // 30%概率获得装备升级
-                            const upgradeTypes = ['weapon', 'shield', 'speed', 'health', 'fireRate', 'multiShot', 'laser', 'bomb'];
-                            const randomUpgrade = upgradeTypes[Math.floor(Math.random() * upgradeTypes.length)];
-                            upgradeSystem.upgradeEquipment(randomUpgrade);
-                        }
-
-                        // 根据题目类型和战斗模式给予不同奖励
-                        const battleMode = gameState.currentQuestion.battleMode;
-
-                        if (battleMode === 'rapid_fire') {
-                            // 标准形式题目：快速射击模式
-                            gameState.shootCooldown = Math.max(50, gameState.shootCooldown - 30);
-                            // 生成多发子弹
-                            for (let i = -1; i <= 1; i++) {
-                                createBullet(gameState.player.x + i * 20, gameState.player.y - 30, 'rapid');
-                            }
-                            // 清除部分敌机
-                            const enemiesToRemove = Math.min(3, gameState.enemies.length);
-                            for (let i = 0; i < enemiesToRemove; i++) {
-                                const enemy = gameState.enemies[i];
-                                createExplosion(enemy.x, enemy.y);
-                                gameState.score += 10;
-                            }
-                            gameState.enemies.splice(0, enemiesToRemove);
-
-                        } else if (battleMode === 'shield_mode') {
-                            // 应用题：护盾模式
-                            gameState.player.health = 100; // 完全恢复血量
-                            // 生成护盾效果
-                            createShieldEffect();
-                            // 生成激光武器
-                            for (let i = 0; i < 5; i++) {
-                                setTimeout(() => {
-                                    createBullet(gameState.player.x, gameState.player.y - 30, 'laser');
-                                }, i * 100);
-                            }
-
-                        } else if (battleMode === 'boss_fight') {
-                            // 根的判断：Boss战模式
-                            // 清除所有普通敌机
-                            gameState.enemies.forEach(enemy => {
-                                if (enemy.type !== 'boss') {
-                                    createExplosion(enemy.x, enemy.y);
-                                    gameState.score += 10;
-                                }
-                            });
-                            gameState.enemies = gameState.enemies.filter(enemy => enemy.type === 'boss');
-
-                            // 生成超级武器
-                            createSuperWeapon();
-
-                            // 如果没有Boss，生成一个
-                            if (gameState.enemies.length === 0) {
-                                createEnemy('boss');
-                            }
-                        }
-
-                        // 显示答对特效
-                        showCorrectEffect();
-
-                    } else {
-                        // 答错了
-                        gameState.player.health -= 30;
-
-                        // 根据战斗模式给予不同惩罚
-                        const battleMode = gameState.currentQuestion.battleMode;
-
-                        if (battleMode === 'rapid_fire') {
-                            // 生成更多敌机
-                            for (let i = 0; i < 3; i++) {
-                                createEnemy('normal');
-                            }
-                        } else if (battleMode === 'shield_mode') {
-                            // 生成强力敌机
-                            createEnemy('strong');
-                            createEnemy('strong');
-                        } else if (battleMode === 'boss_fight') {
-                            // 生成Boss
-                            createEnemy('boss');
-                        }
-
-                        // 显示答错特效
-                        showWrongEffect();
-
-                        if (gameState.player.health <= 0) {
-                            endGame();
-                        }
-                    }
-
-                    updateUI();
-                }
-
-                // 创建护盾效果
-                function createShieldEffect() {
-                    gameState.shieldActive = true;
-                    gameState.shieldTime = 5000; // 5秒护盾
-
-                    // 护盾粒子效果
-                    for (let i = 0; i < 20; i++) {
-                        const angle = (i / 20) * Math.PI * 2;
-                        gameState.particles.push({
-                            x: gameState.player.x + Math.cos(angle) * 40,
-                            y: gameState.player.y + Math.sin(angle) * 40,
-                            vx: Math.cos(angle) * 2,
-                            vy: Math.sin(angle) * 2,
-                            life: 100,
-                            maxLife: 100,
-                            size: 3,
-                            color: '#00ffff',
-                            type: 'shield'
-                        });
-                    }
-                }
-
-                // 创建超级武器
-                function createSuperWeapon() {
-                    // 发射多方向激光
-                    for (let angle = 0; angle < 360; angle += 30) {
-                        const rad = (angle * Math.PI) / 180;
-                        gameState.bullets.push({
-                            x: gameState.player.x,
-                            y: gameState.player.y,
-                            width: 6,
-                            height: 20,
-                            speed: 10,
-                            type: 'super',
-                            damage: 5,
-                            vx: Math.cos(rad) * 8,
-                            vy: Math.sin(rad) * 8
-                        });
-                    }
-                }
-
-                // 显示答对特效
-                function showCorrectEffect() {
-                    for (let i = 0; i < 30; i++) {
-                        gameState.particles.push({
-                            x: gameState.player.x,
-                            y: gameState.player.y,
-                            vx: (Math.random() - 0.5) * 15,
-                            vy: (Math.random() - 0.5) * 15,
-                            life: 60,
-                            maxLife: 60,
-                            size: Math.random() * 6 + 2,
-                            color: '#00ff00',
-                            type: 'success'
-                        });
-                    }
-                }
-
-                // 显示答错特效
-                function showWrongEffect() {
-                    for (let i = 0; i < 20; i++) {
-                        gameState.particles.push({
-                            x: gameState.player.x,
-                            y: gameState.player.y,
-                            vx: (Math.random() - 0.5) * 10,
-                            vy: (Math.random() - 0.5) * 10,
-                            life: 40,
-                            maxLife: 40,
-                            size: Math.random() * 4 + 2,
-                            color: '#ff0000',
-                            type: 'error'
-                        });
-                    }
-                }
-
-                // 创建华丽装备升级系统
-                function createUpgradeSystem() {
-                    // 升级装备
-                    function upgradeEquipment(type) {
-                        const items = gameState.persistentItems;
-
-                        switch (type) {
-                            case 'weapon':
-                                if (items.weaponLevel < 5) {
-                                    items.weaponLevel++;
-                                    showUpgradeEffect('武器升级！', '#ff6600');
-                                    updateWeaponStats();
-                                }
-                                break;
-                            case 'shield':
-                                if (items.shieldLevel < 3) {
-                                    items.shieldLevel++;
-                                    showUpgradeEffect('护盾升级！', '#00ffff');
-                                    updateShieldStats();
-                                }
-                                break;
-                            case 'speed':
-                                if (items.speedLevel < 3) {
-                                    items.speedLevel++;
-                                    showUpgradeEffect('速度升级！', '#00ff00');
-                                    updateSpeedStats();
-                                }
-                                break;
-                            case 'health':
-                                if (items.healthLevel < 3) {
-                                    items.healthLevel++;
-                                    showUpgradeEffect('生命升级！', '#ff0080');
-                                    updateHealthStats();
-                                }
-                                break;
-                            case 'fireRate':
-                                if (items.fireRateLevel < 3) {
-                                    items.fireRateLevel++;
-                                    showUpgradeEffect('射速升级！', '#ffff00');
-                                    updateFireRateStats();
-                                }
-                                break;
-                            case 'multiShot':
-                                if (items.multiShotLevel < 3) {
-                                    items.multiShotLevel++;
-                                    showUpgradeEffect('多重射击升级！', '#ff00ff');
-                                    updateMultiShotStats();
-                                }
-                                break;
-                            case 'laser':
-                                if (items.laserLevel < 3) {
-                                    items.laserLevel++;
-                                    showUpgradeEffect('激光升级！', '#ff0000');
-                                    updateLaserStats();
-                                }
-                                break;
-                            case 'bomb':
-                                if (items.bombLevel < 3) {
-                                    items.bombLevel++;
-                                    showUpgradeEffect('炸弹升级！', '#ff8800');
-                                    updateBombStats();
-                                }
-                                break;
-                        }
-                    }
-
-                    // 显示升级特效
-                    function showUpgradeEffect(text, color) {
-                        const effect = document.createElement('div');
-                        effect.style.position = 'fixed';
-                        effect.style.left = '50%';
-                        effect.style.top = '30%';
-                        effect.style.transform = 'translateX(-50%)';
-                        effect.style.color = color;
-                        effect.style.fontSize = '24px';
-                        effect.style.fontWeight = 'bold';
-                        effect.style.textShadow = `0 0 10px ${color}`;
-                        effect.style.zIndex = '1000';
-                        effect.style.pointerEvents = 'none';
-                        effect.textContent = text;
-
-                        document.body.appendChild(effect);
-
-                        // 动画效果
-                        let opacity = 1;
-                        let scale = 1;
-                        const animate = () => {
-                            opacity -= 0.02;
-                            scale += 0.02;
-                            effect.style.opacity = opacity;
-                            effect.style.transform = `translateX(-50%) scale(${scale})`;
-
-                            if (opacity > 0) {
-                                requestAnimationFrame(animate);
-                            } else {
-                                document.body.removeChild(effect);
-                            }
-                        };
-                        animate();
-                    }
-
-                    // 更新武器属性
-                    function updateWeaponStats() {
-                        const level = gameState.persistentItems.weaponLevel;
-                        gameState.shootCooldown = Math.max(100, 200 - level * 20);
-                    }
-
-                    // 更新护盾属性
-                    function updateShieldStats() {
-                        const level = gameState.persistentItems.shieldLevel;
-                        if (level > 0) {
-                            gameState.shieldActive = true;
-                            gameState.shieldTime = level * 5000; // 每级5秒
-                        }
-                    }
-
-                    // 更新速度属性
-                    function updateSpeedStats() {
-                        // 速度升级影响玩家移动速度
-                        // 在drawPlayer函数中会使用这个值
-                    }
-
-                    // 更新生命属性
-                    function updateHealthStats() {
-                        const level = gameState.persistentItems.healthLevel;
-                        gameState.player.health = Math.min(100 + level * 25, gameState.player.health + 25);
-                    }
-
-                    // 更新射速属性
-                    function updateFireRateStats() {
-                        const level = gameState.persistentItems.fireRateLevel;
-                        gameState.shootCooldown = Math.max(50, 200 - level * 50);
-                    }
-
-                    // 更新多重射击属性
-                    function updateMultiShotStats() {
-                        // 多重射击在createBullet函数中处理
-                    }
-
-                    // 更新激光属性
-                    function updateLaserStats() {
-                        // 激光属性在createBullet函数中处理
-                    }
-
-                    // 更新炸弹属性
-                    function updateBombStats() {
-                        // 炸弹属性在特殊攻击中处理
-                    }
-
-                    return { upgradeEquipment };
-                }
-
-                // 初始化升级系统
-                const upgradeSystem = createUpgradeSystem();
-
-                // 创建道具
-                function createPowerUp(x, y, type) {
-                    gameState.powerUps.push({
-                        x: x,
-                        y: y,
-                        type: type,
-                        life: 300
-                    });
-                }
-
-                // 更新UI
-                function updateUI() {
-                    document.getElementById('gameHealth').textContent = gameState.player.health;
-                    document.getElementById('gameScore').textContent = gameState.score;
-                    document.getElementById('gameLevel').textContent = gameState.level;
-
-                    const minutes = Math.floor(gameState.gameTime / 60);
-                    const seconds = gameState.gameTime % 60;
-                    document.getElementById('gameTime').textContent =
-                        `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-                }
-
-                // 结束游戏
-                function endGame() {
-                    gameState.isRunning = false;
-
+                
+                // 绑定退出按钮
+                document.getElementById('exitGameBtn')?.addEventListener('click', () => {
+                    game.end();
+                    stopGameMusic();
                     const gameContainer = document.getElementById('spaceGameContainer');
-                    const endScreen = document.createElement('div');
-                    endScreen.className = 'absolute inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50';
-                    endScreen.innerHTML = `
-                        <div class="glass-effect p-8 rounded-2xl text-center max-w-md">
-                            <h2 class="text-3xl font-bold mb-4 text-primary">游戏结束</h2>
-                            <p class="text-xl mb-2">最终得分: <span class="text-yellow-500">${gameState.score}</span></p>
-                            <p class="text-lg mb-6">等级: <span class="text-green-500">${gameState.level}</span></p>
-                            <button id="restartBtn" class="bg-gradient-to-r from-primary to-secondary px-6 py-3 rounded-full hover:opacity-90 transition-opacity">
-                                重新开始
-                            </button>
-                        </div>
-                    `;
-
-                    gameContainer.appendChild(endScreen);
-
-                    document.getElementById('restartBtn').onclick = () => {
-                        document.body.removeChild(gameContainer);
-                        launchSpaceGame();
-                    };
-                }
-
-                // 游戏主循环
-                function gameLoop() {
-                    if (!gameState.isRunning) return;
-
-                    // 清空画布并绘制滚动背景
-                    drawScrollingBackground();
-
-                    // 绘制游戏元素
-                    drawStars();
-                    drawPlayer();
-                    drawBullets();
-                    drawEnemies();
-                    drawParticles();
-
-                    // 更新护盾状态
-                    updateShield();
-
-                    // 自动驾驶逻辑
-                    if (gameState.autopilot.active) {
-                        updateAutopilot();
+                    if (gameContainer) {
+                        gameContainer.style.animation = 'fadeOut 0.5s ease-out';
+                        setTimeout(() => {
+                            document.body.removeChild(gameContainer);
+                        }, 500);
                     }
-
-                    // 玩家射击
-                    const now = Date.now();
-                    if (now - gameState.lastShot > gameState.shootCooldown) {
-                        createBullet(gameState.player.x, gameState.player.y - 30);
-                        gameState.lastShot = now;
-                    }
-
-                    // 生成敌机
-                    if (now - gameState.lastEnemySpawn > gameState.enemySpawnRate) {
-                        const rand = Math.random();
-                        if (rand < 0.05) {
-                            createEnemy('boss');
-                        } else if (rand < 0.15) {
-                            createEnemy('bomber');
-                        } else if (rand < 0.25) {
-                            createEnemy('sniper');
-                        } else if (rand < 0.35) {
-                            createEnemy('heavy');
-                        } else if (rand < 0.45) {
-                            createEnemy('scout');
-                        } else if (rand < 0.65) {
-                            createEnemy('strong');
-                        } else {
-                            createEnemy('normal');
-                        }
-                        gameState.lastEnemySpawn = now;
-                    }
-
-                    // 碰撞检测
-                    checkCollisions();
-
-                    // 随机显示题目
-                    if (Math.random() < 0.002 && !gameState.questionActive) {
-                        showQuestion();
-                    }
-
-                    // 游戏时间倒计时
-                    if (now % 1000 < 16) { // 大约每秒执行一次
-                        gameState.gameTime--;
-                        if (gameState.gameTime <= 0) {
-                            endGame();
-                        }
-                        updateUI();
-                    }
-
-                    requestAnimationFrame(gameLoop);
-                }
-
-                // 退出游戏
-                document.getElementById('exitGameBtn').addEventListener('click', function () {
-                    gameState.isRunning = false;
-                    const gameContainer = document.getElementById('spaceGameContainer');
-                    gameContainer.style.animation = 'fadeOut 0.5s ease-out';
-                    setTimeout(() => {
-                        document.body.removeChild(gameContainer);
-                    }, 500);
                 });
-
+                
                 // 隐藏提示
                 setTimeout(() => {
                     const hints = document.getElementById('gameHints');
-                    hints.style.opacity = '0';
-                    hints.style.transition = 'opacity 2s ease-out';
-                }, 3000);
-
-                // 开始游戏循环
-                updateUI();
-                gameLoop();
+                    if (hints) {
+                        hints.style.opacity = '0';
+                        hints.style.transition = 'opacity 2s ease-out';
+                    }
+                }, 5000);
+                
+                // 全局访问
+                window.currentGame = game;
             }
-            document.querySelectorAll('.interactive-btn').forEach(btn => {
-                btn.addEventListener('mouseenter', function () {
-                    this.style.transform = 'translateY(-2px)';
-                    this.style.boxShadow = '0 10px 25px rgba(0,0,0,0.3)';
-                });
-
-                btn.addEventListener('mouseleave', function () {
-                    this.style.transform = 'translateY(0)';
-                    this.style.boxShadow = '0 4px 15px rgba(0,0,0,0.2)';
-                });
-            });
-        }
-
-        // 初始化移动端菜单
-        function initMobileMenu() {
-            const mobileMenuBtn = document.getElementById('menuToggle');
-            const mobileMenu = document.getElementById('mobileMenu');
-
-            if (mobileMenuBtn && mobileMenu) {
-                mobileMenuBtn.addEventListener('click', function () {
-                    mobileMenu.classList.toggle('hidden');
-                });
+            
+            // 保留旧的代码作为备用（不会执行）
+            function _oldGameCode() {
+                // 旧代码已移至 advanced-space-game.js
+                return;
             }
         }
 
@@ -3799,6 +2304,8 @@
             }, 100);
         });
     </script>
+    <!-- 高级太空游戏引擎 -->
+    <script src="advanced-space-game.js"></script>
 </body>
 
 </html>
