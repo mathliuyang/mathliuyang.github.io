@@ -587,7 +587,7 @@ const teamMembers = [
         phones: [],
         orcid: "",
         avatar: "../assets/avatar/yujiali.jpg",
-        position: "核心成员"
+        position: "合作成员"
     }
 ];
 
