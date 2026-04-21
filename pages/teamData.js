@@ -570,6 +570,24 @@ const teamMembers = [
         orcid: "",
         avatar: "../assets/avatar/yucaiyang.jpg",
         position: "核心成员"
+    },
+    {
+        id: "yujiali",
+        name: "于佳丽",
+        englishName: "Jiali Yu",
+        gender: "女",
+        degree: "博士",
+        title: "教授",
+        researchFields: "",
+        institution: "数学科学学院，电子科技大学，中国成都 611731",
+        institutionEn: "School of Mathematical Sciences, University of Electronic Science and Technology of China, Chengdu 611731, China",
+        address: "四川省成都市电子科技大学清水河校区 科研六号楼A区",
+        addressEn: "Research Building No. 6, A Area, Qingshuihe Campus, University of Electronic Science and Technology of China",
+        emails: ["yujiali@uestc.edu.cn"],
+        phones: [],
+        orcid: "",
+        avatar: "../assets/avatar/yujiali.jpg",
+        position: "核心成员"
     }
 ];
 
