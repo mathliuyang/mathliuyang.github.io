@@ -475,7 +475,7 @@ const teamMembers = [
         institutionEn: "Nuclear Power Institute of China, State Key Laboratory of Advanced Nuclear Energy Technology, Chengdu 610213, China",
         address: "四川省成都市双流区长顺大道一段328号",
         addressEn: "No. 328, Section 1, Changshun Avenue, Shuangliu District, Chengdu, Sichuan Province, China",
-        emails: [],
+        emails: ["zhai2454814@gmail.com", "2454814871@qq.com"],
         phones: [],
         orcid: "",
         avatar: "../assets/avatar/zhaixiyan.jpg",
