@@ -6539,6 +6539,58 @@ let pinnsPapers = [
     "summary": "NOEM 用预训练神经算子元件替代需要细网格的子域，实现高效、可扩展的有限元求解，是传统数值方法与机器学习融合的重要一步。",
     "takeaways": "当有限元在某些子域需要极细网格时，可以用预训练的神经算子元件替代大片网格；神经算子的预测精度决定了混合方法的整体误差，训练高质量可复用元件至关重要。",
     "discussion": "你认为哪些传统仿真任务最适合采用这种神经算子与有限元结合的策略？欢迎分享你的看法。"
+  }},
+
+  {
+  "meta": {
+    "titleCN": "基于小波的富化物理信息神经网络用于近似固体力学中的局部和非均匀解",
+    "titleEN": "Wavelet-based enrichment for physics informed neural networks to approximate localized and heterogeneous solutions in solid mechanics",
+    "author": "Duc‑Vinh Nguyen✉, Mohamed Jebahi, Francisco Chinesta",
+    "unit": "Arts et Métiers Institute of Technology, CNRS, Université de Lorraine, LEM3, France; ESI Group Chair @ PIMM Lab, Arts et Métiers Institute of Technology, Paris, France; ESI Group; CNRS@CREATE LTD, Singapore",
+    "venue": "Comput. Methods Appl. Mech. Engrg., 2026",
+    "date": "2026-01-24",
+    "tags": "Physics-Informed Neural Networks, Wavelet Enrichment, Solid Mechanics, Multiscale",
+    "links": {
+      "paper": "https://linkinghub.elsevier.com/retrieve/pii/S0045782526000423",
+      "download": "https://www.jianguoyun.com/p/DQaU1YkQ7P3jDRiG9qoGIAA",
+      "jianguoyun": "https://www.jianguoyun.com/p/DQaU1YkQ7P3jDRiG9qoGIAA",
+      "original": "https://mathliuyang.github.io/tools/pinns-research.html",
+      "code": "论文页面未标注官方开源仓库"
+    }
+  },
+  "titles": {
+    "suspense": "当神经网络遇到孔洞应力集中，它还能精准预测吗？",
+    "value": "抓住局部异质：小波富化PINN提升固体力学求解精度",
+    "conflict": "传统PINN难解局部高频，如何用小波富化突破瓶颈？"
+  },
+  "intro": "作者探讨当物理信息神经网络面对固体力学中的局部应力集中时难以捕捉高频特征的问题。以带孔板为例，提出通过密度感知加权和小波富化提升PINN精度，并在多孔介质和复合材料中验证。",
+  "content": {
+    "background": {
+      "field": "AI for PDEs, 计算固体力学",
+      "context": "PINN被广泛用于求解偏微分方程，不需要网格即可学习解",
+      "problem": "传统PINN难以捕捉孔洞或界面处的局部高频和不连续特征"
+    },
+    "contribution": {
+      "significance": "在无网格深度学习求解器中引入局部富化，为处理异质材料和应力集中提供新框架",
+      "method": "提出密度感知加权的损失函数，以及基于连续可微小波基的富化层，并通过仿射映射在局部区域应用",
+      "innovation": "首次在PINN中使用Gaussian小波进行局部富化，联合L₁正则化自动选择有效模式，实现不增加复杂度的高精度求解"
+    },
+    "validation": {
+      "experiments": "通过带孔板、多孔介质和双材料复合体的数值实验比较传统PINN和富化PINN的表现；评估不同采样策略和损失加权的作用。",
+      "conclusion": "富化PINN在孔边、孔间相互作用和材料界面处大幅降低误差，与有限元基准解接近"
+    },
+    "evaluation": {
+      "impact": "工作为PINN在工程问题中应对局部异质提供了重要范式，有望在复合材料设计、裂纹分析等领域推广",
+      "limitations": "研究目前仅限于二维线弹性，富化区域需先验确定，小波基非正交导致冗余"
+    }
+  },
+  "extension": {
+    "future": "探索将富化扩展到三维和时间域，结合自适应采样自动识别富化区，尝试其他局部基函数并与迁移学习结合"
+  },
+  "closing": {
+    "summary": "文章提出密度加权和小波富化两项关键技术，使物理信息神经网络能够在不增大模型复杂度的情况下捕捉局部高频现象，显著提升预测精度。",
+    "takeaways": "① 在PINN中合理布置采样点并加权可改善全局和局部误差； ② 通过连续小波基引入局部补偿层能显著提升对高频和不连续场的预测能力。",
+    "discussion": "如何设计自适应机制自动识别并富化高频区域，是未来值得研究的问题。"
   }}
 
 
