@@ -6591,7 +6591,59 @@ let pinnsPapers = [
     "summary": "文章提出密度加权和小波富化两项关键技术，使物理信息神经网络能够在不增大模型复杂度的情况下捕捉局部高频现象，显著提升预测精度。",
     "takeaways": "① 在PINN中合理布置采样点并加权可改善全局和局部误差； ② 通过连续小波基引入局部补偿层能显著提升对高频和不连续场的预测能力。",
     "discussion": "如何设计自适应机制自动识别并富化高频区域，是未来值得研究的问题。"
-  }}
+  }},
+
+  {
+  "meta": {
+    "titleCN": "PACMANN 点自适应配点方法",
+    "titleEN": "PACMANN: Point adaptive collocation method for artificial neural networks",
+    "author": "Coen Visser, Alexander Heinlein✉, Bianca Giovanardi",
+    "unit": "Delft University of Technology, Netherlands",
+    "venue": "Computer Methods in Applied Mechanics and Engineering 2026",
+    "date": "2026-01-14",
+    "tags": "AI4PDEs, 自适应采样, PINNs, 数值求解",
+    "links": {
+      "paper": "https://linkinghub.elsevier.com/retrieve/pii/S0045782525009958",
+      "download": "https://www.jianguoyun.com/p/DaROUE4Q7P3jDRiv-6oGIAA",
+      "jianguoyun": "https://www.jianguoyun.com/p/DaROUE4Q7P3jDRiv-6oGIAA",
+      "original": "https://mathliuyang.github.io/tools/pinns-research.html",
+      "code": "https://github.com/CoenVisser/PACMANN"
+    }
+  },
+  "titles": {
+    "suspense": "训练点越多越好？那高维 PINN 为何依然失败？",
+    "value": "残差引导的自适应配点：高维 PINN 解方程的新武器",
+    "conflict": "添加还是移动采样点？PACMANN 用梯度破解自适应难题"
+  },
+  "intro": "物理信息神经网络常依赖大量均匀配点来计算 PDE 残差，但在高维或复杂几何下成本昂贵且难以捕捉局部特征。传统自适应采样方法往往通过新建大量候选点来加密采样，难以扩展至高维。PACMANN 通过使用残差梯度移动已有配点，在不增加点数的情况下使采样聚焦于解的困难区域，从而兼顾精度和效率。",
+  "content": {
+    "background": {
+      "field": "AI4PDEs 与物理信息神经网络 (PINNs) 的研究领域",
+      "context": "PINNs 采用深度神经网络近似偏微分方程解，配点是在空间–时间域内采样用于计算残差的点，点数和位置直接影响求解质量。",
+      "problem": "均匀采样在存在间断或强梯度时难以捕捉局部特征，且大量配点带来训练成本。已有的 RAR、RAD 等自适应方法需要评估大量候选点，难以在高维问题上扩展，并且都是通过增加点数而非调整现有点来改变采样密度。"
+    },
+    "contribution": {
+      "significance": "解决高维 PDE 自适应采样效率问题，为复杂几何和反问题提供可行的训练策略。",
+      "method": "提出 PACMANN，通过计算残差平方的梯度并使用梯度上升法在训练过程中移动配点，将有限的配点集中到高残差区域；训练与移动交替进行，无需额外生成大量候选点。",
+      "innovation": "① 使用残差平方的梯度作为驱动力移动配点，充分利用自动微分提供的梯度信息；② 在训练若干迭代后暂停移动，分阶段更新网络与配点；③ 不需要额外采样，适用于高维 PDE；④ 方法简单易实现，可嵌入现有 PINN 框架。"
+    },
+    "validation": {
+      "experiments": "作者在 Burgers 方程、Allen–Cahn 方程、二维 Navier–Stokes 反问题、五维 Poisson 方程、三维 Navier–Stokes 方程以及含孔板的弹性问题和再入角 Laplace 方程上验证 PACMANN。结果显示，PACMANN 在 Burgers 和 Allen–Cahn 方程上取得最低平均误差，超参数敏感度分析表明适当的步长和移动步数即可收敛；在反问题中，参数估计误差优于 RAR 和 RAD；在 5D Poisson 和 3D Navier–Stokes 问题上，PACMANN 的 L2 误差显著低于静态和其他自适应采样方法，并保持相似的训练时间；在含孔板和再入角问题中，移动配点自动聚集至奇异性附近，预测的位移和残差分布与有限元解吻合良好。",
+      "conclusion": "整体来看，PACMANN 在大多数测试问题上都实现了比现有方法更低的误差和更好的效率，尤其在高维和复杂几何领域展现出独特优势。"
+    },
+    "evaluation": {
+      "impact": "PACMANN 为科学计算领域提供了一种无需增加配点即可自适应调整采样密度的策略，显著提升了 PINNs 在高维 PDE、复杂几何和反问题中的实用性，并为未来的自适应方法提供了新的思路。",
+      "limitations": "首先，在具有强边界层或陡峭梯度的 PDE 中，梯度驱动可能将配点推离边界，导致边界附近采样不足；其次，步长等超参数对结果较为敏感，缺乏自动调节机制；最后，本文实验主要集中于抛物型和椭圆型方程，对于其它类型 PDE 的适用性尚需进一步研究。"
+    }
+  },
+  "extension": {
+    "future": "可以利用残差的 Hessian 等更高阶信息进一步改进配点移动；引入约束或投影策略以保证边界附近的采样密度；将梯度驱动的配点思想与自监督或强化学习结合，甚至应用于神经算子等新的物理学习框架。"
+  },
+  "closing": {
+    "summary": "PACMANN 使用残差梯度移动配点，在不增加点数的情况下提高 PINN 的精度和效率，是解决高维 PDE 自适应采样难题的有效方法。",
+    "takeaways": "① 利用自动微分的梯度信息可以设计出高效的自适应采样策略；② 交替执行网络训练与配点移动可以显著降低误差并加快收敛。",
+    "discussion": "你认为残差梯度驱动的配点移动方法还可以应用到哪些科学计算或机器学习任务中？欢迎分享你的看法。"
+  }},
 
 
     
