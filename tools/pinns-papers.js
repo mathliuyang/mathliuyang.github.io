@@ -6697,7 +6697,57 @@ let pinnsPapers = [
     "discussion": "面对实时物理模拟的需求，你会如何在物理一致性与计算效率之间做取舍？"
   }},
 
-
+{
+  "meta": {
+    "titleCN": "iPINNER：一种与集成卡尔曼滤波结合的迭代物理约束神经网络",
+    "titleEN": "iPINNER: An iterative physics-informed neural network with ensemble Kalman filter",
+    "author": "Binghang Lu, Changhong Mou, Guang Lin✉",
+    "unit": "Purdue University, USA",
+    "venue": "Journal of Computational Physics 548 (2026) 114592",
+    "date": "2025-12",
+    "tags": "AI4PDEs, PINN, 多目标优化, 卡尔曼滤波",
+    "links": {
+      "paper": "https://linkinghub.elsevier.com/retrieve/pii/S0021999125008745",
+      "download": "https://www.jianguoyun.com/p/DYbZpJQQ7P3jDRixm6sGIAA",
+      "jianguoyun": "https://www.jianguoyun.com/p/DYbZpJQQ7P3jDRixm6sGIAA",
+      "original": "https://mathliuyang.github.io/tools/pinns-research.html",
+      "code": "论文页面未标注官方开源仓库"
+    }
+  },
+  "titles": {
+    "suspense": "当噪声观测遇上未知物理，谁来拯救 PINN？",
+    "value": "多目标优化与卡尔曼滤波结合，显著提升物理约束网络的预测精度",
+    "conflict": "传统 PINN 在噪声和缺失物理下束手无策，新方法如何突破"
+  },
+  "intro": "自从物理约束神经网络出现，许多偏微分方程求解问题焕发了新的活力。不过，一旦观测数据带噪或模型参数未知，传统 PINN 就会遇到难以平衡损失和滤除噪声的困境。iPINNER 提出的多目标进化优化配合集成卡尔曼滤波的迭代框架，正是为了解决这一痛点。",
+  "content": {
+    "background": {
+      "field": "科学机器学习",
+      "context": "使用深度学习求解偏微分方程方法的发展",
+      "problem": "数据噪声和未知参数使得传统 PINN 难以保持物理约束和预测精度"
+    },
+    "contribution": {
+      "significance": "提出一种在噪声和模型不完备条件下提高 PINN 预测和反演能力的统一框架",
+      "method": "通过 NSGA‑III 多目标优化生成帕累托前沿的网络集合，并利用 Ensemble Kalman Filter 同化观测数据，迭代更新数据损失",
+      "innovation": "首次将进化多目标优化与卡尔曼滤波结合用于 PINN 训练，实现对不同损失的自动平衡和噪声过滤"
+    },
+    "validation": {
+      "experiments": "在 Burgers 方程、时间分数阶混合扩散波方程和二维热方程上进行正问题和逆问题测试，比较 ADAM‑PINN、NSGA‑PINN 和 iPINNER 的表现",
+      "conclusion": "iPINNER 在多数噪声水平下实现了更低的误差和更准确的参数估计，但在极高噪声时提升有限"
+    },
+    "evaluation": {
+      "impact": "证明多目标优化和统计滤波可显著增强物理约束网络的鲁棒性，为科学计算与数据驱动方法融合提供了新思路",
+      "limitations": "计算成本高，对观测噪声水平仍有要求，ensemble 大小需经验调节"
+    }
+  },
+  "extension": {
+    "future": "未来可以将未知物理参数作为网络输入以量化参数不确定性，结合贝叶斯 PINN 增强高噪声鲁棒性，并扩展到持续学习框架实现在线更新"
+  },
+  "closing": {
+    "summary": "iPINNER 将多目标优化与卡尔曼滤波引入物理约束神经网络，成功提升了在噪声数据和缺失物理背景下求解 PDE 的能力。",
+    "takeaways": "① 多目标优化能平衡不同损失避免权重难调；② 集成卡尔曼滤波可有效滤除观测噪声并校正模型；③ 迭代更新数据驱动项对正问题和逆问题均有益；④ iPINNER 计算成本较高但可并行化；⑤ 高噪声场景下仍需改善方法鲁棒性。",
+    "discussion": "面对日益复杂的科学问题，你认为在神经网络中引入多少传统数值方法是必要的？"
+  }},
     
 
 ];
