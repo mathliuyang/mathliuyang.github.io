@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="AIDING 团队中英文论文撰写、投稿、返修与出版工作流程">
+    <title>AIDING 论文工作流</title>
+    <script>
+        (function enforceAidingAccess() {
+            try {
+                const verifiedAt = Number(localStorage.getItem('teamPagePasswordVerified'));
+                const validFor = 30 * 24 * 60 * 60 * 1000;
+                if (!verifiedAt || !Number.isFinite(verifiedAt) || Date.now() - verifiedAt > validFor) {
+                    window.location.replace('team.html');
+                }
+            } catch (error) {
+                window.location.replace('team.html');
+            }
+        })();
+    </script>
+    <style>
+        :root {
+            --bg: #000;
+            --text: #fff;
+            --text-dim: #9ca3af;
+            --accent: #00ff88;
+            --accent-soft: rgba(0, 255, 136, 0.09);
+            --card-bg: #0a0a0a;
+            --border: rgba(255, 255, 255, 0.08);
+            --line: rgba(0, 255, 136, 0.32);
+            --radius: 18px;
+            --max-width: 1180px;
+        }
+
+        * { box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            margin: 0;
+            min-height: 100vh;
+            color: var(--text);
+            background: var(--bg);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.65;
+            letter-spacing: -0.02em;
+        }
+        button, a { font: inherit; }
+        button { color: inherit; }
+        a { color: inherit; text-decoration: none; }
+        button:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+
+        .glow {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            pointer-events: none;
+            background:
+                radial-gradient(circle at 12% 12%, rgba(0,255,136,.08), transparent 25rem),
+                radial-gradient(circle at 88% 48%, rgba(0,255,136,.05), transparent 28rem);
+        }
+
+        nav {
+            position: fixed;
+            inset: 0 0 auto;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1.5rem 4rem;
+            background: rgba(0,0,0,.78);
+            border-bottom: 1px solid transparent;
+            backdrop-filter: blur(18px);
+            transition: border-color .25s ease;
+        }
+        nav.scrolled { border-color: var(--border); }
+        .logo { font-size: 1rem; font-weight: 600; letter-spacing: .05em; }
+        .nav-actions { display: flex; align-items: center; gap: 1rem; }
+        .nav-link { color: var(--text-dim); font-size: .9rem; transition: color .2s ease; }
+        .nav-link:hover { color: var(--text); }
+        .nav-download {
+            padding: .62rem 1rem;
+            color: #00170d;
+            background: var(--accent);
+            border-radius: 999px;
+            font-size: .86rem;
+            font-weight: 700;
+        }
+
+        main { width: min(calc(100% - 3rem), var(--max-width)); margin: 0 auto; padding: 9.5rem 0 5rem; }
+        .eyebrow { color: var(--accent); font-size: .78rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; }
+        .hero { max-width: 780px; margin-bottom: 3.4rem; }
+        .hero h1 { margin: .7rem 0 .9rem; font-size: clamp(2.65rem, 7vw, 5rem); font-weight: 300; line-height: 1.08; }
+        .hero p { margin: 0; max-width: 650px; color: var(--text-dim); font-size: 1.05rem; }
+
+        .flow-shell {
+            position: relative;
+            padding: 2rem;
+            overflow: hidden;
+            background: linear-gradient(145deg, rgba(255,255,255,.035), rgba(255,255,255,.01));
+            border: 1px solid var(--border);
+            border-radius: 24px;
+        }
+        .flow-shell::after {
+            content: "";
+            position: absolute;
+            width: 260px;
+            height: 260px;
+            right: -150px;
+            bottom: -180px;
+            border: 1px solid rgba(0,255,136,.22);
+            border-radius: 50%;
+        }
+        .flow-hint { display: flex; justify-content: space-between; gap: 1rem; margin-bottom: 1.5rem; }
+        .flow-hint strong { font-size: 1.05rem; }
+        .flow-hint span { color: var(--text-dim); font-size: .86rem; }
+        .flow-map { position: relative; display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.2rem; }
+        .flow-map::before {
+            content: "";
+            position: absolute;
+            top: 30px;
+            left: 11%;
+            right: 11%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--line) 10%, var(--line) 90%, transparent);
+        }
+        .flow-node {
+            position: relative;
+            z-index: 1;
+            display: grid;
+            justify-items: center;
+            gap: .75rem;
+            width: 100%;
+            padding: 0;
+            background: none;
+            border: 0;
+            cursor: pointer;
+        }
+        .node-dot {
+            display: grid;
+            place-items: center;
+            width: 60px;
+            height: 60px;
+            border: 1px solid rgba(255,255,255,.18);
+            border-radius: 50%;
+            color: var(--text-dim);
+            background: #080808;
+            font-size: .86rem;
+            font-weight: 700;
+            transition: .25s ease;
+        }
+        .node-label { color: var(--text-dim); font-size: .92rem; font-weight: 600; transition: color .25s ease; }
+        .flow-node:hover .node-dot, .flow-node.active .node-dot {
+            color: #00170d;
+            background: var(--accent);
+            border-color: var(--accent);
+            box-shadow: 0 0 0 7px rgba(0,255,136,.09), 0 0 32px rgba(0,255,136,.26);
+            transform: translateY(-2px);
+        }
+        .flow-node:hover .node-label, .flow-node.active .node-label { color: var(--text); }
+
+        .stage-panel { display: none; margin-top: 2rem; animation: reveal .32s ease; }
+        .stage-panel.active { display: block; }
+        .stage-heading { display: flex; align-items: end; justify-content: space-between; gap: 1.5rem; margin-bottom: 1.2rem; }
+        .stage-heading h2 { margin: 0 0 .25rem; font-size: clamp(1.55rem, 3vw, 2.2rem); font-weight: 450; }
+        .stage-heading p { margin: 0; color: var(--text-dim); }
+        .done-badge {
+            flex: 0 0 auto;
+            padding: .55rem .8rem;
+            color: var(--accent);
+            background: var(--accent-soft);
+            border: 1px solid rgba(0,255,136,.25);
+            border-radius: 999px;
+            font-size: .78rem;
+            font-weight: 650;
+        }
+        .step-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: .85rem; }
+        .step-card {
+            position: relative;
+            min-height: 176px;
+            padding: 1.25rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            transition: transform .2s ease, border-color .2s ease;
+        }
+        .step-card:hover { transform: translateY(-3px); border-color: rgba(0,255,136,.28); }
+        .step-num { color: var(--accent); font: 700 .72rem/1.2 ui-monospace, SFMono-Regular, Consolas, monospace; letter-spacing: .08em; }
+        .step-card h3 { margin: .75rem 0 .55rem; font-size: 1.02rem; }
+        .step-card p { margin: 0; color: var(--text-dim); font-size: .88rem; line-height: 1.65; }
+        .step-card code { color: #d6ffe9; font-size: .78rem; word-break: break-word; }
+
+        section { margin-top: 5rem; }
+        .section-head { display: flex; align-items: end; justify-content: space-between; gap: 2rem; margin-bottom: 1.4rem; }
+        .section-head h2 { margin: .35rem 0 0; font-size: clamp(1.7rem, 4vw, 2.7rem); font-weight: 350; }
+        .section-head p { margin: 0; color: var(--text-dim); max-width: 480px; font-size: .92rem; }
+
+        .rules { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+        .rule { padding: 1.35rem; background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--radius); }
+        .rule-icon { color: var(--accent); font-size: 1.15rem; }
+        .rule h3 { margin: .65rem 0 .35rem; font-size: 1rem; }
+        .rule p { margin: 0; color: var(--text-dim); font-size: .87rem; }
+
+        .template-box { overflow: hidden; background: var(--card-bg); border: 1px solid var(--border); border-radius: 20px; }
+        .template-tabs { display: flex; gap: .5rem; padding: .75rem; overflow-x: auto; border-bottom: 1px solid var(--border); }
+        .template-tab {
+            flex: 0 0 auto;
+            padding: .68rem .9rem;
+            color: var(--text-dim);
+            background: transparent;
+            border: 1px solid transparent;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: .84rem;
+        }
+        .template-tab:hover, .template-tab.active { color: var(--text); background: var(--accent-soft); border-color: rgba(0,255,136,.18); }
+        .template-panel { display: none; padding: 1.35rem; }
+        .template-panel.active { display: block; animation: reveal .25s ease; }
+        .template-meta { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: .9rem; }
+        .template-meta h3 { margin: 0; font-size: 1rem; }
+        .copy-btn {
+            padding: .55rem .8rem;
+            color: var(--accent);
+            background: transparent;
+            border: 1px solid rgba(0,255,136,.28);
+            border-radius: 9px;
+            cursor: pointer;
+            font-size: .8rem;
+            font-weight: 650;
+        }
+        .copy-btn:hover { color: #00170d; background: var(--accent); }
+        pre {
+            max-height: 300px;
+            margin: 0;
+            padding: 1rem;
+            overflow: auto;
+            white-space: pre-wrap;
+            color: #d6ddd9;
+            background: #050505;
+            border-radius: 12px;
+            font: .82rem/1.7 ui-monospace, SFMono-Regular, Consolas, monospace;
+        }
+
+        .download-box {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 1rem;
+            padding: 1.4rem;
+            background: linear-gradient(135deg, rgba(0,255,136,.1), rgba(0,255,136,.025));
+            border: 1px solid rgba(0,255,136,.25);
+            border-radius: 22px;
+        }
+        .download-lead { padding: .6rem; }
+        .download-lead h2 { margin: .5rem 0 .6rem; font-size: 1.8rem; font-weight: 420; }
+        .download-lead p { margin: 0 0 1.2rem; color: var(--text-dim); font-size: .9rem; }
+        .primary-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: .5rem;
+            padding: .72rem 1rem;
+            color: #00170d;
+            background: var(--accent);
+            border-radius: 10px;
+            font-size: .86rem;
+            font-weight: 750;
+        }
+        .file-list { display: grid; gap: .6rem; }
+        .file-row {
+            display: grid;
+            grid-template-columns: 1fr auto auto;
+            align-items: center;
+            gap: .6rem;
+            padding: .8rem .9rem;
+            background: rgba(0,0,0,.5);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+        }
+        .file-row span { font-size: .84rem; }
+        .file-row a { color: var(--text-dim); font-size: .78rem; }
+        .file-row a:hover { color: var(--accent); }
+
+        footer { width: min(calc(100% - 3rem), var(--max-width)); margin: 0 auto; padding: 1.5rem 0 3rem; color: var(--text-dim); border-top: 1px solid var(--border); font-size: .8rem; }
+        .toast {
+            position: fixed;
+            right: 1.25rem;
+            bottom: 1.25rem;
+            z-index: 300;
+            padding: .8rem 1rem;
+            color: #00170d;
+            background: var(--accent);
+            border-radius: 10px;
+            font-size: .84rem;
+            font-weight: 700;
+            opacity: 0;
+            transform: translateY(12px);
+            pointer-events: none;
+            transition: .25s ease;
+        }
+        .toast.show { opacity: 1; transform: translateY(0); }
+        @keyframes reveal { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+        @media (max-width: 900px) {
+            nav { padding: 1.2rem 1.5rem; }
+            main { padding-top: 8rem; }
+            .step-grid { grid-template-columns: repeat(2, 1fr); }
+            .download-box { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 680px) {
+            main, footer { width: min(calc(100% - 2rem), var(--max-width)); }
+            .nav-download { display: none; }
+            .hero { margin-bottom: 2.5rem; }
+            .flow-shell { padding: 1.25rem; }
+            .flow-hint span { display: none; }
+            .flow-map { grid-template-columns: repeat(4, minmax(64px, 1fr)); gap: .2rem; overflow-x: auto; padding: .5rem 0; }
+            .flow-map::before { left: 12%; right: 12%; top: 34px; }
+            .node-dot { width: 52px; height: 52px; }
+            .node-label { font-size: .76rem; white-space: nowrap; }
+            .stage-heading, .section-head { align-items: flex-start; flex-direction: column; }
+            .step-grid, .rules { grid-template-columns: 1fr; }
+            .step-card { min-height: 0; }
+            section { margin-top: 3.7rem; }
+            .file-row { grid-template-columns: 1fr auto; }
+            .file-row a:last-child { grid-column: 2; }
+        }
+        @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; animation: none !important; transition: none !important; } }
+        @media print {
+            nav, .template-tabs, .copy-btn, .toast, .nav-actions { display: none !important; }
+            body { color: #111; background: #fff; }
+            main { width: 100%; padding: 1rem; }
+            .glow { display: none; }
+            .flow-shell, .step-card, .rule, .template-box, .download-box, .file-row { color: #111; background: #fff; border-color: #bbb; box-shadow: none; }
+            .stage-panel, .template-panel { display: block !important; break-inside: avoid; }
+            .stage-panel { margin-top: 1.5rem; }
+            .stage-heading p, .step-card p, .rule p, .section-head p, .download-lead p { color: #444; }
+            .step-grid, .rules { grid-template-columns: repeat(2, 1fr); }
+            pre { max-height: none; color: #111; background: #f5f5f5; }
+            footer { color: #444; }
+        }
+    </style>
+</head>
+<body>
+    <div class="glow" aria-hidden="true"></div>
+    <nav id="nav">
+        <a class="logo" href="../index.html"><span>AICore</span><span style="color:#00ff88">Scholar</span></a>
+        <div class="nav-actions">
+            <a class="nav-link" href="team.html">返回团队页</a>
+            <a class="nav-download" href="#downloads">下载模板</a>
+        </div>
+    </nav>
+
+    <main>
+        <header class="hero">
+            <div class="eyebrow">AIDING · Paper Workflow</div>
+            <h1>论文工作流</h1>
+            <p>从定稿到出版，按阶段推进。点击流程节点，只看当前最需要做的事。</p>
+        </header>
+
+        <div class="flow-shell" id="workflow">
+            <div class="flow-hint">
+                <strong>选择当前阶段</strong>
+                <span>团队通用 SOP · 期刊最新要求优先</span>
+            </div>
+            <div class="flow-map" role="tablist" aria-label="论文工作流阶段">
+                <button class="flow-node active" type="button" role="tab" aria-selected="true" aria-controls="stage-write" data-stage="write">
+                    <span class="node-dot">01</span><span class="node-label">撰写定稿</span>
+                </button>
+                <button class="flow-node" type="button" role="tab" aria-selected="false" aria-controls="stage-submit" data-stage="submit">
+                    <span class="node-dot">02</span><span class="node-label">首次投稿</span>
+                </button>
+                <button class="flow-node" type="button" role="tab" aria-selected="false" aria-controls="stage-revise" data-stage="revise">
+                    <span class="node-dot">03</span><span class="node-label">返修回复</span>
+                </button>
+                <button class="flow-node" type="button" role="tab" aria-selected="false" aria-controls="stage-proof" data-stage="proof">
+                    <span class="node-dot">04</span><span class="node-label">录用校样</span>
+                </button>
+            </div>
+
+            <article class="stage-panel active" id="stage-write" data-panel="write">
+                <div class="stage-heading">
+                    <div><h2>撰写与定稿</h2><p>先把内容、格式和引用做对，再进入英文稿与投稿准备。</p></div>
+                    <span class="done-badge">完成标准：主稿可直接投稿</span>
+                </div>
+                <div class="step-grid">
+                    <div class="step-card"><span class="step-num">STEP 01</span><h3>中文母稿定稿</h3><p>内容与格式统一；公式编号、交叉引用、图表正文描述、参考文献全部核对。Word 公式统一用 MathType。</p></div>
+                    <div class="step-card"><span class="step-num">STEP 02</span><h3>处理语言分支</h3><p>中文稿直接适配期刊；英文稿忠实翻译，统一 CMAME、JCP、PINNs 与 AI4Science 常用表达，不改变原意。</p></div>
+                    <div class="step-card"><span class="step-num">STEP 03</span><h3>提前预演投稿</h3><p>走通投稿系统。用占位文件完成可填写步骤，先核实作者、基金、声明与文件要求。</p></div>
+                    <div class="step-card"><span class="step-num">STEP 04</span><h3>团队逐句校稿</h3><p>准备中英文稿和 Cover Letter 初稿。以英文稿为准逐句确认；AI 只标注语法与格式问题。</p></div>
+                </div>
+            </article>
+
+            <article class="stage-panel" id="stage-submit" data-panel="submit">
+                <div class="stage-heading">
+                    <div><h2>首次投稿</h2><p>锁定唯一版本，核对系统生成稿，再完成归档与通知。</p></div>
+                    <span class="done-badge">完成标准：提交记录可追溯</span>
+                </div>
+                <div class="step-grid">
+                    <div class="step-card"><span class="step-num">STEP 01</span><h3>完善 Cover Letter</h3><p>保留固定开头和结尾，只更新研究贡献、期刊匹配度及原创性声明。</p></div>
+                    <div class="step-card"><span class="step-num">STEP 02</span><h3>锁定投稿版本</h3><p>统一文件名和版本号，逐项核对作者、基金、声明、主稿、图表及补充材料。</p></div>
+                    <div class="step-card"><span class="step-num">STEP 03</span><h3>核对生成 PDF</h3><p>提交前全员打开期刊生成稿，检查页序、公式、图表、作者信息与缺页错版。</p></div>
+                    <div class="step-card"><span class="step-num">STEP 04</span><h3>归档并通知</h3><p><code>正式提交版_期刊简称_YYYY-MM-DD</code>；压缩包发邮件，最终 PDF 单独发微信。</p></div>
+                </div>
+            </article>
+
+            <article class="stage-panel" id="stage-revise" data-panel="revise">
+                <div class="stage-heading">
+                    <div><h2>返修与回复</h2><p>保留全部原始意见，逐条对应修改证据与准确位置。</p></div>
+                    <span class="done-badge">完成标准：每条意见已闭环</span>
+                </div>
+                <div class="step-grid">
+                    <div class="step-card"><span class="step-num">STEP 01</span><h3>整理双语意见</h3><p>编辑意见用 E.1；审稿意见用 R1.1、R1.2、R2.1。原评论完整保留并给出中文对照。</p></div>
+                    <div class="step-card"><span class="step-num">STEP 02</span><h3>确认修改方案</h3><p>准备中英文混排修改稿和返修信工作稿，线下逐条讨论后再实施。</p></div>
+                    <div class="step-card"><span class="step-num">STEP 03</span><h3>写逐点回复</h3><p>每条含“直接回答 + 具体修改 + 页码/行号 + 图表位置”。缺信息明确标记待补充，绝不虚构。</p></div>
+                    <div class="step-card"><span class="step-num">STEP 04</span><h3>重投与归档</h3><p><code>返修提交版_期刊简称_ManuscriptID_R1_YYYY-MM-DD</code>；邮件和微信同步规则同首次投稿。</p></div>
+                </div>
+            </article>
+
+            <article class="stage-panel" id="stage-proof" data-panel="proof">
+                <div class="stage-heading">
+                    <div><h2>录用及出版前校样</h2><p>逐项处理编辑与出版问题，提交前再次确认关键信息。</p></div>
+                    <span class="done-badge">完成标准：刘老师确认后提交</span>
+                </div>
+                <div class="step-grid">
+                    <div class="step-card"><span class="step-num">STEP 01</span><h3>响应编辑要求</h3><p>按清单提供源文件、高清图、声明、版权材料及出版部门要求的其他素材。</p></div>
+                    <div class="step-card"><span class="step-num">STEP 02</span><h3>逐页检查 Proof</h3><p>重点核对作者、单位、基金、公式、图表、参考文献、页眉页脚与编辑标记。</p></div>
+                    <div class="step-card"><span class="step-num">STEP 03</span><h3>团队复核确认</h3><p>逐项回答编辑问题，团队检查后向刘老师确认；收到确认再提交。</p></div>
+                    <div class="step-card"><span class="step-num">STEP 04</span><h3>确认出版模式</h3><p>默认优先订阅；仅在期刊政策、基金要求或刘老师明确确认时选择 OA。</p></div>
+                </div>
+            </article>
+        </div>
+
+        <section aria-labelledby="rules-title">
+            <div class="section-head">
+                <div><span class="eyebrow">Always Check</span><h2 id="rules-title">三个底线</h2></div>
+                <p>流程可以因期刊调整，但这三项不能省略。</p>
+            </div>
+            <div class="rules">
+                <div class="rule"><span class="rule-icon">✓</span><h3>版本唯一</h3><p>提交前明确唯一最终版；系统生成稿必须重新打开检查。</p></div>
+                <div class="rule"><span class="rule-icon">↗</span><h3>信息可追溯</h3><p>作者、基金、声明、修改位置和通知记录都要能快速核对。</p></div>
+                <div class="rule"><span class="rule-icon">◎</span><h3>提交有门槛</h3><p>首次投稿、返修和校样均须团队核对并向刘老师确认。</p></div>
+            </div>
+        </section>
+
+        <section aria-labelledby="templates-title">
+            <div class="section-head">
+                <div><span class="eyebrow">Quick Templates</span><h2 id="templates-title">常用模板</h2></div>
+                <p>需要时再展开，点击即可复制。正式使用前替换所有方括号内容。</p>
+            </div>
+            <div class="template-box">
+                <div class="template-tabs" role="tablist" aria-label="常用模板">
+                    <button class="template-tab active" type="button" role="tab" aria-selected="true" data-template="translate">忠实翻译</button>
+                    <button class="template-tab" type="button" role="tab" aria-selected="false" data-template="proofread">AI 核查</button>
+                    <button class="template-tab" type="button" role="tab" aria-selected="false" data-template="cover">Cover Letter</button>
+                    <button class="template-tab" type="button" role="tab" aria-selected="false" data-template="response">返修信</button>
+                    <button class="template-tab" type="button" role="tab" aria-selected="false" data-template="notice">邮件与微信</button>
+                </div>
+                <article class="template-panel active" data-template-panel="translate">
+                    <div class="template-meta"><h3>英文论文忠实翻译提示词</h3><button class="copy-btn" type="button" data-copy="tpl-translate">复制模板</button></div>
+                    <pre id="tpl-translate">请将以下中文论文内容翻译为英文。要求：
+1. 不改变原意、数据、公式、编号、引用和科学结论；
+2. 表达通俗、准确且具有学术性，避免生僻词；
+3. 优先使用计算数学、计算物理、CMAME、JCP、PINNs、深度学习求解微分方程及 AI4Science 领域常用表达；
+4. 术语前后一致；不确定处标记 [AUTHOR_INPUT_NEEDED]，不要猜测。
+
+原文：
+[粘贴中文内容]</pre>
+                </article>
+                <article class="template-panel" data-template-panel="proofread">
+                    <div class="template-meta"><h3>英文稿语法与格式核查提示词</h3><button class="copy-btn" type="button" data-copy="tpl-proofread">复制模板</button></div>
+                    <pre id="tpl-proofread">请核查以下英文论文，仅标注问题，不直接静默改写。
+
+按表格输出：位置 | 原文 | 问题类型 | 建议修改 | 是否可能影响科学含义。
+重点检查语法、拼写、标点、术语一致性、公式/图表/参考文献交叉引用和格式。
+不得改变科学含义、数据、公式或引用；不确定处标记 [AUTHOR_INPUT_NEEDED]。
+
+英文稿：
+[粘贴内容]</pre>
+                </article>
+                <article class="template-panel" data-template-panel="cover">
+                    <div class="template-meta"><h3>Cover Letter 固定框架</h3><button class="copy-btn" type="button" data-copy="tpl-cover">复制模板</button></div>
+                    <pre id="tpl-cover">Dear Editor,
+
+We are pleased to submit our manuscript entitled “[TITLE]” for consideration in [JOURNAL].
+
+[SCIENTIFIC PROBLEM AND IMPORTANCE]
+[MAIN METHOD AND KEY RESULTS]
+[CORE CONTRIBUTIONS]
+[WHY THE WORK FITS THIS JOURNAL]
+
+This manuscript is original, has not been published previously, and is not under consideration elsewhere. All authors have approved the manuscript and agree with its submission to [JOURNAL].
+
+Thank you for your consideration.
+
+Sincerely,
+[CORRESPONDING AUTHOR AND CONTACT]</pre>
+                </article>
+                <article class="template-panel" data-template-panel="response">
+                    <div class="template-meta"><h3>Response to Reviewers 单条结构</h3><button class="copy-btn" type="button" data-copy="tpl-response">复制模板</button></div>
+                    <pre id="tpl-response">Comment R1.1
+[完整保留审稿人原评论]
+
+中文理解
+[准确翻译，便于团队讨论]
+
+Response
+Thank you for this valuable comment. [直接回答问题。]
+[说明具体做了什么修改，以及理由。]
+
+Location in the revised manuscript
+Page [X], Lines [Y–Z], [Section/Figure/Table].
+
+Revised text / figure
+[粘贴修改后的正文；如涉及图表，同步插入对应内容。]
+
+信息不足时写 [AUTHOR_INPUT_NEEDED]；不得虚构实验、数据、页码、行号或图表。</pre>
+                </article>
+                <article class="template-panel" data-template-panel="notice">
+                    <div class="template-meta"><h3>归档邮件与微信通知</h3><button class="copy-btn" type="button" data-copy="tpl-notice">复制模板</button></div>
+                    <pre id="tpl-notice">邮件主题：期刊简称_正式提交版_论文短标题
+
+刘老师您好，论文已完成投稿，关键信息如下：
+题目：[TITLE]
+期刊：[JOURNAL]
+提交日期：[YYYY-MM-DD]
+稿件编号：[MANUSCRIPT ID / 暂无]
+附件：正式提交版压缩包（含中英文稿、Cover Letter、全部上传文件及最终生成稿）。
+
+微信：刘老师您好，[论文短标题] 已于 [日期] 提交至 [期刊]，稿件编号为 [ID/暂未生成]。最终 PDF 随后发送，供您查阅。
+
+返修时将“正式提交版”替换为“返修提交版_R1”，并注明本轮提交内容。</pre>
+                </article>
+            </div>
+        </section>
+
+        <section id="downloads" aria-labelledby="downloads-title">
+            <div class="download-box">
+                <div class="download-lead">
+                    <span class="eyebrow">Editable Package</span>
+                    <h2 id="downloads-title">完整模板包</h2>
+                    <p>网页保留重点；详细 SOP、模板和清单在可编辑文档中。DOCX 适合日常使用，TEX 适合版本管理。</p>
+                    <a class="primary-btn" href="../assets/documents/AIDING-workflow/AIDING_Paper_Workflow_Package.zip" download>下载 ZIP 整包 <span>↓</span></a>
+                </div>
+                <div class="file-list">
+                    <div class="file-row"><span>论文全流程 SOP</span><a href="../assets/documents/AIDING-workflow/AIDING_Paper_Workflow_SOP.docx" download>DOCX</a><a href="../assets/documents/AIDING-workflow/AIDING_Paper_Workflow_SOP.tex" download>TEX</a></div>
+                    <div class="file-row"><span>Cover Letter 模板</span><a href="../assets/documents/AIDING-workflow/AIDING_Cover_Letter_Template.docx" download>DOCX</a><a href="../assets/documents/AIDING-workflow/AIDING_Cover_Letter_Template.tex" download>TEX</a></div>
+                    <div class="file-row"><span>返修信模板</span><a href="../assets/documents/AIDING-workflow/AIDING_Response_to_Reviewers_Template.docx" download>DOCX</a><a href="../assets/documents/AIDING-workflow/AIDING_Response_to_Reviewers_Template.tex" download>TEX</a></div>
+                    <div class="file-row"><span>投稿与返修检查清单</span><a href="../assets/documents/AIDING-workflow/AIDING_Submission_Checklist.docx" download>DOCX</a><a href="../assets/documents/AIDING-workflow/AIDING_Submission_Checklist.tex" download>TEX</a></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>AIDING 团队内部工作规范 · 目标期刊最新作者指南和投稿系统要求始终具有最高优先级</footer>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+    <script>
+        const stageButtons = document.querySelectorAll('[data-stage]');
+        const stagePanels = document.querySelectorAll('[data-panel]');
+        const templateButtons = document.querySelectorAll('[data-template]');
+        const templatePanels = document.querySelectorAll('[data-template-panel]');
+        const toast = document.getElementById('toast');
+
+        function activateStage(name) {
+            stageButtons.forEach((button) => {
+                const active = button.dataset.stage === name;
+                button.classList.toggle('active', active);
+                button.setAttribute('aria-selected', String(active));
+            });
+            stagePanels.forEach((panel) => panel.classList.toggle('active', panel.dataset.panel === name));
+        }
+
+        function activateTemplate(name) {
+            templateButtons.forEach((button) => {
+                const active = button.dataset.template === name;
+                button.classList.toggle('active', active);
+                button.setAttribute('aria-selected', String(active));
+            });
+            templatePanels.forEach((panel) => panel.classList.toggle('active', panel.dataset.templatePanel === name));
+        }
+
+        function showToast(message) {
+            toast.textContent = message;
+            toast.classList.add('show');
+            window.clearTimeout(showToast.timer);
+            showToast.timer = window.setTimeout(() => toast.classList.remove('show'), 1800);
+        }
+
+        function fallbackCopy(text) {
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            textarea.setAttribute('readonly', '');
+            textarea.style.position = 'fixed';
+            textarea.style.opacity = '0';
+            document.body.appendChild(textarea);
+            textarea.select();
+            const copied = document.execCommand('copy');
+            textarea.remove();
+            return copied;
+        }
+
+        async function copyTemplate(id) {
+            const target = document.getElementById(id);
+            if (!target) return;
+            const text = target.innerText;
+            try {
+                if (navigator.clipboard && window.isSecureContext) {
+                    await navigator.clipboard.writeText(text);
+                } else if (!fallbackCopy(text)) {
+                    throw new Error('copy failed');
+                }
+                showToast('模板已复制');
+            } catch (error) {
+                showToast('复制失败，请手动选择文本');
+            }
+        }
+
+        stageButtons.forEach((button) => button.addEventListener('click', () => activateStage(button.dataset.stage)));
+        templateButtons.forEach((button) => button.addEventListener('click', () => activateTemplate(button.dataset.template)));
+        document.querySelectorAll('[data-copy]').forEach((button) => button.addEventListener('click', () => copyTemplate(button.dataset.copy)));
+        window.addEventListener('scroll', () => document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 12), { passive: true });
+    </script>
+</body>
+</html>
