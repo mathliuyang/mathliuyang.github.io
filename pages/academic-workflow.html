@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="AIDING 团队论文撰写、投稿、返修与校样工作流程">
+    <meta name="description" content="AIDING 团队论文撰写、投稿、返修、归档与校样工作流程">
     <title>AIDING 论文工作流</title>
     <script>
         (function enforceAidingAccess() {
@@ -26,10 +26,10 @@
             --text: #fff;
             --text-dim: #929a96;
             --accent: #00ff88;
-            --accent-dark: #003c22;
             --accent-soft: rgba(0, 255, 136, 0.08);
             --border: rgba(255, 255, 255, 0.09);
             --border-active: rgba(0, 255, 136, 0.38);
+            --warning: #ffd166;
             --radius: 20px;
             --max-width: 1180px;
         }
@@ -52,8 +52,8 @@
             z-index: -2;
             pointer-events: none;
             background:
-                radial-gradient(circle at 14% 16%, rgba(0,255,136,.09), transparent 24rem),
-                radial-gradient(circle at 84% 46%, rgba(0,255,136,.045), transparent 30rem);
+                radial-gradient(circle at 14% 13%, rgba(0,255,136,.09), transparent 25rem),
+                radial-gradient(circle at 86% 48%, rgba(0,255,136,.045), transparent 31rem);
         }
         body::after {
             content: "";
@@ -61,14 +61,17 @@
             inset: 0;
             z-index: -1;
             pointer-events: none;
-            opacity: .22;
+            opacity: .2;
             background-image: radial-gradient(rgba(255,255,255,.22) .55px, transparent .55px);
             background-size: 26px 26px;
             mask-image: linear-gradient(to bottom, #000, transparent 70%);
         }
         a { color: inherit; text-decoration: none; }
         button { color: inherit; font: inherit; }
-        button:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+        button:focus-visible, a:focus-visible, summary:focus-visible {
+            outline: 2px solid var(--accent);
+            outline-offset: 4px;
+        }
 
         nav {
             position: fixed;
@@ -89,7 +92,7 @@
         .nav-actions { display: flex; align-items: center; gap: 1.15rem; }
         .back-link { color: var(--text-dim); font-size: .88rem; transition: color .2s ease; }
         .back-link:hover { color: var(--text); }
-        .download-link {
+        .nav-download {
             padding: .62rem 1rem;
             color: #00160c;
             background: var(--accent);
@@ -98,7 +101,7 @@
             font-weight: 750;
         }
 
-        main { width: min(calc(100% - 3rem), var(--max-width)); margin: 0 auto; padding: 10rem 0 5.5rem; }
+        main { width: min(calc(100% - 3rem), var(--max-width)); margin: 0 auto; padding: 9.8rem 0 5.5rem; }
         .eyebrow {
             display: inline-flex;
             align-items: center;
@@ -109,17 +112,26 @@
             text-transform: uppercase;
         }
         .eyebrow::before { content: ""; width: 24px; height: 1px; background: currentColor; }
-        .hero { max-width: 820px; margin-bottom: 4rem; }
+        .hero { max-width: 900px; margin-bottom: 3.4rem; }
         .hero h1 {
-            max-width: 760px;
+            max-width: 820px;
             margin: .85rem 0 1rem;
-            font-size: clamp(3rem, 8vw, 6.4rem);
+            font-size: clamp(3rem, 8vw, 6.2rem);
             font-weight: 260;
             line-height: .98;
             letter-spacing: -.055em;
         }
         .hero h1 span { color: var(--accent); }
-        .hero p { max-width: 600px; margin: 0; color: var(--text-dim); font-size: 1.03rem; }
+        .hero > p { max-width: 620px; margin: 0; color: var(--text-dim); font-size: 1.03rem; }
+        .principles { display: flex; flex-wrap: wrap; gap: .55rem; margin-top: 1.4rem; }
+        .principle {
+            padding: .45rem .7rem;
+            color: #c8d0cc;
+            background: rgba(255,255,255,.025);
+            border: 1px solid var(--border);
+            border-radius: 999px;
+            font-size: .76rem;
+        }
 
         .workflow {
             position: relative;
@@ -132,9 +144,9 @@
         .workflow::after {
             content: "WORKFLOW";
             position: absolute;
-            right: -1.2rem;
-            top: 7.8rem;
-            color: rgba(255,255,255,.018);
+            right: -1.1rem;
+            top: 8.6rem;
+            color: rgba(255,255,255,.017);
             font-size: clamp(4rem, 10vw, 8rem);
             font-weight: 800;
             line-height: 1;
@@ -145,22 +157,22 @@
         .workflow-top strong { font-size: .96rem; font-weight: 620; }
         .workflow-top span { color: var(--text-dim); font-size: .8rem; }
 
-        .flow-map { position: relative; display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
+        .flow-map { position: relative; display: grid; grid-template-columns: repeat(5, 1fr); gap: .65rem; }
         .flow-map::before {
             content: "";
             position: absolute;
             top: 27px;
-            left: 11%;
-            right: 11%;
+            left: 8.5%;
+            right: 8.5%;
             height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(0,255,136,.42) 12%, rgba(0,255,136,.42) 88%, transparent);
+            background: linear-gradient(90deg, transparent, rgba(0,255,136,.42) 10%, rgba(0,255,136,.42) 90%, transparent);
         }
         .flow-node {
             position: relative;
             z-index: 1;
             display: grid;
             justify-items: center;
-            gap: .75rem;
+            gap: .72rem;
             padding: 0;
             background: transparent;
             border: 0;
@@ -178,7 +190,7 @@
             font: 700 .78rem/1 ui-monospace, SFMono-Regular, Consolas, monospace;
             transition: .25s ease;
         }
-        .node-name { color: var(--text-dim); font-size: .9rem; font-weight: 620; transition: color .25s ease; }
+        .node-name { color: var(--text-dim); font-size: .86rem; font-weight: 620; text-align: center; transition: color .25s ease; }
         .flow-node:hover .node-index, .flow-node.active .node-index {
             color: #00160c;
             background: var(--accent);
@@ -205,7 +217,7 @@
         }
         .step-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: .8rem; }
         .step-card {
-            min-height: 150px;
+            min-height: 146px;
             padding: 1.15rem;
             background: rgba(5,7,6,.88);
             border: 1px solid var(--border);
@@ -213,16 +225,109 @@
             transition: border-color .2s ease, transform .2s ease;
         }
         .step-card:hover { border-color: var(--border-active); transform: translateY(-3px); }
-        .step-card span { color: var(--accent); font: 700 .67rem/1.2 ui-monospace, SFMono-Regular, Consolas, monospace; letter-spacing: .08em; }
+        .step-card > span { color: var(--accent); font: 700 .67rem/1.2 ui-monospace, SFMono-Regular, Consolas, monospace; letter-spacing: .08em; }
         .step-card h3 { margin: .72rem 0 .38rem; font-size: .98rem; font-weight: 650; }
-        .step-card p { margin: 0; color: var(--text-dim); font-size: .83rem; line-height: 1.6; }
+        .step-card p { margin: 0; color: var(--text-dim); font-size: .82rem; line-height: 1.58; }
 
-        .downloads { margin-top: 5.5rem; scroll-margin-top: 7rem; }
-        .section-head { display: flex; align-items: end; justify-content: space-between; gap: 2rem; margin-bottom: 1.5rem; }
-        .section-head h2 { margin: .45rem 0 0; font-size: clamp(2rem, 5vw, 3.6rem); font-weight: 330; line-height: 1.08; }
-        .section-head p { max-width: 380px; margin: 0; color: var(--text-dim); font-size: .9rem; text-align: right; }
+        .detail-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: .7rem; margin-top: .85rem; }
+        details {
+            background: rgba(255,255,255,.018);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            transition: border-color .2s ease, background .2s ease;
+        }
+        details[open] { background: rgba(0,255,136,.035); border-color: rgba(0,255,136,.2); }
+        summary {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: .8rem;
+            min-height: 58px;
+            padding: .8rem .95rem;
+            list-style: none;
+            cursor: pointer;
+        }
+        summary::-webkit-details-marker { display: none; }
+        summary span { font-size: .86rem; font-weight: 640; }
+        summary small { color: var(--text-dim); font-size: .7rem; white-space: nowrap; }
+        summary::after { content: "+"; color: var(--accent); font-size: 1.05rem; line-height: 1; }
+        details[open] summary::after { content: "−"; }
+        .detail-content { padding: 0 .95rem .95rem; border-top: 1px solid var(--border); }
+        .checklist { display: grid; gap: .55rem; margin: .85rem 0 0; padding: 0; list-style: none; }
+        .checklist li { position: relative; padding-left: 1.05rem; color: var(--text-dim); font-size: .78rem; line-height: 1.5; }
+        .checklist li::before { content: ""; position: absolute; left: 0; top: .58em; width: 5px; height: 5px; background: var(--accent); border-radius: 50%; }
+
+        .section { margin-top: 5rem; scroll-margin-top: 7rem; }
+        .section-head { display: flex; align-items: end; justify-content: space-between; gap: 2rem; margin-bottom: 1.4rem; }
+        .section-head h2 { margin: .45rem 0 0; font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 330; line-height: 1.08; }
+        .section-head p { max-width: 390px; margin: 0; color: var(--text-dim); font-size: .88rem; text-align: right; }
+
+        .version-board {
+            display: grid;
+            grid-template-columns: .85fr 1.15fr;
+            gap: 1rem;
+            padding: 1.15rem;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+        }
+        .version-card { padding: 1rem; background: var(--surface-raised); border: 1px solid var(--border); border-radius: 14px; }
+        .version-card h3 { margin: 0 0 .8rem; font-size: .92rem; }
+        .code-list { display: grid; gap: .55rem; }
+        code {
+            display: block;
+            padding: .6rem .7rem;
+            overflow-wrap: anywhere;
+            color: #caffdf;
+            background: #050605;
+            border-radius: 9px;
+            font: .72rem/1.45 ui-monospace, SFMono-Regular, Consolas, monospace;
+        }
+        .version-warning { display: flex; align-items: center; gap: .55rem; margin-top: .8rem; color: var(--warning); font-size: .76rem; }
+        .version-warning::before { content: "!"; display: grid; place-items: center; width: 18px; height: 18px; border: 1px solid currentColor; border-radius: 50%; font: 700 .68rem/1 ui-monospace, monospace; }
+
+        .copy-shell { overflow: hidden; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); }
+        .copy-tabs { display: flex; gap: .45rem; padding: .7rem; overflow-x: auto; border-bottom: 1px solid var(--border); }
+        .copy-tab {
+            flex: 0 0 auto;
+            padding: .65rem .85rem;
+            color: var(--text-dim);
+            background: transparent;
+            border: 1px solid transparent;
+            border-radius: 9px;
+            cursor: pointer;
+            font-size: .8rem;
+        }
+        .copy-tab:hover, .copy-tab.active { color: var(--text); background: var(--accent-soft); border-color: rgba(0,255,136,.18); }
+        .copy-panel { display: none; padding: 1.15rem; }
+        .copy-panel.active { display: block; animation: rise .25s ease; }
+        .copy-panel-head { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: .8rem; }
+        .copy-panel-head h3 { margin: 0; font-size: .94rem; }
+        .copy-button {
+            padding: .52rem .75rem;
+            color: var(--accent);
+            background: transparent;
+            border: 1px solid rgba(0,255,136,.3);
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: .76rem;
+            font-weight: 650;
+        }
+        .copy-button:hover { color: #00160c; background: var(--accent); }
+        pre {
+            max-height: 320px;
+            margin: 0;
+            padding: .95rem;
+            overflow: auto;
+            white-space: pre-wrap;
+            color: #c8d0cc;
+            background: #050605;
+            border-radius: 11px;
+            font: .77rem/1.65 ui-monospace, SFMono-Regular, Consolas, monospace;
+        }
+
         .download-columns { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
-        .download-group { padding: 1.25rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); }
+        .download-group { padding: 1.2rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); }
         .group-title { display: flex; align-items: center; justify-content: space-between; margin-bottom: .85rem; }
         .group-title h3 { margin: 0; font-size: 1rem; font-weight: 680; }
         .format-badge { color: var(--text-dim); font: 700 .67rem/1 ui-monospace, SFMono-Regular, Consolas, monospace; letter-spacing: .1em; }
@@ -240,44 +345,45 @@
             transition: .2s ease;
         }
         .file-link:hover { background: var(--accent-soft); border-color: var(--border-active); transform: translateX(3px); }
-        .file-name { font-size: .88rem; font-weight: 590; }
-        .file-type { color: var(--text-dim); font: 700 .66rem/1 ui-monospace, SFMono-Regular, Consolas, monospace; letter-spacing: .08em; }
-        .file-arrow {
-            display: grid;
-            place-items: center;
-            width: 30px;
-            height: 30px;
-            color: var(--accent);
-            border: 1px solid rgba(0,255,136,.24);
-            border-radius: 50%;
-            font-size: .95rem;
-            transition: .2s ease;
-        }
+        .file-name { font-size: .86rem; font-weight: 590; }
+        .file-type { color: var(--text-dim); font: 700 .65rem/1 ui-monospace, SFMono-Regular, Consolas, monospace; letter-spacing: .08em; }
+        .file-arrow { display: grid; place-items: center; width: 30px; height: 30px; color: var(--accent); border: 1px solid rgba(0,255,136,.24); border-radius: 50%; font-size: .95rem; transition: .2s ease; }
         .file-link:hover .file-arrow { color: #00160c; background: var(--accent); transform: translateY(2px); }
 
-        footer {
-            width: min(calc(100% - 3rem), var(--max-width));
-            margin: 0 auto;
-            padding: 1.6rem 0 3.2rem;
-            color: var(--text-dim);
-            border-top: 1px solid var(--border);
-            font-size: .78rem;
+        .toast {
+            position: fixed;
+            right: 1.25rem;
+            bottom: 1.25rem;
+            z-index: 300;
+            padding: .75rem .95rem;
+            color: #00160c;
+            background: var(--accent);
+            border-radius: 9px;
+            font-size: .8rem;
+            font-weight: 700;
+            opacity: 0;
+            transform: translateY(10px);
+            pointer-events: none;
+            transition: .23s ease;
         }
+        .toast.show { opacity: 1; transform: none; }
+        footer { width: min(calc(100% - 3rem), var(--max-width)); margin: 0 auto; padding: 1.6rem 0 3.2rem; color: var(--text-dim); border-top: 1px solid var(--border); font-size: .78rem; }
         @keyframes rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
 
-        @media (max-width: 920px) {
+        @media (max-width: 960px) {
             nav { padding: 1.2rem 1.5rem; }
             main { padding-top: 8.6rem; }
             .step-grid { grid-template-columns: repeat(2, 1fr); }
+            .detail-grid { grid-template-columns: 1fr; }
         }
         @media (max-width: 680px) {
             main, footer { width: min(calc(100% - 2rem), var(--max-width)); }
-            .download-link { display: none; }
+            .nav-download { display: none; }
             .hero { margin-bottom: 2.7rem; }
             .hero h1 { font-size: clamp(3rem, 18vw, 5rem); }
-            .workflow { padding: 1.2rem; }
+            .workflow { padding: 1.15rem; }
             .workflow-top span { display: none; }
-            .flow-map { grid-template-columns: 1fr; gap: .55rem; }
+            .flow-map { grid-template-columns: 1fr; gap: .5rem; }
             .flow-map::before {
                 top: 27px;
                 bottom: 27px;
@@ -285,16 +391,17 @@
                 right: auto;
                 width: 1px;
                 height: auto;
-                background: linear-gradient(180deg, transparent, rgba(0,255,136,.42) 10%, rgba(0,255,136,.42) 90%, transparent);
+                background: linear-gradient(180deg, transparent, rgba(0,255,136,.42) 9%, rgba(0,255,136,.42) 91%, transparent);
             }
             .flow-node { grid-template-columns: 54px 1fr; justify-items: start; align-items: center; gap: .9rem; }
-            .node-name { font-size: .86rem; }
+            .node-name { font-size: .85rem; }
             .stage-heading, .section-head { align-items: flex-start; flex-direction: column; }
             .stage-goal { align-self: flex-start; }
-            .step-grid, .download-columns { grid-template-columns: 1fr; }
+            .step-grid, .version-board, .download-columns { grid-template-columns: 1fr; }
             .step-card { min-height: 0; }
-            .downloads { margin-top: 4rem; }
+            .section { margin-top: 4rem; }
             .section-head p { text-align: left; }
+            .copy-panel-head { align-items: flex-start; }
         }
         @media (prefers-reduced-motion: reduce) {
             *, *::before, *::after { scroll-behavior: auto !important; animation: none !important; transition: none !important; }
@@ -306,125 +413,400 @@
         <a class="logo" href="../index.html"><span>AICore</span><span class="logo-accent">Scholar</span></a>
         <div class="nav-actions">
             <a class="back-link" href="team.html">返回团队页</a>
-            <a class="download-link" href="#downloads">下载模板</a>
+            <a class="nav-download" href="#downloads">下载模板</a>
         </div>
     </nav>
 
-    <main>
-        <header class="hero">
+    <main data-sop="1">
+        <header class="hero" data-sop="14">
             <div class="eyebrow">AIDING · Paper Workflow</div>
-            <h1>论文，<span>全流程。</span></h1>
-            <p>从定稿、投稿、返修到校样，选择当前阶段，只做此刻最重要的事。</p>
+            <h1>论文，<span>一步一步。</span></h1>
+            <p>选择当前阶段，先完成关键动作；需要时再展开材料和核查清单。</p>
+            <div class="principles" aria-label="核心原则">
+                <span class="principle">先定内容，再做翻译</span>
+                <span class="principle">先走系统，再正式投稿</span>
+                <span class="principle">人工确认技术，AI 核查语言</span>
+                <span class="principle">系统生成稿必查，关键节点必归档</span>
+            </div>
         </header>
 
         <section class="workflow" aria-labelledby="workflow-title">
             <div class="workflow-top">
                 <strong id="workflow-title">选择当前阶段</strong>
-                <span>目标期刊最新要求优先</span>
+                <span>中文论文可跳过全文翻译</span>
             </div>
-
             <div class="flow-map" role="tablist" aria-label="论文工作流阶段">
                 <button class="flow-node active" id="tab-write" type="button" role="tab" aria-selected="true" aria-controls="stage-write" tabindex="0" data-stage="write">
                     <span class="node-index">01</span><span class="node-name">撰写定稿</span>
                 </button>
+                <button class="flow-node" id="tab-prepare" type="button" role="tab" aria-selected="false" aria-controls="stage-prepare" tabindex="-1" data-stage="prepare">
+                    <span class="node-index">02</span><span class="node-name">投稿准备</span>
+                </button>
                 <button class="flow-node" id="tab-submit" type="button" role="tab" aria-selected="false" aria-controls="stage-submit" tabindex="-1" data-stage="submit">
-                    <span class="node-index">02</span><span class="node-name">首次投稿</span>
+                    <span class="node-index">03</span><span class="node-name">正式投稿</span>
                 </button>
                 <button class="flow-node" id="tab-revise" type="button" role="tab" aria-selected="false" aria-controls="stage-revise" tabindex="-1" data-stage="revise">
-                    <span class="node-index">03</span><span class="node-name">返修回复</span>
+                    <span class="node-index">04</span><span class="node-name">返修提交</span>
                 </button>
                 <button class="flow-node" id="tab-proof" type="button" role="tab" aria-selected="false" aria-controls="stage-proof" tabindex="-1" data-stage="proof">
-                    <span class="node-index">04</span><span class="node-name">录用校样</span>
+                    <span class="node-index">05</span><span class="node-name">录用校样</span>
                 </button>
             </div>
 
-            <article class="stage-panel active" id="stage-write" role="tabpanel" aria-labelledby="tab-write" data-panel="write">
+            <article class="stage-panel active" id="stage-write" role="tabpanel" aria-labelledby="tab-write" data-panel="write" data-sop="2">
                 <div class="stage-heading">
-                    <div><span class="stage-kicker">01 / DRAFT</span><h2>撰写与定稿</h2></div>
-                    <span class="stage-goal">主稿可进入投稿系统</span>
+                    <div><span class="stage-kicker">01 / WRITE</span><h2>撰写与定稿</h2></div>
+                    <span class="stage-goal">门槛：内容、格式和基础信息稳定</span>
                 </div>
                 <div class="step-grid">
-                    <div class="step-card"><span>01</span><h3>固定主稿</h3><p>确认题目、作者、摘要、关键词、正文结构和参考文献。</p></div>
-                    <div class="step-card"><span>02</span><h3>核对格式</h3><p>检查公式、图表、编号和全部交叉引用；Word 公式统一用 MathType。</p></div>
-                    <div class="step-card"><span>03</span><h3>完成双语稿</h3><p>英文稿忠实原意并统一术语；中文稿作为团队校对依据。</p></div>
-                    <div class="step-card"><span>04</span><h3>团队校稿</h3><p>逐句确认最终表达；AI 只标注语言和格式问题。</p></div>
+                    <div class="step-card"><span>01</span><h3>稳定中文母稿</h3><p>先确定结构、技术内容和逻辑，避免边翻译边大改。</p></div>
+                    <div class="step-card"><span>02</span><h3>完成规范排版</h3><p>公式、图表、文献完整编号并使用交叉引用。</p></div>
+                    <div class="step-card"><span>03</span><h3>形成英文主稿</h3><p>忠实原意、自然表达，统一术语、变量、缩写和方法名。</p></div>
+                    <div class="step-card"><span>04</span><h3>锁定基础信息</h3><p>确认作者、单位、基金和通信作者等投稿必填信息。</p></div>
+                </div>
+                <div class="detail-grid">
+                    <details>
+                        <summary><span>中文稿定稿清单</span><small>7 项</small></summary>
+                        <div class="detail-content"><ul class="checklist">
+                            <li>Word 或 LaTeX 整体格式基本完成。</li>
+                            <li>公式、图、表和参考文献编号完整。</li>
+                            <li>公式、图表和参考文献均采用交叉引用。</li>
+                            <li>所有图表已在正文引用并作必要说明。</li>
+                            <li>Word 公式原则上统一使用 MathType。</li>
+                            <li>作者、单位、基金和通信作者信息基本确定。</li>
+                            <li>不存在缺图、缺表、缺公式、缺引用或编号错误。</li>
+                        </ul></div>
+                    </details>
+                    <details>
+                        <summary><span>英文翻译原则</span><small>7 项</small></summary>
+                        <div class="detail-content"><ul class="checklist">
+                            <li>不改变技术含义、研究结论和逻辑关系。</li>
+                            <li>表达清晰准确，避免生僻词和刻意复杂句式。</li>
+                            <li>采用计算数学、计算物理、PINN 和 AI for Science 常用表达。</li>
+                            <li>参考 CMAME、JCP 等期刊语言风格。</li>
+                            <li>术语、变量、缩写和方法名称全文一致。</li>
+                            <li>中文含义不清时先核实，不猜测或强行直译。</li>
+                            <li>英文稿形成后作为后续校稿和投稿主版本。</li>
+                        </ul></div>
+                    </details>
                 </div>
             </article>
 
-            <article class="stage-panel" id="stage-submit" role="tabpanel" aria-labelledby="tab-submit" data-panel="submit" hidden>
+            <article class="stage-panel" id="stage-prepare" role="tabpanel" aria-labelledby="tab-prepare" data-panel="prepare" data-sop="3,4,5" hidden>
                 <div class="stage-heading">
-                    <div><span class="stage-kicker">02 / SUBMIT</span><h2>首次投稿</h2></div>
-                    <span class="stage-goal">提交版本唯一且可追溯</span>
+                    <div><span class="stage-kicker">02 / PREPARE</span><h2>投稿准备</h2></div>
+                    <span class="stage-goal">门槛：要求走通，材料可以集中校稿</span>
                 </div>
                 <div class="step-grid">
-                    <div class="step-card"><span>01</span><h3>完成投稿信</h3><p>写清研究问题、核心方法、主要贡献、期刊匹配和原创性声明。</p></div>
-                    <div class="step-card"><span>02</span><h3>预演系统</h3><p>提前核实作者、基金、声明和上传要求，必要时先用占位文件。</p></div>
-                    <div class="step-card"><span>03</span><h3>锁定版本</h3><p>逐项核对主稿、图表、补充材料及全部投稿信息。</p></div>
-                    <div class="step-card"><span>04</span><h3>确认提交</h3><p>全员检查系统生成稿，向刘老师确认后提交并归档。</p></div>
+                    <div class="step-card"><span>01</span><h3>核查期刊要求</h3><p>确认范围、模板、图表、声明、附件和投稿系统规则。</p></div>
+                    <div class="step-card"><span>02</span><h3>提前预演系统</h3><p>先填作者、基金和声明；未定稿材料可用明确占位文件。</p></div>
+                    <div class="step-card"><span>03</span><h3>集中逐句校稿</h3><p>以英文稿为准核对技术内容、表达和全部引用关系。</p></div>
+                    <div class="step-card"><span>04</span><h3>完成 Cover Letter</h3><p>统一框架，只更新论文工作、贡献、匹配度和声明。</p></div>
+                </div>
+                <div class="detail-grid">
+                    <details>
+                        <summary><span>期刊与系统准备</span><small>8 项</small></summary>
+                        <div class="detail-content"><ul class="checklist">
+                            <li>核查投稿范围、论文类型、模板和参考文献格式。</li>
+                            <li>核查图表分辨率、文件类型及源文件要求。</li>
+                            <li>确认 Highlights、Graphical Abstract、Data Availability 等材料。</li>
+                            <li>确认作者贡献、利益冲突、基金和通信作者要求。</li>
+                            <li>确认推荐或回避审稿人要求。</li>
+                            <li>确认匿名稿、标题页、补充材料和单独图表要求。</li>
+                            <li>提前填写标题、摘要、关键词、作者、单位和研究分类。</li>
+                            <li>正式提交前替换全部占位文件。</li>
+                        </ul></div>
+                    </details>
+                    <details>
+                        <summary><span>集中校稿清单</span><small>8 项</small></summary>
+                        <div class="detail-content"><ul class="checklist">
+                            <li>准备中文稿、英文稿、Cover Letter 和期刊材料清单。</li>
+                            <li>检查错译、漏译、歧义和不自然表达。</li>
+                            <li>统一术语、缩写、符号和变量。</li>
+                            <li>核对公式、图表和参考文献引用。</li>
+                            <li>确保摘要、结论和创新点与正文一致。</li>
+                            <li>核对作者、单位、基金和通信作者信息。</li>
+                            <li>核对图题、图例、坐标轴、单位和编号。</li>
+                            <li>团队确认后再让 AI 标注语法和格式问题。</li>
+                        </ul></div>
+                    </details>
+                    <details>
+                        <summary><span>Cover Letter 核查</span><small>7 项</small></summary>
+                        <div class="detail-content"><ul class="checklist">
+                            <li>稿件标题与目标期刊名称准确。</li>
+                            <li>研究背景、问题和主要工作表述清楚。</li>
+                            <li>创新点、学术价值和期刊匹配度有正文支撑。</li>
+                            <li>包含未一稿多投、未重复发表和作者同意声明。</li>
+                            <li>通信作者、日期和称谓正确。</li>
+                            <li>未残留其他论文、作者或期刊信息。</li>
+                            <li>内容与摘要、引言和结论保持一致。</li>
+                        </ul></div>
+                    </details>
                 </div>
             </article>
 
-            <article class="stage-panel" id="stage-revise" role="tabpanel" aria-labelledby="tab-revise" data-panel="revise" hidden>
+            <article class="stage-panel" id="stage-submit" role="tabpanel" aria-labelledby="tab-submit" data-panel="submit" data-sop="6,7" hidden>
                 <div class="stage-heading">
-                    <div><span class="stage-kicker">03 / REVISE</span><h2>返修与回复</h2></div>
-                    <span class="stage-goal">每条意见都有完整闭环</span>
+                    <div><span class="stage-kicker">03 / SUBMIT</span><h2>正式投稿与归档</h2></div>
+                    <span class="stage-goal">门槛：系统最终文件已集体确认</span>
                 </div>
                 <div class="step-grid">
-                    <div class="step-card"><span>01</span><h3>整理意见</h3><p>完整保留原评论，按审稿人编号并形成中英文对照。</p></div>
-                    <div class="step-card"><span>02</span><h3>确认方案</h3><p>逐条讨论要回答什么、改什么，以及需要补充的证据。</p></div>
-                    <div class="step-card"><span>03</span><h3>逐点回复</h3><p>每条包含直接回答、具体修改及准确页码和行号。</p></div>
-                    <div class="step-card"><span>04</span><h3>同步修订</h3><p>按期刊要求标记改动，团队复核并确认后重新提交。</p></div>
+                    <div class="step-card"><span>01</span><h3>锁定唯一版本</h3><p>排除旧稿、批注稿、讨论稿和仍含占位内容的文件。</p></div>
+                    <div class="step-card"><span>02</span><h3>完成上传填写</h3><p>稿件内容、作者顺序、基金和系统字段保持一致。</p></div>
+                    <div class="step-card"><span>03</span><h3>集体检查 PDF</h3><p>核对页面、公式、图表、符号、顺序和全部附件。</p></div>
+                    <div class="step-card"><span>04</span><h3>提交、归档、汇报</h3><p>向刘老师确认后提交，打包全部材料并同步邮件和微信。</p></div>
+                </div>
+                <div class="detail-grid">
+                    <details>
+                        <summary><span>上传前最终检查</span><small>8 项</small></summary>
+                        <div class="detail-content"><ul class="checklist">
+                            <li>文件名清晰，上传的是唯一最终版。</li>
+                            <li>不存在批注、修订痕迹或隐藏内容。</li>
+                            <li>作者顺序、单位、基金和通信作者信息一致。</li>
+                            <li>Cover Letter 标题、期刊名和作者信息准确。</li>
+                            <li>图表清晰，公式、编号和交叉引用正常。</li>
+                            <li>摘要、关键词等系统内容与稿件一致。</li>
+                            <li>全部附件和补充材料齐全。</li>
+                            <li>所有占位文件已替换。</li>
+                        </ul></div>
+                    </details>
+                    <details>
+                        <summary><span>系统生成稿检查</span><small>7 项</small></summary>
+                        <div class="detail-content"><ul class="checklist">
+                            <li>页面完整，无缺页或空白异常。</li>
+                            <li>公式、特殊符号无乱码。</li>
+                            <li>图表无缺失、模糊或错位。</li>
+                            <li>作者信息和文件顺序正确。</li>
+                            <li>补充材料完整且可以打开。</li>
+                            <li>不存在旧版本或占位文件。</li>
+                            <li>团队共同确认后再点击正式提交。</li>
+                        </ul></div>
+                    </details>
+                    <details>
+                        <summary><span>归档与汇报</span><small>交付项</small></summary>
+                        <div class="detail-content"><ul class="checklist">
+                            <li>文件夹命名：正式提交版_期刊简称_YYYYMMDD。</li>
+                            <li>保存全部上传文件和系统最终生成 PDF。</li>
+                            <li>压缩归档包发送刘老师邮箱。</li>
+                            <li>邮件注明标题、期刊、日期、稿件编号和附件说明。</li>
+                            <li>最终 PDF 单独发送刘老师微信。</li>
+                            <li>优先发送期刊系统生成的最终 PDF。</li>
+                        </ul></div>
+                    </details>
                 </div>
             </article>
 
-            <article class="stage-panel" id="stage-proof" role="tabpanel" aria-labelledby="tab-proof" data-panel="proof" hidden>
+            <article class="stage-panel" id="stage-revise" role="tabpanel" aria-labelledby="tab-revise" data-panel="revise" data-sop="8,9,10,11" hidden>
                 <div class="stage-heading">
-                    <div><span class="stage-kicker">04 / PROOF</span><h2>录用及校样</h2></div>
-                    <span class="stage-goal">刘老师确认后提交</span>
+                    <div><span class="stage-kicker">04 / REVISE</span><h2>返修与提交</h2></div>
+                    <span class="stage-goal">门槛：每条意见闭环且与正文一致</span>
                 </div>
                 <div class="step-grid">
-                    <div class="step-card"><span>01</span><h3>响应编辑</h3><p>逐项提供源文件、高清图、声明和出版所需材料。</p></div>
-                    <div class="step-card"><span>02</span><h3>检查校样</h3><p>核对作者、单位、基金、公式、图表和参考文献。</p></div>
-                    <div class="step-card"><span>03</span><h3>团队确认</h3><p>逐项回答编辑问题，团队复核后向刘老师确认。</p></div>
-                    <div class="step-card"><span>04</span><h3>选择模式</h3><p>默认优先订阅；有政策要求或明确确认时再选择 OA。</p></div>
+                    <div class="step-card"><span>01</span><h3>整理双语意见</h3><p>保留原文和编号，准确翻译并标记涉及位置与歧义。</p></div>
+                    <div class="step-card"><span>02</span><h3>制定修改方案</h3><p>逐条决定如何回应、补什么证据，以及具体负责人。</p></div>
+                    <div class="step-card"><span>03</span><h3>同步正文与回复</h3><p>写清回答、修改、正文内容及准确页码和行号。</p></div>
+                    <div class="step-card"><span>04</span><h3>核查、提交、归档</h3><p>团队复核并向刘老师确认后提交，完成本轮归档与汇报。</p></div>
+                </div>
+                <div class="detail-grid">
+                    <details>
+                        <summary><span>意见与修改方案</span><small>8 项</small></summary>
+                        <div class="detail-content"><ul class="checklist">
+                            <li>完整保留编辑和审稿人的原始编号与评论。</li>
+                            <li>不得遗漏、合并或擅自改写意见。</li>
+                            <li>区分编辑意见、审稿人意见和格式要求。</li>
+                            <li>给出准确中文翻译并标记涉及位置。</li>
+                            <li>歧义意见单独标记，集中讨论。</li>
+                            <li>确定接受修改或客观解释不修改的理由。</li>
+                            <li>确定理论、实验、文献、图表等补充内容。</li>
+                            <li>明确具体负责人和完成状态。</li>
+                        </ul></div>
+                    </details>
+                    <details>
+                        <summary><span>返修信写作要求</span><small>7 项</small></summary>
+                        <div class="detail-content"><ul class="checklist">
+                            <li>每条包含原始意见、感谢、理解和直接回答。</li>
+                            <li>说明具体修改措施、论证和修改后内容。</li>
+                            <li>给出最终稿准确页码和行号。</li>
+                            <li>涉及图表时插入对应图表或关键内容。</li>
+                            <li>回复客观、礼貌、专业，不回避问题。</li>
+                            <li>不夸大、不争辩、不使用情绪化表达。</li>
+                            <li>无法采纳时给出充分且客观的理由。</li>
+                        </ul></div>
+                    </details>
+                    <details>
+                        <summary><span>提交与归档核查</span><small>9 项</small></summary>
+                        <div class="detail-content"><ul class="checklist">
+                            <li>每条意见均已回复，所述修改真实体现在正文。</li>
+                            <li>页码、行号、图表、公式和参考文献编号准确。</li>
+                            <li>按期刊要求准备清稿版和带修订版。</li>
+                            <li>不存在不应出现的批注或修订痕迹。</li>
+                            <li>核对作者、基金和全部系统字段。</li>
+                            <li>检查系统最终 PDF 后再提交。</li>
+                            <li>按 R1、R2、R3 分轮次归档，不覆盖历史版本。</li>
+                            <li>保存意见、双语整理稿、修改稿、返修信和提交记录。</li>
+                            <li>归档包发邮件，最终 PDF 单独发微信。</li>
+                        </ul></div>
+                    </details>
+                </div>
+            </article>
+
+            <article class="stage-panel" id="stage-proof" role="tabpanel" aria-labelledby="tab-proof" data-panel="proof" data-sop="12" hidden>
+                <div class="stage-heading">
+                    <div><span class="stage-kicker">05 / PROOF</span><h2>录用及校样</h2></div>
+                    <span class="stage-goal">门槛：编辑问题与出版选项已确认</span>
+                </div>
+                <div class="step-grid">
+                    <div class="step-card"><span>01</span><h3>逐项响应编辑</h3><p>按要求提供源文件、高清图、版权和补充材料。</p></div>
+                    <div class="step-card"><span>02</span><h3>核对完整校样</h3><p>重点检查作者信息、基金、公式、图表和参考文献。</p></div>
+                    <div class="step-card"><span>03</span><h3>控制修改边界</h3><p>原则上只处理排版、格式和编辑查询，不大改技术内容。</p></div>
+                    <div class="step-card"><span>04</span><h3>确认后提交</h3><p>重要内容向刘老师确认；默认优先选择传统订阅出版。</p></div>
+                </div>
+                <div class="detail-grid">
+                    <details>
+                        <summary><span>校样核对清单</span><small>10 项</small></summary>
+                        <div class="detail-content"><ul class="checklist">
+                            <li>论文标题、作者姓名及顺序。</li>
+                            <li>作者单位、通信作者及邮箱。</li>
+                            <li>基金信息、摘要和关键词。</li>
+                            <li>公式、特殊符号和编号。</li>
+                            <li>图表内容、图注和清晰度。</li>
+                            <li>参考文献、页码、章节和交叉引用。</li>
+                            <li>编辑提出的全部查询问题。</li>
+                            <li>补充材料及版权文件。</li>
+                            <li>技术内容或重要信息修改已向刘老师确认。</li>
+                            <li>出版方式选择无误。</li>
+                        </ul></div>
+                    </details>
+                    <details>
+                        <summary><span>提交边界</span><small>原则</small></summary>
+                        <div class="detail-content"><ul class="checklist">
+                            <li>校样阶段不进行未经确认的大规模技术修改。</li>
+                            <li>编辑查询逐项作答，不遗漏任何问题。</li>
+                            <li>除政策要求或明确确认外，优先选择订阅出版。</li>
+                            <li>提交前再次确认重要信息和出版选项，避免额外费用。</li>
+                        </ul></div>
+                    </details>
                 </div>
             </article>
         </section>
 
-        <section class="downloads" id="downloads" aria-labelledby="downloads-title">
+        <section class="section" aria-labelledby="version-title" data-sop="13">
+            <div class="section-head">
+                <div><span class="eyebrow">Version & Archive</span><h2 id="version-title">版本与归档</h2></div>
+                <p>阶段、轮次、日期写进文件名；重要节点单独保存。</p>
+            </div>
+            <div class="version-board">
+                <div class="version-card">
+                    <h3>归档文件夹</h3>
+                    <div class="code-list">
+                        <code>正式提交版_JCP_20260801</code>
+                        <code>R1提交版_JCP_20260915</code>
+                        <code>R2提交版_JCP_20261020</code>
+                    </div>
+                    <div class="version-warning">不使用“最新版”“最终最终版”等模糊名称</div>
+                </div>
+                <div class="version-card">
+                    <h3>推荐文件名</h3>
+                    <div class="code-list">
+                        <code>Manuscript_CN_v03_20260801.docx</code>
+                        <code>Manuscript_EN_Submission_20260801.docx</code>
+                        <code>Cover_Letter_JCP_20260801.docx</code>
+                        <code>Response_to_Reviewers_R1_20260915.docx</code>
+                        <code>Revised_Manuscript_Clean_R1_20260915.pdf</code>
+                        <code>Revised_Manuscript_Tracked_R1_20260915.pdf</code>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" aria-labelledby="copy-title" data-sop="4,7,11">
+            <div class="section-head">
+                <div><span class="eyebrow">Copy Center</span><h2 id="copy-title">直接复制使用</h2></div>
+                <p>替换方括号内容后使用；技术结论仍须人工确认。</p>
+            </div>
+            <div class="copy-shell">
+                <div class="copy-tabs" role="tablist" aria-label="可复制模板">
+                    <button class="copy-tab active" id="copy-tab-ai" type="button" role="tab" aria-selected="true" aria-controls="copy-ai" data-copy-tab="ai">AI 语法与格式核查</button>
+                    <button class="copy-tab" id="copy-tab-submit" type="button" role="tab" aria-selected="false" aria-controls="copy-submit" data-copy-tab="submit">首次投稿汇报</button>
+                    <button class="copy-tab" id="copy-tab-revise" type="button" role="tab" aria-selected="false" aria-controls="copy-revise" data-copy-tab="revise">返修提交汇报</button>
+                </div>
+                <article class="copy-panel active" id="copy-ai" role="tabpanel" aria-labelledby="copy-tab-ai" data-copy-panel="ai">
+                    <div class="copy-panel-head"><h3>英文稿核查提示词</h3><button class="copy-button" type="button" data-copy-target="text-ai">复制全部</button></div>
+                    <pre id="text-ai">请对以下英文论文内容进行系统核查，并遵循以下要求：
+
+1. 不改变原文的技术含义、研究结论和逻辑关系；
+2. 重点检查语法、拼写、冠词、单复数、时态、主谓一致、介词和标点；
+3. 检查中式英语、表达歧义、句子过长或逻辑不清的问题；
+4. 检查专业术语、缩写、变量名称和方法名称是否前后一致；
+5. 检查图、表、公式和参考文献的交叉引用是否规范；
+6. 检查标题、摘要、关键词、正文和结论的表达风格是否统一；
+7. 优先采用计算数学、计算物理、PINN、深度学习求解微分方程及 AI for Science 领域的常用表达；
+8. 避免使用生僻词汇和过度复杂的句式；
+9. 不要直接重写全文，请按“原文—问题说明—修改建议”的形式逐项标注；
+10. 对可能涉及技术含义变化的修改，明确标记“需要作者确认”。
+
+待核查内容：
+[粘贴英文论文内容]</pre>
+                </article>
+                <article class="copy-panel" id="copy-submit" role="tabpanel" aria-labelledby="copy-tab-submit" data-copy-panel="submit" hidden>
+                    <div class="copy-panel-head"><h3>首次投稿邮件与微信</h3><button class="copy-button" type="button" data-copy-target="text-submit">复制全部</button></div>
+                    <pre id="text-submit">邮件主题：[期刊名]_正式提交版
+
+刘老师您好：
+
+论文《[论文标题]》已于 [提交日期] 正式提交至 [投稿期刊]。
+稿件编号：[稿件编号 / 暂未生成]
+
+附件为本次正式投稿归档压缩包，包含投稿系统上传的全部文件及系统最终生成版本。
+[其他需要说明的信息]
+
+最终稿件 PDF 已同时通过微信发送，供您查阅。
+
+微信：
+刘老师您好，论文《[论文标题]》已于 [提交日期] 提交至 [投稿期刊]，稿件编号为 [稿件编号 / 暂未生成]。现将最终 PDF 发您查阅，完整归档材料已发送至您的邮箱。</pre>
+                </article>
+                <article class="copy-panel" id="copy-revise" role="tabpanel" aria-labelledby="copy-tab-revise" data-copy-panel="revise" hidden>
+                    <div class="copy-panel-head"><h3>返修提交邮件与微信</h3><button class="copy-button" type="button" data-copy-target="text-revise">复制全部</button></div>
+                    <pre id="text-revise">邮件主题：[期刊名]_R1返修提交版
+
+刘老师您好：
+
+论文《[论文标题]》已于 [提交日期] 完成向 [投稿期刊] 的第 [R1] 轮返修提交。
+稿件编号：[稿件编号]
+
+本轮主要修改：
+[概括本轮主要修改内容]
+
+附件为本轮返修归档压缩包，包含原始审稿意见、中英文整理稿、修改稿、清稿、带修订版本、返修信、更新图表及系统最终生成版本。
+
+返修后的最终 PDF 已同时通过微信发送，供您查阅。
+
+微信：
+刘老师您好，论文《[论文标题]》已于 [提交日期] 完成第 [R1] 轮返修提交，稿件编号为 [稿件编号]。现将最终 PDF 发您查阅，完整返修材料已发送至您的邮箱。</pre>
+                </article>
+            </div>
+        </section>
+
+        <section class="section" id="downloads" aria-labelledby="downloads-title">
             <div class="section-head">
                 <div><span class="eyebrow">Confirmed Templates</span><h2 id="downloads-title">已确认模板</h2></div>
                 <p>选择所需格式，直接下载。</p>
             </div>
-
             <div class="download-columns">
                 <div class="download-group">
                     <div class="group-title"><h3>Word 模板</h3><span class="format-badge">DOCX</span></div>
                     <div class="download-list">
-                        <a class="file-link" href="../assets/documents/AIDING-workflow/SOP/word_ref/01_cover%20letter/Cover%20Letter.docx" download>
-                            <span class="file-name">Cover Letter</span><span class="file-type">DOCX</span><span class="file-arrow">↓</span>
-                        </a>
-                        <a class="file-link" href="../assets/documents/AIDING-workflow/SOP/word_ref/02_manuscript/manuscript.docx" download>
-                            <span class="file-name">Manuscript</span><span class="file-type">DOCX</span><span class="file-arrow">↓</span>
-                        </a>
-                        <a class="file-link" href="../assets/documents/AIDING-workflow/SOP/word_ref/03_response%20to%20reviewers/Response%20to%20reviewers.docx" download>
-                            <span class="file-name">Response to Reviewers</span><span class="file-type">DOCX</span><span class="file-arrow">↓</span>
-                        </a>
+                        <a class="file-link" href="../assets/documents/AIDING-workflow/SOP/word_ref/01_cover%20letter/Cover%20Letter.docx" download><span class="file-name">Cover Letter</span><span class="file-type">DOCX</span><span class="file-arrow">↓</span></a>
+                        <a class="file-link" href="../assets/documents/AIDING-workflow/SOP/word_ref/02_manuscript/manuscript.docx" download><span class="file-name">Manuscript</span><span class="file-type">DOCX</span><span class="file-arrow">↓</span></a>
+                        <a class="file-link" href="../assets/documents/AIDING-workflow/SOP/word_ref/03_response%20to%20reviewers/Response%20to%20reviewers.docx" download><span class="file-name">Response to Reviewers</span><span class="file-type">DOCX</span><span class="file-arrow">↓</span></a>
                     </div>
                 </div>
-
                 <div class="download-group">
                     <div class="group-title"><h3>LaTeX 工程</h3><span class="format-badge">ZIP</span></div>
                     <div class="download-list">
-                        <a class="file-link" href="../assets/documents/AIDING-workflow/SOP/AIDING_LaTeX_Manuscript.zip" download>
-                            <span class="file-name">Manuscript · 中英文</span><span class="file-type">ZIP</span><span class="file-arrow">↓</span>
-                        </a>
-                        <a class="file-link" href="../assets/documents/AIDING-workflow/SOP/AIDING_LaTeX_Response_to_Reviewers.zip" download>
-                            <span class="file-name">Response to Reviewers · 中英文</span><span class="file-type">ZIP</span><span class="file-arrow">↓</span>
-                        </a>
-                        <a class="file-link" href="../assets/documents/AIDING-workflow/SOP/AIDING_LaTeX_Review_Comments.zip" download>
-                            <span class="file-name">Review Comments · 中英文</span><span class="file-type">ZIP</span><span class="file-arrow">↓</span>
-                        </a>
+                        <a class="file-link" href="../assets/documents/AIDING-workflow/SOP/AIDING_LaTeX_Manuscript.zip" download><span class="file-name">Manuscript · 中英文</span><span class="file-type">ZIP</span><span class="file-arrow">↓</span></a>
+                        <a class="file-link" href="../assets/documents/AIDING-workflow/SOP/AIDING_LaTeX_Response_to_Reviewers.zip" download><span class="file-name">Response to Reviewers · 中英文</span><span class="file-type">ZIP</span><span class="file-arrow">↓</span></a>
+                        <a class="file-link" href="../assets/documents/AIDING-workflow/SOP/AIDING_LaTeX_Review_Comments.zip" download><span class="file-name">Review Comments · 中英文</span><span class="file-type">ZIP</span><span class="file-arrow">↓</span></a>
                     </div>
                 </div>
             </div>
@@ -432,10 +814,14 @@
     </main>
 
     <footer>AIDING 团队论文工作流 · 目标期刊最新要求优先</footer>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
     <script>
         const stageButtons = [...document.querySelectorAll('[data-stage]')];
         const stagePanels = [...document.querySelectorAll('[data-panel]')];
+        const copyTabs = [...document.querySelectorAll('[data-copy-tab]')];
+        const copyPanels = [...document.querySelectorAll('[data-copy-panel]')];
+        const toast = document.getElementById('toast');
 
         function activateStage(name, moveFocus = false) {
             stageButtons.forEach((button) => {
@@ -455,11 +841,9 @@
         stageButtons.forEach((button, index) => {
             button.addEventListener('click', () => activateStage(button.dataset.stage));
             button.addEventListener('keydown', (event) => {
-                const nextKeys = ['ArrowRight', 'ArrowDown'];
-                const previousKeys = ['ArrowLeft', 'ArrowUp'];
                 let targetIndex = index;
-                if (nextKeys.includes(event.key)) targetIndex = (index + 1) % stageButtons.length;
-                if (previousKeys.includes(event.key)) targetIndex = (index - 1 + stageButtons.length) % stageButtons.length;
+                if (['ArrowRight', 'ArrowDown'].includes(event.key)) targetIndex = (index + 1) % stageButtons.length;
+                if (['ArrowLeft', 'ArrowUp'].includes(event.key)) targetIndex = (index - 1 + stageButtons.length) % stageButtons.length;
                 if (event.key === 'Home') targetIndex = 0;
                 if (event.key === 'End') targetIndex = stageButtons.length - 1;
                 if (targetIndex !== index) {
@@ -467,6 +851,61 @@
                     activateStage(stageButtons[targetIndex].dataset.stage, true);
                 }
             });
+        });
+
+        function activateCopyPanel(name) {
+            copyTabs.forEach((tab) => {
+                const active = tab.dataset.copyTab === name;
+                tab.classList.toggle('active', active);
+                tab.setAttribute('aria-selected', String(active));
+            });
+            copyPanels.forEach((panel) => {
+                const active = panel.dataset.copyPanel === name;
+                panel.classList.toggle('active', active);
+                panel.hidden = !active;
+            });
+        }
+
+        copyTabs.forEach((tab) => tab.addEventListener('click', () => activateCopyPanel(tab.dataset.copyTab)));
+
+        function showToast(message) {
+            toast.textContent = message;
+            toast.classList.add('show');
+            window.clearTimeout(showToast.timer);
+            showToast.timer = window.setTimeout(() => toast.classList.remove('show'), 1800);
+        }
+
+        function fallbackCopy(text) {
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            textarea.setAttribute('readonly', '');
+            textarea.style.position = 'fixed';
+            textarea.style.opacity = '0';
+            document.body.appendChild(textarea);
+            textarea.select();
+            const copied = document.execCommand('copy');
+            textarea.remove();
+            return copied;
+        }
+
+        async function copyText(targetId) {
+            const target = document.getElementById(targetId);
+            if (!target) return;
+            const text = target.textContent.trim();
+            try {
+                if (navigator.clipboard && window.isSecureContext) {
+                    await navigator.clipboard.writeText(text);
+                } else if (!fallbackCopy(text)) {
+                    throw new Error('copy failed');
+                }
+                showToast('内容已复制');
+            } catch (error) {
+                showToast('复制失败，请手动选择文本');
+            }
+        }
+
+        document.querySelectorAll('[data-copy-target]').forEach((button) => {
+            button.addEventListener('click', () => copyText(button.dataset.copyTarget));
         });
 
         window.addEventListener('scroll', () => {
