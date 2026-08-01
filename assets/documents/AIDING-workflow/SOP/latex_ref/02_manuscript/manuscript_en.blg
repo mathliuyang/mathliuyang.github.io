@@ -1,0 +1,49 @@
+This is BibTeX, Version 0.99d (TeX Live 2025)
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: manuscript_en.aux
+The style file: elsarticle-num.bst
+Database file #1: C:/Users/mathliuyang/Zotero/ref_BibTeX.bib
+Warning--empty booktitle in theler2011solution
+Warning--empty pages in theler2011solution
+You've used 45 entries,
+            2952 wiz_defined-function locations,
+            921 strings with 15016 characters,
+and the built_in function-call counts, 13726 in all, are:
+= -- 1195
+> -- 634
+< -- 4
++ -- 241
+- -- 196
+* -- 1040
+:= -- 1984
+add.period$ -- 45
+call.type$ -- 45
+change.case$ -- 45
+chr.to.int$ -- 3
+cite$ -- 47
+duplicate$ -- 390
+empty$ -- 1455
+format.name$ -- 238
+if$ -- 3455
+int.to.chr$ -- 0
+int.to.str$ -- 45
+missing$ -- 46
+newline$ -- 143
+num.names$ -- 45
+pop$ -- 264
+preamble$ -- 1
+purify$ -- 0
+quote$ -- 0
+skip$ -- 850
+stack$ -- 0
+substring$ -- 732
+swap$ -- 63
+text.length$ -- 3
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 0
+warning$ -- 2
+while$ -- 100
+width$ -- 47
+write$ -- 368
+(There were 2 warnings)

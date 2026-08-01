@@ -1,0 +1,50 @@
+This is BibTeX, Version 0.99d (TeX Live 2025)
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: manuscript_zh.aux
+The style file: elsarticle-num.bst
+Database file #1: C:/Users/mathliuyang/Zotero/ref_BibTeX.bib
+Warning--I didn't find a database entry for "LiuDong2025MianXiangShen"
+Warning--empty booktitle in theler2011solution
+Warning--empty pages in theler2011solution
+You've used 58 entries,
+            2952 wiz_defined-function locations,
+            1003 strings with 17770 characters,
+and the built_in function-call counts, 17863 in all, are:
+= -- 1555
+> -- 830
+< -- 6
++ -- 315
+- -- 257
+* -- 1361
+:= -- 2572
+add.period$ -- 58
+call.type$ -- 58
+change.case$ -- 57
+chr.to.int$ -- 3
+cite$ -- 60
+duplicate$ -- 506
+empty$ -- 1891
+format.name$ -- 311
+if$ -- 4494
+int.to.chr$ -- 0
+int.to.str$ -- 58
+missing$ -- 60
+newline$ -- 182
+num.names$ -- 58
+pop$ -- 341
+preamble$ -- 1
+purify$ -- 0
+quote$ -- 0
+skip$ -- 1102
+stack$ -- 0
+substring$ -- 972
+swap$ -- 84
+text.length$ -- 5
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 0
+warning$ -- 2
+while$ -- 131
+width$ -- 60
+write$ -- 473
+(There were 3 warnings)

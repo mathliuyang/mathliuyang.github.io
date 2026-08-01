@@ -1,0 +1,182 @@
+\begin{thebibliography}{10}
+\expandafter\ifx\csname url\endcsname\relax
+  \def\url#1{\texttt{#1}}\fi
+\expandafter\ifx\csname urlprefix\endcsname\relax\def\urlprefix{URL }\fi
+\expandafter\ifx\csname href\endcsname\relax
+  \def\href#1#2{#2} \def\path#1{#1}\fi
+
+\bibitem{stacey2018nuclear}
+W.~M. Stacey, Nuclear reactor physics, John Wiley \& Sons, 2018.
+
+\bibitem{XieZhongSheng2020HeFanYing}
+{谢仲生}, 核反应堆物理分析, 5th Edition, 西安交通大学出版社, 2020.
+
+\bibitem{zhu2016optimally}
+A.~Zhu, M.~Jarrett, Y.~Xu, B.~Kochunas, E.~Larsen, T.~Downar, An optimally diffusive coarse mesh finite difference method to accelerate neutron transport calculations, Annals of Nuclear Energy 95 (2016) 116--124.
+
+\bibitem{mohamedhamada2022higher}
+Y.~Mohamed~Hamada, Higher order compact finite difference schemes for steady and transient solutions of space--time neutron diffusion model, Annals of Nuclear Energy 175 (2022) 109177.
+
+\bibitem{li2024research}
+X.~Li, K.~Cheng, T.~Huang, S.~Tan, Research on neutron diffusion equation and nuclear thermal coupling method based on gradient updating finite volume method, Annals of Nuclear Energy 195 (2024) 110158.
+
+\bibitem{chunyu2018fast}
+Z.~Chunyu, C.~Gong, Fast solution of neutron diffusion problem by reduced basis finite element method, Annals of Nuclear Energy 111 (2018) 702--708.
+
+\bibitem{zong2023multithreaded}
+Z.-W. Zong, M.-S. Cheng, Y.-C. Yu, Z.-M. Dai, A multithreaded parallel upwind sweep algorithm for the sn transport equations discretized with discontinuous finite elements, Nuclear Science and Techniques 34~(12) (2023) 200.
+
+\bibitem{wang2010improved}
+D.~Wang, F.~Li, J.~Guo, J.~Wei, J.~Zhang, C.~Hao, Improved nodal expansion method for solving neutron diffusion equation in cylindrical geometry, Nuclear Engineering and Design 240~(8) (2010) 1997--2004.
+
+\bibitem{yin2024efficient}
+H.~Yin, X.-J. Liu, T.-F. Zhang, An efficient parallel algorithm of variational nodal method for heterogeneous neutron transport problems, Nuclear Science and Techniques 35~(4) (2024) 69.
+
+\bibitem{zhuang2021variational}
+K.~Zhuang, W.~Shang, T.~Li, J.~Yan, S.~Wang, X.~Tang, Y.~Li, Variational nodal method for three-dimensional multigroup neutron diffusion equation based on arbitrary triangular prism, Annals of Nuclear Energy 158 (2021) 108285.
+
+\bibitem{raissi2019physicsinformed}
+M.~Raissi, P.~Perdikaris, G.~Karniadakis, Physics-informed neural networks: a deep learning framework for solving forward and inverse problems involving nonlinear partial differential equations, Journal of Computational Physics 378 (2019) 686--707.
+
+\bibitem{karniadakis2021physicsinformed}
+G.~E. Karniadakis, I.~G. Kevrekidis, L.~Lu, P.~Perdikaris, S.~Wang, L.~Yang, Physics-informed machine learning, Nature Reviews Physics 3~(6) (2021) 422--440.
+
+\bibitem{cuomo2022scientific}
+S.~Cuomo, V.~S. Di~Cola, F.~Giampaolo, G.~Rozza, M.~Raissi, F.~Piccialli, Scientific machine learning through physics--informed neural networks: where we are and what's next, Journal of Scientific Computing 92~(3) (2022) 88.
+
+\bibitem{toscano2025pinns}
+J.~D. Toscano, V.~Oommen, A.~J. Varghese, Z.~Zou, N.~Ahmadi~Daryakenari, C.~Wu, G.~E. Karniadakis, From pinns to pikans: recent advances in physics-informed machine learning, Machine Learning for Computational Science and Engineering 1~(1) (2025) 15.
+
+\bibitem{luo2025physicsinformed}
+K.~Luo, J.~Zhao, Y.~Wang, J.~Li, J.~Wen, J.~Liang, H.~Soekmadji, S.~Liao, Physics-informed neural networks for pde problems: a comprehensive review, Artificial Intelligence Review 58~(10) (2025) 323.
+
+\bibitem{elhareef2021physicsinformed}
+M.~Elhareef, Z.~Wu, Y.~Ma, Physics-informed deep learning neural network solution to the neutron diffusion model, in: Mathematics and Computation 2021, American Nuclear Society, Virtual Meeting, 2021, pp. 990--1001.
+
+\bibitem{xie2021neural}
+Y.~Xie, Y.~Wang, Y.~Ma, Z.~Wu, Neural network based deep learning method for multi-dimensional neutron diffusion problems with novel treatment to boundary, Journal of Nuclear Engineering 2~(4) (2021) 533--552.
+
+\bibitem{LiuDong2022JiYupinnShen}
+{刘东}, {罗琦}, {唐雷}, {安萍}, {杨帆}, 基于pinn深度机器学习技术求解多维中子学扩散方程, 核动力工程 43~(2) (2022) 1--8.
+
+\bibitem{schiassi2022physicsinformed}
+E.~Schiassi, M.~De~Florio, B.~D. Ganapol, P.~Picca, R.~Furfaro, Physics-informed neural networks for the point kinetics equations for nuclear reactor dynamics, Annals of Nuclear Energy 167 (2022) 108833.
+
+\bibitem{prantikos2023physicsinformed}
+K.~Prantikos, S.~Chatzidakis, L.~H. Tsoukalas, A.~Heifetz, Physics-informed neural network with transfer learning (tl-pinn) based on domain similarity measure for prediction of nuclear reactor transients, Scientific Reports 13~(1) (2023) 16840.
+
+\bibitem{liu2024deep}
+D.~Liu, B.~Zhang, Y.~Jiang, P.~An, Z.~Chen, Deep learning driven inverse solving method for neutron diffusion equations and three-dimensional core power reconstruction technology, Nuclear Engineering and Design 429 (2024) 113590.
+
+\bibitem{lee2026development}
+J.~Lee, H.~J. Shim, Development of convolutional neural network-based physics-informed neural networks for solving the neutron diffusion equation, Annals of Nuclear Energy 227 (2026) 111920.
+
+\bibitem{zeng2026application}
+F.-L. Zeng, X.-L. Zhang, P.-C. Zhao, Z.-J. Liu, Application research of a hybrid data- and knowledge-driven artificial intelligence scientific computing model in neutron diffusion calculation for nuclear reactors, Nuclear Science and Techniques 37~(2) (2026) 24.
+
+\bibitem{haghighat2021physicsinformed}
+E.~Haghighat, M.~Raissi, A.~Moure, H.~Gomez, R.~Juanes, A physics-informed deep learning framework for inversion and surrogate modeling in solid mechanics, Computer Methods in Applied Mechanics and Engineering 379 (2021) 113741.
+
+\bibitem{lu2021deepxde}
+L.~Lu, X.~Meng, Z.~Mao, G.~E. Karniadakis, Deepxde: a deep learning library for solving differential equations, SIAM Review 63~(1) (2021) 208--228.
+
+\bibitem{jagtap2020conservative}
+A.~D. Jagtap, E.~Kharazmi, G.~E. Karniadakis, Conservative physics-informed neural networks on discrete domains for conservation laws: applications to forward and inverse problems, Computer Methods in Applied Mechanics and Engineering 365 (2020) 113028.
+
+\bibitem{d.jagtap2020extended}
+A.~D.~Jagtap, G.~Em~Karniadakis, Extended physics-informed neural networks (xpinns): a generalized space-time domain decomposition based deep learning framework for nonlinear partial differential equations, Communications in Computational Physics 28~(5) (2020) 2002--2041.
+
+\bibitem{li2020deep}
+W.~Li, X.~Xiang, Y.~Xu, Deep domain decomposition method: elliptic problems, in: Proc. Mach. Learn. Res., Vol. 107, ML Research Press, 2020, pp. 269--286.
+
+\bibitem{he2022meshfree}
+C.~He, X.~Hu, L.~Mu, A mesh-free method using piecewise deep neural network for elliptic interface problems, Journal of Computational and Applied Mathematics 412 (2022) 114358.
+
+\bibitem{wu2022inn}
+S.~Wu, B.~Lu, Inn: interfaced neural networks as an accessible meshless approach for solving interface pde problems, Journal of Computational Physics 470 (2022) 111588.
+
+\bibitem{mistani2023jaxdips}
+P.~A. Mistani, S.~Pakravan, R.~Ilango, F.~Gibou, Jax-dips: neural bootstrapping of finite discretization methods and application to elliptic problems with discontinuities, Journal of Computational Physics 493 (2023) 112480.
+
+\bibitem{xie2022weighted}
+H.~Xie, C.~Zhai, L.~Liu, H.~Yong, A weighted first-order formulation for solving anisotropic diffusion equations with deep neural networks (2022).
+
+\bibitem{sarma2024interface}
+A.~K. Sarma, S.~Roy, C.~Annavarapu, P.~Roy, S.~Jagannathan, Interface pinns (i-pinns): a physics-informed neural networks framework for interface problems, Computer Methods in Applied Mechanics and Engineering 429 (2024) 117135.
+
+\bibitem{roy2025adaptive}
+S.~Roy, D.~R. Sarkar, C.~Annavarapu, P.~Roy, B.~Lecampion, D.~M. Valiveti, Adaptive interface-pinns (adai-pinns) for transient diffusion: applications to forward and inverse problems in heterogeneous media, Finite Elements in Analysis and Design 244 (2025) 104305.
+
+\bibitem{yao2023deep}
+Y.~Yao, J.~Guo, T.~Gu, A deep learning method for multi-material diffusion problems based on physics-informed neural networks, Computer Methods in Applied Mechanics and Engineering 417 (2023) 116395.
+
+\bibitem{tseng2023cuspcapturing}
+Y.-H. Tseng, T.-S. Lin, W.-F. Hu, M.-C. Lai, A cusp-capturing pinn for elliptic interface problems, Journal of Computational Physics 491 (2023) 112359.
+
+\bibitem{li2025continuitypreserved}
+J.~Li, R.~Bi, Y.~Xie, J.~Ying, Continuity-preserved deep learning method for solving elliptic interface problems, Computational and Applied Mathematics 44~(3) (2025) 127.
+
+\bibitem{li2025two}
+H.~Li, H.~Fan, Z.~Tan, Two novel discontinuity-removing pinns for solving variable coefficient elliptic interface problems on curved surfaces, Computer Methods in Applied Mechanics and Engineering 435 (2025) 117637.
+
+\bibitem{wang2022surrogate}
+J.~Wang, X.~Peng, Z.~Chen, B.~Zhou, Y.~Zhou, N.~Zhou, Surrogate modeling for neutron diffusion problems based on conservative physics-informed neural networks with boundary conditions enforcement, Annals of Nuclear Energy 176 (2022) 109234.
+
+\bibitem{yang2023physicsconstrained}
+Q.-H. Yang, Y.~Yang, Y.-T. Deng, Q.-L. He, H.-L. Gong, S.-Q. Zhang, Physics-constrained neural network for solving discontinuous interface k-eigenvalue problem with application to reactor physics, Nuclear Science and Techniques 34~(10) (2023) 161.
+
+\bibitem{yang2023dataenabled}
+Y.~Yang, H.~Gong, S.~Zhang, Q.~Yang, Z.~Chen, Q.~He, Q.~Li, A data-enabled physics-informed neural network with comprehensive numerical study on solving neutron diffusion eigenvalue problems, Annals of Nuclear Energy 183 (2023) 109656.
+
+\bibitem{yang2024uncertainty}
+Y.~Yang, H.~Gong, Q.~He, Q.~Yang, Y.~Deng, S.~Zhang, On the uncertainty analysis of the data-enabled physics-informed neural network for solving neutron diffusion eigenvalue problem, Nuclear Science and Engineering 198~(5) (2024) 1075--1096.
+
+\bibitem{heng2026residual}
+Z.~Heng, H.~{Yun-Ling}, L.~Dong, H.~Qin, Y.~{He-Min}, X.~Di, Residual resampling-based physics-informed neural network for neutron diffusion equations, Nuclear Science and Techniques 37~(2) (2026) 28.
+
+\bibitem{xie2024physicsspecialized}
+Y.~Xie, H.~Chi, Y.~Wang, Y.~Ma, Physics-specialized neural network with hard constraints for solving multi-material diffusion problems, Computer Methods in Applied Mechanics and Engineering 430 (2024) 117223.
+
+\bibitem{liu2024discontinuity}
+L.~Liu, S.~Liu, H.~Xie, F.~Xiong, T.~Yu, M.~Xiao, L.~Liu, H.~Yong, Discontinuity computing using physics-informed neural networks, Journal of Scientific Computing 98~(1) (2024) 22.
+
+\bibitem{LiuDong2026MianXiangShen}
+{刘东}, {刘洋}, {廖真}, 面向深度学习方法的变域积分弱解理论（viws）若干问题补充研究, 计算物理 (Apr. 2026).
+
+\bibitem{pfeffer1991gaussgreen}
+W.~F. Pfeffer, The gauss-green theorem, Advances in Mathematics 87~(1) (1991) 93--147.
+
+\bibitem{liu2025neutron}
+D.~Liu, Y.~Liu, H.~Dang, K.~Wang, B.~Zhang, F.~Wang, Z.~Liu, Y.~Jiang, The neutron transport equation in exact differential form, Science China Physics, Mechanics \& Astronomy 68~(7) (2025) 270511.
+
+\bibitem{guan2022solving}
+Y.~Guan, T.~Fang, D.~Zhang, C.~Jin, Solving fredholm integral equations using deep learning, International Journal of Applied and Computational Mathematics 8~(2) (2022) 87.
+
+\bibitem{sun2023binn}
+J.~Sun, Y.~Liu, Y.~Wang, Z.~Yao, X.~Zheng, Binn: a deep learning approach for computational mechanics problems based on boundary integral equations, Computer Methods in Applied Mechanics and Engineering 410 (2023) 116012.
+
+\bibitem{guo2022physics}
+R.~Guo, T.~Shan, X.~Song, M.~Li, F.~Yang, S.~Xu, A.~Abubakar, Physics embedded deep neural network for solving volume integral equation: 2-d case, IEEE Transactions on Antennas and Propagation 70~(8) (2022) 6135--6147.
+
+\bibitem{LiuDong2025DuoWeiLian}
+{刘东}, {陈奇隆}, {庞志鑫}, {罗懋康}, {钟守铭}, 多维连续积分方程累次原函数变换交替迭代深度学习求解算法, 中国科学:数学 55~(9) (2025) 1727--1746.
+
+\bibitem{courant1999introduction}
+R.~Courant, F.~John, Introduction to calculus and analysis, Classics in Mathematics, Springer, Berlin, Heidelberg, 1999.
+
+\bibitem{sengupta2020review}
+S.~Sengupta, S.~Basak, P.~Saikia, S.~Paul, V.~Tsalavoutis, F.~Atiah, V.~Ravi, A.~Peters, A review of deep learning with special emphasis on architectures, applications and recent trends, Knowledge-Based Systems 194 (2020) 105596.
+
+\bibitem{wang2024multistage}
+Y.~Wang, C.-Y. Lai, Multi-stage neural networks: function approximator of machine precision, Journal of Computational Physics 504 (2024) 112865.
+
+\bibitem{theler2011solution}
+G.~G. Theler, A.~Clausse, F.~Bonetto, Solution of the 2d iaea pwr benchmark with the neutronic code milonga, 2011.
+
+\bibitem{LiuDong2023HeFanYing}
+{刘东}, {唐雷}, {安萍}, {张斌}, {江勇}, 核反应堆有效增殖系数深度学习直接搜索求解方法, 核动力工程 44~(5) (2023) 6--14.
+
+\bibitem{tancik2020fourier}
+M.~Tancik, P.~Srinivasan, B.~Mildenhall, S.~{Fridovich-Keil}, N.~Raghavan, U.~Singhal, R.~Ramamoorthi, J.~Barron, R.~Ng, Fourier features let networks learn high frequency functions in low dimensional domains, in: Advances in Neural Information Processing Systems, Vol.~33, Curran Associates, Inc., 2020, pp. 7537--7547.
+
+\end{thebibliography}
