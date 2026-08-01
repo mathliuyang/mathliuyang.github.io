@@ -157,7 +157,11 @@
         .workflow-top strong { font-size: .96rem; font-weight: 620; }
         .workflow-top span { color: var(--text-dim); font-size: .8rem; }
 
-        .flow-map { position: relative; display: grid; grid-template-columns: repeat(5, 1fr); gap: .65rem; }
+        .intro-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: .8rem; margin: -2rem 0 3rem; }
+        .intro-grid details { background: var(--surface); }
+        .intro-grid .detail-content { padding-bottom: 1rem; }
+
+        .flow-map { position: relative; display: grid; grid-template-columns: repeat(6, 1fr); gap: .55rem; }
         .flow-map::before {
             content: "";
             position: absolute;
@@ -190,7 +194,7 @@
             font: 700 .78rem/1 ui-monospace, SFMono-Regular, Consolas, monospace;
             transition: .25s ease;
         }
-        .node-name { color: var(--text-dim); font-size: .86rem; font-weight: 620; text-align: center; transition: color .25s ease; }
+        .node-name { color: var(--text-dim); font-size: .8rem; font-weight: 620; text-align: center; transition: color .25s ease; }
         .flow-node:hover .node-index, .flow-node.active .node-index {
             color: #00160c;
             background: var(--accent);
@@ -214,6 +218,16 @@
             border-radius: 999px;
             font-size: .76rem;
             font-weight: 650;
+        }
+        .session-note {
+            margin: 0 0 .9rem;
+            padding: .72rem .9rem;
+            color: #c8d0cc;
+            background: linear-gradient(90deg, rgba(0,255,136,.08), rgba(0,255,136,.018));
+            border-left: 2px solid var(--accent);
+            border-radius: 0 10px 10px 0;
+            font-size: .8rem;
+            line-height: 1.55;
         }
         .step-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: .8rem; }
         .step-card {
@@ -253,6 +267,7 @@
         summary::after { content: "+"; color: var(--accent); font-size: 1.05rem; line-height: 1; }
         details[open] summary::after { content: "−"; }
         .detail-content { padding: 0 .95rem .95rem; border-top: 1px solid var(--border); }
+        .detail-content > p { margin: .85rem 0 0; color: var(--text-dim); font-size: .78rem; line-height: 1.6; }
         .checklist { display: grid; gap: .55rem; margin: .85rem 0 0; padding: 0; list-style: none; }
         .checklist li { position: relative; padding-left: 1.05rem; color: var(--text-dim); font-size: .78rem; line-height: 1.5; }
         .checklist li::before { content: ""; position: absolute; left: 0; top: .58em; width: 5px; height: 5px; background: var(--accent); border-radius: 50%; }
@@ -397,7 +412,7 @@
             .node-name { font-size: .85rem; }
             .stage-heading, .section-head { align-items: flex-start; flex-direction: column; }
             .stage-goal { align-self: flex-start; }
-            .step-grid, .version-board, .download-columns { grid-template-columns: 1fr; }
+            .intro-grid, .step-grid, .version-board, .download-columns { grid-template-columns: 1fr; }
             .step-card { min-height: 0; }
             .section { margin-top: 4rem; }
             .section-head p { text-align: left; }
@@ -418,233 +433,336 @@
     </nav>
 
     <main data-sop="1">
-        <header class="hero" data-sop="14">
-            <div class="eyebrow">AIDING · Paper Workflow</div>
-            <h1>论文，<span>一步一步。</span></h1>
-            <p>选择当前阶段，先完成关键动作；需要时再展开材料和核查清单。</p>
+        <header class="hero">
+            <div class="eyebrow">AIDING · Event-based Paper Workflow</div>
+            <h1>按事件推进，<span>一次做对。</span></h1>
+            <p>为规范团队中英文论文的撰写、校核、投稿、返修及录用前校样处理流程，减少版本混乱、材料遗漏和重复工作，特制定本流程，供 AIDING 团队成员统一参考执行。</p>
             <div class="principles" aria-label="核心原则">
-                <span class="principle">先定内容，再做翻译</span>
-                <span class="principle">先走系统，再正式投稿</span>
+                <span class="principle">先定中文，再定英文</span>
+                <span class="principle">线下集中定稿与投稿</span>
                 <span class="principle">人工确认技术，AI 核查语言</span>
                 <span class="principle">系统生成稿必查，关键节点必归档</span>
             </div>
         </header>
 
+        <div class="intro-grid">
+            <details data-sop="1">
+                <summary><span>目的与适用范围</span><small>8 个环节</small></summary>
+                <div class="detail-content">
+                    <p>本流程主要包括：</p>
+                    <ol class="checklist">
+                        <li>中文稿件撰写与定稿；</li><li>英文稿件翻译与润色；</li>
+                        <li>投稿前准备与集中校稿；</li><li>Cover Letter 编写；</li>
+                        <li>正式投稿与文件归档；</li><li>返修方案讨论与返修信编写；</li>
+                        <li>返修稿提交与材料归档；</li><li>录用前校样核对与提交。</li>
+                    </ol>
+                    <p>中文论文可参照本流程执行，并跳过中英文翻译环节。</p>
+                </div>
+            </details>
+            <details data-sop="14">
+                <summary><span>全过程核心原则</span><small>8 项</small></summary>
+                <div class="detail-content"><p>整个流程应遵循以下核心原则：</p><ul class="checklist">
+                    <li>先定内容，再做英文翻译；</li><li>先熟悉投稿系统，再进行正式投稿；</li>
+                    <li>先集体校稿，再由 AI 辅助检查；</li><li>以人工确认技术内容，以 AI 检查语言和格式；</li>
+                    <li>投稿和返修必须逐项核对，不遗漏任何材料；</li><li>正式提交前必须检查系统生成的最终文件；</li>
+                    <li>每个关键节点均须完整归档；</li><li>任何正式版本提交前，必须确保团队成员和指导老师掌握最终内容。</li>
+                </ul></div>
+            </details>
+        </div>
+
         <section class="workflow" aria-labelledby="workflow-title">
             <div class="workflow-top">
-                <strong id="workflow-title">选择当前阶段</strong>
-                <span>中文论文可跳过全文翻译</span>
+                <strong id="workflow-title">按当前事件进入</strong>
+                <span>英文定稿会与首次投稿通常在同一次线下连续完成</span>
             </div>
             <div class="flow-map" role="tablist" aria-label="论文工作流阶段">
-                <button class="flow-node active" id="tab-write" type="button" role="tab" aria-selected="true" aria-controls="stage-write" tabindex="0" data-stage="write">
-                    <span class="node-index">01</span><span class="node-name">撰写定稿</span>
+                <button class="flow-node active" id="tab-cn" type="button" role="tab" aria-selected="true" aria-controls="stage-cn" tabindex="0" data-stage="cn">
+                    <span class="node-index">01</span><span class="node-name">中文定稿</span>
                 </button>
-                <button class="flow-node" id="tab-prepare" type="button" role="tab" aria-selected="false" aria-controls="stage-prepare" tabindex="-1" data-stage="prepare">
-                    <span class="node-index">02</span><span class="node-name">投稿准备</span>
+                <button class="flow-node" id="tab-en" type="button" role="tab" aria-selected="false" aria-controls="stage-en" tabindex="-1" data-stage="en">
+                    <span class="node-index">02</span><span class="node-name">英文定稿会</span>
                 </button>
                 <button class="flow-node" id="tab-submit" type="button" role="tab" aria-selected="false" aria-controls="stage-submit" tabindex="-1" data-stage="submit">
-                    <span class="node-index">03</span><span class="node-name">正式投稿</span>
+                    <span class="node-index">03</span><span class="node-name">正式投稿会</span>
                 </button>
                 <button class="flow-node" id="tab-revise" type="button" role="tab" aria-selected="false" aria-controls="stage-revise" tabindex="-1" data-stage="revise">
-                    <span class="node-index">04</span><span class="node-name">返修提交</span>
+                    <span class="node-index">04</span><span class="node-name">返修与提交</span>
+                </button>
+                <button class="flow-node" id="tab-transfer" type="button" role="tab" aria-selected="false" aria-controls="stage-transfer" tabindex="-1" data-stage="transfer">
+                    <span class="node-index">05</span><span class="node-name">转投准备</span>
                 </button>
                 <button class="flow-node" id="tab-proof" type="button" role="tab" aria-selected="false" aria-controls="stage-proof" tabindex="-1" data-stage="proof">
-                    <span class="node-index">05</span><span class="node-name">录用校样</span>
+                    <span class="node-index">06</span><span class="node-name">录用校样</span>
                 </button>
             </div>
 
-            <article class="stage-panel active" id="stage-write" role="tabpanel" aria-labelledby="tab-write" data-panel="write" data-sop="2">
+            <article class="stage-panel active" id="stage-cn" role="tabpanel" aria-labelledby="tab-cn" data-panel="cn" data-sop="2">
                 <div class="stage-heading">
-                    <div><span class="stage-kicker">01 / WRITE</span><h2>撰写与定稿</h2></div>
-                    <span class="stage-goal">门槛：内容、格式和基础信息稳定</span>
+                    <div><span class="stage-kicker">EVENT 01 / CHINESE DRAFT</span><h2>中文稿定稿</h2></div>
+                    <span class="stage-goal">进入英文阶段前：内容与格式稳定</span>
                 </div>
+                <p class="session-note">英文论文原则上应先完成中文内容和整体格式定稿，再开展英文翻译工作。中文稿件定稿时，应重点完成以下内容：</p>
                 <div class="step-grid">
-                    <div class="step-card"><span>01</span><h3>稳定中文母稿</h3><p>先确定结构、技术内容和逻辑，避免边翻译边大改。</p></div>
-                    <div class="step-card"><span>02</span><h3>完成规范排版</h3><p>公式、图表、文献完整编号并使用交叉引用。</p></div>
-                    <div class="step-card"><span>03</span><h3>形成英文主稿</h3><p>忠实原意、自然表达，统一术语、变量、缩写和方法名。</p></div>
-                    <div class="step-card"><span>04</span><h3>锁定基础信息</h3><p>确认作者、单位、基金和通信作者等投稿必填信息。</p></div>
+                    <div class="step-card"><span>01</span><h3>确定论文内容</h3><p>论文结构、技术内容和逻辑关系基本确定。</p></div>
+                    <div class="step-card"><span>02</span><h3>完成整体排版</h3><p>Word 或 LaTeX 排版格式基本完成。</p></div>
+                    <div class="step-card"><span>03</span><h3>补齐引用关系</h3><p>公式、图、表和参考文献编号完整并采用交叉引用。</p></div>
+                    <div class="step-card"><span>04</span><h3>确认基础信息</h3><p>作者、单位、基金项目和通信作者信息基本确定。</p></div>
                 </div>
                 <div class="detail-grid">
                     <details>
-                        <summary><span>中文稿定稿清单</span><small>7 项</small></summary>
+                        <summary><span>中文稿定稿清单</span><small>8 项</small></summary>
                         <div class="detail-content"><ul class="checklist">
-                            <li>Word 或 LaTeX 整体格式基本完成。</li>
-                            <li>公式、图、表和参考文献编号完整。</li>
-                            <li>公式、图表和参考文献均采用交叉引用。</li>
-                            <li>所有图表已在正文引用并作必要说明。</li>
-                            <li>Word 公式原则上统一使用 MathType。</li>
-                            <li>作者、单位、基金和通信作者信息基本确定。</li>
-                            <li>不存在缺图、缺表、缺公式、缺引用或编号错误。</li>
+                            <li>论文结构、技术内容和逻辑关系基本确定；</li>
+                            <li>Word 或 LaTeX 排版格式基本完成；</li>
+                            <li>公式、图、表和参考文献编号完整；</li>
+                            <li>公式、图表和参考文献均采用交叉引用；</li>
+                            <li>所有图表均须在正文中进行引用和必要说明；</li>
+                            <li>若采用 Word 撰写，所有公式原则上统一使用 MathType 编辑；</li>
+                            <li>作者信息、作者单位、基金项目、通信作者信息等基本确定；</li>
+                            <li>检查是否存在缺图、缺表、缺公式、缺引用或编号错误等问题。</li>
                         </ul></div>
                     </details>
                     <details>
-                        <summary><span>英文翻译原则</span><small>7 项</small></summary>
-                        <div class="detail-content"><ul class="checklist">
-                            <li>不改变技术含义、研究结论和逻辑关系。</li>
-                            <li>表达清晰准确，避免生僻词和刻意复杂句式。</li>
-                            <li>采用计算数学、计算物理、PINN 和 AI for Science 常用表达。</li>
-                            <li>参考 CMAME、JCP 等期刊语言风格。</li>
-                            <li>术语、变量、缩写和方法名称全文一致。</li>
-                            <li>中文含义不清时先核实，不猜测或强行直译。</li>
-                            <li>英文稿形成后作为后续校稿和投稿主版本。</li>
-                        </ul></div>
+                        <summary><span>进入下一事件的门槛</span><small>原则</small></summary>
+                        <div class="detail-content">
+                            <p>在中文稿尚未稳定前，不宜过早开展大规模英文翻译，以免后续反复修改。</p>
+                            <p>中文论文可参照本流程执行，并跳过中英文翻译环节。</p>
+                        </div>
                     </details>
                 </div>
             </article>
 
-            <article class="stage-panel" id="stage-prepare" role="tabpanel" aria-labelledby="tab-prepare" data-panel="prepare" data-sop="3,4,5" hidden>
+            <article class="stage-panel" id="stage-en" role="tabpanel" aria-labelledby="tab-en" data-panel="en" data-sop="2,4" hidden>
                 <div class="stage-heading">
-                    <div><span class="stage-kicker">02 / PREPARE</span><h2>投稿准备</h2></div>
-                    <span class="stage-goal">门槛：要求走通，材料可以集中校稿</span>
+                    <div><span class="stage-kicker">EVENT 02 / OFFLINE MEETING</span><h2>英文定稿会</h2></div>
+                    <span class="stage-goal">线下逐字逐句：英文稿成为主版本</span>
                 </div>
+                <p class="session-note">先在会前完成翻译和材料准备；线下由团队逐字逐句核对英文稿。首次投稿往往与本次会议连续完成。</p>
                 <div class="step-grid">
-                    <div class="step-card"><span>01</span><h3>核查期刊要求</h3><p>确认范围、模板、图表、声明、附件和投稿系统规则。</p></div>
-                    <div class="step-card"><span>02</span><h3>提前预演系统</h3><p>先填作者、基金和声明；未定稿材料可用明确占位文件。</p></div>
-                    <div class="step-card"><span>03</span><h3>集中逐句校稿</h3><p>以英文稿为准核对技术内容、表达和全部引用关系。</p></div>
-                    <div class="step-card"><span>04</span><h3>完成 Cover Letter</h3><p>统一框架，只更新论文工作、贡献、匹配度和声明。</p></div>
+                    <div class="step-card"><span>会前 01</span><h3>完成英文工作稿</h3><p>忠实原意、自然表达，术语、方法、变量和缩写全文统一。</p></div>
+                    <div class="step-card"><span>会前 02</span><h3>备齐校稿材料</h3><p>中文稿、英文稿、Cover Letter、期刊清单和必要信息全部到位。</p></div>
+                    <div class="step-card"><span>线下 03</span><h3>逐字逐句定稿</h3><p>中文稿用于对照，最终以英文稿的逻辑和表达为准。</p></div>
+                    <div class="step-card"><span>会后 04</span><h3>AI 标注核查</h3><p>只发现并标注语言和格式问题，不直接大改技术内容。</p></div>
                 </div>
                 <div class="detail-grid">
                     <details>
-                        <summary><span>期刊与系统准备</span><small>8 项</small></summary>
-                        <div class="detail-content"><ul class="checklist">
-                            <li>核查投稿范围、论文类型、模板和参考文献格式。</li>
-                            <li>核查图表分辨率、文件类型及源文件要求。</li>
-                            <li>确认 Highlights、Graphical Abstract、Data Availability 等材料。</li>
-                            <li>确认作者贡献、利益冲突、基金和通信作者要求。</li>
-                            <li>确认推荐或回避审稿人要求。</li>
-                            <li>确认匿名稿、标题页、补充材料和单独图表要求。</li>
-                            <li>提前填写标题、摘要、关键词、作者、单位和研究分类。</li>
-                            <li>正式提交前替换全部占位文件。</li>
+                        <summary><span>会前必须准备</span><small>5 类材料</small></summary>
+                        <div class="detail-content"><p>集中线下校稿前，至少准备以下材料：</p><ol class="checklist">
+                            <li>中文稿；</li><li>英文稿；</li><li>中英文 Cover Letter 初稿；</li>
+                            <li>期刊投稿要求或材料清单；</li><li>必要时准备作者信息、基金信息和投稿系统截图。</li>
+                        </ol></div>
+                    </details>
+                    <details>
+                        <summary><span>线下逐句校稿</span><small>9 项</small></summary>
+                        <div class="detail-content"><p>团队成员共同对英文稿进行逐字逐句核对。此阶段：</p><ul class="checklist">
+                            <li>中文稿主要作为内容对照和辅助理解；</li><li>最终以英文稿的逻辑和表达为准；</li>
+                            <li>重点检查技术内容是否准确；</li><li>检查英文是否存在歧义、漏译、错译或表达不自然；</li>
+                            <li>检查术语、缩写、符号和变量是否统一；</li><li>检查公式、图表和参考文献引用是否正确；</li>
+                            <li>检查摘要、结论和创新点是否与正文一致；</li><li>检查题目、作者、单位、基金和通信作者信息是否准确；</li>
+                            <li>检查图表标题、图例、坐标轴、单位和编号是否规范。</li>
+                        </ul><p>逐句校稿完成后，再使用 AI 对全文进行语法和格式核查。AI 的作用主要是发现问题并标注，不应在未经确认的情况下直接大幅修改技术内容。</p></div>
+                    </details>
+                    <details>
+                        <summary><span>Cover Letter 核查</span><small>会前完成</small></summary>
+                        <div class="detail-content"><p>集中校稿时，应同时讨论和完善 Cover Letter 的中英文版本。最终提交前，重点检查：</p><ul class="checklist">
+                            <li>论文标题是否与稿件一致；</li><li>期刊名称是否正确；</li>
+                            <li>是否误保留其他论文或其他期刊的信息；</li><li>作者和通信作者信息是否准确；</li>
+                            <li>创新点是否表述清楚；</li><li>日期和称谓是否规范。</li>
                         </ul></div>
                     </details>
                     <details>
-                        <summary><span>集中校稿清单</span><small>8 项</small></summary>
-                        <div class="detail-content"><ul class="checklist">
-                            <li>准备中文稿、英文稿、Cover Letter 和期刊材料清单。</li>
-                            <li>检查错译、漏译、歧义和不自然表达。</li>
-                            <li>统一术语、缩写、符号和变量。</li>
-                            <li>核对公式、图表和参考文献引用。</li>
-                            <li>确保摘要、结论和创新点与正文一致。</li>
-                            <li>核对作者、单位、基金和通信作者信息。</li>
-                            <li>核对图题、图例、坐标轴、单位和编号。</li>
-                            <li>团队确认后再让 AI 标注语法和格式问题。</li>
-                        </ul></div>
-                    </details>
-                    <details>
-                        <summary><span>Cover Letter 核查</span><small>7 项</small></summary>
-                        <div class="detail-content"><ul class="checklist">
-                            <li>稿件标题与目标期刊名称准确。</li>
-                            <li>研究背景、问题和主要工作表述清楚。</li>
-                            <li>创新点、学术价值和期刊匹配度有正文支撑。</li>
-                            <li>包含未一稿多投、未重复发表和作者同意声明。</li>
-                            <li>通信作者、日期和称谓正确。</li>
-                            <li>未残留其他论文、作者或期刊信息。</li>
-                            <li>内容与摘要、引言和结论保持一致。</li>
-                        </ul></div>
+                        <summary><span>英文稿件翻译原则</span><small>9 项</small></summary>
+                        <div class="detail-content"><p>在中文内容基本定稿后，将中文稿翻译为对应英文稿。翻译过程中应遵循以下原则：</p><ul class="checklist">
+                            <li>不随意改变原文含义、技术结论和逻辑关系；</li><li>表达清晰、准确、通俗易懂，同时保持必要的学术性；</li>
+                            <li>避免使用生僻、冗长或刻意复杂的词汇和句式；</li><li>优先采用计算数学、计算物理及相关国际期刊中的常用表达；</li>
+                            <li>参考 CMAME、JCP 等期刊的语言风格；</li><li>采用 PINN、深度学习求解微分方程和 AI for Science 等领域的规范术语；</li>
+                            <li>同一专业术语、方法名称、变量名称和缩写应全文统一；</li><li>不应仅进行逐字直译，应保证英文句子的逻辑、语法和阅读习惯自然；</li>
+                            <li>翻译过程中发现中文原稿表述不清时，应先核实原意，再进行英文表达。</li>
+                        </ul><p>英文稿形成后，后续校稿和投稿原则上以英文版本为准，中文版本主要用于对照和辅助讨论。</p></div>
                     </details>
                 </div>
             </article>
 
-            <article class="stage-panel" id="stage-submit" role="tabpanel" aria-labelledby="tab-submit" data-panel="submit" data-sop="6,7" hidden>
+            <article class="stage-panel" id="stage-submit" role="tabpanel" aria-labelledby="tab-submit" data-panel="submit" data-sop="3,5,6,7" hidden>
                 <div class="stage-heading">
-                    <div><span class="stage-kicker">03 / SUBMIT</span><h2>正式投稿与归档</h2></div>
-                    <span class="stage-goal">门槛：系统最终文件已集体确认</span>
+                    <div><span class="stage-kicker">EVENT 03 / OFFLINE SUBMISSION</span><h2>正式投稿会</h2></div>
+                    <span class="stage-goal">线下共同完成：生成稿确认后再提交</span>
                 </div>
+                <p class="session-note">正式投稿通常与英文定稿会在同一次线下连续完成。目标期刊、投稿系统和必填信息必须提前准备，会议现场用于最终确认，而不是临时查要求。</p>
                 <div class="step-grid">
-                    <div class="step-card"><span>01</span><h3>锁定唯一版本</h3><p>排除旧稿、批注稿、讨论稿和仍含占位内容的文件。</p></div>
-                    <div class="step-card"><span>02</span><h3>完成上传填写</h3><p>稿件内容、作者顺序、基金和系统字段保持一致。</p></div>
-                    <div class="step-card"><span>03</span><h3>集体检查 PDF</h3><p>核对页面、公式、图表、符号、顺序和全部附件。</p></div>
-                    <div class="step-card"><span>04</span><h3>提交、归档、汇报</h3><p>向刘老师确认后提交，打包全部材料并同步邮件和微信。</p></div>
+                    <div class="step-card"><span>会前 01</span><h3>走通期刊与系统</h3><p>提前核查要求并录入标题、作者、基金、声明等信息。</p></div>
+                    <div class="step-card"><span>线下 02</span><h3>定稿 Cover Letter</h3><p>集中确认研究工作、创新价值、期刊匹配和作者声明。</p></div>
+                    <div class="step-card"><span>线下 03</span><h3>上传并检查 PDF</h3><p>共同检查页面、公式、图表、符号、顺序和全部附件。</p></div>
+                    <div class="step-card"><span>会后 04</span><h3>提交归档与汇报</h3><p>向刘老师确认后提交，归档包发邮件，最终 PDF 发微信。</p></div>
                 </div>
                 <div class="detail-grid">
                     <details>
-                        <summary><span>上传前最终检查</span><small>8 项</small></summary>
-                        <div class="detail-content"><ul class="checklist">
-                            <li>文件名清晰，上传的是唯一最终版。</li>
-                            <li>不存在批注、修订痕迹或隐藏内容。</li>
-                            <li>作者顺序、单位、基金和通信作者信息一致。</li>
-                            <li>Cover Letter 标题、期刊名和作者信息准确。</li>
-                            <li>图表清晰，公式、编号和交叉引用正常。</li>
-                            <li>摘要、关键词等系统内容与稿件一致。</li>
-                            <li>全部附件和补充材料齐全。</li>
-                            <li>所有占位文件已替换。</li>
+                        <summary><span>提前熟悉目标期刊</span><small>10 项</small></summary>
+                        <div class="detail-content"><p>若已经明确目标投稿期刊，应提前熟悉该期刊的投稿要求和投稿系统，不要等到正式投稿时再临时处理。重点核查以下内容：</p><ul class="checklist">
+                            <li>期刊投稿范围及论文类型；</li><li>稿件格式和模板要求；</li><li>参考文献格式；</li>
+                            <li>图表格式、分辨率及文件类型；</li><li>是否需要 Highlights、Graphical Abstract、Declaration、Data Availability Statement 等材料；</li>
+                            <li>Cover Letter 要求；</li><li>作者贡献声明、利益冲突声明及基金信息要求；</li>
+                            <li>是否需要推荐或回避审稿人；</li><li>是否需要单独上传匿名稿、标题页、源文件或补充材料；</li>
+                            <li>投稿系统中的作者顺序、单位、基金和通信作者设置方式。</li>
                         </ul></div>
                     </details>
                     <details>
-                        <summary><span>系统生成稿检查</span><small>7 项</small></summary>
-                        <div class="detail-content"><ul class="checklist">
-                            <li>页面完整，无缺页或空白异常。</li>
-                            <li>公式、特殊符号无乱码。</li>
-                            <li>图表无缺失、模糊或错位。</li>
-                            <li>作者信息和文件顺序正确。</li>
-                            <li>补充材料完整且可以打开。</li>
-                            <li>不存在旧版本或占位文件。</li>
-                            <li>团队共同确认后再点击正式提交。</li>
+                        <summary><span>提前走通投稿流程</span><small>11 项</small></summary>
+                        <div class="detail-content"><p>正式投稿前，应尽可能提前进入投稿系统，将整个流程完整走一遍。可提前完成的内容应尽量提前填写，包括：</p><ul class="checklist">
+                            <li>论文标题；</li><li>摘要；</li><li>关键词；</li><li>作者姓名及顺序；</li><li>作者邮箱和单位；</li>
+                            <li>通信作者信息；</li><li>基金项目；</li><li>论文类型；</li><li>研究领域分类；</li><li>推荐或回避审稿人；</li><li>各类声明和问答。</li>
+                        </ul><p>暂未定稿的稿件、Cover Letter 或其他上传材料，可先使用明确标记的占位文件完成流程测试，正式提交前再统一替换。</p><p>特别注意：作者信息、基金信息和单位信息应提前核对并填写准确，避免正式投稿时现场补充，影响投稿效率或产生错误。</p></div>
+                    </details>
+                    <details>
+                        <summary><span>Cover Letter 编写流程</span><small>完整要求</small></summary>
+                        <div class="detail-content"><p>Cover Letter 应采用团队统一模板。开头、结尾、作者声明和整体结构原则上保持固定，仅根据不同论文修改具体内容。Cover Letter 通常包括：</p><ul class="checklist">
+                            <li>稿件标题；</li><li>投稿期刊名称；</li><li>研究背景和问题；</li><li>论文的主要工作；</li>
+                            <li>主要创新点及学术价值；</li><li>稿件与目标期刊范围的契合性；</li>
+                            <li>稿件未一稿多投、未重复发表等声明；</li><li>全体作者同意投稿的声明；</li><li>通信作者信息。</li>
+                        </ul><p>Cover Letter 的核心内容应与论文摘要、引言和结论保持一致，不得夸大创新性，也不应写入论文中无法支持的结论。</p><p>最终提交前，重点检查论文标题、期刊名称、作者与通信作者信息、创新点、日期和称谓，并确认未误保留其他论文或其他期刊的信息。</p></div>
+                    </details>
+                    <details>
+                        <summary><span>投稿前最终检查</span><small>10 项</small></summary>
+                        <div class="detail-content"><p>正式上传前，应完成以下检查：</p><ul class="checklist">
+                            <li>确认上传的是最终版本；</li><li>确认文件名清晰、规范；</li>
+                            <li>确认未误传旧版本、带批注版本或内部讨论版本；</li><li>确认作者顺序与稿件一致；</li>
+                            <li>确认基金、单位和通信作者信息正确；</li><li>确认 Cover Letter 中的论文标题和期刊名称正确；</li>
+                            <li>确认所有附件完整；</li><li>确认稿件中不存在修订痕迹、批注或隐藏内容；</li>
+                            <li>确认图表清晰，公式、编号和交叉引用正常；</li><li>确认投稿系统中的摘要、关键词等内容与稿件一致。</li>
                         </ul></div>
                     </details>
                     <details>
-                        <summary><span>归档与汇报</span><small>交付项</small></summary>
-                        <div class="detail-content"><ul class="checklist">
-                            <li>文件夹命名：正式提交版_期刊简称_YYYYMMDD。</li>
-                            <li>保存全部上传文件和系统最终生成 PDF。</li>
-                            <li>压缩归档包发送刘老师邮箱。</li>
-                            <li>邮件注明标题、期刊、日期、稿件编号和附件说明。</li>
-                            <li>最终 PDF 单独发送刘老师微信。</li>
-                            <li>优先发送期刊系统生成的最终 PDF。</li>
-                        </ul></div>
+                        <summary><span>系统生成 PDF 集体确认</span><small>8 项</small></summary>
+                        <div class="detail-content"><p>所有文件上传并完成信息填写后，应生成投稿系统的最终 PDF 或预览版本。正式点击提交前，由团队成员共同检查最终生成文件，重点确认：</p><ul class="checklist">
+                            <li>页面是否完整；</li><li>公式是否乱码；</li><li>图表是否缺失、模糊或错位；</li>
+                            <li>特殊符号是否正确；</li><li>作者信息是否正确；</li><li>文件顺序是否正确；</li>
+                            <li>补充材料是否完整；</li><li>是否误上传占位文件或旧版本。</li>
+                        </ul><p>确认无误后再正式提交。</p></div>
+                    </details>
+                    <details>
+                        <summary><span>投稿后归档与汇报</span><small>完整交付</small></summary>
+                        <div class="detail-content">
+                            <p>正式投稿后，应建立专门文件夹进行归档。建议命名格式为：正式提交版_期刊简称或期刊名_提交日期。例如：正式提交版_JCP_20260801。</p>
+                            <p>文件夹中应至少包括：</p><ul class="checklist"><li>投稿系统要求上传的全部文件；</li><li>投稿系统最终生成的 PDF 或编译版本；</li></ul>
+                            <p>归档完成后，将文件夹压缩打包。邮件主题建议统一为：期刊名_正式提交版。邮件正文可包含：</p>
+                            <ul class="checklist"><li>论文标题；</li><li>投稿期刊；</li><li>提交日期；</li><li>稿件编号，如已生成；</li><li>附件内容说明；</li><li>其他需要说明的信息。</li></ul>
+                            <p>邮件附件为正式投稿归档压缩包。邮件发送完成后，再将最终稿件 PDF 单独发送给刘老师微信，方便查阅。PDF 版本选择原则：</p>
+                            <ul class="checklist"><li>若投稿系统生成了最终 PDF，优先发送期刊系统生成版本；</li><li>若投稿系统未生成 PDF，则发送正式上传的稿件 PDF；</li><li>发送前再次确认不是旧版本或内部修改版本。</li></ul>
+                        </div>
                     </details>
                 </div>
             </article>
 
             <article class="stage-panel" id="stage-revise" role="tabpanel" aria-labelledby="tab-revise" data-panel="revise" data-sop="8,9,10,11" hidden>
                 <div class="stage-heading">
-                    <div><span class="stage-kicker">04 / REVISE</span><h2>返修与提交</h2></div>
-                    <span class="stage-goal">门槛：每条意见闭环且与正文一致</span>
+                    <div><span class="stage-kicker">EVENT 04 / OFFLINE REVISION</span><h2>返修定稿与投稿会</h2></div>
+                    <span class="stage-goal">线下共同完成：每条意见闭环</span>
                 </div>
+                <p class="session-note">返修内容先分工完成，线下会议集中核对修改稿与返修信；团队复核并向刘老师确认后，在同一次会议中完成系统提交。</p>
                 <div class="step-grid">
-                    <div class="step-card"><span>01</span><h3>整理双语意见</h3><p>保留原文和编号，准确翻译并标记涉及位置与歧义。</p></div>
-                    <div class="step-card"><span>02</span><h3>制定修改方案</h3><p>逐条决定如何回应、补什么证据，以及具体负责人。</p></div>
-                    <div class="step-card"><span>03</span><h3>同步正文与回复</h3><p>写清回答、修改、正文内容及准确页码和行号。</p></div>
-                    <div class="step-card"><span>04</span><h3>核查、提交、归档</h3><p>团队复核并向刘老师确认后提交，完成本轮归档与汇报。</p></div>
+                    <div class="step-card"><span>会前 01</span><h3>整理意见与方案</h3><p>保留全部原始意见，形成中英文对照并逐条确定修改方式。</p></div>
+                    <div class="step-card"><span>会前 02</span><h3>完成修改工作稿</h3><p>准备修改稿、返修信、原稿、原始意见以及新增材料。</p></div>
+                    <div class="step-card"><span>线下 03</span><h3>逐条核对定稿</h3><p>确认回答、修改内容、图表及页码行号与正文完全一致。</p></div>
+                    <div class="step-card"><span>线下 04</span><h3>生成稿确认与提交</h3><p>共同检查系统最终 PDF，提交后按返修轮次归档和汇报。</p></div>
                 </div>
                 <div class="detail-grid">
                     <details>
-                        <summary><span>意见与修改方案</span><small>8 项</small></summary>
-                        <div class="detail-content"><ul class="checklist">
-                            <li>完整保留编辑和审稿人的原始编号与评论。</li>
-                            <li>不得遗漏、合并或擅自改写意见。</li>
-                            <li>区分编辑意见、审稿人意见和格式要求。</li>
-                            <li>给出准确中文翻译并标记涉及位置。</li>
-                            <li>歧义意见单独标记，集中讨论。</li>
-                            <li>确定接受修改或客观解释不修改的理由。</li>
-                            <li>确定理论、实验、文献、图表等补充内容。</li>
-                            <li>明确具体负责人和完成状态。</li>
-                        </ul></div>
+                        <summary><span>整理审稿意见与修改方案</span><small>14 项</small></summary>
+                        <div class="detail-content"><p>收到返修意见后，首先将编辑和审稿人的全部意见整理为中英文对照版本，便于团队共同理解和讨论。整理时应：</p><ul class="checklist">
+                            <li>保留编辑和审稿人的原始编号；</li><li>不得遗漏、合并或擅自改写审稿意见；</li><li>对每条意见给出准确中文翻译；</li>
+                            <li>区分编辑意见、审稿人意见和格式要求；</li><li>初步标记每条意见涉及的论文位置；</li><li>对存在歧义的意见单独标注，集中讨论。</li>
+                        </ul><p>团队共同讨论每条意见的处理方式，包括：</p><ul class="checklist">
+                            <li>是否接受并修改；</li><li>修改哪些内容；</li><li>是否需要补充理论说明；</li><li>是否需要增加数值实验；</li>
+                            <li>是否需要补充参考文献；</li><li>是否需要调整图表；</li><li>是否需要解释未修改的原因；</li><li>由哪位成员负责具体修改。</li>
+                        </ul><p>原则上应逐条回应，不得遗漏审稿意见。</p></div>
                     </details>
                     <details>
-                        <summary><span>返修信写作要求</span><small>7 项</small></summary>
-                        <div class="detail-content"><ul class="checklist">
-                            <li>每条包含原始意见、感谢、理解和直接回答。</li>
-                            <li>说明具体修改措施、论证和修改后内容。</li>
-                            <li>给出最终稿准确页码和行号。</li>
-                            <li>涉及图表时插入对应图表或关键内容。</li>
-                            <li>回复客观、礼貌、专业，不回避问题。</li>
-                            <li>不夸大、不争辩、不使用情绪化表达。</li>
-                            <li>无法采纳时给出充分且客观的理由。</li>
+                        <summary><span>返修信编写要求</span><small>完整要求</small></summary>
+                        <div class="detail-content"><p>返修信采用团队统一模板。开头、结尾、致谢和整体格式保持一致，根据具体审稿意见修改回复内容。每条回复一般包括：</p><ul class="checklist">
+                            <li>审稿人原始意见；</li><li>对审稿人的感谢；</li><li>对问题的理解；</li><li>采取的修改措施；</li>
+                            <li>必要的解释或论证；</li><li>修改后的具体内容；</li><li>修改位置，包括页码和行号。</li>
+                        </ul><p>若涉及图表新增或修改，应在返修信中插入对应图表或关键修改内容，便于审稿人直接核对。返修信中的回复应做到：</p><ul class="checklist">
+                            <li>态度客观、礼貌、专业；</li><li>回应明确，不回避问题；</li><li>修改内容与论文正文完全一致；</li>
+                            <li>页码和行号准确；</li><li>不夸大、不争辩、不使用情绪化表达；</li><li>对无法采纳的意见，应给出充分、客观的理由。</li>
                         </ul></div>
                     </details>
                     <details>
                         <summary><span>提交与归档核查</span><small>9 项</small></summary>
+                        <div class="detail-content"><p>返修内容完成后，应重点核对：</p><ul class="checklist">
+                            <li>每条审稿意见是否均已回复；</li><li>返修信中所述修改是否真实体现在正文中；</li>
+                            <li>页码和行号是否与最终修改稿一致；</li><li>新增图表、公式和参考文献是否编号正确；</li>
+                            <li>修改稿是否保留了不应出现的批注或修订痕迹；</li><li>是否需要同时上传清稿版和带修订版本；</li>
+                            <li>文件命名是否符合期刊要求；</li><li>投稿系统中的作者、基金等信息是否需要更新；</li>
+                            <li>是否误上传旧版返修信或旧版修改稿。</li>
+                        </ul><p>上传完成并生成最终 PDF 后，应再次由团队共同检查，确认无误后提交。</p></div>
+                    </details>
+                    <details>
+                        <summary><span>返修线下讨论前准备</span><small>6 类材料</small></summary>
+                        <div class="detail-content"><p>返修线下讨论前，应准备：</p><ol class="checklist">
+                            <li>修改稿中英文混排版本，便于对照修改；</li><li>返修信中英文混排版本；</li>
+                            <li>必要时另附中英文分开的修改稿和返修信；</li><li>原始投稿稿件；</li>
+                            <li>编辑和审稿人原始意见；</li><li>新增或修改的图表、数据和参考文献。</li>
+                        </ol><p>中英文可以采用混排或分开方式，核心原则是便于逐条对照、讨论和修改。</p></div>
+                    </details>
+                    <details>
+                        <summary><span>返修提交后完整归档</span><small>11 类文件</small></summary>
+                        <div class="detail-content"><p>返修提交后，按照正式投稿阶段的方式重新整理文件夹。</p><p>建议文件夹命名格式为：第1次返修提交版_期刊名_提交日期，或：R1提交版_期刊名_提交日期。若有多轮返修，可依次采用：</p>
+                        <ul class="checklist"><li>R1 提交版；</li><li>R2 提交版；</li><li>R3 提交版。</li></ul><p>归档内容应包括：</p><ul class="checklist">
+                            <li>原始审稿意见；</li><li>中英文审稿意见整理版；</li><li>修改稿中文版本；</li><li>修改稿英文版本；</li>
+                            <li>带修订版本；</li><li>清稿版本；</li><li>中英文返修信；</li><li>新增或修改的图表及数据；</li>
+                            <li>投稿系统上传的全部材料；</li><li>投稿系统最终生成的 PDF；</li><li>提交成功记录。</li>
+                        </ul><p>归档压缩后发送至刘老师邮箱。邮件主题可采用：期刊名_R1返修提交版。邮件正文注明：</p>
+                        <ul class="checklist"><li>论文标题；</li><li>投稿期刊；</li><li>返修轮次；</li><li>提交日期；</li><li>稿件编号；</li><li>本轮主要修改内容；</li><li>附件说明。</li></ul>
+                        <p>同时，将返修提交后的最终 PDF 单独发送至刘老师微信，方便查阅。</p></div>
+                    </details>
+                </div>
+            </article>
+
+            <article class="stage-panel" id="stage-transfer" role="tabpanel" aria-labelledby="tab-transfer" data-panel="transfer" data-sop="3,5,6,7" hidden>
+                <div class="stage-heading">
+                    <div><span class="stage-kicker">EVENT 05 / TRANSFER</span><h2>转投准备与投稿</h2></div>
+                    <span class="stage-goal">新期刊材料全部适配后再提交</span>
+                </div>
+                <p class="session-note">转投不是直接换一个投稿入口。会前应准备新 Cover Letter、匹配新期刊模板与文件要求，并提前熟悉或录入新投稿系统的信息流程。</p>
+                <div class="step-grid">
+                    <div class="step-card"><span>会前 01</span><h3>确定新目标期刊</h3><p>重新核对期刊范围、论文类型和稿件匹配度。</p></div>
+                    <div class="step-card"><span>会前 02</span><h3>适配新期刊模板</h3><p>调整版式、参考文献、图表、声明、附件及文件命名。</p></div>
+                    <div class="step-card"><span>会前 03</span><h3>重做 Cover Letter</h3><p>更新期刊名称、匹配理由、稿件信息和日期，清除旧期刊内容。</p></div>
+                    <div class="step-card"><span>线下 04</span><h3>预录系统并投稿</h3><p>提前走通或录入信息，线下共同检查生成稿后提交。</p></div>
+                </div>
+                <div class="detail-grid">
+                    <details>
+                        <summary><span>转投会前必须准备</span><small>材料包</small></summary>
                         <div class="detail-content"><ul class="checklist">
-                            <li>每条意见均已回复，所述修改真实体现在正文。</li>
-                            <li>页码、行号、图表、公式和参考文献编号准确。</li>
-                            <li>按期刊要求准备清稿版和带修订版。</li>
-                            <li>不存在不应出现的批注或修订痕迹。</li>
-                            <li>核对作者、基金和全部系统字段。</li>
-                            <li>检查系统最终 PDF 后再提交。</li>
-                            <li>按 R1、R2、R3 分轮次归档，不覆盖历史版本。</li>
-                            <li>保存意见、双语整理稿、修改稿、返修信和提交记录。</li>
-                            <li>归档包发邮件，最终 PDF 单独发微信。</li>
+                            <li>上一期刊的决定信、编辑意见和审稿意见；</li><li>吸收既有修改后的中文稿与英文清稿；</li>
+                            <li>新目标期刊的投稿要求、模板和材料清单；</li><li>针对新期刊重新编写的 Cover Letter；</li>
+                            <li>作者顺序、邮箱、单位、通信作者和基金信息；</li><li>新投稿系统需要的声明、附件及推荐或回避审稿人信息。</li>
+                        </ul></div>
+                    </details>
+                    <details>
+                        <summary><span>匹配新期刊样式</span><small>逐项重查</small></summary>
+                        <div class="detail-content"><ul class="checklist">
+                            <li>重新核查期刊投稿范围及论文类型；</li><li>重新套用稿件格式和模板要求；</li><li>更新参考文献格式；</li>
+                            <li>匹配图表格式、分辨率及文件类型；</li><li>补齐 Highlights、Graphical Abstract、Declaration、Data Availability Statement 等材料；</li>
+                            <li>确认匿名稿、标题页、源文件、补充材料及作者贡献等要求；</li><li>全文检查并删除上一期刊名称、模板、称谓和残留信息。</li>
+                        </ul></div>
+                    </details>
+                    <details>
+                        <summary><span>Cover Letter 重新适配</span><small>不能沿用旧刊信息</small></summary>
+                        <div class="detail-content"><ul class="checklist">
+                            <li>使用团队统一模板，重新填写稿件标题和新投稿期刊名称；</li>
+                            <li>针对新期刊重新说明研究背景、主要工作、创新点和学术价值；</li>
+                            <li>重新说明稿件与新期刊范围的契合性；</li><li>保留未一稿多投、未重复发表及全体作者同意投稿的声明；</li>
+                            <li>核对通信作者、日期、称谓和作者信息；</li><li>确认未保留上一期刊、其他论文或旧日期信息。</li>
+                        </ul></div>
+                    </details>
+                    <details>
+                        <summary><span>提前熟悉或录入系统</span><small>提交前完成</small></summary>
+                        <div class="detail-content"><ul class="checklist">
+                            <li>提前进入新投稿系统并走通整个流程；</li><li>预先录入标题、摘要、关键词、作者、单位、基金和研究分类；</li>
+                            <li>预先准备推荐或回避审稿人、声明和问答；</li><li>可用明确标记的占位文件测试，但正式提交前必须统一替换；</li>
+                            <li>上传后生成最终 PDF 或预览版本，由团队共同检查；</li><li>按新一次正式投稿建立独立归档，不覆盖上一期刊材料；</li>
+                            <li>提交前由团队复核并向刘老师确认。</li>
                         </ul></div>
                     </details>
                 </div>
@@ -652,9 +770,10 @@
 
             <article class="stage-panel" id="stage-proof" role="tabpanel" aria-labelledby="tab-proof" data-panel="proof" data-sop="12" hidden>
                 <div class="stage-heading">
-                    <div><span class="stage-kicker">05 / PROOF</span><h2>录用及校样</h2></div>
+                    <div><span class="stage-kicker">EVENT 06 / PROOF</span><h2>录用前校样</h2></div>
                     <span class="stage-goal">门槛：编辑问题与出版选项已确认</span>
                 </div>
+                <p class="session-note">收到录用前校样或排版校稿通知后，应严格按照编辑要求逐项核查和提供材料。</p>
                 <div class="step-grid">
                     <div class="step-card"><span>01</span><h3>逐项响应编辑</h3><p>按要求提供源文件、高清图、版权和补充材料。</p></div>
                     <div class="step-card"><span>02</span><h3>核对完整校样</h3><p>重点检查作者信息、基金、公式、图表和参考文献。</p></div>
@@ -663,28 +782,20 @@
                 </div>
                 <div class="detail-grid">
                     <details>
-                        <summary><span>校样核对清单</span><small>10 项</small></summary>
-                        <div class="detail-content"><ul class="checklist">
-                            <li>论文标题、作者姓名及顺序。</li>
-                            <li>作者单位、通信作者及邮箱。</li>
-                            <li>基金信息、摘要和关键词。</li>
-                            <li>公式、特殊符号和编号。</li>
-                            <li>图表内容、图注和清晰度。</li>
-                            <li>参考文献、页码、章节和交叉引用。</li>
-                            <li>编辑提出的全部查询问题。</li>
-                            <li>补充材料及版权文件。</li>
-                            <li>技术内容或重要信息修改已向刘老师确认。</li>
-                            <li>出版方式选择无误。</li>
+                        <summary><span>校样核对清单</span><small>12 项</small></summary>
+                        <div class="detail-content"><p>主要检查内容包括：</p><ul class="checklist">
+                            <li>论文标题；</li><li>作者姓名及顺序；</li><li>作者单位；</li><li>通信作者及邮箱；</li>
+                            <li>基金信息；</li><li>摘要和关键词；</li><li>公式及特殊符号；</li><li>图表内容、图注和清晰度；</li>
+                            <li>参考文献；</li><li>页码、章节和交叉引用；</li><li>编辑提出的查询问题；</li><li>补充材料及版权文件。</li>
                         </ul></div>
                     </details>
                     <details>
-                        <summary><span>提交边界</span><small>原则</small></summary>
-                        <div class="detail-content"><ul class="checklist">
-                            <li>校样阶段不进行未经确认的大规模技术修改。</li>
-                            <li>编辑查询逐项作答，不遗漏任何问题。</li>
-                            <li>除政策要求或明确确认外，优先选择订阅出版。</li>
-                            <li>提交前再次确认重要信息和出版选项，避免额外费用。</li>
-                        </ul></div>
+                        <summary><span>提交边界与出版方式</span><small>原则</small></summary>
+                        <div class="detail-content">
+                            <p>涉及技术内容、作者信息、基金信息或其他重要修改时，应在最终提交前向刘老师确认。</p>
+                            <p>校样阶段原则上只处理排版、格式和编辑查询问题，不宜进行大规模技术内容修改。</p>
+                            <p>涉及出版方式选择时，除非已提前明确需要开放获取，通常优先选择传统订阅出版方式，而不是开放获取方式。提交前应再次确认出版选项，避免误选并产生额外费用。</p>
+                        </div>
                     </details>
                 </div>
             </article>
@@ -693,20 +804,22 @@
         <section class="section" aria-labelledby="version-title" data-sop="13">
             <div class="section-head">
                 <div><span class="eyebrow">Version & Archive</span><h2 id="version-title">版本与归档</h2></div>
-                <p>阶段、轮次、日期写进文件名；重要节点单独保存。</p>
+                <p>所有文件采用清晰、统一的命名方式；重要节点单独归档，不覆盖历史版本。</p>
             </div>
             <div class="version-board">
                 <div class="version-card">
                     <h3>归档文件夹</h3>
                     <div class="code-list">
-                        <code>正式提交版_JCP_20260801</code>
-                        <code>R1提交版_JCP_20260915</code>
-                        <code>R2提交版_JCP_20261020</code>
+                        <code>正式提交版_期刊简称或期刊名_YYYYMMDD</code>
+                        <code>R1提交版_期刊名_YYYYMMDD</code>
+                        <code>R2提交版_期刊名_YYYYMMDD</code>
+                        <code>转投提交版_新期刊名_YYYYMMDD</code>
                     </div>
                     <div class="version-warning">不使用“最新版”“最终最终版”等模糊名称</div>
                 </div>
                 <div class="version-card">
                     <h3>推荐文件名</h3>
+                    <p style="color:var(--text-dim);font-size:.78rem">推荐文件命名示例：</p>
                     <div class="code-list">
                         <code>Manuscript_CN_v03_20260801.docx</code>
                         <code>Manuscript_EN_Submission_20260801.docx</code>
@@ -717,6 +830,15 @@
                     </div>
                 </div>
             </div>
+            <details style="margin-top:.8rem">
+                <summary><span>统一版本管理要求</span><small>8 项</small></summary>
+                <div class="detail-content"><p>整个论文流程中，应始终坚持以下原则：</p><ol class="checklist">
+                    <li>所有文件必须采用清晰、统一的命名方式；</li><li>文件名中应包含稿件阶段、日期和版本号；</li>
+                    <li>不使用“最新版”“最终版”“最终最终版”等含义不清的名称；</li><li>重要节点必须单独归档，不直接覆盖历史版本；</li>
+                    <li>正式上传前必须再次确认文件版本；</li><li>团队内部修改稿和正式提交稿应分开保存；</li>
+                    <li>投稿、返修和校样阶段均应保存系统最终生成文件；</li><li>所有正式提交材料应完整打包，并同步发送给指导老师留存。</li>
+                </ol></div>
+            </details>
         </section>
 
         <section class="section" aria-labelledby="copy-title" data-sop="4,7,11">
@@ -736,17 +858,17 @@
 
 1. 不改变原文的技术含义、研究结论和逻辑关系；
 2. 重点检查语法、拼写、冠词、单复数、时态、主谓一致、介词和标点；
-3. 检查中式英语、表达歧义、句子过长或逻辑不清的问题；
+3. 检查是否存在中式英语、表达歧义、句子过长或逻辑不清的问题；
 4. 检查专业术语、缩写、变量名称和方法名称是否前后一致；
 5. 检查图、表、公式和参考文献的交叉引用是否规范；
 6. 检查标题、摘要、关键词、正文和结论的表达风格是否统一；
 7. 优先采用计算数学、计算物理、PINN、深度学习求解微分方程及 AI for Science 领域的常用表达；
 8. 避免使用生僻词汇和过度复杂的句式；
 9. 不要直接重写全文，请按“原文—问题说明—修改建议”的形式逐项标注；
-10. 对可能涉及技术含义变化的修改，明确标记“需要作者确认”。
+10. 对可能涉及技术含义变化的修改，应明确标记为“需要作者确认”。
 
-待核查内容：
-[粘贴英文论文内容]</pre>
+待核查内容如下：
+【粘贴英文论文内容】</pre>
                 </article>
                 <article class="copy-panel" id="copy-submit" role="tabpanel" aria-labelledby="copy-tab-submit" data-copy-panel="submit" hidden>
                     <div class="copy-panel-head"><h3>首次投稿邮件与微信</h3><button class="copy-button" type="button" data-copy-target="text-submit">复制全部</button></div>
@@ -799,6 +921,7 @@
                         <a class="file-link" href="../assets/documents/AIDING-workflow/SOP/word_ref/01_cover%20letter/Cover%20Letter.docx" download><span class="file-name">Cover Letter</span><span class="file-type">DOCX</span><span class="file-arrow">↓</span></a>
                         <a class="file-link" href="../assets/documents/AIDING-workflow/SOP/word_ref/02_manuscript/manuscript.docx" download><span class="file-name">Manuscript</span><span class="file-type">DOCX</span><span class="file-arrow">↓</span></a>
                         <a class="file-link" href="../assets/documents/AIDING-workflow/SOP/word_ref/03_response%20to%20reviewers/Response%20to%20reviewers.docx" download><span class="file-name">Response to Reviewers</span><span class="file-type">DOCX</span><span class="file-arrow">↓</span></a>
+                        <a class="file-link" href="../assets/documents/AIDING-workflow/SOP/word_ref/04_review%20comments/Review%20comments.docx" download><span class="file-name">Review Comments</span><span class="file-type">DOCX</span><span class="file-arrow">↓</span></a>
                     </div>
                 </div>
                 <div class="download-group">
