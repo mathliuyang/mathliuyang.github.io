@@ -1,0 +1,214 @@
+P0001	style=	num=:	Bilingual Reviewer Comments
+P0002	style=	num=:	审稿意见中英对照
+T0003	rows=2
+T0003.R001	Manuscript / 稿件编号： || ELSCAM-D-26-01599
+T0003.R002	Article / 稿件题目： || Domain-decomposed antiderivative transformation iterative method: A deep learning approach for weakly and Cauchy types singular integral equations
+P0004	style=	num=:	
+T0005	rows=1
+T0005.R001	本文件仅汇编审稿人意见；每条先列英文原文，再列中文译文，不含作者回复与修改说明。 | This document contains reviewer comments only. Each English original is followed by its Chinese translation; author responses and revision notes are omitted.
+P0006	style=	num=:	Contents
+P0007	style=TOC1	num=:		Reviewer #1 / 审稿人 #1	3
+P0008	style=TOC2	num=:		R1.1: Comment 1 / 意见 1	3
+P0009	style=TOC2	num=:		R1.2: Comment 2 / 意见 2	3
+P0010	style=TOC2	num=:		R1.3: Comment 3 / 意见 3	3
+P0011	style=TOC2	num=:		R1.4: Comment 4 / 意见 4	3
+P0012	style=TOC2	num=:		R1.5: Comment 5 / 意见 5	4
+P0013	style=TOC2	num=:		R1.6: Comment 6 / 意见 6	4
+P0014	style=TOC2	num=:		R1.7: Comment 7 / 意见 7	4
+P0015	style=TOC2	num=:		R1.8: Comment 8 / 意见 8	4
+P0016	style=TOC2	num=:		R1.9: Comment 9 / 意见 9	4
+P0017	style=TOC2	num=:		R1.10: Comment 10 / 意见 10	5
+P0018	style=TOC2	num=:		R1.11: Comment 11 / 意见 11	5
+P0019	style=TOC1	num=:		Reviewer #2 / 审稿人 #2	5
+P0020	style=TOC2	num=:		R2.1: Comment 1 / 意见 1	5
+P0021	style=TOC2	num=:		R2.2: Comment 2 / 意见 2	6
+P0022	style=TOC2	num=:		R2.3: Comment 3 / 意见 3	6
+P0023	style=TOC2	num=:		R2.4: Comment 4 / 意见 4	6
+P0024	style=TOC2	num=:		R2.5: Comment 5 / 意见 5	6
+P0025	style=TOC2	num=:		R2.6: Comment 6 / 意见 6	6
+P0026	style=TOC2	num=:		R2.7: Comment 7 / 意见 7	7
+P0027	style=TOC2	num=:		R2.8: Comment 8 / 意见 8	7
+P0028	style=TOC2	num=:		R2.9: Comment 9 / 意见 9	7
+P0029	style=	num=:	\n
+P0030	style=1	num=:	Reviewer #1 / 审稿人 #1
+P0031	style=2	num=:	R1.1: Comment 1 / 意见 1
+T0032	rows=2
+T0032.R001	English original
+T0032.R002	Page 3, line no. 11 from top, for hyper-singular integral equations, “α≥2” seems to be “α > 1”. Otherwise, discuss the missing case 1 < α < 2.
+P0033	style=	num=:	
+T0034	rows=2
+T0034.R001	中文译文
+T0034.R002	第 3 页，从上往下第 11 行：对于超奇异积分方程，“α≥2”似乎应为“α > 1”。否则，请讨论缺失的情形 1 < α < 2。
+P0035	style=	num=:	
+P0036	style=2	num=:	R1.2: Comment 2 / 意见 2
+T0037	rows=2
+T0037.R001	English original
+T0037.R002	Page 4, line no. 16 from top, the statement “G(x,t) and φ(t) are both continuous, the integrand [G(x,t)/(x−t)^α]φ(t) is also a continuous function.” seems to be wrong. For example, if G(x,t)=(x+t)^α and φ(t)=1, how [G(x,t)/(x−t)^α]φ(t) will be a continuous function.
+P0038	style=	num=:	
+T0039	rows=2
+T0039.R001	中文译文
+T0039.R002	第 4 页，从上往下第 16 行，表述“G(x,t) 和 φ(t) 均连续，因此被积函数 [G(x,t)/(x−t)^α]φ(t) 也是连续函数”似乎有误。例如，若 G(x,t)=(x+t)^α 且 φ(t)=1，则 [G(x,t)/(x−t)^α]φ(t) 如何会是连续函数？
+P0040	style=	num=:	
+P0041	style=2	num=:	R1.3: Comment 3 / 意见 3
+T0042	rows=2
+T0042.R001	English original
+T0042.R002	Page 4, line no. 11, 12 from top, the domain Ω and [a, x] both are sets. So, what is purpose of writing Ω∈[a,x]? Should be used “=” or “⊆”. Similarly, for Ω∈[a,x−ε] and other such expressions.
+P0043	style=	num=:	
+T0044	rows=2
+T0044.R001	中文译文
+T0044.R002	第 4 页，从上往下第 11、12 行，区域 Ω 和 [a,x] 都是集合。那么写 Ω∈[a,x] 的目的是什么？应使用“=”或“⊆”。类似地，Ω∈[a,x−ε] 等表达也应如此处理。
+P0045	style=	num=:	
+P0046	style=2	num=:	R1.4: Comment 4 / 意见 4
+T0047	rows=2
+T0047.R001	English original
+T0047.R002	Motivation is not sufficiently stated in the introduction part. It should be clarified what advantages of the proposed technique are.
+P0048	style=	num=:	
+T0049	rows=2
+T0049.R001	中文译文
+T0049.R002	引言部分对研究动机的阐述不够充分。应明确说明所提出技术具有哪些优势。
+P0050	style=	num=:	
+P0051	style=2	num=:	R1.5: Comment 5 / 意见 5
+T0052	rows=2
+T0052.R001	English original
+T0052.R002	Page 3, line no. 11 from top, G(x,t)/(x−t)φ(t) should be written as [G(x,t)/(x−t)]φ(t) to avoid confusing. Similar inaccuracies are there in many places. Also do the same corrections for G(x,t)/(x−t)^α.
+P0053	style=	num=:	
+T0054	rows=2
+T0054.R001	中文译文
+T0054.R002	第 3 页，从上往下第 11 行，G(x,t)/(x−t)φ(t) 应写成 [G(x,t)/(x−t)]φ(t)，以避免混淆。文中许多地方存在类似的不准确表达。对于 G(x,t)/(x−t)^α 也请作同样修正。
+P0055	style=	num=:	
+P0056	style=2	num=:	R1.6: Comment 6 / 意见 6
+T0057	rows=2
+T0057.R001	English original
+T0057.R002	In Page 2, the line spacing in the lower part of the page is noticeably larger than that in the upper part. Please correct this formatting inconsistency and ensure that line spacing is uniform throughout the manuscript.
+P0058	style=	num=:	
+T0059	rows=2
+T0059.R001	中文译文
+T0059.R002	第 2 页下半部分的行距明显大于上半部分。请修正这一格式不一致问题，并确保全文行距统一。
+P0060	style=	num=:	
+P0061	style=2	num=:	R1.7: Comment 7 / 意见 7
+T0062	rows=2
+T0062.R001	English original
+T0062.R002	Equation (9), what is R? is it the set of real numbers. If then denote it by ℝ.
+P0063	style=	num=:	
+T0064	rows=2
+T0064.R001	中文译文
+T0064.R002	关于公式（9），R 是什么？它是否表示实数集？如果是，请记作 ℝ。
+P0065	style=	num=:	
+P0066	style=2	num=:	R1.8: Comment 8 / 意见 8
+T0067	rows=2
+T0067.R001	English original
+T0067.R002	The authors should state in the paper what kind of the software package has used to obtain the required results in the beginning of the numerical examples section.
+P0068	style=	num=:	
+T0069	rows=2
+T0069.R001	中文译文
+T0069.R002	作者应在数值算例部分开头说明使用了何种软件包来获得所需结果。
+P0070	style=	num=:	
+P0071	style=2	num=:	R1.9: Comment 9 / 意见 9
+T0072	rows=2
+T0072.R001	English original
+T0072.R002	The authors should give some more details about the effects observed in the numerical tables and figures in the numerical examples section.
+P0073	style=	num=:	
+T0074	rows=2
+T0074.R001	中文译文
+T0074.R002	作者应更详细地说明数值算例部分各数值表格和图中观察到的现象。
+P0075	style=	num=:	
+P0076	style=2	num=:	R1.10: Comment 10 / 意见 10
+T0077	rows=2
+T0077.R001	English original
+T0077.R002	Write all references in a consistent format. For example, in References 4 and 16, ”pp.” is written before the page numbers, whereas in the other references it is not.
+P0078	style=	num=:	
+T0079	rows=2
+T0079.R001	中文译文
+T0079.R002	所有参考文献应采用一致的格式。例如，参考文献 4 和 16 在页码前写有“pp.”，而其他参考文献没有。
+P0080	style=	num=:	
+P0081	style=2	num=:	R1.11: Comment 11 / 意见 11
+T0082	rows=2
+T0082.R001	English original
+T0082.R002	Moreover, there are some minor grammatical inconsistencies throughout the manuscript which need to be corrected.
+P0083	style=	num=:	
+T0084	rows=2
+T0084.R001	中文译文
+T0084.R002	此外，稿件中仍有一些细微的语法不一致问题，需要予以修正。
+P0085	style=	num=:	
+P0086	style=1	num=:	Reviewer #2 / 审稿人 #2
+P0087	style=2	num=:	R2.1: Comment 1 / 意见 1
+T0088	rows=2
+T0088.R001	English original
+T0088.R002	Lack of theoretical analysis. The manuscript does not provide rigorous results regarding: | Equivalence between the original singular integral equation and the transformed differential system; | Stability of the proposed transformation; | Convergence of the iterative neural-network procedure; | Influence of the parameter ε introduced near singular points.
+P0089	style=	num=:	
+T0090	rows=2
+T0090.R001	中文译文
+T0090.R002	缺少理论分析。稿件没有就以下方面给出严格结果： | 原奇异积分方程与变换后的微分系统之间的等价性； | 所提出变换的稳定性； | 迭代神经网络过程的收敛性； | 在奇异点附近引入的参数 ε 的影响。
+P0091	style=	num=:	
+P0092	style=2	num=:	R2.2: Comment 2 / 意见 2
+T0093	rows=2
+T0093.R001	English original
+T0093.R002	
+P0094	style=	num=:	
+T0095	rows=2
+T0095.R001	中文译文
+T0095.R002	与现有方法的比较不充分。D-AIM 的有效性仅通过基准算例得到展示，缺少与配置法、谱方法、边界元技术或现有基于 PINN 的方法等成熟数值方法的比较。
+P0096	style=	num=:	
+P0097	style=2	num=:	R2.3: Comment 3 / 意见 3
+T0098	rows=2
+T0098.R001	English original
+T0098.R002	
+P0099	style=	num=:	
+T0100	rows=2
+T0100.R001	中文译文
+T0100.R002	对超参数的敏感性。网络结构、损失权重、采样策略以及 ε 的取值似乎均凭经验选定。开展敏感性研究将显著增强稿件的说服力。
+P0101	style=	num=:	
+P0102	style=2	num=:	R2.4: Comment 4 / 意见 4
+T0103	rows=2
+T0103.R001	English original
+T0103.R002	
+P0104	style=	num=:	
+T0105	rows=2
+T0105.R001	中文译文
+T0105.R002	计算效率。稿件没有讨论训练时间、硬件配置、收敛历史和计算复杂度，而这些方面对于评估基于深度学习的数值方法的实际应用价值十分重要。
+P0106	style=	num=:	
+P0107	style=2	num=:	R2.5: Comment 5 / 意见 5
+T0108	rows=2
+T0108.R001	English original
+T0108.R002	
+P0109	style=	num=:	
+T0110	rows=2
+T0110.R001	中文译文
+T0110.R002	文献综述应更好地说明所提出方法相对于 PINN、XPINN、BINN、DeepONet 和神经算子框架的定位。
+P0111	style=	num=:	
+P0112	style=2	num=:	R2.6: Comment 6 / 意见 6
+T0113	rows=2
+T0113.R001	English original
+T0113.R002	
+P0114	style=	num=:	
+T0115	rows=2
+T0115.R001	中文译文
+T0115.R002	稿件中仍存在若干语法和文体问题，建议认真校对。
+P0116	style=	num=:	
+P0117	style=2	num=:	R2.7: Comment 7 / 意见 7
+T0118	rows=2
+T0118.R001	English original
+T0118.R002	
+P0119	style=	num=:	
+T0120	rows=2
+T0120.R001	中文译文
+T0120.R002	与仅展示解的图相比，误差分布图和收敛曲线将提供更多信息。
+P0121	style=	num=:	
+P0122	style=2	num=:	R2.8: Comment 8 / 意见 8
+T0123	rows=2
+T0123.R001	English original
+T0123.R002	
+P0124	style=	num=:	
+T0125	rows=2
+T0125.R001	中文译文
+T0125.R002	增加一幅说明 D-AIM 流程的示意图将有助于提高可读性。
+P0126	style=	num=:	
+P0127	style=2	num=:	R2.9: Comment 9 / 意见 9
+T0128	rows=2
+T0128.R001	English original
+T0128.R002	
+P0129	style=	num=:	
+T0130	rows=2
+T0130.R001	中文译文
+T0130.R002	增加一张符号汇总表将有助于读者理解推导过程。
+P0131	style=	num=:	

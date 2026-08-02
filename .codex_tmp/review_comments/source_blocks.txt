@@ -1,0 +1,213 @@
+P0001	style=	num=:	Revisions to the paper titled Domain-decomposed antiderivative transformation iterative method: A deep learning approach for weakly and Cauchy types singular integral equations
+P0002	style=	num=:	
+P0003	style=	num=:	Manuscript Number: ELSCAM-D-26-01599
+P0004	style=	num=:	
+P0005	style=	num=:	Dear Editor and Reviewers,
+P0006	style=	num=:	Thank you very much for your comments concerning our manuscript entitled "Domain-decomposed antiderivative transformation iterative method: A deep learning approach for weakly and Cauchy types singular integral equations". All of the comments have been taken into account, and the manuscript has been revised accordingly (revised portions in the revised manuscript have been marked in red color for easier identification purposes). Below is our description of the revision based on the reviewers' comments.
+P0007	style=	num=:	With kindest regards,
+P0008	style=	num=:	Yours Sincerely, 
+P0009	style=	num=:	Dong Liu
+P0010	style=	num=:	
+P0011	style=	num=:	Response to Reviewer #1:
+P0012	style=	num=:	
+P0013	style=	num=:	1. Page 3, line no. 11 from top, for hyper-singular integral equations, “α≥2” seems to be “α > 1”. Otherwise, discuss the missing case 1 < α < 2.
+P0014	style=	num=:	Response:
+P0015	style=	num=:	>> We thank the reviewer for these comments. We agree with the reviewer and have corrected the condition for hypersingular integral equations to “α > 1”.
+P0016	style=	num=:	The corresponding change appears on page 4 (line 102).
+P0017	style=	num=:	
+P0018	style=	num=:	2. Page 4, line no. 16 from top, the statement “ and  are both continuous, the integrand  is also a continuous function.” seems to be wrong. For example, if  and , how  will be a continuous function.
+P0019	style=	num=:	Response:
+P0020	style=	num=:	>> We thank the reviewer for these comments. The integrand  is singular along the diagonal . Under the Cauchy principal-value definition, however, it is continuous outside the region around  with width . In this work, we decompose the solution domain as  and apply the antiderivative transformation separately on each subdomain. The integrand is therefore continuous on both subdomains. We have revised the manuscript accordingly, as follows:
+P0021	style=	num=:	“ and  are both continuous. The integrand  is singular along the diagonal , but it is continuous outside the region around  with width .”
+P0022	style=	num=:	The corresponding change appears on page 5 (lines 141–143).
+P0023	style=	num=:	
+P0024	style=	num=:	3. Page 4, line no. 11, 12 from top, the domain Ω and [a, x] both are sets. So, what is purpose of writing ? Should be used “=” or “⊆”. Similarly, for  and other such expressions.
+P0025	style=	num=:	Response:
+P0026	style=	num=:	>> We thank the reviewer for these comments. We have replaced  with  and  with , and have corrected all similar expressions throughout the manuscript. The corresponding changes appear on page 5 (lines 136–140) and page 6 (lines 180–181).
+P0027	style=	num=:	
+P0028	style=	num=:	4. Motivation is not sufficiently stated in the introduction part. It should be clarified what advantages of the proposed technique are.
+P0029	style=	num=:	Response:
+P0030	style=	num=:	>> We thank the reviewer for these comments. We have added the following explanation to the manuscript:
+P0031	style=	num=:	“Unlike traditional methods, the deep-learning approach proposed in this work builds the solution scheme directly from the original equation, without any model simplification. The solution process is well-organized and relatively simple to implement. Moreover, deep-learning approaches are widely regarded as a promising method for solving high-dimensional integro-differential equations. The proposed method may therefore provide a useful and potentially high-performance route for solving singular integral equations arising in fracture mechanics and other complex engineering problems.”
+P0032	style=	num=:	The corresponding change appears on page 2 (lines 66–72).
+P0033	style=	num=:	5. Page 3, line no. 11 from top,  should be written as  to avoid confusing. Similar inaccuracies are there in many places. Also do the same corrections for .
+P0034	style=	num=:	Response:
+P0035	style=	num=:	>> We thank the reviewer for these comments. We have corrected all similar expressions throughout the manuscript, replacing  with . The corresponding changes appear on page 3 (lines 92,96 and 100), page 4 (line 102) and page 5 (lines 142,152).
+P0036	style=	num=:	
+P0037	style=	num=:	6. In Page 2, the line spacing in the lower part of the page is noticeably larger than that in the upper part. Please correct this formatting inconsistency and ensure that line spacing is uniform throughout the manuscript.
+P0038	style=	num=:	Response:
+P0039	style=	num=:	>> We thank the reviewer for these comments. We have set the line spacing throughout the manuscript to 1.5 lines.
+P0040	style=	num=:	
+P0041	style=	num=:	7. Equation (9), what is R? is it the set of real numbers. If then denote it by ℝ.
+P0042	style=	num=:	Response:
+P0043	style=	num=:	>> We thank the reviewer for these comments. We have replaced R with ℝ in Eq. (9). The corresponding change appears on page 5 (line 156).
+P0044	style=	num=:	
+P0045	style=	num=:	8. The authors should state in the paper what kind of the software package has used to obtain the required results in the beginning of the numerical examples section.
+P0046	style=	num=:	Response:
+P0047	style=	num=:	>> We thank the reviewer for these comments. At the beginning of the numerical-validation section (Section 6), we have added details of the software used to generate the reported results, as follows:
+P0048	style=	num=:	“In this section, all numerical examples were trained on a single NVIDIA GeForce RTX 4070 Ti GPU. The networks were implemented, differentiated automatically and trained using PyTorch 2.12.0 with CUDA 12.6 acceleration, and the complete workflow was run in Python 3.13.”
+P0049	style=	num=:	The corresponding change appears on page 10 (lines 273–275).
+P0050	style=	num=:	
+P0051	style=	num=:	9. The authors should give some more details about the effects observed in the numerical tables and figures in the numerical examples section.
+P0052	style=	num=:	Response:
+P0053	style=	num=:	>> We thank the reviewer for these comments. More detailed descriptions of the results have been added to the corresponding figure captions; the relevant revisions can be found in Figs. 4, 5, 10, 11 and 12 of Section 6. In addition, an absolute error distribution plot has been added for each numerical example in Section 6, as shown below:
+T0054	rows=4
+T0054.R001	 ||  || 
+T0054.R002	Fig. 4(c). Pointwise absolute-error distribution || Fig. 5(c). Pointwise absolute-error distribution || Fig. 10(c). Pointwise absolute-error distribution
+T0054.R003	 ||  || 
+T0054.R004	Fig. 11(c). Pointwise absolute-error distribution || Fig. 12(c). Pointwise absolute-error distribution || 
+P0055	style=	num=:	
+P0056	style=	num=:	10. Write all references in a consistent format. For example, in References 4 and 16, ”pp.” is written before the page numbers, whereas in the other references it is not.
+P0057	style=	num=:	Response:
+P0058	style=	num=:	>> We thank the reviewer for these comments. We have removed the “pp.” prefix from Refs. [4] and [16] and standardized the formatting of the remaining references. The corresponding changes appear on page 20 (lines 414–416) and page 21 (lines 446–447).
+P0059	style=	num=:	
+P0060	style=	num=:	11. Moreover, there are some minor grammatical inconsistencies throughout the manuscript which need to be corrected.
+P0061	style=	num=:	Response:
+P0062	style=	num=:	>> We thank the reviewer for these comments. We have carefully proofread and revised the grammar and language throughout the manuscript. Some representative examples of the revisions are given below:
+P0063	style=	num=:	"thus establishes new technical approaches" has been revised to "thus establishing new technical approaches" (see page 1, line 23).
+P0064	style=	num=:	"differential equations systems" has been revised to "differential equation systems" (see page 2, line 63).
+P0065	style=	num=:	All other grammatical and linguistic revisions have been marked in red in the revised manuscript.
+P0066	style=	num=:	
+P0067	style=	num=:	Response to Reviewer #2:
+P0068	style=	num=:	
+P0069	style=	num=:	1. Lack of theoretical analysis. The manuscript does not provide rigorous results regarding:
+P0070	style=	num=:	• Equivalence between the original singular integral equation and the transformed differential system;
+P0071	style=	num=:	• Stability of the proposed transformation;
+P0072	style=	num=:	• Convergence of the iterative neural-network procedure;
+P0073	style=	num=:	• Influence of the parameter ε introduced near singular points.
+P0074	style=	num=:	Response:
+P0075	style=	num=:	>> We thank the reviewer for these comments.
+P0076	style=	num=:	   Regarding the equivalence and stability of the transformation from the original singular integral equation to the differential system, we have added the following statement:
+P0077	style=	num=:	“By the Newton–Leibniz formula, if the kernel in an integral term is continuous over the solution domain, then, provided that a definite solution exists, the integral term and its antiderivative are in one-to-one correspondence. This establishes the equivalence between the original singular integral equation and the transformed differential system [1,28]. Because the antiderivative transformation of an integral term with a continuous kernel is mathematically rigorous, the transformation is stable.”
+P0078	style=	num=:	See Refs. [1,28] and the derivation in the main text, page 4, lines 127–131, Eqs. (9)–(11).
+P0079	style=	num=:	   The convergence of neural-network iterative solvers for differential equations is a central research topic in scientific machine learning, and current studies in this field verify convergence mainly through numerical experiments. We have therefore added the following statement in Section 6.2:
+P0080	style=	num=:	“The experimental results show that the total loss of the proposed method decreases progressively with the iterations and then levels off, indicating that the computational process exhibits good convergence, as shown in Fig. 6.” See page 14, lines 320–322.
+P0081	style=	num=:	
+P0082	style=	num=:	Fig. 6. Evolution of the total loss
+P0083	style=	num=:	   To assess the influence of the parameter ε introduced near the singular point, we carried out a systematic sensitivity analysis in Section 6.2 and added the following statement:
+P0084	style=	num=:	“Eleven values of 𝜀 were selected across different orders of magnitude, and five independent repeated runs were carried out for each value. Fig. 7 shows the variation of the MSE with 𝜀, together with the error bars obtained from the repeated runs. The results show that for ε > 0.001 the prediction error decreases as ε decreases, whereas for ε < 0.001 the prediction error remains essentially unchanged.” See page 13, lines 312–314, and page 14, lines 318–320.
+P0085	style=	num=:	
+P0086	style=	num=:	
+P0087	style=	num=:	Fig. 7. Mean squared error of the predicted solution as a function of ε
+P0088	style=	num=:	
+P0089	style=	num=:	2. Insufficient comparison with existing methods. The effectiveness of D-AIM is demonstrated only through benchmark examples. Comparisons with established numerical methods, such as collocation methods, spectral methods, boundary element techniques, or existing PINN-based approaches, are missing.
+P0090	style=	num=:	Response:
+P0091	style=	num=:	>> We thank the reviewer for these comments. Because D-AIM is a deep-learning method, we chose to compare it with the conventional PINN method. We have added the corresponding comparison to Section 6.2, with the main results summarized as follows:
+P0092	style=	num=:	“Fig. 8 shows the evolution of the total loss with the number of training epochs for the PINN method, and Fig. 9 compares the D-AIM solution, the PINN solution, and the analytical solution. The results show that the loss of the PINN method oscillates drastically during training and does not decrease to a converged level, resulting in a large error; the D-AIM method therefore exhibits a clear performance advantage over the conventional PINN in this example.”
+T0093	rows=2
+T0093.R001	 || 
+T0093.R002	Fig. 8. Evolution of the total loss || Fig. 9. Comparison of the predicted solutions with the analytical solution
+P0094	style=	num=:	The corresponding changes appear on page 14 (lines 324–328).
+P0095	style=	num=:	
+P0096	style=	num=:	3. Sensitivity to hyperparameters. The network architecture, loss weights, sampling strategy, and values of ε appear to be selected empirically. A sensitivity study would significantly strengthen the manuscript.
+P0097	style=	num=:	Response:
+P0098	style=	num=:	>> We thank the reviewer for these comments.
+P0099	style=	num=:	   We have carried out a systematic sensitivity analysis of ε in Section 6.2 and added the following statement:
+P0100	style=	num=:	“Eleven values of 𝜀 were selected across different orders of magnitude, and five independent repeated runs were carried out for each value. Fig. 7 shows the variation of the MSE with 𝜀, together with the error bars obtained from the repeated runs. The results show that for ε > 0.001 the prediction error decreases as ε decreases, whereas for ε < 0.001 the prediction error remains essentially unchanged.” See page 13, lines 312–314, and page 14, lines 318–320.
+P0101	style=	num=:	
+P0102	style=	num=:	Fig. 7. Mean squared error of the predicted solution as a function of ε
+P0103	style=	num=:	With reference to existing research on deep learning based PDE solvers, hyperparameters such as the network architecture, sampling strategy, and loss weights still lack a well-established theoretical foundation, and are mainly determined empirically and through experiments. We therefore followed established PINN practice and selected the hyperparameters in our numerical experiments. A theoretical study of hyperparameter selection will be pursued in future work. We added the following sentence to the outlook in Section 7:
+P0104	style=	num=:	“Future research will focus on theoretically analyzing the convergence and stability of the multi-network iterative deep learning method and quantitatively evaluating its time and space complexity. Further theoretical studies will also examine how key hyperparameters, including network architecture, loss weights, and sampling strategies, affect solver performance.”
+P0105	style=	num=:	The corresponding changes appear on page 18-19 (lines 390–393).
+P0106	style=	num=:	
+P0107	style=	num=:	4. Computational efficiency. Training time, hardware specifications, convergence history, and computational complexity are not discussed. These aspects are important when assessing the practical usefulness of deep learning-based numerical methods.
+P0108	style=	num=:	Response:
+P0109	style=	num=:	>> We thank the reviewer for these comments.
+P0110	style=	num=:	We have added the following description of the hardware configuration to Section 6:
+P0111	style=	num=:	“In this section, all numerical examples were trained on a single NVIDIA GeForce RTX 4070 Ti GPU. The networks were implemented, differentiated automatically and trained using PyTorch 2.12.0 with CUDA 12.6 acceleration, and the complete workflow was run in Python 3.13.”
+P0112	style=	num=:	The corresponding change appears on page 10 (lines 273–275).
+P0113	style=	num=:	   We also added a discussion of training time and convergence history to Section 6.2, as follows:
+P0114	style=	num=:	“In the above computing environment, each training run took approximately 5400 s on average. Fig. 6 shows the evolution of the total loss with the number of training epochs. The loss decreases steadily and levels off at roughly 500,000 epochs, indicating that training has converged.” The corresponding change appears on pages 13-14 (lines 314–317).
+P0115	style=	num=:	
+P0116	style=	num=:	
+P0117	style=	num=:	Fig. 6. Evolution of the total loss
+P0118	style=	num=:	Regarding computational complexity, since the quantitative analysis of the complexity of deep learning is a recognized challenge in the field, we will pursue this issue in our future research. We have added the following clarification to the outlook section:
+P0119	style=	num=:	“Future research will focus on theoretically analyzing the convergence and stability of the multi-network iterative deep learning method and quantitatively evaluating its time and space complexity.”
+P0120	style=	num=:	The corresponding change appears on page 18 (lines 390–391).
+P0121	style=	num=:	
+P0122	style=	num=:	5. The literature review should better position the proposed method with respect to PINNs, XPINNs, BINNs, DeepONets, and neural operator frameworks.
+P0123	style=	num=:	Response:
+P0124	style=	num=:	>> We thank the reviewer for these comments. We have expanded the literature review in Section 1 to clarify how the proposed method relates to these five classes of methods, as follows:
+P0125	style=	num=:	“In recent years, deep learning has been used not only for differential equations [19-23] but also increasingly for integral equations. PINN-based methods have been developed for multidimensional Fredholm integral equations [24,25], volume integral equations [26], boundary integral equations [27] and other multidimensional integral equations with continuous kernels [28]. For integral equations with discontinuous coefficients, domain-decomposed XPINNs are often used to accommodate non-smooth solutions across interfaces [29]. DeepONet and neural-operator methods are suitable for solving a class of parameterized problems [21,30-32], thereby enhancing the generalization capability of deep learning based numerical computation. Most of these studies concern non-singular integral equations and evaluate the integral terms by numerical integration, which introduces additional discretization error. The boundary integral neural network (BINN) is an important exception: it converts a PDE into a boundary integral equation using a Green’s function and evaluates weakly singular and Cauchy-type singular integrals by regularization techniques. Its applicability, however, depends on the existence of the BIE formulation and the fundamental solution. In many non-linear problems, the unknowns in the interior region cannot be completely eliminated. Moreover, the fundamental solution may be hard to obtain or even not exist [27]. Therefore, it is necessary to explore new deep learning methods for solving singular integral equations.”
+P0126	style=	num=:	The corresponding change appears on page 2 (lines 42–57).
+P0127	style=	num=:	
+P0128	style=	num=:	
+P0129	style=	num=:	6. Several grammatical and stylistic issues remain and careful proofreading is recommended.
+P0130	style=	num=:	Response:
+P0131	style=	num=:	>> We thank the reviewer for these comments. We have carefully proofread and revised the grammar and language throughout the manuscript. Some representative examples of the revisions are given below:
+P0132	style=	num=:	"thus establishes new technical approaches" has been revised to "thus establishing new technical approaches" (see page 1, line 23).
+P0133	style=	num=:	"differential equations systems" has been revised to "differential equation systems" (see page 2, line 63).
+P0134	style=	num=:	All other grammatical and linguistic revisions have been marked in red in the revised manuscript.
+P0135	style=	num=:	
+P0136	style=	num=:	7. Error distributions and convergence plots would be more informative than solution plots alone.
+P0137	style=	num=:	Response:
+P0138	style=	num=:	>> We thank the reviewer for these comments. We have added a pointwise error-distribution plot for every example in Section 6, as shown below:
+T0139	rows=4
+T0139.R001	 ||  || 
+T0139.R002	Fig. 4(c). Pointwise absolute-error distribution || Fig. 5(c). Pointwise absolute-error distribution || Fig. 10(c). Pointwise absolute-error distribution
+T0139.R003	 ||  || 
+T0139.R004	Fig. 11(c). Pointwise absolute-error distribution || Fig. 12(c). Pointwise absolute-error distribution || 
+P0140	style=	num=:	The corresponding changes are shown in Section 6, Figs. 4, 5, 10, 11 and 12.
+P0141	style=	num=:	For the convergence curve, we added the following statement to Section 6.2:
+P0142	style=	num=:	“Fig. 6 shows the evolution of the total loss with the number of training epochs. The loss decreases steadily and levels off at roughly 500,000 epochs, indicating that training has converged.” The corresponding change appears on pages 13-14 (lines 315–317).
+P0143	style=	num=:	
+P0144	style=	num=:	
+P0145	style=	num=:	Fig. 6. Evolution of the total loss
+P0146	style=	num=:	
+P0147	style=	num=:	8. A schematic workflow illustrating the D-AIM procedure would improve readability.
+P0148	style=	num=:	Response:
+P0149	style=	num=:	>> We thank the reviewer for these comments. We revised the relevant text in Section 5 and the figure caption so that Fig. 3 explains each step of the D-AIM workflow more clearly:
+P0150	style=	num=:	“After transforming the integral equations into exact differential equations and defining the corresponding loss functions, the deep learning process can be carried out either with the standard PINN framework[19] or with one of the improved deep-learning architectures developed for differential equations[27,29,35]. The deep learning process involves setting the network structures of neural network functions , and , constructing machine learning sample sets according to their respective solution domains, and updating the weights  and biases  in equation  according to the weighted loss functions determined by equations  and , so that , and  decrease alternately and gradually approach zero. In the training process described above, the number of loop iterations in the computational procedure depends on the complexity of the task. Once training is complete,  approximates the numerical solution  of the equation. In practice, convergence criteria are generally set for loss functions, i.e., less than the preset minimum value , or a maximum number of machine learning rounds. Machine learning stops when convergence criteria are satisfied. Taking the case where all neural network loss functions are less than  as the convergence criterion, the iterative computation flowchart is shown in Fig. 3:”
+P0151	style=	num=:	
+P0152	style=	num=:	Fig. 3 Workflow of the D-AIM procedure
+P0153	style=	num=:	The corresponding changes appear on page 10 (lines 256–271).
+P0154	style=	num=:	
+P0155	style=	num=:	9. A table summarizing the notation would help readers follow the derivations.
+P0156	style=	num=:	Response:
+P0157	style=	num=:	>> We thank the reviewer for these comments. We have added a notation table (Table 3) summarizing the symbols used in the manuscript. It is included as an appendix at the end of the manuscript. The corresponding change appears on page 19 (lines 399–401).
+P0158	style=	num=:	
+P0159	style=	num=:	Table 3. Symbols and definitions
+T0160	rows=26
+T0160.R001	Symbol || Definition
+T0160.R002	a, b || Lower and upper limits of integration
+T0160.R003	x, t || Independent and integration variables, x, t ∈ [a, b]
+T0160.R004	ϕ(x) || Unknown solution of the singular integral equation
+T0160.R005	λ || Fixed parameter of the integral equation
+T0160.R006	a(x), f(x) || Known functions
+T0160.R007	K(x, t) || Singular integral kernel
+T0160.R008	G(x, t) || Continuous and bounded part of the kernel
+T0160.R009	α || Order of the kernel singularity
+T0160.R010	ε || Small quantity
+T0160.R011	Ω || Integration domain
+T0160.R012	F(x, t) || Antiderivative of the integral term
+T0160.R013	C || Constant
+T0160.R014	 || Neural-network input vector
+T0160.R015	 || Neural-network weights and biases
+T0160.R016	 || Network depth
+T0160.R017	 || Number of hidden neurons
+T0160.R018	 || Neural-network output for ϕ(x)
+T0160.R019	 || Neural-network output for Fa (x, t), Fb (x, t)
+T0160.R020	 || Loss function for the original governing equation
+T0160.R021	 || Loss function for the antiderivative equation
+T0160.R022	 || Loss function for the antiderivative definite solution constraint
+T0160.R023	 || Unified machine-learning loss for the antiderivative
+T0160.R024	 || Loss-function weights
+T0160.R025	 || Convergence tolerance for the training loss
+T0160.R026	 || Mean squared error
+P0161	style=	num=:	
+P0162	style=	num=:	[1]	F.G. Tricomi, Integral Equations, Dover Publications, New York, 1985.
+P0163	style=	num=:	[19]	M. Raissi, P. Perdikaris, G.E. Karniadakis, Physics-informed neural networks: A deep learning framework for solving forward and inverse problems involving nonlinear partial differential equations, J. Comput. Phys. 378 (2019) 686–707. https://doi.org/10.1016/j.jcp.2018.10.045.
+P0164	style=	num=:	[20]	G.E. Karniadakis, I.G. Kevrekidis, L. Lu, P. Perdikaris, S. Wang, L. Yang, Physics-informed machine learning, Nat. Rev. Phys. 3 (2021) 422–440. https://doi.org/10.1038/s42254-021-00314-5.
+P0165	style=	num=:	[21]	E. Zappala, A.H. de O. Fonseca, J.O. Caro, A.H. Moberly, M.J. Higley, J. Cardin, D. van Dijk, Learning integral operators via neural integral equations, Nat. Mach. Intell. 6 (2024) 1046–1062. https://doi.org/10.1038/s42256-024-00886-8.
+P0166	style=	num=:	[22]	S. Cuomo, V.S. Di Cola, F. Giampaolo, G. Rozza, M. Raissi, F. Piccialli, Scientific machine learning through physics–informed neural networks: where we are and what’s next, J. Sci. Comput. 92 (2022) 88. https://doi.org/10.1007/s10915-022-01939-z.
+P0167	style=	num=:	[23]	S.L. Brunton, J.N. Kutz, Promising directions of machine learning for partial differential equations, Nat. Comput. Sci. 4 (2024) 483–494. https://doi.org/10.1038/s43588-024-00643-2.
+P0168	style=	num=:	[24]	Y. Guan, T. Fang, D. Zhang, C. Jin, Solving fredholm integral equations using deep learning, Int. J. Appl. Comput. Math. 8 (2022) 87. https://doi.org/10.1007/s40819-022-01288-3.
+P0169	style=	num=:	[25]	Y. Ma, W. Li, Efficient solution of second-kind Fredholm integral equations using L1 space discrete coordinates and physics-informed neural networks, Next Res. 2 (2025) 100534. https://doi.org/10.1016/j.nexres.2025.100534.
+P0170	style=	num=:	[26]	R. Guo, T. Shan, X. Song, M. Li, F. Yang, S. Xu, A. Abubakar, Physics embedded deep neural network for solving volume integral equation: 2-D case, IEEE Trans. Antennas Propag. 70 (2022) 6135–6147. https://doi.org/10.1109/TAP.2021.3070152.
+P0171	style=	num=:	[27]	J. Sun, Y. Liu, Y. Wang, Z. Yao, X. Zheng, BINN: A deep learning approach for computational mechanics problems based on boundary integral equations, Comput. Methods Appl. Mech. Eng. 410 (2023) 116012. https://doi.org/10.1016/j.cma.2023.116012.
+P0172	style=	num=:	[28]	D. Liu, Y. Liu, H. Dang, K. Wang, B. Zhang, F. Wang, Z. Liu, Y. Jiang, The neutron transport equation in exact differential form, Sci. China Phys. Mech. Astron. 68 (2025) 270511. https://doi.org/10.1007/s11433-024-2642-3.
+P0173	style=	num=:	[29]	A.D. Jagtap, G.E. Karniadakis, Extended physics-informed neural networks (XPINNs): A generalized space-time domain decomposition based deep learning framework for nonlinear partial differential equations, Commun. Comput. Phys. 28 (2020) 2002–2041. https://doi.org/10.4208/cicp.oa-2020-0164.
+P0174	style=	num=:	[30]	L. Lu, P. Jin, G. Pang, Z. Zhang, G.E. Karniadakis, Learning nonlinear operators via DeepONet based on the universal approximation theorem of operators, Nat. Mach. Intell. 3 (2021) 218–229.
+P0175	style=	num=:	[31]	Z. Li, N. Kovachki, K. Azizzadenesheli, B. Liu, K. Bhattacharya, A. Stuart, A. Anandkumar, Fourier neural operator for parametric partial differential equations, in: International Conference on Learning Representations, 2021.
+P0176	style=	num=:	[32]	N. Kovachki, Z. Li, B. Liu, K. Azizzadenesheli, K. Bhattacharya, A. Stuart, A. Anandkumar, Neural operator: Learning maps between function spaces, arXiv:2108.08481, 2021.
+P0177	style=	num=:	

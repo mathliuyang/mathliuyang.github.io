@@ -1,0 +1,2483 @@
+{
+  "package": {
+    "has_comments": false,
+    "has_numbering": true,
+    "has_footnotes": true,
+    "has_endnotes": true,
+    "header_parts": [
+      "word/header1.xml",
+      "word/header2.xml"
+    ],
+    "footer_parts": [
+      "word/footer1.xml"
+    ],
+    "media_parts": []
+  },
+  "blocks": [
+    {
+      "kind": "paragraph",
+      "style": "",
+      "num_id": "",
+      "ilvl": "",
+      "text": "Bilingual Reviewer Comments",
+      "deleted_text": "",
+      "equations": [],
+      "embedded": [],
+      "xml": ""
+    },
+    {
+      "kind": "paragraph",
+      "style": "",
+      "num_id": "",
+      "ilvl": "",
+      "text": "审稿意见中英对照",
+      "deleted_text": "",
+      "equations": [],
+      "embedded": [],
+      "xml": ""
+    },
+    {
+      "kind": "table",
+      "rows": [
+        [
+          [
+            {
+              "style": "",
+              "num_id": "",
+              "ilvl": "",
+              "text": "Manuscript / 稿件编号：",
+              "deleted_text": "",
+              "equations": [],
+              "embedded": [],
+              "xml": ""
+            }
+          ],
+          [
+            {
+              "style": "",
+              "num_id": "",
+              "ilvl": "",
+              "text": "ELSCAM-D-26-01599",
+              "deleted_text": "",
+              "equations": [],
+              "embedded": [],
+              "xml": ""
+            }
+          ]
+        ],
+        [
+          [
+            {
+              "style": "",
+              "num_id": "",
+              "ilvl": "",
+              "text": "Article / 稿件题目：",
+              "deleted_text": "",
+              "equations": [],
+              "embedded": [],
+              "xml": ""
+            }
+          ],
+          [
+            {
+              "style": "",
+              "num_id": "",
+              "ilvl": "",
+              "text": "Domain-decomposed antiderivative transformation iterative method: A deep learning approach for weakly and Cauchy types singular integral equations",
+              "deleted_text": "",
+              "equations": [],
+              "embedded": [],
+              "xml": ""
+            }
+          ]
+        ]
+      ]
+    },
+    {
+      "kind": "paragraph",
+      "style": "",
+      "num_id": "",
+      "ilvl": "",
+      "text": "",
+      "deleted_text": "",
+      "equations": [],
+      "embedded": [],
+      "xml": ""
+    },
+    {
+      "kind": "table",
+      "rows": [
+        [
+          [
+            {
+              "style": "",
+              "num_id": "",
+              "ilvl": "",
+              "text": "本文件仅汇编审稿人意见；每条先列英文原文，再列中文译文，不含作者回复与修改说明。",
+              "deleted_text": "",
+              "equations": [],
+              "embedded": [],
+              "xml": ""
+            },
+            {
+              "style": "",
+              "num_id": "",
+              "ilvl": "",
+              "text": "This document contains reviewer comments only. Each English original is followed by its Chinese translation; author responses and revision notes are omitted.",
+              "deleted_text": "",
+              "equations": [],
+              "embedded": [],
+              "xml": ""
+            }
+          ]
+        ]
+      ]
+    },
+    {
+      "kind": "paragraph",
+      "style": "",
+      "num_id": "",
+      "ilvl": "",
+      "text": "Contents",
+      "deleted_text": "",
+      "equations": [],
+      "embedded": [],
+      "xml": ""
+    },
+    {
+      "kind": "paragraph",
+      "style": "TOC1",
+      "num_id": "",
+      "ilvl": "",
+      "text": "\tReviewer #1 / 审稿人 #1\t3",
+      "deleted_text": "",
+      "equations": [],
+      "embedded": [],
+      "xml": ""
+    },
+    {
+      "kind": "paragraph",
+      "style": "TOC2",
+      "num_id": "",
+      "ilvl": "",
+      "text": "\tR1.1: Comment 1 / 意见 1\t3",
+      "deleted_text": "",
+      "equations": [],
+      "embedded": [],
+      "xml": ""
+    },
+    {
+      "kind": "paragraph",
+      "style": "TOC2",
+      "num_id": "",
+      "ilvl": "",
+      "text": "\tR1.2: Comment 2 / 意见 2\t3",
+      "deleted_text": "",
+      "equations": [],
+      "embedded": [],
+      "xml": ""
+    },
+    {
+      "kind": "paragraph",
+      "style": "TOC2",
+      "num_id": "",
+      "ilvl": "",
+      "text": "\tR1.3: Comment 3 / 意见 3\t3",
+      "deleted_text": "",
+      "equations": [],
+      "embedded": [],
+      "xml": ""
+    },
+    {
+      "kind": "paragraph",
+      "style": "TOC2",
+      "num_id": "",
+      "ilvl": "",
+      "text": "\tR1.4: Comment 4 / 意见 4\t3",
+      "deleted_text": "",
+      "equations": [],
+      "embedded": [],
+      "xml": ""
+    },
+    {
+      "kind": "paragraph",
+      "style": "TOC2",
+      "num_id": "",
+      "ilvl": "",
+      "text": "\tR1.5: Comment 5 / 意见 5\t4",
+      "deleted_text": "",
+      "equations": [],
+      "embedded": [],
+      "xml": ""
+    },
+    {
+      "kind": "paragraph",
+      "style": "TOC2",
+      "num_id": "",
+      "ilvl": "",
+      "text": "\tR1.6: Comment 6 / 意见 6\t4",
+      "deleted_text": "",
+      "equations": [],
+      "embedded": [],
+      "xml": ""
+    },
+    {
+      "kind": "paragraph",
+      "style": "TOC2",
+      "num_id": "",
+      "ilvl": "",
+      "text": "\tR1.7: Comment 7 / 意见 7\t4",
+      "deleted_text": "",
+      "equations": [],
+      "embedded": [],
+      "xml": ""
+    },
+    {
+      "kind": "paragraph",
+      "style": "TOC2",
+      "num_id": "",
+      "ilvl": "",
+      "text": "\tR1.8: Comment 8 / 意见 8\t4",
+      "deleted_text": "",
+      "equations": [],
+      "embedded": [],
+      "xml": ""
+    },
+    {
+      "kind": "paragraph",
+      "style": "TOC2",
+      "num_id": "",
+      "ilvl": "",
+      "text": "\tR1.9: Comment 9 / 意见 9\t4",
+      "deleted_text": "",
+      "equations": [],
+      "embedded": [],
+      "xml": ""
+    },
+    {
+      "kind": "paragraph",
+      "style": "TOC2",
+      "num_id": "",
+      "ilvl": "",
+      "text": "\tR1.10: Comment 10 / 意见 10\t5",
+      "deleted_text": "",
+      "equations": [],
+      "embedded": [],
+      "xml": ""
+    },
+    {
+      "kind": "paragraph",
+      "style": "TOC2",
+      "num_id": "",
+      "ilvl": "",
+      "text": "\tR1.11: Comment 11 / 意见 11\t5",
+      "deleted_text": "",
+      "equations": [],
+      "embedded": [],
+      "xml": ""
+    },
+    {
+      "kind": "paragraph",
+      "style": "TOC1",
+      "num_id": "",
+      "ilvl": "",
+      "text": "\tReviewer #2 / 审稿人 #2\t5",
+      "deleted_text": "",
+      "equations": [],
+      "embedded": [],
+      "xml": ""
+    },
+    {
+      "kind": "paragraph",
+      "style": "TOC2",
+      "num_id": "",
+      "ilvl": "",
+      "text": "\tR2.1: Comment 1 / 意见 1\t5",
+      "deleted_text": "",
+      "equations": [],
+      "embedded": [],
+      "xml": ""
+    },
+    {
+      "kind": "paragraph",
+      "style": "TOC2",
+      "num_id": "",
+      "ilvl": "",
+      "text": "\tR2.2: Comment 2 / 意见 2\t6",
+      "deleted_text": "",
+      "equations": [],
+      "embedded": [],
+      "xml": ""
+    },
+    {
+      "kind": "paragraph",
+      "style": "TOC2",
+      "num_id": "",
+      "ilvl": "",
+      "text": "\tR2.3: Comment 3 / 意见 3\t6",
+      "deleted_text": "",
+      "equations": [],
+      "embedded": [],
+      "xml": ""
+    },
+    {
+      "kind": "paragraph",
+      "style": "TOC2",
+      "num_id": "",
+      "ilvl": "",
+      "text": "\tR2.4: Comment 4 / 意见 4\t6",
+      "deleted_text": "",
+      "equations": [],
+      "embedded": [],
+      "xml": ""
+    },
+    {
+      "kind": "paragraph",
+      "style": "TOC2",
+      "num_id": "",
+      "ilvl": "",
+      "text": "\tR2.5: Comment 5 / 意见 5\t6",
+      "deleted_text": "",
+      "equations": [],
+      "embedded": [],
+      "xml": ""
+    },
+    {
+      "kind": "paragraph",
+      "style": "TOC2",
+      "num_id": "",
+      "ilvl": "",
+      "text": "\tR2.6: Comment 6 / 意见 6\t6",
+      "deleted_text": "",
+      "equations": [],
+      "embedded": [],
+      "xml": ""
+    },
+    {
+      "kind": "paragraph",
+      "style": "TOC2",
+      "num_id": "",
+      "ilvl": "",
+      "text": "\tR2.7: Comment 7 / 意见 7\t7",
+      "deleted_text": "",
+      "equations": [],
+      "embedded": [],
+      "xml": ""
+    },
+    {
+      "kind": "paragraph",
+      "style": "TOC2",
+      "num_id": "",
+      "ilvl": "",
+      "text": "\tR2.8: Comment 8 / 意见 8\t7",
+      "deleted_text": "",
+      "equations": [],
+      "embedded": [],
+      "xml": ""
+    },
+    {
+      "kind": "paragraph",
+      "style": "TOC2",
+      "num_id": "",
+      "ilvl": "",
+      "text": "\tR2.9: Comment 9 / 意见 9\t7",
+      "deleted_text": "",
+      "equations": [],
+      "embedded": [],
+      "xml": ""
+    },
+    {
+      "kind": "paragraph",
+      "style": "",
+      "num_id": "",
+      "ilvl": "",
+      "text": "\n",
+      "deleted_text": "",
+      "equations": [],
+      "embedded": [],
+      "xml": ""
+    },
+    {
+      "kind": "paragraph",
+      "style": "1",
+      "num_id": "",
+      "ilvl": "",
+      "text": "Reviewer #1 / 审稿人 #1",
+      "deleted_text": "",
+      "equations": [],
+      "embedded": [],
+      "xml": ""
+    },
+    {
+      "kind": "paragraph",
+      "style": "2",
+      "num_id": "",
+      "ilvl": "",
+      "text": "R1.1: Comment 1 / 意见 1",
+      "deleted_text": "",
+      "equations": [],
+      "embedded": [],
+      "xml": ""
+    },
+    {
+      "kind": "table",
+      "rows": [
+        [
+          [
+            {
+              "style": "",
+              "num_id": "",
+              "ilvl": "",
+              "text": "English original",
+              "deleted_text": "",
+              "equations": [],
+              "embedded": [],
+              "xml": ""
+            }
+          ]
+        ],
+        [
+          [
+            {
+              "style": "",
+              "num_id": "",
+              "ilvl": "",
+              "text": "Page 3, line no. 11 from top, for hyper-singular integral equations, “α≥2” seems to be “α > 1”. Otherwise, discuss the missing case 1 < α < 2.",
+              "deleted_text": "",
+              "equations": [],
+              "embedded": [],
+              "xml": ""
+            }
+          ]
+        ]
+      ]
+    },
+    {
+      "kind": "paragraph",
+      "style": "",
+      "num_id": "",
+      "ilvl": "",
+      "text": "",
+      "deleted_text": "",
+      "equations": [],
+      "embedded": [],
+      "xml": ""
+    },
+    {
+      "kind": "table",
+      "rows": [
+        [
+          [
+            {
+              "style": "",
+              "num_id": "",
+              "ilvl": "",
+              "text": "中文译文",
+              "deleted_text": "",
+              "equations": [],
+              "embedded": [],
+              "xml": ""
+            }
+          ]
+        ],
+        [
+          [
+            {
+              "style": "",
+              "num_id": "",
+              "ilvl": "",
+              "text": "第 3 页，从上往下第 11 行：对于超奇异积分方程，“α≥2”似乎应为“α > 1”。否则，请讨论缺失的情形 1 < α < 2。",
+              "deleted_text": "",
+              "equations": [],
+              "embedded": [],
+              "xml": ""
+            }
+          ]
+        ]
+      ]
+    },
+    {
+      "kind": "paragraph",
+      "style": "",
+      "num_id": "",
+      "ilvl": "",
+      "text": "",
+      "deleted_text": "",
+      "equations": [],
+      "embedded": [],
+      "xml": ""
+    },
+    {
+      "kind": "paragraph",
+      "style": "2",
+      "num_id": "",
+      "ilvl": "",
+      "text": "R1.2: Comment 2 / 意见 2",
+      "deleted_text": "",
+      "equations": [],
+      "embedded": [],
+      "xml": ""
+    },
+    {
+      "kind": "table",
+      "rows": [
+        [
+          [
+            {
+              "style": "",
+              "num_id": "",
+              "ilvl": "",
+              "text": "English original",
+              "deleted_text": "",
+              "equations": [],
+              "embedded": [],
+              "xml": ""
+            }
+          ]
+        ],
+        [
+          [
+            {
+              "style": "",
+              "num_id": "",
+              "ilvl": "",
+              "text": "Page 4, line no. 16 from top, the statement “G(x,t) and φ(t) are both continuous, the integrand [G(x,t)/(x−t)^α]φ(t) is also a continuous function.” seems to be wrong. For example, if G(x,t)=(x+t)^α and φ(t)=1, how [G(x,t)/(x−t)^α]φ(t) will be a continuous function.",
+              "deleted_text": "",
+              "equations": [],
+              "embedded": [],
+              "xml": ""
+            }
+          ]
+        ]
+      ]
+    },
+    {
+      "kind": "paragraph",
+      "style": "",
+      "num_id": "",
+      "ilvl": "",
+      "text": "",
+      "deleted_text": "",
+      "equations": [],
+      "embedded": [],
+      "xml": ""
+    },
+    {
+      "kind": "table",
+      "rows": [
+        [
+          [
+            {
+              "style": "",
+              "num_id": "",
+              "ilvl": "",
+              "text": "中文译文",
+              "deleted_text": "",
+              "equations": [],
+              "embedded": [],
+              "xml": ""
+            }
+          ]
+        ],
+        [
+          [
+            {
+              "style": "",
+              "num_id": "",
+              "ilvl": "",
+              "text": "第 4 页，从上往下第 16 行，表述“G(x,t) 和 φ(t) 均连续，因此被积函数 [G(x,t)/(x−t)^α]φ(t) 也是连续函数”似乎有误。例如，若 G(x,t)=(x+t)^α 且 φ(t)=1，则 [G(x,t)/(x−t)^α]φ(t) 如何会是连续函数？",
+              "deleted_text": "",
+              "equations": [],
+              "embedded": [],
+              "xml": ""
+            }
+          ]
+        ]
+      ]
+    },
+    {
+      "kind": "paragraph",
+      "style": "",
+      "num_id": "",
+      "ilvl": "",
+      "text": "",
+      "deleted_text": "",
+      "equations": [],
+      "embedded": [],
+      "xml": ""
+    },
+    {
+      "kind": "paragraph",
+      "style": "2",
+      "num_id": "",
+      "ilvl": "",
+      "text": "R1.3: Comment 3 / 意见 3",
+      "deleted_text": "",
+      "equations": [],
+      "embedded": [],
+      "xml": ""
+    },
+    {
+      "kind": "table",
+      "rows": [
+        [
+          [
+            {
+              "style": "",
+              "num_id": "",
+              "ilvl": "",
+              "text": "English original",
+              "deleted_text": "",
+              "equations": [],
+              "embedded": [],
+              "xml": ""
+            }
+          ]
+        ],
+        [
+          [
+            {
+              "style": "",
+              "num_id": "",
+              "ilvl": "",
+              "text": "Page 4, line no. 11, 12 from top, the domain Ω and [a, x] both are sets. So, what is purpose of writing Ω∈[a,x]? Should be used “=” or “⊆”. Similarly, for Ω∈[a,x−ε] and other such expressions.",
+              "deleted_text": "",
+              "equations": [],
+              "embedded": [],
+              "xml": ""
+            }
+          ]
+        ]
+      ]
+    },
+    {
+      "kind": "paragraph",
+      "style": "",
+      "num_id": "",
+      "ilvl": "",
+      "text": "",
+      "deleted_text": "",
+      "equations": [],
+      "embedded": [],
+      "xml": ""
+    },
+    {
+      "kind": "table",
+      "rows": [
+        [
+          [
+            {
+              "style": "",
+              "num_id": "",
+              "ilvl": "",
+              "text": "中文译文",
+              "deleted_text": "",
+              "equations": [],
+              "embedded": [],
+              "xml": ""
+            }
+          ]
+        ],
+        [
+          [
+            {
+              "style": "",
+              "num_id": "",
+              "ilvl": "",
+              "text": "第 4 页，从上往下第 11、12 行，区域 Ω 和 [a,x] 都是集合。那么写 Ω∈[a,x] 的目的是什么？应使用“=”或“⊆”。类似地，Ω∈[a,x−ε] 等表达也应如此处理。",
+              "deleted_text": "",
+              "equations": [],
+              "embedded": [],
+              "xml": ""
+            }
+          ]
+        ]
+      ]
+    },
+    {
+      "kind": "paragraph",
+      "style": "",
+      "num_id": "",
+      "ilvl": "",
+      "text": "",
+      "deleted_text": "",
+      "equations": [],
+      "embedded": [],
+      "xml": ""
+    },
+    {
+      "kind": "paragraph",
+      "style": "2",
+      "num_id": "",
+      "ilvl": "",
+      "text": "R1.4: Comment 4 / 意见 4",
+      "deleted_text": "",
+      "equations": [],
+      "embedded": [],
+      "xml": ""
+    },
+    {
+      "kind": "table",
+      "rows": [
+        [
+          [
+            {
+              "style": "",
+              "num_id": "",
+              "ilvl": "",
+              "text": "English original",
+              "deleted_text": "",
+              "equations": [],
+              "embedded": [],
+              "xml": ""
+            }
+          ]
+        ],
+        [
+          [
+            {
+              "style": "",
+              "num_id": "",
+              "ilvl": "",
+              "text": "Motivation is not sufficiently stated in the introduction part. It should be clarified what advantages of the proposed technique are.",
+              "deleted_text": "",
+              "equations": [],
+              "embedded": [],
+              "xml": ""
+            }
+          ]
+        ]
+      ]
+    },
+    {
+      "kind": "paragraph",
+      "style": "",
+      "num_id": "",
+      "ilvl": "",
+      "text": "",
+      "deleted_text": "",
+      "equations": [],
+      "embedded": [],
+      "xml": ""
+    },
+    {
+      "kind": "table",
+      "rows": [
+        [
+          [
+            {
+              "style": "",
+              "num_id": "",
+              "ilvl": "",
+              "text": "中文译文",
+              "deleted_text": "",
+              "equations": [],
+              "embedded": [],
+              "xml": ""
+            }
+          ]
+        ],
+        [
+          [
+            {
+              "style": "",
+              "num_id": "",
+              "ilvl": "",
+              "text": "引言部分对研究动机的阐述不够充分。应明确说明所提出技术具有哪些优势。",
+              "deleted_text": "",
+              "equations": [],
+              "embedded": [],
+              "xml": ""
+            }
+          ]
+        ]
+      ]
+    },
+    {
+      "kind": "paragraph",
+      "style": "",
+      "num_id": "",
+      "ilvl": "",
+      "text": "",
+      "deleted_text": "",
+      "equations": [],
+      "embedded": [],
+      "xml": ""
+    },
+    {
+      "kind": "paragraph",
+      "style": "2",
+      "num_id": "",
+      "ilvl": "",
+      "text": "R1.5: Comment 5 / 意见 5",
+      "deleted_text": "",
+      "equations": [],
+      "embedded": [],
+      "xml": ""
+    },
+    {
+      "kind": "table",
+      "rows": [
+        [
+          [
+            {
+              "style": "",
+              "num_id": "",
+              "ilvl": "",
+              "text": "English original",
+              "deleted_text": "",
+              "equations": [],
+              "embedded": [],
+              "xml": ""
+            }
+          ]
+        ],
+        [
+          [
+            {
+              "style": "",
+              "num_id": "",
+              "ilvl": "",
+              "text": "Page 3, line no. 11 from top, G(x,t)/(x−t)φ(t) should be written as [G(x,t)/(x−t)]φ(t) to avoid confusing. Similar inaccuracies are there in many places. Also do the same corrections for G(x,t)/(x−t)^α.",
+              "deleted_text": "",
+              "equations": [],
+              "embedded": [],
+              "xml": ""
+            }
+          ]
+        ]
+      ]
+    },
+    {
+      "kind": "paragraph",
+      "style": "",
+      "num_id": "",
+      "ilvl": "",
+      "text": "",
+      "deleted_text": "",
+      "equations": [],
+      "embedded": [],
+      "xml": ""
+    },
+    {
+      "kind": "table",
+      "rows": [
+        [
+          [
+            {
+              "style": "",
+              "num_id": "",
+              "ilvl": "",
+              "text": "中文译文",
+              "deleted_text": "",
+              "equations": [],
+              "embedded": [],
+              "xml": ""
+            }
+          ]
+        ],
+        [
+          [
+            {
+              "style": "",
+              "num_id": "",
+              "ilvl": "",
+              "text": "第 3 页，从上往下第 11 行，G(x,t)/(x−t)φ(t) 应写成 [G(x,t)/(x−t)]φ(t)，以避免混淆。文中许多地方存在类似的不准确表达。对于 G(x,t)/(x−t)^α 也请作同样修正。",
+              "deleted_text": "",
+              "equations": [],
+              "embedded": [],
+              "xml": ""
+            }
+          ]
+        ]
+      ]
+    },
+    {
+      "kind": "paragraph",
+      "style": "",
+      "num_id": "",
+      "ilvl": "",
+      "text": "",
+      "deleted_text": "",
+      "equations": [],
+      "embedded": [],
+      "xml": ""
+    },
+    {
+      "kind": "paragraph",
+      "style": "2",
+      "num_id": "",
+      "ilvl": "",
+      "text": "R1.6: Comment 6 / 意见 6",
+      "deleted_text": "",
+      "equations": [],
+      "embedded": [],
+      "xml": ""
+    },
+    {
+      "kind": "table",
+      "rows": [
+        [
+          [
+            {
+              "style": "",
+              "num_id": "",
+              "ilvl": "",
+              "text": "English original",
+              "deleted_text": "",
+              "equations": [],
+              "embedded": [],
+              "xml": ""
+            }
+          ]
+        ],
+        [
+          [
+            {
+              "style": "",
+              "num_id": "",
+              "ilvl": "",
+              "text": "In Page 2, the line spacing in the lower part of the page is noticeably larger than that in the upper part. Please correct this formatting inconsistency and ensure that line spacing is uniform throughout the manuscript.",
+              "deleted_text": "",
+              "equations": [],
+              "embedded": [],
+              "xml": ""
+            }
+          ]
+        ]
+      ]
+    },
+    {
+      "kind": "paragraph",
+      "style": "",
+      "num_id": "",
+      "ilvl": "",
+      "text": "",
+      "deleted_text": "",
+      "equations": [],
+      "embedded": [],
+      "xml": ""
+    },
+    {
+      "kind": "table",
+      "rows": [
+        [
+          [
+            {
+              "style": "",
+              "num_id": "",
+              "ilvl": "",
+              "text": "中文译文",
+              "deleted_text": "",
+              "equations": [],
+              "embedded": [],
+              "xml": ""
+            }
+          ]
+        ],
+        [
+          [
+            {
+              "style": "",
+              "num_id": "",
+              "ilvl": "",
+              "text": "第 2 页下半部分的行距明显大于上半部分。请修正这一格式不一致问题，并确保全文行距统一。",
+              "deleted_text": "",
+              "equations": [],
+              "embedded": [],
+              "xml": ""
+            }
+          ]
+        ]
+      ]
+    },
+    {
+      "kind": "paragraph",
+      "style": "",
+      "num_id": "",
+      "ilvl": "",
+      "text": "",
+      "deleted_text": "",
+      "equations": [],
+      "embedded": [],
+      "xml": ""
+    },
+    {
+      "kind": "paragraph",
+      "style": "2",
+      "num_id": "",
+      "ilvl": "",
+      "text": "R1.7: Comment 7 / 意见 7",
+      "deleted_text": "",
+      "equations": [],
+      "embedded": [],
+      "xml": ""
+    },
+    {
+      "kind": "table",
+      "rows": [
+        [
+          [
+            {
+              "style": "",
+              "num_id": "",
+              "ilvl": "",
+              "text": "English original",
+              "deleted_text": "",
+              "equations": [],
+              "embedded": [],
+              "xml": ""
+            }
+          ]
+        ],
+        [
+          [
+            {
+              "style": "",
+              "num_id": "",
+              "ilvl": "",
+              "text": "Equation (9), what is R? is it the set of real numbers. If then denote it by ℝ.",
+              "deleted_text": "",
+              "equations": [],
+              "embedded": [],
+              "xml": ""
+            }
+          ]
+        ]
+      ]
+    },
+    {
+      "kind": "paragraph",
+      "style": "",
+      "num_id": "",
+      "ilvl": "",
+      "text": "",
+      "deleted_text": "",
+      "equations": [],
+      "embedded": [],
+      "xml": ""
+    },
+    {
+      "kind": "table",
+      "rows": [
+        [
+          [
+            {
+              "style": "",
+              "num_id": "",
+              "ilvl": "",
+              "text": "中文译文",
+              "deleted_text": "",
+              "equations": [],
+              "embedded": [],
+              "xml": ""
+            }
+          ]
+        ],
+        [
+          [
+            {
+              "style": "",
+              "num_id": "",
+              "ilvl": "",
+              "text": "关于公式（9），R 是什么？它是否表示实数集？如果是，请记作 ℝ。",
+              "deleted_text": "",
+              "equations": [],
+              "embedded": [],
+              "xml": ""
+            }
+          ]
+        ]
+      ]
+    },
+    {
+      "kind": "paragraph",
+      "style": "",
+      "num_id": "",
+      "ilvl": "",
+      "text": "",
+      "deleted_text": "",
+      "equations": [],
+      "embedded": [],
+      "xml": ""
+    },
+    {
+      "kind": "paragraph",
+      "style": "2",
+      "num_id": "",
+      "ilvl": "",
+      "text": "R1.8: Comment 8 / 意见 8",
+      "deleted_text": "",
+      "equations": [],
+      "embedded": [],
+      "xml": ""
+    },
+    {
+      "kind": "table",
+      "rows": [
+        [
+          [
+            {
+              "style": "",
+              "num_id": "",
+              "ilvl": "",
+              "text": "English original",
+              "deleted_text": "",
+              "equations": [],
+              "embedded": [],
+              "xml": ""
+            }
+          ]
+        ],
+        [
+          [
+            {
+              "style": "",
+              "num_id": "",
+              "ilvl": "",
+              "text": "The authors should state in the paper what kind of the software package has used to obtain the required results in the beginning of the numerical examples section.",
+              "deleted_text": "",
+              "equations": [],
+              "embedded": [],
+              "xml": ""
+            }
+          ]
+        ]
+      ]
+    },
+    {
+      "kind": "paragraph",
+      "style": "",
+      "num_id": "",
+      "ilvl": "",
+      "text": "",
+      "deleted_text": "",
+      "equations": [],
+      "embedded": [],
+      "xml": ""
+    },
+    {
+      "kind": "table",
+      "rows": [
+        [
+          [
+            {
+              "style": "",
+              "num_id": "",
+              "ilvl": "",
+              "text": "中文译文",
+              "deleted_text": "",
+              "equations": [],
+              "embedded": [],
+              "xml": ""
+            }
+          ]
+        ],
+        [
+          [
+            {
+              "style": "",
+              "num_id": "",
+              "ilvl": "",
+              "text": "作者应在数值算例部分开头说明使用了何种软件包来获得所需结果。",
+              "deleted_text": "",
+              "equations": [],
+              "embedded": [],
+              "xml": ""
+            }
+          ]
+        ]
+      ]
+    },
+    {
+      "kind": "paragraph",
+      "style": "",
+      "num_id": "",
+      "ilvl": "",
+      "text": "",
+      "deleted_text": "",
+      "equations": [],
+      "embedded": [],
+      "xml": ""
+    },
+    {
+      "kind": "paragraph",
+      "style": "2",
+      "num_id": "",
+      "ilvl": "",
+      "text": "R1.9: Comment 9 / 意见 9",
+      "deleted_text": "",
+      "equations": [],
+      "embedded": [],
+      "xml": ""
+    },
+    {
+      "kind": "table",
+      "rows": [
+        [
+          [
+            {
+              "style": "",
+              "num_id": "",
+              "ilvl": "",
+              "text": "English original",
+              "deleted_text": "",
+              "equations": [],
+              "embedded": [],
+              "xml": ""
+            }
+          ]
+        ],
+        [
+          [
+            {
+              "style": "",
+              "num_id": "",
+              "ilvl": "",
+              "text": "The authors should give some more details about the effects observed in the numerical tables and figures in the numerical examples section.",
+              "deleted_text": "",
+              "equations": [],
+              "embedded": [],
+              "xml": ""
+            }
+          ]
+        ]
+      ]
+    },
+    {
+      "kind": "paragraph",
+      "style": "",
+      "num_id": "",
+      "ilvl": "",
+      "text": "",
+      "deleted_text": "",
+      "equations": [],
+      "embedded": [],
+      "xml": ""
+    },
+    {
+      "kind": "table",
+      "rows": [
+        [
+          [
+            {
+              "style": "",
+              "num_id": "",
+              "ilvl": "",
+              "text": "中文译文",
+              "deleted_text": "",
+              "equations": [],
+              "embedded": [],
+              "xml": ""
+            }
+          ]
+        ],
+        [
+          [
+            {
+              "style": "",
+              "num_id": "",
+              "ilvl": "",
+              "text": "作者应更详细地说明数值算例部分各数值表格和图中观察到的现象。",
+              "deleted_text": "",
+              "equations": [],
+              "embedded": [],
+              "xml": ""
+            }
+          ]
+        ]
+      ]
+    },
+    {
+      "kind": "paragraph",
+      "style": "",
+      "num_id": "",
+      "ilvl": "",
+      "text": "",
+      "deleted_text": "",
+      "equations": [],
+      "embedded": [],
+      "xml": ""
+    },
+    {
+      "kind": "paragraph",
+      "style": "2",
+      "num_id": "",
+      "ilvl": "",
+      "text": "R1.10: Comment 10 / 意见 10",
+      "deleted_text": "",
+      "equations": [],
+      "embedded": [],
+      "xml": ""
+    },
+    {
+      "kind": "table",
+      "rows": [
+        [
+          [
+            {
+              "style": "",
+              "num_id": "",
+              "ilvl": "",
+              "text": "English original",
+              "deleted_text": "",
+              "equations": [],
+              "embedded": [],
+              "xml": ""
+            }
+          ]
+        ],
+        [
+          [
+            {
+              "style": "",
+              "num_id": "",
+              "ilvl": "",
+              "text": "Write all references in a consistent format. For example, in References 4 and 16, ”pp.” is written before the page numbers, whereas in the other references it is not.",
+              "deleted_text": "",
+              "equations": [],
+              "embedded": [],
+              "xml": ""
+            }
+          ]
+        ]
+      ]
+    },
+    {
+      "kind": "paragraph",
+      "style": "",
+      "num_id": "",
+      "ilvl": "",
+      "text": "",
+      "deleted_text": "",
+      "equations": [],
+      "embedded": [],
+      "xml": ""
+    },
+    {
+      "kind": "table",
+      "rows": [
+        [
+          [
+            {
+              "style": "",
+              "num_id": "",
+              "ilvl": "",
+              "text": "中文译文",
+              "deleted_text": "",
+              "equations": [],
+              "embedded": [],
+              "xml": ""
+            }
+          ]
+        ],
+        [
+          [
+            {
+              "style": "",
+              "num_id": "",
+              "ilvl": "",
+              "text": "所有参考文献应采用一致的格式。例如，参考文献 4 和 16 在页码前写有“pp.”，而其他参考文献没有。",
+              "deleted_text": "",
+              "equations": [],
+              "embedded": [],
+              "xml": ""
+            }
+          ]
+        ]
+      ]
+    },
+    {
+      "kind": "paragraph",
+      "style": "",
+      "num_id": "",
+      "ilvl": "",
+      "text": "",
+      "deleted_text": "",
+      "equations": [],
+      "embedded": [],
+      "xml": ""
+    },
+    {
+      "kind": "paragraph",
+      "style": "2",
+      "num_id": "",
+      "ilvl": "",
+      "text": "R1.11: Comment 11 / 意见 11",
+      "deleted_text": "",
+      "equations": [],
+      "embedded": [],
+      "xml": ""
+    },
+    {
+      "kind": "table",
+      "rows": [
+        [
+          [
+            {
+              "style": "",
+              "num_id": "",
+              "ilvl": "",
+              "text": "English original",
+              "deleted_text": "",
+              "equations": [],
+              "embedded": [],
+              "xml": ""
+            }
+          ]
+        ],
+        [
+          [
+            {
+              "style": "",
+              "num_id": "",
+              "ilvl": "",
+              "text": "Moreover, there are some minor grammatical inconsistencies throughout the manuscript which need to be corrected.",
+              "deleted_text": "",
+              "equations": [],
+              "embedded": [],
+              "xml": ""
+            }
+          ]
+        ]
+      ]
+    },
+    {
+      "kind": "paragraph",
+      "style": "",
+      "num_id": "",
+      "ilvl": "",
+      "text": "",
+      "deleted_text": "",
+      "equations": [],
+      "embedded": [],
+      "xml": ""
+    },
+    {
+      "kind": "table",
+      "rows": [
+        [
+          [
+            {
+              "style": "",
+              "num_id": "",
+              "ilvl": "",
+              "text": "中文译文",
+              "deleted_text": "",
+              "equations": [],
+              "embedded": [],
+              "xml": ""
+            }
+          ]
+        ],
+        [
+          [
+            {
+              "style": "",
+              "num_id": "",
+              "ilvl": "",
+              "text": "此外，稿件中仍有一些细微的语法不一致问题，需要予以修正。",
+              "deleted_text": "",
+              "equations": [],
+              "embedded": [],
+              "xml": ""
+            }
+          ]
+        ]
+      ]
+    },
+    {
+      "kind": "paragraph",
+      "style": "",
+      "num_id": "",
+      "ilvl": "",
+      "text": "",
+      "deleted_text": "",
+      "equations": [],
+      "embedded": [],
+      "xml": ""
+    },
+    {
+      "kind": "paragraph",
+      "style": "1",
+      "num_id": "",
+      "ilvl": "",
+      "text": "Reviewer #2 / 审稿人 #2",
+      "deleted_text": "",
+      "equations": [],
+      "embedded": [],
+      "xml": ""
+    },
+    {
+      "kind": "paragraph",
+      "style": "2",
+      "num_id": "",
+      "ilvl": "",
+      "text": "R2.1: Comment 1 / 意见 1",
+      "deleted_text": "",
+      "equations": [],
+      "embedded": [],
+      "xml": ""
+    },
+    {
+      "kind": "table",
+      "rows": [
+        [
+          [
+            {
+              "style": "",
+              "num_id": "",
+              "ilvl": "",
+              "text": "English original",
+              "deleted_text": "",
+              "equations": [],
+              "embedded": [],
+              "xml": ""
+            }
+          ]
+        ],
+        [
+          [
+            {
+              "style": "",
+              "num_id": "",
+              "ilvl": "",
+              "text": "Lack of theoretical analysis. The manuscript does not provide rigorous results regarding:",
+              "deleted_text": "",
+              "equations": [],
+              "embedded": [],
+              "xml": ""
+            },
+            {
+              "style": "",
+              "num_id": "1",
+              "ilvl": "0",
+              "text": "Equivalence between the original singular integral equation and the transformed differential system;",
+              "deleted_text": "",
+              "equations": [],
+              "embedded": [],
+              "xml": ""
+            },
+            {
+              "style": "",
+              "num_id": "1",
+              "ilvl": "0",
+              "text": "Stability of the proposed transformation;",
+              "deleted_text": "",
+              "equations": [],
+              "embedded": [],
+              "xml": ""
+            },
+            {
+              "style": "",
+              "num_id": "1",
+              "ilvl": "0",
+              "text": "Convergence of the iterative neural-network procedure;",
+              "deleted_text": "",
+              "equations": [],
+              "embedded": [],
+              "xml": ""
+            },
+            {
+              "style": "",
+              "num_id": "1",
+              "ilvl": "0",
+              "text": "Influence of the parameter ε introduced near singular points.",
+              "deleted_text": "",
+              "equations": [],
+              "embedded": [],
+              "xml": ""
+            }
+          ]
+        ]
+      ]
+    },
+    {
+      "kind": "paragraph",
+      "style": "",
+      "num_id": "",
+      "ilvl": "",
+      "text": "",
+      "deleted_text": "",
+      "equations": [],
+      "embedded": [],
+      "xml": ""
+    },
+    {
+      "kind": "table",
+      "rows": [
+        [
+          [
+            {
+              "style": "",
+              "num_id": "",
+              "ilvl": "",
+              "text": "中文译文",
+              "deleted_text": "",
+              "equations": [],
+              "embedded": [],
+              "xml": ""
+            }
+          ]
+        ],
+        [
+          [
+            {
+              "style": "",
+              "num_id": "",
+              "ilvl": "",
+              "text": "缺少理论分析。稿件没有就以下方面给出严格结果：",
+              "deleted_text": "",
+              "equations": [],
+              "embedded": [],
+              "xml": ""
+            },
+            {
+              "style": "",
+              "num_id": "1",
+              "ilvl": "0",
+              "text": "原奇异积分方程与变换后的微分系统之间的等价性；",
+              "deleted_text": "",
+              "equations": [],
+              "embedded": [],
+              "xml": ""
+            },
+            {
+              "style": "",
+              "num_id": "1",
+              "ilvl": "0",
+              "text": "所提出变换的稳定性；",
+              "deleted_text": "",
+              "equations": [],
+              "embedded": [],
+              "xml": ""
+            },
+            {
+              "style": "",
+              "num_id": "1",
+              "ilvl": "0",
+              "text": "迭代神经网络过程的收敛性；",
+              "deleted_text": "",
+              "equations": [],
+              "embedded": [],
+              "xml": ""
+            },
+            {
+              "style": "",
+              "num_id": "1",
+              "ilvl": "0",
+              "text": "在奇异点附近引入的参数 ε 的影响。",
+              "deleted_text": "",
+              "equations": [],
+              "embedded": [],
+              "xml": ""
+            }
+          ]
+        ]
+      ]
+    },
+    {
+      "kind": "paragraph",
+      "style": "",
+      "num_id": "",
+      "ilvl": "",
+      "text": "",
+      "deleted_text": "",
+      "equations": [],
+      "embedded": [],
+      "xml": ""
+    },
+    {
+      "kind": "paragraph",
+      "style": "2",
+      "num_id": "",
+      "ilvl": "",
+      "text": "R2.2: Comment 2 / 意见 2",
+      "deleted_text": "",
+      "equations": [],
+      "embedded": [],
+      "xml": ""
+    },
+    {
+      "kind": "table",
+      "rows": [
+        [
+          [
+            {
+              "style": "",
+              "num_id": "",
+              "ilvl": "",
+              "text": "English original",
+              "deleted_text": "",
+              "equations": [],
+              "embedded": [],
+              "xml": ""
+            }
+          ]
+        ],
+        [
+          [
+            {
+              "style": "",
+              "num_id": "",
+              "ilvl": "",
+              "text": "",
+              "deleted_text": "",
+              "equations": [],
+              "embedded": [],
+              "xml": ""
+            }
+          ]
+        ]
+      ]
+    },
+    {
+      "kind": "paragraph",
+      "style": "",
+      "num_id": "",
+      "ilvl": "",
+      "text": "",
+      "deleted_text": "",
+      "equations": [],
+      "embedded": [],
+      "xml": ""
+    },
+    {
+      "kind": "table",
+      "rows": [
+        [
+          [
+            {
+              "style": "",
+              "num_id": "",
+              "ilvl": "",
+              "text": "中文译文",
+              "deleted_text": "",
+              "equations": [],
+              "embedded": [],
+              "xml": ""
+            }
+          ]
+        ],
+        [
+          [
+            {
+              "style": "",
+              "num_id": "",
+              "ilvl": "",
+              "text": "与现有方法的比较不充分。D-AIM 的有效性仅通过基准算例得到展示，缺少与配置法、谱方法、边界元技术或现有基于 PINN 的方法等成熟数值方法的比较。",
+              "deleted_text": "",
+              "equations": [],
+              "embedded": [],
+              "xml": ""
+            }
+          ]
+        ]
+      ]
+    },
+    {
+      "kind": "paragraph",
+      "style": "",
+      "num_id": "",
+      "ilvl": "",
+      "text": "",
+      "deleted_text": "",
+      "equations": [],
+      "embedded": [],
+      "xml": ""
+    },
+    {
+      "kind": "paragraph",
+      "style": "2",
+      "num_id": "",
+      "ilvl": "",
+      "text": "R2.3: Comment 3 / 意见 3",
+      "deleted_text": "",
+      "equations": [],
+      "embedded": [],
+      "xml": ""
+    },
+    {
+      "kind": "table",
+      "rows": [
+        [
+          [
+            {
+              "style": "",
+              "num_id": "",
+              "ilvl": "",
+              "text": "English original",
+              "deleted_text": "",
+              "equations": [],
+              "embedded": [],
+              "xml": ""
+            }
+          ]
+        ],
+        [
+          [
+            {
+              "style": "",
+              "num_id": "",
+              "ilvl": "",
+              "text": "",
+              "deleted_text": "",
+              "equations": [],
+              "embedded": [],
+              "xml": ""
+            }
+          ]
+        ]
+      ]
+    },
+    {
+      "kind": "paragraph",
+      "style": "",
+      "num_id": "",
+      "ilvl": "",
+      "text": "",
+      "deleted_text": "",
+      "equations": [],
+      "embedded": [],
+      "xml": ""
+    },
+    {
+      "kind": "table",
+      "rows": [
+        [
+          [
+            {
+              "style": "",
+              "num_id": "",
+              "ilvl": "",
+              "text": "中文译文",
+              "deleted_text": "",
+              "equations": [],
+              "embedded": [],
+              "xml": ""
+            }
+          ]
+        ],
+        [
+          [
+            {
+              "style": "",
+              "num_id": "",
+              "ilvl": "",
+              "text": "对超参数的敏感性。网络结构、损失权重、采样策略以及 ε 的取值似乎均凭经验选定。开展敏感性研究将显著增强稿件的说服力。",
+              "deleted_text": "",
+              "equations": [],
+              "embedded": [],
+              "xml": ""
+            }
+          ]
+        ]
+      ]
+    },
+    {
+      "kind": "paragraph",
+      "style": "",
+      "num_id": "",
+      "ilvl": "",
+      "text": "",
+      "deleted_text": "",
+      "equations": [],
+      "embedded": [],
+      "xml": ""
+    },
+    {
+      "kind": "paragraph",
+      "style": "2",
+      "num_id": "",
+      "ilvl": "",
+      "text": "R2.4: Comment 4 / 意见 4",
+      "deleted_text": "",
+      "equations": [],
+      "embedded": [],
+      "xml": ""
+    },
+    {
+      "kind": "table",
+      "rows": [
+        [
+          [
+            {
+              "style": "",
+              "num_id": "",
+              "ilvl": "",
+              "text": "English original",
+              "deleted_text": "",
+              "equations": [],
+              "embedded": [],
+              "xml": ""
+            }
+          ]
+        ],
+        [
+          [
+            {
+              "style": "",
+              "num_id": "",
+              "ilvl": "",
+              "text": "",
+              "deleted_text": "",
+              "equations": [],
+              "embedded": [],
+              "xml": ""
+            }
+          ]
+        ]
+      ]
+    },
+    {
+      "kind": "paragraph",
+      "style": "",
+      "num_id": "",
+      "ilvl": "",
+      "text": "",
+      "deleted_text": "",
+      "equations": [],
+      "embedded": [],
+      "xml": ""
+    },
+    {
+      "kind": "table",
+      "rows": [
+        [
+          [
+            {
+              "style": "",
+              "num_id": "",
+              "ilvl": "",
+              "text": "中文译文",
+              "deleted_text": "",
+              "equations": [],
+              "embedded": [],
+              "xml": ""
+            }
+          ]
+        ],
+        [
+          [
+            {
+              "style": "",
+              "num_id": "",
+              "ilvl": "",
+              "text": "计算效率。稿件没有讨论训练时间、硬件配置、收敛历史和计算复杂度，而这些方面对于评估基于深度学习的数值方法的实际应用价值十分重要。",
+              "deleted_text": "",
+              "equations": [],
+              "embedded": [],
+              "xml": ""
+            }
+          ]
+        ]
+      ]
+    },
+    {
+      "kind": "paragraph",
+      "style": "",
+      "num_id": "",
+      "ilvl": "",
+      "text": "",
+      "deleted_text": "",
+      "equations": [],
+      "embedded": [],
+      "xml": ""
+    },
+    {
+      "kind": "paragraph",
+      "style": "2",
+      "num_id": "",
+      "ilvl": "",
+      "text": "R2.5: Comment 5 / 意见 5",
+      "deleted_text": "",
+      "equations": [],
+      "embedded": [],
+      "xml": ""
+    },
+    {
+      "kind": "table",
+      "rows": [
+        [
+          [
+            {
+              "style": "",
+              "num_id": "",
+              "ilvl": "",
+              "text": "English original",
+              "deleted_text": "",
+              "equations": [],
+              "embedded": [],
+              "xml": ""
+            }
+          ]
+        ],
+        [
+          [
+            {
+              "style": "",
+              "num_id": "",
+              "ilvl": "",
+              "text": "",
+              "deleted_text": "",
+              "equations": [],
+              "embedded": [],
+              "xml": ""
+            }
+          ]
+        ]
+      ]
+    },
+    {
+      "kind": "paragraph",
+      "style": "",
+      "num_id": "",
+      "ilvl": "",
+      "text": "",
+      "deleted_text": "",
+      "equations": [],
+      "embedded": [],
+      "xml": ""
+    },
+    {
+      "kind": "table",
+      "rows": [
+        [
+          [
+            {
+              "style": "",
+              "num_id": "",
+              "ilvl": "",
+              "text": "中文译文",
+              "deleted_text": "",
+              "equations": [],
+              "embedded": [],
+              "xml": ""
+            }
+          ]
+        ],
+        [
+          [
+            {
+              "style": "",
+              "num_id": "",
+              "ilvl": "",
+              "text": "文献综述应更好地说明所提出方法相对于 PINN、XPINN、BINN、DeepONet 和神经算子框架的定位。",
+              "deleted_text": "",
+              "equations": [],
+              "embedded": [],
+              "xml": ""
+            }
+          ]
+        ]
+      ]
+    },
+    {
+      "kind": "paragraph",
+      "style": "",
+      "num_id": "",
+      "ilvl": "",
+      "text": "",
+      "deleted_text": "",
+      "equations": [],
+      "embedded": [],
+      "xml": ""
+    },
+    {
+      "kind": "paragraph",
+      "style": "2",
+      "num_id": "",
+      "ilvl": "",
+      "text": "R2.6: Comment 6 / 意见 6",
+      "deleted_text": "",
+      "equations": [],
+      "embedded": [],
+      "xml": ""
+    },
+    {
+      "kind": "table",
+      "rows": [
+        [
+          [
+            {
+              "style": "",
+              "num_id": "",
+              "ilvl": "",
+              "text": "English original",
+              "deleted_text": "",
+              "equations": [],
+              "embedded": [],
+              "xml": ""
+            }
+          ]
+        ],
+        [
+          [
+            {
+              "style": "",
+              "num_id": "",
+              "ilvl": "",
+              "text": "",
+              "deleted_text": "",
+              "equations": [],
+              "embedded": [],
+              "xml": ""
+            }
+          ]
+        ]
+      ]
+    },
+    {
+      "kind": "paragraph",
+      "style": "",
+      "num_id": "",
+      "ilvl": "",
+      "text": "",
+      "deleted_text": "",
+      "equations": [],
+      "embedded": [],
+      "xml": ""
+    },
+    {
+      "kind": "table",
+      "rows": [
+        [
+          [
+            {
+              "style": "",
+              "num_id": "",
+              "ilvl": "",
+              "text": "中文译文",
+              "deleted_text": "",
+              "equations": [],
+              "embedded": [],
+              "xml": ""
+            }
+          ]
+        ],
+        [
+          [
+            {
+              "style": "",
+              "num_id": "",
+              "ilvl": "",
+              "text": "稿件中仍存在若干语法和文体问题，建议认真校对。",
+              "deleted_text": "",
+              "equations": [],
+              "embedded": [],
+              "xml": ""
+            }
+          ]
+        ]
+      ]
+    },
+    {
+      "kind": "paragraph",
+      "style": "",
+      "num_id": "",
+      "ilvl": "",
+      "text": "",
+      "deleted_text": "",
+      "equations": [],
+      "embedded": [],
+      "xml": ""
+    },
+    {
+      "kind": "paragraph",
+      "style": "2",
+      "num_id": "",
+      "ilvl": "",
+      "text": "R2.7: Comment 7 / 意见 7",
+      "deleted_text": "",
+      "equations": [],
+      "embedded": [],
+      "xml": ""
+    },
+    {
+      "kind": "table",
+      "rows": [
+        [
+          [
+            {
+              "style": "",
+              "num_id": "",
+              "ilvl": "",
+              "text": "English original",
+              "deleted_text": "",
+              "equations": [],
+              "embedded": [],
+              "xml": ""
+            }
+          ]
+        ],
+        [
+          [
+            {
+              "style": "",
+              "num_id": "",
+              "ilvl": "",
+              "text": "",
+              "deleted_text": "",
+              "equations": [],
+              "embedded": [],
+              "xml": ""
+            }
+          ]
+        ]
+      ]
+    },
+    {
+      "kind": "paragraph",
+      "style": "",
+      "num_id": "",
+      "ilvl": "",
+      "text": "",
+      "deleted_text": "",
+      "equations": [],
+      "embedded": [],
+      "xml": ""
+    },
+    {
+      "kind": "table",
+      "rows": [
+        [
+          [
+            {
+              "style": "",
+              "num_id": "",
+              "ilvl": "",
+              "text": "中文译文",
+              "deleted_text": "",
+              "equations": [],
+              "embedded": [],
+              "xml": ""
+            }
+          ]
+        ],
+        [
+          [
+            {
+              "style": "",
+              "num_id": "",
+              "ilvl": "",
+              "text": "与仅展示解的图相比，误差分布图和收敛曲线将提供更多信息。",
+              "deleted_text": "",
+              "equations": [],
+              "embedded": [],
+              "xml": ""
+            }
+          ]
+        ]
+      ]
+    },
+    {
+      "kind": "paragraph",
+      "style": "",
+      "num_id": "",
+      "ilvl": "",
+      "text": "",
+      "deleted_text": "",
+      "equations": [],
+      "embedded": [],
+      "xml": ""
+    },
+    {
+      "kind": "paragraph",
+      "style": "2",
+      "num_id": "",
+      "ilvl": "",
+      "text": "R2.8: Comment 8 / 意见 8",
+      "deleted_text": "",
+      "equations": [],
+      "embedded": [],
+      "xml": ""
+    },
+    {
+      "kind": "table",
+      "rows": [
+        [
+          [
+            {
+              "style": "",
+              "num_id": "",
+              "ilvl": "",
+              "text": "English original",
+              "deleted_text": "",
+              "equations": [],
+              "embedded": [],
+              "xml": ""
+            }
+          ]
+        ],
+        [
+          [
+            {
+              "style": "",
+              "num_id": "",
+              "ilvl": "",
+              "text": "",
+              "deleted_text": "",
+              "equations": [],
+              "embedded": [],
+              "xml": ""
+            }
+          ]
+        ]
+      ]
+    },
+    {
+      "kind": "paragraph",
+      "style": "",
+      "num_id": "",
+      "ilvl": "",
+      "text": "",
+      "deleted_text": "",
+      "equations": [],
+      "embedded": [],
+      "xml": ""
+    },
+    {
+      "kind": "table",
+      "rows": [
+        [
+          [
+            {
+              "style": "",
+              "num_id": "",
+              "ilvl": "",
+              "text": "中文译文",
+              "deleted_text": "",
+              "equations": [],
+              "embedded": [],
+              "xml": ""
+            }
+          ]
+        ],
+        [
+          [
+            {
+              "style": "",
+              "num_id": "",
+              "ilvl": "",
+              "text": "增加一幅说明 D-AIM 流程的示意图将有助于提高可读性。",
+              "deleted_text": "",
+              "equations": [],
+              "embedded": [],
+              "xml": ""
+            }
+          ]
+        ]
+      ]
+    },
+    {
+      "kind": "paragraph",
+      "style": "",
+      "num_id": "",
+      "ilvl": "",
+      "text": "",
+      "deleted_text": "",
+      "equations": [],
+      "embedded": [],
+      "xml": ""
+    },
+    {
+      "kind": "paragraph",
+      "style": "2",
+      "num_id": "",
+      "ilvl": "",
+      "text": "R2.9: Comment 9 / 意见 9",
+      "deleted_text": "",
+      "equations": [],
+      "embedded": [],
+      "xml": ""
+    },
+    {
+      "kind": "table",
+      "rows": [
+        [
+          [
+            {
+              "style": "",
+              "num_id": "",
+              "ilvl": "",
+              "text": "English original",
+              "deleted_text": "",
+              "equations": [],
+              "embedded": [],
+              "xml": ""
+            }
+          ]
+        ],
+        [
+          [
+            {
+              "style": "",
+              "num_id": "",
+              "ilvl": "",
+              "text": "",
+              "deleted_text": "",
+              "equations": [],
+              "embedded": [],
+              "xml": ""
+            }
+          ]
+        ]
+      ]
+    },
+    {
+      "kind": "paragraph",
+      "style": "",
+      "num_id": "",
+      "ilvl": "",
+      "text": "",
+      "deleted_text": "",
+      "equations": [],
+      "embedded": [],
+      "xml": ""
+    },
+    {
+      "kind": "table",
+      "rows": [
+        [
+          [
+            {
+              "style": "",
+              "num_id": "",
+              "ilvl": "",
+              "text": "中文译文",
+              "deleted_text": "",
+              "equations": [],
+              "embedded": [],
+              "xml": ""
+            }
+          ]
+        ],
+        [
+          [
+            {
+              "style": "",
+              "num_id": "",
+              "ilvl": "",
+              "text": "增加一张符号汇总表将有助于读者理解推导过程。",
+              "deleted_text": "",
+              "equations": [],
+              "embedded": [],
+              "xml": ""
+            }
+          ]
+        ]
+      ]
+    },
+    {
+      "kind": "paragraph",
+      "style": "",
+      "num_id": "",
+      "ilvl": "",
+      "text": "",
+      "deleted_text": "",
+      "equations": [],
+      "embedded": [],
+      "xml": ""
+    }
+  ]
+}
