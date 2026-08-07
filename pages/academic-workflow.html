@@ -498,6 +498,251 @@
         @media (prefers-reduced-motion: reduce) {
             *, *::before, *::after { scroll-behavior: auto !important; animation: none !important; transition: none !important; }
         }
+
+        /* 2026 visual rebuild: readability first, particles remain atmospheric. */
+        :root {
+            --bg: #030604;
+            --surface: #0b100d;
+            --surface-raised: #111813;
+            --text-dim: #b8c3bd;
+            --border: rgba(216, 232, 223, .17);
+            --border-active: rgba(0, 255, 136, .62);
+            --radius: 22px;
+            --max-width: 1280px;
+        }
+        body { background: var(--bg); font-size: 16px; line-height: 1.7; }
+        #particle-canvas { opacity: .2; filter: saturate(.78); }
+        nav {
+            padding: 1.1rem clamp(1.25rem, 4vw, 4rem);
+            background: rgba(3, 6, 4, .94);
+            border-bottom-color: rgba(255,255,255,.08);
+        }
+        .logo { font-size: 1.04rem; }
+        .back-link { color: #c3cdc7; font-size: .94rem; }
+        .nav-download { min-height: 42px; padding: .62rem 1.1rem; display: inline-flex; align-items: center; font-size: .9rem; }
+        main { width: min(calc(100% - 3rem), var(--max-width)); padding: 7.6rem 0 5rem; }
+        .hero { min-height: 300px; max-width: 900px; margin-bottom: 2rem; }
+        .eyebrow { font-size: .82rem; }
+        .hero h1 { margin: .75rem 0 1rem; font-size: clamp(4rem, 7vw, 6.2rem); font-weight: 350; }
+        .hero > p { max-width: 720px; color: #c0cbc5; font-size: 1.08rem; line-height: 1.75; }
+        .hero-actions { display: flex; flex-wrap: wrap; gap: .65rem; margin-top: 1.7rem; }
+        .hero-actions a {
+            min-height: 44px;
+            padding: .68rem 1rem;
+            display: inline-flex;
+            align-items: center;
+            color: #d8e0dc;
+            background: #0c120e;
+            border: 1px solid rgba(255,255,255,.17);
+            border-radius: 11px;
+            font-size: .9rem;
+            font-weight: 650;
+            transition: .2s ease;
+        }
+        .hero-actions a:hover { color: #fff; border-color: var(--border-active); transform: translateY(-2px); }
+        .hero-actions .hero-primary { color: #00170c; background: var(--accent); border-color: var(--accent); }
+
+        .workflow {
+            overflow: hidden;
+            padding: clamp(1.35rem, 2.6vw, 2.35rem);
+            background: #080d0a;
+            border: 1px solid rgba(203, 224, 212, .2);
+            border-radius: 28px;
+            box-shadow: 0 28px 80px rgba(0,0,0,.42);
+        }
+        .workflow::after { display: none; }
+        .workflow-top { margin-bottom: 1.1rem; padding-bottom: 1rem; border-bottom: 1px solid rgba(255,255,255,.1); }
+        .workflow-top strong { font-size: 1.22rem; font-weight: 720; }
+        .workflow-top span { color: #aeb9b3; font-size: .92rem; }
+        .milestone-diagram { min-height: 360px; margin-top: .35rem; }
+        .flow-lines { z-index: 2; }
+        .flow-lines > path { stroke: rgba(221,235,227,.5); stroke-width: 2.4; }
+        .flow-lines .main-route { stroke: rgba(0,255,136,.88); stroke-width: 2.6; }
+        .flow-lines .return-route { stroke: rgba(0,255,136,.74); stroke-width: 2.2; stroke-dasharray: 7 5; }
+        .milestone-node, .branch-node {
+            z-index: 4;
+            color: #fff;
+            background: #111713;
+            border: 1px solid rgba(213,229,220,.27);
+            border-radius: 16px;
+            box-shadow: 0 12px 30px rgba(0,0,0,.28);
+            backdrop-filter: none;
+        }
+        .milestone-node { top: 225px; width: 165px; min-height: 112px; padding: 1.05rem; }
+        .milestone-node:nth-of-type(1) { left: 9%; }
+        .milestone-node:nth-of-type(2) { left: 29%; }
+        .milestone-node:nth-of-type(3) { left: 49%; }
+        .milestone-node.proof-node { left: 92%; }
+        .result-group {
+            z-index: auto;
+            left: 61%;
+            top: 8px;
+            width: 22%;
+            height: 337px;
+            background: #0a100c;
+            border: 1.5px dashed rgba(181,204,191,.52);
+            border-radius: 20px;
+        }
+        .result-group-label {
+            z-index: 4;
+            left: 14px;
+            top: -18px;
+            padding: .35rem .68rem;
+            color: #76ffba;
+            background: #0a100c;
+            border-color: rgba(0,255,136,.65);
+            font-size: .73rem;
+        }
+        .branch-node { width: 180px; min-height: 124px; padding: 1.05rem; }
+        .branch-node.revise-node { left: 50%; top: 217px; }
+        .branch-node.transfer-node { left: 50%; top: 75px; }
+        .milestone-index { margin-bottom: .55rem; font-size: .76rem; }
+        .milestone-title { font-size: 1.06rem; font-weight: 740; }
+        .milestone-meta { margin-top: .38rem; color: #b8c3bd; font-size: .82rem; line-height: 1.5; }
+        .mode-row { gap: .38rem; margin-top: .72rem; }
+        .mode-tag { padding: .25rem .5rem; font-size: .7rem; }
+        .mode-tag.online { color: #d1dad5; background: #263029; }
+        .branch-return { margin-top: .65rem; font-size: .75rem; font-weight: 650; }
+        .milestone-node:hover, .milestone-node.active, .branch-node:hover, .branch-node.active {
+            background: #14251b;
+            border-color: #00ff88;
+            box-shadow: 0 0 0 3px rgba(0,255,136,.1), 0 15px 36px rgba(0,0,0,.42);
+        }
+        .result-group:has(.branch-node.active) { border-color: rgba(0,255,136,.72); background: #0b130e; }
+
+        .stage-panel {
+            margin-top: 1.25rem;
+            padding: clamp(1.4rem, 2.4vw, 2.15rem);
+            background: #0b110d;
+            border: 1px solid rgba(205,225,214,.17);
+            border-radius: 22px;
+        }
+        .stage-heading { margin-bottom: 1.25rem; }
+        .stage-kicker { font-size: .78rem; }
+        .stage-heading h2 { margin-top: .42rem; font-size: clamp(2rem, 3.5vw, 3rem); font-weight: 520; }
+        .stage-goal { padding: .62rem .88rem; font-size: .86rem; }
+        .session-note {
+            margin-bottom: 1rem;
+            padding: .9rem 1rem;
+            color: #e0e6e2;
+            background: #101b14;
+            border-left-width: 3px;
+            font-size: .94rem;
+            line-height: 1.7;
+        }
+        .stage-brief { gap: 1rem; }
+        .brief-card {
+            min-height: 150px;
+            padding: 1.2rem;
+            background: #121914;
+            border-color: rgba(207,224,214,.18);
+            border-radius: 16px;
+        }
+        .brief-label { padding: .32rem .58rem; color: #d1d9d4; background: #273029; font-size: .75rem; }
+        .brief-card h3 { margin: .8rem 0 .45rem; font-size: 1.08rem; }
+        .brief-card p { color: #bdc7c1; font-size: .9rem; line-height: 1.65; }
+        .rules-toggle {
+            min-height: 44px;
+            margin-top: 1rem;
+            padding: .7rem 1rem;
+            color: #dce3df;
+            background: #111914;
+            border-color: rgba(0,255,136,.42);
+            border-radius: 10px;
+            font-size: .9rem;
+            font-weight: 680;
+        }
+        .rules-toggle:hover { color: #00170c; background: var(--accent); border-color: var(--accent); }
+        .detail-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; margin-top: 1rem; }
+        .detail-grid > details:last-child:nth-child(odd) { grid-column: 1 / -1; }
+        details { background: #111713; border-color: rgba(211,228,218,.18); border-radius: 15px; }
+        details[open] { background: #101a13; border-color: rgba(0,255,136,.42); }
+        summary { min-height: 64px; padding: 1rem 1.1rem; }
+        summary span { font-size: .98rem; }
+        summary small { color: #aeb9b3; font-size: .78rem; }
+        summary::after { font-size: 1.25rem; }
+        .detail-content { padding: 0 1.1rem 1.15rem; }
+        .detail-content > p, .checklist li { color: #c4cdc8; font-size: .9rem; line-height: 1.7; }
+        .checklist { gap: .7rem; }
+
+        .section {
+            margin-top: 2.25rem;
+            padding: clamp(1.4rem, 2.6vw, 2.35rem);
+            background: #080d0a;
+            border: 1px solid rgba(203,224,212,.18);
+            border-radius: 26px;
+            box-shadow: 0 24px 64px rgba(0,0,0,.3);
+        }
+        .section-head { margin-bottom: 1.5rem; }
+        .section-head h2 { font-size: clamp(2rem, 4vw, 3.1rem); font-weight: 480; }
+        .section-head p { max-width: 460px; color: #bdc7c1; font-size: .95rem; line-height: 1.65; }
+        .archive-steps { gap: 1rem; }
+        .archive-step { padding: 1.3rem; background: #111813; border-color: rgba(207,224,214,.18); }
+        .archive-step span { font-size: .74rem; }
+        .archive-step h3 { margin: .75rem 0 .48rem; font-size: 1.08rem; }
+        .archive-step p { color: #bec8c2; font-size: .9rem; line-height: 1.65; }
+        .archive-step:not(:last-child)::after { width: 1.7rem; height: 1.7rem; right: -.86rem; background: #0b100d; font-size: .82rem; }
+        code { padding: .7rem .82rem; color: #d7ffe9; background: #050806; font-size: .82rem; }
+        .version-warning { margin-top: 1rem; font-size: .88rem; }
+
+        .copy-guide { gap: .75rem; margin-bottom: 1rem; }
+        .copy-guide span { padding: .85rem 1rem; color: #c6cfca; background: #111813; border-color: rgba(207,224,214,.18); font-size: .88rem; }
+        .copy-shell { background: #0d130f; border-color: rgba(207,224,214,.2); }
+        .copy-tabs { gap: .6rem; padding: .85rem; }
+        .copy-tab { min-height: 42px; padding: .68rem 1rem; color: #bdc7c1; font-size: .9rem; }
+        .copy-tab:hover, .copy-tab.active { color: #00170c; background: var(--accent); border-color: var(--accent); }
+        .copy-panel { padding: 1.35rem; }
+        .copy-panel-head h3 { font-size: 1.08rem; }
+        .copy-button { min-height: 40px; padding: .58rem .85rem; font-size: .86rem; }
+        pre { max-height: 420px; padding: 1.15rem; color: #d2dad5; background: #050806; font-size: .88rem; line-height: 1.75; }
+
+        .download-columns { gap: 1.1rem; }
+        .download-group { padding: 1.35rem; background: #0d130f; border-color: rgba(207,224,214,.2); }
+        .group-title h3 { font-size: 1.14rem; }
+        .format-badge { color: #adb8b2; font-size: .74rem; }
+        .download-list { gap: .7rem; }
+        .file-link { min-height: 70px; padding: .85rem 1rem; background: #141b16; border-color: rgba(209,226,216,.13); }
+        .file-name { font-size: .96rem; font-weight: 650; }
+        .file-type { color: #aeb9b3; font-size: .72rem; }
+        .file-arrow { width: 34px; height: 34px; }
+        footer { color: #aeb9b3; font-size: .86rem; }
+
+        @media (max-width: 900px) {
+            main { width: min(calc(100% - 2rem), var(--max-width)); padding-top: 7rem; }
+            .hero { min-height: 260px; }
+            .workflow-top, .stage-heading, .section-head { align-items: flex-start; flex-direction: column; }
+            .milestone-diagram { display: grid; min-height: 0; gap: .75rem; padding-top: .4rem; }
+            .flow-lines { display: none; }
+            .milestone-node, .branch-node {
+                position: relative;
+                inset: auto !important;
+                width: 100%;
+                min-height: 0;
+                transform: none !important;
+                text-align: left;
+            }
+            .result-group { position: relative; inset: auto; width: 100%; height: auto; margin: .7rem 0; padding: 2.5rem .85rem .85rem; display: grid; gap: .75rem; }
+            .result-group-label { top: -12px; }
+            .result-group .transfer-node { order: -1; }
+            .stage-brief, .detail-grid, .archive-steps, .copy-guide, .download-columns { grid-template-columns: 1fr; }
+            .detail-grid > details:last-child:nth-child(odd) { grid-column: auto; }
+            .archive-step:not(:last-child)::after { content: "↓"; top: auto; right: 50%; bottom: -.86rem; transform: translateX(50%); }
+            .section-head p { text-align: left; }
+        }
+        @media (max-width: 600px) {
+            nav { padding: 1rem; }
+            .nav-download { display: none; }
+            .hero h1 { font-size: clamp(3.25rem, 18vw, 4.8rem); }
+            .hero > p { font-size: 1rem; }
+            .hero-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .hero-actions a { justify-content: center; }
+            .workflow, .section { padding: 1rem; border-radius: 19px; }
+            .stage-panel { padding: 1.05rem; border-radius: 16px; }
+            .stage-heading h2 { font-size: 2rem; }
+            .stage-goal { white-space: normal; }
+            .copy-panel-head { align-items: flex-start; flex-direction: column; }
+            .copy-button { width: 100%; }
+        }
     </style>
 </head>
 <body>
@@ -514,24 +759,30 @@
         <header class="hero">
             <div class="eyebrow">AIDING · PAPER SOP</div>
             <h1>论文<span>工作流</span></h1>
-            <p>从稿件定稿到录用出版，按事件推进。</p>
+            <p>从中文定稿到录用出版，把每一次准备、线下确认和正式提交放在正确的位置。</p>
+            <div class="hero-actions" aria-label="页面导航">
+                <a class="hero-primary" href="#workflow">查看工作流</a>
+                <a href="#archive">版本归档</a>
+                <a href="#toolkit">常用模板</a>
+                <a href="#downloads">文件下载</a>
+            </div>
         </header>
 
-        <section class="workflow" aria-labelledby="workflow-title">
+        <section class="workflow" id="workflow" aria-labelledby="workflow-title">
             <div class="workflow-top">
                 <strong id="workflow-title">五个里程碑</strong>
                 <span>点击节点查看任务；回折箭头表示重新进入投稿或评审</span>
             </div>
             <div class="milestone-diagram" role="tablist" aria-label="论文工作流阶段">
-                <svg class="flow-lines" viewBox="0 0 1000 440" preserveAspectRatio="none" aria-hidden="true">
+                <svg class="flow-lines" viewBox="0 0 1000 360" preserveAspectRatio="none" aria-hidden="true">
                     <defs><marker id="flow-arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#00ff88" stroke="none"></path></marker></defs>
-                    <path class="main-route" d="M155 200 H215" marker-end="url(#flow-arrow)"></path>
-                    <path class="main-route" d="M365 200 H415" marker-end="url(#flow-arrow)"></path>
-                    <path class="main-route" d="M565 200 H634" marker-end="url(#flow-arrow)"></path>
-                    <path d="M565 200 H600 V85 H634" marker-end="url(#flow-arrow)"></path>
-                    <path class="main-route" d="M806 200 H845" marker-end="url(#flow-arrow)"></path>
-                    <path class="return-route" d="M765 258 C800 275 800 298 720 298 C640 298 640 275 675 258" marker-end="url(#flow-arrow)"></path>
-                    <path class="return-route" d="M720 27 V8 H490 V154" marker-end="url(#flow-arrow)"></path>
+                    <path class="main-route" d="M173 225 H208" marker-end="url(#flow-arrow)"></path>
+                    <path class="main-route" d="M373 225 H408" marker-end="url(#flow-arrow)"></path>
+                    <path class="main-route" d="M573 225 H630" marker-end="url(#flow-arrow)"></path>
+                    <path d="M573 225 H600 V83 H630" marker-end="url(#flow-arrow)"></path>
+                    <path class="main-route" d="M810 225 H838" marker-end="url(#flow-arrow)"></path>
+                    <path class="return-route" d="M765 288 C810 306 810 329 720 329 C630 329 630 306 675 288" marker-end="url(#flow-arrow)"></path>
+                    <path class="return-route" d="M720 21 V5 H490 V170" marker-end="url(#flow-arrow)"></path>
                 </svg>
                 <button class="milestone-node active" id="tab-cn" type="button" role="tab" aria-selected="true" aria-controls="stage-cn" tabindex="0" data-stage="cn">
                     <span class="milestone-index">01</span><span class="milestone-title">稿件准备</span><span class="milestone-meta">中文内容与格式定稿</span><span class="mode-row"><span class="mode-tag online">线上</span></span>
@@ -897,7 +1148,7 @@
             </article>
         </section>
 
-        <section class="section" aria-labelledby="version-title" data-sop="13">
+        <section class="section" id="archive" aria-labelledby="version-title" data-sop="13">
             <div class="section-head">
                 <div><span class="eyebrow">AFTER SUBMISSION</span><h2 id="version-title">提交完成后，怎么存？</h2></div>
                 <p>每次正式投稿、返修或转投，都执行同一套收尾动作。</p>
@@ -922,7 +1173,7 @@
             </details>
         </section>
 
-        <section class="section" aria-labelledby="copy-title" data-sop="4,7,11">
+        <section class="section" id="toolkit" aria-labelledby="copy-title" data-sop="4,7,11">
             <div class="section-head">
                 <div><span class="eyebrow">COPY & USE</span><h2 id="copy-title">常用操作模板</h2></div>
                 <p>校稿时调用 AI 核查；提交后完成邮件和微信汇报。</p>
