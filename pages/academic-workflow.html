@@ -18,6 +18,7 @@
             }
         })();
     </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <style>
         :root {
             --bg: #000;
@@ -35,6 +36,14 @@
         }
 
         * { box-sizing: border-box; }
+        #particle-canvas {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
         html { scroll-behavior: smooth; }
         body {
             min-height: 100vh;
@@ -61,10 +70,8 @@
             inset: 0;
             z-index: -1;
             pointer-events: none;
-            opacity: .2;
-            background-image: radial-gradient(rgba(255,255,255,.22) .55px, transparent .55px);
-            background-size: 26px 26px;
-            mask-image: linear-gradient(to bottom, #000, transparent 70%);
+            opacity: .52;
+            background: linear-gradient(to bottom, rgba(0,0,0,.12), rgba(0,0,0,.78) 58%, #000 92%);
         }
         a { color: inherit; text-decoration: none; }
         button { color: inherit; font: inherit; }
@@ -101,7 +108,8 @@
             font-weight: 750;
         }
 
-        main { width: min(calc(100% - 3rem), var(--max-width)); margin: 0 auto; padding: 9.8rem 0 5.5rem; }
+        main, footer { position: relative; z-index: 1; }
+        main { width: min(calc(100% - 3rem), var(--max-width)); margin: 0 auto; padding: 9.2rem 0 5.5rem; }
         .eyebrow {
             display: inline-flex;
             align-items: center;
@@ -112,17 +120,16 @@
             text-transform: uppercase;
         }
         .eyebrow::before { content: ""; width: 24px; height: 1px; background: currentColor; }
-        .hero { max-width: 900px; margin-bottom: 3.4rem; }
+        .hero { min-height: 290px; max-width: 760px; margin-bottom: 2.2rem; display: flex; flex-direction: column; justify-content: center; }
         .hero h1 {
-            max-width: 820px;
-            margin: .85rem 0 1rem;
-            font-size: clamp(3rem, 8vw, 6.2rem);
-            font-weight: 260;
-            line-height: .98;
+            margin: .72rem 0 .8rem;
+            font-size: clamp(3.5rem, 8vw, 6.4rem);
+            font-weight: 300;
+            line-height: 1;
             letter-spacing: -.055em;
         }
         .hero h1 span { color: var(--accent); }
-        .hero > p { max-width: 620px; margin: 0; color: var(--text-dim); font-size: 1.03rem; }
+        .hero > p { max-width: 520px; margin: 0; color: var(--text-dim); font-size: 1rem; }
         .principles { display: flex; flex-wrap: wrap; gap: .55rem; margin-top: 1.4rem; }
         .principle {
             padding: .45rem .7rem;
@@ -204,6 +211,46 @@
         }
         .flow-node:hover .node-name, .flow-node.active .node-name { color: var(--text); }
 
+        .milestone-diagram { position: relative; min-height: 440px; margin-top: .2rem; }
+        .flow-lines { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+        .flow-lines > path { fill: none; stroke: rgba(255,255,255,.2); stroke-width: 1.7; vector-effect: non-scaling-stroke; }
+        .flow-lines .main-route { stroke: rgba(0,255,136,.5); }
+        .flow-lines .return-route { stroke: rgba(0,255,136,.34); stroke-dasharray: 5 5; }
+        .milestone-node, .milestone-hub, .branch-node {
+            position: absolute;
+            z-index: 2;
+            transform: translate(-50%, -50%);
+            border: 1px solid rgba(255,255,255,.12);
+            border-radius: 16px;
+            background: rgba(8,10,9,.92);
+            backdrop-filter: blur(12px);
+        }
+        .milestone-node, .branch-node { color: var(--text); cursor: pointer; transition: .22s ease; }
+        .milestone-node { top: 88px; width: 150px; min-height: 92px; padding: 1rem; text-align: left; }
+        .milestone-node:nth-of-type(1) { left: 8%; }
+        .milestone-node:nth-of-type(2) { left: 29%; }
+        .milestone-node:nth-of-type(3) { left: 49%; }
+        .milestone-node.proof-node { left: 92%; }
+        .milestone-hub { top: 88px; left: 71%; width: 160px; min-height: 92px; padding: 1rem; }
+        .branch-node { top: 252px; width: 172px; min-height: 116px; padding: 1rem; text-align: left; }
+        .branch-node.revise-node { left: 63%; }
+        .branch-node.transfer-node { left: 80%; }
+        .milestone-index { display: block; margin-bottom: .46rem; color: var(--accent); font: 700 .68rem/1 ui-monospace, Consolas, monospace; letter-spacing: .08em; }
+        .milestone-title { display: block; font-size: .94rem; font-weight: 680; }
+        .milestone-meta { display: block; margin-top: .3rem; color: var(--text-dim); font-size: .7rem; line-height: 1.4; }
+        .mode-row { display: flex; flex-wrap: wrap; gap: .3rem; margin-top: .58rem; }
+        .mode-tag { padding: .2rem .42rem; border-radius: 999px; font-size: .61rem; font-weight: 720; }
+        .mode-tag.online { color: #b7c0bc; background: rgba(255,255,255,.06); }
+        .mode-tag.offline { color: #00160c; background: var(--accent); }
+        .branch-return { display: block; margin-top: .55rem; color: var(--accent); font-size: .65rem; }
+        .milestone-node:hover, .milestone-node.active, .branch-node:hover, .branch-node.active {
+            border-color: var(--accent); background: rgba(0,255,136,.09); transform: translate(-50%, -54%); box-shadow: 0 14px 36px rgba(0,0,0,.35);
+        }
+        .milestone-diagram:has(.branch-node.active) .milestone-hub { border-color: rgba(0,255,136,.5); background: rgba(0,255,136,.055); }
+        .flow-caption { position: absolute; z-index: 2; color: var(--text-dim); font-size: .65rem; }
+        .flow-caption.revise-caption { left: 68%; top: 342px; }
+        .flow-caption.transfer-caption { left: 49%; top: 397px; transform: translateX(-50%); }
+
         .stage-panel { display: none; position: relative; z-index: 1; margin-top: 2rem; animation: rise .3s ease; }
         .stage-panel.active { display: block; }
         .stage-heading { display: flex; align-items: end; justify-content: space-between; gap: 1.5rem; margin-bottom: 1.15rem; }
@@ -229,7 +276,7 @@
             font-size: .8rem;
             line-height: 1.55;
         }
-        .step-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: .8rem; }
+        .step-grid { display: none; }
         .step-card {
             min-height: 146px;
             padding: 1.15rem;
@@ -243,7 +290,17 @@
         .step-card h3 { margin: .72rem 0 .38rem; font-size: .98rem; font-weight: 650; }
         .step-card p { margin: 0; color: var(--text-dim); font-size: .82rem; line-height: 1.58; }
 
-        .detail-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: .7rem; margin-top: .85rem; }
+        .detail-grid { display: none; grid-template-columns: repeat(3, 1fr); gap: .7rem; margin-top: .85rem; }
+        .stage-panel.show-rules .detail-grid { display: grid; }
+        .stage-brief { display: grid; grid-template-columns: repeat(3, 1fr); gap: .8rem; }
+        .brief-card { min-height: 132px; padding: 1.05rem; background: rgba(5,7,6,.88); border: 1px solid var(--border); border-radius: 15px; }
+        .brief-label { display: inline-flex; padding: .25rem .48rem; border-radius: 999px; color: var(--text-dim); background: rgba(255,255,255,.055); font-size: .65rem; font-weight: 730; }
+        .brief-card.offline .brief-label { color: #00160c; background: var(--accent); }
+        .brief-card.output .brief-label { color: var(--accent); background: var(--accent-soft); }
+        .brief-card h3 { margin: .7rem 0 .38rem; font-size: .96rem; }
+        .brief-card p { margin: 0; color: var(--text-dim); font-size: .78rem; line-height: 1.55; }
+        .rules-toggle { margin-top: .8rem; padding: .62rem .82rem; color: var(--text-dim); background: transparent; border: 1px solid var(--border); border-radius: 9px; cursor: pointer; font-size: .76rem; }
+        .rules-toggle:hover { color: var(--text); border-color: var(--border-active); }
         details {
             background: rgba(255,255,255,.018);
             border: 1px solid var(--border);
@@ -300,8 +357,19 @@
         }
         .version-warning { display: flex; align-items: center; gap: .55rem; margin-top: .8rem; color: var(--warning); font-size: .76rem; }
         .version-warning::before { content: "!"; display: grid; place-items: center; width: 18px; height: 18px; border: 1px solid currentColor; border-radius: 50%; font: 700 .68rem/1 ui-monospace, monospace; }
+        .archive-steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: .8rem; }
+        .archive-step { position: relative; padding: 1.15rem; background: var(--surface); border: 1px solid var(--border); border-radius: 16px; }
+        .archive-step:not(:last-child)::after { content: "→"; position: absolute; right: -.72rem; top: 50%; z-index: 2; display: grid; place-items: center; width: 1.45rem; height: 1.45rem; color: var(--accent); background: #000; border: 1px solid var(--border-active); border-radius: 50%; transform: translateY(-50%); font-size: .72rem; }
+        .archive-step span { color: var(--accent); font: 700 .66rem/1 ui-monospace, Consolas, monospace; }
+        .archive-step h3 { margin: .68rem 0 .4rem; font-size: .98rem; }
+        .archive-step p { margin: 0; color: var(--text-dim); font-size: .78rem; line-height: 1.55; }
+        .archive-examples { display: flex; flex-wrap: wrap; gap: .45rem; margin-top: .8rem; }
+        .archive-examples code { display: inline-block; }
 
         .copy-shell { overflow: hidden; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); }
+        .copy-guide { display: grid; grid-template-columns: repeat(3, 1fr); gap: .55rem; margin-bottom: .8rem; }
+        .copy-guide span { padding: .7rem .8rem; color: var(--text-dim); background: rgba(255,255,255,.025); border: 1px solid var(--border); border-radius: 10px; font-size: .76rem; }
+        .copy-guide strong { margin-right: .35rem; color: var(--accent); }
         .copy-tabs { display: flex; gap: .45rem; padding: .7rem; overflow-x: auto; border-bottom: 1px solid var(--border); }
         .copy-tab {
             flex: 0 0 auto;
@@ -390,6 +458,7 @@
             main { padding-top: 8.6rem; }
             .step-grid { grid-template-columns: repeat(2, 1fr); }
             .detail-grid { grid-template-columns: 1fr; }
+            .stage-brief { grid-template-columns: 1fr; }
         }
         @media (max-width: 680px) {
             main, footer { width: min(calc(100% - 2rem), var(--max-width)); }
@@ -412,7 +481,16 @@
             .node-name { font-size: .85rem; }
             .stage-heading, .section-head { align-items: flex-start; flex-direction: column; }
             .stage-goal { align-self: flex-start; }
-            .intro-grid, .step-grid, .version-board, .download-columns { grid-template-columns: 1fr; }
+            .intro-grid, .step-grid, .stage-brief, .version-board, .archive-steps, .copy-guide, .download-columns { grid-template-columns: 1fr; }
+            .archive-step:not(:last-child)::after { content: "↓"; top: auto; right: 50%; bottom: -.72rem; transform: translateX(50%); }
+            .milestone-diagram { display: grid; min-height: 0; gap: .55rem; }
+            .flow-lines, .flow-caption { display: none; }
+            .milestone-node, .milestone-hub, .branch-node {
+                position: relative; inset: auto !important; width: 100%; min-height: 0; transform: none !important;
+            }
+            .milestone-node, .branch-node { text-align: left; }
+            .milestone-hub { margin-top: .5rem; }
+            .branch-node { margin-left: 1.2rem; width: calc(100% - 1.2rem); }
             .step-card { min-height: 0; }
             .section { margin-top: 4rem; }
             .section-head p { text-align: left; }
@@ -424,6 +502,7 @@
     </style>
 </head>
 <body>
+    <canvas id="particle-canvas" aria-hidden="true"></canvas>
     <nav id="nav">
         <a class="logo" href="../index.html"><span>AICore</span><span class="logo-accent">Scholar</span></a>
         <div class="nav-actions">
@@ -434,66 +513,51 @@
 
     <main data-sop="1">
         <header class="hero">
-            <div class="eyebrow">AIDING · Event-based Paper Workflow</div>
-            <h1>按事件推进，<span>一次做对。</span></h1>
-            <p>为规范团队中英文论文的撰写、校核、投稿、返修及录用前校样处理流程，减少版本混乱、材料遗漏和重复工作，特制定本流程，供 AIDING 团队成员统一参考执行。</p>
-            <div class="principles" aria-label="核心原则">
-                <span class="principle">先定中文，再定英文</span>
-                <span class="principle">线下集中定稿与投稿</span>
-                <span class="principle">人工确认技术，AI 核查语言</span>
-                <span class="principle">系统生成稿必查，关键节点必归档</span>
-            </div>
+            <div class="eyebrow">AIDING · PAPER SOP</div>
+            <h1>论文<span>工作流</span></h1>
+            <p>从稿件定稿到录用出版，按事件推进。</p>
         </header>
-
-        <div class="intro-grid">
-            <details data-sop="1">
-                <summary><span>目的与适用范围</span><small>8 个环节</small></summary>
-                <div class="detail-content">
-                    <p>本流程主要包括：</p>
-                    <ol class="checklist">
-                        <li>中文稿件撰写与定稿；</li><li>英文稿件翻译与润色；</li>
-                        <li>投稿前准备与集中校稿；</li><li>Cover Letter 编写；</li>
-                        <li>正式投稿与文件归档；</li><li>返修方案讨论与返修信编写；</li>
-                        <li>返修稿提交与材料归档；</li><li>录用前校样核对与提交。</li>
-                    </ol>
-                    <p>中文论文可参照本流程执行，并跳过中英文翻译环节。</p>
-                </div>
-            </details>
-            <details data-sop="14">
-                <summary><span>全过程核心原则</span><small>8 项</small></summary>
-                <div class="detail-content"><p>整个流程应遵循以下核心原则：</p><ul class="checklist">
-                    <li>先定内容，再做英文翻译；</li><li>先熟悉投稿系统，再进行正式投稿；</li>
-                    <li>先集体校稿，再由 AI 辅助检查；</li><li>以人工确认技术内容，以 AI 检查语言和格式；</li>
-                    <li>投稿和返修必须逐项核对，不遗漏任何材料；</li><li>正式提交前必须检查系统生成的最终文件；</li>
-                    <li>每个关键节点均须完整归档；</li><li>任何正式版本提交前，必须确保团队成员和指导老师掌握最终内容。</li>
-                </ul></div>
-            </details>
-        </div>
 
         <section class="workflow" aria-labelledby="workflow-title">
             <div class="workflow-top">
-                <strong id="workflow-title">按当前事件进入</strong>
-                <span>英文定稿会与首次投稿通常在同一次线下连续完成</span>
+                <strong id="workflow-title">五个里程碑</strong>
+                <span>点击节点查看任务；回折箭头表示重新进入投稿或评审</span>
             </div>
-            <div class="flow-map" role="tablist" aria-label="论文工作流阶段">
-                <button class="flow-node active" id="tab-cn" type="button" role="tab" aria-selected="true" aria-controls="stage-cn" tabindex="0" data-stage="cn">
-                    <span class="node-index">01</span><span class="node-name">中文定稿</span>
+            <div class="milestone-diagram" role="tablist" aria-label="论文工作流阶段">
+                <svg class="flow-lines" viewBox="0 0 1000 440" preserveAspectRatio="none" aria-hidden="true">
+                    <defs><marker id="flow-arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#00ff88" stroke="none"></path></marker></defs>
+                    <path class="main-route" d="M155 88 H215" marker-end="url(#flow-arrow)"></path>
+                    <path class="main-route" d="M365 88 H415" marker-end="url(#flow-arrow)"></path>
+                    <path class="main-route" d="M565 88 H630" marker-end="url(#flow-arrow)"></path>
+                    <path class="main-route" d="M790 88 H845" marker-end="url(#flow-arrow)"></path>
+                    <path d="M710 134 V178 H630 V195" marker-end="url(#flow-arrow)"></path>
+                    <path d="M710 178 H800 V195" marker-end="url(#flow-arrow)"></path>
+                    <path class="return-route" d="M630 312 V355 H710 V145" marker-end="url(#flow-arrow)"></path>
+                    <path class="return-route" d="M800 312 V405 H490 V145" marker-end="url(#flow-arrow)"></path>
+                </svg>
+                <button class="milestone-node active" id="tab-cn" type="button" role="tab" aria-selected="true" aria-controls="stage-cn" tabindex="0" data-stage="cn">
+                    <span class="milestone-index">01</span><span class="milestone-title">稿件准备</span><span class="milestone-meta">中文内容与格式定稿</span><span class="mode-row"><span class="mode-tag online">线上</span></span>
                 </button>
-                <button class="flow-node" id="tab-en" type="button" role="tab" aria-selected="false" aria-controls="stage-en" tabindex="-1" data-stage="en">
-                    <span class="node-index">02</span><span class="node-name">英文定稿会</span>
+                <button class="milestone-node" id="tab-en" type="button" role="tab" aria-selected="false" aria-controls="stage-en" tabindex="-1" data-stage="en">
+                    <span class="milestone-index">02</span><span class="milestone-title">英文定稿</span><span class="milestone-meta">翻译准备与逐句校稿</span><span class="mode-row"><span class="mode-tag online">线上</span><span class="mode-tag offline">线下</span></span>
                 </button>
-                <button class="flow-node" id="tab-submit" type="button" role="tab" aria-selected="false" aria-controls="stage-submit" tabindex="-1" data-stage="submit">
-                    <span class="node-index">03</span><span class="node-name">正式投稿会</span>
+                <button class="milestone-node" id="tab-submit" type="button" role="tab" aria-selected="false" aria-controls="stage-submit" tabindex="-1" data-stage="submit">
+                    <span class="milestone-index">03</span><span class="milestone-title">首次投稿</span><span class="milestone-meta">系统预录与共同提交</span><span class="mode-row"><span class="mode-tag online">线上</span><span class="mode-tag offline">线下</span></span>
                 </button>
-                <button class="flow-node" id="tab-revise" type="button" role="tab" aria-selected="false" aria-controls="stage-revise" tabindex="-1" data-stage="revise">
-                    <span class="node-index">04</span><span class="node-name">返修与提交</span>
+                <div class="milestone-hub" aria-label="第四阶段：返修或转投">
+                    <span class="milestone-index">04</span><span class="milestone-title">返修或转投</span><span class="milestone-meta">根据期刊决定进入分支</span>
+                </div>
+                <button class="branch-node revise-node" id="tab-revise" type="button" role="tab" aria-selected="false" aria-controls="stage-revise" tabindex="-1" data-stage="revise">
+                    <span class="milestone-title">返修与再提交</span><span class="mode-row"><span class="mode-tag online">线上准备</span><span class="mode-tag offline">线下提交</span></span><span class="branch-return">↩ 提交后重新等待决定</span>
                 </button>
-                <button class="flow-node" id="tab-transfer" type="button" role="tab" aria-selected="false" aria-controls="stage-transfer" tabindex="-1" data-stage="transfer">
-                    <span class="node-index">05</span><span class="node-name">转投准备</span>
+                <button class="branch-node transfer-node" id="tab-transfer" type="button" role="tab" aria-selected="false" aria-controls="stage-transfer" tabindex="-1" data-stage="transfer">
+                    <span class="milestone-title">转投新期刊</span><span class="mode-row"><span class="mode-tag online">线上准备</span><span class="mode-tag offline">线下确认</span></span><span class="branch-return">↩ 适配后进入新一轮投稿</span>
                 </button>
-                <button class="flow-node" id="tab-proof" type="button" role="tab" aria-selected="false" aria-controls="stage-proof" tabindex="-1" data-stage="proof">
-                    <span class="node-index">06</span><span class="node-name">录用校样</span>
+                <button class="milestone-node proof-node" id="tab-proof" type="button" role="tab" aria-selected="false" aria-controls="stage-proof" tabindex="-1" data-stage="proof">
+                    <span class="milestone-index">05</span><span class="milestone-title">录用出版</span><span class="milestone-meta">校样、确认与出版选择</span><span class="mode-row"><span class="mode-tag online">线上</span></span>
                 </button>
+                <span class="flow-caption revise-caption">返修可循环多轮</span>
+                <span class="flow-caption transfer-caption">转投后回到首次投稿</span>
             </div>
 
             <article class="stage-panel active" id="stage-cn" role="tabpanel" aria-labelledby="tab-cn" data-panel="cn" data-sop="2">
@@ -502,6 +566,12 @@
                     <span class="stage-goal">进入英文阶段前：内容与格式稳定</span>
                 </div>
                 <p class="session-note">英文论文原则上应先完成中文内容和整体格式定稿，再开展英文翻译工作。中文稿件定稿时，应重点完成以下内容：</p>
+                <div class="stage-brief">
+                    <div class="brief-card"><span class="brief-label">线上准备</span><h3>完成中文母稿</h3><p>定内容、结构和格式，补齐公式、图表、引用及作者基金信息。</p></div>
+                    <div class="brief-card offline"><span class="brief-label">阶段确认</span><h3>确认可以翻译</h3><p>不缺图、表、公式和引用，不再进行大范围内容改动。</p></div>
+                    <div class="brief-card output"><span class="brief-label">产出</span><h3>中文定稿</h3><p>一份内容稳定、信息完整、可以进入英文阶段的母稿。</p></div>
+                </div>
+                <button class="rules-toggle" type="button" aria-expanded="false">查看完整细则</button>
                 <div class="step-grid">
                     <div class="step-card"><span>01</span><h3>确定论文内容</h3><p>论文结构、技术内容和逻辑关系基本确定。</p></div>
                     <div class="step-card"><span>02</span><h3>完成整体排版</h3><p>Word 或 LaTeX 排版格式基本完成。</p></div>
@@ -538,6 +608,12 @@
                     <span class="stage-goal">线下逐字逐句：英文稿成为主版本</span>
                 </div>
                 <p class="session-note">先在会前完成翻译和材料准备；线下由团队逐字逐句核对英文稿。首次投稿往往与本次会议连续完成。</p>
+                <div class="stage-brief">
+                    <div class="brief-card"><span class="brief-label">线上准备</span><h3>翻译并备齐材料</h3><p>完成英文工作稿，同时准备中文稿、Cover Letter 和期刊要求。</p></div>
+                    <div class="brief-card offline"><span class="brief-label">线下会议</span><h3>逐字逐句定稿</h3><p>以英文稿为准核对技术含义、术语、表达、公式和图表引用。</p></div>
+                    <div class="brief-card output"><span class="brief-label">产出</span><h3>英文投稿稿</h3><p>团队确认的英文主版本，以及待投稿的 Cover Letter 初稿。</p></div>
+                </div>
+                <button class="rules-toggle" type="button" aria-expanded="false">查看完整细则</button>
                 <div class="step-grid">
                     <div class="step-card"><span>会前 01</span><h3>完成英文工作稿</h3><p>忠实原意、自然表达，术语、方法、变量和缩写全文统一。</p></div>
                     <div class="step-card"><span>会前 02</span><h3>备齐校稿材料</h3><p>中文稿、英文稿、Cover Letter、期刊清单和必要信息全部到位。</p></div>
@@ -589,6 +665,12 @@
                     <span class="stage-goal">线下共同完成：生成稿确认后再提交</span>
                 </div>
                 <p class="session-note">正式投稿通常与英文定稿会在同一次线下连续完成。目标期刊、投稿系统和必填信息必须提前准备，会议现场用于最终确认，而不是临时查要求。</p>
+                <div class="stage-brief">
+                    <div class="brief-card"><span class="brief-label">线上准备</span><h3>预录投稿系统</h3><p>走通流程，提前填写作者、基金和声明，准备全部上传文件。</p></div>
+                    <div class="brief-card offline"><span class="brief-label">线下会议</span><h3>共同上传并提交</h3><p>确认唯一终稿，检查系统生成 PDF，无误后向刘老师确认并提交。</p></div>
+                    <div class="brief-card output"><span class="brief-label">产出</span><h3>投稿记录与归档包</h3><p>保存全部上传文件、系统最终稿和提交记录，并完成邮件、微信汇报。</p></div>
+                </div>
+                <button class="rules-toggle" type="button" aria-expanded="false">查看完整细则</button>
                 <div class="step-grid">
                     <div class="step-card"><span>会前 01</span><h3>走通期刊与系统</h3><p>提前核查要求并录入标题、作者、基金、声明等信息。</p></div>
                     <div class="step-card"><span>线下 02</span><h3>定稿 Cover Letter</h3><p>集中确认研究工作、创新价值、期刊匹配和作者声明。</p></div>
@@ -659,6 +741,12 @@
                     <span class="stage-goal">线下共同完成：每条意见闭环</span>
                 </div>
                 <p class="session-note">返修内容先分工完成，线下会议集中核对修改稿与返修信；团队复核并向刘老师确认后，在同一次会议中完成系统提交。</p>
+                <div class="stage-brief">
+                    <div class="brief-card"><span class="brief-label">线上准备</span><h3>分工修改与逐条回复</h3><p>整理双语意见，完成修改稿、返修信及新增图表或证据。</p></div>
+                    <div class="brief-card offline"><span class="brief-label">线下会议</span><h3>返修定稿与提交</h3><p>逐条核对回复、正文和页码行号，共同检查系统最终稿。</p></div>
+                    <div class="brief-card output"><span class="brief-label">产出</span><h3>本轮返修提交版</h3><p>正文与返修信完全一致，按 R1、R2、R3 分轮次归档。</p></div>
+                </div>
+                <button class="rules-toggle" type="button" aria-expanded="false">查看完整细则</button>
                 <div class="step-grid">
                     <div class="step-card"><span>会前 01</span><h3>整理意见与方案</h3><p>保留全部原始意见，形成中英文对照并逐条确定修改方式。</p></div>
                     <div class="step-card"><span>会前 02</span><h3>完成修改工作稿</h3><p>准备修改稿、返修信、原稿、原始意见以及新增材料。</p></div>
@@ -724,6 +812,12 @@
                     <span class="stage-goal">新期刊材料全部适配后再提交</span>
                 </div>
                 <p class="session-note">转投不是直接换一个投稿入口。会前应准备新 Cover Letter、匹配新期刊模板与文件要求，并提前熟悉或录入新投稿系统的信息流程。</p>
+                <div class="stage-brief">
+                    <div class="brief-card"><span class="brief-label">线上准备</span><h3>适配新期刊</h3><p>调整模板、参考文献和附件，重写 Cover Letter，预录新系统。</p></div>
+                    <div class="brief-card offline"><span class="brief-label">线下确认</span><h3>检查并重新投稿</h3><p>清除旧期刊信息，确认新生成稿后进入新一轮正式投稿。</p></div>
+                    <div class="brief-card output"><span class="brief-label">产出</span><h3>新期刊提交版</h3><p>新 Cover Letter、适配稿件、系统最终稿和独立归档包。</p></div>
+                </div>
+                <button class="rules-toggle" type="button" aria-expanded="false">查看完整细则</button>
                 <div class="step-grid">
                     <div class="step-card"><span>会前 01</span><h3>确定新目标期刊</h3><p>重新核对期刊范围、论文类型和稿件匹配度。</p></div>
                     <div class="step-card"><span>会前 02</span><h3>适配新期刊模板</h3><p>调整版式、参考文献、图表、声明、附件及文件命名。</p></div>
@@ -774,6 +868,12 @@
                     <span class="stage-goal">门槛：编辑问题与出版选项已确认</span>
                 </div>
                 <p class="session-note">收到录用前校样或排版校稿通知后，应严格按照编辑要求逐项核查和提供材料。</p>
+                <div class="stage-brief">
+                    <div class="brief-card"><span class="brief-label">线上处理</span><h3>完成校样与编辑查询</h3><p>核对作者、基金、公式、图表和文献，逐项回复编辑问题。</p></div>
+                    <div class="brief-card offline"><span class="brief-label">提交前确认</span><h3>确认重要信息</h3><p>涉及技术内容或出版方式时，团队复核并向刘老师确认。</p></div>
+                    <div class="brief-card output"><span class="brief-label">产出</span><h3>最终校样提交版</h3><p>编辑问题全部闭环，出版选项无误，默认优先订阅方式。</p></div>
+                </div>
+                <button class="rules-toggle" type="button" aria-expanded="false">查看完整细则</button>
                 <div class="step-grid">
                     <div class="step-card"><span>01</span><h3>逐项响应编辑</h3><p>按要求提供源文件、高清图、版权和补充材料。</p></div>
                     <div class="step-card"><span>02</span><h3>核对完整校样</h3><p>重点检查作者信息、基金、公式、图表和参考文献。</p></div>
@@ -803,49 +903,35 @@
 
         <section class="section" aria-labelledby="version-title" data-sop="13">
             <div class="section-head">
-                <div><span class="eyebrow">Version & Archive</span><h2 id="version-title">版本与归档</h2></div>
-                <p>所有文件采用清晰、统一的命名方式；重要节点单独归档，不覆盖历史版本。</p>
+                <div><span class="eyebrow">AFTER SUBMISSION</span><h2 id="version-title">提交完成后，怎么存？</h2></div>
+                <p>每次正式投稿、返修或转投，都执行同一套收尾动作。</p>
             </div>
-            <div class="version-board">
-                <div class="version-card">
-                    <h3>归档文件夹</h3>
-                    <div class="code-list">
-                        <code>正式提交版_期刊简称或期刊名_YYYYMMDD</code>
-                        <code>R1提交版_期刊名_YYYYMMDD</code>
-                        <code>R2提交版_期刊名_YYYYMMDD</code>
-                        <code>转投提交版_新期刊名_YYYYMMDD</code>
-                    </div>
-                    <div class="version-warning">不使用“最新版”“最终最终版”等模糊名称</div>
-                </div>
-                <div class="version-card">
-                    <h3>推荐文件名</h3>
-                    <p style="color:var(--text-dim);font-size:.78rem">推荐文件命名示例：</p>
-                    <div class="code-list">
-                        <code>Manuscript_CN_v03_20260801.docx</code>
-                        <code>Manuscript_EN_Submission_20260801.docx</code>
-                        <code>Cover_Letter_JCP_20260801.docx</code>
-                        <code>Response_to_Reviewers_R1_20260915.docx</code>
-                        <code>Revised_Manuscript_Clean_R1_20260915.pdf</code>
-                        <code>Revised_Manuscript_Tracked_R1_20260915.pdf</code>
-                    </div>
-                </div>
+            <div class="archive-steps">
+                <article class="archive-step"><span>01 / 命名</span><h3>先建立独立文件夹</h3><p>文件夹写清提交阶段、期刊和日期，不覆盖历史版本。</p></article>
+                <article class="archive-step"><span>02 / 打包</span><h3>保存本次全部材料</h3><p>上传文件、系统最终 PDF、返修信和提交记录统一放入归档包。</p></article>
+                <article class="archive-step"><span>03 / 汇报</span><h3>邮件发包，微信发 PDF</h3><p>归档压缩包发刘老师邮箱；系统最终 PDF 单独发微信。</p></article>
             </div>
+            <div class="archive-examples" aria-label="文件夹命名示例">
+                <code>正式提交版_期刊_YYYYMMDD</code><code>R1提交版_期刊_YYYYMMDD</code><code>转投提交版_新期刊_YYYYMMDD</code>
+            </div>
+            <div class="version-warning">禁止使用“最新版”“最终版”“最终最终版”等模糊名称</div>
             <details style="margin-top:.8rem">
-                <summary><span>统一版本管理要求</span><small>8 项</small></summary>
-                <div class="detail-content"><p>整个论文流程中，应始终坚持以下原则：</p><ol class="checklist">
+                <summary><span>查看完整命名规范与文件名示例</span><small>按需展开</small></summary>
+                <div class="detail-content"><ol class="checklist">
                     <li>所有文件必须采用清晰、统一的命名方式；</li><li>文件名中应包含稿件阶段、日期和版本号；</li>
                     <li>不使用“最新版”“最终版”“最终最终版”等含义不清的名称；</li><li>重要节点必须单独归档，不直接覆盖历史版本；</li>
                     <li>正式上传前必须再次确认文件版本；</li><li>团队内部修改稿和正式提交稿应分开保存；</li>
                     <li>投稿、返修和校样阶段均应保存系统最终生成文件；</li><li>所有正式提交材料应完整打包，并同步发送给指导老师留存。</li>
-                </ol></div>
+                </ol><div class="archive-examples"><code>Manuscript_CN_v03_20260801.docx</code><code>Manuscript_EN_Submission_20260801.docx</code><code>Cover_Letter_JCP_20260801.docx</code><code>Response_to_Reviewers_R1_20260915.docx</code><code>Revised_Manuscript_Clean_R1_20260915.pdf</code><code>Revised_Manuscript_Tracked_R1_20260915.pdf</code></div></div>
             </details>
         </section>
 
         <section class="section" aria-labelledby="copy-title" data-sop="4,7,11">
             <div class="section-head">
-                <div><span class="eyebrow">Copy Center</span><h2 id="copy-title">直接复制使用</h2></div>
-                <p>替换方括号内容后使用；技术结论仍须人工确认。</p>
+                <div><span class="eyebrow">COPY & USE</span><h2 id="copy-title">常用操作模板</h2></div>
+                <p>校稿时调用 AI 核查；提交后完成邮件和微信汇报。</p>
             </div>
+            <div class="copy-guide"><span><strong>01</strong>选择使用场景</span><span><strong>02</strong>替换方括号内容</span><span><strong>03</strong>复制并使用</span></div>
             <div class="copy-shell">
                 <div class="copy-tabs" role="tablist" aria-label="可复制模板">
                     <button class="copy-tab active" id="copy-tab-ai" type="button" role="tab" aria-selected="true" aria-controls="copy-ai" data-copy-tab="ai">AI 语法与格式核查</button>
@@ -911,8 +997,8 @@
 
         <section class="section" id="downloads" aria-labelledby="downloads-title">
             <div class="section-head">
-                <div><span class="eyebrow">Confirmed Templates</span><h2 id="downloads-title">已确认模板</h2></div>
-                <p>选择所需格式，直接下载。</p>
+                <div><span class="eyebrow">FILES</span><h2 id="downloads-title">模板与工程文件</h2></div>
+                <p>Word 模板直接编辑；LaTeX 工程下载后解压使用。</p>
             </div>
             <div class="download-columns">
                 <div class="download-group">
@@ -925,8 +1011,9 @@
                     </div>
                 </div>
                 <div class="download-group">
-                    <div class="group-title"><h3>LaTeX 工程</h3><span class="format-badge">ZIP</span></div>
+                    <div class="group-title"><h3>LaTeX 工程</h3><span class="format-badge">ZIP / DOCX</span></div>
                     <div class="download-list">
+                        <a class="file-link" href="../assets/documents/AIDING-workflow/SOP/latex_ref/01_cover%20letter/Cover%20Letter.docx" download><span class="file-name">Cover Letter · 通用模板</span><span class="file-type">DOCX</span><span class="file-arrow">↓</span></a>
                         <a class="file-link" href="../assets/documents/AIDING-workflow/SOP/AIDING_LaTeX_Manuscript.zip" download><span class="file-name">Manuscript · 中英文</span><span class="file-type">ZIP</span><span class="file-arrow">↓</span></a>
                         <a class="file-link" href="../assets/documents/AIDING-workflow/SOP/AIDING_LaTeX_Response_to_Reviewers.zip" download><span class="file-name">Response to Reviewers · 中英文</span><span class="file-type">ZIP</span><span class="file-arrow">↓</span></a>
                         <a class="file-link" href="../assets/documents/AIDING-workflow/SOP/AIDING_LaTeX_Review_Comments.zip" download><span class="file-name">Review Comments · 中英文</span><span class="file-type">ZIP</span><span class="file-arrow">↓</span></a>
@@ -973,6 +1060,15 @@
                     event.preventDefault();
                     activateStage(stageButtons[targetIndex].dataset.stage, true);
                 }
+            });
+        });
+
+        document.querySelectorAll('.rules-toggle').forEach((button) => {
+            button.addEventListener('click', () => {
+                const panel = button.closest('.stage-panel');
+                const expanded = panel.classList.toggle('show-rules');
+                button.setAttribute('aria-expanded', String(expanded));
+                button.textContent = expanded ? '收起完整细则' : '查看完整细则';
             });
         });
 
@@ -1035,5 +1131,6 @@
             document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 12);
         }, { passive: true });
     </script>
+    <script src="../assets/js/aiding-particles.js"></script>
 </body>
 </html>
