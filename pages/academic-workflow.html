@@ -501,7 +501,7 @@
 
         /* 2026 visual rebuild: readability first, particles remain atmospheric. */
         :root {
-            --bg: #030604;
+            --bg: #000;
             --surface: #0b100d;
             --surface-raised: #111813;
             --text-dim: #b8c3bd;
@@ -511,7 +511,8 @@
             --max-width: 1280px;
         }
         body { background: var(--bg); font-size: 16px; line-height: 1.7; }
-        #particle-canvas { opacity: .2; filter: saturate(.78); }
+        body::before, body::after { display: none; }
+        #particle-canvas { opacity: 1; filter: none; }
         nav {
             padding: 1.1rem clamp(1.25rem, 4vw, 4rem);
             background: rgba(3, 6, 4, .94);
