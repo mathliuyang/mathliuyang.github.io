@@ -230,11 +230,11 @@
         .milestone-node:nth-of-type(1) { left: 8%; }
         .milestone-node:nth-of-type(2) { left: 29%; }
         .milestone-node:nth-of-type(3) { left: 49%; }
-        .milestone-node.proof-node { left: 92%; }
+        .milestone-node.proof-node { top: 252px; left: 92%; }
         .milestone-hub { top: 88px; left: 71%; width: 160px; min-height: 92px; padding: 1rem; }
         .branch-node { top: 252px; width: 172px; min-height: 116px; padding: 1rem; text-align: left; }
-        .branch-node.revise-node { left: 63%; }
-        .branch-node.transfer-node { left: 80%; }
+        .branch-node.revise-node { left: 72%; }
+        .branch-node.transfer-node { left: 58%; }
         .milestone-index { display: block; margin-bottom: .46rem; color: var(--accent); font: 700 .68rem/1 ui-monospace, Consolas, monospace; letter-spacing: .08em; }
         .milestone-title { display: block; font-size: .94rem; font-weight: 680; }
         .milestone-meta { display: block; margin-top: .3rem; color: var(--text-dim); font-size: .7rem; line-height: 1.4; }
@@ -248,7 +248,7 @@
         }
         .milestone-diagram:has(.branch-node.active) .milestone-hub { border-color: rgba(0,255,136,.5); background: rgba(0,255,136,.055); }
         .flow-caption { position: absolute; z-index: 2; color: var(--text-dim); font-size: .65rem; }
-        .flow-caption.revise-caption { left: 68%; top: 342px; }
+        .flow-caption.revise-caption { left: 74%; top: 145px; }
         .flow-caption.transfer-caption { left: 49%; top: 397px; transform: translateX(-50%); }
 
         .stage-panel { display: none; position: relative; z-index: 1; margin-top: 2rem; animation: rise .3s ease; }
@@ -528,12 +528,12 @@
                     <defs><marker id="flow-arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#00ff88" stroke="none"></path></marker></defs>
                     <path class="main-route" d="M155 88 H215" marker-end="url(#flow-arrow)"></path>
                     <path class="main-route" d="M365 88 H415" marker-end="url(#flow-arrow)"></path>
-                    <path class="main-route" d="M565 88 H630" marker-end="url(#flow-arrow)"></path>
-                    <path class="main-route" d="M790 88 H845" marker-end="url(#flow-arrow)"></path>
-                    <path d="M710 134 V178 H630 V195" marker-end="url(#flow-arrow)"></path>
-                    <path d="M710 178 H800 V195" marker-end="url(#flow-arrow)"></path>
-                    <path class="return-route" d="M630 312 V355 H710 V145" marker-end="url(#flow-arrow)"></path>
-                    <path class="return-route" d="M800 312 V405 H490 V145" marker-end="url(#flow-arrow)"></path>
+                    <path class="main-route" d="M565 88 H610" marker-end="url(#flow-arrow)"></path>
+                    <path d="M710 134 V170 H720 V190" marker-end="url(#flow-arrow)"></path>
+                    <path d="M710 170 H580 V190" marker-end="url(#flow-arrow)"></path>
+                    <path class="main-route" d="M806 252 H845" marker-end="url(#flow-arrow)"></path>
+                    <path class="return-route" d="M720 194 C720 145 825 145 825 252 C825 300 800 315 790 290" marker-end="url(#flow-arrow)"></path>
+                    <path class="return-route" d="M580 312 V405 H490 V145" marker-end="url(#flow-arrow)"></path>
                 </svg>
                 <button class="milestone-node active" id="tab-cn" type="button" role="tab" aria-selected="true" aria-controls="stage-cn" tabindex="0" data-stage="cn">
                     <span class="milestone-index">01</span><span class="milestone-title">稿件准备</span><span class="milestone-meta">中文内容与格式定稿</span><span class="mode-row"><span class="mode-tag online">线上</span></span>
@@ -545,19 +545,19 @@
                     <span class="milestone-index">03</span><span class="milestone-title">首次投稿</span><span class="milestone-meta">系统预录与共同提交</span><span class="mode-row"><span class="mode-tag online">线上</span><span class="mode-tag offline">线下</span></span>
                 </button>
                 <div class="milestone-hub" aria-label="第四阶段：返修或转投">
-                    <span class="milestone-index">04</span><span class="milestone-title">返修或转投</span><span class="milestone-meta">根据期刊决定进入分支</span>
+                    <span class="milestone-index">04</span><span class="milestone-title">期刊结果</span><span class="milestone-meta">首次投稿后进入对应分支</span>
                 </div>
                 <button class="branch-node revise-node" id="tab-revise" type="button" role="tab" aria-selected="false" aria-controls="stage-revise" tabindex="-1" data-stage="revise">
-                    <span class="milestone-title">返修与再提交</span><span class="mode-row"><span class="mode-tag online">线上准备</span><span class="mode-tag offline">线下提交</span></span><span class="branch-return">↩ 提交后重新等待决定</span>
+                    <span class="milestone-title">论文返修</span><span class="mode-row"><span class="mode-tag online">线上准备</span><span class="mode-tag offline">线下提交</span></span><span class="branch-return">↻ 可能经历 R1 / R2 / R3</span>
                 </button>
                 <button class="branch-node transfer-node" id="tab-transfer" type="button" role="tab" aria-selected="false" aria-controls="stage-transfer" tabindex="-1" data-stage="transfer">
-                    <span class="milestone-title">转投新期刊</span><span class="mode-row"><span class="mode-tag online">线上准备</span><span class="mode-tag offline">线下确认</span></span><span class="branch-return">↩ 适配后进入新一轮投稿</span>
+                    <span class="milestone-title">拒稿转投</span><span class="mode-row"><span class="mode-tag online">线上准备</span><span class="mode-tag offline">线下确认</span></span><span class="branch-return">↩ 适配后返回首次投稿</span>
                 </button>
                 <button class="milestone-node proof-node" id="tab-proof" type="button" role="tab" aria-selected="false" aria-controls="stage-proof" tabindex="-1" data-stage="proof">
                     <span class="milestone-index">05</span><span class="milestone-title">录用出版</span><span class="milestone-meta">校样、确认与出版选择</span><span class="mode-row"><span class="mode-tag online">线上</span></span>
                 </button>
-                <span class="flow-caption revise-caption">返修可循环多轮</span>
-                <span class="flow-caption transfer-caption">转投后回到首次投稿</span>
+                <span class="flow-caption revise-caption">返修自循环</span>
+                <span class="flow-caption transfer-caption">拒稿转投后回到首次投稿</span>
             </div>
 
             <article class="stage-panel active" id="stage-cn" role="tabpanel" aria-labelledby="tab-cn" data-panel="cn" data-sop="2">
@@ -1067,6 +1067,9 @@
             button.addEventListener('click', () => {
                 const panel = button.closest('.stage-panel');
                 const expanded = panel.classList.toggle('show-rules');
+                panel.querySelectorAll('.detail-grid details').forEach((detail) => {
+                    detail.open = expanded;
+                });
                 button.setAttribute('aria-expanded', String(expanded));
                 button.textContent = expanded ? '收起完整细则' : '查看完整细则';
             });
