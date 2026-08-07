@@ -554,7 +554,7 @@
         .workflow-top { margin-bottom: 1.1rem; padding-bottom: 1rem; border-bottom: 1px solid rgba(255,255,255,.1); }
         .workflow-top strong { font-size: 1.22rem; font-weight: 720; }
         .workflow-top span { color: #aeb9b3; font-size: .92rem; }
-        .milestone-diagram { min-height: 360px; margin-top: .35rem; }
+        .milestone-diagram { min-height: 400px; margin-top: .35rem; }
         .flow-lines { z-index: 2; }
         .flow-lines > path { stroke: rgba(221,235,227,.5); stroke-width: 2.4; }
         .flow-lines .main-route { stroke: rgba(0,255,136,.88); stroke-width: 2.6; }
@@ -568,7 +568,7 @@
             box-shadow: 0 12px 30px rgba(0,0,0,.28);
             backdrop-filter: none;
         }
-        .milestone-node { top: 225px; width: 165px; min-height: 112px; padding: 1.05rem; }
+        .milestone-node { top: 265px; width: 165px; min-height: 112px; padding: 1.05rem; }
         .milestone-node:nth-of-type(1) { left: 9%; }
         .milestone-node:nth-of-type(2) { left: 29%; }
         .milestone-node:nth-of-type(3) { left: 49%; }
@@ -576,9 +576,9 @@
         .result-group {
             z-index: auto;
             left: 61%;
-            top: 8px;
+            top: 30px;
             width: 22%;
-            height: 337px;
+            height: 350px;
             background: #0a100c;
             border: 1.5px dashed rgba(181,204,191,.52);
             border-radius: 20px;
@@ -586,16 +586,17 @@
         .result-group-label {
             z-index: 4;
             left: 14px;
-            top: -18px;
-            padding: .35rem .68rem;
+            top: 14px;
+            padding: 0;
             color: #76ffba;
-            background: #0a100c;
-            border-color: rgba(0,255,136,.65);
-            font-size: .73rem;
+            background: transparent;
+            border: 0;
+            border-radius: 0;
+            font-size: .76rem;
         }
         .branch-node { width: 180px; min-height: 124px; padding: 1.05rem; }
-        .branch-node.revise-node { left: 50%; top: 217px; }
-        .branch-node.transfer-node { left: 50%; top: 75px; }
+        .branch-node.revise-node { left: 50%; top: 235px; }
+        .branch-node.transfer-node { left: 50%; top: 100px; }
         .milestone-index { margin-bottom: .55rem; font-size: .76rem; }
         .milestone-title { font-size: 1.06rem; font-weight: 740; }
         .milestone-meta { margin-top: .38rem; color: #b8c3bd; font-size: .82rem; line-height: 1.5; }
@@ -721,8 +722,8 @@
                 transform: none !important;
                 text-align: left;
             }
-            .result-group { position: relative; inset: auto; width: 100%; height: auto; margin: .7rem 0; padding: 2.5rem .85rem .85rem; display: grid; gap: .75rem; }
-            .result-group-label { top: -12px; }
+            .result-group { position: relative; inset: auto; width: 100%; height: auto; margin: .7rem 0; padding: 3.5rem .85rem .85rem; display: grid; gap: .75rem; }
+            .result-group-label { top: 16px; }
             .result-group .transfer-node { order: -1; }
             .stage-brief, .detail-grid, .archive-steps, .copy-guide, .download-columns { grid-template-columns: 1fr; }
             .detail-grid > details:last-child:nth-child(odd) { grid-column: auto; }
@@ -774,15 +775,14 @@
                 <span>点击节点查看任务；回折箭头表示重新进入投稿或评审</span>
             </div>
             <div class="milestone-diagram" role="tablist" aria-label="论文工作流阶段">
-                <svg class="flow-lines" viewBox="0 0 1000 360" preserveAspectRatio="none" aria-hidden="true">
+                <svg class="flow-lines" viewBox="0 0 1000 400" preserveAspectRatio="none" aria-hidden="true">
                     <defs><marker id="flow-arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#00ff88" stroke="none"></path></marker></defs>
-                    <path class="main-route" d="M173 225 H208" marker-end="url(#flow-arrow)"></path>
-                    <path class="main-route" d="M373 225 H408" marker-end="url(#flow-arrow)"></path>
-                    <path class="main-route" d="M573 225 H630" marker-end="url(#flow-arrow)"></path>
-                    <path d="M573 225 H600 V83 H630" marker-end="url(#flow-arrow)"></path>
-                    <path class="main-route" d="M810 225 H838" marker-end="url(#flow-arrow)"></path>
-                    <path class="return-route" d="M765 288 C810 306 810 329 720 329 C630 329 630 306 675 288" marker-end="url(#flow-arrow)"></path>
-                    <path class="return-route" d="M720 21 V5 H490 V170" marker-end="url(#flow-arrow)"></path>
+                    <path class="main-route" d="M173 265 H208" marker-end="url(#flow-arrow)"></path>
+                    <path class="main-route" d="M373 265 H408" marker-end="url(#flow-arrow)"></path>
+                    <path class="main-route" d="M573 265 H610" marker-end="url(#flow-arrow)"></path>
+                    <path class="main-route" d="M810 265 H838" marker-end="url(#flow-arrow)"></path>
+                    <path class="return-route" d="M765 327 C810 345 810 370 720 370 C630 370 630 345 675 327" marker-end="url(#flow-arrow)"></path>
+                    <path class="return-route" d="M760 68 V0 H490 V209" marker-end="url(#flow-arrow)"></path>
                 </svg>
                 <button class="milestone-node active" id="tab-cn" type="button" role="tab" aria-selected="true" aria-controls="stage-cn" tabindex="0" data-stage="cn">
                     <span class="milestone-index">01</span><span class="milestone-title">稿件准备</span><span class="milestone-meta">中文内容与格式定稿</span><span class="mode-row"><span class="mode-tag online">线上</span></span>
