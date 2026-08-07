@@ -211,11 +211,11 @@
         }
         .flow-node:hover .node-name, .flow-node.active .node-name { color: var(--text); }
 
-        .milestone-diagram { position: relative; min-height: 390px; margin-top: .2rem; }
+        .milestone-diagram { position: relative; min-height: 335px; margin-top: .2rem; }
         .flow-lines { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
         .flow-lines > path { fill: none; stroke: rgba(255,255,255,.2); stroke-width: 1.7; vector-effect: non-scaling-stroke; }
         .flow-lines .main-route { stroke: rgba(0,255,136,.5); }
-        .flow-lines .return-route { stroke: rgba(0,255,136,.34); stroke-dasharray: 5 5; }
+        .flow-lines .return-route { stroke: rgba(0,255,136,.58); stroke-width: 2; stroke-dasharray: 6 5; }
         .milestone-node, .branch-node {
             position: absolute;
             z-index: 2;
@@ -226,16 +226,16 @@
             backdrop-filter: blur(12px);
         }
         .milestone-node, .branch-node { color: var(--text); cursor: pointer; transition: .22s ease; }
-        .milestone-node { top: 235px; width: 150px; min-height: 92px; padding: 1rem; text-align: left; }
+        .milestone-node { top: 200px; width: 150px; min-height: 92px; padding: 1rem; text-align: left; }
         .milestone-node:nth-of-type(1) { left: 8%; }
         .milestone-node:nth-of-type(2) { left: 29%; }
         .milestone-node:nth-of-type(3) { left: 49%; }
         .milestone-node.proof-node { left: 92%; }
-        .result-group { position: absolute; z-index: 1; left: 54%; top: 50px; width: 30%; height: 300px; border: 1px dashed rgba(255,255,255,.24); border-radius: 20px; background: rgba(5,7,6,.28); }
-        .result-group-label { position: absolute; left: 16px; top: -12px; padding: .25rem .55rem; color: var(--accent); background: #050706; border: 1px dashed rgba(0,255,136,.42); border-radius: 999px; font: 700 .67rem/1.2 ui-monospace, Consolas, monospace; letter-spacing: .06em; }
+        .result-group { position: absolute; z-index: 1; left: 62%; top: 20px; width: 20%; height: 300px; border: 1px dashed rgba(255,255,255,.24); border-radius: 20px; background: rgba(5,7,6,.28); }
+        .result-group-label { position: absolute; left: 12px; top: -12px; padding: .25rem .55rem; color: var(--accent); background: #050706; border: 1px dashed rgba(0,255,136,.42); border-radius: 999px; font: 700 .67rem/1.2 ui-monospace, Consolas, monospace; letter-spacing: .06em; }
         .branch-node { width: 172px; min-height: 116px; padding: 1rem; text-align: left; }
-        .branch-node.revise-node { left: 70%; top: 185px; }
-        .branch-node.transfer-node { left: 30%; top: 70px; }
+        .branch-node.revise-node { left: 50%; top: 180px; }
+        .branch-node.transfer-node { left: 50%; top: 65px; }
         .milestone-index { display: block; margin-bottom: .46rem; color: var(--accent); font: 700 .68rem/1 ui-monospace, Consolas, monospace; letter-spacing: .08em; }
         .milestone-title { display: block; font-size: .94rem; font-weight: 680; }
         .milestone-meta { display: block; margin-top: .3rem; color: var(--text-dim); font-size: .7rem; line-height: 1.4; }
@@ -245,12 +245,9 @@
         .mode-tag.offline { color: #00160c; background: var(--accent); }
         .branch-return { display: block; margin-top: .55rem; color: var(--accent); font-size: .65rem; }
         .milestone-node:hover, .milestone-node.active, .branch-node:hover, .branch-node.active {
-            border-color: var(--accent); background: rgba(0,255,136,.09); transform: translate(-50%, -54%); box-shadow: 0 14px 36px rgba(0,0,0,.35);
+            border-color: var(--accent); background: rgba(0,255,136,.09); transform: translate(-50%, -50%); box-shadow: 0 14px 36px rgba(0,0,0,.35);
         }
-        .result-group:has(.branch-node.active) { border-color: rgba(0,255,136,.58); background: rgba(0,255,136,.035); }
-        .flow-caption { position: absolute; z-index: 2; color: var(--text-dim); font-size: .65rem; }
-        .flow-caption.revise-caption { left: 69%; top: 331px; }
-        .flow-caption.transfer-caption { left: 48%; top: 48px; transform: translateX(-50%); }
+        .result-group:has(.branch-node.active) { border-color: rgba(0,255,136,.5); background: rgba(0,255,136,.012); }
 
         .stage-panel { display: none; position: relative; z-index: 1; margin-top: 2rem; animation: rise .3s ease; }
         .stage-panel.active { display: block; }
@@ -485,7 +482,7 @@
             .intro-grid, .step-grid, .stage-brief, .version-board, .archive-steps, .copy-guide, .download-columns { grid-template-columns: 1fr; }
             .archive-step:not(:last-child)::after { content: "↓"; top: auto; right: 50%; bottom: -.72rem; transform: translateX(50%); }
             .milestone-diagram { display: grid; min-height: 0; gap: .55rem; }
-            .flow-lines, .flow-caption { display: none; }
+            .flow-lines { display: none; }
             .milestone-node, .branch-node {
                 position: relative; inset: auto !important; width: 100%; min-height: 0; transform: none !important;
             }
@@ -528,13 +525,13 @@
             <div class="milestone-diagram" role="tablist" aria-label="论文工作流阶段">
                 <svg class="flow-lines" viewBox="0 0 1000 440" preserveAspectRatio="none" aria-hidden="true">
                     <defs><marker id="flow-arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#00ff88" stroke="none"></path></marker></defs>
-                    <path class="main-route" d="M155 235 H215" marker-end="url(#flow-arrow)"></path>
-                    <path class="main-route" d="M365 235 H415" marker-end="url(#flow-arrow)"></path>
-                    <path class="main-route" d="M565 235 H664" marker-end="url(#flow-arrow)"></path>
-                    <path d="M565 235 H630 V178" marker-end="url(#flow-arrow)"></path>
-                    <path class="main-route" d="M836 235 H845" marker-end="url(#flow-arrow)"></path>
-                    <path class="return-route" d="M790 293 C820 315 820 332 750 332 C680 332 680 315 710 293" marker-end="url(#flow-arrow)"></path>
-                    <path class="return-route" d="M630 62 V24 H490 V189" marker-end="url(#flow-arrow)"></path>
+                    <path class="main-route" d="M155 200 H215" marker-end="url(#flow-arrow)"></path>
+                    <path class="main-route" d="M365 200 H415" marker-end="url(#flow-arrow)"></path>
+                    <path class="main-route" d="M565 200 H634" marker-end="url(#flow-arrow)"></path>
+                    <path d="M565 200 H600 V85 H634" marker-end="url(#flow-arrow)"></path>
+                    <path class="main-route" d="M806 200 H845" marker-end="url(#flow-arrow)"></path>
+                    <path class="return-route" d="M765 258 C800 275 800 298 720 298 C640 298 640 275 675 258" marker-end="url(#flow-arrow)"></path>
+                    <path class="return-route" d="M720 27 V8 H490 V154" marker-end="url(#flow-arrow)"></path>
                 </svg>
                 <button class="milestone-node active" id="tab-cn" type="button" role="tab" aria-selected="true" aria-controls="stage-cn" tabindex="0" data-stage="cn">
                     <span class="milestone-index">01</span><span class="milestone-title">稿件准备</span><span class="milestone-meta">中文内容与格式定稿</span><span class="mode-row"><span class="mode-tag online">线上</span></span>
@@ -557,8 +554,6 @@
                 <button class="milestone-node proof-node" id="tab-proof" type="button" role="tab" aria-selected="false" aria-controls="stage-proof" tabindex="-1" data-stage="proof">
                     <span class="milestone-index">05</span><span class="milestone-title">录用出版</span><span class="milestone-meta">校样、确认与出版选择</span><span class="mode-row"><span class="mode-tag online">线上</span></span>
                 </button>
-                <span class="flow-caption revise-caption">返修自循环</span>
-                <span class="flow-caption transfer-caption">拒稿转投后回到首次投稿</span>
             </div>
 
             <article class="stage-panel active" id="stage-cn" role="tabpanel" aria-labelledby="tab-cn" data-panel="cn" data-sop="2">
