@@ -1,0 +1,620 @@
+% !TeX program = xelatex
+% 中英文块级字段审稿回复信模板
+% 推荐连续编译两次：xelatex Review_Response_Template.tex
+
+\documentclass[10pt,a4paper]{article}
+
+\usepackage[
+  a4paper,
+  top=1in,
+  bottom=1in,
+  left=1.25in,
+  right=1.25in,
+  headheight=0pt,
+  headsep=0pt,
+  footskip=0pt
+]{geometry}
+\usepackage{fontspec}
+\usepackage{xeCJK}
+\setmainfont{Times New Roman}
+\setCJKmainfont{SimSun}[AutoFakeBold=2]
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs,tabularx,array}
+\usepackage{etoolbox}
+\usepackage{needspace}
+\usepackage{caption}
+\usepackage[hidelinks]{hyperref}
+
+\pagestyle{empty}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt}
+\setlength{\emergencystretch}{2em}
+\linespread{1.0}\selectfont
+\sloppy
+\clubpenalty=10000
+\widowpenalty=10000
+\displaywidowpenalty=10000
+\hyphenpenalty=10000
+\exhyphenpenalty=10000
+
+\captionsetup{
+  font=normalsize,
+  labelfont=normalfont,
+  labelsep=period,
+  justification=centering,
+  singlelinecheck=true,
+  skip=5pt
+}
+
+% =============================================================================
+% 只需修改这一行即可切换显示模式：
+%   en   = 仅英文
+%   cn   = 仅中文
+%   both = 英文整块 + 对应中文整块
+% 命令行临时切换示例：
+% xelatex "\def\ResponseMode{cn}\input{Review_Response_Template.tex}"
+% =============================================================================
+\providecommand{\ResponseMode}{both}
+
+\newif\ifShowEnglish
+\newif\ifShowChinese
+
+\newcommand{\ResponseDisplayMode}[1]{%
+  \ShowEnglishfalse
+  \ShowChinesefalse
+  \ifstrequal{#1}{en}{%
+    \ShowEnglishtrue
+  }{%
+    \ifstrequal{#1}{cn}{%
+      \ShowChinesetrue
+    }{%
+      \ifstrequal{#1}{both}{%
+        \ShowEnglishtrue
+        \ShowChinesetrue
+      }{%
+        \PackageError{ReviewResponse}{Unknown display mode '#1'}%
+          {Use en, cn, or both.}%
+      }%
+    }%
+  }%
+}
+\expandafter\ResponseDisplayMode\expandafter{\ResponseMode}
+
+\newcommand{\ModeInline}[2]{%
+  \ifShowEnglish #1\ifShowChinese\ /\ \fi\fi
+  \ifShowChinese #2\fi
+}
+
+\renewcommand{\figurename}{\ModeInline{Figure}{图}}
+\renewcommand{\tablename}{\ModeInline{Table}{表}}
+
+% =============================================================================
+%                         用户编辑区 1：信件整体字段
+% 只需在这里填写一次，标题、开场说明和署名会自动同步替换。
+% 未确定的内容暂时保留为普通黑色 xxx。
+% =============================================================================
+
+% 论文英文标题
+\newcommand{\MetaTitleEN}{xxx}
+% 论文中文标题
+\newcommand{\MetaTitleCN}{xxx}
+% 稿件编号（中英文共用，只填一次）
+\newcommand{\MetaManuscriptID}{xxx}
+% 通讯作者英文姓名
+\newcommand{\MetaCorrespondingAuthorEN}{xxx}
+% 通讯作者中文姓名
+\newcommand{\MetaCorrespondingAuthorCN}{xxx}
+
+\newcommand{\FieldSalutationEN}{Dear Editor and Reviewers,}
+\newcommand{\FieldSalutationCN}{尊敬的编辑和审稿专家：}
+
+% 每条回复的固定首句，由模板自动添加，无需在 ResponseEN / ResponseCN 中重复填写。
+\newcommand{\ResponseOpeningEN}{We thank the reviewer for these comments.}
+\newcommand{\ResponseOpeningCN}{感谢审稿人提出这些意见。}
+
+\newcommand{\FieldOpeningEN}{%
+  Thank you for your careful evaluation and constructive comments. We have
+  carefully considered each comment and revised the manuscript accordingly. Our
+  point-by-point responses are provided below. The reviewers' comments are
+  reproduced in bold, followed by our responses. All changes in the revised
+  manuscript are highlighted in red.%
+}
+
+\newcommand{\FieldOpeningCN}{%
+  感谢您对本稿件的认真评阅和建设性意见。我们已逐条认真研究并据此修订稿件。下文
+  给出逐点回复。审稿意见以粗体显示，随后给出我们的回复。修订稿中的所有改动均以
+  红色标出。%
+}
+
+\newcommand{\FieldSignOffEN}{%
+  With kindest regards,\par
+  Yours Sincerely,\par
+  \MetaCorrespondingAuthorEN%
+}
+
+\newcommand{\FieldSignOffCN}{%
+  此致\par
+  敬礼！\par
+  \MetaCorrespondingAuthorCN%
+}
+
+% =============================================================================
+%                         以下为排版逻辑，通常无需修改
+% =============================================================================
+
+\newcommand{\IndentedParagraph}[1]{%
+  \par\begingroup
+  \setlength{\parindent}{21pt}%
+  \indent #1\par
+  \endgroup
+}
+
+\newcommand{\MakeLetterHeader}{%
+  \begin{center}
+    \bfseries\fontsize{12pt}{14.4pt}\selectfont
+    \ifShowEnglish Revisions to the paper titled \MetaTitleEN\fi
+    \ifShowEnglish\ifShowChinese\\[0.35em]\fi\fi
+    \ifShowChinese 关于论文《\MetaTitleCN》的修改说明\fi
+  \end{center}
+  \vspace{1.2\baselineskip}
+
+  \ifShowEnglish\noindent Manuscript Number: \MetaManuscriptID\par\fi
+  \ifShowChinese\noindent 稿件编号：\MetaManuscriptID\par\fi
+  \vspace{1.9\baselineskip}
+
+  \ifShowEnglish \FieldSalutationEN\par\fi
+  \ifShowEnglish\ifShowChinese\smallskip\fi\fi
+  \ifShowChinese \FieldSalutationCN\par\fi
+  \medskip
+
+  \ifShowEnglish\IndentedParagraph{\FieldOpeningEN}\fi
+  \ifShowEnglish\ifShowChinese\vspace{0.45\baselineskip}\fi\fi
+  \ifShowChinese\IndentedParagraph{\FieldOpeningCN}\fi
+
+  \vspace{0.65\baselineskip}
+  \ifShowEnglish \FieldSignOffEN\par\fi
+  \ifShowEnglish\ifShowChinese\vspace{0.45\baselineskip}\fi\fi
+  \ifShowChinese \FieldSignOffCN\par\fi
+}
+
+\newcounter{reviewcomment}
+
+\newcommand{\EditorSection}{%
+  \vspace{1.35\baselineskip}
+  \noindent\textbf{\ModeInline{Response to the Editor:}{对编辑意见的回复：}}\par
+  \vspace{0.75\baselineskip}
+  \setcounter{reviewcomment}{0}%
+}
+
+\newcommand{\ReviewerSection}[1]{%
+  \vspace{1.35\baselineskip}
+  \noindent\textbf{\ModeInline{Response to Reviewer \##1:}{对审稿人 \##1 的回复：}}\par
+  \vspace{0.75\baselineskip}
+  \setcounter{reviewcomment}{0}%
+}
+
+% 审稿意见：先显示完整英文块，再显示完整中文块；不做逐句交替。
+\NewDocumentCommand{\RenderCommentBlock}{m +m +m}{%
+  \refstepcounter{reviewcomment}%
+  \Needspace{7\baselineskip}%
+  \par\vspace{0.9\baselineskip}
+  \noindent\hypertarget{#1}{}%
+  \begingroup\bfseries
+  \arabic{reviewcomment}.\ %
+  \ifShowEnglish #2\fi
+  \ifShowEnglish\ifShowChinese\par\smallskip\noindent\hspace*{1.35em}\fi\fi
+  \ifShowChinese #3\fi
+  \par\endgroup
+  \nobreak\smallskip
+}
+
+% 作者回复：先显示完整英文块，再显示完整中文块；不做逐句交替。
+\NewDocumentCommand{\RenderResponseBlock}{+m +m}{%
+  \Needspace{4\baselineskip}%
+  \noindent\textbf{\ModeInline{Response:}{回复：}}\par
+  \nobreak
+  \ifShowEnglish
+    \noindent\mbox{\textgreater\kern0.08em\textgreater}\
+    \ResponseOpeningEN\space #1\par
+  \fi
+  \ifShowEnglish\ifShowChinese\smallskip\fi\fi
+  \ifShowChinese
+    \noindent\mbox{\textgreater\kern0.08em\textgreater}\
+    \ResponseOpeningCN\space #2\par
+  \fi
+}
+
+\NewDocumentCommand{\RenderRevisedText}{+m +m}{%
+  \ifShowEnglish
+    \par\begingroup
+    \setlength{\leftskip}{21pt}\setlength{\rightskip}{21pt}%
+    \textit{Revised text: }``#1''\par
+    \endgroup
+  \fi
+  \ifShowEnglish\ifShowChinese\smallskip\fi\fi
+  \ifShowChinese
+    \par\begingroup
+    \setlength{\leftskip}{21pt}\setlength{\rightskip}{21pt}%
+    修订文本：“#2”\par
+    \endgroup
+  \fi
+}
+
+\NewDocumentCommand{\RenderLocation}{+m +m}{%
+  \ifShowEnglish\par\noindent The corresponding change appears in #1.\par\fi
+  \ifShowChinese\par\noindent 相应修改位于#2。\par\fi
+}
+
+% 自动位置字段：重复使用 \At{页码}{行号或行号范围} 即可添加多个位置。
+% 同一页出现多个 \At 时会自动合并；多个页面会自动补充 and / 以及。
+\ExplSyntaxOn
+\seq_new:N  \l__rr_location_pages_seq
+\seq_new:N  \l__rr_location_lines_seq
+\prop_new:N \l__rr_location_lines_prop
+\bool_new:N \l__rr_location_singular_line_bool
+\int_new:N  \l__rr_location_page_count_int
+\int_new:N  \l__rr_location_line_count_int
+
+\cs_generate_variant:Nn \seq_set_split:Nnn { NnV }
+
+\cs_new_protected:Npn \__rr_location_collect:nn #1#2
+  {
+    \prop_get:NnNTF \l__rr_location_lines_prop {#1} \l_tmpa_tl
+      {
+        \prop_put:Nnx \l__rr_location_lines_prop {#1}
+          { \exp_not:V \l_tmpa_tl ; \exp_not:n {#2} }
+      }
+      {
+        \seq_put_right:Nn \l__rr_location_pages_seq {#1}
+        \prop_put:Nnn \l__rr_location_lines_prop {#1} {#2}
+      }
+  }
+
+\cs_new_protected:Npn \__rr_location_prepare:n #1
+  {
+    \seq_clear:N \l__rr_location_pages_seq
+    \prop_clear:N \l__rr_location_lines_prop
+    \cs_set_protected:Npn \At ##1##2
+      { \__rr_location_collect:nn {##1} {##2} }
+    #1
+  }
+
+\cs_new_protected:Npn \__rr_location_set_lines_for_page:n #1
+  {
+    \prop_get:NnN \l__rr_location_lines_prop {#1} \l_tmpa_tl
+    \seq_set_split:NnV \l__rr_location_lines_seq {;} \l_tmpa_tl
+    \seq_set_map:NNn \l__rr_location_lines_seq \l__rr_location_lines_seq
+      { \tl_trim_spaces:n {##1} }
+  }
+
+\cs_new_protected:Npn \__rr_location_set_line_number:n #1
+  {
+    \__rr_location_set_lines_for_page:n {#1}
+    \bool_set_false:N \l__rr_location_singular_line_bool
+    \int_compare:nNnT { \seq_count:N \l__rr_location_lines_seq } = {1}
+      {
+        \tl_set:Nx \l_tmpa_tl
+          { \seq_item:Nn \l__rr_location_lines_seq {1} }
+        \tl_if_in:VnF \l_tmpa_tl {--}
+          {
+            \tl_if_in:VnF \l_tmpa_tl {,}
+              { \bool_set_true:N \l__rr_location_singular_line_bool }
+          }
+      }
+  }
+
+\cs_new_protected:Npn \__rr_location_en_line_item:n #1
+  {
+    \tl_set:Nn \l_tmpa_tl {#1}
+    \regex_replace_all:nnN { \s* , \s* } { ~and~ } \l_tmpa_tl
+    \tl_use:N \l_tmpa_tl
+  }
+
+\cs_new_protected:Npn \__rr_location_en_lines:
+  {
+    \int_set:Nn \l__rr_location_line_count_int
+      { \seq_count:N \l__rr_location_lines_seq }
+    \seq_map_indexed_inline:Nn \l__rr_location_lines_seq
+      {
+        \int_compare:nNnT {##1} > {1}
+          {
+            \int_compare:nNnTF {\l__rr_location_line_count_int} = {2}
+              { ~and~ }
+              {
+                \int_compare:nNnTF {##1} = {\l__rr_location_line_count_int}
+                  { ,~and~ }
+                  { ,~ }
+              }
+          }
+        \__rr_location_en_line_item:n {##2}
+      }
+  }
+
+\cs_new_protected:Npn \__rr_location_en_page:n #1
+  {
+    \__rr_location_set_line_number:n {#1}
+    \tl_if_in:nnTF {#1} {--} {pages} {page}\space #1
+    \int_compare:nNnTF {\l__rr_location_page_count_int} = {1}
+      {
+        ,\space
+        \bool_if:NTF \l__rr_location_singular_line_bool {line} {lines}
+        \space\__rr_location_en_lines:
+      }
+      {
+        \space(
+        \bool_if:NTF \l__rr_location_singular_line_bool {line} {lines}
+        \space\__rr_location_en_lines:)
+      }
+  }
+
+\cs_new_protected:Npn \__rr_location_en_pages:
+  {
+    \int_set:Nn \l__rr_location_page_count_int
+      { \seq_count:N \l__rr_location_pages_seq }
+    \seq_map_indexed_inline:Nn \l__rr_location_pages_seq
+      {
+        \int_compare:nNnT {##1} > {1}
+          {
+            \int_compare:nNnTF {\l__rr_location_page_count_int} = {2}
+              { \space and\space }
+              {
+                \int_compare:nNnTF {##1} = {\l__rr_location_page_count_int}
+                  { ,\space and\space }
+                  { ,\space }
+              }
+          }
+        \__rr_location_en_page:n {##2}
+      }
+  }
+
+\cs_new_protected:Npn \__rr_location_cn_lines:
+  {
+    \int_set:Nn \l__rr_location_line_count_int
+      { \seq_count:N \l__rr_location_lines_seq }
+    \seq_map_indexed_inline:Nn \l__rr_location_lines_seq
+      {
+        \int_compare:nNnT {##1} > {1}
+          {
+            \int_compare:nNnTF {##1} = {\l__rr_location_line_count_int}
+              { 和 }
+              { 、 }
+          }
+        第~##2~行
+      }
+  }
+
+\cs_new_protected:Npn \__rr_location_cn_page:n #1
+  {
+    \__rr_location_set_lines_for_page:n {#1}
+    第~#1~页
+    \int_compare:nNnTF {\l__rr_location_page_count_int} = {1}
+      { \__rr_location_cn_lines: }
+      { （\__rr_location_cn_lines:） }
+  }
+
+\cs_new_protected:Npn \__rr_location_cn_pages:
+  {
+    \int_set:Nn \l__rr_location_page_count_int
+      { \seq_count:N \l__rr_location_pages_seq }
+    \seq_map_indexed_inline:Nn \l__rr_location_pages_seq
+      {
+        \int_compare:nNnT {##1} > {1}
+          {
+            \int_compare:nNnTF {\l__rr_location_page_count_int} = {2}
+              { 以及 }
+              {
+                \int_compare:nNnTF {##1} = {\l__rr_location_page_count_int}
+                  { 以及 }
+                  { 、 }
+              }
+          }
+        \__rr_location_cn_page:n {##2}
+      }
+  }
+
+\cs_new_protected:Npn \__rr_render_auto_location:n #1
+  {
+    \__rr_location_prepare:n {#1}
+    \ifShowEnglish
+      \par\noindent
+      \int_compare:nNnTF { \seq_count:N \l__rr_location_pages_seq } = {1}
+        { The~corresponding~change~appears~in~the~revised~manuscript~on~ }
+        { The~corresponding~changes~appear~in~the~revised~manuscript~on~ }
+      \__rr_location_en_pages:.\par
+    \fi
+    \ifShowChinese
+      \par\noindent
+      相应修改位于修订稿
+      \__rr_location_cn_pages:。\par
+    \fi
+  }
+\NewDocumentCommand{\RenderAutoLocation}{+m}{%
+  \__rr_render_auto_location:n {#1}%
+}
+\ExplSyntaxOff
+
+% -----------------------------------------------------------------------------
+% 一条审稿意见的友好字段环境
+%
+% \begin{ReviewItem}{稳定编号}
+%   \CommentEN{完整英文意见}
+%   \CommentCN{完整中文意见}
+%   \ResponseEN{英文固定首句之后的回复正文}
+%   \ResponseCN{中文固定首句之后的回复正文}
+%   \RevisedEN{可选：英文修订原文}
+%   \RevisedCN{可选：中文对照}
+%   \Evidence{可选：图、表或公式}
+%   \Location{\At{8}{210--225}\At{8}{244--260}\At{10}{301}\At{12}{365}}
+%   特殊位置无法用页码和行号表达时，改用 \LocationEN 和 \LocationCN 手写。
+% \end{ReviewItem}
+% -----------------------------------------------------------------------------
+\NewDocumentEnvironment{ReviewItem}{m +b}{%
+  \begingroup
+  \long\def\RRCommentEN{xxx}%
+  \long\def\RRCommentCN{xxx}%
+  \long\def\RRResponseEN{xxx}%
+  \long\def\RRResponseCN{xxx}%
+  \long\def\RRRevisedEN{}%
+  \long\def\RRRevisedCN{}%
+  \long\def\RREvidence{}%
+  \long\def\RRAutoLocation{}%
+  \long\def\RRLocationEN{xxx}%
+  \long\def\RRLocationCN{xxx}%
+
+  \long\def\CommentEN##1{\long\def\RRCommentEN{##1}}%
+  \long\def\CommentCN##1{\long\def\RRCommentCN{##1}}%
+  \long\def\ResponseEN##1{\long\def\RRResponseEN{##1}}%
+  \long\def\ResponseCN##1{\long\def\RRResponseCN{##1}}%
+  \long\def\RevisedEN##1{\long\def\RRRevisedEN{##1}}%
+  \long\def\RevisedCN##1{\long\def\RRRevisedCN{##1}}%
+  \long\def\Evidence##1{\long\def\RREvidence{##1}}%
+  \long\def\Location##1{\long\def\RRAutoLocation{##1}}%
+  \long\def\LocationEN##1{\long\def\RRLocationEN{##1}}%
+  \long\def\LocationCN##1{\long\def\RRLocationCN{##1}}%
+
+  #2%
+
+  \RenderCommentBlock{#1}{\RRCommentEN}{\RRCommentCN}%
+  \RenderResponseBlock{\RRResponseEN}{\RRResponseCN}%
+  \ifdefempty{\RRRevisedEN}{%
+    \ifdefempty{\RRRevisedCN}{}{\RenderRevisedText{\RRRevisedEN}{\RRRevisedCN}}%
+  }{\RenderRevisedText{\RRRevisedEN}{\RRRevisedCN}}%
+  \ifdefempty{\RREvidence}{}{\RREvidence}%
+  \ifdefempty{\RRAutoLocation}{%
+    \RenderLocation{\RRLocationEN}{\RRLocationCN}%
+  }{\RenderAutoLocation{\RRAutoLocation}}%
+  \endgroup
+}{}
+
+\NewDocumentCommand{\FigurePlaceholder}{O{0.66\linewidth} m m}{%
+  \begin{figure}[htbp]
+    \centering
+    \fbox{\rule{0pt}{30mm}\rule{#1}{0pt}}
+    \caption{\ModeInline{#2}{#3}}
+  \end{figure}
+}
+
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+
+\begin{document}
+
+\MakeLetterHeader
+
+% =============================================================================
+%                      用户编辑区 2：逐条审稿意见与回复
+% 每个字段均填写一整段或多段内容，不要逐句拆分。
+% =============================================================================
+
+\ReviewerSection{1}
+
+\begin{ReviewItem}{R1.1}
+  % 审稿意见英文原文（完整粘贴，不要改写）
+  \CommentEN{xxx}
+  % 审稿意见中文译文（完整填写）
+  \CommentCN{xxx}
+  % 英文回复正文；固定首句由模板自动添加，只需填写首句之后的内容
+  \ResponseEN{%
+    Specifically, xxx. Accordingly, we have revised xxx to improve xxx.%
+  }
+  % 中文回复正文；固定首句由模板自动添加，只需填写首句之后的内容
+  \ResponseCN{%
+    具体而言，xxx。因此，我们已对 xxx 进行了修改，以进一步完善 xxx。%
+  }
+  % 可选：修订稿中的英文原文；不需要引用时可删除本行
+  \RevisedEN{xxx}
+  % 可选：修订原文的中文对照；不需要引用时可删除本行
+  \RevisedCN{xxx}
+  % 修改位置：每个 \At{页码}{行号} 表示一处；重复 \At 即可添加多个位置
+  % 单个位置示例：\Location{\At{8}{210--225}}
+  % 多个位置示例（相同页码会自动合并）：
+  % \Location{\At{8}{210--225}\At{8}{244--260}\At{10}{301}\At{12}{365}}
+  \Location{\At{xxx}{xxx}}
+\end{ReviewItem}
+
+\begin{ReviewItem}{R1.2}
+  % 审稿意见英文原文（完整粘贴，不要改写）
+  \CommentEN{xxx}
+  % 审稿意见中文译文（完整填写）
+  \CommentCN{xxx}
+  % 英文回复正文；固定首句由模板自动添加
+  \ResponseEN{%
+    We agree that the original presentation did not make this point sufficiently
+    clear. We have therefore clarified xxx and added xxx to support this revision.%
+  }
+  % 中文回复正文；固定首句由模板自动添加
+  \ResponseCN{%
+    我们同意原稿对此说明得不够清楚。因此，我们已进一步澄清 xxx，并补充 xxx 作为
+    支撑。%
+  }
+  % 可选：回复中需要展示的图、表或公式；不需要时可删除整个 Evidence 字段
+  \Evidence{%
+    % 替换为真实图片时使用：
+    % \includegraphics[width=0.66\linewidth]{figures/your-figure.pdf}
+    \FigurePlaceholder
+      {xxx}
+      {xxx}%
+  }
+  % 修改位置：重复 \At{页码}{行号或行号范围} 可添加多个位置
+  \Location{\At{xxx}{xxx}}
+\end{ReviewItem}
+
+\begin{ReviewItem}{R1.3}
+  % 审稿意见英文原文（完整粘贴，不要改写）
+  \CommentEN{xxx}
+  % 审稿意见中文译文（完整填写）
+  \CommentCN{xxx}
+  % 英文回复正文；固定首句由模板自动添加
+  \ResponseEN{%
+    The requested comparison has been added and is summarized in
+    Table~\ref{tab:comparison}.%
+  }
+  % 中文回复正文；固定首句由模板自动添加
+  \ResponseCN{%
+    我们已补充所要求的比较，结果汇总于表~\ref{tab:comparison}。%
+  }
+  % 可选：定量比较表；将表题、方法名、指标名和数值中的 xxx 替换为实际内容
+  \Evidence{%
+    \begin{table}[htbp]
+      \centering
+      \caption{\ModeInline
+        {xxx}
+        {xxx}}
+      \label{tab:comparison}
+      \begin{tabularx}{0.86\linewidth}{@{}Y>{\centering\arraybackslash}p{2.6cm}>{\centering\arraybackslash}p{2.6cm}@{}}
+        \toprule
+        \ModeInline{Method}{方法} & \ModeInline{Metric 1}{指标 1} & \ModeInline{Metric 2}{指标 2} \\
+        \midrule
+        \ModeInline{Proposed method}{本文方法} & xxx & xxx \\
+        \ModeInline{Baseline method}{基线方法} & xxx & xxx \\
+        \bottomrule
+      \end{tabularx}
+    \end{table}%
+  }
+  % 修改位置：重复 \At{页码}{行号或行号范围} 可添加多个位置
+  \Location{\At{xxx}{xxx}}
+\end{ReviewItem}
+
+\ReviewerSection{2}
+
+\begin{ReviewItem}{R2.1}
+  % 审稿意见英文原文（完整粘贴，不要改写）
+  \CommentEN{xxx}
+  % 审稿意见中文译文（完整填写）
+  \CommentCN{xxx}
+  % 英文回复正文；固定首句由模板自动添加
+  \ResponseEN{%
+    In response, we have revised xxx and added xxx to substantiate this point.%
+  }
+  % 中文回复正文；固定首句由模板自动添加
+  \ResponseCN{%
+    作为回应，我们已修改 xxx，并补充 xxx 以提供支撑。%
+  }
+  % 修改位置：重复 \At{页码}{行号或行号范围} 可添加多个位置
+  \Location{\At{xxx}{xxx}}
+\end{ReviewItem}
+
+% 添加新意见：复制一个完整的 ReviewItem 环境。
+% 添加新审稿人：复制 ReviewerSection，并从新的 ReviewItem 开始。
+
+\end{document}

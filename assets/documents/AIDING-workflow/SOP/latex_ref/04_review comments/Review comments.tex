@@ -67,6 +67,15 @@
   fonttitle=\bfseries,
   title={中文译文}
 }
+\newtcolorbox{revisionidea}{
+  enhanced,breakable,
+  colback=yellow!8,colframe=orange!70,
+  boxrule=0.55pt,arc=1.5mm,
+  left=2.5mm,right=2.5mm,top=2mm,bottom=2mm,
+  before skip=0.25em,after skip=0.9em,
+  fonttitle=\bfseries,
+  title={修改灵感 / Revision Inspiration}
+}
 
 \begin{document}
 
@@ -97,6 +106,8 @@ This paper proposes a deep learning framework for solving neutron diffusion equa
 \begin{chinesecomment}
 本文提出了一种用于求解非均匀介质中中子扩散方程的深度学习框架。本文所处理的主要挑战是材料界面处存在不连续的扩散系数和宏观截面。这些不连续性会引起通量梯度跳跃和界面奇异性，可能对基于神经网络的求解器的精度与收敛性产生不利影响。为解决这一问题，作者采用变域积分弱解（Variable-Domain Integral Weak Solution, VIWS）方法建立中子扩散方程，并使用单网络表示全局解。该方法旨在无需显式处理内部材料界面的情况下求解非均匀中子扩散问题。该主题与反应堆物理中深度学习方法的应用相关，并具有潜在价值。然而，稿件缺少足够的方法与实现细节，读者尚难以充分理解、复现和评价所提出的方法。以下意见需要处理。
 \end{chinesecomment}
+\begin{revisionidea}
+\end{revisionidea}
 
 \Needspace{8\baselineskip}
 \subsection{R1.1: Comment 1 / 意见 1}
@@ -106,6 +117,8 @@ The abstract does not clearly identify the comparison baseline. It would be bene
 \begin{chinesecomment}
 摘要没有清楚说明比较基线。建议明确指出所提出的方法是与传统 PINN、有限元方法（FEM）、有限差分方法（FDM），还是其他成熟的中子扩散求解器进行比较。此外，摘要没有说明计算成本、训练时间、内存需求，或向大规模反应堆计算扩展的能力。
 \end{chinesecomment}
+\begin{revisionidea}
+\end{revisionidea}
 
 \Needspace{8\baselineskip}
 \subsection{R1.2: Comment 2 / 意见 2}
@@ -115,6 +128,8 @@ The manuscript should provide a more detailed discussion regarding the existence
 \begin{chinesecomment}
 稿件应更详细地讨论所提出方法中原函数形式所涉及的存在性与唯一性条件。
 \end{chinesecomment}
+\begin{revisionidea}
+\end{revisionidea}
 
 \Needspace{8\baselineskip}
 \subsection{R1.A: Unnumbered architecture comment / 原决定信中未编号的网络结构意见}
@@ -140,6 +155,8 @@ The neural-network architecture is insufficiently described. If separate antider
 \item 训练策略。
 \end{enumerate}
 \end{chinesecomment}
+\begin{revisionidea}
+\end{revisionidea}
 
 \Needspace{8\baselineskip}
 \subsection{R1.3: Comment 3 / 意见 3}
@@ -149,6 +166,8 @@ The optimization procedure is not adequately described. The manuscript should cl
 \begin{chinesecomment}
 优化过程的描述不够充分。稿件应清楚说明可训练参数、优化算法、学习率策略，以及训练过程中采用的其他优化设置。
 \end{chinesecomment}
+\begin{revisionidea}
+\end{revisionidea}
 
 \Needspace{8\baselineskip}
 \subsection{R1.4: Comment 4 / 意见 4}
@@ -158,6 +177,8 @@ The manuscript states that training terminates when the loss reaches a prescribe
 \begin{chinesecomment}
 稿件称，当损失达到预设精度要求或满足停止准则时终止训练。然而，文中既没有明确定义该精度要求，也没有明确定义停止准则。稿件引用参考文献 38 和 39 说明这些细节，但其中一篇文献不便于国际读者获取，因此相关信息应直接写入稿件。
 \end{chinesecomment}
+\begin{revisionidea}
+\end{revisionidea}
 
 \Needspace{8\baselineskip}
 \subsection{R1.5: Comment 5 / 意见 5}
@@ -167,6 +188,8 @@ The term L-BFGS appears in Section 4 without prior introduction. The authors sho
 \begin{chinesecomment}
 术语 L-BFGS 在第 4 节出现之前没有介绍。作者应给出其全称，并简要说明它在优化过程中的作用。
 \end{chinesecomment}
+\begin{revisionidea}
+\end{revisionidea}
 
 \Needspace{8\baselineskip}
 \subsection{R1.6: Comment 6 / 意见 6}
@@ -176,6 +199,8 @@ The manuscript states that the ``default network is an 8-layer FCNN.'' The meani
 \begin{chinesecomment}
 稿件称“默认网络为 8 层 FCNN”。应澄清“默认”的含义：该结构是否用于全部数值实验，还是仅在没有另行说明时使用？
 \end{chinesecomment}
+\begin{revisionidea}
+\end{revisionidea}
 
 \Needspace{8\baselineskip}
 \subsection{R1.7: Comment 7 / 意见 7}
@@ -185,6 +210,8 @@ The manuscript should explicitly state the number and physical meaning of the in
 \begin{chinesecomment}
 稿件应明确说明每个神经网络所用输入和输出变量的数量及其物理含义。
 \end{chinesecomment}
+\begin{revisionidea}
+\end{revisionidea}
 
 \Needspace{8\baselineskip}
 \subsection{R1.8: Comment 8 / 意见 8}
@@ -194,6 +221,8 @@ The incorporation of the VIWS formulation into the deep learning framework is no
 \begin{chinesecomment}
 稿件没有充分解释如何将 VIWS 形式纳入深度学习框架。需要清楚指出 VIWS 形式在神经网络训练过程中的具体作用位置，以及它如何构成损失函数或控制约束。
 \end{chinesecomment}
+\begin{revisionidea}
+\end{revisionidea}
 
 \Needspace{8\baselineskip}
 \subsection{R1.9: Comment 9 / 意见 9}
@@ -203,6 +232,8 @@ It is not entirely clear whether the neutron diffusion equation is enforced thro
 \begin{chinesecomment}
 目前尚不完全清楚中子扩散方程是通过 VIWS 形式导出的积分残差来施加约束，还是通过其他实现方式施加约束。应澄清这一点。
 \end{chinesecomment}
+\begin{revisionidea}
+\end{revisionidea}
 
 \Needspace{8\baselineskip}
 \subsection{R1.10: Comment 10 / 意见 10}
@@ -212,6 +243,8 @@ Statements such as ``antiderivative forms are used in the deep learning solution
 \begin{chinesecomment}
 “在深度学习求解中使用原函数形式”之类的表述使读者难以理解。稿件应更明确地解释如何把原函数形式纳入训练过程，以及该形式如何影响计算效率。
 \end{chinesecomment}
+\begin{revisionidea}
+\end{revisionidea}
 
 \Needspace{8\baselineskip}
 \subsection{R1.11: Comment 11 / 意见 11}
@@ -221,6 +254,8 @@ I think the paper is not proposing a new neural network architecture. Rather, it
 \begin{chinesecomment}
 我认为本文并未提出新的神经网络架构，而是提出了一种嵌入深度学习框架的新数学形式（VIWS），以更好地处理非均匀中子扩散问题中的材料界面。如果确实如此，请在稿件中明确说明。
 \end{chinesecomment}
+\begin{revisionidea}
+\end{revisionidea}
 
 \Needspace{8\baselineskip}
 \subsection{R1.12: Comment 12 / 意见 12}
@@ -230,6 +265,8 @@ How do the execution time and memory compare against conventional NDE solvers?
 \begin{chinesecomment}
 与传统中子扩散方程（NDE）求解器相比，该方法的执行时间和内存占用如何？
 \end{chinesecomment}
+\begin{revisionidea}
+\end{revisionidea}
 
 \Needspace{14\baselineskip}
 \section{Reviewer \#2 / 审稿人 \#2}
@@ -241,6 +278,8 @@ The title of the manuscript is a bit misleading. What exactly is ``heterogeneous
 \begin{chinesecomment}
 稿件标题略有误导。“非均匀中子扩散计算”究竟指什么？如果该方法需要进行跨材料均匀化（例如，每个棒元被均匀化，不再分别表示包壳、气隙、燃料和慢化剂区域），那么“非均匀”一词并不适用于本文，应改为更恰当的术语。
 \end{chinesecomment}
+\begin{revisionidea}
+\end{revisionidea}
 
 \Needspace{8\baselineskip}
 \subsection{R2.G2: General Comment 2 / 总体意见 2}
@@ -250,6 +289,8 @@ The quality of the abstract is much lower than the quality of the main body of t
 \begin{chinesecomment}
 摘要的质量明显低于稿件正文。正文较为简洁，术语使用正确，整体上可以理解，但摘要未能很好地反映论文内容。摘要中的某些句子甚至难以理解，因此作者需要完全重写摘要并认真校对，使其质量与正文相匹配。
 \end{chinesecomment}
+\begin{revisionidea}
+\end{revisionidea}
 
 \Needspace{8\baselineskip}
 \subsection{R2.G3: General Comment 3 / 总体意见 3}
@@ -259,6 +300,8 @@ An important aspect of introducing PINNs in place of traditional neutron diffusi
 \begin{chinesecomment}
 用 PINN 替代传统中子扩散求解器的一个重要方面，是其潜在的计算速度优势。所提出的方法与传统求解器进行严格同条件比较（使用完全相同数量的 CPU 核/GPU 卡和相同模型）时表现如何？如果更快，需要付出怎样的精度代价？内存消耗又如何？
 \end{chinesecomment}
+\begin{revisionidea}
+\end{revisionidea}
 
 \Needspace{8\baselineskip}
 \subsection{R2.G4: General Comment 4 / 总体意见 4}
@@ -268,6 +311,8 @@ While the presented method seems to be of high value, the potential disadvantage
 \begin{chinesecomment}
 尽管所提出的方法似乎很有价值，但稿件没有清楚说明其潜在缺点，因此读起来更像宣传材料；科学论文应同时呈现研究中观察到的优点与不足。
 \end{chinesecomment}
+\begin{revisionidea}
+\end{revisionidea}
 
 \Needspace{8\baselineskip}
 \subsection{R2.G5: General Comment 5 / 总体意见 5}
@@ -277,6 +322,8 @@ The proposed method could be introduced in a more reproducible way, which was no
 \begin{chinesecomment}
 所提出的方法应以更具可复现性的方式介绍，而投稿稿件没有做到这一点。读者需要查阅文中提到的全部文献乃至更多资料，才能拼凑出实现类似求解器的具体流程。如果稿件能给出一个更直接的算法，说明作者如何构建模型、训练模型并在实际中使用，将会有很大帮助。还请作者注意，投稿期刊名为《Nuclear Engineering and Technology》。虽然稿件中的“Nuclear”很明确，但没有体现“Engineering”和/或“Technology”，使文章更像一份科学报告，而不是原创研究论文。请作者弥补这一差距。
 \end{chinesecomment}
+\begin{revisionidea}
+\end{revisionidea}
 
 \Needspace{8\baselineskip}
 \subsection{R2.S1: Specific Comment 1: Abstract / 具体意见 1：摘要}
@@ -296,6 +343,8 @@ The proposed method could be introduced in a more reproducible way, which was no
 \item 审稿人也不认同“反应堆堆芯包含这些系数或其他系数”的说法。作者需要校对整个摘要，以更加清楚、准确地表达观点。
 \end{enumerate}
 \end{chinesecomment}
+\begin{revisionidea}
+\end{revisionidea}
 
 \Needspace{8\baselineskip}
 \subsection{R2.S2: Specific Comment 2: Fig. 4 / 具体意见 2：图 4}
@@ -305,6 +354,8 @@ What is antiderivative, and why are antiderivative fields in Fig. 4 not symmetri
 \begin{chinesecomment}
 什么是原函数？为什么图 4 中的原函数场不对称？
 \end{chinesecomment}
+\begin{revisionidea}
+\end{revisionidea}
 
 \Needspace{8\baselineskip}
 \subsection{R2.S3: Specific Comment 3: Section 4.1 / 具体意见 3：第 4.1 节}
@@ -318,6 +369,8 @@ What are the sampling points and how exactly are they used? How is the number de
 
 这些采样点是什么？具体如何使用？其数量是如何确定的，为什么这一数量很重要？
 \end{chinesecomment}
+\begin{revisionidea}
+\end{revisionidea}
 
 \Needspace{8\baselineskip}
 \subsection{R2.S4: Specific Comment 4: Section 4.3 / 具体意见 4：第 4.3 节}
@@ -327,6 +380,8 @@ It would be useful to see axially normalized maps and their comparison. In parti
 \begin{chinesecomment}
 如果能给出轴向归一化图及其对比，将很有帮助。尤其应同时展示参考程序、PINN 和 VIWS 计算得到的通量图与源项图，而不只是通量图。
 \end{chinesecomment}
+\begin{revisionidea}
+\end{revisionidea}
 
 \Needspace{8\baselineskip}
 \subsection{R2.S5: Specific Comment 5: Section 4.4 / 具体意见 5：第 4.4 节}
@@ -336,6 +391,8 @@ What are the limitations of the method in terms of problem size and boundary con
 \begin{chinesecomment}
 该方法在问题规模和边界条件方面有哪些限制？网格能否扩展到整个燃料组件的尺度？
 \end{chinesecomment}
+\begin{revisionidea}
+\end{revisionidea}
 
 \Needspace{8\baselineskip}
 \subsection{R2.S6: Specific Comment 6: Section 4.5 / 具体意见 6：第 4.5 节}
@@ -357,6 +414,8 @@ What are the limitations of the method in terms of problem size and boundary con
 \item 燃料组件是否被划分为子区域？此外，燃料组件区域是否在材料参数上进行了均匀化？
 \end{enumerate}
 \end{chinesecomment}
+\begin{revisionidea}
+\end{revisionidea}
 
 \Needspace{8\baselineskip}
 \subsection{R2.S7: Specific Comment 7: Section 4.5 / 具体意见 7：第 4.5 节}
@@ -370,5 +429,7 @@ It would be useful to see the details on how the flux and the multiplication fac
 
 建议说明如何在同一个 VIWS 模型中同时得到通量和增殖因子的具体细节。
 \end{chinesecomment}
+\begin{revisionidea}
+\end{revisionidea}
 
 \end{document}
