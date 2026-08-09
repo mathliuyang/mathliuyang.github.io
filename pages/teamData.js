@@ -536,7 +536,7 @@ const teamMembers = [
         position: "核心成员"
     },
         {
-        id: "duanzhouhang",
+        id: "zhuqixin",
         name: "朱启鑫",
         englishName: "Qixin Zhu",
         gender: "男",
@@ -551,6 +551,24 @@ const teamMembers = [
         phones: ["18009211860"],
         orcid: "",
         avatar: "../assets/avatar/zhuqixin.jpg",
+        position: "核心成员"
+    },
+            {
+        id: "anping",
+        name: "安萍",
+        englishName: "Ping An",
+        gender: "女",
+        degree: "",
+        title: "",
+        researchFields: "",
+        institution: "中国核动力研究院，先进核能技术国家重点实验室，中国成都 610213",
+        institutionEn: "Nuclear Power Institute of China, State Key Laboratory of Advanced Nuclear Energy Technology, Chengdu 610213, China",
+        address: "四川省成都市双流区长顺大道一段328号",
+        addressEn: "No. 328, Section 1, Changshun Avenue, Shuangliu District, Chengdu, Sichuan Province, China",
+        emails: ["Jcbsjs-szls@npic.ac.cn", "anpingwork@126.com"],
+        phones: ["13980462581"],
+        orcid: "",
+        avatar: "../assets/avatar/anping.jpg",
         position: "核心成员"
     },
     {
