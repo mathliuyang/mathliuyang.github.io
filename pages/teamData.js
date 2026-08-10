@@ -26,6 +26,14 @@ const fundingData = [
         grantNo: "2023YFG0373",
         fullText: "the Supported by Sichuan Science and Technology Program (Grant Nos. 2023YFG0373)",
         fullTextCn: "四川省揭榜挂帅行业共性技术攻关项目 (批准号: 2023YFG0373)"
+    },
+    {
+        id: "cnnc_basic_research",
+        name: "CNNC Basic Research Project",
+        nameCn: "中核集团基础科研项目",
+        grantNo: "CNNC-JCKY-202601",
+        fullText: "the CNNC Basic Research Project (Grant No. CNNC-JCKY-202601)",
+        fullTextCn: "中核集团基础科研项目 (批准号: CNNC-JCKY-202601)"
     }
 ];
 
